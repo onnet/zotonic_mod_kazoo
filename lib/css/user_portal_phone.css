@@ -1,0 +1,114 @@
+
+/***************** phone ***************/
+/*******************************************/
+#phone, #ctrls {
+  position: relative;
+  float: left;
+  padding: 10px 0px 20px 20px;
+  border-radius: 0 0 10px 0;
+}
+
+
+/* dialpad */
+
+#phone .dialpad,
+#ctrls .dialpad {
+  position: relative;
+//  margin-top: 10px;
+  user-select: none;
+}
+
+#phone .dialpad .line,
+#ctrls .dialpad .line {
+//  height: 2.5em;
+  user-select: none;
+}
+
+#phone .dialpad .button {
+  float: left;
+  color: #3E7A8C;
+  font-weight: bold;
+  text-align: center;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  height: 38px;
+  width: 1em;
+  color: #3E7A8C;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  display: block;
+  width: 40px;
+  margin: 1px;
+  padding: 5px 0 32px 0;
+  background: #d6dfe7;
+}
+
+#phone .dialpad .button:hover {
+  background: #3E7A8C;
+  color: #FFF;
+}
+
+#phone .dialpad .button:active {
+  color: #FFF;
+  background: #E86110;
+}
+
+#ctrls .dialpad .button {
+  float: left;
+  color: #3E7A8C;
+  font-weight: bold;
+  text-align: center;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  height: 38px;
+  width: 1em;
+  color: #3E7A8C;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  width: 120px;
+  margin: 1px;
+  padding: 4px 0 28px 0;
+  background: #d6dfe7;
+}
+
+#ctrls .dialpad .button:hover {
+  background: #3E7A8C;
+  color: #FFF;
+}
+
+#ctrls .dialpad .button:active {
+  color: #FFF;
+  background: #E86110;
+}
+
+#ctrls .dialpad .button_call { display: block; }
+
+#ctrls .dialpad .button_accept { display: none; }
+
+#ctrls .dialpad .button_reject { display: none; }
+
+#ctrls .dialpad .button_clear { display: block; }
+
+#ctrls .dialpad .button_xfer { display: none; }
+
+#ctrls .dialpad .button_xfer_send { display: none; }
+
+#ctrls .dialpad .button_xfer_cancel { display: none; }
+
+#ctrls .dialpad .button_delete { display: block; }
+
+#ctrls .dialpad .button_hold { display: none; }
+
+#ctrls .dialpad .button_unhold { display: none; }
+
+#ctrls .dialpad .button_hangup { display: none; }

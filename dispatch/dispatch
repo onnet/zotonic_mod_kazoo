@@ -1,0 +1,12 @@
+[
+ {admin_settings,["admin_settings"],         controller_template,  [ {template, "admin_settings.tpl"} ]},
+ {admin_feature_codes,["admin_feature_codes"],         controller_template,  [ {template, "admin_feature_codes.tpl"} ]},
+ {admin_statistics,["admin_statistics"],         controller_template,  [ {template, "admin_statistics.tpl"} ]},
+ {admin_callflows,["admin_callflows"],         controller_template,  [ {template, "admin_callflows.tpl"} ]},
+ {userportal,["userportal"],         controller_template,  [ {template, "user_portal.tpl"} ]},
+
+ {getinfaxdoc, ["getinfaxdoc","id",id], controller_getinfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
+ {getfaxdoc, ["getfaxdoc","id",id], controller_getfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
+ {getprompt, ["getprompt","id",id], controller_getprompt, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]}
+
+].
