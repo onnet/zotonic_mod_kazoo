@@ -1,10 +1,10 @@
-{% wire id="form_cf_select_menu" type="submit" postback="cf_select_menu" delegate="inno" %}
+{% wire id="form_cf_select_menu" type="submit" postback="cf_select_menu" delegate="mod_kazoo" %}
 <form id="form_cf_select_menu" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
             <select id="menu_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for option in m.inno.kz_list_account_menus %}
+              {% for option in m.kazoo.kz_list_account_menus %}
                   <option value="{{ option["id"] }}" {% if option["id"] == kz_element_id %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
             </select>

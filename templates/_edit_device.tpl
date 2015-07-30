@@ -1,4 +1,4 @@
-{% with m.inno[{kz_device_doc device_id=device_id}][1] as device_doc %}
+{% with m.kazoo[{kz_device_doc device_id=device_id}][1] as device_doc %}
 {% if device_doc["device_type"]=="cellphone" %}
     {% include "admin_portal_device_cellphone.tpl" %}
 {% else %}

@@ -1,10 +1,10 @@
-{% wire id="form_cf_select_receive_fax" type="submit" postback="cf_select_receive_fax" delegate="inno" %}
+{% wire id="form_cf_select_receive_fax" type="submit" postback="cf_select_receive_fax" delegate="mod_kazoo" %}
 <form id="form_cf_select_receive_fax" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
             <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for option in m.inno.kz_list_account_users_short %}
+              {% for option in m.kazoo.kz_list_account_users_short %}
                 {% if option[1] %}
                   <option value="{{ option[1] }}" {% if option[1] == kz_element_id %}selected{% endif %}>{{ option[2] }}</option>
                 {% endif %}

@@ -1,16 +1,16 @@
-{% extends "onnet_widget_dashboard.tpl" %}
+{% extends "modkazoo_widget_dashboard.tpl" %}
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
         action={ toggle target="calls_list_widget_opened" }
         action={ toggle target="arrow_right_"++#dtid }
         action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="calls_list_widget_opened" } delegate="inno" }
+        action={ postback postback={trigger_innoui_widget arg="calls_list_widget_opened" } delegate="mod_kazoo" }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
-    <i id="arrow_right_{{ #dtid }}" style="{% if m.inno[{ui_element_opened element="calls_list_widget_opened"}] %}display: none;{% endif %}" 
+    <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="calls_list_widget_opened"}] %}display: none;{% endif %}" 
                                     class="arrowpad fa fa-arrow-circle-right"></i>
-    <i id="arrow_down_{{ #dtid }}" style="{% if not m.inno[{ui_element_opened element="calls_list_widget_opened"}] %}display: none;{% endif %}" 
+    <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="calls_list_widget_opened"}] %}display: none;{% endif %}" 
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
@@ -20,7 +20,7 @@
 
 {% block widget_content %}
             
-<div id="calls_list_widget_opened" style="{% if not m.inno[{ui_element_opened element="calls_list_widget_opened"}] %}display: none;{% endif %}">
+<div id="calls_list_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="calls_list_widget_opened"}] %}display: none;{% endif %}">
 <table id="user_portal_call_history_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -32,7 +32,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for call in m.inno.kz_list_user_cdr %}
+        {% for call in m.kazoo.kz_list_user_cdr %}
             {% include "user_cdr_table_line.tpl" %}
         {% endfor %}
     </tbody>
@@ -64,6 +64,6 @@ var oTable = $('#user_portal_call_history_table').dataTable({
 });
 {% endjavascript %}
 
-{# print m.inno.kz_list_user_cdr #}
+{# print m.kazoo.kz_list_user_cdr #}
 
 {% endblock %}

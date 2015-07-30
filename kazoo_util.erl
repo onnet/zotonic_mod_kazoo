@@ -234,9 +234,9 @@
 -define(MK_DATABAG(JObj), {[{<<"data">>, JObj}]}).
 
 kz_admin_creds(Context) ->
-    Crossbar_URL = m_config:get_value('inno', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?API_AUTH/binary>>),
-    API_Key = m_config:get_value('inno', 'kazoo_super_duper_api_key', Context),
+    API_Key = m_config:get_value('mod_kazoo', 'kazoo_super_duper_api_key', Context),
     DataBag = {[{<<"data">>, {[{<<"api_key">>, API_Key}]}}]},
     Payload = jiffy:encode(DataBag),
 
@@ -250,7 +250,7 @@ kz_admin_creds(Context) ->
 
 kz_user_creds(Login, Password, Account, Context) ->
     try
-        Crossbar_URL = m_config:get_value('inno', 'kazoo_crossbar_url', Context),
+        Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
         URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
         Creds = io_lib:format("~s:~s", [Login, Password]),
         Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
@@ -357,7 +357,7 @@ kz_set_device_doc(K, V, DeviceId, Context) ->
     end.
 
 crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
-    Crossbar_URL = m_config:get_value('inno', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
@@ -386,7 +386,7 @@ req_headers(Token) ->
 
 crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
-    Crossbar_URL = m_config:get_value('inno', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
@@ -396,7 +396,7 @@ crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
 
 crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
-    Crossbar_URL = m_config:get_value('inno', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 10000}]).
 
@@ -475,7 +475,7 @@ create_kazoo_account(Context) ->
     Companyname = z_convert:to_binary(z_context:get_q("companyname", Context)),
     Email = z_convert:to_binary(z_context:get_q("email", Context)),
     Phonenumber = z_convert:to_binary(z_context:get_q("phonenumber", Context)),
-    DefaultRealm = m_config:get_value('inno', 'kazoo_default_realm', Context),
+    DefaultRealm = m_config:get_value('mod_kazoo', 'kazoo_default_realm', Context),
     Accountname = case valid_account_name(Companyname) of
       'false' -> <<Firstname/binary, <<" ">>/binary, Surname/binary>>;
       'true' -> Companyname
@@ -556,7 +556,7 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
     create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, <<"admin">>, AccountId, Context).
 
 create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLevel, AccountId, Context) ->
-    Crossbar_URL = m_config:get_value('inno', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     z_convert:to_binary(Surname),
     DataBag = {[{<<"data">>,
                   {[{<<"apps">>,
@@ -589,7 +589,7 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
 
 send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Context) ->
     {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
-    SalesEmail = m_config:get_value('inno', sales_email, Context),
+    SalesEmail = m_config:get_value('mod_kazoo', sales_email, Context),
     Vars = [{email, Email}
             ,{accountname, Accountname}
             ,{username, Username}
@@ -665,19 +665,19 @@ kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VMBoxId))/binary,
                    ?MESSAGES/binary, <<"/">>/binary, (z_convert:to_binary(MediaId))/binary, ?RAW/binary, <<"?">>/binary,
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
-    <<(m_config:get_value('inno', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+    <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
 kz_recording_download_link(CallId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?THIRD_PARTY_RECORDING/binary, <<"/">>/binary, (z_convert:to_binary(CallId))/binary,
                    ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
-    <<(m_config:get_value('inno', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+    <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
 kz_incoming_fax_download_link(DocId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?FAXES_INCOMING/binary, (z_convert:to_binary(DocId))/binary,
                    ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
-    <<(m_config:get_value('inno', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+    <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
 
 is_kazoo_account_admin(Context) ->
     case z_context:get_session('kazoo_account_admin', Context) of
@@ -735,7 +735,7 @@ get_reg_details(Username, [Registration|T]) ->
 
 azrates(Context) ->
     {{Year,Month,Day},{Hour,_,_}} = erlang:localtime(),
-    RatesFile = m_config:get_value('inno', 'rates_file', Context),
+    RatesFile = m_config:get_value('mod_kazoo', 'rates_file', Context),
     case filelib:last_modified(RatesFile) of
         {{Year,Month,Day},{Hour,_,_}} -> 'ok';
         _ -> spawn('kazoo_util', 'azrates_refresh', [Context])
@@ -754,7 +754,7 @@ azrates_refresh(Context) ->
     DescriptionPriceTuples = lists:usort(ets:match(TabId,{'_','$1','$2','$3'})),
     CombinedRL = lists:map(fun ([Description, Cost, Surcharge]) -> {[{<<"prefix">>, ets:match(TabId, {'$1',Description,Cost,Surcharge})}
                                                           ,{<<"cost">>, Cost}, {<<"description">>, Description},{<<"surcharge">>,Surcharge}]} end, DescriptionPriceTuples),
-    file:write_file(m_config:get_value('inno', 'rates_file', Context), jiffy:encode(CombinedRL)).
+    file:write_file(m_config:get_value('mod_kazoo', 'rates_file', Context), jiffy:encode(CombinedRL)).
 
 rate_number(Number, Context) ->
     API_String = <<?RATES/binary, ?NUMBER/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>, 
@@ -880,6 +880,7 @@ bt_delete_card(CardId, Context) ->
 make_payment(Amount, AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?BRAINTREE/binary, ?CREDITS/binary>>, 
     DataBag = {[{<<"data">>,{[{<<"amount">>, z_convert:to_binary(Amount)}]}}]},
+    lager:info("Make payment attempt. AccountId: ~p. Amount: ~p.",[AccountId, Amount]),
     crossbar_account_request('put', API_String, DataBag, Context).
 
 topup_submit(Threshold, Amount, AccountId, Context) ->
@@ -910,7 +911,7 @@ ui_element_state(ElementName,Context) ->
                     z_context:set_session(z_convert:to_atom(ElementName), 'false', Context),
                     'false';
                 _ ->
-                    case m_config:get_value('inno', z_convert:to_atom(ElementName), Context) of
+                    case m_config:get_value('mod_kazoo', z_convert:to_atom(ElementName), Context) of
                         <<"true">> ->
                             z_context:set_session(z_convert:to_atom(ElementName), 'true', Context),
                             'true';
@@ -953,7 +954,7 @@ process_purchase_number(Number, Context) ->
             Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
             z_render:growl_error(?__("Something wrong happened.", Context2), Context2);
         _ ->
-            may_be_add_service_plan(m_config:get_value('inno', 'signup_service_plan', Context), z_context:get_session('kazoo_account_id', Context), Context),
+            may_be_add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), z_context:get_session('kazoo_account_id', Context), Context),
             Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
             Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
             Context3 = z_render:update("onnet_widget_order_additional_number_tpl" ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context2),Context2),
@@ -1540,7 +1541,7 @@ cf_element_path(ElementId) ->
 cf_get_element_by_id(ElementId, Context) ->
     modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)). 
 
-cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},inno,_},{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},inno,BranchId}},Context) ->
+cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},mod_kazoo,BranchId}},Context) ->
     lager:info("Drop DropParent: ~p",[DropParent]),
     case z_convert:to_list(DropParent) of
         "menu" ->

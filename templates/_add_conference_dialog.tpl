@@ -1,5 +1,5 @@
-{% with m.inno[{kz_get_account_conference conference_id=conference_id}] as conference %}
-{% wire id="form_kz_conference" type="submit" postback="kz_conference" delegate="inno" %}
+{% with m.kazoo[{kz_get_account_conference conference_id=conference_id}] as conference %}
+{% wire id="form_kz_conference" type="submit" postback="kz_conference" delegate="mod_kazoo" %}
 <form id="form_kz_conference" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -11,7 +11,7 @@
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Conference owner _}
           <select id="sipphone_owner_id" name="owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
-            {% for option in m.inno.kz_list_account_users_short %}
+            {% for option in m.kazoo.kz_list_account_users_short %}
                   <option value="{{ option[1] }}" {% if conference[1]["owner_id"] == option[1] or (not option[1] and not conference[1]["owner_id"]) %}selected{% endif %}>{{ option[2] }}</option>
             {% endfor %}
           </select>

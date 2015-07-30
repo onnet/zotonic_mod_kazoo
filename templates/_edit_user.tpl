@@ -1,4 +1,4 @@
-{% with m.inno[{kz_user_doc_by_ownerid owner_id=user_id}][1] as user_doc %}
+{% with m.kazoo[{kz_user_doc_by_ownerid owner_id=user_id}][1] as user_doc %}
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
   <li class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>

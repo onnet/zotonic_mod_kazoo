@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_conference_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_conference_widget_opened"}] %}
 <table id="admin_portal_conference_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -11,8 +11,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for conference in m.inno.kz_list_account_conferences %}
-        {% with m.inno[{kz_get_account_conference conference_id=conference["id"]}] as conference_details %}
+        {% for conference in m.kazoo.kz_list_account_conferences %}
+        {% with m.kazoo[{kz_get_account_conference conference_id=conference["id"]}] as conference_details %}
 	<tr>
             <td style="text-align: center1;">{{ conference["name"] }}</td>
             <td style="text-align: center;">{% for number in conference_details[1]["member"][1]["numbers"] %}{{ number }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
@@ -35,7 +35,7 @@
             <td style="text-align: center;"><i id="delete_{{ conference["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++conference["id"]
                     action={confirm text=_"Do you really want to delete conference "++conference["name"]++"?"
-                                action={postback postback={delete_conference conference_id=conference["id"]} delegate="inno"}
+                                action={postback postback={delete_conference conference_id=conference["id"]} delegate="mod_kazoo"}
                            }
             %}
         </tr>

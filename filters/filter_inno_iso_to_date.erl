@@ -4,9 +4,7 @@
           inno_iso_to_date/3
 ]).
 
-inno_iso_to_date(ISOTime, Context) ->
-    lager:info("ISOTime: ~p", [ISOTime]),
-    lager:info("Timezone: ~p", [kazoo_util:get_user_timezone(Context)]),
+inno_iso_to_date(ISOTime, _Context) ->
     <<Year:4/binary, _:1/binary, Month:2/binary, _:1/binary, Day:2/binary
      ,_:1/binary
      ,Hours:2/binary, _:1/binary, Minutes:2/binary, _:1/binary, Sec:2/binary, _/binary>> = ISOTime,

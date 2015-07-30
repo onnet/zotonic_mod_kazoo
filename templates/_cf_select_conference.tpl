@@ -1,11 +1,11 @@
-{% wire id="form_cf_select_conference" type="submit" postback="cf_select_conference" delegate="inno" %}
+{% wire id="form_cf_select_conference" type="submit" postback="cf_select_conference" delegate="mod_kazoo" %}
 <form id="form_cf_select_conference" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
             <select id="conference_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
               <option value="">{_ Conference Server _}</option>
-              {% for option in m.inno.kz_list_account_conferences %}
+              {% for option in m.kazoo.kz_list_account_conferences %}
                   <option value="{{ option["id"] }}" {% if option["id"] == kz_element_id %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
             </select>

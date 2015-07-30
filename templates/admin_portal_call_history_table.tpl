@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_calls_list_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_calls_list_widget_opened"}] %}
 <table id="user_portal_call_history_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for call in m.inno.kz_list_account_cdr %}
+        {% for call in m.kazoo.kz_list_account_cdr %}
             {% include "admin_cdr_table_line.tpl" %}
         {% endfor %}
     </tbody>

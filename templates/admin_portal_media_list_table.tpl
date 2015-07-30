@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_media_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_media_widget_opened"}] %}
 <table id="admin_portal_media_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for prompt in m.inno.kz_list_account_media %}
+        {% for prompt in m.kazoo.kz_list_account_media %}
 	<tr>
             <td style="text-align: center1;">{{ prompt["name"] }}</td>
             <td style="text-align: center;">
@@ -40,7 +40,7 @@
             <td style="text-align: center;"><i id="delete_{{ prompt["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++prompt["id"]
                     action={confirm text=_"Do you really want to delete prompt "++prompt["name"]++"?"
-                                action={postback postback={delete_prompt prompt_id=prompt["id"]} delegate="inno"}
+                                action={postback postback={delete_prompt prompt_id=prompt["id"]} delegate="mod_kazoo"}
                            }
             %}
         </tr>

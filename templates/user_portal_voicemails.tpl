@@ -1,16 +1,16 @@
-{% extends "onnet_widget_dashboard.tpl" %}
+{% extends "modkazoo_widget_dashboard.tpl" %}
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
         action={ toggle target="vmboxes_list_widget_opened" }
         action={ toggle target="arrow_right_"++#dtid }
         action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="vmboxes_list_widget_opened" } delegate="inno" }
+        action={ postback postback={trigger_innoui_widget arg="vmboxes_list_widget_opened" } delegate="mod_kazoo" }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
-    <i id="arrow_right_{{ #dtid }}" style="{% if m.inno[{ui_element_opened element="vmboxes_list_widget_opened"}] %}display: none;{% endif %}"
+    <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="vmboxes_list_widget_opened"}] %}display: none;{% endif %}"
                                     class="arrowpad fa fa-arrow-circle-right"></i>
-    <i id="arrow_down_{{ #dtid }}" style="{% if not m.inno[{ui_element_opened element="vmboxes_list_widget_opened"}] %}display: none;{% endif %}"
+    <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="vmboxes_list_widget_opened"}] %}display: none;{% endif %}"
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
@@ -31,9 +31,9 @@
 })( jQuery );
 {% endjavascript %}
 
-<div id="vmboxes_list_widget_opened" style="{% if not m.inno[{ui_element_opened element="vmboxes_list_widget_opened"}] %}display: none;{% endif %}">
+<div id="vmboxes_list_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="vmboxes_list_widget_opened"}] %}display: none;{% endif %}">
 
-{% for vmbox in m.inno.kz_list_user_vmboxes %}
+{% for vmbox in m.kazoo.kz_list_user_vmboxes %}
 {% wire id="label_"++vmbox["id"] type="click"
         action={ toggle target=vmbox["id"] }
         action={ toggle target="arrow_right_"++vmbox["id"] }
@@ -59,7 +59,7 @@
         </tr>
     </thead>
     <tbody>
-            {%  with m.inno[{kz_list_user_vmbox_details vmbox_id=vmbox["id"]}] as results %}
+            {%  with m.kazoo[{kz_list_user_vmbox_details vmbox_id=vmbox["id"]}] as results %}
             {% for result in results %}
               {% for message in result["messages"] %}
                 {% if not (message["folder"]=="deleted") %}
@@ -69,7 +69,7 @@
                        <td style="text-align: center;">{{ message["folder"] }}</td>
                        <td style="text-align: center;">
                          <audio id="audio_{{ message["media_id"] }}">
-                             <source src="{{ m.inno[{kz_vmessage_download_link vmbox_id=vmbox["id"] media_id=message["media_id"]}] }}" type="audio/mp3">
+                             <source src="{{ m.kazoo[{kz_vmessage_download_link vmbox_id=vmbox["id"] media_id=message["media_id"]}] }}" type="audio/mp3">
                          </audio>
                          <a id="play_{{ message["media_id"] }}" onclick='$("#audio_{{ message["media_id"] }}").trigger("play");
                                                                  $("#play_{{ message["media_id"] }}").toggle();
@@ -78,7 +78,7 @@
                             <i style="cursor: pointer;" class="fa fa-play" title="{_ Play _}"></i>
                          </a>
                          {% wire name="event_"++message["media_id"] 
-                            action={postback postback={set_vm_message_folder folder="saved" vmbox_id=vmbox["id"] media_id=message["media_id"]} delegate="inno"} %}
+                            action={postback postback={set_vm_message_folder folder="saved" vmbox_id=vmbox["id"] media_id=message["media_id"]} delegate="mod_kazoo"} %}
                          <a id="pause_{{ message["media_id"] }}" style="display: none;" onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
                                                                                          $("#play_{{ message["media_id"] }}").toggle();
                                                                                          $("#pause_{{ message["media_id"] }}").toggle();'>
@@ -92,7 +92,7 @@
                          </a>
                        </td>
                        <td style="text-align: center;">
-                           <a href="{{ m.inno[{kz_vmessage_download_link vmbox_id=vmbox["id"] media_id=message["media_id"]}] }}">
+                           <a href="{{ m.kazoo[{kz_vmessage_download_link vmbox_id=vmbox["id"] media_id=message["media_id"]}] }}">
                              <i class="fa fa-download" title="{_ Download _}"></i>
                            </a>
                        </td>
@@ -101,7 +101,7 @@
                        </td>
                        {% wire id="delete_"++message["media_id"] 
                                action={confirm text=_"Do you really want to delete message from "++message["caller_id_number"]++"?"
-                                           action={postback postback={delete_vm_message vmbox_id=vmbox["id"] media_id=message["media_id"]} delegate="inno"}
+                                           action={postback postback={delete_vm_message vmbox_id=vmbox["id"] media_id=message["media_id"]} delegate="mod_kazoo"}
                                       }
                        %}
                     </tr>

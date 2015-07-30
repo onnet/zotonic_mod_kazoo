@@ -1,10 +1,10 @@
-{% wire id="form_cf_select_device" type="submit" postback="cf_select_device" delegate="inno" %}
+{% wire id="form_cf_select_device" type="submit" postback="cf_select_device" delegate="mod_kazoo" %}
 <form id="form_cf_select_device" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
             <select id="device_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for option in m.inno.kz_list_account_devices_short %}
+              {% for option in m.kazoo.kz_list_account_devices_short %}
                 {% if option[1] %}
                   <option value="{{ option[1] }}" {% if option[1] == kz_element_id %}selected{% endif %}>{{ option[2] }}</option>
                 {% endif %}

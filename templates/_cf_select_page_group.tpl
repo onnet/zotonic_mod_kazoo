@@ -1,14 +1,14 @@
-{% with m.inno[{cf_get_element_by_id element_id=element_id}]
-       ,m.inno.kz_list_account_groups
-       ,m.inno.kz_list_account_users_short
-       ,m.inno.kz_list_account_devices_short
+{% with m.kazoo[{cf_get_element_by_id element_id=element_id}]
+       ,m.kazoo.kz_list_account_groups
+       ,m.kazoo.kz_list_account_users_short
+       ,m.kazoo.kz_list_account_devices_short
     as 
         element_data
        ,account_groups
        ,users_short
        ,devices_short
 %}
-{% wire id="form_cf_select_page_group" type="submit" postback="cf_select_page_group" delegate="inno" %}
+{% wire id="form_cf_select_page_group" type="submit" postback="cf_select_page_group" delegate="mod_kazoo" %}
 <form id="form_cf_select_page_group" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -27,7 +27,7 @@
         <div class="col-xs-1 text-center"></div>
       </div>
     </div>
-    {% sorter id="sorter" tag="mysorter" delegate="inno" %}
+    {% sorter id="sorter" tag="mysorter" delegate="mod_kazoo" %}
     <div id="sorter" class="form-group">
     {% for endpoint in element_data[1]["data"][1]["endpoints"] %}
         {% include "_cf_select_page_group_element.tpl" selected_value=[endpoint] element_type=endpoint["endpoint_type"] account_groups=account_groups users_short=users_short devices_short=devices_short %}
@@ -39,7 +39,7 @@
       <div class="row">
         <div class="col-sm-4">
           <h4 class="text-center">Groups:</h4>
-          {% wire id="group_selector" type="change" action={ postback postback={cf_page_group_select element_type="group"}  delegate="inno"}
+          {% wire id="group_selector" type="change" action={ postback postback={cf_page_group_select element_type="group"}  delegate="mod_kazoo"}
                                                      action={script script="$('#group_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="group_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
@@ -57,7 +57,7 @@
         </div>
         <div class="col-sm-4">
           <h4 class="text-center">Users:</h4>
-          {% wire id="user_selector" type="change" action={ postback postback={cf_page_group_select element_type="user"}  delegate="inno"}
+          {% wire id="user_selector" type="change" action={ postback postback={cf_page_group_select element_type="user"}  delegate="mod_kazoo"}
                                                      action={script script="$('#user_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
@@ -77,7 +77,7 @@
         </div>
         <div class="col-sm-4">
           <h4 class="text-center">Devices:</h4>
-          {% wire id="device_selector" type="change" action={ postback postback={cf_page_group_select element_type="device"}  delegate="inno"}
+          {% wire id="device_selector" type="change" action={ postback postback={cf_page_group_select element_type="device"}  delegate="mod_kazoo"}
                                                      action={script script="$('#device_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="device_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">

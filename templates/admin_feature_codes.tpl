@@ -2,7 +2,7 @@
 
 {% block service_description %}
 
-  {% include "_onnet_account_page_title.tpl" title=_"Account statistics" %}
+  {% include "_account_page_title.tpl" title=_"Account statistics" %}
 
 <div class="pl-10 pr-10 col-md-6">
   <span id="admin_portal_call_history_tpl">

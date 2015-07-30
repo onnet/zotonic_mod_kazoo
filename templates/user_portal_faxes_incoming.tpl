@@ -1,16 +1,16 @@
-{% extends "onnet_widget_dashboard.tpl" %}
+{% extends "modkazoo_widget_dashboard.tpl" %}
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
         action={ toggle target="incoming_faxes_widget_opened" }
         action={ toggle target="arrow_right_"++#dtid }
         action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="incoming_faxes_widget_opened" } delegate="inno" }
+        action={ postback postback={trigger_innoui_widget arg="incoming_faxes_widget_opened" } delegate="mod_kazoo" }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
-    <i id="arrow_right_{{ #dtid }}" style="{% if m.inno[{ui_element_opened element="incoming_faxes_widget_opened"}] %}display: none;{% endif %}"
+    <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="incoming_faxes_widget_opened"}] %}display: none;{% endif %}"
                                     class="arrowpad fa fa-arrow-circle-right"></i>
-    <i id="arrow_down_{{ #dtid }}" style="{% if not m.inno[{ui_element_opened element="incoming_faxes_widget_opened"}] %}display: none;{% endif %}"
+    <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="incoming_faxes_widget_opened"}] %}display: none;{% endif %}"
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
@@ -20,7 +20,7 @@
 
 {% block widget_content %}
             
-<div id="incoming_faxes_widget_opened" style="{% if not m.inno[{ui_element_opened element="incoming_faxes_widget_opened"}] %}display: none;{% endif %}">
+<div id="incoming_faxes_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="incoming_faxes_widget_opened"}] %}display: none;{% endif %}">
 <table id="user_portal_faxes_incoming_table" class="table display table-striped table-condensed">
    <thead>
         <tr>
@@ -33,7 +33,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for attempt in m.inno.kz_list_incoming_faxes %}
+        {% for attempt in m.kazoo.kz_list_incoming_faxes %}
           {% if attempt["timestamp"] %}
             <tr>
                 <td style="text-align: center; white-space: nowrap;">{{ attempt["timestamp"]|inno_timestamp_to_date:[4] }}</td>
@@ -46,7 +46,7 @@
             {% wire id=attempt["id"] action={ dialog_open title=_"Fax details" template="_details.tpl" arg=attempt } %}
             {% wire id="fax_delete_"++attempt["id"]
                     action={confirm text=_"Do you really want to delete incoming fax from "++attempt["from_number"]|pretty_phonenumber++"?"
-                                action={postback postback={delete_incoming_fax fax_id=attempt["id"] } delegate="inno"}
+                                action={postback postback={delete_incoming_fax fax_id=attempt["id"] } delegate="mod_kazoo"}
                            }
             %}
           {% endif %}

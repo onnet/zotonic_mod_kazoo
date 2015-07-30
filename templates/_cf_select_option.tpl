@@ -1,4 +1,4 @@
-{% wire id="form_cf_select_option" type="submit" postback="cf_select_option" delegate="inno" %}
+{% wire id="form_cf_select_option" type="submit" postback="cf_select_option" delegate="mod_kazoo" %}
 <form id="form_cf_select_option" method="post" action="postback">
     <div class="form-group">
       <div class="row">

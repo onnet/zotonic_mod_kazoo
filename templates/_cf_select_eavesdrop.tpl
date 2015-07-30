@@ -1,4 +1,4 @@
-{% with m.inno[{cf_get_element_by_id element_id=element_id}] as element_data %}
+{% with m.kazoo[{cf_get_element_by_id element_id=element_id}] as element_data %}
 {% with  element_data[1]["data"][1]["approved_group_id"]
         ,element_data[1]["data"][1]["approved_user_id"]
         ,element_data[1]["data"][1]["approved_device_id"]
@@ -13,7 +13,7 @@
         ,user_id
         ,device_id
 %}
-{% wire id="form_cf_select_eavesdrop" type="submit" postback="cf_select_eavesdrop" delegate="inno" %}
+{% wire id="form_cf_select_eavesdrop" type="submit" postback="cf_select_eavesdrop" delegate="mod_kazoo" %}
 <form id="form_cf_select_eavesdrop" method="post" action="postback">
     <div class="form-group">
       <label class="form-control-onnet margin-bottom-xs">Target

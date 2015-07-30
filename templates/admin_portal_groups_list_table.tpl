@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_groups_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_groups_widget_opened"}] %}
 <table id="admin_portal_groups_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -9,7 +9,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for group in m.inno.kz_list_account_groups %}
+        {% for group in m.kazoo.kz_list_account_groups %}
 	<tr>
             <td style="text-align: center1;">{{ group["name"] }}</td>
             <td style="text-align: center;">{{ group["endpoints"] }}</td>
@@ -18,7 +18,7 @@
             <td style="text-align: center;"><i id="delete_{{ group["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++group["id"]
                     action={confirm text=_"Do you really want to delete group "++group["name"]++"?"
-                                action={postback postback={delete_group group_id=group["id"]} delegate="inno"}
+                                action={postback postback={delete_group group_id=group["id"]} delegate="mod_kazoo"}
                            }
             %}
         </tr>

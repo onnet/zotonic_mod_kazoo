@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_menus_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_menus_widget_opened"}] %}
 <table id="admin_portal_menus_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -11,8 +11,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for menu in m.inno.kz_list_account_menus %}
-        {% with m.inno[{kz_get_account_menu menu_id=menu["id"]}] as menu_details %}
+        {% for menu in m.kazoo.kz_list_account_menus %}
+        {% with m.kazoo[{kz_get_account_menu menu_id=menu["id"]}] as menu_details %}
 	<tr>
             <td style="text-align: center1;">{{ menu["name"] }}</td>
             <td style="text-align: center;">{{ menu_details[1]["retries"] }}</td>
@@ -23,7 +23,7 @@
             <td style="text-align: center;"><i id="delete_{{ menu["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++menu["id"]
                     action={confirm text=_"Do you really want to delete menu "++menu["name"]++"?"
-                                action={postback postback={delete_menu menu_id=menu["id"]} delegate="inno"}
+                                action={postback postback={delete_menu menu_id=menu["id"]} delegate="mod_kazoo"}
                            }
             %}
         </tr>

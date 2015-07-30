@@ -1,6 +1,6 @@
 <div class="row">
 <div class="col-sm-8 col-sm-offset-2">
-{% wire id="passwordForm" type="submit" postback="passwordForm" delegate="inno" %}
+{% wire id="passwordForm" type="submit" postback="passwordForm" delegate="mod_kazoo" %}
 <form method="post" action="postback" id="passwordForm">
 <input type="hidden" name="chpwd_user_id" value={{ user_id }}>
 <input type="password" class="input form-control mt-1" name="password1" id="password1" placeholder="New Password" autocomplete="off">

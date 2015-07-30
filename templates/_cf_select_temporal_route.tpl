@@ -1,11 +1,11 @@
-{% with m.inno[{cf_get_module_info module_name=tool_name module_path=element_id}][2] as current_timezone %}
-{% wire id="form_cf_select_temporal_route" type="submit" postback="cf_select_temporal_route" delegate="inno" %}
+{% with m.kazoo[{cf_get_module_info module_name=tool_name module_path=element_id}][2] as current_timezone %}
+{% wire id="form_cf_select_temporal_route" type="submit" postback="cf_select_temporal_route" delegate="mod_kazoo" %}
 <form id="form_cf_select_temporal_route" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
             <select id="temporal_route_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for zone in m.inno.tz_list %}
+              {% for zone in m.kazoo.tz_list %}
                   <option value="{{ zone }}" {% if zone == current_timezone %}selected{% endif %}>{{ zone }}</option>
               {% endfor %}
             </select>

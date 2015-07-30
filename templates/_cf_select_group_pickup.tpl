@@ -1,4 +1,4 @@
-{% wire id="form_cf_select_group_pickup" type="submit" postback="cf_select_group_pickup" delegate="inno" %}
+{% wire id="form_cf_select_group_pickup" type="submit" postback="cf_select_group_pickup" delegate="mod_kazoo" %}
 <form id="form_cf_select_group_pickup" method="post" action="postback">
     <div class="form-group">
       <div class="row">

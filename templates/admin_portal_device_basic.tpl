@@ -18,9 +18,9 @@
         <div id="owner_id" class="col-xs-5">
             {% wire id="edit_owner_id" type="click" action={ update target="owner_id" 
                                                                     template="_edit_field_select.tpl" 
-                                                                    type="device" doc_id=device_id field_name="owner_id" options=m.inno.kz_list_account_users_short } %}
+                                                                    type="device" doc_id=device_id field_name="owner_id" options=m.kazoo.kz_list_account_users_short } %}
             <span>
-                {{ m.inno[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="first_name"}] }} {{ m.inno[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="last_name"}] }}
+                {{ m.kazoo[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="first_name"}] }} {{ m.kazoo[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="last_name"}] }}
                 <i id="edit_owner_id" class="fa fa-edit pointer" title="Edit field"></i>
             </span>
         </div>
@@ -31,7 +31,7 @@
     <!-- Realm field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Realm</label></div>
-        <div id="edit_realm" class="col-xs-5">{{ m.inno.get_account_realm }}</div>
+        <div id="edit_realm" class="col-xs-5">{{ m.kazoo.get_account_realm }}</div>
     </div>
     <!-- Username field -->
     <div class="row">
@@ -67,7 +67,7 @@
             {% if device_doc["media"][1]["fax_option"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_mediafax_option" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_mediafax_option" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="device" doc_id=device_id field_name=["media","fax_option"]}
             %}
         </div>
@@ -81,14 +81,14 @@
             <div>
                 {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Disable"  action={ postback postback={disable_doc type doc_id field_name}
                                                                                                          inject_args type="device" doc_id=device_id field_name="enabled"
-                                                                                                         delegate="inno"}
+                                                                                                         delegate="mod_kazoo"}
                 %}
             </div>
         {% else %}
             <div>
                 {% button class="col-xs-12 btn btn-zprimary mb-1" text=_"Enable"  action={ postback postback={enable_doc type doc_id field_name}
                                                                                                     inject_args type="device" doc_id=device_id field_name="enabled"
-                                                                                                    delegate="inno"}
+                                                                                                    delegate="mod_kazoo"}
                 %}
             </div>
         {% endif %}
@@ -96,7 +96,7 @@
     <div class="col-xs-2">
         <div>
             {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Delete"  action={confirm text="Do you really want to delete this device?"
-                                                                                                   action={ postback postback={delete_device device_id} inject_args device_id=device_id delegate="inno"}
+                                                                                                   action={ postback postback={delete_device device_id} inject_args device_id=device_id delegate="mod_kazoo"}
                                                                                                    action={dialog_close}
                                                                                           }
             %}

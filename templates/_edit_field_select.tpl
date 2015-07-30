@@ -1,5 +1,5 @@
 <select id="{{ field_name }}_input" name="input_value" style="max-width:140px; height:20px; text-align:center;">
-  {% with m.inno[{kz_doc_field type=type doc_id=doc_id field=field_name}] as current_value %}
+  {% with m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name}] as current_value %}
   {% for option in options %}
     {% if option[1]|is_list %}
         <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>{{ option[2] }}</option>
@@ -14,6 +14,6 @@
 {% wire id=field_name++"_undo" type="click" action={ update target=field_name template="_show_field_select.tpl" type=type doc_id=doc_id field_name=field_name options=options} %}
 <i id="{{ field_name }}_save" class="fa fa-save pointer" title="Save"></i>
 {% wire id=field_name++"_save" type="click" action={postback postback={save_field_select type doc_id field_name options} 
-                                                             delegate="inno" 
+                                                             delegate="mod_kazoo" 
                                                              qarg=field_name++"_input" inject_args type=type doc_id=doc_id field_name=field_name options=options}
 %}

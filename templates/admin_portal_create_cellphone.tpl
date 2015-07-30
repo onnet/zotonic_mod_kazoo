@@ -1,4 +1,4 @@
-{% wire id="form_add_cellphone" type="submit" postback="add_new_device" delegate="inno" %}
+{% wire id="form_add_cellphone" type="submit" postback="add_new_device" delegate="mod_kazoo" %}
 <form id="form_add_cellphone" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -7,7 +7,7 @@
         </div>
         <div class="col-sm-6">
             <select id="cellphone_owner_id" name="device_owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for option in m.inno.kz_list_account_users_short %}
+              {% for option in m.kazoo.kz_list_account_users_short %}
                     <option value="{{ option[1] }}" {% if not option[1] %}selected{% endif %}>{{ option[2] }}</option>
               {% endfor %}
             </select>

@@ -1,16 +1,16 @@
-{% extends "onnet_widget_dashboard.tpl" %}
+{% extends "modkazoo_widget_dashboard.tpl" %}
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
         action={ toggle target="user_webphone_widget_opened" }
         action={ toggle target="arrow_right_"++#dtid }
         action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="user_webphone_widget_opened" } delegate="inno" }
+        action={ postback postback={trigger_innoui_widget arg="user_webphone_widget_opened" } delegate="mod_kazoo" }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
-    <i id="arrow_right_{{ #dtid }}" style="{% if m.inno[{ui_element_opened element="user_webphone_widget_opened"}] %}display: none;{% endif %}"
+    <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="user_webphone_widget_opened"}] %}display: none;{% endif %}"
                                     class="arrowpad fa fa-arrow-circle-right"></i>
-    <i id="arrow_down_{{ #dtid }}" style="{% if not m.inno[{ui_element_opened element="user_webphone_widget_opened"}] %}display: none;{% endif %}"
+    <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="user_webphone_widget_opened"}] %}display: none;{% endif %}"
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
   <span id="status_registration"></span>
@@ -25,7 +25,7 @@
 {% if m.session.webrtc_dev_sip_username %}
   {% button id="webrtc_register_button" class="btn btn-xs btn-onnet pull-right display_none" text=_"register" action={submit target="start-webphone-form"} %}
   <select id="webrtc_device_select" name="webrtc_device" class="pull-right display_none" style="height: 1.5em;">
-  {% for device in m.inno.kz_list_user_devices %}
+  {% for device in m.kazoo.kz_list_user_devices %}
       <option value="{{ device["id"] }}">{{ device["name"]|escape }}</option>
   {% endfor %}
   </select>
@@ -41,7 +41,7 @@
 {% if not m.session.webrtc_dev_sip_username %}
   {% button id="webrtc_register_button" class="btn btn-xs btn-onnet pull-right" text=_"register" action={submit target="start-webphone-form"} %}
   <select id="webrtc_device_select" name="webrtc_device" class="pull-right" style="height: 1.5em;">
-  {% for device in m.inno.kz_list_user_devices %}
+  {% for device in m.kazoo.kz_list_user_devices %}
     <option value="{{ device["id"] }}">{{ device["name"]|escape }}</option>
   {% endfor %}
   </select>
@@ -58,7 +58,7 @@
 
 
 {% block widget_content %}
-<div id="user_webphone_widget_opened" style="{% if not m.inno[{ui_element_opened element="user_webphone_widget_opened"}] %}display: none;{% endif %}">
+<div id="user_webphone_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="user_webphone_widget_opened"}] %}display: none;{% endif %}">
   <div id="webphone_widget">
     {% include "user_portal_phone.tpl" %}
   </div>

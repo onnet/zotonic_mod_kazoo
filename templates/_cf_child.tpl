@@ -4,12 +4,12 @@
     {% else %}
       {% include "_cf_child_head.tpl" %}
     {% endif %}
-    {% droppable id=element_id tag={drop_args drop_id=element_id drop_parent=tool_name} delegate="inno" %}
+    {% droppable id=element_id tag={drop_args drop_id=element_id drop_parent=tool_name} delegate="mod_kazoo" %}
     <div id="{{ element_id }}" class="branch">
         <div name="{{ tool_name }}" class="node icons_black" style="position: relative;">
             <div class="node-options">
                 {% wire id=element_id++"_delete" action={remove target=element_id++"_child"}
-                                                 action={postback postback={cf_delete_element element_id=element_id} delegate="inno"}
+                                                 action={postback postback={cf_delete_element element_id=element_id} delegate="mod_kazoo"}
                 %}
                 <div id="{{ element_id }}_delete" class="delete">
                 </div>
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div id="{{ element_id }}-children" class="children">
-          {% wire action={postback postback={check_children id=element_id  drop_id=element_id drop_parent=tool_name} delegate="inno"} %}
+          {% wire action={postback postback={check_children id=element_id  drop_id=element_id drop_parent=tool_name} delegate="mod_kazoo"} %}
         </div>
     </div>
 </div>

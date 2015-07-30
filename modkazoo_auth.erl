@@ -56,7 +56,7 @@ signout(Context) ->
     z_render:wire({redirect, [{dispatch, "home"}]}, Context1).
 
 gcapture_check(Context) ->
-    CaptSecret = m_config:get_value('inno', 'g_capture_secret', Context),
+    CaptSecret = m_config:get_value('mod_kazoo', 'g_capture_secret', Context),
     GCaptureResp = z_context:get_q("g-recaptcha-response",Context),
     {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
     URL = list_to_binary(["https://www.google.com/recaptcha/api/siteverify?secret=", CaptSecret, "&response=", GCaptureResp, "&remoteip=", ClientIP]),
@@ -67,6 +67,6 @@ gcapture_check(Context) ->
 process_signup_form(Context) ->
     {'new_account_id', AccountId} = kazoo_util:create_kazoo_account(Context),
     spawn('kazoo_util', 'kz_create_default_callflow_sec', [20000, AccountId, Context]),
- %   _ = kazoo_util:add_service_plan(m_config:get_value('inno', 'signup_service_plan', Context), AccountId, Context),
+ %   _ = kazoo_util:add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), AccountId, Context),
     z_render:update("sign_up_div", z_template:render("_registration_completed.tpl", [], Context), Context).
       

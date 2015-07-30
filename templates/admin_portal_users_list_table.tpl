@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_users_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_users_widget_opened"}] %}
 <table id="admin_portal_users_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -12,8 +12,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for user in m.inno.kz_list_account_users %}
-        {% with m.inno[{kz_user_doc_by_ownerid owner_id=user["id"]}] as user_doc %}
+        {% for user in m.kazoo.kz_list_account_users %}
+        {% with m.kazoo[{kz_user_doc_by_ownerid owner_id=user["id"]}] as user_doc %}
         {% with user_doc[1]["caller_id"][1][1][2][1][2][2], user_doc[1]["caller_id"][1][2][2][1][2][2] as internal_cid, external_cid %} 
 	<tr>
             <td style="text-align: center;">{{ user["username"] }}</td>

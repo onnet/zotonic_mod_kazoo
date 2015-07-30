@@ -1,5 +1,5 @@
-{% with m.inno[{kz_get_account_menu menu_id=menu_id}] as menu %}
-{% wire id="form_kz_menu" type="submit" postback="kz_menu" delegate="inno" %}
+{% with m.kazoo[{kz_get_account_menu menu_id=menu_id}] as menu %}
+{% wire id="form_kz_menu" type="submit" postback="kz_menu" delegate="mod_kazoo" %}
 <form id="form_kz_menu" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -9,7 +9,7 @@
         <div class="col-sm-6">
             <select id="greeting" name="greeting" class="form-control margin-bottom-xs" style="text-align:center;">
                 <option value=" ">-- Select voice prompt --</option>
-              {% for option in m.inno.kz_list_account_media %}
+              {% for option in m.kazoo.kz_list_account_media %}
                 <option value="{{ option["id"] }}" {% if option["id"] == menu[1]["media"][1]["greeting"] %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
             </select>

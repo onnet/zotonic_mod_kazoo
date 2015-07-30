@@ -65,7 +65,7 @@
                 {% if user_doc["vm_to_email_enabled"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
                 <i id="toggle_vm_to_email_enabled" class="fa fa-refresh pointer" title="Change"></i>
                 {% wire id="toggle_vm_to_email_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                              delegate="inno"
+                                                                              delegate="mod_kazoo"
                                                                               inject_args type="user" doc_id=user_id field_name="vm_to_email_enabled"}
                 %}
             </span>
@@ -76,7 +76,7 @@
                 {% if user_doc["fax_to_email_enabled"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
                 <i id="toggle_fax_to_email_enabled" class="fa fa-refresh pointer" title="Change"></i>
                 {% wire id="toggle_fax_to_email_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                              delegate="inno"
+                                                                              delegate="mod_kazoo"
                                                                               inject_args type="user" doc_id=user_id field_name="fax_to_email_enabled"}
                 %}
             </span>
@@ -87,7 +87,7 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Timezone</label></div>
         <div id="timezone" class="col-xs-5">
-            {% wire id="edit_timezone" type="click" action={ update target="timezone" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.inno.tz_list } %}
+            {% wire id="edit_timezone" type="click" action={ update target="timezone" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list } %}
             <span>
                 {{ user_doc["timezone"] }}
                 <i id="edit_timezone" class="fa fa-edit pointer" title="Edit field"></i>
@@ -101,14 +101,14 @@
             <div>
                 {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Disable" action={ postback postback={disable_doc type doc_id field_name}
                                                                                                         inject_args type="user" doc_id=user_id field_name="enabled" 
-                                                                                                        delegate="inno"}
+                                                                                                        delegate="mod_kazoo"}
                 %}
             </div>
         {% else %}
             <div>
                 {% button class="col-xs-12 btn btn-zprimary mb-1" text=_"Enable" action={ postback postback={enable_doc type doc_id field_name}
                                                                                                    inject_args type="user" doc_id=user_id field_name="enabled"
-                                                                                                   delegate="inno"}
+                                                                                                   delegate="mod_kazoo"}
                 %}
             </div>
         {% endif %}
@@ -116,7 +116,7 @@
     <div class="col-xs-2">
         <div>
             {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Delete"  action={confirm text="Do you really want to delete this user?"
-                                                                                                   action={ postback postback={delete_user user_id} inject_args user_id=user_id delegate="inno"}
+                                                                                                   action={ postback postback={delete_user user_id} inject_args user_id=user_id delegate="mod_kazoo"}
                                                                                                    action={dialog_close}
                                                                                           }
             %}

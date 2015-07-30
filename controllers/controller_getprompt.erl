@@ -31,7 +31,7 @@ service_available(ReqData, ConfigProps) ->
         0 -> ?WM_REPLY(false, Context1);
         N when is_integer(N) ->
             PromptDoc = kazoo_util:kz_get_account_prompt(DocId, Context1),
-            Mime = z_media_identify:guess_mime(inno_util:get_value(<<"description">>,PromptDoc)),
+            Mime = z_media_identify:guess_mime(modkazoo_util:get_value(<<"description">>,PromptDoc)),
             ContextMime = z_context:set(mime, Mime, Context1),
             ContextSize = z_context:set([{file_size, N}], ContextMime), 
             ?WM_REPLY(true, ContextSize);

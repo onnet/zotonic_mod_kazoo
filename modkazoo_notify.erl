@@ -17,7 +17,7 @@ email_attachment(CustomerEmail, FileName, Template, Vars, Data, Context) ->
         mime = "application/pdf"
     },
     Email = #email{
-        from=m_config:get_value('inno', sales_email, Context),
+        from=m_config:get_value('mod_kazoo', sales_email, Context),
         to=CustomerEmail,
         html_tpl=z_convert:to_list(Template),
         vars=[{clientip, ClientIP}|Vars],

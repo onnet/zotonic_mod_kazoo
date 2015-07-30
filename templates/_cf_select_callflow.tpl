@@ -1,10 +1,10 @@
-{% wire id="form_cf_select_callflow" type="submit" postback="cf_select_callflow" delegate="inno" %}
+{% wire id="form_cf_select_callflow" type="submit" postback="cf_select_callflow" delegate="mod_kazoo" %}
 <form id="form_cf_select_callflow" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
             <select id="callflow_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for option in m.inno.kz_list_account_callflows %}
+              {% for option in m.kazoo.kz_list_account_callflows %}
                 {% if option["numbers"][1]|match:"^\\+?\\d+$" %}
                   <option value="{{ option["id"] }}" selected="selected">{% if option["name"] %}{{ option["name"] }}{% else %}{{ option["numbers"][1] }}{% endif %}</option>
                 {% endif %}

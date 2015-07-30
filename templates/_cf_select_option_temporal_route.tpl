@@ -1,4 +1,4 @@
-{% wire id="form_cf_select_option_temporal_route" type="submit" postback="cf_select_option_temporal_route" delegate="inno" %}
+{% wire id="form_cf_select_option_temporal_route" type="submit" postback="cf_select_option_temporal_route" delegate="mod_kazoo" %}
 <form id="form_cf_select_option_temporal_route" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <select id="menu_key_selector" name="switch" class="form-control margin-bottom-xs" style="text-align:center;">
               {% for key in available_keys %}
-                  <option value="{{ key }}">{% if key=="_" %}Default action{% else %}{{ m.inno[{kz_get_temporal_rule rule_id=key}][1]["name"] }}{% endif %}</option>
+                  <option value="{{ key }}">{% if key=="_" %}Default action{% else %}{{ m.kazoo[{kz_get_temporal_rule rule_id=key}][1]["name"] }}{% endif %}</option>
               {% endfor %}
             </select>
         </div>

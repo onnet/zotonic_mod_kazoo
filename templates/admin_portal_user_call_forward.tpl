@@ -9,7 +9,7 @@
             {% if user_doc["call_forward"][1]["enabled"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwardenabled" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardenabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="user" doc_id=user_id field_name=["call_forward","enabled"]}
             %}
         </div>
@@ -30,7 +30,7 @@
             {% if user_doc["call_forward"][1]["substitute"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwardsubstitute" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardsubstitute" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="user" doc_id=user_id field_name=["call_forward","substitute"]}
             %}
         </div>
@@ -42,7 +42,7 @@
             {% if user_doc["call_forward"][1]["require_keypress"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwardrequire_keypress" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardrequire_keypress" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="user" doc_id=user_id field_name=["call_forward","require_keypress"]}
             %}
         </div>
@@ -54,7 +54,7 @@
             {% if user_doc["call_forward"][1]["keep_caller_id"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwardkeep_caller_id" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardkeep_caller_id" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="user" doc_id=user_id field_name=["call_forward","keep_caller_id"]}
             %}
         </div>
@@ -66,7 +66,7 @@
             {% if user_doc["call_forward"][1]["direct_calls_only"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwarddirect_calls_only" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwarddirect_calls_only" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="user" doc_id=user_id field_name=["call_forward","direct_calls_only"]}
             %}
         </div>

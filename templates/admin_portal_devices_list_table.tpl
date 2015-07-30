@@ -1,4 +1,4 @@
-{% if m.inno[{ui_element_opened element="ap_devices_widget_opened"}] %}
+{% if m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}
 <table id="admin_portal_devices_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -11,10 +11,10 @@
         </tr>
     </thead>
     <tbody>
-        {% for device in m.inno.kz_list_account_devices %}
-        {% with m.inno[{kz_get_device_registration_details device_id=device["id"]}] as device_details %}
-        {% with m.inno[{kz_check_device_registration device_id=device["id"]}] as device_registered %}
-        {% with m.inno[{kz_device_doc device_id=device["id"]}] as device_doc %}
+        {% for device in m.kazoo.kz_list_account_devices %}
+        {% with m.kazoo[{kz_get_device_registration_details device_id=device["id"]}] as device_details %}
+        {% with m.kazoo[{kz_check_device_registration device_id=device["id"]}] as device_registered %}
+        {% with m.kazoo[{kz_device_doc device_id=device["id"]}] as device_doc %}
         {% with device_doc[1]["caller_id"][1][1][2][1][2][2], device_doc[1]["caller_id"][1][2][2][1][2][2] as internal_cid, external_cid %}
 	<tr>
             <td style="text-align: center;">
@@ -27,7 +27,7 @@
                             icon-telicon-voip-phone icon-device"></i>
                 {% elseif device["device_type"]=="softphone" %}
                   <i class="{% if device["enabled"] %}
-                                {% if m.inno[{kz_check_device_registration device_id=device["id"]}] %}registered
+                                {% if m.kazoo[{kz_check_device_registration device_id=device["id"]}] %}registered
                                     {% else %}unregistered
                                 {% endif %}
                             {% endif %} 
@@ -39,7 +39,7 @@
                 {% endif %}
             </td>
             <td style="text-align: center;">{{ device["name"]|truncate:13 }}</td>
-            <td style="text-align: center;">{% if device["owner_id"] %}{{ m.inno[{kz_user_doc_by_ownerid owner_id=device["owner_id"]}][1]["username"]|truncate:13 }}{% else %}-{% endif %}</td>
+            <td style="text-align: center;">{% if device["owner_id"] %}{{ m.kazoo[{kz_user_doc_by_ownerid owner_id=device["owner_id"]}][1]["username"]|truncate:13 }}{% else %}-{% endif %}</td>
             <td style="text-align: center;">
                 {{ internal_cid }}
                 {% if internal_cid and external_cid %} | {% endif %}

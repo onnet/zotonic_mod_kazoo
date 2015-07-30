@@ -5,7 +5,7 @@
 
 {% lib "css/kazoo/cf_app.css" %}
 {% lib "css/kazoo/cf_tables.css" %}
-{% lib "css/kazoo/cf_onnet.css" %}
+{% lib "css/kazoo/cf_mod_kazoo.css" %}
 
 {% wire action={connect signal={update_cf_builder_area} action={update target="cf_builder_area" template="kzui_cf.tpl"}} %}
 <span id="cf_builder_area">

@@ -1,10 +1,10 @@
-{% wire id="form_cf_select_play" type="submit" postback="cf_select_play" delegate="inno" %}
+{% wire id="form_cf_select_play" type="submit" postback="cf_select_play" delegate="mod_kazoo" %}
 <form id="form_cf_select_play" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
             <select id="play_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for option in m.inno.kz_list_account_media %}
+              {% for option in m.kazoo.kz_list_account_media %}
                   <option value="{{ option["id"] }}" {% if option["id"] == kz_element_id %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
             </select>

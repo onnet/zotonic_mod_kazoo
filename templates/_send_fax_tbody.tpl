@@ -1,4 +1,4 @@
-{% wire id="send-fax-form" type="submit" postback="send_fax" delegate="inno" %}
+{% wire id="send-fax-form" type="submit" postback="send_fax" delegate="mod_kazoo" %}
 <form id="send-fax-form" method="post" action="postback" class="form">
 <table class="table table-condensed table-hover table-centered" style="table-layout: fixed;">
 <tbody id="send-fax-tbody">
@@ -15,7 +15,7 @@
   <td >{_ Please choose the number to send fax from _}:</td>
   <td class="td-left">
        <select name="fax_from" id="fax_from">
-       {% for number in m.inno.get_acc_numbers %}
+       {% for number in m.kazoo.get_acc_numbers %}
        <option>{{ number }}</option>
        {% endfor %}
        </select></td>

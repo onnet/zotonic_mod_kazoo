@@ -1,4 +1,4 @@
-{% sortable id=#selected tag="test" delegate="inno" %}
+{% sortable id=#selected tag="test" delegate="mod_kazoo" %}
 <div id="{{ #selected }}" class="row" style="padding-top:5px;">
   <input id="{{ #selected }}_index" type="hidden" name="{{ selected_value[1]["id"] }}" value="5000">
   <input type="hidden" name="sortable_element" value="{{ selected_value[1]["id"] }}">

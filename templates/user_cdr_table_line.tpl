@@ -6,7 +6,7 @@
             <td style="text-align: center;">{% if call["recording_url"] and (call["billing_seconds"] > 3) %}
 
                          <audio id="audio_{{ call["timestamp"] }}">
-                             <source src="{{ m.inno[{kz_recording_download_link cdr_id=call["id"]}] }}" type="audio/mp3">
+                             <source src="{{ m.kazoo[{kz_recording_download_link cdr_id=call["id"]}] }}" type="audio/mp3">
                          </audio>
                          <a id="play_{{ call["timestamp"] }}" onclick='$("#audio_{{ call["timestamp"] }}").trigger("play");
                                                                  $("#play_{{ call["timestamp"] }}").toggle();

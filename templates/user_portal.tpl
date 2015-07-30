@@ -2,7 +2,7 @@
 
 {% block service_description %}
 
-  {% include "_onnet_account_page_title.tpl" title=_"User portal" %}
+  {% include "_account_page_title.tpl" title=_"User portal" %}
 
   {% lib "js/sip-0.7.0.js" %}
   {% lib "css/user_portal_phone.css" %}

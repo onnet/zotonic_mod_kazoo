@@ -1,4 +1,4 @@
-{% wire id="form_add_group" type="submit" postback="add_new_group" delegate="inno" %}
+{% wire id="form_add_group" type="submit" postback="add_new_group" delegate="mod_kazoo" %}
 <form id="form_add_group" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -10,7 +10,7 @@
     <div class="form-group" id="grp_users_list">
       <h4>Users:</h4>
       <div class="col-sm-12 columns"> 
-        {% for option in m.inno.kz_list_account_users_short %}
+        {% for option in m.kazoo.kz_list_account_users_short %}
         {% if option[1] %}
         <label for="{{ option[1]|truncate:8:"" }}" class="checkbox-inline">
           <input type="checkbox" value="{{ option[1] }}" id="{{ option[1]|truncate:8:"" }}" name="user">
@@ -23,7 +23,7 @@
     <div class="form-group" id="grp_users_list">
       <h4>Devices:</h4>
       <div class="col-sm-12 columns"> 
-        {% for option in m.inno.kz_list_account_devices_short %}
+        {% for option in m.kazoo.kz_list_account_devices_short %}
         {% if option[1] %}
         <label for="{{ option[1]|truncate:8:"" }}" class="checkbox-inline">
           <input type="checkbox" value="{{ option[1] }}" id="{{ option[1]|truncate:8:"" }}" name="device">

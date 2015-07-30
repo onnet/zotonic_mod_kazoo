@@ -1,4 +1,4 @@
-{% wire id="form_cf_add_number" type="submit" postback="cf_add_number" delegate="inno" %}
+{% wire id="form_cf_add_number" type="submit" postback="cf_add_number" delegate="mod_kazoo" %}
 <form id="form_cf_add_number" method="post" action="postback">
     <div class="form-group">
       <div class="row">

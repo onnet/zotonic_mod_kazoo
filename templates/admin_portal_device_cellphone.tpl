@@ -18,9 +18,9 @@
         <div id="owner_id" class="col-xs-5">
             {% wire id="edit_owner_id" type="click" action={ update target="owner_id" 
                                                                     template="_edit_field_select.tpl" 
-                                                                    type="device" doc_id=device_id field_name="owner_id" options=m.inno.kz_list_account_users_short } %}
+                                                                    type="device" doc_id=device_id field_name="owner_id" options=m.kazoo.kz_list_account_users_short } %}
             <span>
-                {{ m.inno[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="first_name"}] }} {{ m.inno[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="last_name"}] }}
+                {{ m.kazoo[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="first_name"}] }} {{ m.kazoo[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="last_name"}] }}
                 <i id="edit_owner_id" class="fa fa-edit pointer" title="Edit field"></i>
             </span>
         </div>
@@ -44,7 +44,7 @@
             {% if device_doc["call_forward"][1]["keep_caller_id"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwardkeep_caller_id" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardkeep_caller_id" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="device" doc_id=device_id field_name=["call_forward","keep_caller_id"]}
             %}
         </div>
@@ -56,7 +56,7 @@
             {% if device_doc["call_forward"][1]["require_keypress"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
             <i id="toggle_call_forwardrequire_keypress" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardrequire_keypress" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                          delegate="inno"
+                                                                          delegate="mod_kazoo"
                                                                           inject_args type="device" doc_id=device_id field_name=["call_forward","require_keypress"]}
             %}
         </div>
@@ -69,14 +69,14 @@
             <div>
                 {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Disable"  action={ postback postback={disable_doc type doc_id field_name} 
                                                                                                          inject_args type="device" doc_id=device_id field_name=["call_forward","enabled"] 
-                                                                                                         delegate="inno"}
+                                                                                                         delegate="mod_kazoo"}
                 %}
             </div>
         {% else %}
             <div>
                 {% button class="col-xs-12 btn btn-zprimary mb-1" text=_"Enable"  action={ postback postback={enable_doc type doc_id field_name}
                                                                                                     inject_args type="device" doc_id=device_id field_name=["call_forward","enabled"]
-                                                                                                    delegate="inno"}
+                                                                                                    delegate="mod_kazoo"}
                 %}
             </div>
         {% endif %}
@@ -84,7 +84,7 @@
     <div class="col-xs-2">
         <div>
             {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Delete"  action={confirm text="Do you really want to delete this device?"
-                                                                                                   action={ postback postback={delete_device device_id} inject_args device_id=device_id delegate="inno"}
+                                                                                                   action={ postback postback={delete_device device_id} inject_args device_id=device_id delegate="mod_kazoo"}
                                                                                                    action={dialog_close}
                                                                                           }
             %}

@@ -46,13 +46,13 @@
   </div>
 </div>
 
-{% for number in m.inno.get_acc_numbers_info %}
+{% for number in m.kazoo.get_acc_numbers_info %}
     {% print number[2][1]["used_by"] %}
     {% if not number[2][1]["used_by"] %}
         {% print number[2][1] %}
     {% endif %}
 {% endfor %}
 Callflows:
-{% print m.inno.kz_list_account_callflows %}
+{% print m.kazoo.kz_list_account_callflows %}
 Numbers:
-{% print m.inno.get_acc_numbers_info %}
+{% print m.kazoo.get_acc_numbers_info %}

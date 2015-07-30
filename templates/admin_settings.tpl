@@ -2,7 +2,7 @@
 
 {% block service_description %}
 
-  {% include "_onnet_account_page_title.tpl" title=_"Account settings" %}
+  {% include "_account_page_title.tpl" title=_"Account settings" %}
 
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_admin_portal_users_list_tpl} action={update target="admin_portal_users_list_tpl" template="admin_portal_users_list.tpl" headline=_"Account's Users"}} %}

@@ -1,5 +1,5 @@
-{% with m.inno[{kz_get_account_prompt prompt_id=prompt_id}] as eprompt %}
-{% wire id="form_add_media" type="submit" postback="add_new_media" delegate="inno" %}
+{% with m.kazoo[{kz_get_account_prompt prompt_id=prompt_id}] as eprompt %}
+{% wire id="form_add_media" type="submit" postback="add_new_media" delegate="mod_kazoo" %}
 <form id="form_add_media" method="post" action="postback">
     <div class="form-group">
       <div class="row">

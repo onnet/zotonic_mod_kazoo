@@ -1,5 +1,5 @@
-{% with m.inno[{kz_get_temporal_rule rule_id=rule_id}] as rule %}
-{% wire id="time-of-the-day-form" type="submit" postback="cf_time_of_the_day" delegate="inno" %}
+{% with m.kazoo[{kz_get_temporal_rule rule_id=rule_id}] as rule %}
+{% wire id="time-of-the-day-form" type="submit" postback="cf_time_of_the_day" delegate="mod_kazoo" %}
 <form id="time-of-the-day-form"  method="post" action="postback">
   <div class="pill-content">
     <div class="form-group">

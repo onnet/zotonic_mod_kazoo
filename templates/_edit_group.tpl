@@ -1,6 +1,6 @@
-{% with m.inno[{kz_group_doc group_id=group_id}][1] as group_doc %}
+{% with m.kazoo[{kz_group_doc group_id=group_id}][1] as group_doc %}
 {% with group_doc["endpoints"][1]|element:1 as members %}
-{% wire id="form_edit_group" type="submit" postback="edit_group" delegate="inno" %}
+{% wire id="form_edit_group" type="submit" postback="edit_group" delegate="mod_kazoo" %}
 <form id="form_edit_group" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -12,7 +12,7 @@
     <div class="form-group" id="grp_users_list">
       <h4>Users:</h4>
       <div class="col-sm-12 columns"> 
-        {% for option in m.inno.kz_list_account_users_short %}
+        {% for option in m.kazoo.kz_list_account_users_short %}
         {% if option[1] %}
         <label for="{{ option[1]|truncate:8:"" }}" class="checkbox-inline {% if option[1]|member:members %}checked{% endif %}">
           <input type="checkbox" value="{{ option[1] }}" id="{{ option[1]|truncate:8:"" }}" name="user" {% if option[1]|member:members %}checked{% endif %}>
@@ -25,7 +25,7 @@
     <div class="form-group" id="grp_users_list">
       <h4>Devices:</h4>
       <div class="col-sm-12 columns"> 
-        {% for option in m.inno.kz_list_account_devices_short %}
+        {% for option in m.kazoo.kz_list_account_devices_short %}
         {% if option[1] %}
         <label for="{{ option[1]|truncate:8:"" }}" class="checkbox-inline {% if option[1]|member:members %}checked{% endif %}">
           <input type="checkbox" value="{{ option[1] }}" id="{{ option[1]|truncate:8:"" }}" name="device" {% if option[1]|member:members %}checked{% endif %}>

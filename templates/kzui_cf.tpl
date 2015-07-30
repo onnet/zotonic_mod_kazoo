@@ -3,11 +3,11 @@
 </div>
 <div class="row" style="padding: 1em;">
   <div class="col-xs-2">
-    {% wire id="callflow_manager_selector" type="change" action={ postback postback={cf_load}  delegate="inno"} %}
+    {% wire id="callflow_manager_selector" type="change" action={ postback postback={cf_load}  delegate="mod_kazoo"} %}
     <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs" style="text-align:center;">
       <option value="">-Select to edit-</option>
       <option value="new">-Add new Callflow-</option>
-      {% for option in m.inno.kz_list_account_callflows %}
+      {% for option in m.kazoo.kz_list_account_callflows %}
         {% if not option["featurecode"] and ( option["numbers"][1]|match:"^\\+?\\d+$" or option["patterns"][1] ) %}
           <option value="{{ option["id"] }}" {% if m.session.current_callflow[1]["id"] == option["id"] %}selected{% endif %}>
             {% if option["name"] %}{{ option["name"] }}{% elseif option["numbers"][1] %}{{ option["numbers"][1] }}{% else %}{{ option["patterns"][1] }}{% endif %}
@@ -17,7 +17,7 @@
     </select>
   </div>
   {% wire id="cf_reload_btn" action={confirm text="Do you really want to reload this callflow?"
-                                   action={postback postback={cf_reload cf="current_callflow"} delegate="inno"}
+                                   action={postback postback={cf_reload cf="current_callflow"} delegate="mod_kazoo"}
                            }
   %}
   <div class="col-xs-2">
@@ -28,14 +28,14 @@
     <button id="cf_details_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Details</button>
   </div>
   {% wire id="cf_save_btn" action={confirm text="Do you really want to save this callflow?"
-                                   action={postback postback={cf_save cf="current_callflow"} delegate="inno"}
+                                   action={postback postback={cf_save cf="current_callflow"} delegate="mod_kazoo"}
                            }
   %}
   <div class="col-xs-2">
     <button id="cf_save_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Save</button>
   </div>
   {% wire id="cf_delete_btn" action={confirm text="Do you really want to delete this callflow?"
-                                     action={postback postback={cf_delete cf="current_callflow"} delegate="inno"}
+                                     action={postback postback={cf_delete cf="current_callflow"} delegate="mod_kazoo"}
                              } 
   %}
   <div class="col-xs-2">
@@ -54,7 +54,7 @@
               <span class="flow">
                 <div id="ws_cf_flow">
                   <div class="child">
-                    {% droppable id="flow0" tag={drop_args drop_id="flow" drop_parent="root"} delegate="inno" %}
+                    {% droppable id="flow0" tag={drop_args drop_id="flow" drop_parent="root"} delegate="mod_kazoo" %}
                     <div id="flow0" class="branch">
                       <div name="root" class="node">
                         <div class="root">
@@ -76,7 +76,7 @@
                         </div>
                       </div>
                       <div id="flow-root" class="children">
-                      {% wire action={postback postback={check_children id="flow0" drop_id="flow" drop_parent="root"} delegate="inno"} %}
+                      {% wire action={postback postback={check_children id="flow0" drop_id="flow" drop_parent="root"} delegate="mod_kazoo"} %}
                       </div>
                     </div>
                   </div>

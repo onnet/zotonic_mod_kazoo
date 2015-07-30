@@ -43,11 +43,11 @@ event({postback,{signout,[]}, _, _}, Context) ->
 
 event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
     try
-      'ok' = module_util:check_field_filled("firstname",Context),
-      'ok' = module_util:check_field_filled("surname",Context),
-      'ok' = module_util:check_field_filled("username",Context),
-      'ok' = module_util:check_field_filled("email",Context),
-      'ok' = module_util:check_field_filled("phonenumber",Context),
+      'ok' = modkazoo_util:check_field_filled("firstname",Context),
+      'ok' = modkazoo_util:check_field_filled("surname",Context),
+      'ok' = modkazoo_util:check_field_filled("username",Context),
+      'ok' = modkazoo_util:check_field_filled("email",Context),
+      'ok' = modkazoo_util:check_field_filled("phonenumber",Context),
       Email = z_context:get_q_all("email",Context),
       {{ok, _}, _} = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), [false,"^[-+0-9 ()]+$"], Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
@@ -120,7 +120,7 @@ event({submit, send_fax, _, _}, Context) ->
 
     case z_context:get_q("faxfile", Context) of
         {upload, _FaxUploadFilename, FaxUploadTmp, _, _} ->
-            false = module_util:check_file_size_exceeded(faxfile, FaxUploadTmp, 15000000),
+            false = modkazoo_util:check_file_size_exceeded(faxfile, FaxUploadTmp, 15000000),
             {ok, FaxData} = file:read_file(FaxUploadTmp),
             {ok, FaxIdnProps} = z_media_identify:identify(FaxUploadTmp, Context),
             FaxMime = proplists:get_value(mime, FaxIdnProps),
@@ -155,7 +155,7 @@ event({postback,kazoo_transaction,_,_}, Context) ->
     case z_convert:to_float(z_context:get_q("kazoo_transaction", Context)) of
         Amount when Amount >= 10, Amount =< 200 ->
             JObj = kazoo_util:make_payment(Amount, z_context:get_session('kazoo_account_id', Context), Context),
-            case module_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
+            case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
                 <<"submitted_for_settlement">> ->
                     Context1 = z_render:growl(?__("£"++z_convert:to_list(Amount)++" successfully added.",Context), Context),
                     Context2 = z_render:update("onnet_widget_finance_tpl"
@@ -272,10 +272,10 @@ event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
            ,{number, Number}],
     case kazoo_util:is_creditable(Context) of
         'true' ->
-            spawn('z_email', 'send_render', [m_config:get_value('inno', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
+            spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
             kazoo_util:process_purchase_number(Number, Context);
         'false' -> 
-            spawn('z_email', 'send_render', [m_config:get_value('inno', sales_email, Context), "_email_number_purchase.tpl", [{'not_creditable','true'}|Vars], Context]),
+            spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", [{'not_creditable','true'}|Vars], Context]),
             Context1 = z_render:update("onnet_widget_order_additional_number_tpl" ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context),Context),
             z_render:growl_error(?__("Please add Credit Card or top-up account balance first.", Context1), Context1)
     end;
@@ -287,7 +287,7 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{clientip, ClientIP}
            ,{number, Number}],
-    spawn('z_email', 'send_render', [m_config:get_value('inno', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
+    spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
     case kazoo_util:deallocate_number(Number, Context) of
         <<>> ->
             Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
@@ -302,10 +302,10 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
 event({submit,{start_webphone_form,[]},_,_}, Context) ->
     DeviceId = z_context:get_q("webrtc_device",Context),
     DeviceDoc = kazoo_util:kz_get_device_doc(DeviceId, Context),
-    z_context:set_session('webrtc_dev_id', module_util:get_value(<<"id">>,DeviceDoc), Context),
-    z_context:set_session('webrtc_dev_name', module_util:get_value(<<"name">>,DeviceDoc), Context),
-    z_context:set_session('webrtc_dev_sip_username', module_util:get_value([<<"sip">>,<<"username">>],DeviceDoc), Context),
-    z_context:set_session('webrtc_dev_sip_password', module_util:get_value([<<"sip">>,<<"password">>],DeviceDoc), Context),
+    z_context:set_session('webrtc_dev_id', modkazoo_util:get_value(<<"id">>,DeviceDoc), Context),
+    z_context:set_session('webrtc_dev_name', modkazoo_util:get_value(<<"name">>,DeviceDoc), Context),
+    z_context:set_session('webrtc_dev_sip_username', modkazoo_util:get_value([<<"sip">>,<<"username">>],DeviceDoc), Context),
+    z_context:set_session('webrtc_dev_sip_password', modkazoo_util:get_value([<<"sip">>,<<"password">>],DeviceDoc), Context),
     z_render:update("webphone_widget" ,z_template:render("user_portal_phone.tpl", [{devicedoc, DeviceDoc}], Context),Context);
 
 event({postback,{delete_incoming_fax,[{fax_id, FaxId}]},_,_}, Context) ->
@@ -365,10 +365,10 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
 
 event({submit,add_new_user_form,_,_}, Context) ->
     try
-      'ok' = module_util:check_field_filled("firstname",Context),
-      'ok' = module_util:check_field_filled("surname",Context),
-      'ok' = module_util:check_field_filled("username",Context),
-      'ok' = module_util:check_field_filled("email",Context),
+      'ok' = modkazoo_util:check_field_filled("firstname",Context),
+      'ok' = modkazoo_util:check_field_filled("surname",Context),
+      'ok' = modkazoo_util:check_field_filled("username",Context),
+      'ok' = modkazoo_util:check_field_filled("email",Context),
       Email = z_context:get_q_all("email",Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
       case z_context:get_q_all("username",Context) of
@@ -376,7 +376,7 @@ event({submit,add_new_user_form,_,_}, Context) ->
           _ -> throw({'error', 'emails_not_equal'})
       end,
       kazoo_util:create_kazoo_user(Email
-                       ,module_util:rand_hex_binary(10)
+                       ,modkazoo_util:rand_hex_binary(10)
                        ,z_convert:to_binary(z_context:get_q("firstname", Context))
                        ,z_convert:to_binary(z_context:get_q("surname", Context))
                        ,z_convert:to_binary(Email)
@@ -524,14 +524,14 @@ event({submit,cf_select_group_pickup,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     PickupType = z_context:get_q("pickup_type", Context)++"_id",
     Selected = jiffy:decode(z_context:get_q("selected", Context)),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data",PickupType], module_util:get_value(<<"id">>,Selected), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","name"], module_util:get_value(<<"name">>,Selected), Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data",PickupType], modkazoo_util:get_value(<<"id">>,Selected), Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","name"], modkazoo_util:get_value(<<"name">>,Selected), Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_receive_fax,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","owner_id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","media","fax_option"], module_util:on_to_true(z_context:get_q("t_38_checkbox", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","media","fax_option"], modkazoo_util:on_to_true(z_context:get_q("t_38_checkbox", Context)), Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_save,[{cf,"current_callflow"}]},_,_},Context) ->
@@ -544,7 +544,7 @@ event({postback,{cf_delete,[{cf,"current_callflow"}]},_,_},Context) ->
 event({postback,{cf_ring_group_select,[{element_type,ElementType}]},_,_},Context) ->
     Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
     Context1 = z_render:insert_bottom("sorter",z_template:render("_cf_select_ring_group_element.tpl",[{selected_value,Selected},{element_type,ElementType}],Context),Context),
-    z_render:wire([{hide, [{target, "option_"++z_convert:to_list(module_util:get_value(<<"id">>,Selected))}]}], Context1);
+    z_render:wire([{hide, [{target, "option_"++z_convert:to_list(modkazoo_util:get_value(<<"id">>,Selected))}]}], Context1);
 
 event({submit,cf_select_ring_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
@@ -557,7 +557,7 @@ event({submit,cf_select_ring_group,_,_},Context) ->
 event({postback,{cf_page_group_select,[{element_type,ElementType}]},_,_},Context) ->
     Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
     Context1 = z_render:insert_bottom("sorter",z_template:render("_cf_select_page_group_element.tpl",[{selected_value,Selected},{element_type,ElementType}],Context),Context),
-    z_render:wire([{hide, [{target, "option_"++z_convert:to_list(module_util:get_value(<<"id">>,Selected))}]}], Context1);
+    z_render:wire([{hide, [{target, "option_"++z_convert:to_list(modkazoo_util:get_value(<<"id">>,Selected))}]}], Context1);
 
 event({submit,cf_select_page_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
@@ -613,7 +613,7 @@ event({postback,{cf_load,_},_,_},Context) ->
     Context;
 
 event({postback,{cf_reload,_},_,_},Context) ->
-    case module_util:get_value(<<"id">>,z_context:get_session('current_callflow', Context)) of
+    case modkazoo_util:get_value(<<"id">>,z_context:get_session('current_callflow', Context)) of
         'undefined' -> kazoo_util:cf_load_to_session("new", Context);
         CallflowId -> kazoo_util:cf_load_to_session(CallflowId, Context)
     end,
@@ -688,17 +688,17 @@ event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eav
     ElementId = z_context:get_q("element_id", Context),
     TargetType = z_convert:to_binary(z_context:get_q("target_type", Context)++"_id"),
     ApprovedType = z_convert:to_binary("approved_"++z_context:get_q("approved_type", Context)++"_id"),
-    TargetSelected = module_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("target_selected", Context))),
-    ApprovedSelected = module_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("approved_selected", Context))),
+    TargetSelected = modkazoo_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("target_selected", Context))),
+    ApprovedSelected = modkazoo_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("approved_selected", Context))),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], {[{TargetType,TargetSelected},{ApprovedType,ApprovedSelected}]}, Context),
     _ = kazoo_util:cf_set_session('current_callflow'
                                   ,[<<"metadata">>,TargetSelected]
-                                  ,{[{<<"name">>,module_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("target_selected", Context)))}
+                                  ,{[{<<"name">>,modkazoo_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("target_selected", Context)))}
                                     ,{<<"pvt_type">>,z_convert:to_binary(z_context:get_q("target_type", Context))}]}
                                   ,Context),
     _ = kazoo_util:cf_set_session('current_callflow'
                                   ,[<<"metadata">>,ApprovedSelected]
-                                  ,{[{<<"name">>,module_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("approved_selected", Context)))}
+                                  ,{[{<<"name">>,modkazoo_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("approved_selected", Context)))}
                                     ,{<<"pvt_type">>,z_convert:to_binary(z_context:get_q("approved_type", Context))}]}
                                   ,Context),
     z_render:dialog_close(Context);
