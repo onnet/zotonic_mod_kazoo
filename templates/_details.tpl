@@ -1,0 +1,4 @@
+<span>
+    {% print arg %}
+</span>
+
