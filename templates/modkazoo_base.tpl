@@ -120,9 +120,6 @@
     {% include "footer.tpl" %}
     {% include "legal.tpl" %}
     {% include "footer_js.tpl" %}
-    {% include "google_anatytics.tpl" %}
-    {% include "yandex_metrika.tpl" %}
-    {% include "rambler_counter.tpl" %}
 
     {% script %}
   </body>
