@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="/lib/images/favicon.ico">
     <title>{{ m.config.mod_kazoo.page_header.value }}</title>
 
+    {% include "_mod_style.tpl" %}
+
     {% lib "js/jquery-2.1.1.min.js" %}
     {% lib "js/jquery-migrate-1.0.0.js" %}
     {% lib "js/jquery-ui.min.js" %}
