@@ -118,8 +118,6 @@
     {% block main %}{% endblock %}
 
     {% include "footer.tpl" %}
-    {% include "legal.tpl" %}
-    {% include "footer_js.tpl" %}
 
     {% script %}
   </body>
