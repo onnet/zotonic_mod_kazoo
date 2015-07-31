@@ -8,7 +8,7 @@
 
 .btn-zprimary,
 .btn-zprimary:hover {
-color: {{ m.config.mod_kazoo.color3.value }};
+color: {{ m.config.mod_kazoo.color3.value }}!important;
 background-color: {{ m.config.mod_kazoo.color1.value }};
 border-color: {{ m.config.mod_kazoo.color1.value }};
 }
@@ -25,7 +25,7 @@ border-color: {{ m.config.mod_kazoo.color1.value }};
 
 .btn-zalarm,
 .btn-zalarm:hover {
-  color: {{ m.config.mod_kazoo.color3.value }};
+  color: {{ m.config.mod_kazoo.color3.value }}!important;
   background-color: {{ m.config.mod_kazoo.color2.value }};
   border-color: {{ m.config.mod_kazoo.color2.value }};
 }
