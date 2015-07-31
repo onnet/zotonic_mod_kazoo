@@ -211,6 +211,18 @@ input[type="text"].input-number-zonnet {
   visibility: hidden!important;
 }
 
+.panel-onnet {
+  border-radius: 0px;
+}
+
+input, select{
+  border-radius: 0px!important;
+}
+
+.btn {
+  border-radius: 0px;
+}
+
 .btn-onnet {
   color: #515151;
   background-color: #e6e6e6;
