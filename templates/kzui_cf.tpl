@@ -39,7 +39,7 @@
                              } 
   %}
   <div class="col-xs-2">
-    <button id="cf_delete_btn" class="col-xs-12 btn btn-onnet-orange margin-bottom-xs">Delete</button>
+    <button id="cf_delete_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs">Delete</button>
   </div>
 </div>
 

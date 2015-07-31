@@ -23,6 +23,12 @@ border-color: {{ m.config.mod_kazoo.color1.value }};
   font-size: 18px!important;
 }
 
+.btn-zalarm,
+.btn-zalarm:hover {
+  color: {{ m.config.mod_kazoo.color3.value }};
+  background-color: {{ m.config.mod_kazoo.color2.value }};
+  border-color: {{ m.config.mod_kazoo.color2.value }};
+}
 
 
 

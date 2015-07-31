@@ -93,13 +93,6 @@ table#calls_list_table tfoot tr {
   border-color: #3E7A8C;
 }
 
-.btn-onnet-orange, 
-.btn-onnet-orange:hover {
-  color: #ffffff;
-  background-color: #E86110;
-  border-color: #3E7A8C;
-}
-
 .nav-pills-orange > li.active > a, .nav-pills-orange > li.active > a:hover, .nav-pills-orange > li.active > a:focus {
   background-color: #3E7A8C;
 }

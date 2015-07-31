@@ -79,7 +79,7 @@
     <div class="col-xs-2" id="device_enable_control">
         {% if device_doc["enabled"] %}
             <div>
-                {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Disable"  action={ postback postback={disable_doc type doc_id field_name}
+                {% button class="col-xs-12 btn btn-zalarm mb-1" text=_"Disable"  action={ postback postback={disable_doc type doc_id field_name}
                                                                                                          inject_args type="device" doc_id=device_id field_name="enabled"
                                                                                                          delegate="mod_kazoo"}
                 %}
@@ -95,7 +95,7 @@
     </div>
     <div class="col-xs-2">
         <div>
-            {% button class="col-xs-12 btn btn-onnet-orange mb-1" text=_"Delete"  action={confirm text="Do you really want to delete this device?"
+            {% button class="col-xs-12 btn btn-zalarm mb-1" text=_"Delete"  action={confirm text="Do you really want to delete this device?"
                                                                                                    action={ postback postback={delete_device device_id} inject_args device_id=device_id delegate="mod_kazoo"}
                                                                                                    action={dialog_close}
                                                                                           }
