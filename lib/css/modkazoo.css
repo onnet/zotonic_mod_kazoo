@@ -236,6 +236,7 @@ input, select{
 
 .panel-onnet>.panel-heading {
   background-color: rgba(62,122,140,.2);
+  border-radius: 0px;
 }
 
 .panel-onnet>.panel-body {
