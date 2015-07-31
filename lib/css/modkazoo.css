@@ -288,6 +288,7 @@ input, select{
 .modal-dialog {
 /*  width: auto; */
   max-width: 800px;
+  border-radius: 0px;
 }
 
 .modal-header {
