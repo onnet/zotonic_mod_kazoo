@@ -1,8 +1,10 @@
 {% extends "dashboard_base.tpl" %}
 
-{% block service_description %}
-
+{% block header_title %}
   {% include "_account_page_title.tpl" title=_"Account settings" %}
+{% endblock %}
+
+{% block service_description %}
 
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_admin_portal_users_list_tpl} action={update target="admin_portal_users_list_tpl" template="admin_portal_users_list.tpl" headline=_"Account's Users"}} %}
