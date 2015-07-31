@@ -1077,7 +1077,7 @@
 	z-index: 10000;
 }
 #ws_callflow .title {
-	background: #3E7A8C;
+	background: {{ m.config.mod_kazoo.color1.value }};
 	font-size: 12px;
 	height: 25px;
 	line-height: 25px;
