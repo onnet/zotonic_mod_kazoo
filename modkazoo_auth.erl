@@ -40,7 +40,10 @@ do_sign_in(Login, Password, Account, Context) ->
                 <<"admin">> -> 
                     z_context:set_session('kazoo_account_admin', 'true', Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
-                    z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context1);
+                    case z_dispatcher:url_for('dashboard',z:c(inno)) of
+                        'undefined' -> z_render:wire({redirect, [{dispatch, "userportal"}]}, Context1);
+                        _ -> z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context1)
+                    end;
                 _ ->
                     z_context:set_session('kazoo_account_admin', 'false', Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
