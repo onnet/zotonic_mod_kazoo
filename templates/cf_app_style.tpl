@@ -1,3 +1,4 @@
+<style type="text/css">
 
 .callflows-port .media_tabs {
 	background-color: #555555;
@@ -661,9 +662,8 @@
 	width: 322px;
 }
 #ws_callflow .callflow .root > .top_bar {
-	background-color: #3E7A8C;
-/*	height: 25px;  */
-	text-align: left;
+        background-color: {{ m.config.mod_kazoo.color1.value }};
+        text-align: left;
 }
 #ws_callflow .callflow .root > .top_bar > span {
 	line-height: 25px;
@@ -1861,3 +1861,5 @@
 #callflow_container .entity-edition .entity-content {
 	padding: 20px 40px;
 }
+
+</style>

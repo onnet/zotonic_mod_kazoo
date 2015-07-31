@@ -3,7 +3,7 @@
 {% block service_description %}
 
 
-{% lib "css/kazoo/cf_app.css" %}
+{% include "cf_app_style.tpl" %}
 {% lib "css/kazoo/cf_tables.css" %}
 {% lib "css/kazoo/cf_mod_kazoo.css" %}
 

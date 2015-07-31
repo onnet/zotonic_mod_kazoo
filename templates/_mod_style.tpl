@@ -31,5 +31,4 @@ border-color: {{ m.config.mod_kazoo.color1.value }};
 }
 
 
-
 </style>
