@@ -43,7 +43,8 @@
           "css/animate.css"
           "css/elements.css"
           "css/custom.css"
-          "css/onnet.css"
+          "css/project.css"
+          "css/modkazoo.css"
     %}
  
     {% with ["/lib/images/ldn_docklands.jpg"]|random as bgr_image %}
