@@ -23,7 +23,6 @@
     %}
 
     {% lib
-          "css/custom.css"
           "css/project.css"
           "css/modkazoo.css"
     %}
