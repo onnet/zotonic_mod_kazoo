@@ -13,6 +13,15 @@ background-color: {{ m.config.mod_kazoo.color1.value }};
 border-color: {{ m.config.mod_kazoo.color1.value }};
 }
 
+.registered {
+  color: {{ m.config.mod_kazoo.color1.value }};
+  font-size: 18px!important;
+}
+
+.unregistered {
+  color: {{ m.config.mod_kazoo.color2.value }};
+  font-size: 18px!important;
+}
 
 
 

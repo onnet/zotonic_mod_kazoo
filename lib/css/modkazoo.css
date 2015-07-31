@@ -57,34 +57,12 @@ div table tbody tr td label.radio {
   color: #333;
 }
 
-.btn-zprimary,
-.btn-zprimary:hover {
-color: #ffffff;
-background-color: #3E7A8C;
-border-color: #3E7A8C;
-}
-
-a.carousel-arrow:hover, 
-a.carousel-arrow:active {
-  background: #3E7A8C!important;
-}
-
 table#calls_list_table tfoot tr {
   background-color: white;
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
   background-color: white;
-}
-
-.registered {
-  color: #3E7A8C;
-  font-size: 18px!important;
-}
-
-.unregistered {
-  color: #E86110;
-  font-size: 18px!important;
 }
 
 .zorange {
