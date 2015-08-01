@@ -26,7 +26,6 @@
 
     {% lib
           "css/project.css"
-          "css/modkazoo.css"
     %}
  
     {% lib "js/apps/zotonic-1.0.js" %}

@@ -25,7 +25,7 @@
                 {% if internal_cid and external_cid %} | {% endif %}
                 {{ external_cid }}
             </td>
-            <td style="text-align: center;">{% if user_doc[1]["enabled"] %}<i class="fa fa-check zprimary" title="{_ Enabled _}"></i>{% else %}<i class="fa fa-remove zorange" title="{_ Disabled _}"></i>{% endif %}</td>
+            <td style="text-align: center;">{% if user_doc[1]["enabled"] %}<i class="fa fa-check zprimary" title="{_ Enabled _}"></i>{% else %}<i class="fa fa-remove zalarm" title="{_ Disabled _}"></i>{% endif %}</td>
             <td style="text-align: center;"><i id="info_{{ user["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
             {% wire id="info_"++user["id"] action={ dialog_open title=_"Edit user "++user["username"] template="_edit_user_lazy.tpl" user_id=user["id"] } %}
         </tr>

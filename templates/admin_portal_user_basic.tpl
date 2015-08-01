@@ -4,12 +4,12 @@
     <!-- Username field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Username</label></div>
-        <div id="edit_username" class="col-xs-5 zorange">{{ user_doc["username"] }}</div>
+        <div id="edit_username" class="col-xs-5 zalarm">{{ user_doc["username"] }}</div>
     </div>
     <!-- User status -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">User status</label></div>
-        <div id="user_enabled_status" class="col-xs-5">{% if user_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zorange">Disabled</span>{% endif %}</div>
+        <div id="user_enabled_status" class="col-xs-5">{% if user_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
     </div>
     <!-- First Name field -->
     <div class="row">

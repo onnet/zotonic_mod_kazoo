@@ -20,14 +20,14 @@
               {% if conference_details[1]["play_name"] %}
                 <i class="fa fa-check zprimary" title="Enabled">
               {% else %}
-                <i class="fa fa-remove zorange" title="Disabled">
+                <i class="fa fa-remove zalarm" title="Disabled">
               {% endif %}
             </td>
             <td style="text-align: center;">
               {% if conference_details[1]["member"][1]["join_muted"] %}
                 <i class="fa fa-check zprimary" title="Enabled">
               {% else %}
-                <i class="fa fa-remove zorange" title="Disabled">
+                <i class="fa fa-remove zalarm" title="Disabled">
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_{{ conference["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>

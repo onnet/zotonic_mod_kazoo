@@ -4,12 +4,12 @@
     <!-- Device Nickname field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Device Nickname</label></div>
-        <div id="edit_username" class="col-xs-5 zorange">{{ device_doc["name"] }}</div>
+        <div id="edit_username" class="col-xs-5 zalarm">{{ device_doc["name"] }}</div>
     </div>
     <!-- User status -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Device status</label></div>
-        <div id="device_enabled_status" class="col-xs-5">{% if device_doc["call_forward"][1]["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zorange">Disabled</span>{% endif %}</div>
+        <div id="device_enabled_status" class="col-xs-5">{% if device_doc["call_forward"][1]["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
     </div>
 
     <!-- Assign To -->
