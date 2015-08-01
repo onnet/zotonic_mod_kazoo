@@ -40,7 +40,7 @@
                 <td style="text-align: center;">{{ attempt["from_number"]|pretty_phonenumber }}</td>
                 <td style="text-align: center;">{% if attempt["rx_result"][1]["success"] %}{_ Success _}{% else %}{_ Failed _}{% endif %}</td>
                 <td style="text-align: center;"><a href="/getinfaxdoc/id/{{ attempt["id"] }}"><i class="fa fa-download" title="{_ Download _}"></i></a></td>
-                <td style="text-align: center;"><i id={{ attempt["id"] }} style="cursor: pointer;" class="fa fa-info-circle" title="{_ Details _}"></i></td>
+                <td style="text-align: center;"><i id={{ attempt["id"] }} style="cursor: pointer;" class="fa fa-info-circle" zprimary title="{_ Details _}"></i></td>
                 <td style="text-align: center;"><i id="fax_delete_{{ attempt["id"] }}" style="cursor: pointer;" class="fa fa-trash-o" title="{_ Delete _}"></i></td>
             </tr>
             {% wire id=attempt["id"] action={ dialog_open title=_"Fax details" template="_details.tpl" arg=attempt } %}

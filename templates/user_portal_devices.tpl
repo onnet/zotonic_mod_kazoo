@@ -61,7 +61,7 @@
             <td style="text-align: center;">{% if device_registered %}{{ device_details[1]["contact_ip"] }}{% else %}-{% endif %}</td>
             <td style="text-align: center;">{% if device_registered %}{{ device_details[1]["user_agent"] }}{% else %}-{% endif %}</td>
             {% wire id="info_"++device["id"] action={ dialog_open title=_"Registration details" template="_details.tpl" arg=device_details } %}
-            <td style="text-align: center;">{% if device_registered %}<i id="info_{{ device["id"] }}" class="fa fa-info-circle pointer" title="{_ Details _}"></i>{% else %}-{% endif %}</td>
+            <td style="text-align: center;">{% if device_registered %}<i id="info_{{ device["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>{% else %}-{% endif %}</td>
         </tr>
         {% endwith %}
         {% endwith %}
