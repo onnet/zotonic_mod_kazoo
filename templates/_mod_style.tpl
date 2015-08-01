@@ -30,5 +30,9 @@ border-color: {{ m.config.mod_kazoo.color1.value }};
   border-color: {{ m.config.mod_kazoo.color2.value }};
 }
 
+.zprimary {
+  color: {{ m.config.mod_kazoo.color1.value }};
+}
+
 
 </style>
