@@ -628,8 +628,8 @@ border-color: {{ m.config.mod_kazoo.color1.value }};
 .btn-zprimary-checkbox.active,
 .btn-zprimary-checkbox.active:hover {
 color: #ffffff;
-background-color: #E86110!important;
-border-color: #E86110!important;
+background-color: {{ m.config.mod_kazoo.color2.value }}!important;
+border-color: {{ m.config.mod_kazoo.color2.value }}!important;
 }
 
 .form-control-onnet {
