@@ -206,7 +206,7 @@ input, select{
 .btn-onnet {
   color: #515151;
   background-color: #e6e6e6;
-  border-color: #eea236;
+  border-color: {{ m.config.mod_kazoo.color2.value }};
   margin-left: 3px;
 }
 
@@ -575,7 +575,7 @@ label.radio-inline, label.checkbox-inline, label.radio, label.checkbox {
   padding: 7px 10px 7px 30px;
 }
 label.radio-inline.checked, label.checkbox-inline.checked, label.radio.checked, label.checkbox.checked {
-  background-color: #E86110;
+  background-color: {background-color: {{ m.config.mod_kazoo.color2.value }};
   color: #fff !important;
   text-shadow: 1px 1px 2px #000 !important;
 }
