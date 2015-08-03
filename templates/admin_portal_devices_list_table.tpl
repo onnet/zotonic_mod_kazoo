@@ -6,8 +6,8 @@
             <th style="text-align: center;">{_ Name _}</th>
             <th style="text-align: center;">{_ Owner _}</th>
             <th style="text-align: center;">{_ CID Number _}</th>
-            <th style="text-align: center;">{_ Edit _}</th>
-            <th style="text-align: center;">{_ Info _}</th>
+            <th style="text-align: center;"></th>
+            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>
