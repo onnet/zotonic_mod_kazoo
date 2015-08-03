@@ -39,6 +39,7 @@ do_sign_in(Login, Password, Account, Context) ->
             case kazoo_util:kz_user_doc_field(<<"priv_level">>, Context) of
                 <<"admin">> -> 
                     z_context:set_session('kazoo_account_admin', 'true', Context),
+                    may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
                     case z_dispatcher:url_for('dashboard',z:c(inno)) of
                         'undefined' -> z_render:wire({redirect, [{dispatch, "userportal"}]}, Context1);
@@ -46,6 +47,7 @@ do_sign_in(Login, Password, Account, Context) ->
                     end;
                 _ ->
                     z_context:set_session('kazoo_account_admin', 'false', Context),
+                    may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
                     z_render:wire({redirect, [{dispatch, "userportal"}]}, Context1)
             end;
@@ -73,3 +75,5 @@ process_signup_form(Context) ->
  %   _ = kazoo_util:add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), AccountId, Context),
     z_render:update("sign_up_div", z_template:render("_registration_completed.tpl", [], Context), Context).
       
+may_be_add_third_party_billing(Context) ->
+    lb_auth:lb_auth_addon(kazoo_util:kz_account_numbers(Context), Context).
