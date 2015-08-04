@@ -49,7 +49,7 @@
       {% endwith %}
     </div>
     <div class="form-inline" style="padding: 1em;">
-        <label>Enable Call Forward:</label>
+        <label>{_ Enable Call Forward _}:</label>
             {% if m.kazoo[{kz_user_doc_field field1="call_forward" field2="enabled"}] %}
                 <input class="checkbox" id="call-forward-enabled" name="call_forward_enabled" type="checkbox" checked="checked"/>
             {% else %}

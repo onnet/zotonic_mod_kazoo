@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Incoming faxes"
+msgstr "Принятые факсы"
+
+msgid "Devices"
+msgstr "Устройства"
+
+msgid "User portal"
+msgstr "Настройки пользователя"
+
+msgid "Send fax"
+msgstr "Отправить факс"
+
+msgid "Voicemails"
+msgstr "Голосовая почта"
+

@@ -5,8 +5,8 @@
             <th style="text-align: center1;">{_ Prompt Name _}</th>
             <th style="text-align: center;">{_ Play _}</th>
             <th style="text-align: center;">{_ Download _}</th>
-            <th style="text-align: center;">Edit</th>
-            <th style="text-align: center;">Delete</th>
+            <th style="text-align: center;"></th>
+            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>
