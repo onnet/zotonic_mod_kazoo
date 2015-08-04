@@ -11,7 +11,7 @@
 {% endjavascript %}
 {% else %}
   <div class="wrapper">
-    <div class="container">
+    <div class="container" style="width: 95%">
       <div class="row">
         <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
           {% block header_title %}{% endblock %}

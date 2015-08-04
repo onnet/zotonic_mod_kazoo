@@ -2,9 +2,7 @@
   <div class="pull-right">
   <p>
     {_ Logged in as _}
-    {{ m.session.kazoo_login_name }}
-    {_ at _}
-    <a href="/dashboard">{{ m.session.kazoo_account_name }}</a>
+    <span style="color:{{ m.config.mod_kazoo.color2.value }};">{{ m.session.kazoo_login_name }}@{{ m.session.kazoo_account_name }}</span>
   </p>
   </div>
   <h2>{{ title }}</h2>

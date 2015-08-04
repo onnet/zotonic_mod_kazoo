@@ -58,8 +58,8 @@
             <label class="btn btn-zprimary-checkbox {% if "tuesday"|member:rule[1]["wdays"] or not rule[1]["id"] %}active{% endif %}">
               <input type="checkbox" name="wdays" value="tuesday" autocomplete="off" {% if "tuesday"|member:rule[1]["wdays"] or not rule[1]["id"] %}checked{% endif %}>T
             </label>
-            <label class="btn btn-zprimary-checkbox {% if "wednesday"|member:rule[1]["wdays"] or not rule[1]["id"] %}active{% endif %}">
-              <input type="checkbox" name="wdays" value="wednesday" autocomplete="off" {% if "wednesday"|member:rule[1]["wdays"] or not rule[1]["id"] %}checked{% endif %}>W
+            <label class="btn btn-zprimary-checkbox {% if "wednesday"|member:rule[1]["wdays"] or "wensday"|member:rule[1]["wdays"] or not rule[1]["id"] %}active{% endif %}">
+              <input type="checkbox" name="wdays" value="wednesday" autocomplete="off" {% if "wednesday"|member:rule[1]["wdays"] or "wensday"|member:rule[1]["wdays"] or not rule[1]["id"] %}checked{% endif %}>W
             </label>
             <label class="btn btn-zprimary-checkbox {% if "thursday"|member:rule[1]["wdays"] or not rule[1]["id"] %}active{% endif %}">
               <input type="checkbox" name="wdays" value="thursday" autocomplete="off" {% if "thursday"|member:rule[1]["wdays"] or not rule[1]["id"] %}checked{% endif %}>T

@@ -37,7 +37,7 @@
               <option value="sunday" {% if rule[1]["wdays"][1] == "sunday" %}selected{% endif %}>Sunday</option>
               <option value="monday" {% if rule[1]["wdays"][1] == "monday" %}selected{% endif %}>Monday</option>
               <option value="tuesday" {% if rule[1]["wdays"][1] == "tuesday" %}selected{% endif %}>Tuesday</option>
-              <option value="wednesday" {% if rule[1]["wdays"][1] == "wednesday" %}selected{% endif %}>Wednesday</option>
+              <option value="wednesday" {% if rule[1]["wdays"][1] == "wednesday" or rule[1]["wdays"][1] == "wensday" %}selected{% endif %}>Wednesday</option>
               <option value="thursday" {% if rule[1]["wdays"][1] == "thursday" %}selected{% endif %}>Thursday</option>
               <option value="friday" {% if rule[1]["wdays"][1] == "friday" %}selected{% endif %}>Friday</option>
               <option value="saturday" {% if rule[1]["wdays"][1] == "saturday" %}selected{% endif %}>Saturday</option>
