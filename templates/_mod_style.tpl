@@ -464,7 +464,7 @@ div#recaptcha_widget {
 
 #call-forward-data {
   padding: 1em;
-  width: 22em;
+  width: 24em;
   display: block;
   margin-left: 3em;
   border: 1px solid rgb(153, 153, 153);

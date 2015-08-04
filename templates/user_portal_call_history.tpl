@@ -28,7 +28,7 @@
             <th style="text-align: center;">{_ From _}</th>
             <th style="text-align: center;">{_ To _}</th>
             <th style="text-align: center;">{_ Duration _}</th>
-            <th style="text-align: center;">{_ play _}</th>
+            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>

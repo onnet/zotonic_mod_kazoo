@@ -2,7 +2,7 @@
 <table id="admin_portal_conference_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
-            <th style="text-align: center1;">{_ Group name _}</th>
+            <th style="text-align: center1;">{_ Group Name _}</th>
             <th style="text-align: center;">{_ Numbers _}</th>
             <th style="text-align: center;">{_ Play name _}</th>
             <th style="text-align: center;">{_ Muted _}</th>

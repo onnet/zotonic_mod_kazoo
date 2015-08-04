@@ -1,13 +1,13 @@
 <table id="admin_portal_current_calls_table" class="table display table-striped table-condensed">
 <thead>
   <tr>
-    <th style="text-align: center;">CallId</th>
-    <th style="text-align: center;">User</th>
-    <th style="text-align: center;">Device</th>
-    <th style="text-align: center;">Caller Number</th>
-    <th style="text-align: center;">Callee Number</th>
-    <th style="text-align: center;">Xfer</th>
-    <th style="text-align: center;">Hang Up</th>
+    <th style="text-align: center;">{_ CallId _}</th>
+    <th style="text-align: center;">{_ User _}</th>
+    <th style="text-align: center;">{_ Device _}</th>
+    <th style="text-align: center;">{_ Caller Number _}</th>
+    <th style="text-align: center;">{_ Callee Number _}</th>
+    <th style="text-align: center;">{_ Xfer _}</th>
+    <th style="text-align: center;">{_ Hang Up _}</th>
   </td>
 </thead>
 <tbody id="currentcallstableid">

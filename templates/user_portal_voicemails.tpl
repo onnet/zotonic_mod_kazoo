@@ -51,7 +51,7 @@
     <thead>
         <tr>
             <th style="text-align: center;">{_ Date _}</th>
-            <th style="text-align: center;">{_ Caller ID _}</th>
+            <th style="text-align: center;">{_ From _}</th>
             <th style="text-align: center;">{_ Status _}</th>
             <th style="text-align: center;">{_ Play _}</th>
             <th style="text-align: center;">{_ D/L _}</th>

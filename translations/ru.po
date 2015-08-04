@@ -7,6 +7,186 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Edit user"
+msgstr "Редактировать пользователя"
+
+msgid "Edit device"
+msgstr "Редактировать устройство"
+
+msgid "Add device"
+msgstr "Добавить устройство"
+
+msgid "Ext. length"
+msgstr "Длина номера"
+
+msgid "Timeout"
+msgstr "Таймаут"
+
+msgid "Owner"
+msgstr "Хозяин"
+
+msgid "Retries"
+msgstr "Попыток"
+
+msgid "Menu name"
+msgstr "Название меню"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Muted"
+msgstr "Микр. откл."
+
+msgid "Play name"
+msgstr "Проигр. имя"
+
+msgid "Numbers"
+msgstr "Номера"
+
+msgid "Prompt Name"
+msgstr "Название записи"
+
+msgid "CID Number"
+msgstr "АОН"
+
+msgid "Privilege"
+msgstr "Уровень доступа"
+
+msgid "Last Name"
+msgstr "Фамилия"
+
+msgid "First Name"
+msgstr "Имя"
+
+msgid "Endpoints amount"
+msgstr "Кол-во участников"
+
+msgid "Group Name"
+msgstr "Название группы"
+
+msgid "Conferences"
+msgstr "Конференции"
+
+msgid "Time of the day rules"
+msgstr "Временные правила"
+
+msgid "Menus"
+msgstr "Меню"
+
+msgid "Groups"
+msgstr "Группы"
+
+msgid "Account's Devices"
+msgstr "Устройства"
+
+msgid "Account's Users"
+msgstr "Пользователи"
+
+msgid "Account settings"
+msgstr "Настройки учетной записи"
+
+msgid "add conference"
+msgstr "добавить конференцию"
+
+msgid "add rule"
+msgstr "добавить правило"
+
+msgid "add group"
+msgstr "добавить группу"
+
+msgid "add prompt"
+msgstr "добавить запись"
+
+msgid "add menu"
+msgstr "добавить меню"
+
+msgid "add device"
+msgstr "добавить устройство"
+
+msgid "add user"
+msgstr "добавить пользователя"
+
+msgid "submit"
+msgstr "сохранить"
+
+msgid "call"
+msgstr "вызвать"
+
+msgid "register"
+msgstr "зарегистрировать"
+
+msgid "Webphone"
+msgstr "Вэб-телефон"
+
+msgid "Call details"
+msgstr "Информация о вызове"
+
+msgid "Hang Up"
+msgstr "Разъединить"
+
+msgid "Callee Number"
+msgstr "Номер Б"
+
+msgid "Caller Number"
+msgstr "Номер А"
+
+msgid "Device"
+msgstr "Устройство"
+
+msgid "Call History"
+msgstr "История вызовов"
+
+msgid "Account's Call History"
+msgstr "История вызовов"
+
+msgid "Account's Current Calls"
+msgstr "Текущие вызовы"
+
+msgid "Account statistics"
+msgstr "Статистика учетной записи"
+
+msgid "Caller ID"
+msgstr "АОН"
+
+msgid "Duration"
+msgstr "Длит."
+
+msgid "Play"
+msgstr "Воспр."
+
+msgid "Email Address"
+msgstr "Эл. адрес"
+
+msgid "Keep Caller ID"
+msgstr "Сохранять АОН"
+
+msgid "Also Ring My VoIP Phone"
+msgstr "Задействовать IP-телефон"
+
+msgid "Forward Calls To"
+msgstr "Переадресовывать на"
+
+msgid "Send Voicemail to Email"
+msgstr "Отправлять голосовую почту на email"
+
+msgid "User's timezone"
+msgstr "Часовой пояс"
+
+msgid "Enable Call Forward"
+msgstr "Включить переадресацию"
+
 msgid "Incoming faxes"
 msgstr "Принятые факсы"
 

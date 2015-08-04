@@ -16,9 +16,9 @@
   </span>
     {{ headline }}
     {% if not m.kazoo[{ui_element_opened element="user_settings_widget_opened"}] %}
-        {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right display_none" text=_"Submit" action={submit target="user_settings_form_form"} %}
+        {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right display_none" text=_"submit" action={submit target="user_settings_form_form"} %}
     {% else %}
-        {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right" text=_"Submit" action={submit target="user_settings_form_form"} %}
+        {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right" text=_"submit" action={submit target="user_settings_form_form"} %}
     {% endif %}
 {% endblock %}
 
@@ -62,13 +62,13 @@
                                            display: none;
                                        {% endif %}">
         <div class="form-inline">
-             <label>Forward Calls To:</label>
+             <label>{_ Forward Calls To _}:</label>
                 <input id="ring-number-txt" name="ring-number-txt" type="text" 
                                             style="text-align: center; border: 1px solid rgb(153, 153, 153); border-radius: 3px; width: 10em;"
                                             value="{{ m.kazoo[{kz_user_doc_field field1="call_forward" field2="number"}] }}"/>
         </div>
         <div class="form-inline">
-            <label>Also Ring My VoIP Phone:</label>
+            <label>{_ Also Ring My VoIP Phone _}:</label>
             {% if m.kazoo[{kz_user_doc_field field1="call_forward" field2="substitute"}] %}
                 <input class="checkbox" id="ring-device-checkbox" name="ring-device-checkbox" type="checkbox"/>
             {% else %}
@@ -76,7 +76,7 @@
             {% endif %}
         </div>
         <div class="form-inline">
-            <label>Keep Caller ID:</label>
+            <label>{_ Keep Caller ID _}:</label>
             {% if m.kazoo[{kz_user_doc_field field1="call_forward" field2="keep_caller_id"}] %}
                  <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward_keep_caller_id" type="checkbox" checked="checked"/>
             {% else %}
@@ -85,7 +85,7 @@
         </div>
     </div>
     <div class="form-inline" style="padding-left: 1em; padding-top: 1em;">
-        <label>Send Voicemail to Email:</label>
+        <label>{_ Send Voicemail to Email _}:</label>
         {% if m.kazoo[{kz_user_doc_field field1="vm_to_email_enabled"}] %}
             <input id="vm-to-email-checkbox" class="checkbox" name="vm-to-email-checkbox" type="checkbox" checked="checked"/>
         {% else %}
@@ -98,7 +98,7 @@
                                    {% else %}
                                        display: none;
                                    {% endif %}">
-        <label>Email Address:</label>
+        <label>{_ Email Address _}:</label>
         <input id="vm-to-email-txt" name="vm-to-email-txt" type="text"
                                     style="text-align: center; border: 1px solid rgb(153, 153, 153); border-radius: 3px;"  
                                     value="{{ m.kazoo[{kz_user_doc_field field1="email"}] }}"/>

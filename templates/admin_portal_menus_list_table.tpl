@@ -2,7 +2,7 @@
 <table id="admin_portal_menus_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
-            <th style="text-align: center1;">{_ Menu Name _}</th>
+            <th style="text-align: center1;">{_ Menu name _}</th>
             <th style="text-align: center;">{_ Retries _}</th>
             <th style="text-align: center;">{_ Timeout _}</th>
             <th style="text-align: center;">{_ Ext. length _}</th>
