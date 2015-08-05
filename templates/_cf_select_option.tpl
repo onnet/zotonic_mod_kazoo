@@ -23,7 +23,7 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">
-      <button id="button_cf_select_option" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Save</button>
+      <button id="button_cf_select_option" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
     </div>
   </div>
 </div>

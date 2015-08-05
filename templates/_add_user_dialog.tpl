@@ -3,20 +3,20 @@
             <div class="form-group">
               <div class="row">
                 <div class="col-sm-6">
-                  <input type="text" class="form-control margin-bottom-xs" id="firstname" name="firstname" placeholder="Name (mandatory)" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter name here." data-original-title="Name">
+                  <input type="text" class="form-control margin-bottom-xs" id="firstname" name="firstname" placeholder="{_ Name (mandatory) _}">
                 </div>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname (mandatory)" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter surname here." data-original-title="Name">
+                  <input type="text" class="form-control" id="surname" name="surname" placeholder="{_ Surname (mandatory) _}">
                 </div>
               </div>
             </div>
             <div class="form-group">
               <div class="row">
                 <div class="col-sm-6">
-                  <input type="text" class="form-control margin-bottom-xs" id="username" name="username" placeholder="Enter email address (mandatory)" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter your nickname here." data-original-title="Username">
+                  <input type="text" class="form-control margin-bottom-xs" id="username" name="username" placeholder="{_ Enter email address (mandatory) _}">
                 </div>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control margin-bottom-xs" id="email" name="email" placeholder="Confirm email address (mandatory)" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter a valid email here." data-original-title="Email">
+                  <input type="text" class="form-control margin-bottom-xs" id="email" name="email" placeholder="{_ Confirm email address (mandatory) _}">
                 </div>
               </div>
             </div>

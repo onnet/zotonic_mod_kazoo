@@ -62,6 +62,10 @@ a {
   color: #E86110;
 }
 
+.nav-tabs {
+  margin-bottom: 15px;
+}
+
 /* Hide made by reCaptcha empty iframe */
 body > iframe[src="about:blank"] {
   display:none;

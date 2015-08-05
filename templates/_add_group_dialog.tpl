@@ -3,12 +3,12 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="groupname" name="name" placeholder="Enter group name here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter group name here." data-original-title="GroupName">
+          <input type="text" class="form-control margin-bottom-xs" id="groupname" name="name" placeholder="{_ Enter group name here _}">
         </div>
       </div>
     </div>
     <div class="form-group" id="grp_users_list">
-      <h4>Users:</h4>
+      <h4>{_ Users _}:</h4>
       <div class="col-sm-12 columns"> 
         {% for option in m.kazoo.kz_list_account_users_short %}
         {% if option[1] %}
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="form-group" id="grp_users_list">
-      <h4>Devices:</h4>
+      <h4>{_ Devices _}:</h4>
       <div class="col-sm-12 columns"> 
         {% for option in m.kazoo.kz_list_account_devices_short %}
         {% if option[1] %}
@@ -42,7 +42,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">Create Group</button>
+          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Create group _}</button>
         </div>
       </div>
     </div>

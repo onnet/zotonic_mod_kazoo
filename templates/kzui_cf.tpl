@@ -21,25 +21,25 @@
                            }
   %}
   <div class="col-xs-2">
-    <button id="cf_reload_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Reload</button>
+    <button id="cf_reload_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Reload _}</button>
   </div>
   {% wire id="cf_details_btn" action={ dialog_open title=_"Callflow details" template="_cf_current_callflow_details.tpl" class="iamclass" width="auto" } %}
   <div class="col-xs-2">
-    <button id="cf_details_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Details</button>
+    <button id="cf_details_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Details _}</button>
   </div>
   {% wire id="cf_save_btn" action={confirm text="Do you really want to save this callflow?"
                                    action={postback postback={cf_save cf="current_callflow"} delegate="mod_kazoo"}
                            }
   %}
   <div class="col-xs-2">
-    <button id="cf_save_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Save</button>
+    <button id="cf_save_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
   </div>
   {% wire id="cf_delete_btn" action={confirm text="Do you really want to delete this callflow?"
                                      action={postback postback={cf_delete cf="current_callflow"} delegate="mod_kazoo"}
                              } 
   %}
   <div class="col-xs-2">
-    <button id="cf_delete_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs">Delete</button>
+    <button id="cf_delete_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs">{_ Delete _}</button>
   </div>
 </div>
 

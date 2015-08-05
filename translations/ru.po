@@ -4,6 +4,42 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Reload"
+msgstr "Загрузить заново"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Create group"
+msgstr "Создать группу"
+
+msgid "Enter group name here"
+msgstr "Введите название группы"
+
+msgid "Create user"
+msgstr "Создать пользователя"
+
+msgid "Confirm email address (mandatory)"
+msgstr "Подтвердить Email (обязательно)"
+
+msgid "Enter email address (mandatory)"
+msgstr "Email (обязательно)"
+
+msgid "Surname (mandatory)"
+msgstr "Фмилия (обязательно)"
+
+msgid "Name (mandatory)"
+msgstr "Имя (обязательно)"
+
 msgid "Enter password here"
 msgstr "Введите пароль"
 
@@ -91,8 +127,11 @@ msgstr "Название группы"
 msgid "Conferences"
 msgstr "Конференции"
 
+msgid "Add Time of Day rule"
+msgstr "Добавить временной интервал"
+
 msgid "Time of the day rules"
-msgstr "Временные правила"
+msgstr "Временные интервалы"
 
 msgid "Menus"
 msgstr "Меню"
@@ -109,17 +148,29 @@ msgstr "Пользователи"
 msgid "Account settings"
 msgstr "Настройки учетной записи"
 
+msgid "Add conference"
+msgstr "Добавить конференцию"
+
 msgid "add conference"
 msgstr "добавить конференцию"
 
 msgid "add rule"
 msgstr "добавить правило"
 
+msgid "Add group"
+msgstr "Добавить группу"
+
 msgid "add group"
 msgstr "добавить группу"
 
+msgid "Add prompt"
+msgstr "Добавить запись"
+
 msgid "add prompt"
 msgstr "добавить запись"
+
+msgid "Add menu"
+msgstr "Добавить меню"
 
 msgid "add menu"
 msgstr "добавить меню"
