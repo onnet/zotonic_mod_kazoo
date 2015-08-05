@@ -4,20 +4,20 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Enter password here"
+msgstr "Введите пароль"
 
-msgid ""
-msgstr ""
+msgid "Enter username here"
+msgstr "Введите имя пользователя"
 
-msgid ""
-msgstr ""
+msgid "Enter device nickname here"
+msgstr "Введите имя устройства"
 
-msgid ""
-msgstr ""
+msgid "Enter phonenumber here"
+msgstr "Введите номер телефона"
 
-msgid ""
-msgstr ""
+msgid "Enter device name here"
+msgstr "Введите название устройства"
 
 msgid "Cell Phone"
 msgstr "Мобильный телефон"

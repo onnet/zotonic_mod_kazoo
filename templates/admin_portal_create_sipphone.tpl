@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="devicenickname" name="name" placeholder="Enter device nickname here">
+          <input type="text" class="form-control margin-bottom-xs" id="devicenickname" name="name" placeholder="{_ Enter device nickname here _}">
         </div>
         <div class="col-sm-6">
             <select id="sipphone_owner_id" name="device_owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
@@ -17,10 +17,10 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="sipusername" name="sipusername" value="user_{{ m.kazoo[{rand_hex length=3}] }}" placeholder="Enter username here">
+          <input type="text" class="form-control margin-bottom-xs" id="sipusername" name="sipusername" value="user_{{ m.kazoo[{rand_hex length=3}] }}" placeholder="{_ Enter username here _}">
         </div>
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="sippassword" name="sippassword" value="{{ m.kazoo[{rand_hex length=6}] }}" placeholder="Enter password here">
+          <input type="text" class="form-control margin-bottom-xs" id="sippassword" name="sippassword" value="{{ m.kazoo[{rand_hex length=6}] }}" placeholder="{_ Enter password here _}">
         </div>
       </div>
     </div>

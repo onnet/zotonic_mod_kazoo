@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="devicename" name="name" placeholder="Enter device name here">
+          <input type="text" class="form-control margin-bottom-xs" id="devicename" name="name" placeholder="{_ Enter device name here _}">
         </div>
         <div class="col-sm-6">
             <select id="cellphone_owner_id" name="device_owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
@@ -17,7 +17,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="cellphonenumber" name="cellphonenumber" placeholder="Enter phonenumber here">
+          <input type="text" class="form-control margin-bottom-xs" id="cellphonenumber" name="cellphonenumber" placeholder="{_ Enter phonenumber here _}">
         </div>
       </div>
     </div>
