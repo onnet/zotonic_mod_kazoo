@@ -207,6 +207,11 @@ input, select{
   border-radius: 0px;
 }
 
+.long-text {
+  padding: 6px 0px;
+  font-size: 12px;
+}
+
 .btn-onnet {
   color: #515151;
   background-color: #e6e6e6;

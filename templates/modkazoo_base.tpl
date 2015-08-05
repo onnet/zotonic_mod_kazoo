@@ -34,7 +34,6 @@
     {% lib "js/modules/z.notice.js" %}
     {% lib "js/z.dialog.bootstrap3.js" %}
     {% lib "js/modules/ubf.js" %}
-    {% lib "js/modules/z.notice.js" %}
     {% lib 
           "js/modules/z.tooltip.js"
           "js/modules/z.feedback.js"

@@ -99,14 +99,14 @@
     <div class="col-xs-2" id="user_enable_control">
         {% if user_doc["enabled"] %}
             <div>
-                {% button class="col-xs-12 btn btn-zalarm mb-1" text=_"Disable" action={ postback postback={disable_doc type doc_id field_name}
+                {% button class="col-xs-12 btn btn-zalarm mb-1 long-text" text=_"Disable" action={ postback postback={disable_doc type doc_id field_name}
                                                                                                         inject_args type="user" doc_id=user_id field_name="enabled" 
                                                                                                         delegate="mod_kazoo"}
                 %}
             </div>
         {% else %}
             <div>
-                {% button class="col-xs-12 btn btn-zprimary mb-1" text=_"Enable" action={ postback postback={enable_doc type doc_id field_name}
+                {% button class="col-xs-12 btn btn-zprimary mb-1 long-text" text=_"Enable" action={ postback postback={enable_doc type doc_id field_name}
                                                                                                    inject_args type="user" doc_id=user_id field_name="enabled"
                                                                                                    delegate="mod_kazoo"}
                 %}
@@ -115,7 +115,7 @@
     </div>
     <div class="col-xs-2">
         <div>
-            {% button class="col-xs-12 btn btn-zalarm mb-1" text=_"Delete"  action={confirm text="Do you really want to delete this user?"
+            {% button class="col-xs-12 btn btn-zalarm mb-1 long-text" text=_"Delete"  action={confirm text="Do you really want to delete this user?"
                                                                                                    action={ postback postback={delete_user user_id} inject_args user_id=user_id delegate="mod_kazoo"}
                                                                                                    action={dialog_close}
                                                                                           }
@@ -124,7 +124,7 @@
     </div>
     <div class="col-xs-2">
         <div>
-            {% button class="col-xs-12 btn btn-zprimary mb-1" text=_"Close"  action={ dialog_close } %}
+            {% button class="col-xs-12 btn btn-zprimary mb-1 long-text" text=_"Close"  action={ dialog_close } %}
         </div>
     </div>
     </div>

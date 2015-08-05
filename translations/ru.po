@@ -4,11 +4,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Enable"
+msgstr "Включить"
 
-msgid ""
-msgstr ""
+msgid "Disable"
+msgstr "Отключить"
 
 msgid "Feature Codes"
 msgstr "ДВО"
