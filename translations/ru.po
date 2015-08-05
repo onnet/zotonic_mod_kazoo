@@ -10,8 +10,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Feature Codes"
+msgstr "ДВО"
 
 msgid "Reload"
 msgstr "Загрузить заново"
