@@ -19,6 +19,18 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid "Cell Phone"
+msgstr "Мобильный телефон"
+
+msgid "Create Cell Phone"
+msgstr "Создать мобильный телефон"
+
+msgid "SIP Phone"
+msgstr "SIP-телефон"
+
+msgid "Create SIP Phone"
+msgstr "Создать SIP-телефон"
+
 msgid "Edit user"
 msgstr "Редактировать пользователя"
 

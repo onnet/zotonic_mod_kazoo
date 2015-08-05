@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="devicename" name="name" placeholder="Enter device name here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter device name here." data-original-title="DeviceName">
+          <input type="text" class="form-control margin-bottom-xs" id="devicename" name="name" placeholder="Enter device name here">
         </div>
         <div class="col-sm-6">
             <select id="cellphone_owner_id" name="device_owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
@@ -17,14 +17,14 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="cellphonenumber" name="cellphonenumber" placeholder="Enter phonenumber here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter phonenumber email here." data-original-title="phonenumber">
+          <input type="text" class="form-control margin-bottom-xs" id="cellphonenumber" name="cellphonenumber" placeholder="Enter phonenumber here">
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">Create Cell Phone</button>
+          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Create Cell Phone _}</button>
         </div>
       </div>
     </div>

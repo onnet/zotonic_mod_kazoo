@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="devicenickname" name="name" placeholder="Enter device nickname here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter device nickname here." data-original-title="DeviceName">
+          <input type="text" class="form-control margin-bottom-xs" id="devicenickname" name="name" placeholder="Enter device nickname here">
         </div>
         <div class="col-sm-6">
             <select id="sipphone_owner_id" name="device_owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
@@ -17,17 +17,17 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="sipusername" name="sipusername" value="user_{{ m.kazoo[{rand_hex length=3}] }}" placeholder="Enter username here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter username email here." data-original-title="Email">
+          <input type="text" class="form-control margin-bottom-xs" id="sipusername" name="sipusername" value="user_{{ m.kazoo[{rand_hex length=3}] }}" placeholder="Enter username here">
         </div>
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="sippassword" name="sippassword" value="{{ m.kazoo[{rand_hex length=6}] }}" placeholder="Enter password here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter password here." data-original-title="SipPhonePassword">
+          <input type="text" class="form-control margin-bottom-xs" id="sippassword" name="sippassword" value="{{ m.kazoo[{rand_hex length=6}] }}" placeholder="Enter password here">
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">Create SIP Phone</button>
+          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Create SIP Phone _}</button>
         </div>
       </div>
     </div>
