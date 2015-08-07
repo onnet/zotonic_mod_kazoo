@@ -510,24 +510,25 @@ create_kazoo_account(Context) ->
 valid_account_name(Name) when size(Name) < 3 -> 'false';
 valid_account_name(_) -> 'true'.
 
+kz_account_create_callflow(Routines, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
+    crossbar_account_request('put', API_String, DataBag, Context).
+
 kz_create_default_callflow_sec(Seconds,AccountId, Context) ->
     timer:sleep(Seconds),
     kz_create_default_callflow(AccountId, Context).
 
-kz_create_callflow(Routines, Context) ->
-    kz_create_callflow(z_context:get_session('kazoo_account_id', Context), Routines, Context).
-
-kz_create_callflow(AccountId, Routines, Context) ->
+kz_admin_create_callflow(AccountId, Routines, Context) ->
     DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
-lager:info("DataBag: ~p", [DataBag]),
-lager:info("API_String: ~p", [API_String]),
     crossbar_admin_request('put', API_String, DataBag, Context).
 
 kz_create_default_callflow(AccountId, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"no_match">>], J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"offnet">>, J) end],
-    kz_create_callflow(AccountId, Routines, Context).
+    kz_admin_create_callflow(AccountId, Routines, Context).
 
 update_kazoo_user(Context) ->
     CallForwardEnabled = modkazoo_util:on_to_true(z_context:get_q("call_forward_enabled", Context)),
@@ -1753,10 +1754,10 @@ kz_get_featurecode_by_name(FCName, Context) ->
 kz_add_featurecode_voicemail_check(Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"check">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"voicemail">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], <<"*97">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*97">>], J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"voicemail[action=check]">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"97">>, J) end],
-    kz_create_callflow(Routines, Context).
+    kz_account_create_callflow(Routines, Context).
 
 toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of

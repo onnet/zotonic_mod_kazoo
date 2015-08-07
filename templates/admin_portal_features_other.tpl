@@ -24,8 +24,8 @@
 
 <div id="featurecode_form">
 	<form>
-                {% wire action={connect signal={signal_featurecode_voicemail_check} action={update target="featurecode_line" template="_featurecode_voicemail_check.tpl"}} %}
-		<div class="featurecode_line">
+                {% wire action={connect signal={signal_featurecode_voicemail_check} action={update target="featurecode_voicemail_check_id" template="_featurecode_voicemail_check.tpl"}} %}
+		<div id="featurecode_voicemail_check_id" class="featurecode_line">
                     {% include "_featurecode_voicemail_check.tpl" %}
 		</div>	
 		<div class="featurecode_line">
