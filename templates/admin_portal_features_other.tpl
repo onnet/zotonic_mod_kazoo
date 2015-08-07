@@ -28,13 +28,9 @@
 		<div id="featurecode_voicemail_check_id" class="featurecode_line">
                     {% include "_featurecode_voicemail_check.tpl" %}
 		</div>	
-		<div class="featurecode_line">
-			<div class="name"><span>{_ Direct to Voicemail _}</span></div>
-			<div id="feature_direct_voicemail_call" class="input">
-				<span class="add-on">*</span>
-				<input type="text" value="*" disabled="disabled" class="feature_code">
-				<input type="checkbox" class="featurecode_enabled">
-			</div>
+                {% wire action={connect signal={signal_featurecode_voicemail_direct} action={update target="featurecode_voicemail_direct_id" template="_featurecode_voicemail_direct.tpl"}} %}
+		<div id="featurecode_voicemail_direct_id" class="featurecode_line">
+                    {% include "_featurecode_voicemail_direct.tpl" %}
 		</div>	
 		<div class="featurecode_line">
 			<div class="name"><span>{_ Intercom _}</span></div>
@@ -59,5 +55,5 @@
     </div>
 </div>
 
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="voicemail[action=check]"}] %}
+{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="voicemail[action=\"direct\"]"}] %}
 {% endblock %}
