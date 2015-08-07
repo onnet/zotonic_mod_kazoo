@@ -24,13 +24,9 @@
 
 <div id="featurecode_form">
 	<form>
+                {% wire action={connect signal={signal_featurecode_voicemail_check} action={update target="featurecode_line" template="_featurecode_voicemail_check.tpl"}} %}
 		<div class="featurecode_line">
-			<div class="name"><span>{_ Check Voicemail _}</span></div>
-			<div id="feature_check_voicemail" class="input">
-				<span class="add-on">*</span>
-				<input type="text" value="97" disabled="disabled" class="feature_code">
-				<input type="checkbox" class="featurecode_enabled">
-			</div>
+                    {% include "_featurecode_voicemail_check.tpl" %}
 		</div>	
 		<div class="featurecode_line">
 			<div class="name"><span>{_ Direct to Voicemail _}</span></div>
@@ -62,4 +58,6 @@
 
     </div>
 </div>
+
+{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="voicemail[action=check]"}] %}
 {% endblock %}

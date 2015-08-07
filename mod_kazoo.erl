@@ -703,6 +703,11 @@ event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eav
                                   ,Context),
     z_render:dialog_close(Context);
 
+event({postback,toggle_featurecode_voicemail_check,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_voicemail_check(Context),
+    mod_signal:emit({update_admin_portal_conferences_list_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

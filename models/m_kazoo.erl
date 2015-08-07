@@ -225,6 +225,9 @@ m_find_value(kz_list_account_conferences, _M, Context) ->
 m_find_value({kz_get_account_conference, [{conference_id, ConferenceId}]}, _M, Context) ->
     kazoo_util:kz_conference('get',ConferenceId, Context);
 
+m_find_value({kz_get_featurecode_by_name, [{featurecode_name, FCName}]}, _M, Context) ->
+    kazoo_util:kz_get_featurecode_by_name(FCName, Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

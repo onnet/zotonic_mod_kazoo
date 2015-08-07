@@ -128,6 +128,9 @@
     ,kz_list_account_conferences/1
     ,kz_conference/1
     ,kz_conference/3
+    ,kz_get_featurecode_by_name/2
+    ,kz_add_featurecode_voicemail_check/1
+    ,toggle_featurecode_voicemail_check/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -511,21 +514,20 @@ kz_create_default_callflow_sec(Seconds,AccountId, Context) ->
     timer:sleep(Seconds),
     kz_create_default_callflow(AccountId, Context).
 
+kz_create_callflow(Routines, Context) ->
+    kz_create_callflow(z_context:get_session('kazoo_account_id', Context), Routines, Context).
+
+kz_create_callflow(AccountId, Routines, Context) ->
+    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
+lager:info("DataBag: ~p", [DataBag]),
+lager:info("API_String: ~p", [API_String]),
+    crossbar_admin_request('put', API_String, DataBag, Context).
+
 kz_create_default_callflow(AccountId, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"no_match">>], J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"offnet">>, J) end],
-    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
-%%    DataBag = {[{<<"data">>,
-%%                  {[{<<"featurecode">>,{[]}},
-%%                    {<<"numbers">>,[<<"no_match">>]},
-%%                    {<<"flow">>,
-%%                     {[{<<"children">>,{[]}}
-%%                       ,{<<"data">>,{[]}}
-%%                       ,{<<"module">>,<<"offnet">>}]}}
-%%                    ]}
-%%              }]}, 
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
-    crossbar_admin_request('put', API_String, DataBag, Context).
+    kz_create_callflow(AccountId, Routines, Context).
 
 update_kazoo_user(Context) ->
     CallForwardEnabled = modkazoo_util:on_to_true(z_context:get_q("call_forward_enabled", Context)),
@@ -1741,3 +1743,27 @@ kz_conference(Verb, ConferenceId,Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
+
+kz_get_featurecode_by_name(FCName, Context) ->
+    case lists:filter(fun(X) -> z_convert:to_binary(FCName) == modkazoo_util:get_value([<<"featurecode">>,<<"name">>],X) end, kz_list_account_callflows(Context)) of
+        [] -> [];
+        [H|_] -> H
+    end.
+
+kz_add_featurecode_voicemail_check(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"check">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"voicemail">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], <<"*97">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"voicemail[action=check]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"97">>, J) end],
+    kz_create_callflow(Routines, Context).
+
+toggle_featurecode_voicemail_check(Context) ->
+    case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
+        [] -> kz_add_featurecode_voicemail_check(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
