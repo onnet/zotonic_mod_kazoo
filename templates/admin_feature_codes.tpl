@@ -6,14 +6,20 @@
 
 {% block service_description %}
 
-<div class="pl-10 pr-10 col-md-6">
-  <span id="admin_portal_call_history_tpl">
-        {% include "admin_portal_current_calls.tpl" headline=_"Account's Current Calls" %}
+<div class="pl-10 pr-10 col-md-4">
+  <span id="admin_portal_features_transfer_tpl">
+        {% include "admin_portal_features_transfer.tpl" headline=_"Call-Forward" %}
   </span>
 </div>
-<div class="pl-10 pr-10 col-md-6">
-  <span id="admin_portal_call_history_tpl">
-        {% include "admin_portal_call_history.tpl" headline=_"Account's Call History" %}
+<div class="pl-10 pr-10 col-md-4">
+  <span id="admin_portal_features_parking_tpl">
+        {% include "admin_portal_features_parking.tpl" headline=_"Parking" %}
+  </span>
+</div>
+
+<div class="pl-10 pr-10 col-md-4">
+  <span id="admin_portal_features_other_tpl">
+        {% include "admin_portal_features_other.tpl" headline=_"Miscellaneous" %}
   </span>
 </div>
 

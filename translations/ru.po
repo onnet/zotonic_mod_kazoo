@@ -4,6 +4,84 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Retrieve"
+msgstr "Извлечение"
+
+msgid "Valet"
+msgstr "Автоматически"
+
+msgid "Park and Retrieve"
+msgstr "Парковка и извлечение"
+
+msgid "Privacy"
+msgstr "Защита приватности"
+
+msgid "Intercom"
+msgstr "Интерком"
+
+msgid "Direct to Voicemail"
+msgstr "Прямой вызов голосовой почты"
+
+msgid "Check Voicemail"
+msgstr "Проверить голосовую почту"
+
+msgid "Update Call-Forward"
+msgstr "Обновить переадресацию"
+
+msgid "Toggle Call-Forward"
+msgstr "Переключить переадресацию"
+
+msgid "Disable Call-Forward"
+msgstr "Выключить переадресацию"
+
+msgid "Enable Call-Forward"
+msgstr "Включить переадресацию"
+
+msgid "Feature codes"
+msgstr "Коды ДВО"
+
+msgid "Parking"
+msgstr "Парковка"
+
+msgid "Miscellaneous"
+msgstr "Разное"
+
+msgid "Hot-Desking"
+msgstr "Присвоение телефона"
+
+msgid "Call-Forward"
+msgstr "Переадресация"
+
+msgid "Auth failed."
+msgstr "Ошибка авторизации."
+
 msgid "Enable"
 msgstr "Включить"
 
