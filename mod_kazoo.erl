@@ -705,7 +705,7 @@ event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eav
 
 event({postback,toggle_featurecode_voicemail_check,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_voicemail_check(Context),
-    mod_signal:emit({update_admin_portal_conferences_list_tpl, []}, Context),
+    mod_signal:emit({signal_featurecode_voicemail_check, []}, Context),
     Context;
 
 event({drag,_,_},Context) ->
