@@ -678,4 +678,37 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
    color:    #ccc!important;
 }
 
+#ap_features_parking_widget_opened .p-3, #ap_features_transfer_widget_opened .p-3, #ap_features_other_widget_opened .p-3 {
+	padding: 1em 3em;
+}
+
+#featurecode_form {
+	margin: 0 auto;
+	width: 200px;
+}
+
+#featurecode_form .name {
+	width: 116px;
+	float: left;
+	text-align: left;
+	height: 40px;
+	display: table;
+}
+
+#featurecode_form .name span, #featurecode_form .featurecode_enabled  {
+	vertical-align: middle;
+	display: table-cell;
+	margin: 0!important;
+}
+
+#featurecode_form .featurecode_line {
+	height: 40px;
+	margin-bottom: 5px;
+}
+
+#featurecode_form .feature_code {
+	margin-top: 8px;
+	width: 40px;
+}
+
 </style>
