@@ -28,8 +28,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to change this setting?"
+msgstr "Вы действительно хотите изменить эту настройку?"
 
 msgid "Retrieve"
 msgstr "Извлечение"

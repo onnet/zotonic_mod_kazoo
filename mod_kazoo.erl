@@ -708,6 +708,11 @@ event({postback,toggle_featurecode_voicemail_check,_,_}, Context) ->
     mod_signal:emit({signal_featurecode_voicemail_check, []}, Context),
     Context;
 
+event({postback,toggle_featurecode_voicemail_direct,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_voicemail_direct(Context),
+    mod_signal:emit({signal_featurecode_voicemail_direct, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 
