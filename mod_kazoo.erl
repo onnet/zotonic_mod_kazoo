@@ -713,6 +713,16 @@ event({postback,toggle_featurecode_voicemail_direct,_,_}, Context) ->
     mod_signal:emit({signal_featurecode_voicemail_direct, []}, Context),
     Context;
 
+event({postback,toggle_featurecode_park_and_retrieve,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_park_and_retrieve(Context),
+    mod_signal:emit({signal_featurecode_park_and_retrieve, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_call_forward_activate,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_call_forward_activate(Context),
+    mod_signal:emit({signal_featurecode_call_forward_activate, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

@@ -131,6 +131,8 @@
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
+    ,toggle_featurecode_park_and_retrieve/1
+    ,toggle_featurecode_call_forward_activate/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1767,6 +1769,22 @@ kz_add_featurecode_voicemail_direct(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"\\*">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
+kz_add_featurecode_park_and_retrieve(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"auto">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"park">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*3([0-9]*)$">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"park_and_retrieve">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"3">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_call_forward_activate(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"activate">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*72">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=activate]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"72">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
 toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
         [] -> kz_add_featurecode_voicemail_check(Context);
@@ -1779,6 +1797,24 @@ toggle_featurecode_voicemail_check(Context) ->
 toggle_featurecode_voicemail_direct(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=\"direct\"]">>, Context) of
         [] -> kz_add_featurecode_voicemail_direct(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_park_and_retrieve(Context) ->
+    case kz_get_featurecode_by_name(<<"park_and_retrieve">>, Context) of
+        [] -> kz_add_featurecode_park_and_retrieve(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_call_forward_activate(Context) ->
+    case kz_get_featurecode_by_name(<<"call_forward[action=activate]">>, Context) of
+        [] -> kz_add_featurecode_call_forward_activate(Context);
         JObj -> 
             AccountId = z_context:get_session('kazoo_account_id', Context),
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
