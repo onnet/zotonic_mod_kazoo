@@ -187,6 +187,7 @@
 -define(MENUS, <<"/menus">>).
 -define(TEMPORAL_RULES, <<"/temporal_rules">>).
 -define(CONFERENCES, <<"/conferences">>).
+-define(BLACKLISTS, <<"/blacklists">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
