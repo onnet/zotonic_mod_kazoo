@@ -85,6 +85,7 @@
     ,add_device/1
     ,add_group/1
     ,kz_list_account_groups/1
+    ,kz_list_account_blacklists/1
     ,kz_list_account_callflows/1
     ,kz_get_account_callflow/2
     ,kz_get_account_channel/2
@@ -133,6 +134,7 @@
     ,toggle_featurecode_voicemail_direct/1
     ,toggle_featurecode_park_and_retrieve/1
     ,toggle_featurecode_call_forward_activate/1
+    ,toggle_blacklist_member/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1078,6 +1080,11 @@ kz_list_account_groups(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+kz_list_account_blacklists(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?BLACKLISTS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
 kz_list_account_callflows(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
@@ -1822,3 +1829,10 @@ toggle_featurecode_call_forward_activate(Context) ->
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
+toggle_blacklist_member(BlacklistId,Context) ->
+lager:info("BlacklistId: ~p",[BlacklistId]),
+    Blacklists = kazoo_util:kz_account_doc_field(<<"blacklists">>, Context),
+    case lists:member(BlacklistId, Blacklists) of
+        'true' -> kz_set_acc_doc(<<"blacklists">>, lists:usort(Blacklists)--[BlacklistId,<<"undefined">>], Context); 
+        'false' -> kz_set_acc_doc(<<"blacklists">>, lists:usort(Blacklists++[BlacklistId])--[<<"undefined">>], Context) 
+    end.

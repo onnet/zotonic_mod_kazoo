@@ -44,6 +44,11 @@
   <span id="admin_portal_menus_list_tpl">
         {% include "admin_portal_menus_list.tpl" headline=_"Menus" %}
   </span>
+
+  {% wire action={connect signal={update_admin_portal_blacklists_tpl} action={update target="admin_portal_blacklists_tpl" template="admin_portal_blacklists.tpl" headline=_"Blacklists"}} %}
+  <span id="admin_portal_blacklists_tpl">
+        {% include "admin_portal_blacklists.tpl" headline=_"Blacklists" %}
+  </span>
 </div>
 
 {% endblock %}

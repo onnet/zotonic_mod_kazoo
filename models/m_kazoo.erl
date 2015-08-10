@@ -60,6 +60,7 @@ m_find_value({kz_device_doc_field, [{device_id, DeviceId}, {field, Field}]}, _M,
 
 m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}]}, _M, Context) ->
     case Type of
+        "account" -> kazoo_util:kz_account_doc_field(Field, Context);
         "user" -> kazoo_util:kz_user_doc_field(Field, DocId, Context);
         "device" -> kazoo_util:kz_device_doc_field(Field, DocId, Context);
         E -> lager:info("kz_doc_field Error: ~p",[E])
@@ -70,6 +71,9 @@ m_find_value(kz_list_account_users, _M, Context) ->
 
 m_find_value(kz_list_account_groups, _M, Context) ->
     kazoo_util:kz_list_account_groups(Context);
+
+m_find_value(kz_list_account_blacklists, _M, Context) ->
+    kazoo_util:kz_list_account_blacklists(Context);
 
 m_find_value(kz_list_account_channels, _M, Context) ->
     kazoo_util:kz_list_account_channels(Context);
