@@ -1,4 +1,5 @@
-
+-define(JSON_WRAPPER(Proplist), {Proplist}).
+-define(EMPTY_JSON_OBJECT, ?JSON_WRAPPER([])).
 -define(TIMEZONES_LIST, [<<"Africa/Abidjan">>,
              <<"Africa/Accra">>,
              <<"Africa/Addis_Ababa">>,

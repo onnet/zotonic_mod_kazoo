@@ -195,6 +195,10 @@ input[type="text"].input-number-zonnet {
   visibility: hidden!important;
 }
 
+.bradius-0 {
+  border-radius: 0px;
+}
+
 .panel-onnet {
   border-radius: 0px;
 }

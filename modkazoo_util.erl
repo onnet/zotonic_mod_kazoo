@@ -1,9 +1,6 @@
 -module(modkazoo_util).
 -author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 
--define(JSON_WRAPPER(Proplist), {Proplist}).
--define(EMPTY_JSON_OBJECT, ?JSON_WRAPPER([])).
-
 -export([new/0
     ,is_defined/1
     ,pad_month/1
@@ -46,6 +43,9 @@
     ,set_session_jobj/5
     ,delete_session_jobj_key/3
 ]).
+
+-include_lib("zotonic.hrl").
+-include_lib("include/mod_kazoo.hrl").
 
 is_defined(Var) ->
     case Var of

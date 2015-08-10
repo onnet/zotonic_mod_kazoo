@@ -135,9 +135,13 @@
     ,toggle_featurecode_park_and_retrieve/1
     ,toggle_featurecode_call_forward_activate/1
     ,toggle_blacklist_member/2
+    ,kz_get_account_blacklist/2
+    ,set_blacklist_doc/4
+    ,kz_delete_blacklist/2
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("include/mod_kazoo.hrl").
 
 %% Define API calls
 -define(V1, <<"/v1">>).
@@ -1830,9 +1834,34 @@ toggle_featurecode_call_forward_activate(Context) ->
     end.
 
 toggle_blacklist_member(BlacklistId,Context) ->
-lager:info("BlacklistId: ~p",[BlacklistId]),
     Blacklists = kazoo_util:kz_account_doc_field(<<"blacklists">>, Context),
     case lists:member(BlacklistId, Blacklists) of
         'true' -> kz_set_acc_doc(<<"blacklists">>, lists:usort(Blacklists)--[BlacklistId,<<"undefined">>], Context); 
         'false' -> kz_set_acc_doc(<<"blacklists">>, lists:usort(Blacklists++[BlacklistId])--[<<"undefined">>], Context) 
     end.
+
+kz_get_account_blacklist(BlacklistId, Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?BLACKLISTS/binary, <<"/">>/binary, (z_convert:to_binary(BlacklistId))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+set_blacklist_doc(Id, Name, Nums, Context) ->
+    Props =  [{<<"name">>, z_convert:to_binary(Name)}
+             ,{<<"id">>, z_convert:to_binary(Id)}
+             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {z_convert:to_binary(X), ?EMPTY_JSON_OBJECT} end, Nums))}],
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    case Id of
+        'undefined'->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?BLACKLISTS/binary>>,
+            crossbar_account_request('put', API_String, DataBag, Context);
+        _ ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?BLACKLISTS/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            crossbar_account_request('post', API_String, DataBag, Context)
+    end.
+
+kz_delete_blacklist(BlacklistId,Context) ->
+    kz_set_acc_doc(<<"blacklists">>, lists:usort(kazoo_util:kz_account_doc_field(<<"blacklists">>, Context))--[BlacklistId,<<"undefined">>], Context),
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?BLACKLISTS/binary, <<"/">>/binary, (z_convert:to_binary(BlacklistId))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).

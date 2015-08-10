@@ -36,8 +36,6 @@
         {% endfor %}
     </tbody>
 </table>
-{% print blacklists %}
-{% print m.kazoo.kz_list_account_blacklists %}
 {% endwith %}
 
 {% javascript %}
