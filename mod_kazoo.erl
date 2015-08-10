@@ -731,7 +731,7 @@ event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Con
 event({postback,add_blacklisted_number,_,_},Context) ->
     case z_context:get_q("new_blacklisted_number",Context) of
         [] -> Context;
-        Number -> z_render:insert_bottom("blacklisted_numbers_list",z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(Number)}],Context),Context) 
+        Number -> z_render:insert_top("blacklisted_numbers_list",z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(Number)}],Context),Context) 
     end;
 
 event({submit,add_new_blacklist,_,_},Context) ->
