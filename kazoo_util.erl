@@ -1797,6 +1797,14 @@ kz_add_featurecode_call_forward_activate(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"72">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
+kz_add_featurecode_call_forward_activate_2(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"activate">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*72">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=activate]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"72">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
 toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
         [] -> kz_add_featurecode_voicemail_check(Context);

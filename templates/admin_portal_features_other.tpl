@@ -32,6 +32,14 @@
 		<div id="featurecode_voicemail_direct_id" class="featurecode_line">
                     {% include "_featurecode_voicemail_direct.tpl" %}
 		</div>	
+                {% wire action={connect signal={signal_featurecode_intercom} action={update target="featurecode_intercom_id" template="_featurecode_intercom.tpl"}} %}
+		<div id="featurecode_intercom_id" class="featurecode_line">
+                    {% include "_featurecode_intercom.tpl" %}
+		</div>	
+                {% wire action={connect signal={signal_featurecode_privacy} action={update target="featurecode_privacy_id" template="_featurecode_privacy.tpl"}} %}
+		<div id="featurecode_privacy_id" class="featurecode_line">
+                    {% include "_featurecode_privacy.tpl" %}
+		</div>	
 		<div class="featurecode_line">
 			<div class="name"><span>{_ Intercom _}</span></div>
 			<div id="feature_intercom" class="input">
@@ -55,5 +63,5 @@
     </div>
 </div>
 
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="voicemail[action=\"direct\"]"}] %}
+{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="intercom"}] %}
 {% endblock %}
