@@ -1565,13 +1565,13 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
     case z_convert:to_list(DropParent) of
         "cid_check" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
-            KeysList = case modkazoo_util:get_value(cf_element_path(BranchId)++[<<"data">>,<<"use_absolute_mode">>], z_context:get_session('current_callflow', Context)) of
-                           'false' -> [<<"nomatch">>,<<"match">>];
-                           'true' -> [<<"nomatch">>,<<"caller_id">>]
+            [KeysList,AddOn] = case modkazoo_util:get_value(cf_element_path(BranchId)++[<<"data">>,<<"use_absolute_mode">>], z_context:get_session('current_callflow', Context)) of
+                           'false' -> [[<<"nomatch">>,<<"match">>],[]];
+                           'true' -> [[<<"nomatch">>],[<<"caller_id">>]] 
                        end,
             z_render:dialog(?__("Choose route option",Context)
                                  , "_cf_select_option_cid_check.tpl"
-                                 ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),Context)}]
+                                 ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context)}]
                                  ,Context);
         "menu" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
