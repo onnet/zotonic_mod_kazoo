@@ -729,6 +729,16 @@ event({postback,toggle_featurecode_call_forward_activate,_,_}, Context) ->
     mod_signal:emit({signal_featurecode_call_forward_activate, []}, Context),
     Context;
 
+event({postback,toggle_featurecode_intercom,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_intercom(Context),
+    mod_signal:emit({signal_featurecode_intercom, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_privacy,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_privacy(Context),
+    mod_signal:emit({signal_featurecode_privacy, []}, Context),
+    Context;
+
 event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Context) ->
     _ = kazoo_util:toggle_blacklist_member(BlacklistId,Context),
     mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),

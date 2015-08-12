@@ -40,22 +40,6 @@
 		<div id="featurecode_privacy_id" class="featurecode_line">
                     {% include "_featurecode_privacy.tpl" %}
 		</div>	
-		<div class="featurecode_line">
-			<div class="name"><span>{_ Intercom _}</span></div>
-			<div id="feature_intercom" class="input">
-				<span class="add-on">*</span>
-				<input type="text" value="0" disabled="disabled" class="feature_code">
-				<input type="checkbox" class="featurecode_enabled">
-			</div>
-		</div>	
-		<div class="featurecode_line">
-			<div class="name"><span>{_ Privacy _}</span></div>
-			<div id="feature_privacy_protect" class="input">
-				<span class="add-on">*</span>
-				<input type="text" value="67" disabled="disabled" class="feature_code">
-				<input type="checkbox" class="featurecode_enabled">
-			</div>
-		</div>
 	</form>
 </div>
 
@@ -63,5 +47,5 @@
     </div>
 </div>
 
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="intercom"}] %}
+{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="privacy[mode=full]"}] %}
 {% endblock %}
