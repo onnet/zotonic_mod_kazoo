@@ -19,11 +19,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "add blacklist"
+msgstr "добавить черный список"
 
-msgid ""
-msgstr ""
+msgid "Blacklists"
+msgstr "Черные списки"
 
 msgid "Click to add number"
 msgstr "Добавить номер"
