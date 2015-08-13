@@ -24,17 +24,17 @@
 
 <div id="featurecode_form">
 	<form>
-                {% wire action={connect signal={signal_featurecode_hotdesking_enable} action={update target="featurecode_hotdesking_enable_id" template="_featurecode_hotdesking_enable.tpl"}} %}
-		<div id="featurecode_hotdesking_enable_id" class="featurecode_line">
-                    {% include "_featurecode_hotdesking_enable.tpl" %}
+                {% wire action={connect signal={signal_featurecode_hotdesk_enable} action={update target="featurecode_hotdesk_enable_id" template="_featurecode_hotdesk_enable.tpl"}} %}
+		<div id="featurecode_hotdesk_enable_id" class="featurecode_line">
+                    {% include "_featurecode_hotdesk_enable.tpl" %}
 		</div>	
-                {% wire action={connect signal={signal_featurecode_hotdesking_disable} action={update target="featurecode_hotdesking_disable_id" template="_featurecode_hotdesking_disable.tpl"}} %}
-		<div id="featurecode_hotdesking_disable_id" class="featurecode_line">
-                    {% include "_featurecode_hotdesking_disable.tpl" %}
+                {% wire action={connect signal={signal_featurecode_hotdesk_disable} action={update target="featurecode_hotdesk_disable_id" template="_featurecode_hotdesk_disable.tpl"}} %}
+		<div id="featurecode_hotdesk_disable_id" class="featurecode_line">
+                    {% include "_featurecode_hotdesk_disable.tpl" %}
 		</div>	
-                {% wire action={connect signal={signal_featurecode_hotdesking_toggle} action={update target="featurecode_hotdesking_toggle_id" template="_featurecode_hotdesking_toggle.tpl"}} %}
-		<div id="featurecode_hotdesking_toggle_id" class="featurecode_line">
-                    {% include "_featurecode_hotdesking_toggle.tpl" %}
+                {% wire action={connect signal={signal_featurecode_hotdesk_toggle} action={update target="featurecode_hotdesk_toggle_id" template="_featurecode_hotdesk_toggle.tpl"}} %}
+		<div id="featurecode_hotdesk_toggle_id" class="featurecode_line">
+                    {% include "_featurecode_hotdesk_toggle.tpl" %}
 		</div>	
 	</form>
 </div>
@@ -43,7 +43,4 @@
     </div>
 </div>
 
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="hotdesk[action=login]"}] %}
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="hotdesk[action=logout]"}] %}
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="hotdesk[action=toggle]"}] %}
 {% endblock %}

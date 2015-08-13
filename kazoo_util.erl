@@ -136,6 +136,9 @@
     ,toggle_featurecode_call_forward_activate/1
     ,toggle_featurecode_intercom/1
     ,toggle_featurecode_privacy/1
+    ,toggle_featurecode_hotdesk_enable/1
+    ,toggle_featurecode_hotdesk_disable/1
+    ,toggle_featurecode_hotdesk_toggle/1
     ,toggle_blacklist_member/2
     ,kz_get_account_blacklist/2
     ,set_blacklist_doc/4
@@ -1841,6 +1844,30 @@ kz_add_featurecode_privacy(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"67">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
+kz_add_featurecode_hotdesk_enable(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"login">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"hotdesk">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*11">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"hotdesk[action=login]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"11">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_hotdesk_disable(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"logout">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"hotdesk">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*12">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"hotdesk[action=logout]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"12">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_hotdesk_toggle(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"toggle">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"hotdesk">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*13">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"hotdesk[action=toggle]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"13">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
 toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
         [] -> kz_add_featurecode_voicemail_check(Context);
@@ -1889,6 +1916,33 @@ toggle_featurecode_intercom(Context) ->
 toggle_featurecode_privacy(Context) ->
     case kz_get_featurecode_by_name(<<"privacy[mode=full]">>, Context) of
         [] -> kz_add_featurecode_privacy(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_hotdesk_enable(Context) ->
+    case kz_get_featurecode_by_name(<<"hotdesk[action=login]">>, Context) of
+        [] -> kz_add_featurecode_hotdesk_enable(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_hotdesk_disable(Context) ->
+    case kz_get_featurecode_by_name(<<"hotdesk[action=logout]">>, Context) of
+        [] -> kz_add_featurecode_hotdesk_disable(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_hotdesk_toggle(Context) ->
+    case kz_get_featurecode_by_name(<<"hotdesk[action=toggle]">>, Context) of
+        [] -> kz_add_featurecode_hotdesk_toggle(Context);
         JObj -> 
             AccountId = z_context:get_session('kazoo_account_id', Context),
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,

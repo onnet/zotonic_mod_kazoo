@@ -19,7 +19,7 @@
 
 <div class="pl-10 pr-10 col-md-3">
   <span id="admin_portal_features_hotdesking_tpl">
-        {% include "admin_portal_features_hotdesking.tpl" headline=_"Hot-Desking" %}
+        {% include "admin_portal_features_hotdesk.tpl" headline=_"Hot-Desking" %}
   </span>
 </div>
 

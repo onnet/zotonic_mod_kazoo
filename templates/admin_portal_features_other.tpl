@@ -47,5 +47,4 @@
     </div>
 </div>
 
-{% print m.kazoo[{kz_get_featurecode_by_name featurecode_name="privacy[mode=full]"}] %}
 {% endblock %}
