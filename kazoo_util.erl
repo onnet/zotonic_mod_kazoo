@@ -1521,7 +1521,8 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"page_gro
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"cid_check">> ->
     case modkazoo_util:get_value(ModulePath++[<<"data">>,<<"use_absolute_mode">>],z_context:get_session('current_callflow', Context)) of
         'true' -> ['undefined', <<"Exact numbers">>];
-        'false' -> ['undefined', <<"Regex match">>]
+        'false' -> ['undefined', <<"Regex match">>];
+        _ -> ['undefined', undefined]
     end;
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"prepend_cid">> ->
     CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name_prefix">>],z_context:get_session('current_callflow', Context)),
