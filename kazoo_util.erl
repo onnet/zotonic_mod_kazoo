@@ -143,6 +143,7 @@
     ,kz_get_account_blacklist/2
     ,set_blacklist_doc/4
     ,kz_delete_blacklist/2
+    ,may_be_cid_check_children_clean/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1517,6 +1518,11 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"ring_gro
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"page_group">> ->
     Name = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"name">>],z_context:get_session('current_callflow', Context)),
     ['undefined', Name];
+cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"cid_check">> ->
+    case modkazoo_util:get_value(ModulePath++[<<"data">>,<<"use_absolute_mode">>],z_context:get_session('current_callflow', Context)) of
+        'true' -> ['undefined', <<"Exact numbers">>];
+        'false' -> ['undefined', <<"Regex match">>]
+    end;
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"prepend_cid">> ->
     CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name_prefix">>],z_context:get_session('current_callflow', Context)),
     CallerIdNumberPrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_number_prefix">>],z_context:get_session('current_callflow', Context)),
@@ -1612,8 +1618,9 @@ cf_available_keys(KeysList,ElementPath,AddOn,Context) ->
 cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
     case DropParent of
         "cid_check" ->
-            lager:info("Drop BranchId: ~p",[ExistingElementId]),
+            lager:info("Drop ExistingElementId: ~p",[ExistingElementId]),
             lager:info("Drop TL: ~p",[lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))]),
+            lager:info("Switch: ~p",[hd(lists:reverse(cf_element_path(ExistingElementId)))]),
             [KeysList,AddOn] = case modkazoo_util:get_value(lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))++[<<"data">>,<<"use_absolute_mode">>]
                                                    ,z_context:get_session('current_callflow', Context)) of
                            'false' -> [[<<"nomatch">>,<<"match">>],[]];
@@ -1622,6 +1629,7 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
             z_render:dialog(?__("Choose route option",Context)
                                  , "_cf_select_option_cid_check.tpl"
                                  ,[{existing_element_id,ExistingElementId}
+                                 ,{switch,hd(lists:reverse(cf_element_path(ExistingElementId)))}
                                   ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),AddOn,Context)}]
                                  ,Context);
         "menu" ->
@@ -1981,3 +1989,37 @@ kz_delete_blacklist(BlacklistId,Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?BLACKLISTS/binary, <<"/">>/binary, (z_convert:to_binary(BlacklistId))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
+
+may_be_cid_check_children_clean(Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    case z_convert:to_atom(z_context:get_q("selected", Context))
+          ==
+         modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"data">>,<<"use_absolute_mode">>], z_context:get_session('current_callflow', Context))
+         of
+        'true' -> 'ok';
+        'false' -> cid_check_children_clean(Context)
+    end. 
+
+cid_check_children_clean(Context) ->
+    CurrentCallflow = z_context:get_session('current_callflow', Context),
+    ElementId = z_context:get_q("element_id", Context),
+    case z_context:get_q("selected", Context) of
+        "true" ->
+            case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"match">>], z_context:get_session('current_callflow', Context)) of
+                'undefined' -> 'ok';
+                _ -> z_context:set_session('current_callflow', modkazoo_util:delete_key(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"match">>], CurrentCallflow), Context),
+                     mod_signal:emit({update_cf_builder_area, []}, Context)
+            end;
+        "false" ->
+            case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"nomatch">>], z_context:get_session('current_callflow', Context)) of
+                'undefined' -> 
+                    z_context:set_session('current_callflow', modkazoo_util:set_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], ?EMPTY_JSON_OBJECT, CurrentCallflow), Context),
+                    mod_signal:emit({update_cf_builder_area, []}, Context);
+                NoMatch -> 
+                    Childless = modkazoo_util:set_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], ?EMPTY_JSON_OBJECT, CurrentCallflow),
+                    z_context:set_session('current_callflow', modkazoo_util:set_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"nomatch">>], NoMatch, Childless), Context),
+                    mod_signal:emit({update_cf_builder_area, []}, Context)
+            end
+    end.
+
+

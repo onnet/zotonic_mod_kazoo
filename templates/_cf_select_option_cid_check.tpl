@@ -2,15 +2,17 @@
 <form id="form_cf_select_option" method="post" action="postback">
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-6 text-center">
-            Choose route option
-        </div>
         <div class="col-sm-6">
-            <select id="menu_key_selector" name="switch" class="form-control margin-bottom-xs" style="text-align:center;">
+            {% wire id="menu_key_selector" type="change" action={ update target="check_value_id" template="_cf_select_option_cid_check_value.tpl" }%}
+            <select id="menu_key_selector" name="pre_switch" class="form-control margin-bottom-xs" style="text-align:center;">
+                  <option value="">{_ Select route key _}</option>
               {% for key in available_keys %}
-                  <option value="{{ key }}">{% if key=="_" %}Default action{% else %}{{ key }}{% endif %}</option>
+                  <option value="{{ key }}">{% if key=="nomatch" %}Default action{% else %}{{ key }}{% endif %}</option>
               {% endfor %}
             </select>
+        </div>
+        <div id="check_value_id" class="col-sm-6">
+          {% include "_cf_select_option_cid_check_value.tpl" available_keys=available_keys %}
         </div>
       </div>
     </div>

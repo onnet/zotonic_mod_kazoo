@@ -42,6 +42,7 @@
     ,count_activation_charge/1
     ,set_session_jobj/5
     ,delete_session_jobj_key/3
+    ,split_b/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -423,3 +424,5 @@ delete_session_jobj_key(SessionKey, K, Context) ->
         JObj -> z_context:set_session(SessionKey,delete_key(K,JObj), Context)
     end.
  
+split_b(String,Divider) ->
+    lists:map(fun (K) -> z_convert:to_binary(K) end, z_string:split(String,Divider)).
