@@ -13,6 +13,7 @@
 
 
 -include_lib("zotonic.hrl").
+-include_lib("include/mod_kazoo.hrl").
 
 observe_search_query(_, _) ->
     'undefined'.
@@ -577,8 +578,12 @@ event({submit,cf_select_temporal_route,_,_}, Context) ->
 
 event({submit,cf_select_cid_check,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","use_absolute_mode"], z_convert:to_atom(z_context:get_q("selected", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","regex"], z_convert:to_binary(z_context:get_q("regex", Context)), Context),
+    _ = case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], z_context:get_session('current_callflow', Context), ?EMPTY_JSON_OBJECT) of
+            ?EMPTY_JSON_OBJECT -> 'ok';
+            _ -> kazoo_util:may_be_cid_check_children_clean(Context)
+        end,
+    _ = kazoo_util:cf_set_session('current_callflow', modkazoo_util:split_b(ElementId,"-")++["data","use_absolute_mode"], z_convert:to_atom(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow', modkazoo_util:split_b(ElementId,"-")++["data","regex"], z_convert:to_binary(z_context:get_q("regex", Context)), Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_option,_,_},Context) ->

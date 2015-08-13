@@ -24,7 +24,6 @@
     </div>
   </div>
 </div>
-{% print this_cid_check %}
 {% endwith %}
 {% wire id="button_cf_select_cid_check" action={script script="$('#"++element_id++"_details').text(($('#use_absolute_mode_selector option:selected').text()))"}
                                   action={submit target="form_cf_select_cid_check"}
