@@ -28,22 +28,14 @@
                 <div id="featurecode_park_and_retrieve_id" class="featurecode_line">
                     {% include "_featurecode_park_and_retrieve.tpl" %}
                 </div>
-		<div class="featurecode_line">
-			<div class="name"><span>{_ Valet _}</span></div>
-			<div id="feature_parking_auto" class="input">
-				<span class="add-on">*</span>
-				<input type="text" value="4" disabled="disabled" class="feature_code">
-				<input type="checkbox" class="featurecode_enabled">
-			</div>
-		</div>	
-		<div class="featurecode_line">
-			<div class="name"><span>{_ Retrieve _}</span></div>
-			<div id="feature_parking_out" class="input">
-				<span class="add-on">*</span>
-				<input type="text" value="5" disabled="disabled" class="feature_code">
-				<input type="checkbox" class="featurecode_enabled">
-			</div>
-		</div>
+                {% wire action={connect signal={signal_featurecode_park_valet} action={update target="featurecode_park_valet_id" template="_featurecode_park_valet.tpl"}} %}
+                <div id="featurecode_park_valet_id" class="featurecode_line">
+                    {% include "_featurecode_park_valet.tpl" %}
+                </div>
+                {% wire action={connect signal={signal_featurecode_park_retrieve} action={update target="featurecode_park_retrieve_id" template="_featurecode_park_retrieve.tpl"}} %}
+                <div id="featurecode_park_retrieve_id" class="featurecode_line">
+                    {% include "_featurecode_park_retrieve.tpl" %}
+                </div>
 	</form>
 </div>
 

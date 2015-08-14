@@ -133,12 +133,17 @@
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
     ,toggle_featurecode_park_and_retrieve/1
-    ,toggle_featurecode_call_forward_activate/1
+    ,toggle_featurecode_park_valet/1
+    ,toggle_featurecode_park_retrieve/1
     ,toggle_featurecode_intercom/1
     ,toggle_featurecode_privacy/1
     ,toggle_featurecode_hotdesk_enable/1
     ,toggle_featurecode_hotdesk_disable/1
     ,toggle_featurecode_hotdesk_toggle/1
+    ,toggle_featurecode_call_forward_activate/1
+    ,toggle_featurecode_call_forward_deactivate/1
+    ,toggle_featurecode_call_forward_toggle/1
+    ,toggle_featurecode_call_forward_update/1
     ,toggle_blacklist_member/2
     ,kz_get_account_blacklist/2
     ,set_blacklist_doc/4
@@ -1833,12 +1838,20 @@ kz_add_featurecode_park_and_retrieve(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"3">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
-kz_add_featurecode_call_forward_activate(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"activate">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*72">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=activate]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"72">>, J) end],
+kz_add_featurecode_park_valet(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"park">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"park">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*4">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"valet">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"4">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_park_retrieve(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"retrieve">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"retrieve">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*5([0-9]*)$">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"retrieve">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"5">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
 kz_add_featurecode_intercom(Context) ->
@@ -1881,6 +1894,38 @@ kz_add_featurecode_hotdesk_toggle(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"13">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
+kz_add_featurecode_call_forward_activate(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"activate">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*72">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=activate]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"72">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_call_forward_deactivate(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"deactivate">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*73">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=deactivate]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"73">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_call_forward_toggle(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"toggle">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*74([0-9]*)$">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=toggle]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"74">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
+kz_add_featurecode_call_forward_update(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"update">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*56">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=update]">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"56">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
 toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
         [] -> kz_add_featurecode_voicemail_check(Context);
@@ -1908,9 +1953,18 @@ toggle_featurecode_park_and_retrieve(Context) ->
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
-toggle_featurecode_call_forward_activate(Context) ->
-    case kz_get_featurecode_by_name(<<"call_forward[action=activate]">>, Context) of
-        [] -> kz_add_featurecode_call_forward_activate(Context);
+toggle_featurecode_park_valet(Context) ->
+    case kz_get_featurecode_by_name(<<"valet">>, Context) of
+        [] -> kz_add_featurecode_park_valet(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_park_retrieve(Context) ->
+    case kz_get_featurecode_by_name(<<"retrieve">>, Context) of
+        [] -> kz_add_featurecode_park_retrieve(Context);
         JObj -> 
             AccountId = z_context:get_session('kazoo_account_id', Context),
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
@@ -1956,6 +2010,42 @@ toggle_featurecode_hotdesk_disable(Context) ->
 toggle_featurecode_hotdesk_toggle(Context) ->
     case kz_get_featurecode_by_name(<<"hotdesk[action=toggle]">>, Context) of
         [] -> kz_add_featurecode_hotdesk_toggle(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_call_forward_activate(Context) ->
+    case kz_get_featurecode_by_name(<<"call_forward[action=activate]">>, Context) of
+        [] -> kz_add_featurecode_call_forward_activate(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_call_forward_deactivate(Context) ->
+    case kz_get_featurecode_by_name(<<"call_forward[action=deactivate]">>, Context) of
+        [] -> kz_add_featurecode_call_forward_deactivate(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_call_forward_toggle(Context) ->
+    case kz_get_featurecode_by_name(<<"call_forward[action=toggle]">>, Context) of
+        [] -> kz_add_featurecode_call_forward_toggle(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_call_forward_update(Context) ->
+    case kz_get_featurecode_by_name(<<"call_forward[action=update]">>, Context) of
+        [] -> kz_add_featurecode_call_forward_update(Context);
         JObj -> 
             AccountId = z_context:get_session('kazoo_account_id', Context),
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,

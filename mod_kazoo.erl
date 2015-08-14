@@ -729,9 +729,14 @@ event({postback,toggle_featurecode_park_and_retrieve,_,_}, Context) ->
     mod_signal:emit({signal_featurecode_park_and_retrieve, []}, Context),
     Context;
 
-event({postback,toggle_featurecode_call_forward_activate,_,_}, Context) ->
-    _ = kazoo_util:toggle_featurecode_call_forward_activate(Context),
-    mod_signal:emit({signal_featurecode_call_forward_activate, []}, Context),
+event({postback,toggle_featurecode_park_valet,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_park_valet(Context),
+    mod_signal:emit({signal_featurecode_park_valet, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_park_retrieve,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_park_retrieve(Context),
+    mod_signal:emit({signal_featurecode_park_retrieve, []}, Context),
     Context;
 
 event({postback,toggle_featurecode_intercom,_,_}, Context) ->
@@ -757,6 +762,26 @@ event({postback,toggle_featurecode_hotdesk_disable,_,_}, Context) ->
 event({postback,toggle_featurecode_hotdesk_toggle,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_toggle(Context),
     mod_signal:emit({signal_featurecode_hotdesk_toggle, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_call_forward_activate,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_call_forward_activate(Context),
+    mod_signal:emit({signal_featurecode_call_forward_activate, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_call_forward_deactivate,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_call_forward_deactivate(Context),
+    mod_signal:emit({signal_featurecode_call_forward_deactivate, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_call_forward_toggle,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_call_forward_toggle(Context),
+    mod_signal:emit({signal_featurecode_call_forward_toggle, []}, Context),
+    Context;
+
+event({postback,toggle_featurecode_call_forward_update,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_call_forward_update(Context),
+    mod_signal:emit({signal_featurecode_call_forward_update, []}, Context),
     Context;
 
 event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Context) ->
