@@ -39,6 +39,9 @@ do_sign_in(Login, Password, Account, Context) ->
             case kazoo_util:kz_user_doc_field(<<"priv_level">>, Context) of
                 <<"admin">> -> 
                     z_context:set_session('kazoo_account_admin', 'true', Context),
+                    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
+                    z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
+                    z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
                     _ = may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
                     case z_dispatcher:url_for('dashboard',z:c(inno)) of
