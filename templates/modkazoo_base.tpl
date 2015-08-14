@@ -16,6 +16,12 @@
 
     {% lib "css/bootstrap.min.css" %}
     {% lib "js/bootstrap.min.js" %}
+    {% lib "js/bootstrap-select.min.js" %}
+
+    {% lib
+          "js/bootstrap-datepicker.js"
+          "js/locales/bootstrap-datepicker.ru.js"
+    %}
     
     {% lib
           "css/z.modal.css"
@@ -48,9 +54,8 @@
 
     {% lib
           "css/datepicker3.css"
-          "js/bootstrap-datepicker.js"
-          "js/locales/bootstrap-datepicker.ru.js"
-     %}
+          "css/bootstrap-select.min.css"
+    %}
 
     {% lib "css/font-awesome.min.css" %}
     {% lib "css/telicon.css" %}
