@@ -4,7 +4,7 @@
 <div class="row" style="padding: 1em;">
   <div class="col-xs-2">
     {% wire id="callflow_manager_selector" type="change" action={ postback postback={cf_load}  delegate="mod_kazoo"} %}
-    <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs" style="text-align:center;">
+    <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;" data-live-search="true">
       <option value="">-Select to edit-</option>
       <option value="new">-Add new Callflow-</option>
       {% for option in m.kazoo.kz_list_account_callflows %}
@@ -16,6 +16,12 @@
       {% endfor %}
     </select>
   </div>
+  {% javascript %}
+    $('#callflow_manager_selector').selectpicker({
+      style: 'btn-zalarm',
+      size: 7
+    });
+  {% endjavascript %}
   {% wire id="cf_reload_btn" action={confirm text="Do you really want to reload this callflow?"
                                    action={postback postback={cf_reload cf="current_callflow"} delegate="mod_kazoo"}
                            }

@@ -7,9 +7,9 @@
             <select id="menu_key_selector" name="pre_switch" class="form-control margin-bottom-xs" style="text-align:center;">
                   <option value="">{_ Select route key _}</option>
               {% for key in available_keys %}
-                  <option value="{{ key }}">{% if key=="nomatch" %}Default action
-                                            {% elseif key=="match" %}Regex match action
-                                            {% elseif key=="caller_id" %}Caller ID Number
+                  <option value="{{ key }}">{% if key=="nomatch" %}{_ Default action _}
+                                            {% elseif key=="match" %}{_ Regex match action _}
+                                            {% elseif key=="caller_id" %}{_ Caller ID Number _}
                                             {% else %}{{ key }}
                                             {% endif %}
                   </option>
