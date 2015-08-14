@@ -1,4 +1,5 @@
 [
+ {reseller_children_list,["reseller_children_list"],         controller_template,  [ {template, "reseller_children_list.tpl"} ]},
  {admin_settings,["admin_settings"],         controller_template,  [ {template, "admin_settings.tpl"} ]},
  {admin_feature_codes,["admin_feature_codes"],         controller_template,  [ {template, "admin_feature_codes.tpl"} ]},
  {admin_statistics,["admin_statistics"],         controller_template,  [ {template, "admin_statistics.tpl"} ]},
