@@ -1579,14 +1579,18 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
                            'false' -> [[<<"nomatch">>,<<"match">>],[]];
                            'true' -> [[<<"nomatch">>],[<<"caller_id">>]] 
                        end,
-            z_render:dialog(?__("Choose route option",Context)
-                                 , "_cf_select_option_cid_check.tpl"
-                                 ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context)}]
-                                 ,Context);
+            case cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context) of
+                [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
+                AvailableKeys ->
+                    z_render:dialog(?__("Choose route option",Context)
+                                         ,"_cf_select_option_cid_check.tpl"
+                                         ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,AvailableKeys}]
+                                         ,Context)
+            end;
         "menu" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
             z_render:dialog(?__("Menu option",Context)
-                                 , "_cf_select_option.tpl"
+                                 ,"_cf_select_option.tpl"
                                  ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(?MENU_KEYS_LIST,cf_element_path(BranchId),Context)}]
                                  ,Context);
         "temporal_route" ->
