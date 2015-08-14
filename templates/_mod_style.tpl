@@ -682,13 +682,13 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
    color:    #ccc!important;
 }
 
-#ap_features_parking_widget_opened .p-3, #ap_features_transfer_widget_opened .p-3, #ap_features_other_widget_opened .p-3 {
+#ap_features_parking_widget_opened .p-3, #ap_features_transfer_widget_opened .p-3, #ap_features_other_widget_opened .p-3, #ap_features_hotdesking_widget_opened .p-3 {
 	padding: 1em 3em;
 }
 
 #featurecode_form {
 	margin: 0 auto;
-	width: 200px;
+	width: 210px;
 }
 
 #featurecode_form .name {
@@ -699,10 +699,19 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
 	display: table;
 }
 
-#featurecode_form .name span, #featurecode_form .featurecode_enabled  {
+#featurecode_form .input {
+	float: left;
+	text-align: left;
+	height: 40px;
+	display: table;
+	padding-left:20px;
+}
+
+#featurecode_form .name span, #featurecode_form .input span, #featurecode_form .input i, #featurecode_form .featurecode_enabled  {
 	vertical-align: middle;
 	display: table-cell;
 	margin: 0!important;
+	min-width:30px;
 }
 
 #featurecode_form .featurecode_line {
