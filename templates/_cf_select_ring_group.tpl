@@ -49,7 +49,7 @@
                                                      action={script script="$('#group_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="group_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="" selected>-Select to add-</option>
+            <option value="" selected>-- {_ Select to add _} --</option>
             {% for group in account_groups %}
               <option id="option_{{ group["id"] }}"
                       {% for selected_endpoint in element_data[1]["data"][1]["endpoints"] %}
@@ -67,7 +67,7 @@
                                                      action={script script="$('#user_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="" selected>-Select to add-</option>
+            <option value="" selected>-- {_ Select to add _} --</option>
             {% for option in users_short %}
               {% if option[1] %}
                 <option id="option_{{ option[1] }}"
@@ -87,7 +87,7 @@
                                                      action={script script="$('#device_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="device_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="" selected>-Select to add-</option>
+            <option value="" selected>-- {_ Select to add _} --</option>
             {% for option in devices_short %}
               {% if option[1] %}
                 <option id="option_{{ option[1] }}"

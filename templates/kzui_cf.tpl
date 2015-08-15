@@ -5,8 +5,8 @@
   <div class="col-xs-2">
     {% wire id="callflow_manager_selector" type="change" action={ postback postback={cf_load}  delegate="mod_kazoo"} %}
     <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;" data-live-search="true">
-      <option value="">-Select to edit-</option>
-      <option value="new">-Add new Callflow-</option>
+      <option value="">-- {_ Select to edit _} --</option>
+      <option value="new">-- {_ Add new Callflow _} --</option>
       {% for option in m.kazoo.kz_list_account_callflows %}
         {% if not option["featurecode"] and ( option["numbers"][1]|match:"^\\+?\\d+$" or option["patterns"][1] ) %}
           <option value="{{ option["id"] }}" {% if m.session.current_callflow[1]["id"] == option["id"] %}selected{% endif %}>

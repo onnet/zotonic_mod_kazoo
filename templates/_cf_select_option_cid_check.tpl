@@ -5,7 +5,7 @@
         <div class="col-sm-6">
             {% wire id="menu_key_selector" type="change" action={ update target="check_value_id" template="_cf_select_option_cid_check_value.tpl" }%}
             <select id="menu_key_selector" name="pre_switch" class="form-control margin-bottom-xs" style="text-align:center;">
-                  <option value="">{_ Select route key _}</option>
+                  <option value=""> - {_ Select route key _} - </option>
               {% for key in available_keys %}
                   <option value="{{ key }}">{% if key=="nomatch" %}{_ Default action _}
                                             {% elseif key=="match" %}{_ Regex match action _}

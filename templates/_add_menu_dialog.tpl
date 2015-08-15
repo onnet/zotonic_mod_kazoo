@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-6">
             <select id="greeting" name="greeting" class="form-control margin-bottom-xs" style="text-align:center;">
-                <option value=" ">-- Select voice prompt --</option>
+                <option value=" ">-- {_ Select voice prompt _} --</option>
               {% for option in m.kazoo.kz_list_account_media %}
                 <option value="{{ option["id"] }}" {% if option["id"] == menu[1]["media"][1]["greeting"] %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
