@@ -44,7 +44,7 @@ do_sign_in(Login, Password, Account, Context) ->
                     z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
                     _ = may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
-                    case z_dispatcher:url_for('dashboard',z:c(inno)) of
+                    case z_dispatcher:url_for('dashboard',Context) of
                         'undefined' -> z_render:wire({redirect, [{dispatch, "userportal"}]}, Context1);
                         _ -> z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context1)
                     end;
