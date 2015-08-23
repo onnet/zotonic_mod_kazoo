@@ -33,7 +33,7 @@
           "css/project.css"
     %}
 
-    {% include "_mod_style.tpl" %}
+    {% all include "_mod_style.tpl" %}
  
     {% lib "js/apps/zotonic-1.0.js" %}
     {% lib "js/apps/z.widgetmanager.js" %}
