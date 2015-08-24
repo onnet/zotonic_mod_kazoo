@@ -13,11 +13,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Accounting"
+msgstr "Расчеты"
 
-msgid ""
-msgstr ""
+msgid "Finance"
+msgstr "Финансы"
 
 msgid "add blacklist"
 msgstr "добавить черный список"
@@ -342,4 +342,41 @@ msgstr "Отправить факс"
 
 msgid "Voicemails"
 msgstr "Голосовая почта"
+
+msgid "Sign Out"
+msgstr "Выход"
+
+msgid "Admin Portal"
+msgstr "Администрирование"
+
+msgid "User Portal"
+msgstr "Портал пользователя"
+
+msgid "Callflow Builder"
+msgstr "Маршрутизация"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "Payments"
+msgstr "Оплата"
+
+msgid "Delivery"
+msgstr "Доставка"
+
+msgid "Service Order"
+msgstr "Заказ услуг"
+
+msgid "Instructions"
+msgstr "Инструкции"
+
+msgid "About us"
+msgstr "О нас"
+
+msgid "Contacts"
+msgstr "Конакты"
+
 
