@@ -45,14 +45,14 @@ do_sign_in(Login, Password, Account, Context) ->
                     _ = may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
                     case z_dispatcher:url_for('dashboard',Context) of
-                        'undefined' -> z_render:wire({redirect, [{dispatch, "userportal"}]}, Context1);
+                        'undefined' -> z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context1);
                         _ -> z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context1)
                     end;
                 _ ->
                     z_context:set_session('kazoo_account_admin', 'false', Context),
                     _ = may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
-                    z_render:wire({redirect, [{dispatch, "userportal"}]}, Context1)
+                    z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context1)
             end;
         _ ->
             lager:info("Failed to authenticate Kazoo user ~p. IP address: ~p.", [z_context:get_q("username", Context),ClientIP]),

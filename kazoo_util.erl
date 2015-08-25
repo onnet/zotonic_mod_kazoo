@@ -21,6 +21,7 @@
     ,kz_list_account_users/1
     ,kz_list_account_devices/1
     ,kz_list_account_cdr/3
+    ,kz_list_account_children/1
     ,kz_list_account_channels/1
     ,kz_list_user_devices/1
     ,kz_get_device_doc/2
@@ -49,6 +50,7 @@
     ,kz_incoming_fax_delete/2
     ,kz_account_numbers/1
     ,kz_account_numbers_info/1
+    ,kz_account_numbers_info/2
     ,kz_send_fax/7
     ,kz_list_outgoing_faxes/1
     ,kz_list_transactions/1
@@ -69,8 +71,10 @@
     ,ui_element_state/2
     ,set_accounts_address/4
     ,lookup_numbers/2
+    ,rs_add_number/3
     ,purchase_number/2
     ,deallocate_number/2
+    ,deallocate_number/3
     ,current_service_plans/1
     ,add_service_plan/3
     ,valid_card_exists/1
@@ -205,6 +209,7 @@
 -define(TEMPORAL_RULES, <<"/temporal_rules">>).
 -define(CONFERENCES, <<"/conferences">>).
 -define(BLACKLISTS, <<"/blacklists">>).
+-define(CHILDREN, <<"/children">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -298,7 +303,7 @@ kz_get_acc_doc(Context) ->
 kz_get_acc_doc_by_account_id('undefined', _Context) ->
     <<>>;
 kz_get_acc_doc_by_account_id(Account_Id, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(Account_Id))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_set_acc_doc(K, V, Context) ->
@@ -430,7 +435,10 @@ crossbar_account_request(Verb, API_String, DataBag, Context) ->
                 [50,_,_] ->
                     {JsonData} = jiffy:decode(Body),
                     proplists:get_value(<<"data">>, JsonData);
-                _ -> <<"">>
+                _ -> 
+                    lager:info("crossbar_account_request API String: ~p:~p", [Verb,API_String]),
+                    lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
+                    <<"">>
             end;
         E -> 
             lager:info("crossbar_account_request Error: ~p", [E]),
@@ -843,7 +851,10 @@ kz_incoming_fax_attachment_tiff(DocId, Context) ->
 
 kz_account_numbers_info(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary>>,
+    kz_account_numbers_info(AccountId, Context).
+
+kz_account_numbers_info(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary>>,
     case crossbar_account_request('get', API_String, [], Context) of
         <<>> -> [<<"">>];
         Result -> Result
@@ -964,6 +975,10 @@ lookup_numbers(AreaCode, Context) ->
     API_String = <<?V2/binary, ?PHONE_NUMBERS/binary, <<"?">>/binary, ?PREFIX/binary, AreaCode/binary, <<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+rs_add_number(Number, AccountId, Context) ->
+    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>,[],Context),
+    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?ACTIVATE/binary>>,[],Context).
+
 purchase_number(Number, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
@@ -988,7 +1003,12 @@ deallocate_number(<<"+", Number/binary>>, Context) ->
     deallocate_number(<<"%2B", Number/binary>>, Context);
 deallocate_number(Number, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary>>,
+    deallocate_number(Number, AccountId, Context).
+
+deallocate_number(<<"+", Number/binary>>, AccountId, Context) ->
+    deallocate_number(<<"%2B", Number/binary>>, AccountId, Context);
+deallocate_number(Number, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
 current_service_plans(Context) ->
@@ -1108,6 +1128,11 @@ kz_list_account_callflows(Context) ->
 kz_get_account_callflow(CallflowId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (z_convert:to_binary(CallflowId))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_list_account_children(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CHILDREN/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_channels(Context) ->

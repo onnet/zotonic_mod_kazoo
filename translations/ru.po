@@ -347,7 +347,7 @@ msgid "Sign Out"
 msgstr "Выход"
 
 msgid "Admin Portal"
-msgstr "Администрирование"
+msgstr "Виртуальный офис"
 
 msgid "User Portal"
 msgstr "Портал пользователя"

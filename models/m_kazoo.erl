@@ -28,6 +28,9 @@ m_find_value(is_kazoo_account_admin, _M, Context) ->
 m_find_value(get_kazoo_account_id, _M, Context) ->
     z_context:get_session(kazoo_account_id, Context);
 
+m_find_value({kz_get_acc_doc_by_account_id, [{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_get_acc_doc_by_account_id(AccountId, Context);
+
 m_find_value({kz_account_doc_field, [{field1, Field1}]}, _M, Context) ->
     kazoo_util:kz_account_doc_field(Field1, Context);
 
@@ -74,6 +77,9 @@ m_find_value(kz_list_account_groups, _M, Context) ->
 
 m_find_value(kz_list_account_blacklists, _M, Context) ->
     kazoo_util:kz_list_account_blacklists(Context);
+
+m_find_value(kz_list_account_children, _M, Context) ->
+    kazoo_util:kz_list_account_children(Context);
 
 m_find_value(kz_list_account_channels, _M, Context) ->
     kazoo_util:kz_list_account_channels(Context);
@@ -149,6 +155,9 @@ m_find_value(get_acc_numbers, _M, Context) ->
 
 m_find_value(get_acc_numbers_info, _M, Context) ->
     modkazoo_util:to_proplist(<<"numbers">>, kazoo_util:kz_account_numbers_info(Context));
+
+m_find_value({get_acc_numbers_info, [{account_id,AccountId}]}, _M, Context) ->
+    modkazoo_util:to_proplist(<<"numbers">>, kazoo_util:kz_account_numbers_info(AccountId,Context));
 
 m_find_value(kz_list_outgoing_faxes, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_outgoing_faxes(Context)));

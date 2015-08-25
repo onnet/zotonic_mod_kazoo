@@ -264,6 +264,15 @@ event({postback,new_numbers_lookup,_,_}, Context) ->
     FreeNumbers = kazoo_util:lookup_numbers(AreaCode, Context),
     z_render:update("numbers_to_choose",z_template:render("_numbers_lookup.tpl", [{free_numbers, FreeNumbers}], Context),Context);
 
+event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
+    case z_context:get_q("new_number_to_add",Context) of
+        'undefined' -> z_render:growl_error(?__("Something wrong happened.", Context), Context);
+        NumberToAdd -> 
+            _ = kazoo_util:rs_add_number(NumberToAdd, AccountId, Context),
+            mod_signal:emit({update_reseller_children_area, []}, Context),
+            Context
+    end;
+
 event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
     lager:info("Number purchase attempt: ~p",[Number]),
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
@@ -298,6 +307,16 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
             Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
             Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
             z_render:growl(?__("Number ", Context2)++z_convert:to_list(Number)++?__(" successfully removed.", Context2), Context2)
+    end;
+
+event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,_}, Context) ->
+    case kazoo_util:deallocate_number(Number, AccountId, Context) of
+        <<>> ->
+            mod_signal:emit({update_rs_allocated_numbers_tpl, []}, Context),
+            z_render:growl_error(?__("Something wrong happened.", Context), Context);
+        _ -> 
+            mod_signal:emit({update_rs_allocated_numbers_tpl, []}, Context),
+            z_render:growl(?__("Number ", Context)++z_convert:to_list(Number)++?__(" successfully removed.", Context), Context)
     end;
 
 event({submit,{start_webphone_form,[]},_,_}, Context) ->
