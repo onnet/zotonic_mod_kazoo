@@ -49,7 +49,6 @@ event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
       'ok' = modkazoo_util:check_field_filled("username",Context),
       'ok' = modkazoo_util:check_field_filled("email",Context),
       'ok' = modkazoo_util:check_field_filled("phonenumber",Context),
-  lager:info("line 1"),
       Email = z_context:get_q_all("email",Context),
       {{ok, _}, _} = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), [false,"^[-+0-9 ()]+$"], Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
@@ -57,12 +56,10 @@ event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
           Email -> 'ok';
           _ -> throw({'error', 'emails_not_equal'})
       end,
-  lager:info("line 2"),
       "on" = z_context:get_q("checkbox",Context),
-  lager:info("line 3"),
       case modkazoo_auth:gcapture_check(Context) of
-          'true' -> lager:info("line 4"),modkazoo_auth:process_signup_form(Context);
-          'false' -> lager:info("line 5"),z_render:growl_error(?__("Are you robot?", Context), Context)
+          'true' -> modkazoo_auth:process_signup_form(Context);
+          'false' -> z_render:growl_error(?__("Are you robot?", Context), Context)
       end
     catch
       error:{badmatch,{{error, 1, invalid}, _}} -> z_render:growl_error(?__("Incorrect Contact phone field",Context), Context);
