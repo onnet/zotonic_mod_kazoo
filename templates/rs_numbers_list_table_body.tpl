@@ -7,7 +7,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for number in m.kazoo[{get_acc_numbers_info account_id=q.triggervalue}] %}
+        {% for number in m.kazoo[{get_acc_numbers_info account_id=account_id}] %}
           <tr  id="number_line_{{ forloop.counter }}">
              <td class="text-center">{{ number[1] }}</td>
              <td class="text-center">{{ number[2][1]["state"] }}</td>
@@ -15,7 +15,7 @@
              <td class="text-center">
                 {% wire id="delete_number_"++forloop.counter
                   action={confirm text=_"Do you really want to delete this number? <br />"
-                          action={postback postback={deallocate_number number=number[1] account_id=q.triggervalue} delegate="mod_kazoo"}
+                          action={postback postback={deallocate_number number=number[1] account_id=account_id} delegate="mod_kazoo"}
                           action={mask target="number_line_"++forloop.counter message=_"Processing number removal..."}
                          }
                 %}

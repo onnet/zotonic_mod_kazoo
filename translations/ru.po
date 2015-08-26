@@ -4,14 +4,14 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Registration"
+msgstr "Регистрация"
 
-msgid ""
-msgstr ""
+msgid "Create"
+msgstr "Создать"
 
-msgid ""
-msgstr ""
+msgid "Sing up"
+msgstr "Регистрация"
 
 msgid "Accounting"
 msgstr "Расчеты"

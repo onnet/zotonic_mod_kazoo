@@ -16,7 +16,7 @@
   {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add number" id="addnumberbtn"
                          action={confirm text=_"Do you really want to add this number? <br />"
-                              action={postback postback={rs_add_number account_id=q.triggervalue} qarg="new_number_id" delegate="mod_kazoo"}
+                              action={postback postback={rs_add_number account_id=account_id} qarg="new_number_id" delegate="mod_kazoo"}
                          }
     %}
     <input id="new_number_id" class="input input-number-onnet pull-right" type="text" name="new_number_to_add" placeholder="02071234567" maxlength="12">

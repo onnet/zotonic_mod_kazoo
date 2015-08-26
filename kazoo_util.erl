@@ -83,6 +83,7 @@
     ,get_user_timezone/1
     ,is_service_plan_applied/1
     ,get_account_realm/1
+    ,delete_account/2
     ,delete_user/2
     ,delete_device/2
     ,kz_list_classifiers/1
@@ -1068,6 +1069,10 @@ get_account_realm(Context) ->
             Realm;
         Realm -> Realm
     end.
+
+delete_account(AccountId,Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
 
 delete_user(UserId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
