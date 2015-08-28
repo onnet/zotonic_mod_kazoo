@@ -1,7 +1,7 @@
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
-  {% wire id="rs_account_reload_btn" action={update target="child_sandbox" template="reseller_child_info.tpl" account_id=account_id} %}
+  {% wire id="rs_account_mask_btn" action={postback postback={rs_account_mask account_id=account_id} delegate="mod_kazoo"} %}
   <div class="col-xs-2 col-xs-offset-3">
-    <button id="rs_account_reload_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Reload _}</button>
+    <button id="rs_account_mask_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Mask _}</button>
   </div>
   {% wire id="cf_details_btn" action={ dialog_open title=_"Account details" template="_account_details.tpl" account_id=account_id class="iamclass" width="auto" } %}
   <div class="col-xs-2">

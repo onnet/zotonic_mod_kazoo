@@ -509,8 +509,8 @@ create_kazoo_account(Context) ->
     Phonenumber = z_convert:to_binary(z_context:get_q("phonenumber", Context)),
     DefaultRealm = m_config:get_value('mod_kazoo', 'kazoo_default_realm', Context),
     Accountname = case valid_account_name(Companyname) of
-      'false' -> <<Firstname/binary, <<" ">>/binary, Surname/binary>>;
-      'true' -> Companyname
+      'false' -> z_convert:to_binary(modkazoo_util2:translit(z_convert:to_list(<<Firstname/binary, <<" ">>/binary, Surname/binary>>)));
+      'true' -> z_convert:to_binary(modkazoo_util2:translit(z_convert:to_list(Companyname)))
     end,
     {'ok', {'account_id', AdminAccountId}, {'auth_token', _}, {'crossbar', _}} = kz_admin_creds(Context),
     DataBag = {[{<<"data">>,

@@ -1,4 +1,4 @@
-{% with m.session.current_callflow[1]["numbers"]++m.session.current_callflow[1]["patterns"] as numbers %}
+{% with m.kazoo.get_callflow_numbers_and_patterns as numbers %}
 {% if not numbers or numbers|length==0 %}
 <div class="number_row">
   {% wire id="cf_add_number" action={ dialog_open title=_"Add number" template="_cf_add_number.tpl" } %}

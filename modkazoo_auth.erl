@@ -1,12 +1,12 @@
 -module(modkazoo_auth).
 -author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 
--export([
-    is_auth/1
-   ,do_sign_in/4
-   ,signout/1
-   ,gcapture_check/1
-   ,process_signup_form/1
+-export([is_auth/1
+    ,do_sign_in/4
+    ,signout/1
+    ,gcapture_check/1
+    ,process_signup_form/1
+    ,may_be_add_third_party_billing/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -42,6 +42,7 @@ do_sign_in(Login, Password, Account, Context) ->
                     AccountDoc = kazoo_util:kz_get_acc_doc(Context),
                     z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
                     z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
+                    _ = may_be_set_reseller_data(AccountDoc, Context),
                     _ = may_be_add_third_party_billing(Context),
                     Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
                     case z_dispatcher:url_for('dashboard',Context) of
@@ -57,6 +58,12 @@ do_sign_in(Login, Password, Account, Context) ->
         _ ->
             lager:info("Failed to authenticate Kazoo user ~p. IP address: ~p.", [z_context:get_q("username", Context),ClientIP]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
+    end.
+
+may_be_set_reseller_data(AccountDoc, Context) ->
+    case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
+        'true' -> z_context:set_session(kazoo_reseller_account_id, z_context:get_session(kazoo_account_id, Context), Context);
+        'false' -> 'ok'
     end.
 
 signout(Context) ->

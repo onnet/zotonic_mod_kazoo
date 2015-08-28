@@ -4,6 +4,87 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Please check your mailbox for further instructions"
+msgstr "Пожалуйста проверьте свой электронный почтовы ящик для получения реквизитов доступа на портал"
+
+msgid "Best regards"
+msgstr "С уважением"
+
+msgid "Regards"
+msgstr "С уважением"
+
+msgid "You can also open support tickets in our Support Centre at"
+msgstr "Вы также можете обращаться в техническую поддержку по адресу"
+
+msgid "Support Centre"
+msgstr "Поддержка"
+
+msgid "The following access credentials are valid for portal"
+msgstr "Следующие реквизиты доступа могут быть использоывны для авторизации"
+
+msgid "As an account holder you now have access to our customer portal at"
+msgstr "Вы можете получить доступ на портал по адресу"
+
+msgid "We're pleased to confirm that your account has been created"
+msgstr "Мы рады сообщить, что Ваша учетная запись создана"
+
+msgid "OnNet communications Inc."
+msgstr "ЗАО «ОнНет комьюникейшнс»"
+
+msgid "Welcome to"
+msgstr "Добро пожаловать в"
+
+msgid "Terms of Service"
+msgstr "условиями предоставления услуг"
+
+msgid "I agree to the"
+msgstr "Я согласен с"
+
+msgid "Create an account"
+msgstr "Создать учетную запись"
+
+msgid "Phone number (mandatory)"
+msgstr "Контактный телефон (обязательно)"
+
+msgid "Company name (optional)"
+msgstr "Название организации (при наличии)"
+
+msgid "Confirm email address (mandatory)"
+msgstr "Подтвердите Ваш email (обязательно)"
+
+msgid "Enter email address (mandatory)"
+msgstr "Ваш email (обязательно)"
+
+msgid "Thank you for registering"
+msgstr "Благодарим Вас за регистрацию"
+
+msgid "Dear"
+msgstr "Уважаемый(ая)"
+
+msgid "Account Name"
+msgstr "Учетная запись"
+
+msgid "Your name (mandatory)"
+msgstr "Ваше имя (обязательно)"
+
+msgid "Your surname (mandatory)"
+msgstr "Ваша фамилия (обязательно)"
+
 msgid "Registration"
 msgstr "Регистрация"
 
