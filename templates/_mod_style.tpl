@@ -724,4 +724,12 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
 	width: 40px;
 }
 
+#rs_demask {
+        background: #3E7A8C;
+        background: linear-gradient(top, #3E7A8C, #3E7A8C);
+        background: -webkit-linear-gradient(top, #3E7A8C, #3E7A8C);
+        background: -moz-linear-gradient(top, #3E7A8C, #3E7A8C);
+        position: relative;
+}
+
 </style>
