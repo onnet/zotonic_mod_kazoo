@@ -57,14 +57,13 @@ do_sign_in(Login, Password, Account, Context) ->
     end.
 
 choose_page_to_redirect(Context) ->
-lager:info("RSAI: ~p",[z_context:get_session(kazoo_reseller_account_id, Context)]),
     case z_dispatcher:url_for('dashboard',Context) of
         'undefined' -> 
             case z_context:get_session(kazoo_reseller_account_id, Context) of 
-                'undefined' -> lager:info("1"), z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context);
-                _ -> lager:info("2"), z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context)
+                'undefined' -> z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context);
+                _ -> z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context)
             end;
-        _ -> lager:info("3"), z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context) 
+        _ -> z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context) 
     end.
 
 may_be_set_reseller_data(AccountDoc, Context) ->
