@@ -13,11 +13,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Demask"
+msgstr "Выйти из"
 
-msgid ""
-msgstr ""
+msgid "Mask"
+msgstr "Маскироваться"
 
 msgid "Please check your mailbox for further instructions"
 msgstr "Пожалуйста проверьте свой электронный почтовы ящик для получения реквизитов доступа на портал"

@@ -725,10 +725,10 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
 }
 
 #rs_demask {
-        background: #3E7A8C;
-        background: linear-gradient(top, #3E7A8C, #3E7A8C);
-        background: -webkit-linear-gradient(top, #3E7A8C, #3E7A8C);
-        background: -moz-linear-gradient(top, #3E7A8C, #3E7A8C);
+        background: {{ m.config.mod_kazoo.color1.value }};
+        background: linear-gradient(top, {{ m.config.mod_kazoo.color1.value }}, {{ m.config.mod_kazoo.color1.value }});
+        background: -webkit-linear-gradient(top, {{ m.config.mod_kazoo.color1.value }}, {{ m.config.mod_kazoo.color1.value }});
+        background: -moz-linear-gradient(top, {{ m.config.mod_kazoo.color1.value }}, {{ m.config.mod_kazoo.color1.value }});
         position: relative;
 }
 
