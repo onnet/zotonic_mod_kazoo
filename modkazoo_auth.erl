@@ -24,13 +24,13 @@ do_sign_in(Login, Password, Account, Context) ->
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     case kazoo_util:kz_user_creds(Login, Password, Account, Context) of
         {ok, {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->
-            lager:info("Failed to authenticate Kazoo user ~p. IP address: ~p.", [z_context:get_q("username", Context),ClientIP]),
+            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
         {ok, {'owner_id', _}, {account_id, _}, {'auth_token', <<>>}, {'crossbar', _}, {'account_name', _}} ->
-            lager:info("Failed to authenticate Kazoo user ~p. IP address: ~p.", [z_context:get_q("username", Context),ClientIP]),
+            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
         {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', _Crossbar_URL}, {'account_name', Account_Name}} ->
-            lager:info("Succesfull authentication of Kazoo user ~p. IP address: ~p.", [z_context:get_q("username", Context),ClientIP]),
+            lager:info("Succesfull authentication of Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_context:set_session(kazoo_owner_id, Owner_Id, Context),
             z_context:set_session(kazoo_auth_token, Auth_Token, Context),
             z_context:set_session(kazoo_account_id, Account_Id, Context),
@@ -44,11 +44,7 @@ do_sign_in(Login, Password, Account, Context) ->
                     z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
                     _ = may_be_set_reseller_data(AccountDoc, Context),
                     _ = may_be_add_third_party_billing(Context),
-                    Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
-                    case z_dispatcher:url_for('dashboard',Context) of
-                        'undefined' -> z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context1);
-                        _ -> z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context1)
-                    end;
+                    choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context));
                 _ ->
                     z_context:set_session('kazoo_account_admin', 'false', Context),
                     _ = may_be_add_third_party_billing(Context),
@@ -56,8 +52,19 @@ do_sign_in(Login, Password, Account, Context) ->
                     z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context1)
             end;
         _ ->
-            lager:info("Failed to authenticate Kazoo user ~p. IP address: ~p.", [z_context:get_q("username", Context),ClientIP]),
+            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
+    end.
+
+choose_page_to_redirect(Context) ->
+lager:info("RSAI: ~p",[z_context:get_session(kazoo_reseller_account_id, Context)]),
+    case z_dispatcher:url_for('dashboard',Context) of
+        'undefined' -> 
+            case z_context:get_session(kazoo_reseller_account_id, Context) of 
+                'undefined' -> lager:info("1"), z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context);
+                _ -> lager:info("2"), z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context)
+            end;
+        _ -> lager:info("3"), z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context) 
     end.
 
 may_be_set_reseller_data(AccountDoc, Context) ->

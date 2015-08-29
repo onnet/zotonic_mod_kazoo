@@ -10,6 +10,9 @@ msgstr "Не активировано"
 msgid "Numbers management"
 msgstr "Управление номерами"
 
+msgid "Reseller Portal"
+msgstr "Панель реселлера"
+
 msgid "Reseller status"
 msgstr "Статус реселлера"
 
