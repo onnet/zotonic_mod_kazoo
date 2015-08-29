@@ -1,17 +1,17 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Not provided"
+msgstr "Не предоставлен"
 
-msgid ""
-msgstr ""
+msgid "Not activated"
+msgstr "Не активировано"
 
-msgid ""
-msgstr ""
+msgid "Numbers management"
+msgstr "Управление номерами"
 
-msgid ""
-msgstr ""
+msgid "Reseller status"
+msgstr "Статус реселлера"
 
 msgid "Unmask"
 msgstr "Выйти из"
@@ -427,7 +427,7 @@ msgstr "Голосовая почта"
 msgid "Sign Out"
 msgstr "Выход"
 
-msgid "Admin Portal"
+msgid "Hosted PBX"
 msgstr "Виртуальный офис"
 
 msgid "User Portal"

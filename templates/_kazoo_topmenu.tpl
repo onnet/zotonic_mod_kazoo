@@ -1,6 +1,6 @@
        <ul class="nav navbar-nav">
          <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ Admin Portal _} <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ Hosted PBX _} <b class="caret"></b></a>
             <ul class="dropdown-menu">
               {% if (m.session.kazoo_superduper_admin or m.session.kazoo_is_reseller) and m.kazoo.is_kazoo_account_admin %}
                 <li><a href="/reseller_portal">{_ Reseller Portal _}</a>

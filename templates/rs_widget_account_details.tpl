@@ -12,13 +12,27 @@
     <thead>
         <tr>
             <th>{_ Account status _}</th>
-            <th>{% if m.kazoo[{kz_account_doc_field field1="enabled"}] %}<span class="zprimary">{_ Active _}</span>
+            <th>{% if account_doc[1]["enabled"] %}<span class="zprimary">{_ Active _}</span>
                             {% else %}<span class="zalarm">{_ Blocked _}{% endif %}</span>
+            </th>
+        </tr>
+        <tr>
+            <th>{_ Reseller status _}</th>
+            <th>{% if account_doc[1]["is_reseller"] %}<span class="zprimary">{_ Activated _}</span>
+                            {% else %}<span class="zalarm">{_ Not provided _}{% endif %}</span>
+            </th>
+        </tr>
+        <tr>
+            <th>{_ Numbers management _}</th>
+            <th>{% if account_doc[1]["wnm_allow_additions"] %}<span class="zprimary">{_ Activated _}</span>
+                            {% else %}<span class="zalarm">{_ Not activated _}{% endif %}</span>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>{_ Current balance _}</td><td>£{{ m.kazoo.current_account_credit|format_price }}</td></tr>
+        {% if m.modules.info.mod_bt.enabled %}
+          <tr><td>{_ Current balance _}</td><td>£{{ m.kazoo.current_account_credit|format_price }}</td></tr>
+        {% endif %}
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
         <tr><th colspan="2">
             {% wire id="arrows_"++#id type="click"
@@ -62,18 +76,9 @@
         </tr>
     </tbody>
     <tbody id="rs_contacts_widget_opened" style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_contacts_widget_opened"}] %}display: none;{% endif %}">
-        <tr><td>Name</td><td>{{ m.kazoo[{kz_user_doc_field field1="first_name"}] }} {{ m.kazoo[{kz_user_doc_field field1="last_name"}] }}</td></tr>
-        <tr><td>E-mail</td><td>{{ m.kazoo[{kz_user_doc_field field1="email"}] }}</td></tr>
-        <tr><td>{_ Phone number _}</td>
-            <td>
-                {% if m.kazoo[{kz_user_doc_field field1="contact_phonenumber"}] %}
-                    {{ m.kazoo[{kz_user_doc_field field1="contact_phonenumber"}] }}
-                {% else %}
-                    {{ m.kazoo[{kz_user_doc_field field1="call_forward" field2="number"}] }}
-                {% endif %}
-            </td>
-        </tr>
+        <tr><td>{_ Account enabled _}</td><td></td></tr>
     </tbody>
 </table>
+{% print account_doc %}
 {% endwith %}
 {% endblock %}
