@@ -56,29 +56,6 @@
         <tr><td>{_ Realm _}</td><td>{{ account_doc[1]["realm"] }}</td></tr>
         <tr><td>{_ Account ID _}</td><td>{{ account_id }}</td></tr>
     </tbody>
-    <tbody>
-        <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
-        <tr><th colspan="2">
-            {% wire id="arrows2_"++#id type="click"
-                    action={ toggle target="rs_contacts_widget_opened" }
-                    action={ toggle target="arrow2_right_"++#id }
-                    action={ toggle target="arrow2_down_"++#id }
-                    action={ postback postback={trigger_innoui_widget arg="rs_contacts_widget_opened" } delegate="mod_kazoo" }
-            %}
-              <span id="arrows2_{{ #id }}" style="cursor: pointer;">
-                <i id="arrow2_right_{{ #id }}" style="{% if m.kazoo[{ui_element_opened element="rs_contacts_widget_opened"}] %}display: none;{% endif %}" 
-                                                class="arrowpad fa fa-arrow-circle-right"></i>
-                <i id="arrow2_down_{{ #id }}" style="{% if not m.kazoo[{ui_element_opened element="rs_contacts_widget_opened"}] %}display: none;{% endif %}" 
-                                               class="arrowpad fa fa-arrow-circle-down"></i>
-              </span>
-                Contacts:
-            </th>
-        </tr>
-    </tbody>
-    <tbody id="rs_contacts_widget_opened" style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_contacts_widget_opened"}] %}display: none;{% endif %}">
-        <tr><td>{_ Account enabled _}</td><td></td></tr>
-    </tbody>
 </table>
-{% print account_doc %}
 {% endwith %}
 {% endblock %}
