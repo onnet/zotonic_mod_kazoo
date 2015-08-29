@@ -20,7 +20,7 @@
          <ul class="nav navbar-nav navbar-right hidden-xs" style="margin-right: 0;">
            {% wire id="rs_demask" action={postback postback="rs_account_demask" delegate="mod_kazoo"} %}
            <li id="rs_demask">
-              <a href="#">{_ Demask _} -- {{ m.kazoo[{kz_account_doc_field field1="name"}] }} -- </a>
+              <a href="#">{_ Unmask _} -- {{ m.kazoo[{kz_account_doc_field field1="name"}] }} -- </a>
            </li>
          </ul>
          {% endif %}

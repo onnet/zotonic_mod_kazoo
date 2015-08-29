@@ -13,7 +13,7 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid "Demask"
+msgid "Unmask"
 msgstr "Выйти из"
 
 msgid "Mask"

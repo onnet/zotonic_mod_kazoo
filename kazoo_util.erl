@@ -324,7 +324,7 @@ kz_get_user_doc(Context) ->
 
 kz_get_user_doc(OwnerId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' of
+    case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, OwnerId/binary>>,
             crossbar_account_request('get', API_String, [], Context);
@@ -1544,7 +1544,7 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"receive_
     case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],z_context:get_session('current_callflow', Context)) of
         'undefined' -> 
             UserDoc = kz_get_user_doc(Id, Context),
-            [Id,<<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary,<<" ">>/binary,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>];
+            [Id,<<(modkazoo_util:get_value_bin(<<"first_name">>,UserDoc))/binary,<<" ">>/binary,(modkazoo_util:get_value_bin(<<"last_name">>,UserDoc))/binary>>];
         Name -> [Id, Name]
     end;
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"ring_group">> ->
