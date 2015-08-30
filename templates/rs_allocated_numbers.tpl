@@ -19,7 +19,7 @@
                               action={postback postback={rs_add_number account_id=account_id} qarg="new_number_id" delegate="mod_kazoo"}
                          }
     %}
-    <input id="new_number_id" class="input input-number-onnet pull-right" type="text" name="new_number_to_add" placeholder="02071234567" maxlength="12">
+    <input id="new_number_id" class="input input-number-onnet pull-right" type="text" name="new_number_to_add" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

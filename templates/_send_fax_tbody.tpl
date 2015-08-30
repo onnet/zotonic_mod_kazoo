@@ -4,7 +4,7 @@
 <tbody id="send-fax-tbody">
   <tr id="send_to_number">
   <td style="width: 63%">{_ Enter the number of the Fax to send document to _}:</td>
-  <td class="td-left"><input id="fax_number" class="input input-number-onnet" type="text" name="fax_number" placeholder="02071234567" maxlength="15"></td>
+  <td class="td-left"><input id="fax_number" class="input input-number-onnet" type="text" name="fax_number" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="15"></td>
   {% validate id="fax_number" type={format pattern="^[0-9]+$" failure_message=_"Invalid phone format"} %}
   </tr>
   <tr id="fax_file">
