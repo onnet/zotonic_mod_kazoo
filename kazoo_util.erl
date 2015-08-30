@@ -530,7 +530,10 @@ create_kazoo_account(Context) ->
                   ]}
               }]},
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AdminAccountId/binary>>,
-    {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context),
+    case z_context:get_session(kazoo_reseller_account_id,Context) of
+        'undefinrd' -> {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context);
+        _ -> {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, [], jiffy:encode(DataBag), Context)
+    end,
     CreatedUserAccountId = modkazoo_util:get_value([<<"data">>,<<"id">>], jiffy:decode(Body)),
     UserPassword = modkazoo_util:rand_hex_binary(10),
     create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
