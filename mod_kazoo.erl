@@ -70,7 +70,6 @@ event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
       E1:E2 ->
           lager:info("Err ~p:~p", [E1, E2]), 
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
-
     end;
 
 event({submit,{kazoo_user_settings,[]},"user_settings_form_form","user_settings_form_form"}, Context) ->
@@ -828,9 +827,8 @@ event({postback,rs_child_selected,_,_},Context) ->
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, z_context:get_q("triggervalue", Context)}], Context), Context);
 
 event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
-    _ = kazoo_util:delete_account(AccountId,Context),
-    mod_signal:emit({update_reseller_children_area, []}, Context),
-    Context;
+    spawn(kazoo_util,rs_delete_account,[AccountId,Context]),
+    z_render:wire({mask, [{target_id, "child_sandbox"}]}, Context);
 
 event({postback,{rs_account_mask,[{account_id,AccountId}]},_,_},Context) ->
     z_context:set_session(kazoo_account_id, z_convert:to_binary(AccountId), Context),

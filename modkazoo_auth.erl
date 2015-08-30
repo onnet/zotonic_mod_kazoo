@@ -77,20 +77,29 @@ signout(Context) ->
     z_render:wire({redirect, [{dispatch, "home"}]}, Context1).
 
 gcapture_check(Context) ->
-    CaptSecret = m_config:get_value('mod_kazoo', 'g_capture_secret', Context),
-    GCaptureResp = z_context:get_q("g-recaptcha-response",Context),
-    {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
-    URL = list_to_binary(["https://www.google.com/recaptcha/api/siteverify?secret=", CaptSecret, "&response=", GCaptureResp, "&remoteip=", ClientIP]),
-    {'ok', {{"HTTP/1.1", _ReturnCode, _State}, _Head, Body}} = httpc:request('get', {binary_to_list(URL), []}, [], []),
-    {JsonData} = jiffy:decode(Body),
-    proplists:get_value(<<"success">>, JsonData).
+    case z_context:get_session(kazoo_reseller_account_id, Context) of
+        'undefined' ->
+            CaptSecret = m_config:get_value('mod_kazoo', 'g_capture_secret', Context),
+            GCaptureResp = z_context:get_q("g-recaptcha-response",Context),
+            {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
+            URL = list_to_binary(["https://www.google.com/recaptcha/api/siteverify?secret=", CaptSecret, "&response=", GCaptureResp, "&remoteip=", ClientIP]),
+            {'ok', {{"HTTP/1.1", _ReturnCode, _State}, _Head, Body}} = httpc:request('get', {binary_to_list(URL), []}, [], []),
+            {JsonData} = jiffy:decode(Body),
+            proplists:get_value(<<"success">>, JsonData);
+        _ -> 'true'
+    end.
 
 process_signup_form(Context) ->
     {'new_account_id', AccountId} = kazoo_util:create_kazoo_account(Context),
     spawn('kazoo_util', 'kz_create_default_callflow_sec', [20000, AccountId, Context]),
  %   _ = kazoo_util:add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), AccountId, Context),
-    z_render:update("sign_up_div", z_template:render("_registration_completed.tpl", [], Context), Context).
-      
+    case z_context:get_q("rs_sign_up",Context) of
+        'undefined' -> z_render:update("sign_up_div", z_template:render("_registration_completed.tpl", [], Context), Context);
+        _ -> 
+            Context1 = z_render:dialog_close(Context),
+            z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, AccountId}], Context1), Context1)
+    end.
+
 may_be_add_third_party_billing(Context) ->
     case z_module_manager:active('mod_lb', Context) of
         'true' -> lb_auth:lb_auth_addon(kazoo_util:kz_account_numbers(Context), Context);

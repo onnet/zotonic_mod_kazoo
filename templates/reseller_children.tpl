@@ -17,7 +17,7 @@
       size: 7
     });
   {% endjavascript %}
-  {% wire id="create_account_btn" action={ dialog_open title=_"Account details" template="_account_details.tpl" account_id=account_id class="iamclass" width="auto" } %}
+  {% wire id="create_account_btn" action={ dialog_open title=_"Create an account" template="_rs_add_account.tpl" } %}
   <div class="col-xs-2">
     <button id="create_account_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Create _}</button>
   </div>

@@ -154,6 +154,7 @@
     ,set_blacklist_doc/4
     ,kz_delete_blacklist/2
     ,may_be_cid_check_children_clean/1
+    ,rs_delete_account/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -533,7 +534,10 @@ create_kazoo_account(Context) ->
     CreatedUserAccountId = modkazoo_util:get_value([<<"data">>,<<"id">>], jiffy:decode(Body)),
     UserPassword = modkazoo_util:rand_hex_binary(10),
     create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
-    send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context),
+    case z_context:get_q("notify_signed_up",Context) of
+        'undefined' -> 'ok';
+        _ -> send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context)
+    end,
     {'new_account_id', CreatedUserAccountId}.
  
 valid_account_name(Name) when size(Name) < 3 -> 'false';
@@ -2147,4 +2151,8 @@ cid_check_children_clean(Context) ->
             end
     end.
 
+rs_delete_account(AccountId,Context) ->
+    _ = delete_account(AccountId,Context),
+    z_context:add_script_session([<<"z_reload();">>], Context),
+    Context.
 
