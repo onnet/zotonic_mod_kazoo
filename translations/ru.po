@@ -28,8 +28,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Blacklist Name"
+msgstr "Название черного списка"
 
 msgid "Caller ID Number"
 msgstr "Номер звонящего"
