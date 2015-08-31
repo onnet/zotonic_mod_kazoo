@@ -1,6 +1,84 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Caller ID Number"
+msgstr "Номер звонящего"
+
+msgid "Caller ID Name"
+msgstr "Имя звонящего"
+
+msgid "Outbound Calls"
+msgstr "Исходящие вызовы"
+
+msgid "In-House Calls"
+msgstr "Внутренние вызовы"
+
+msgid "Timezone"
+msgstr "Часовой пояс"
+
+msgid "Email Notifications"
+msgstr "Уведомления по email"
+
+msgid "User privilege level"
+msgstr "Уровень доступа"
+
+msgid "User status"
+msgstr "Статус пользователя"
+
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+msgid "Diversion"
+msgstr "Переадресация"
+
+msgid "Restrictions"
+msgstr "Ограничения"
+
+msgid "Caller ID"
+msgstr "АОН"
+
+msgid "CID"
+msgstr "АОН"
+
+msgid "Please choose sip device to register with"
+msgstr "Пожалуйста выберите устройство для регистрации"
+
+msgid "D/L"
+msgstr "Скачать"
+
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
 msgid "Not provided"
 msgstr "Не предоставлен"
 
@@ -61,17 +139,23 @@ msgstr "Я согласен с"
 msgid "Create an account"
 msgstr "Создать учетную запись"
 
-msgid "Phone number (mandatory)"
-msgstr "Контактный телефон (обязательно)"
+msgid "Phone number"
+msgstr "Контактный телефон"
 
-msgid "Company name (optional)"
-msgstr "Название организации (при наличии)"
+msgid "(mandatory)"
+msgstr "(обязательно)"
 
-msgid "Confirm email address (mandatory)"
-msgstr "Подтвердите Ваш email (обязательно)"
+msgid "Company name"
+msgstr "Название организации"
 
-msgid "Enter email address (mandatory)"
-msgstr "Ваш email (обязательно)"
+msgid "(optional)"
+msgstr "(при наличии)"
+
+msgid "Confirm email address"
+msgstr "Подтвердите Ваш email"
+
+msgid "Enter email address"
+msgstr "Адрес email"
 
 msgid "Thank you for registering"
 msgstr "Благодарим Вас за регистрацию"

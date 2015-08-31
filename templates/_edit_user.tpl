@@ -1,12 +1,12 @@
 {% with m.kazoo[{kz_user_doc_by_ownerid owner_id=user_id}][1] as user_doc %}
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
-  <li class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
-  <li><a href="#callerid" role="tab" data-toggle="tab">CID</a></li>
-  <li><a href="#diversion" role="tab" data-toggle="tab">Diversion</a></li>
-  <li><a href="#password" role="tab" data-toggle="tab">Password</a></li>
-  <li><a href="#restrictions" role="tab" data-toggle="tab">Restrictions</a></li>
-  <li><a href="#allocatednumbers" role="tab" data-toggle="tab" class="hidden">Numbers</a></li>
+  <li class="active"><a href="#basic" role="tab" data-toggle="tab">{_ Basic _}</a></li>
+  <li><a href="#callerid" role="tab" data-toggle="tab">{_ CID _}</a></li>
+  <li><a href="#diversion" role="tab" data-toggle="tab">{_ Diversion _}</a></li>
+  <li><a href="#password" role="tab" data-toggle="tab">{_ Password _}</a></li>
+  <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
+  <li><a href="#allocatednumbers" role="tab" data-toggle="tab" class="hidden">{_ Numbers _}</a></li>
 </ul>
 
 <div class="tab-content">

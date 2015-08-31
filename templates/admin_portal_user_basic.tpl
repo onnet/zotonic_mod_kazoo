@@ -3,17 +3,17 @@
     <div class="col-sm-10">
     <!-- Username field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Username</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Username _}</label></div>
         <div id="edit_username" class="col-xs-5 zalarm">{{ user_doc["username"] }}</div>
     </div>
     <!-- User status -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">User status</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ User status _}</label></div>
         <div id="user_enabled_status" class="col-xs-5">{% if user_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
     </div>
     <!-- First Name field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">First Name</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ First Name _}</label></div>
         <div id="first_name" class="col-xs-5">
             {% wire id="edit_first_name" type="click" action={ update target="first_name" template="_edit_field.tpl" type="user" doc_id=user_id field_name="first_name" } %}
             <span>
@@ -24,7 +24,7 @@
     </div>
     <!-- Last Name field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Last Name</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Last Name _}</label></div>
         <div id="last_name" class="col-xs-5">
             {% wire id="edit_last_name" type="click" action={ update target="last_name" template="_edit_field.tpl" type="user" doc_id=user_id field_name="last_name" } %}
             <span>
@@ -35,7 +35,7 @@
     </div>
     <!-- Email field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Email</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Email _}</label></div>
         <div id="email" class="col-xs-5">
             {% wire id="edit_email" type="click" action={ update target="email" template="_edit_field.tpl" type="user" doc_id=user_id field_name="email" } %}
             <span>
@@ -46,7 +46,7 @@
     </div>
     <!-- User privilege level -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">User privilege level</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ User privilege level _}</label></div>
         <div id="priv_level" class="col-xs-5">
             {% wire id="edit_priv_level" type="click" action={ update target="priv_level" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name="priv_level" options=["admin","user"] } %}
             <span>
@@ -57,7 +57,7 @@
     </div>
     <!-- Email Notifications -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Email Notifications</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Email Notifications _}</label></div>
         <div class="col-xs-5">
         <div>
             Voicemail
@@ -85,7 +85,7 @@
     </div>
     <!-- Timezone -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Timezone</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Timezone _}</label></div>
         <div id="timezone" class="col-xs-5">
             {% wire id="edit_timezone" type="click" action={ update target="timezone" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list } %}
             <span>

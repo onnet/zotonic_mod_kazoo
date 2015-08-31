@@ -1,5 +1,5 @@
 {% if not m.session.webrtc_dev_sip_username %}
-    Please choose sip device to register with.
+    {_ Please choose sip device to register with _}.
 {% else %}
 
     <audio id="ringtone" src="/lib/images/incoming.mp3" loop></audio>

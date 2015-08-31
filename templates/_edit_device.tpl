@@ -4,11 +4,11 @@
 {% else %}
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
-  <li class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
-  <li><a href="#callerid" role="tab" data-toggle="tab">Caller ID</a></li>
+  <li class="active"><a href="#basic" role="tab" data-toggle="tab">{_ Basic _}</a></li>
+  <li><a href="#callerid" role="tab" data-toggle="tab">{_ Caller ID _}</a></li>
 <!--  <li><a href="#sipsettings" role="tab" data-toggle="tab">SIP Settings</a></li> -->
 <!--  <li><a href="#audiosettings" role="tab" data-toggle="tab">Audio</a></li> -->
-  <li><a href="#restrictions" role="tab" data-toggle="tab">Restrictions</a></li>
+  <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
 </ul>
 
 <div class="tab-content">

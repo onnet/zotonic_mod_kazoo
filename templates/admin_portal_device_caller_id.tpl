@@ -6,7 +6,7 @@
         <div class="col-xs-4 col-xs-offset-1"><h4>{_ In-House Calls _}</h4></div>
     </div>
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Caller ID Name</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Name _}</label></div>
         <div id="caller_idinternalname" class="col-xs-6" >
             <span>{{ device_doc["caller_id"][1]["internal"][1]["name"] }}</span>
             <i id="edit_caller_idinternalname" class="fa fa-edit pointer" title="Edit field"></i>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Caller ID Number</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Number _}</label></div>
         <div id="caller_idinternalnumber" class="col-xs-6" >
             <span>{{ device_doc["caller_id"][1]["internal"][1]["number"] }}</span>
             <i id="edit_caller_idinternalnumber" class="fa fa-edit pointer" title="Edit field"></i>
@@ -26,7 +26,7 @@
         <div class="col-xs-4 col-xs-offset-1"><h4>{_ Outbound Calls _}</h4></div>
     </div>
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Caller ID Name</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Name _}</label></div>
         <div id="caller_idexternalname" class="col-xs-6" >
             <span>{{ device_doc["caller_id"][1]["external"][1]["name"] }}</span>
             <i id="edit_caller_idexternalname" class="fa fa-edit pointer" title="Edit field"></i>
@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Caller ID Number</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Number _}</label></div>
         <div id="caller_idexternalnumber" class="col-xs-6" >
             <span>{{ device_doc["caller_id"][1]["external"][1]["number"] }}</span>
             <i id="edit_caller_idexternalnumber" class="fa fa-edit pointer" title="Edit field"></i>

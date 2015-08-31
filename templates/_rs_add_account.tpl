@@ -3,30 +3,30 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-6">
-        <input type="text" class="form-control margin-bottom-xs" id="firstname" name="firstname" placeholder="{_ Your name (mandatory) _}">
+        <input type="text" class="form-control margin-bottom-xs" id="firstname" name="firstname" placeholder="{_ Name _} {_ (mandatory) _}">
       </div>
       <div class="col-sm-6">
-        <input type="text" class="form-control" id="surname" name="surname" placeholder="{_ Your surname (mandatory) _}">
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-6">
-        <input type="text" class="form-control margin-bottom-xs" id="username" name="username" placeholder="{_ Enter email address (mandatory) _}">
-      </div>
-      <div class="col-sm-6">
-        <input type="text" class="form-control margin-bottom-xs" id="email" name="email" placeholder="{_ Confirm email address (mandatory) _}">
+        <input type="text" class="form-control" id="surname" name="surname" placeholder="{_ Surname _} {_ (mandatory) _}">
       </div>
     </div>
   </div>
   <div class="form-group">
     <div class="row">
       <div class="col-sm-6">
-        <input type="text" class="form-control" id="companyname"  name="companyname" placeholder="{_ Company name (optional) _}">
+        <input type="text" class="form-control margin-bottom-xs" id="username" name="username" placeholder="{_ Email address _} {_ (mandatory) _}">
       </div>
       <div class="col-sm-6">
-        <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="{_ Phone number (mandatory) _}">
+        <input type="text" class="form-control margin-bottom-xs" id="email" name="email" placeholder="{_ Confirm email address _} {_ (mandatory) _}">
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="companyname"  name="companyname" placeholder="{_ Company name _} {_ (optional) _}">
+      </div>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="{_ Phone number _} {_ (mandatory) _}">
       </div>
     </div>
   </div>
