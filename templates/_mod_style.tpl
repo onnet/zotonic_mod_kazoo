@@ -273,7 +273,7 @@ input, select{
 }
 
 .modal-dialog {
-  width: auto;
+/*  width: auto; */
   max-width: 800px;
 }
 
