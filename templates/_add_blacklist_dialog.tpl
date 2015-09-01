@@ -4,7 +4,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="blacklist_name" name="blacklist_name" placeholder="Enter blacklist name here" value="{{ blacklist[1]["name"] }}">
+          <input type="text" class="form-control margin-bottom-xs" id="blacklist_name" name="blacklist_name" placeholder="{_ Enter blacklist name here _}" value="{{ blacklist[1]["name"] }}">
         </div>
         <div class="col-sm-6">
           <div class="input-group">

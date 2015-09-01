@@ -28,6 +28,51 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Join deaf"
+msgstr "Отключить динамик"
+
+msgid "Join muted"
+msgstr "Отключить микрофон"
+
+msgid "Save conference"
+msgstr "Сохранить конференцию"
+
+msgid "(comma separated)"
+msgstr "(через запятую)"
+
+msgid "Conference pins"
+msgstr "Пин-коды доступа"
+
+msgid "Conference owner"
+msgstr "Менеджер конференции"
+
+msgid "Conference numbers"
+msgstr "Номера доступа к конференции"
+
+msgid "Conference name"
+msgstr "Название конференции"
+
+msgid "Add number"
+msgstr "Добавить номер"
+
+msgid "Enter conference name here"
+msgstr "Введите название конференции"
+
+msgid "Enter blacklist name here"
+msgstr "Введите название черного списка"
+
+msgid "Add blacklist"
+msgstr "Добавить черный список"
+
+msgid "Save blacklist"
+msgstr "Сохранить черный список"
+
 msgid "Blacklist Name"
 msgstr "Название черного списка"
 

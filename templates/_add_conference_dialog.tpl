@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Conference name _}
-            <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="Enter conference name here" value="{{ conference[1]["name"] }}">
+            <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="{_ Enter conference name here _}" value="{{ conference[1]["name"] }}">
           </label>
         </div>
         <div class="col-sm-6">
@@ -23,13 +23,13 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Conference numbers _}
-            <input type="text" class="form-control margin-bottom-xs" id="numbers" name="numbers" placeholder="(comma separated)" 
+            <input type="text" class="form-control margin-bottom-xs" id="numbers" name="numbers" placeholder="{_ (comma separated) _}" 
                    value="{% for number in conference[1]["member"][1]["numbers"] %}{{ number }}{% if not forloop.last %}, {% endif %}{% endfor %}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Conference pins _}
-            <input type="text" class="form-control margin-bottom-xs" id="pins" name="pins" placeholder="(comma separated)"
+            <input type="text" class="form-control margin-bottom-xs" id="pins" name="pins" placeholder="{_ (comma separated) _}"
                    value="{% for pin in conference[1]["member"][1]["pins"] %}{{ pin }}{% if not forloop.last %}, {% endif %}{% endfor %}">
           </label>
         </div>
@@ -59,7 +59,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save Conference _}</button>
+          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save conference _}</button>
         </div>
       </div>
     </div>
