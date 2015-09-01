@@ -3,21 +3,21 @@
 {% wire id="passwordForm" type="submit" postback="passwordForm" delegate="mod_kazoo" %}
 <form method="post" action="postback" id="passwordForm">
 <input type="hidden" name="chpwd_user_id" value={{ user_id }}>
-<input type="password" class="input form-control mt-1" name="password1" id="password1" placeholder="New Password" autocomplete="off">
+<input type="password" class="input form-control mt-1" name="password1" id="password1" placeholder="{_ New password _}" autocomplete="off">
 <div class="row">
 <div class="col-sm-6">
-<span id="10char" class="fa fa-remove" style="color:#FF0004;"></span> 10 Characters Long<br>
-<span id="ucase" class="fa fa-remove" style="color:#FF0004;"></span> Uppercase Letters
+<span id="10char" class="fa fa-remove" style="color:#FF0004;"></span> {_ 10 Characters long _}<br>
+<span id="ucase" class="fa fa-remove" style="color:#FF0004;"></span> {_ Uppercase letters _}
 </div>
 <div class="col-sm-6">
-<span id="lcase" class="fa fa-remove" style="color:#FF0004;"></span> Lowercase Letters<br>
-<span id="num" class="fa fa-remove" style="color:#FF0004;"></span> Numbers
+<span id="lcase" class="fa fa-remove" style="color:#FF0004;"></span> {_ Lowercase letters _}<br>
+<span id="num" class="fa fa-remove" style="color:#FF0004;"></span> {_ Numbers _}
 </div>
 </div>
-<input type="password" class="input form-control mt-1" name="password2" id="password2" placeholder="Repeat Password" autocomplete="off">
+<input type="password" class="input form-control mt-1" name="password2" id="password2" placeholder="{_ Repeat password _}" autocomplete="off">
 <div class="row">
 <div class="col-sm-12">
-<span id="pwmatch" class="fa fa-remove" style="color:#FF0004;"></span> Passwords Match
+<span id="pwmatch" class="fa fa-remove" style="color:#FF0004;"></span> {_ Passwords match _}
 </div>
 </div>
 {% button class="col-xs-12 btn btn-zprimary mt-1 mb-1" text=_"Change Password"  action={script script="mypwdsubmit()"} %}

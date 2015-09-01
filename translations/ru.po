@@ -28,11 +28,44 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Passwords match"
+msgstr "Пароли совпадают"
 
-msgid ""
-msgstr ""
+msgid "Uppercase letters"
+msgstr "Заглавные буквы"
+
+msgid "Lowercase letters"
+msgstr "Строчные буквы"
+
+msgid "10 Characters long"
+msgstr "10 симвоов длинной"
+
+msgid "New password"
+msgstr "Новый пароль"
+
+msgid "Direct Calls Only"
+msgstr "Только прямые вызовы"
+
+msgid "Require Key Press"
+msgstr "Требовать нажатия клавиши"
+
+msgid "Bypass user's phones"
+msgstr "Пропускать устройства"
+
+msgid "Redirect calls to"
+msgstr "Переадресовывать вызовы на"
+
+msgid "Realm"
+msgstr "SIP-домен (Realm)"
+
+msgid "Assign To"
+msgstr "Назначить"
+
+msgid "Device status"
+msgstr "Статус устройства"
+
+msgid "Device Nickname"
+msgstr "Ник устройства"
 
 msgid "Join deaf"
 msgstr "Отключить динамик"
@@ -326,7 +359,7 @@ msgid "Enter email address (mandatory)"
 msgstr "Email (обязательно)"
 
 msgid "Surname (mandatory)"
-msgstr "Фмилия (обязательно)"
+msgstr "Фамилия (обязательно)"
 
 msgid "Name (mandatory)"
 msgstr "Имя (обязательно)"

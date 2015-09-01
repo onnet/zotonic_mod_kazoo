@@ -3,18 +3,18 @@
     <div class="col-sm-10">
     <!-- Device Nickname field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Device Nickname</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Device Nickname _}</label></div>
         <div id="edit_username" class="col-xs-5 zalarm">{{ device_doc["name"] }}</div>
     </div>
     <!-- User status -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Device status</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Device status _}</label></div>
         <div id="device_enabled_status" class="col-xs-5">{% if device_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
     </div>
 
     <!-- Assign To -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Assign To</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Assign To _}</label></div>
         <div id="owner_id" class="col-xs-5">
             {% wire id="edit_owner_id" type="click" action={ update target="owner_id" 
                                                                     template="_edit_field_select.tpl" 
@@ -30,12 +30,12 @@
 
     <!-- Realm field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Realm</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Realm _}</label></div>
         <div id="edit_realm" class="col-xs-5">{{ m.kazoo.get_account_realm }}</div>
     </div>
     <!-- Username field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Username</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Username _}</label></div>
         <div id="sipusername" class="col-xs-5">
             {% wire id="edit_sipusername" type="click" action={ update target="sipusername" template="_edit_field.tpl" type="device" doc_id=device_id field_name=["sip","username"] } %}
             <span>
@@ -46,7 +46,7 @@
     </div>
     <!-- Password field -->
     <div class="row">
-        <div class="col-xs-5"><label class="edit_user_label">Password</label></div>
+        <div class="col-xs-5"><label class="edit_user_label">{_ Password _}</label></div>
         <div class="col-xs-5">
         {% wire id="eye_sippassword" action={ toggle target="sippassword"} action={ toggle target="hiddensippassword"} %}
         <i id="eye_sippassword" class="fa fa-eye pointer" title="Display pasword"></i>
