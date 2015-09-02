@@ -17,6 +17,7 @@
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add number" id="addnumberbtn"
                          action={confirm text=_"Do you really want to add this number? <br />"
                               action={postback postback={rs_add_number account_id=account_id} qarg="new_number_id" delegate="mod_kazoo"}
+                              action={mask target="rs_numbers_list_table" message=_"Allocating number..."}
                          }
     %}
     <input id="new_number_id" class="input input-number-onnet pull-right" type="text" name="new_number_to_add" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">

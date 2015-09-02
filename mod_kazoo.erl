@@ -268,7 +268,7 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
         'undefined' -> z_render:growl_error(?__("Something wrong happened.", Context), Context);
         NumberToAdd -> 
             _ = kazoo_util:rs_add_number(NumberToAdd, AccountId, Context),
-            mod_signal:emit({update_reseller_children_area, []}, Context),
+            mod_signal:emit({update_rs_allocated_numbers_tpl, [{account_id,AccountId}]}, Context),
             Context
     end;
 
@@ -311,11 +311,11 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
 event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,_}, Context) ->
     case kazoo_util:deallocate_number(Number, AccountId, Context) of
         <<>> ->
-            mod_signal:emit({update_rs_allocated_numbers_tpl, []}, Context),
-            z_render:growl_error(?__("Something wrong happened.", Context), Context);
+            Context1 = z_render:update("rs_numbers_list_table" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
+            z_render:growl_error(?__("Something wrong happened.", Context1), Context1);
         _ -> 
-            mod_signal:emit({update_rs_allocated_numbers_tpl, []}, Context),
-            z_render:growl(?__("Number ", Context)++z_convert:to_list(Number)++?__(" successfully removed.", Context), Context)
+            Context1 = z_render:update("rs_numbers_list_table" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
+            z_render:growl(?__("Number ", Context1)++z_convert:to_list(Number)++?__(" successfully removed.", Context1), Context1)
     end;
 
 event({submit,{start_webphone_form,[]},_,_}, Context) ->

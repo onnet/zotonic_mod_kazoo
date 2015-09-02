@@ -25,8 +25,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Allocating number..."
+msgstr "Подключение номера..."
 
 msgid "Passwords match"
 msgstr "Пароли совпадают"
