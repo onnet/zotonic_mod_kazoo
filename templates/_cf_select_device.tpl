@@ -1,3 +1,4 @@
+{% with m.kazoo[{cf_get_element_by_id element_id=element_id}] as element_data %}
 {% wire id="form_cf_select_device" type="submit" postback="cf_select_device" delegate="mod_kazoo" %}
 <form id="form_cf_select_device" method="post" action="postback">
     <div class="form-group">
@@ -13,7 +14,8 @@
         </div>
         <div id="number_input_div"class="col-sm-6">
           Ring this device for
-          <input type="text" name="timeout" id="parameter_input" maxlength="3" size="3" style="height: 34px; text-align: center;" value="20">
+          <input type="text" name="timeout" id="parameter_input" maxlength="3" size="3" style="height: 34px; text-align: center;"
+                 value="{% if element_data[1]["data"][1]["timeout"] %}{{ element_data[1]["data"][1]["timeout"] }}{% else %}20{% endif %}">
           seconds.
         </div>
       </div>
@@ -30,6 +32,7 @@
 {% wire id="button_cf_select_device" action={script script="$('#"++element_id++"_details').text(($('#device_selector option:selected').text()))"}
                                   action={submit target="form_cf_select_device"}
 %}
+{% endwith %}
 {% javascript %}
     $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
 {% endjavascript %}
