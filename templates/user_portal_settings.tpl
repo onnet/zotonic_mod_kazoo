@@ -106,5 +106,11 @@
 </form>
 </div>
 
+{% javascript %}
+  $('#user_timezone').selectpicker({
+    style: 'btn-xs btn-onnet',
+    size: 7
+  });
+{% endjavascript %}
 
 {% endblock %}
