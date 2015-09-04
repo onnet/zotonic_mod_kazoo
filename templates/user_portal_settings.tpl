@@ -41,7 +41,7 @@
     <div style="padding-top: 1.5em; padding-left: 1em;">
       {% with m.kazoo.get_user_timezone as user_timezone %}
       <label for="user_timezone">{_ User's timezone _}</label>
-      <select class="selectpicker" id="user_timezone" name="user_timezone">
+      <select class="selectpicker" id="user_timezone" name="user_timezone" data-live-search="true">
       {% for zone in m.kazoo.tz_list %}
         <option value="{{ zone }}" {% if zone == user_timezone %}selected{% endif %}>{{ zone }}</option>
       {% endfor %}
