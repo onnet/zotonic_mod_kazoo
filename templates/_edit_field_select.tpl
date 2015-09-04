@@ -1,4 +1,4 @@
-<select id="{{ field_name }}_input" name="input_value" style="max-width:140px; height:20px; text-align:center;">
+<select id="{{ field_name }}_input" name="input_value" style="max-width:140px; height:20px; text-align:center;" {% if field_name == "timezone" or field_namei == "caller_idexternalnumber" %}data-live-search="true"{% endif %}>
   {% with m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name}] as current_value %}
   {% for option in options %}
     {% if option[1]|is_list %}
@@ -17,3 +17,13 @@
                                                              delegate="mod_kazoo" 
                                                              qarg=field_name++"_input" inject_args type=type doc_id=doc_id field_name=field_name options=options}
 %}
+
+
+{# if field_name=="timezone" #}
+  {% javascript %}
+    $('#{{ field_name }}_input').selectpicker({
+      style: 'btn-xs btn-onnet',
+      size: 7
+    });
+  {% endjavascript %}
+{# endif #}
