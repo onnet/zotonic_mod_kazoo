@@ -14,7 +14,7 @@
     <tbody>
         {% for user in m.kazoo.kz_list_account_users %}
         {% with m.kazoo[{kz_user_doc_by_ownerid owner_id=user["id"]}] as user_doc %}
-        {% with user_doc[1]["caller_id"][1][1][2][1][2][2], user_doc[1]["caller_id"][1][2][2][1][2][2] as internal_cid, external_cid %} 
+        {% with user_doc[1]["caller_id"][1]["internal"][1]["number"], user_doc[1]["caller_id"][1]["external"][1]["number"] as internal_cid, external_cid %} 
 	<tr>
             <td style="text-align: center;">{{ user["username"] }}</td>
             <td style="text-align: center;">{{ user["first_name"]|truncate:13 }}</td>

@@ -15,7 +15,7 @@
         {% with m.kazoo[{kz_get_device_registration_details device_id=device["id"]}] as device_details %}
         {% with m.kazoo[{kz_check_device_registration device_id=device["id"]}] as device_registered %}
         {% with m.kazoo[{kz_device_doc device_id=device["id"]}] as device_doc %}
-        {% with device_doc[1]["caller_id"][1][1][2][1][2][2], device_doc[1]["caller_id"][1][2][2][1][2][2] as internal_cid, external_cid %}
+        {% with device_doc[1]["caller_id"][1]["internal"][1]["number"], device_doc[1]["caller_id"][1]["external"][1]["number"] as internal_cid, external_cid %}
 	<tr>
             <td style="text-align: center;">
                 {% if device["device_type"]=="sip_device" %}
