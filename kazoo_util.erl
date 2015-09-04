@@ -524,6 +524,16 @@ create_kazoo_account(Context) ->
                     ,{<<"provision">>,{[]}}
                     ,{<<"apps">>,[]}
                     ,{<<"name">>,Accountname}
+                    ,{<<"language">>,case m_config:get_value('mod_kazoo', 'default_kazoo_language', Context) of
+                                         'undefined' -> <<"en-en">>;
+                                          Lang -> z_convert:to_binary(Lang)
+                                      end
+                     }
+                    ,{<<"timezone">>,case m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context) of
+                                         'undefined' -> <<"Europe/London">>;
+                                          Lang -> z_convert:to_binary(Lang)
+                                      end
+                     }
                     ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
                     ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
     %                ,{<<"billing_id">>,AdminAccountId}
