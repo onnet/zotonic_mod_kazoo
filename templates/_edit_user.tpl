@@ -6,7 +6,6 @@
   <li><a href="#diversion" role="tab" data-toggle="tab">{_ Diversion _}</a></li>
   <li><a href="#password" role="tab" data-toggle="tab">{_ Password _}</a></li>
   <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
-  <li><a href="#allocatednumbers" role="tab" data-toggle="tab" class="hidden">{_ Numbers _}</a></li>
 </ul>
 
 <div class="tab-content">
@@ -27,10 +26,6 @@
   </div>
   <div class="tab-pane fade" id="restrictions">
     {% include "admin_portal_user_restrictions.tpl" %}
-  </div>
-  <div class="tab-pane fade" id="allocatednumbers">
-    {% include "admin_portal_user_allocated_numbers.tpl" %}
-    {# print user_doc #}
   </div>
 </div>
 </div>
