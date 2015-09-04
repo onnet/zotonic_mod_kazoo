@@ -4,7 +4,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-            <select id="temporal_route_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+            <select id="temporal_route_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
               {% for zone in m.kazoo.tz_list %}
                   <option value="{{ zone }}" {% if zone == current_timezone %}selected{% endif %}>{{ zone }}</option>
               {% endfor %}
@@ -27,4 +27,5 @@
 %}
 {% javascript %}
     $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+    $('#temporal_route_selector').selectpicker({size: 5});
 {% endjavascript %}

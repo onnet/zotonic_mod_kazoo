@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-            <select id="menu_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+            <select id="menu_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
               {% for option in m.kazoo.kz_list_account_menus %}
                   <option value="{{ option["id"] }}" {% if option["id"] == kz_element_id %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
@@ -25,4 +25,5 @@
 %}
 {% javascript %}
     $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+    $('#menu_selector').selectpicker({size: 5});
 {% endjavascript %}

@@ -48,7 +48,7 @@
           {% wire id="group_selector" type="change" action={ postback postback={cf_ring_group_select element_type="group"}  delegate="mod_kazoo"}
                                                      action={script script="$('#group_selector').get(0).selectedIndex = 0;"}
           %}
-          <select id="group_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+          <select id="group_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
             <option value="" selected>-- {_ Select to add _} --</option>
             {% for group in account_groups %}
               <option id="option_{{ group["id"] }}"
@@ -66,7 +66,7 @@
           {% wire id="user_selector" type="change" action={ postback postback={cf_ring_group_select element_type="user"}  delegate="mod_kazoo"}
                                                      action={script script="$('#user_selector').get(0).selectedIndex = 0;"}
           %}
-          <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+          <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
             <option value="" selected>-- {_ Select to add _} --</option>
             {% for option in users_short %}
               {% if option[1] %}
@@ -86,7 +86,7 @@
           {% wire id="device_selector" type="change" action={ postback postback={cf_ring_group_select element_type="device"}  delegate="mod_kazoo"}
                                                      action={script script="$('#device_selector').get(0).selectedIndex = 0;"}
           %}
-          <select id="device_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+          <select id="device_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
             <option value="" selected>-- {_ Select to add _} --</option>
             {% for option in devices_short %}
               {% if option[1] %}
@@ -116,5 +116,8 @@
     </div>
 {% endwith %}
 {% javascript %}
-    $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+  $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+  $('#group_selector').selectpicker({size: 5});
+  $('#user_selector').selectpicker({size: 5});
+  $('#device_selector').selectpicker({size: 5});
 {% endjavascript %}
