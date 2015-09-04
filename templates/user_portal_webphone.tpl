@@ -24,7 +24,7 @@
 
 {% if m.session.webrtc_dev_sip_username %}
   {% button id="webrtc_register_button" class="btn btn-xs btn-onnet pull-right display_none" text=_"register" action={submit target="start-webphone-form"} %}
-  <select id="webrtc_device_select" name="webrtc_device" class="pull-right display_none" style="height: 1.5em;">
+  <select id="webrtc_device_select" name="webrtc_device" class="pull-right btn-onnet display_none" style="height: 1.5em;">
   {% for device in m.kazoo.kz_list_user_devices %}
       <option value="{{ device["id"] }}">{{ device["name"]|escape }}</option>
   {% endfor %}
@@ -40,7 +40,7 @@
 
 {% if not m.session.webrtc_dev_sip_username %}
   {% button id="webrtc_register_button" class="btn btn-xs btn-onnet pull-right" text=_"register" action={submit target="start-webphone-form"} %}
-  <select id="webrtc_device_select" name="webrtc_device" class="pull-right" style="height: 1.5em;">
+  <select id="webrtc_device_select" name="webrtc_device" class="pull-right btn-onnet" style="height: 1.5em;">
   {% for device in m.kazoo.kz_list_user_devices %}
     <option value="{{ device["id"] }}">{{ device["name"]|escape }}</option>
   {% endfor %}

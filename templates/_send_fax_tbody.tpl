@@ -14,7 +14,7 @@
   <tr id="send_from_number">
   <td >{_ Please choose the number to send fax from _}:</td>
   <td class="td-left">
-       <select name="fax_from" id="fax_from">
+       <select name="fax_from" id="fax_from" class="btn-onnet">
        {% for number in m.kazoo.get_acc_numbers %}
        <option>{{ number }}</option>
        {% endfor %}
@@ -22,7 +22,7 @@
   </tr>
   <tr id="attempts_number">
   <td >{_ Please choose the number of attempts _}:</td>
-  <td class="td-left"><select name="attempts" id="fax_retries" maxlength="1"><option>1</option><option>2</option><option>3</option></select></td>
+  <td class="td-left"><select name="attempts" id="fax_retries" maxlength="1" class="btn-onnet"><option>1</option><option>2</option><option>3</option></select></td>
   </tr>
   <tr id="company_name_header_line">
   <td >{_ Check to add company name to fax header _}:</td>
