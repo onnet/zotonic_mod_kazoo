@@ -26,7 +26,7 @@
                             icon-telicon-voip-phone icon-device"></i>
                 {% elseif device["device_type"]=="softphone" %}
                   <i class="{% if device["enabled"] %}
-                                {% if m.kazoo[{kz_check_device_registration device_id=device["id"]}] %}registered
+                                {% if device_registered %}registered
                                     {% else %}unregistered
                                 {% endif %}
                             {% endif %} 
@@ -46,8 +46,14 @@
             </td>
             <td style="text-align: center;"><i id="edit_{{ device["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
             {% wire id="edit_"++device["id"] action={ dialog_open title=_"Edit device"++" "++device["name"] template="_edit_device_lazy.tpl" device_id=device["id"] width="auto" } %}
-            <td style="text-align: center;">{% if device_registered %}<i id="info_{{ device["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>{% else %}-{% endif %}</td>
-            {% wire id="info_"++device["id"] action={ dialog_open title=_"Registration details" template="_device_registration_details.tpl" device_id=device["id"] } %}
+            <td style="text-align: center;">
+                {% if device_registered %}
+                    <i id="info_{{ device["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+                    {% wire id="info_"++device["id"] action={ dialog_open title=_"Registration details" template="_device_registration_details.tpl" device_id=device["id"] } %}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
         </tr>
         {% endwith %}
         {% endwith %}
