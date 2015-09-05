@@ -24,7 +24,7 @@
       size: 7
     });
   {% endjavascript %}
-  {% wire id="cf_reload_btn" action={confirm text="Do you really want to reload this callflow?"
+  {% wire id="cf_reload_btn" action={confirm text=_"Do you really want to reload this callflow?"
                                    action={postback postback={cf_reload cf="current_callflow"} delegate="mod_kazoo"}
                            }
   %}
@@ -35,14 +35,14 @@
   <div class="col-xs-2">
     <button id="cf_details_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Details _}</button>
   </div>
-  {% wire id="cf_save_btn" action={confirm text="Do you really want to save this callflow?"
+  {% wire id="cf_save_btn" action={confirm text=_"Do you really want to save this callflow?"
                                    action={postback postback={cf_save cf="current_callflow"} delegate="mod_kazoo"}
                            }
   %}
   <div class="col-xs-2">
     <button id="cf_save_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
   </div>
-  {% wire id="cf_delete_btn" action={confirm text="Do you really want to delete this callflow?"
+  {% wire id="cf_delete_btn" action={confirm text=_"Do you really want to delete this callflow?"
                                      action={postback postback={cf_delete cf="current_callflow"} delegate="mod_kazoo"}
                              } 
   %}

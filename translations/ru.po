@@ -25,14 +25,14 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to delete this callflow?"
+msgstr "Вы действительно хотите удалить этот маршрут?"
 
-msgid ""
-msgstr ""
+msgid "Do you really want to save this callflow?"
+msgstr "Вы действительно хотите сохранить изменения в этом маршруте?"
 
-msgid ""
-msgstr ""
+msgid "Do you really want to reload this callflow?"
+msgstr "Вы действительно хотите загрузить этот маршрут снова?"
 
 msgid "Edit blacklist"
 msgstr "Редактировать черный список"
