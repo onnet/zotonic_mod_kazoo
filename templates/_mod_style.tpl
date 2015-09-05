@@ -724,11 +724,8 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
 	width: 40px;
 }
 
-.width_auto_important {
-  width: auto!important;
-}
-
-.bootstrap-select.btn-group {
+#zmodal .bootstrap-select.btn-group,
+#user_settings_form_form .bootstrap-select.btn-group {
   width: auto!important;
 }
 
