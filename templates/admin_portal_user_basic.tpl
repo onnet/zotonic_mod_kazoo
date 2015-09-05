@@ -87,7 +87,7 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Timezone _}</label></div>
         <div id="timezone" class="col-xs-5">
-            {% wire id="edit_timezone" type="click" action={ update target="timezone" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list } %}
+            {% wire id="edit_timezone" type="click" action={ update target="timezone" template="_edit_field_select_bootsearch.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list } %}
             <span>
                 {{ user_doc["timezone"] }}
                 <i id="edit_timezone" class="fa fa-edit pointer" title="Edit field"></i>
