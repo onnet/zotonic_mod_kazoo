@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-            <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+            <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
               {% for option in m.kazoo.kz_list_account_users_short %}
                 {% if option[1] %}
                   <option value="{{ option[1] }}" {% if option[1] == kz_element_id %}selected{% endif %}>{{ option[2] }}</option>
@@ -31,4 +31,5 @@
 %}
 {% javascript %}
     $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+    $('#user_selector').selectpicker({size: 5});
 {% endjavascript %}
