@@ -14,7 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"add menu" action={ dialog_open title=_"Add menu" template="_add_menu_dialog.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add menu" action={ dialog_open title=_"Add menu" template="_add_menu_dialog.tpl" width="auto" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
