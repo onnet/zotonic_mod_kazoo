@@ -5,7 +5,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="name" name="name" type="text" class="form-control margin-bottom-xs" placeholder="Enter rule name here" value="{{ rule[1]["name"] }}">
+          <input id="name" name="name" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter rule name here _}" value="{{ rule[1]["name"] }}">
         </div>
         <div class="col-sm-6">
           <select name="enabled" id="enabled" class="form-control margin-bottom-xs">
