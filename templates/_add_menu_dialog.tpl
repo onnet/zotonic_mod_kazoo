@@ -4,7 +4,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="Enter menu name here" value="{{ menu[1]["name"] }}">
+          <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="{_ Enter menu name here _}" value="{{ menu[1]["name"] }}">
         </div>
         <div class="col-sm-6">
             <select id="greeting" name="greeting" class="form-control margin-bottom-xs" style="text-align:center;">

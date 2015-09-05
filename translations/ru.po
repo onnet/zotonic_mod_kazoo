@@ -4,26 +4,29 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Enter menu name here"
+msgstr "Название меню"
 
-msgid ""
-msgstr ""
+msgid "Save prompt"
+msgstr "Сохранить приветствие"
 
-msgid ""
-msgstr ""
+msgid "Edit prompt"
+msgstr "Редактировать"
 
-msgid ""
-msgstr ""
+msgid "Save Menu"
+msgstr "Сохранить меню"
 
-msgid ""
-msgstr ""
+msgid "Suppress invalid"
+msgstr "Подавлять ошибки"
 
-msgid ""
-msgstr ""
+msgid "Outside recording"
+msgstr "Запись извне"
 
-msgid ""
-msgstr ""
+msgid "Dial extensions"
+msgstr "Внутренние номера"
+
+msgid "# of retries"
+msgstr "Кол-во попыток"
 
 msgid "Allocating number..."
 msgstr "Подключение номера..."
@@ -391,6 +394,9 @@ msgstr "SIP-телефон"
 msgid "Create SIP Phone"
 msgstr "Создать SIP-телефон"
 
+msgid "Edit menu"
+msgstr "Редактировать меню"
+
 msgid "Edit user"
 msgstr "Редактировать пользователя"
 
@@ -488,10 +494,10 @@ msgid "add group"
 msgstr "добавить группу"
 
 msgid "Add prompt"
-msgstr "Добавить запись"
+msgstr "Добавить приветствие"
 
 msgid "add prompt"
-msgstr "добавить запись"
+msgstr "добавить приветствие"
 
 msgid "Add menu"
 msgstr "Добавить меню"

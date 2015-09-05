@@ -36,7 +36,7 @@
             </td>
             <td style="text-align: center;"><a href="/getprompt/id/{{ prompt["id"] }}"><i class="fa fa-download" title="{_ Download _}"></i></a></td>
             <td style="text-align: center;"><i id="edit_{{ prompt["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++prompt["id"] action={ dialog_open title=_"Edit prompt "++prompt["name"] template="_edit_media_lazy.tpl" prompt_id=prompt["id"] } %}
+            {% wire id="edit_"++prompt["id"] action={ dialog_open title=_"Edit prompt"++" "++prompt["name"] template="_edit_media_lazy.tpl" prompt_id=prompt["id"] } %}
             <td style="text-align: center;"><i id="delete_{{ prompt["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++prompt["id"]
                     action={confirm text=_"Do you really want to delete prompt "++prompt["name"]++"?"

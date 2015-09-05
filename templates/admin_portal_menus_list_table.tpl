@@ -19,7 +19,7 @@
             <td style="text-align: center;">{{ (menu_details[1]["timeout"]/1000)|to_integer }}</td>
             <td style="text-align: center;">{{ menu_details[1]["max_extension_length"] }}</td>
             <td style="text-align: center;"><i id="edit_{{ menu["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++menu["id"] action={ dialog_open title=_"Edit menu "++menu["name"] template="_edit_menu_lazy.tpl" menu_id=menu["id"] } %}
+            {% wire id="edit_"++menu["id"] action={ dialog_open title=_"Edit menu"++" "++menu["name"] template="_edit_menu_lazy.tpl" menu_id=menu["id"] width="auto" } %}
             <td style="text-align: center;"><i id="delete_{{ menu["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++menu["id"]
                     action={confirm text=_"Do you really want to delete menu "++menu["name"]++"?"
