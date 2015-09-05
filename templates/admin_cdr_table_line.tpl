@@ -5,13 +5,12 @@
             <td style="text-align: center;">{{ call["duration_seconds"] }}/{{ call["billing_seconds"] }}</td>
             <td style="text-align: center;">{% if call["recording_url"] and (call["billing_seconds"] > 3) %}
 
-                         <audio id="audio_{{ call["timestamp"] }}">
+                         <audio id="audio_{{ call["timestamp"] }}" preload="none">
                              <source src="{{ m.kazoo[{kz_recording_download_link cdr_id=call["id"]}] }}" type="audio/mp3">
                          </audio>
                          <a id="play_{{ call["timestamp"] }}" onclick='$("#audio_{{ call["timestamp"] }}").trigger("play");
                                                                  $("#play_{{ call["timestamp"] }}").toggle();
-                                                                 $("#pause_{{ call["timestamp"] }}").toggle();
-                                                                  z_event("event_{{ call["timestamp"] }}");'>
+                                                                 $("#pause_{{ call["timestamp"] }}").toggle();'>
                             <i style="cursor: pointer;" class="fa fa-play" title="{_ Play _}"></i>
                          </a>
                          <a id="pause_{{ call["timestamp"] }}" style="display: none;" onclick='$("#audio_{{ call["timestamp"] }}").trigger("pause");

@@ -32,6 +32,8 @@
     ,rand_hex_binary/1
     ,on_to_true/1
     ,current_tstamp/0
+    ,day_ago_tstamp/0
+    ,week_ago_tstamp/0
     ,month_ago_tstamp/0
     ,filter_undefined/1
     ,filter_empty/1
@@ -267,6 +269,12 @@ on_to_true(Res) ->
 
 current_tstamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time()).
+
+day_ago_tstamp() ->
+    calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 86400.
+
+week_ago_tstamp() ->
+    calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 604800.
 
 month_ago_tstamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 2678400.
