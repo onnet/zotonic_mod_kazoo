@@ -25,7 +25,7 @@
              {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_{{ blacklist["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++blacklist["id"] action={ dialog_open title=_"Edit blacklist "++blacklist["name"] template="_edit_blacklist_lazy.tpl" blacklist_id=blacklist["id"] } %}
+            {% wire id="edit_"++blacklist["id"] action={ dialog_open title=_"Edit blacklist"++" "++blacklist["name"] template="_edit_blacklist_lazy.tpl" blacklist_id=blacklist["id"] } %}
             <td style="text-align: center;"><i id="delete_{{ blacklist["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++blacklist["id"]
                     action={confirm text=_"Do you really want to delete blacklist "++blacklist["name"]++"?"

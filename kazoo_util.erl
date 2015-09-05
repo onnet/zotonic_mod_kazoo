@@ -2100,7 +2100,10 @@ toggle_featurecode_call_forward_update(Context) ->
     end.
 
 toggle_blacklist_member(BlacklistId,Context) ->
-    Blacklists = kazoo_util:kz_account_doc_field(<<"blacklists">>, Context),
+    Blacklists = case kazoo_util:kz_account_doc_field(<<"blacklists">>, Context) of
+        'undefined' -> [];
+        Value -> Value
+    end,
     case lists:member(BlacklistId, Blacklists) of
         'true' -> kz_set_acc_doc(<<"blacklists">>, lists:usort(Blacklists)--[BlacklistId,<<"undefined">>], Context); 
         'false' -> kz_set_acc_doc(<<"blacklists">>, lists:usort(Blacklists++[BlacklistId])--[<<"undefined">>], Context) 

@@ -34,8 +34,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Edit blacklist"
+msgstr "Редактировать черный список"
 
 msgid "Enter rule name here"
 msgstr "Название интервала"
