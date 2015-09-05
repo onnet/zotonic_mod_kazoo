@@ -39,6 +39,7 @@
                     {% include "_cf_tool_element.tpl" tool_id="page_group" tool_name="page_group" tool_descr="Page Group" icon="ring_group" help="Make announcement to the group" %}
                     {% include "_cf_tool_element.tpl" tool_id="conference" tool_name="conference" tool_descr="Conference" icon="conference" help="Connect a caller to a Meet-Me conference bridge" %}
                     {% include "_cf_tool_element.tpl" tool_id="eavesdrop" tool_name="eavesdrop" tool_descr="Eavesdrop" icon="scale1" help="" %}
+                    {% include "_cf_tool_element.tpl" tool_id="record_call" tool_name="record_call" tool_descr="Record Call" icon="conference" help="" %}
                     <div class="clear">
                     </div>
                     <div class="app_list_nav">

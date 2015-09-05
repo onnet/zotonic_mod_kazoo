@@ -539,6 +539,14 @@ event({submit,cf_select_callflow,_,_},Context) ->
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
     z_render:dialog_close(Context);
 
+event({submit,cf_select_record_call,_,_},Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"start">>, Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","url"], <<>>, Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","format"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","time_limit"], <<"6000">>, Context),
+    z_render:dialog_close(Context);
+
 event({submit,cf_select_group_pickup,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     PickupType = z_context:get_q("pickup_type", Context)++"_id",

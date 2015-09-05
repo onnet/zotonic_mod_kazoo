@@ -1545,6 +1545,9 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"menu">> 
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"temporal_route">> ->
     Name = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"timezone">>],z_context:get_session('current_callflow', Context)), 
     ['undefined', Name];
+cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"record_call">> ->
+    Format = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"format">>],z_context:get_session('current_callflow', Context)), 
+    [Format, Format];
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"callflow">> ->
     Id = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
     case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],z_context:get_session('current_callflow', Context)) of
