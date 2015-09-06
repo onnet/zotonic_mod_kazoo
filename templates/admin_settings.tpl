@@ -54,6 +54,11 @@
   <span id="admin_portal_blacklists_tpl">
         {% include "admin_portal_blacklists.tpl" headline=_"Blacklists" %}
   </span>
+
+  {% wire action={connect signal={update_admin_portal_vms_list_tpl} action={update target="admin_portal_vms_list_tpl" template="admin_portal_vms_list.tpl" headline=_"Voicemails"}} %}
+  <span id="admin_portal_vms_list_tpl">
+        {% include "admin_portal_vms_list.tpl" headline=_"Voicemails" %}
+  </span>
 </div>
 
 {% endblock %}

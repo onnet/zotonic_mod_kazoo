@@ -4,20 +4,23 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to delete vmbox"
+msgstr "Вы действительно хотите удалить ящик"
 
-msgid ""
-msgstr ""
+msgid "Msg. amount"
+msgstr "Кол-во сообщений"
 
-msgid ""
-msgstr ""
+msgid "Number"
+msgstr "Номер"
 
-msgid ""
-msgstr ""
+msgid "Box"
+msgstr "Ящик"
 
-msgid ""
-msgstr ""
+msgid "Add vmbox"
+msgstr "добавить ящик голосовой почты"
+
+msgid "add vmbox"
+msgstr "добавить ящик"
 
 msgid "All calls recording"
 msgstr "Запись всех разговоров"
