@@ -820,8 +820,7 @@ event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Con
 
 event({postback,toggle_all_calls_recording,_,_}, Context) ->
     _ = kazoo_util:toggle_all_calls_recording(Context),
-    mod_signal:emit({update_admin_portal_general_settings_tpl, []}, Context),
-    Context;
+    z_render:update("all_calls_recording_enabled", z_template:render("_all_calls_recording.tpl", [], Context), Context);
 
 event({postback,add_blacklisted_number,_,_},Context) ->
     case z_context:get_q("new_blacklisted_number",Context) of
