@@ -155,6 +155,7 @@
     ,kz_delete_blacklist/2
     ,may_be_cid_check_children_clean/1
     ,rs_delete_account/2
+    ,toggle_all_calls_recording/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2174,4 +2175,16 @@ rs_delete_account(AccountId,Context) ->
     _ = delete_account(AccountId,Context),
     z_context:add_script_session([<<"z_reload();">>], Context),
     Context.
+
+toggle_all_calls_recording(Context) ->
+    RecState = case kz_account_doc_field([<<"preflow">>,<<"always">>],Context) of
+        'undefined' -> [];
+        [] -> [];
+        <<>> -> [];
+        Value -> Value
+    end,
+    case RecState of
+        [] -> kz_set_acc_doc([<<"preflow">>,<<"always">>], <<"preflow">>, Context);
+        _ -> kz_set_acc_doc([<<"preflow">>,<<"always">>], <<>>, Context)
+    end.
 

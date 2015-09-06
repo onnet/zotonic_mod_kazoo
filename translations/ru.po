@@ -19,11 +19,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "All calls recording"
+msgstr "Запись всех разговоров"
 
-msgid ""
-msgstr ""
+msgid "Account Language"
+msgstr "Язык учетной записи"
 
 msgid "Do you really want to delete this callflow?"
 msgstr "Вы действительно хотите удалить этот маршрут?"

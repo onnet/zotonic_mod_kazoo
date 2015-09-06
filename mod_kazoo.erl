@@ -428,6 +428,9 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]
 
 event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options}]},_,_}, Context) ->
     case Type of
+        "account" ->
+            _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), Context),
+            z_render:update(FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{options,Options}], Context), Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
@@ -813,6 +816,11 @@ event({postback,toggle_featurecode_call_forward_update,_,_}, Context) ->
 event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Context) ->
     _ = kazoo_util:toggle_blacklist_member(BlacklistId,Context),
     mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
+    Context;
+
+event({postback,toggle_all_calls_recording,_,_}, Context) ->
+    _ = kazoo_util:toggle_all_calls_recording(Context),
+    mod_signal:emit({update_admin_portal_general_settings_tpl, []}, Context),
     Context;
 
 event({postback,add_blacklisted_number,_,_},Context) ->

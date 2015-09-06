@@ -28,6 +28,9 @@ m_find_value(is_kazoo_account_admin, _M, Context) ->
 m_find_value(get_kazoo_account_id, _M, Context) ->
     z_context:get_session(kazoo_account_id, Context);
 
+m_find_value(kz_get_acc_doc, _M, Context) ->
+    kazoo_util:kz_get_acc_doc(Context);
+
 m_find_value({kz_get_acc_doc_by_account_id, [{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_get_acc_doc_by_account_id(AccountId, Context);
 

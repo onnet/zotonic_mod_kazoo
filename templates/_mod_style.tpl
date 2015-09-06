@@ -619,8 +619,16 @@ label.radio-inline.checked, label.checkbox-inline.checked, label.radio.checked, 
   width: 100%;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .datepicker {
