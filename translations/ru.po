@@ -1,8 +1,11 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Account language"
+msgstr "Язык учетной записи"
+
+msgid "Account timezone"
+msgstr "Часовой пояс"
 
 msgid "Do you really want to delete vmbox"
 msgstr "Вы действительно хотите удалить ящик"
