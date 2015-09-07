@@ -114,7 +114,7 @@
       <input type="hidden" name="vmbox_id" value="{{ vmbox[1]["id"] }}">
     {% endif %}
 </form>
-{% print vmbox %}
+{# print vmbox #}
 {% endwith %}
 
 <script type="text/javascript">
