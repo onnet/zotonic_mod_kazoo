@@ -12,7 +12,11 @@
           <label class="form-control-onnet margin-bottom-xs">{_ Voicemail owner _}
           <select id="owner_id" name="owner_id" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
             {% for option in m.kazoo.kz_list_account_users_short %}
-                  <option value="{{ option[1] }}" {% if vmbox[1]["owner_id"] == option[1] or (not option[1] and not vmbox[1]["owner_id"]) %}selected{% endif %}>{{ option[2] }}</option>
+                  <option value="{{ option[1] }}" {% if vmbox[1]["owner_id"] == option[1] or (not option[1] and not vmbox[1]["owner_id"]) %}
+                                                    selected
+                                                  {% endif %}>
+                    {{ option[2] }}
+                  </option>
             {% endfor %}
           </select>
           </label>
@@ -51,7 +55,9 @@
           <label class="form-control-onnet margin-bottom-xs">{_ Timezone _}
           <select id="vmbox_timezone" name="vmbox_timezone" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
             {% for zone in m.kazoo.tz_list %}
-              <option value="{{ zone }}" {% if zone == vmbox[1]["timezone"] %}selected{% endif %}>{{ zone }}</option>
+              <option value="{{ zone }}" {% if zone == vmbox[1]["timezone"] or (not vmbox[1]["timezone"] and zone == m.config.mod_kazoo.default_kazoo_timezone.value) %}selected{% endif %}>
+               {{ zone }}
+              </option>
             {% endfor %}
           </select>
           </label>
