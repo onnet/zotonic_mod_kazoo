@@ -19,7 +19,7 @@
             <td style="text-align: center;">{{ vmbox["mailbox"] }}</td>
             <td style="text-align: center;">{{ vmbox["messages"] }}</td>
             <td style="text-align: center;"><i id="edit_{{ vmbox["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++vmbox["id"] action={ dialog_open title=_"Edit vmbox"++" "++vmbox["name"] template="_edit_vmbox_lazy.tpl" vmbox_id=vmbox["id"] width="auto" } %}
+            {% wire id="edit_"++vmbox["id"] action={ dialog_open title=_"Edit voicemail box"++" "++vmbox["name"] template="_add_vm_dialog.tpl" vmbox_id=vmbox["id"] width="auto" } %}
             <td style="text-align: center;"><i id="delete_{{ vmbox["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++vmbox["id"]
                     action={confirm text=_"Do you really want to delete vmbox "++vmbox["name"]++"?"

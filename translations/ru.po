@@ -1,6 +1,48 @@
 msgid ""
 msgstr ""
 
+msgid "Delete After Notification"
+msgstr "Удалить после уведомления"
+
+msgid "Skip Instructions"
+msgstr "Пропустить инструкции"
+
+msgid "Skip Greeting"
+msgstr "Пропустить приветствие"
+
+msgid "Auto-login enabled"
+msgstr "Автоматический вход"
+
+msgid "Require PIN"
+msgstr "Требовать ввод кода PIN"
+
+msgid "Already Setup"
+msgstr "Уже настроено"
+
+msgid "Enter vmbox name here"
+msgstr "Название ящика"
+
+msgid "Save voicemail box"
+msgstr "Сохранить ящик"
+
+msgid "Unavailable message"
+msgstr "Извещение о недоступности"
+
+msgid "PIN number"
+msgstr "PIN ящика"
+
+msgid "Voicemail number"
+msgstr "Номер ящика"
+
+msgid "Voicemail owner"
+msgstr "Хозяин ящика"
+
+msgid "Voicemail name"
+msgstr "Название ящика"
+
+msgid "Edit voicemail box"
+msgstr "Редактировать ящик голосовой почты"
+
 msgid "Account language"
 msgstr "Язык учетной записи"
 
@@ -20,7 +62,7 @@ msgid "Box"
 msgstr "Ящик"
 
 msgid "Add vmbox"
-msgstr "добавить ящик голосовой почты"
+msgstr "Добавить ящик голосовой почты"
 
 msgid "add vmbox"
 msgstr "добавить ящик"
