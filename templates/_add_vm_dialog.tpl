@@ -23,13 +23,13 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Voicemail number _}
-            <input type="text" class="form-control margin-bottom-xs" id="numbers" name="numbers" placeholder="{_ Number _}" 
+            <input type="text" class="form-control margin-bottom-xs" id="mailbox" name="mailbox" placeholder="{_ Number _}" 
                    value="{{ vmbox[1]["mailbox"] }}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ PIN number _}
-            <input type="text" class="form-control margin-bottom-xs" id="pins" name="pins" placeholder="{_ PIN _}"
+            <input type="text" class="form-control margin-bottom-xs" id="pin" name="pin" placeholder="{_ PIN _}"
                    value="{{ vmbox[1]["pin"] }}">
           </label>
         </div>
@@ -40,7 +40,7 @@
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Unavailable message _}
             <select id="unavailable_message_id" name="unavailable_message_id" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
-                <option value=" ">-- {_ Select voice prompt _} --</option>
+                <option value="">-- {_ No custom prompt _} --</option>
               {% for option in m.kazoo.kz_list_account_media %}
                 <option value="{{ option["id"] }}" {% if option["id"] == vmbox[1]["media"][1]["unavailable"] %}selected{% endif %}>{{ option["name"] }}</option>
               {% endfor %}
@@ -108,6 +108,7 @@
       <input type="hidden" name="vmbox_id" value="{{ vmbox[1]["id"] }}">
     {% endif %}
 </form>
+{% print vmbox %}
 {% endwith %}
 
 <script type="text/javascript">

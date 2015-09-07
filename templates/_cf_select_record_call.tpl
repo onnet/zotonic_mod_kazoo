@@ -19,9 +19,6 @@
     </div>
   </div>
 </div>
-{% print element_id %}
-{% print tool_name %}
-{% print kz_element_id %}
 {% wire id="button_cf_select_record_call" action={script script="$('#"++element_id++"_details').text(($('#record_call_selector option:selected').text()))"}
                                   action={submit target="form_cf_select_record_call"}
 %}

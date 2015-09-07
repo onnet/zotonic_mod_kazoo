@@ -132,6 +132,8 @@
     ,kz_get_account_prompt_attachment/2
     ,cf_get_module_info/3
     ,kz_list_account_conferences/1
+    ,kz_vmbox/1
+    ,kz_vmbox/3
     ,kz_conference/1
     ,kz_conference/3
     ,kz_get_featurecode_by_name/2
@@ -1827,6 +1829,39 @@ kz_list_account_conferences(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONFERENCES/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_vmbox(Context) ->
+    Id = z_context:get_q("vmbox_id",Context),
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    Props = [{<<"name">>, z_convert:to_binary(z_context:get_q("name", Context))}
+            ,{<<"mailbox">>, z_convert:to_binary(z_context:get_q("mailbox", Context))}
+            ,{<<"pin">>, z_convert:to_binary(z_context:get_q("pin", Context))}
+            ,{<<"owner_id">>, z_convert:to_binary(z_context:get_q("owner_id", Context))}
+            ,{<<"media">>, case z_context:get_q("unavailable_message_id", Context) of [] -> 'undefined'; MessageId -> {[{<<"unavailable">>, z_convert:to_binary(MessageId)}]} end}
+            ,{<<"timezone">>, z_convert:to_binary(z_context:get_q("vmbox_timezone", Context))}
+            ,{<<"is_setup">>, modkazoo_util:on_to_true(z_context:get_q("is_setup", Context))}
+            ,{<<"require_pin">>, modkazoo_util:on_to_true(z_context:get_q("require_pin", Context))}
+            ,{<<"check_if_owner">>, modkazoo_util:on_to_true(z_context:get_q("check_if_owner", Context))}
+            ,{<<"skip_greeting">>, modkazoo_util:on_to_true(z_context:get_q("skip_greeting", Context))}
+            ,{<<"skip_instructions">>, modkazoo_util:on_to_true(z_context:get_q("skip_instructions", Context))}
+            ,{<<"delete_after_notify">>, modkazoo_util:on_to_true(z_context:get_q("delete_after_notify", Context))}
+            ,{<<"id">>, z_convert:to_binary(Id)}],
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
+lager:info("kz_vmbox Darabag: ~p", [DataBag]),
+lager:info("kz_vmbox unavailable_message_id: ~p", [z_context:get_q("unavailable_message_id", Context)]),
+    case Id of
+        'undefined'->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary>>,
+            crossbar_account_request('put', API_String, DataBag, Context);
+        _ ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            crossbar_account_request('post', API_String, DataBag, Context)
+    end.
+
+kz_vmbox(Verb, VmboxId,Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VmboxId))/binary>>,
+    crossbar_account_request(Verb, API_String, [], Context).
 
 kz_conference(Context) ->
     Id = z_context:get_q("conference_id",Context),

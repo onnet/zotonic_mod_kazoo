@@ -705,6 +705,16 @@ event({submit,cf_select_prepend_cid,_,_},Context) ->
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","caller_id_number_prefix"], z_convert:to_binary(z_context:get_q("caller_id_number_prefix", Context)), Context),
     z_render:dialog_close(Context);
 
+event({submit,kz_vmbox,_,_},Context) ->
+    _ = kazoo_util:kz_vmbox(Context),
+    mod_signal:emit({update_admin_portal_vms_list_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
+event({postback,{delete_vmbox,[{vmbox_id,VmboxId}]},_,_},Context) ->
+    _ = kazoo_util:kz_vmbox('delete',VmboxId,Context),
+    mod_signal:emit({update_admin_portal_vms_list_tpl, []}, Context),
+    Context;
+
 event({submit,kz_conference,_,_},Context) ->
     _ = kazoo_util:kz_conference(Context),
     mod_signal:emit({update_admin_portal_conferences_list_tpl, []}, Context),
