@@ -427,14 +427,26 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]
     end;
 
 event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options}]},_,_}, Context) ->
+    event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,""},{postfix,""}]},"",""}, Context);
+event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix}]},_,_}, Context) ->
+    Prefix = case RawPrefix of
+        'undefined' -> "";
+        Pre -> Pre
+    end,
+    Postfix = case RawPostfix of
+        'undefined' -> "";
+        Post -> Post
+    end,
     case Type of
         "account" ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), Context),
-            z_render:update(FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{options,Options}], Context), Context);
+            z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,RawPostfix}], Context), Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
-            z_render:update(FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{options,Options}], Context), Context);
+            z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,RawPostfix}], Context), Context);
         "device" ->
             InputValue = case z_context:get_q("input_value", Context) of
                 [] -> 'undefined';
@@ -442,7 +454,8 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
-            z_render:update(FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{options,Options}], Context), Context)
+            z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,RawPostfix}], Context), Context)
     end;
 
 event({submit,add_new_device,_,_}, Context) ->

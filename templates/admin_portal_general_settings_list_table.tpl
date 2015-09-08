@@ -3,12 +3,14 @@
 <table class="table table-condensed table-hover table-centered">
     <thead>
         <tr>
-            <th class="text-center1">{_ Account language _}</th>
+            <th style="width: 40%;"class="text-center1">{_ Account language _}</th>
             <th class="text-left">
              <span id="language">
                 {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name="language" options=["en-us","ru-ru","fr-fr"] %}
              </span>
             </th>
+        </tr>
+        <tr>
             <th class="text-center1">{_ All calls recording _}</th>
             <th>
               <span id="all_calls_recording_enabled">
@@ -21,12 +23,9 @@
         <tr>
             <th class="text-center1">{_ Account timezone _}</th>
             <th class="text-left">
-             <span id="timezone">
-                {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name="timezone" options=m.kazoo.tz_list %}
+             <span id="general_timezone">
+                {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name="timezone" options=m.kazoo.tz_list prefix="general_" postfix="_bootsearch" %}
              </span>
-            </th>
-            <th class="text-center">{_  _}</th>
-            <th>
             </th>
         </tr>
     </thead>
