@@ -1,6 +1,30 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Main account number"
+msgstr "Основной номер"
+
 msgid "Delete After Notification"
 msgstr "Удалить после уведомления"
 

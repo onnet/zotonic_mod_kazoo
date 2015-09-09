@@ -8,7 +8,7 @@ inno_seconds_to_time(Seconds, _Context) ->
     case Seconds of
         'undefined' -> <<"00:00">>;
         _ ->
-            {Hours,Minutes,_} = calendar:seconds_to_time(z_convert:to_integer(Seconds)),
+            {_,{Hours,Minutes,_}} = calendar:seconds_to_daystime(z_convert:to_integer(Seconds)),
             z_convert:to_binary(io_lib:format("~2..0w:~2..0w",[Hours, Minutes]))
     end.
 
@@ -16,6 +16,6 @@ inno_seconds_to_time(Seconds, _Args, _Context) ->
     case Seconds of
         'undefined' -> <<"00:00">>;
         _ ->
-            {Hours,Minutes,_} = calendar:seconds_to_time(z_convert:to_integer(Seconds)),
+            {_,{Hours,Minutes,_}} = calendar:seconds_to_time(z_convert:to_integer(Seconds)),
             z_convert:to_binary(io_lib:format("~2..0w:~2..0w",[Hours, Minutes]))
     end.

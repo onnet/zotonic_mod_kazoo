@@ -3,6 +3,14 @@
 <table class="table table-condensed table-hover table-centered">
     <thead>
         <tr>
+            <th style="width: 40%;"class="text-center1">{_ Main account number _}</th>
+            <th class="text-left">
+             <span id="caller_idexternalnumber">
+                {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name=["caller_id","external","number"] options=m.kazoo.get_acc_numbers prefix="" postfix="_bootsearch" %}
+             </span>
+            </th>
+        </tr>
+        <tr>
             <th style="width: 40%;"class="text-center1">{_ Account language _}</th>
             <th class="text-left">
              <span id="language">
