@@ -12,7 +12,7 @@
 {% else %}
   <div class="wrapper">
     <div class="container" style="width: 95%">
-      <div class="row">
+      <div id="page_title_row" class="row">
         <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
           {% block header_title %}{% endblock %}
         </div>
