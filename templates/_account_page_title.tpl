@@ -1,4 +1,4 @@
-<div class="pl-10 pr-10 pb-10">
+<div id="account_page_title" class="pl-10 pr-10 pb-10">
   <div class="pull-right">
   <p>
     {_ Logged in as _}
