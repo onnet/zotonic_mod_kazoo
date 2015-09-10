@@ -27,24 +27,24 @@
                                        class="arrowpad fa fa-arrow-circle-down"></i>
     </span>
     {{ headline }}
-    {% button id="send_fax_button" class="btn btn-xs btn-onnet pull-right display_none" text=_"submit fax"
+    {% button id="send_fax_button" class="btn btn-xs btn-onnet pull-right" text=_"submit fax" style="display: inline-block;"
               action={submit target="send-fax-form"}
     %}
-    {% button id="show_fax_list" class="btn btn-xs btn-onnet pull-right display_none" text=_"show sent faxes" 
+    {% button id="show_fax_list" class="btn btn-xs btn-onnet pull-right" text=_"show sent faxes" style="display: inline-block;" 
               action={update target="send_fax_widget_opened" template="_outgoing_faxes_tbody.tpl"}
               action={ toggle target="send_fax_button" }
               action={ toggle target="show_fax_list" }
               action={ toggle target="return_to_send_fax" }
               action={ toggle target="refresh_fax_list" }
     %}
-    {% button id="return_to_send_fax" class="btn btn-xs btn-onnet pull-right display_none" text=_"send fax" 
+    {% button id="return_to_send_fax" class="btn btn-xs btn-onnet pull-right" text=_"back to send fax form" style="display: none;"
               action={update target="send_fax_widget_opened" template="_send_fax_tbody.tpl"}
               action={ toggle target="send_fax_button" }
               action={ toggle target="show_fax_list" }
               action={ toggle target="return_to_send_fax" }
               action={ toggle target="refresh_fax_list" }
     %}
-    {% button id="refresh_fax_list" class="btn btn-xs btn-onnet pull-right display_none" text=_"refresh" 
+    {% button id="refresh_fax_list" class="btn btn-xs btn-onnet pull-right" text=_"refresh" style="display: none;" 
               action={update target="send_fax_widget_opened" template="_outgoing_faxes_tbody.tpl"}
     %}
 
