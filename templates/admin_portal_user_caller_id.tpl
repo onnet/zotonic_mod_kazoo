@@ -35,10 +35,10 @@
     </div>
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Number _}</label></div>
-        <div id="caller_idexternalnumber" class="col-xs-6" >
+        <div id="user_caller_idexternalnumber" class="col-xs-6" >
             <span>{{ user_doc["caller_id"][1]["external"][1]["number"] }}</span>
             <i id="edit_caller_idexternalnumber" class="fa fa-edit pointer" title="Edit field"></i>
-            {% wire id="edit_caller_idexternalnumber" type="click" action={ update target="caller_idexternalnumber" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name=["caller_id","external","number"] options=m.kazoo.get_acc_numbers } %}
+            {% wire id="edit_caller_idexternalnumber" type="click" action={ update target="user_caller_idexternalnumber" template="_edit_field_select_bootsearch.tpl" type="user" doc_id=user_id field_name=["caller_id","external","number"] options=m.kazoo.get_acc_numbers|cleanout prefix="user_" postfix="_bootsearch" } %}
         </div>
     </div>
 
