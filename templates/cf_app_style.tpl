@@ -724,8 +724,8 @@
 	display: inline-block;
 	position: absolute;
 	padding: 5px;
-	right: 0px;
-	top: 0px;
+	right: 3px;
+	top: 3px;
 	cursor: pointer;
 }
 #ws_callflow .callflow .root > .content .number_column .delete:hover {
@@ -740,6 +740,19 @@
 #ws_callflow .callflow .node[name="root"] {
 	cursor: default;
 }
+#ws_callflow .callflow .node .node-options .cf_park {
+        background: url(/lib/images/callflow/edit_icon.png);
+        background-size: 9px; 
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 6px;
+	height: 6px;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	padding: 5px;
+	cursor: pointer;
+}
 #ws_callflow .callflow .node .node-options .delete {
 	background-image: url(/lib/images/callflow/btn_delete.png);
 	background-repeat: no-repeat;
@@ -747,8 +760,8 @@
 	width: 6px;
 	height: 6px;
 	position: absolute;
-	top: 0px;
-	right: 0px;
+	top: 3px;
+	right: 3px;
 	padding: 5px;
 	cursor: pointer;
 }
