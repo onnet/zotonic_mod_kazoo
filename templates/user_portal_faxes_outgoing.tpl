@@ -27,16 +27,22 @@
                                        class="arrowpad fa fa-arrow-circle-down"></i>
     </span>
     {{ headline }}
-    {% button id="send_fax_button" class="btn btn-xs btn-onnet pull-right" text=_"submit fax" style="display: inline-block;"
-              action={submit target="send-fax-form"}
+    {% wire id="send_fax_button" action={submit target="send-fax-form"} %}
+    <button id="send_fax_button" class="btn btn-xs btn-onnet pull-right"
+            style="{% if m.kazoo[{ui_element_opened element="send_fax_widget_opened"}] %}display: inline-block;{% else %}display: none;{% endif %}">
+      {_ submit fax _}
+    </button>
+    {% wire id="show_fax_list"
+            action={update target="send_fax_widget_opened" template="_outgoing_faxes_tbody.tpl"}
+            action={ toggle target="send_fax_button" }
+            action={ toggle target="show_fax_list" }
+            action={ toggle target="return_to_send_fax" }
+            action={ toggle target="refresh_fax_list" }
     %}
-    {% button id="show_fax_list" class="btn btn-xs btn-onnet pull-right" text=_"show sent faxes" style="display: inline-block;" 
-              action={update target="send_fax_widget_opened" template="_outgoing_faxes_tbody.tpl"}
-              action={ toggle target="send_fax_button" }
-              action={ toggle target="show_fax_list" }
-              action={ toggle target="return_to_send_fax" }
-              action={ toggle target="refresh_fax_list" }
-    %}
+    <button id="show_fax_list" class="btn btn-xs btn-onnet pull-right"
+            style="{% if m.kazoo[{ui_element_opened element="send_fax_widget_opened"}] %}display: inline-block;{% else %}display: none;{% endif %}">
+      {_ show sent faxes _}
+    </button>
     {% button id="return_to_send_fax" class="btn btn-xs btn-onnet pull-right" text=_"back to send fax form" style="display: none;"
               action={update target="send_fax_widget_opened" template="_send_fax_tbody.tpl"}
               action={ toggle target="send_fax_button" }

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "No saved brunch"
+msgstr "Сохраненная ветвь отсутствует"
 
 msgid "Branch saved"
 msgstr "Ветвь сохранена"

@@ -1423,9 +1423,15 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
     'true' = cf_child_not_exists(ElementId, Context),
     case ToolName of
         "branch_recovery" ->
-            _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-"), z_context:get_session('cf_park_slot1', Context), Context),
-            mod_signal:emit({update_cf_builder_area, []}, Context),
-            z_render:dialog_close(Context);
+            case z_context:get_session('cf_park_slot1', Context) of
+                'undefined' -> 
+                    Context2 = z_render:dialog_close(Context),
+                    z_render:growl(?__("No saved brunch", Context2), Context2);
+                ParkedBranch ->
+                    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-"), ParkedBranch, Context),
+                    mod_signal:emit({update_cf_builder_area, []}, Context),
+                    z_render:dialog_close(Context)
+            end;
         _ ->
             Context1 = z_render:insert_bottom(PathToChildren
                                      ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
