@@ -7,20 +7,17 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "refresh"
+msgstr "обновить"
 
-msgid ""
-msgstr ""
+msgid "back to send fax form"
+msgstr "вернуться к отправке"
 
-msgid ""
-msgstr ""
+msgid "show sent faxes"
+msgstr "показать отправленные"
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
+msgid "submit fax"
+msgstr "oтправить факс"
 
 msgid "Main account number"
 msgstr "Основной номер"
