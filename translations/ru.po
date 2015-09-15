@@ -4,8 +4,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Branch saved"
+msgstr "Ветвь сохранена"
 
 msgid "refresh"
 msgstr "обновить"

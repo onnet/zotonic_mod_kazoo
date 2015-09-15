@@ -19,6 +19,7 @@
                                                                                                   help="Ring several VoIP or cell phones in order or at the same time" %}
                     {% include "_cf_tool_element.tpl" tool_id="menu" tool_name="menu" tool_descr="Menu" icon="menu1" help="Ask a caller to push a menu option or dial an extension number" %}
                     {% include "_cf_tool_element.tpl" tool_id="temporal_route" tool_name="temporal_route" tool_descr="Time of Day" icon="temporal_route" help="" %}
+                    {% include "_cf_tool_element.tpl" tool_id="branch_recovery" tool_name="branch_recovery" tool_descr="Branch recovery" icon="trash" help="" %}
                     <div class="clear">
                     </div>
                     <div class="app_list_nav">

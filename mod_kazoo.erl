@@ -679,6 +679,9 @@ event({postback,{check_children,[{id,BranchId},{drop_id,DropId},{drop_parent,Dro
 event({postback,{cf_delete_element,[{element_id,ElementId}]},_,_},Context) ->
     kazoo_util:cf_delete_element(ElementId,Context);
 
+event({postback,{cf_park_element,[{element_id,ElementId}]},_,_},Context) ->
+    kazoo_util:cf_park_element(ElementId,Context);
+
 event({postback,{cf_choose_new_switch,[{element_id,ExistingElementId},{drop_parent,DropParent}]},_,_},Context) ->
     kazoo_util:cf_choose_new_switch(ExistingElementId,DropParent,Context);
 

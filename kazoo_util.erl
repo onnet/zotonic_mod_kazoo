@@ -118,6 +118,7 @@
     ,cf_load_to_session/2
     ,cf_may_be_add_child/4
     ,cf_delete_element/2
+    ,cf_park_element/2
     ,cf_get_element_by_id/2
     ,cf_handle_drop/2
     ,cf_choose_new_switch/3
@@ -1420,15 +1421,19 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
     lager:info("Drop DropParent: ~p",[DropParent]),
     lager:info("Element doesn't exist: ~p",[cf_child_not_exists(ElementId, Context)]),
     'true' = cf_child_not_exists(ElementId, Context),
-    Context1 = z_render:insert_bottom(PathToChildren
+    case ToolName of
+        "branch_recovery" ->
+            _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-"), z_context:get_session('cf_park_slot1', Context), Context),
+            mod_signal:emit({update_cf_builder_area, []}, Context),
+            z_render:dialog_close(Context);
+        _ ->
+            Context1 = z_render:insert_bottom(PathToChildren
                                      ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
                                                                         ,{element_id, ElementId}
                                                                         ,{drop_parent,DropParent}
                                                                         ,{switch,Switch}]
                                                         ,Context)
                                      ,Context),
-    case ToolName of
-        _ ->
             kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], z_convert:to_binary(ToolName), Context),
             kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
             z_render:dialog(?__("Select ",Context1), "_cf_select_"++ToolName++".tpl", [{element_id, ElementId},{tool_name,ToolName}], Context1)
@@ -1621,6 +1626,12 @@ kz_get_name(Id, Type, Context) ->
     
 cf_delete_element(ElementId,Context) ->
     modkazoo_util:delete_session_jobj_key('current_callflow', cf_element_path(ElementId), Context).
+    
+cf_park_element(ElementId,Context) ->
+    ParkCandidate = modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)),
+    z_context:set_session('cf_park_slot1', ParkCandidate, Context),
+lager:info("Cf_park slot 1: ~p",[z_context:get_session('cf_park_slot1', Context)]),
+    z_render:growl(?__("Branch saved", Context), Context).
 
 cf_element_path(ElementId) ->
     lists:map(fun (K) -> z_convert:to_binary(K) end, z_string:split(ElementId,"-")).
