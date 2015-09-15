@@ -308,7 +308,7 @@ msgid "Support Centre"
 msgstr "Поддержка"
 
 msgid "The following access credentials are valid for portal"
-msgstr "Следующие реквизиты доступа могут быть использоывны для авторизации"
+msgstr "Следующие реквизиты доступа могут быть использованы для авторизации"
 
 msgid "As an account holder you now have access to our customer portal at"
 msgstr "Вы можете получить доступ на портал по адресу"
