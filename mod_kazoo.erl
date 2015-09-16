@@ -441,12 +441,12 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
         "account" ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), Context),
             z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,RawPostfix}], Context), Context);
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix}], Context), Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
             z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,RawPostfix}], Context), Context);
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix}], Context), Context);
         "device" ->
             InputValue = case z_context:get_q("input_value", Context) of
                 [] -> 'undefined';
@@ -455,7 +455,7 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
             z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,RawPostfix}], Context), Context)
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix}], Context), Context)
     end;
 
 event({submit,add_new_device,_,_}, Context) ->
