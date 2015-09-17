@@ -1,9 +1,10 @@
         <tr>
-            <td style="text-align: center;">{{ call["datetime"] }} </td>
+            <td style="text-align: center;">{{ call["timestamp"]|inno_timestamp_to_date }} </td>
             <td style="text-align: center;">{{ call["calling_from"] }}</td>
             <td style="text-align: center;">{{ call["dialed_number"] }}</td>
             <td style="text-align: center;">{{ call["duration_seconds"] }}/{{ call["billing_seconds"] }}</td>
-            <td style="text-align: center;">{% if call["recording_url"] and (call["billing_seconds"] > 3) %}
+            <td style="text-align: center;">
+                {% if call["recording_url"] and (call["billing_seconds"] > 3) %}
 
                          <audio id="audio_{{ call["timestamp"] }}" preload="none">
                              <source src="{{ m.kazoo[{kz_recording_download_link cdr_id=call["id"]}] }}" type="audio/mp3">
@@ -26,7 +27,8 @@
                          </a>
 
 
-            {% else %}-{% endif %}</td>
+                {% else %}-{% endif %}
+            </td>
             <td style="text-align: center;"><i id="info_{{ call["timestamp"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i></td>
             {% wire id="info_"++call["timestamp"] action={ dialog_open title=_"Call details" template="_details.tpl" arg=call } %}
         </tr>

@@ -7,7 +7,9 @@
 inno_timestamp_to_date(Seconds, _Context) ->
     case Seconds of
         'undefined' -> {{0000,0,00},{00,00,0}};
-        _ -> calendar:gregorian_seconds_to_datetime(z_convert:to_integer(Seconds))
+        _ -> 
+            GMT = calendar:gregorian_seconds_to_datetime(z_convert:to_integer(Seconds)),
+            localtime:local_to_local(GMT, "GMT", "Europe/Moscow")
     end.
 
 inno_timestamp_to_date(Seconds, Args, _Context) ->
