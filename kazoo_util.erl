@@ -517,7 +517,12 @@ create_kazoo_account(Context) ->
       'false' -> z_convert:to_binary(modkazoo_util2:translit(z_convert:to_list(<<Firstname/binary, <<" ">>/binary, Surname/binary>>)));
       'true' -> z_convert:to_binary(modkazoo_util2:translit(z_convert:to_list(Companyname)))
     end,
-    {'ok', {'account_id', AdminAccountId}, {'auth_token', _}, {'crossbar', _}} = kz_admin_creds(Context),
+    ResellerId = case z_context:get_session('kazoo_account_id', Context) of
+        'undefined' -> 
+            {'ok', {'account_id', AdminAccountId}, {'auth_token', _}, {'crossbar', _}} = kz_admin_creds(Context),
+            AdminAccountId;
+        AccountId -> AccountId
+    end,
     DataBag = {[{<<"data">>,
                   {[{<<"call_restriction">>,{[]}}
                     ,{<<"notifications">>,
@@ -540,11 +545,11 @@ create_kazoo_account(Context) ->
                      }
                     ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
                     ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
-    %                ,{<<"billing_id">>,AdminAccountId}
+                    ,{<<"billing_id">>,ResellerId}
                   ]}
               }]},
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AdminAccountId/binary>>,
-    case z_context:get_session(kazoo_reseller_account_id,Context) of
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ResellerId/binary>>,
+    case z_context:get_session(kazoo_auth_token, Context) of
         'undefined' -> {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context);
         _ -> {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, [], jiffy:encode(DataBag), Context)
     end,
