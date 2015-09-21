@@ -16,11 +16,11 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-6">
-      {% wire id="button_cf_select_receive_fax_create" action={dialog_open title=_"Add vmbox" template="_add_vm_dialog.tpl" width="auto" } %}
-      <button id="button_cf_select_receive_fax_create" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add voicemail _}</button>
+      {% wire id="button_cf_select_vmbox_create" action={dialog_open title=_"Add vmbox" template="_add_vm_dialog.tpl" width="auto" } %}
+      <button id="button_cf_select_vmbox_create" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add voicemail _}</button>
     </div>
     {% wire name="refresh_edit_vmbox_btn_cf_vmbox" action={ update target="edit_vmbox_btn_cf_vmbox" template="_cf_edit_vm_button.tpl" } %}
-    <div id="edit_user_btn_cf_fax" class="col-sm-6">
+    <div id="edit_vmbox_btn_cf_vmbox" class="col-sm-6">
       {% if kz_element_id %}
         {% wire id="button_cf_select_edit_kzvmbox" action={ dialog_open title=_"Edit voicemail"++" "++kz_element_name template="_add_vm_dialog.tpl" vmbox_id=kz_element_id width="auto" } %}
         <button id="button_cf_select_edit_kzvmbox" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit voicemail _}</button>
