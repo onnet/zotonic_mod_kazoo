@@ -81,6 +81,7 @@
     ,is_creditable/1
     ,process_purchase_number/2
     ,get_user_timezone/1
+    ,may_be_get_timezone/1
     ,is_service_plan_applied/1
     ,get_account_realm/1
     ,delete_account/2
@@ -1074,7 +1075,7 @@ is_creditable(Context) ->
 
 kz_get_user_timezone(Context) ->
     case kz_user_doc_field(<<"timezone">>, Context) of
-        'undefined' -> kz_user_doc_field(<<"timezone">>, Context);
+        'undefined' -> kz_account_doc_field(<<"timezone">>, Context);
         Timezone -> Timezone
     end.
 
@@ -1084,6 +1085,12 @@ get_user_timezone(Context) ->
             Timezone = kz_get_user_timezone(Context),
             z_context:set_session('user_timezone', Timezone, Context),
             Timezone;
+        Timezone -> Timezone
+    end.
+
+may_be_get_timezone(Context) ->
+    case kz_get_user_timezone(Context) of
+        'undefined' -> <<"UTC">>;
         Timezone -> Timezone
     end.
 
