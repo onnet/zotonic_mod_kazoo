@@ -18,6 +18,7 @@
                     {% wire id=element_id++"_div_icon" action={ dialog_open title=_"Select " template="_cf_select_"++tool_name++".tpl" element_id=element_id
                                                                                                                                        tool_name=tool_name
                                                                                                                                        kz_element_id=kz_element_id
+                                                                                                                                       kz_element_name=kz_element_name
                                                               }
                     %}
                     <div id="{{ element_id }}_div_icon" class="div_icon">

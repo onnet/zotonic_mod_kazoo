@@ -332,7 +332,7 @@ kz_get_user_doc(OwnerId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, OwnerId/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, (z_convert:to_binary(OwnerId))/binary>>,
             crossbar_account_request('get', API_String, [], Context);
         'true' -> []
     end.
