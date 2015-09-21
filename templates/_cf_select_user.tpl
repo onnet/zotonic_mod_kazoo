@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-            <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
+            <select id="user_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
               {% for option in m.kazoo.kz_list_account_users_short %}
                 {% if option[1] %}
                   <option value="{{ option[1] }}" {% if option[1] == kz_element_id %}selected{% endif %}>{{ option[2] }}</option>
@@ -29,8 +29,8 @@
     {% wire name="refresh_edit_user_btn_cf_user" action={ update target="edit_user_btn_cf_user" template="_cf_edit_user_button.tpl" } %}
     <div id="edit_user_btn_cf_user" class="col-sm-6">
       {% if kz_element_id %}
-        {% wire id="button_cf_select_user_edit" action={ dialog_open title=_"Edit user"++" "++kz_element_name template="_edit_user_lazy.tpl" user_id=kz_element_id width="auto" } %}
-        <button id="button_cf_select_user_edit" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit user _}</button>
+        {% wire id="button_cf_select_edit_kzuser" action={ dialog_open title=_"Edit user"++" "++kz_element_name template="_edit_user_lazy.tpl" user_id=kz_element_id width="auto" } %}
+        <button id="button_cf_select_edit_kzuser" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit user _}</button>
       {% endif %}
     </div>
   </div>
@@ -52,10 +52,10 @@
 
     $(function() {
         $('#user_selector').on('change', function(){
-        var selected = $(this).find("option:selected").val();
-        var selected_name = $(this).find("option:selected").text();
-        z_event("refresh_edit_user_btn_cf_user", { kz_element_id: selected, kz_element_name: selected_name });
+          var selected = $(this).find("option:selected").val();
+          var selected_name = $(this).find("option:selected").text();
+          z_event("refresh_edit_user_btn_cf_user", { kz_element_id: selected, kz_element_name: selected_name });
+        });
     });
-  });
 
 {% endjavascript %}

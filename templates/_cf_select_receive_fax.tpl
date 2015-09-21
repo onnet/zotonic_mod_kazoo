@@ -28,8 +28,8 @@
     {% wire name="refresh_edit_user_btn_cf_fax" action={ update target="edit_user_btn_cf_fax" template="_cf_edit_user_button.tpl" } %} 
     <div id="edit_user_btn_cf_fax" class="col-sm-6">
       {% if kz_element_id %}
-        {% wire id="button_cf_select_receive_fax_edit" action={ dialog_open title=_"Edit user"++" "++kz_element_name template="_edit_user_lazy.tpl" user_id=kz_element_id width="auto" } %}
-        <button id="button_cf_select_receive_fax_edit" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit user _}</button>
+        {% wire id="button_cf_select_edit_kzuser" action={ dialog_open title=_"Edit user"++" "++kz_element_name template="_edit_user_lazy.tpl" user_id=kz_element_id width="auto" } %}
+        <button id="button_cf_select_edit_kzuser" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit user _}</button>
       {% endif %}
     </div>
   </div>
