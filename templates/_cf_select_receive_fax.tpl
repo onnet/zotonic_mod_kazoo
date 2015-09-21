@@ -27,8 +27,10 @@
     </div>
     {% wire name="refresh_edit_user_btn_cf_fax" action={ update target="edit_user_btn_cf_fax" template="_cf_edit_user_button.tpl" } %} 
     <div id="edit_user_btn_cf_fax" class="col-sm-6">
-      {% wire id="button_cf_select_receive_fax_edit" action={ dialog_open title=_"Edit user"++" "++kz_element_name template="_edit_user_lazy.tpl" user_id=kz_element_id width="auto" } %}
-      <button id="button_cf_select_receive_fax_edit" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit user _}</button>
+      {% if kz_element_id %}
+        {% wire id="button_cf_select_receive_fax_edit" action={ dialog_open title=_"Edit user"++" "++kz_element_name template="_edit_user_lazy.tpl" user_id=kz_element_id width="auto" } %}
+        <button id="button_cf_select_receive_fax_edit" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Edit user _}</button>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -44,6 +46,7 @@
 </div>
 {% javascript %}
     $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+
     $('#user_selector').selectpicker({size: 5});
 
     $(function() {
