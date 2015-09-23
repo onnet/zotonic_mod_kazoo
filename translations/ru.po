@@ -1,6 +1,9 @@
 msgid ""
 msgstr ""
 
+msgid "Choose menu option"
+msgstr "Выберите пункт меню"
+
 msgid "No saved brunch"
 msgstr "Сохраненная ветвь отсутствует"
 

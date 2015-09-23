@@ -1685,7 +1685,12 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
             KeysList = [<<"_">>]++lists:map(fun(X) -> modkazoo_util:get_value(<<"id">>,X) end, kz_list_account_temporal_rules(Context)),
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option_temporal_route.tpl"
-                                 ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),Context)}]
+                              %   ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),Context)}]
+                                 ,[{tool_name,ToolName}
+                                  ,{drop_id,DropId}
+                                  ,{drop_parent,DropParent}
+                                  ,{branch_id,BranchId}
+                                  ,{available_keys,KeysList}]
                                  ,Context);
         _ ->
             Switch = case BranchId of
@@ -1728,6 +1733,7 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
             z_render:dialog(?__("Menu option",Context)
                                , "_cf_select_option.tpl"
                                ,[{existing_element_id,ExistingElementId}
+                                ,{kz_element_id,hd(lists:reverse(modkazoo_util:split_b(ExistingElementId,"-")))}
                                 ,{available_keys,cf_available_keys(?MENU_KEYS_LIST,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),Context)}]
                             ,Context);
         "temporal_route" ->
@@ -1735,7 +1741,9 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option_temporal_route.tpl"
                                ,[{existing_element_id,ExistingElementId}
-                                ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),Context)}]
+                                ,{kz_element_id,hd(lists:reverse(modkazoo_util:split_b(ExistingElementId,"-")))}
+                          %      ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),Context)}]
+                                ,{available_keys,KeysList}]
                             ,Context)
     end.
 
