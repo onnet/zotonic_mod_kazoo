@@ -1685,12 +1685,11 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
             KeysList = [<<"_">>]++lists:map(fun(X) -> modkazoo_util:get_value(<<"id">>,X) end, kz_list_account_temporal_rules(Context)),
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option_temporal_route.tpl"
-                              %   ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),Context)}]
                                  ,[{tool_name,ToolName}
                                   ,{drop_id,DropId}
                                   ,{drop_parent,DropParent}
                                   ,{branch_id,BranchId}
-                                  ,{available_keys,KeysList}]
+                                  ,{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),Context)}]
                                  ,Context);
         _ ->
             Switch = case BranchId of
