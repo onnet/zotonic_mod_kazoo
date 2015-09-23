@@ -1,0 +1,781 @@
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Music on hold"
+msgstr "Музыка на удержании"
+
+msgid "Menu option"
+msgstr "Пункт меню"
+
+msgid "Choose menu option"
+msgstr "Выберите пункт меню"
+
+msgid "No saved brunch"
+msgstr "Сохраненная ветвь отсутствует"
+
+msgid "Branch saved"
+msgstr "Ветвь сохранена"
+
+msgid "refresh"
+msgstr "обновить"
+
+msgid "back to send fax form"
+msgstr "вернуться к отправке"
+
+msgid "show sent faxes"
+msgstr "показать отправленные"
+
+msgid "submit fax"
+msgstr "oтправить факс"
+
+msgid "Main account number"
+msgstr "Основной номер"
+
+msgid "Delete After Notification"
+msgstr "Удалить после уведомления"
+
+msgid "Skip Instructions"
+msgstr "Пропустить инструкции"
+
+msgid "Skip Greeting"
+msgstr "Пропустить приветствие"
+
+msgid "Auto-login enabled"
+msgstr "Автоматический вход"
+
+msgid "Require PIN"
+msgstr "Требовать ввод кода PIN"
+
+msgid "Already Setup"
+msgstr "Уже настроено"
+
+msgid "Enter vmbox name here"
+msgstr "Название ящика"
+
+msgid "Save voicemail box"
+msgstr "Сохранить ящик"
+
+msgid "Unavailable message"
+msgstr "Извещение о недоступности"
+
+msgid "PIN number"
+msgstr "PIN ящика"
+
+msgid "Voicemail number"
+msgstr "Номер ящика"
+
+msgid "Voicemail owner"
+msgstr "Хозяин ящика"
+
+msgid "Voicemail name"
+msgstr "Название ящика"
+
+msgid "Edit voicemail box"
+msgstr "Редактировать ящик голосовой почты"
+
+msgid "Account language"
+msgstr "Язык учетной записи"
+
+msgid "Account timezone"
+msgstr "Часовой пояс"
+
+msgid "Do you really want to delete vmbox"
+msgstr "Вы действительно хотите удалить ящик"
+
+msgid "Msg. amount"
+msgstr "Кол-во сообщений"
+
+msgid "Number"
+msgstr "Номер"
+
+msgid "Box"
+msgstr "Ящик"
+
+msgid "Add vmbox"
+msgstr "Добавить ящик голосовой почты"
+
+msgid "add vmbox"
+msgstr "добавить ящик"
+
+msgid "All calls recording"
+msgstr "Запись всех разговоров"
+
+msgid "Account Language"
+msgstr "Язык учетной записи"
+
+msgid "Do you really want to delete this callflow?"
+msgstr "Вы действительно хотите удалить этот маршрут?"
+
+msgid "Do you really want to save this callflow?"
+msgstr "Вы действительно хотите сохранить изменения в этом маршруте?"
+
+msgid "Do you really want to reload this callflow?"
+msgstr "Вы действительно хотите загрузить этот маршрут снова?"
+
+msgid "Edit blacklist"
+msgstr "Редактировать черный список"
+
+msgid "Enter rule name here"
+msgstr "Название интервала"
+
+msgid "Edit rule"
+msgstr "Редактировать интервал"
+
+msgid "Enter menu name here"
+msgstr "Название меню"
+
+msgid "Save prompt"
+msgstr "Сохранить приветствие"
+
+msgid "Edit prompt"
+msgstr "Редактировать"
+
+msgid "Save Menu"
+msgstr "Сохранить меню"
+
+msgid "Suppress invalid"
+msgstr "Подавлять ошибки"
+
+msgid "Outside recording"
+msgstr "Запись извне"
+
+msgid "Dial extensions"
+msgstr "Внутренние номера"
+
+msgid "# of retries"
+msgstr "Кол-во попыток"
+
+msgid "Allocating number..."
+msgstr "Подключение номера..."
+
+msgid "Passwords match"
+msgstr "Пароли совпадают"
+
+msgid "Uppercase letters"
+msgstr "Заглавные буквы"
+
+msgid "Lowercase letters"
+msgstr "Строчные буквы"
+
+msgid "10 Characters long"
+msgstr "10 симвоов длинной"
+
+msgid "New password"
+msgstr "Новый пароль"
+
+msgid "Direct Calls Only"
+msgstr "Только прямые вызовы"
+
+msgid "Require Key Press"
+msgstr "Требовать нажатия клавиши"
+
+msgid "Bypass user's phones"
+msgstr "Пропускать устройства"
+
+msgid "Redirect calls to"
+msgstr "Переадресовывать вызовы на"
+
+msgid "Realm"
+msgstr "SIP-домен (Realm)"
+
+msgid "Assign To"
+msgstr "Назначить"
+
+msgid "Device status"
+msgstr "Статус устройства"
+
+msgid "Device Nickname"
+msgstr "Ник устройства"
+
+msgid "Join deaf"
+msgstr "Отключить динамик"
+
+msgid "Join muted"
+msgstr "Отключить микрофон"
+
+msgid "Save conference"
+msgstr "Сохранить конференцию"
+
+msgid "(comma separated)"
+msgstr "(через запятую)"
+
+msgid "Conference pins"
+msgstr "Пин-коды доступа"
+
+msgid "Conference owner"
+msgstr "Менеджер конференции"
+
+msgid "Conference numbers"
+msgstr "Номера доступа к конференции"
+
+msgid "Conference name"
+msgstr "Название конференции"
+
+msgid "Add number"
+msgstr "Добавить номер"
+
+msgid "Enter conference name here"
+msgstr "Введите название конференции"
+
+msgid "Enter blacklist name here"
+msgstr "Введите название черного списка"
+
+msgid "Add blacklist"
+msgstr "Добавить черный список"
+
+msgid "Save blacklist"
+msgstr "Сохранить черный список"
+
+msgid "Blacklist Name"
+msgstr "Название черного списка"
+
+msgid "Caller ID Number"
+msgstr "Номер звонящего"
+
+msgid "Caller ID Name"
+msgstr "Имя звонящего"
+
+msgid "Outbound Calls"
+msgstr "Исходящие вызовы"
+
+msgid "In-House Calls"
+msgstr "Внутренние вызовы"
+
+msgid "Timezone"
+msgstr "Часовой пояс"
+
+msgid "Email Notifications"
+msgstr "Уведомления по email"
+
+msgid "User privilege level"
+msgstr "Уровень доступа"
+
+msgid "User status"
+msgstr "Статус пользователя"
+
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+msgid "Diversion"
+msgstr "Переадресация"
+
+msgid "Restrictions"
+msgstr "Ограничения"
+
+msgid "Caller ID"
+msgstr "АОН"
+
+msgid "CID"
+msgstr "АОН"
+
+msgid "Please choose sip device to register with"
+msgstr "Пожалуйста выберите устройство для регистрации"
+
+msgid "D/L"
+msgstr "Скачать"
+
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+msgid "Not provided"
+msgstr "Не предоставлен"
+
+msgid "Not activated"
+msgstr "Не активировано"
+
+msgid "Numbers management"
+msgstr "Управление номерами"
+
+msgid "Reseller Portal"
+msgstr "Панель реселлера"
+
+msgid "Reseller status"
+msgstr "Статус реселлера"
+
+msgid "Unmask"
+msgstr "Выйти из"
+
+msgid "Mask"
+msgstr "Маскироваться"
+
+msgid "Please check your mailbox for further instructions"
+msgstr "Пожалуйста проверьте свой электронный почтовы ящик для получения реквизитов доступа на портал"
+
+msgid "Best regards"
+msgstr "С уважением"
+
+msgid "Regards"
+msgstr "С уважением"
+
+msgid "You can also open support tickets in our Support Centre at"
+msgstr "Вы также можете обращаться в техническую поддержку по адресу"
+
+msgid "Support Centre"
+msgstr "Поддержка"
+
+msgid "The following access credentials are valid for portal"
+msgstr "Следующие реквизиты доступа могут быть использованы для авторизации"
+
+msgid "As an account holder you now have access to our customer portal at"
+msgstr "Вы можете получить доступ на портал по адресу"
+
+msgid "We're pleased to confirm that your account has been created"
+msgstr "Мы рады сообщить, что Ваша учетная запись создана"
+
+msgid "OnNet communications Inc."
+msgstr "ЗАО «ОнНет комьюникейшнс»"
+
+msgid "Welcome to"
+msgstr "Добро пожаловать в"
+
+msgid "Terms of Service"
+msgstr "условиями предоставления услуг"
+
+msgid "I agree to the"
+msgstr "Я согласен с"
+
+msgid "Create an account"
+msgstr "Создать учетную запись"
+
+msgid "Phone number"
+msgstr "Контактный телефон"
+
+msgid "(mandatory)"
+msgstr "(обязательно)"
+
+msgid "Company name"
+msgstr "Название организации"
+
+msgid "(optional)"
+msgstr "(при наличии)"
+
+msgid "Confirm email address"
+msgstr "Подтвердите Ваш email"
+
+msgid "Enter email address"
+msgstr "Адрес email"
+
+msgid "Thank you for registering"
+msgstr "Благодарим Вас за регистрацию"
+
+msgid "Dear"
+msgstr "Уважаемый(ая)"
+
+msgid "Account Name"
+msgstr "Учетная запись"
+
+msgid "Your name (mandatory)"
+msgstr "Ваше имя (обязательно)"
+
+msgid "Your surname (mandatory)"
+msgstr "Ваша фамилия (обязательно)"
+
+msgid "Registration"
+msgstr "Регистрация"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Sing up"
+msgstr "Регистрация"
+
+msgid "Accounting"
+msgstr "Расчеты"
+
+msgid "Finance"
+msgstr "Финансы"
+
+msgid "add blacklist"
+msgstr "добавить черный список"
+
+msgid "Blacklists"
+msgstr "Черные списки"
+
+msgid "Click to add number"
+msgstr "Добавить номер"
+
+msgid "Do you really want to change this setting?"
+msgstr "Вы действительно хотите изменить эту настройку?"
+
+msgid "Retrieve"
+msgstr "Извлечение"
+
+msgid "Valet"
+msgstr "Автоматически"
+
+msgid "Park and Retrieve"
+msgstr "Парковка и извлечение"
+
+msgid "Privacy"
+msgstr "Защита приватности"
+
+msgid "Intercom"
+msgstr "Интерком"
+
+msgid "Direct to Voicemail"
+msgstr "Прямой вызов голосовой почты"
+
+msgid "Check Voicemail"
+msgstr "Проверить голосовую почту"
+
+msgid "Update Call-Forward"
+msgstr "Обновить переадресацию"
+
+msgid "Toggle Call-Forward"
+msgstr "Переключить переадресацию"
+
+msgid "Disable Call-Forward"
+msgstr "Выключить переадресацию"
+
+msgid "Enable Call-Forward"
+msgstr "Включить переадресацию"
+
+msgid "Feature codes"
+msgstr "Коды ДВО"
+
+msgid "Parking"
+msgstr "Парковка"
+
+msgid "Miscellaneous"
+msgstr "Разное"
+
+msgid "Hot-Desking"
+msgstr "Присвоение телефона"
+
+msgid "Call-Forward"
+msgstr "Переадресация"
+
+msgid "Auth failed."
+msgstr "Ошибка авторизации."
+
+msgid "Enable"
+msgstr "Включить"
+
+msgid "Disable"
+msgstr "Отключить"
+
+msgid "Feature Codes"
+msgstr "ДВО"
+
+msgid "Reload"
+msgstr "Загрузить заново"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Create group"
+msgstr "Создать группу"
+
+msgid "Enter group name here"
+msgstr "Введите название группы"
+
+msgid "Create user"
+msgstr "Создать пользователя"
+
+msgid "Confirm email address (mandatory)"
+msgstr "Подтвердить Email (обязательно)"
+
+msgid "Enter email address (mandatory)"
+msgstr "Email (обязательно)"
+
+msgid "Surname (mandatory)"
+msgstr "Фамилия (обязательно)"
+
+msgid "Name (mandatory)"
+msgstr "Имя (обязательно)"
+
+msgid "Enter password here"
+msgstr "Введите пароль"
+
+msgid "Enter username here"
+msgstr "Введите имя пользователя"
+
+msgid "Enter device nickname here"
+msgstr "Введите имя устройства"
+
+msgid "Enter phonenumber here"
+msgstr "Введите номер телефона"
+
+msgid "Enter device name here"
+msgstr "Введите название устройства"
+
+msgid "Cell Phone"
+msgstr "Мобильный телефон"
+
+msgid "Create Cell Phone"
+msgstr "Создать мобильный телефон"
+
+msgid "SIP Phone"
+msgstr "SIP-телефон"
+
+msgid "Create SIP Phone"
+msgstr "Создать SIP-телефон"
+
+msgid "Edit menu"
+msgstr "Редактировать меню"
+
+msgid "Edit user"
+msgstr "Редактировать пользователя"
+
+msgid "Edit device"
+msgstr "Редактировать устройство"
+
+msgid "Add device"
+msgstr "Добавить устройство"
+
+msgid "Ext. length"
+msgstr "Длина номера"
+
+msgid "Timeout"
+msgstr "Таймаут"
+
+msgid "Owner"
+msgstr "Хозяин"
+
+msgid "Retries"
+msgstr "Попыток"
+
+msgid "Menu name"
+msgstr "Название меню"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Muted"
+msgstr "Микр. откл."
+
+msgid "Play name"
+msgstr "Проигр. имя"
+
+msgid "Numbers"
+msgstr "Номера"
+
+msgid "Prompt Name"
+msgstr "Название записи"
+
+msgid "CID Number"
+msgstr "АОН"
+
+msgid "Privilege"
+msgstr "Уровень доступа"
+
+msgid "Last Name"
+msgstr "Фамилия"
+
+msgid "First Name"
+msgstr "Имя"
+
+msgid "Endpoints amount"
+msgstr "Кол-во участников"
+
+msgid "Group Name"
+msgstr "Название группы"
+
+msgid "Conferences"
+msgstr "Конференции"
+
+msgid "Add Time of Day rule"
+msgstr "Добавить временной интервал"
+
+msgid "Edit Time of Day rule"
+msgstr "Редактировать временной интервал"
+
+msgid "Time of the day rules"
+msgstr "Временные интервалы"
+
+msgid "Menus"
+msgstr "Меню"
+
+msgid "Groups"
+msgstr "Группы"
+
+msgid "Account's Devices"
+msgstr "Устройства"
+
+msgid "Account's Users"
+msgstr "Пользователи"
+
+msgid "Account settings"
+msgstr "Настройки учетной записи"
+
+msgid "Add conference"
+msgstr "Добавить конференцию"
+
+msgid "add conference"
+msgstr "добавить конференцию"
+
+msgid "add rule"
+msgstr "добавить правило"
+
+msgid "Add group"
+msgstr "Добавить группу"
+
+msgid "add group"
+msgstr "добавить группу"
+
+msgid "Add prompt"
+msgstr "Добавить приветствие"
+
+msgid "add prompt"
+msgstr "добавить приветствие"
+
+msgid "Add menu"
+msgstr "Добавить меню"
+
+msgid "add menu"
+msgstr "добавить меню"
+
+msgid "add device"
+msgstr "добавить устройство"
+
+msgid "add user"
+msgstr "добавить пользователя"
+
+msgid "submit"
+msgstr "сохранить"
+
+msgid "call"
+msgstr "вызвать"
+
+msgid "register"
+msgstr "зарегистрировать"
+
+msgid "Webphone"
+msgstr "Вэб-телефон"
+
+msgid "Call details"
+msgstr "Информация о вызове"
+
+msgid "Hang Up"
+msgstr "Разъединить"
+
+msgid "Callee Number"
+msgstr "Номер Б"
+
+msgid "Caller Number"
+msgstr "Номер А"
+
+msgid "Device"
+msgstr "Устройство"
+
+msgid "Call History"
+msgstr "История вызовов"
+
+msgid "Account's Call History"
+msgstr "История вызовов"
+
+msgid "Account's Current Calls"
+msgstr "Текущие вызовы"
+
+msgid "Account statistics"
+msgstr "Статистика учетной записи"
+
+msgid "Caller ID"
+msgstr "АОН"
+
+msgid "Duration"
+msgstr "Длит."
+
+msgid "Play"
+msgstr "Воспр."
+
+msgid "Email Address"
+msgstr "Эл. адрес"
+
+msgid "Keep Caller ID"
+msgstr "Сохранять АОН"
+
+msgid "Also Ring My VoIP Phone"
+msgstr "Задействовать IP-телефон"
+
+msgid "Forward Calls To"
+msgstr "Переадресовывать на"
+
+msgid "Send Voicemail to Email"
+msgstr "Отправлять голосовую почту на email"
+
+msgid "User's timezone"
+msgstr "Часовой пояс"
+
+msgid "Enable Call Forward"
+msgstr "Включить переадресацию"
+
+msgid "Incoming faxes"
+msgstr "Принятые факсы"
+
+msgid "Devices"
+msgstr "Устройства"
+
+msgid "User portal"
+msgstr "Настройки пользователя"
+
+msgid "Send fax"
+msgstr "Отправить факс"
+
+msgid "Voicemails"
+msgstr "Голосовая почта"
+
+msgid "Sign Out"
+msgstr "Выход"
+
+msgid "Hosted PBX"
+msgstr "Виртуальный офис"
+
+msgid "User Portal"
+msgstr "Портал пользователя"
+
+msgid "Callflow Builder"
+msgstr "Маршрутизация"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "Payments"
+msgstr "Оплата"
+
+msgid "Delivery"
+msgstr "Доставка"
+
+msgid "Service Order"
+msgstr "Заказ услуг"
+
+msgid "Instructions"
+msgstr "Инструкции"
+
+msgid "About us"
+msgstr "О нас"
+
+msgid "Contacts"
+msgstr "Конакты"
+
+
