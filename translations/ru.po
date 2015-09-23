@@ -1,6 +1,24 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Music on hold"
+msgstr "Музыка на удержании"
+
 msgid "Choose menu option"
 msgstr "Выберите пункт меню"
 

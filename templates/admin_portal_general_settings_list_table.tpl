@@ -37,6 +37,15 @@
              </span>
             </th>
         </tr>
+        <tr>
+            <th style="width: 40%;"class="text-center1">{_ Music on hold _}</th>
+            <th class="text-left">
+             <span id="account_music_on_holdmedia_id">
+                {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name=["music_on_hold","media_id"] 
+                                                    options=m.kazoo.kz_list_account_media_short prefix="account_" postfix="_bootsearch" %}
+             </span>
+            </th>
+        </tr>
     </thead>
 </table>
 {% endwith %}

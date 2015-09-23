@@ -69,6 +69,7 @@ m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}]}, _M,
         "account" -> kazoo_util:kz_account_doc_field(Field, Context);
         "user" -> kazoo_util:kz_user_doc_field(Field, DocId, Context);
         "device" -> kazoo_util:kz_device_doc_field(Field, DocId, Context);
+        "media" -> kazoo_util:kz_media_doc_field(Field, DocId, Context);
         E -> lager:info("kz_doc_field Error: ~p",[E])
     end;
 
@@ -213,6 +214,10 @@ m_find_value({kz_group_doc, [{group_id, GroupId}]}, _M, Context) ->
 m_find_value(kz_list_account_media, _M, Context) ->
     kazoo_util:kz_list_account_media(Context);
 
+m_find_value(kz_list_account_media_short, _M, Context) ->
+    lists:map(fun (MediaDoc) -> [z_convert:to_list(modkazoo_util:get_value(<<"id">>,MediaDoc)),modkazoo_util:get_value(<<"name">>,MediaDoc)] end, kazoo_util:kz_list_account_media(Context))
+        ++ [["","Default music"]];
+
 m_find_value(kz_list_account_menus, _M, Context) ->
     kazoo_util:kz_list_account_menus(Context);
 
@@ -250,9 +255,6 @@ m_find_value({kz_get_featurecode_by_name, [{featurecode_name, FCName}]}, _M, Con
 m_find_value(get_callflow_numbers_and_patterns, _M, Context) ->
     CurrCallflow = z_context:get_session('current_callflow', Context),
     modkazoo_util:get_value(<<"numbers">>,CurrCallflow,[])++modkazoo_util:get_value(<<"patterns">>,CurrCallflow,[]);
-
-m_find_value(kz_list_cf_slots, _M, Context) ->
-    [[{<<"id">>,<<"1">>},{<<"name">>,<<"1">>}],[{<<"id">>,<<"2">>},{<<"name">>,<<"2">>}]];
 
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),

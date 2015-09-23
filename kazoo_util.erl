@@ -13,6 +13,7 @@
     ,kz_user_doc_field/2
     ,kz_user_doc_field/3
     ,kz_device_doc_field/3
+    ,kz_media_doc_field/3
     ,create_kazoo_account/1
     ,create_kazoo_user/9
     ,kz_create_default_callflow/2
@@ -109,6 +110,7 @@
     ,cf_save/2
     ,cf_delete/2
     ,kz_list_account_media/1
+    ,kz_get_media_doc/2
     ,cf_build_ring_group_endpoints/1
     ,cf_build_page_group_endpoints/1
     ,cf_calculate_ring_group_timeout/1
@@ -498,13 +500,22 @@ kz_user_doc_field(Field, OwnerId, Context) when is_list(Field) ->
     modkazoo_util:get_value(z_convert:to_binary(Field), kz_get_user_doc(OwnerId, Context)).
 
 kz_device_doc_field(Field, DeviceId, Context) when is_binary(Field) ->
-    modkazoo_util:get_value(Field, kz_get_user_doc(DeviceId, Context));
+    modkazoo_util:get_value(Field, kz_get_device_doc(DeviceId, Context));
 kz_device_doc_field(Field, DeviceId, Context) when is_list(hd(Field)) ->
-    modkazoo_util:get_value([z_convert:to_binary(X) || X <- Field], kz_get_user_doc(DeviceId, Context));
+    modkazoo_util:get_value([z_convert:to_binary(X) || X <- Field], kz_get_device_doc(DeviceId, Context));
 kz_device_doc_field(Field, DeviceId, Context) when is_binary(hd(Field)) ->
-    modkazoo_util:get_value(Field, kz_get_user_doc(DeviceId, Context));
+    modkazoo_util:get_value(Field, kz_get_device_doc(DeviceId, Context));
 kz_device_doc_field(Field, DeviceId, Context) when is_list(Field) ->
-    modkazoo_util:get_value(z_convert:to_binary(Field), kz_get_user_doc(DeviceId, Context)).
+    modkazoo_util:get_value(z_convert:to_binary(Field), kz_get_device_doc(DeviceId, Context)).
+
+kz_media_doc_field(Field, MediaId, Context) when is_binary(Field) ->
+    modkazoo_util:get_value(Field, kz_get_media_doc(MediaId, Context));
+kz_media_doc_field(Field, MediaId, Context) when is_list(hd(Field)) ->
+    modkazoo_util:get_value([z_convert:to_binary(X) || X <- Field], kz_get_media_doc(MediaId, Context));
+kz_media_doc_field(Field, MediaId, Context) when is_binary(hd(Field)) ->
+    modkazoo_util:get_value(Field, kz_get_media_doc(MediaId, Context));
+kz_media_doc_field(Field, MediaId, Context) when is_list(Field) ->
+    modkazoo_util:get_value(z_convert:to_binary(Field), kz_get_media_doc(MediaId, Context)).
 
 create_kazoo_account(Context) ->
     Firstname = z_convert:to_binary(z_context:get_q("firstname", Context)),
@@ -1344,6 +1355,15 @@ kz_list_account_media(Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?MEDIA/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_get_media_doc(MediaId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    case AccountId =:= 'undefined' orelse MediaId =:= 'undefined' orelse MediaId =:= 'null' of
+        'false' -> 
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(MediaId))/binary>>,
+            crossbar_account_request('get', API_String, [], Context);
+        'true' -> []
+    end.
 
 cf_build_page_group_endpoints(Context) ->
     lists:map(fun (EndpointId) ->
