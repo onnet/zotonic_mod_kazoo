@@ -1522,11 +1522,11 @@ cf_add_desc_child(BranchId,DropId,DropParent,Switch,Context) ->
     lager:info("cf_add_desc_child ModuleName: ~p",[ModuleName]),
     [KzElementId, KzElementName] = cf_get_module_info(ModuleName,ModulePath,Context),
     z_render:insert_bottom(PathToChildren ,z_template:render("_cf_child.tpl",[{tool_name,z_convert:to_list(ModuleName)}
-                                                                            ,{element_id, ElementId}
-                                                                            ,{kz_element_id, KzElementId}
-                                                                            ,{kz_element_name, KzElementName}
-                                                                            ,{drop_parent,z_convert:to_list(ParentModuleName)}
-                                                                            ,{switch,Switch}],Context),Context).
+                                                                             ,{element_id, ElementId}
+                                                                             ,{kz_element_id, KzElementId}
+                                                                             ,{kz_element_name, KzElementName}
+                                                                             ,{drop_parent,z_convert:to_list(ParentModuleName)}
+                                                                             ,{switch,Switch}],Context),Context).
 
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"user">> ->
     Id = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
