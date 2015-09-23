@@ -1,6 +1,39 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Menu option"
+msgstr "Пункт меню"
+
 msgid "Choose menu option"
 msgstr "Выберите пункт меню"
 
@@ -570,6 +603,9 @@ msgstr "Конференции"
 
 msgid "Add Time of Day rule"
 msgstr "Добавить временной интервал"
+
+msgid "Edit Time of Day rule"
+msgstr "Редактировать временной интервал"
 
 msgid "Time of the day rules"
 msgstr "Временные интервалы"
