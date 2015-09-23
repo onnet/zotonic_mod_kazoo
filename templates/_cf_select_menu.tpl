@@ -16,7 +16,7 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-6">
-      {% wire id="button_cf_select_menu_create" action={dialog_open title=_"Add menu" template="_add_menu_dialog.tpl"} %}
+      {% wire id="button_cf_select_menu_create" action={dialog_open title=_"Add menu" template="_add_menu_dialog.tpl" width="auto"} %}
       <button id="button_cf_select_menu_create" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add menu _}</button>
     </div>
     {% wire name="refresh_edit_menu_btn_cf_menu" action={ update target="edit_menu_btn_cf_menu" template="_cf_edit_menu_button.tpl" } %}
