@@ -879,6 +879,7 @@ event({postback,{rs_account_mask,[{account_id,AccountId}]},_,_},Context) ->
 event({postback,rs_account_demask,_,_},Context) ->
     z_context:set_session(kazoo_account_id, z_context:get_session(kazoo_reseller_account_id, Context), Context),
     z_context:set_session('current_callflow','undefined',Context),
+    z_context:set_session('account_realm','undefined',Context),
     modkazoo_auth:may_be_add_third_party_billing(Context),
     z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
 
