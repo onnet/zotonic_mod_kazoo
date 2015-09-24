@@ -1,6 +1,7 @@
 {% if m.kazoo[{ui_element_opened element="user_settings_widget_opened"}] %}
 {% with m.kazoo.kz_get_acc_doc as account_doc %}
 
+{% wire id="user_settings_form_form" type="submit" postback={kazoo_user_settings} delegate="mod_kazoo" %}
 <form  id="user_settings_form_form" method="post" action="postback">
     <div style="padding-top: 1.5em; padding-left: 1em;">
       {% with m.kazoo.get_user_timezone as user_timezone %}
@@ -13,12 +14,10 @@
       {% endwith %}
     </div>
     <div class="form-inline" style="padding: 1em;">
-        <label>{_ Enable Call Forward _}:</label>
-            {% if m.kazoo[{kz_user_doc_field field1="call_forward" field2="enabled"}] %}
-                <input class="checkbox" id="call-forward-enabled" name="call_forward_enabled" type="checkbox" checked="checked"/>
-            {% else %}
-                <input class="checkbox" id="call-forward-enabled" name="call_forward_enabled" type="checkbox"/>
-            {% endif %}
+      <label>{_ Enable Call Forward _}:</label>
+          {% wire id="call-forward-enabled" type="click" action={ toggle target="call-forward-data" } %}
+          <input class="checkbox" id="call-forward-enabled" name="call_forward_enabled" 
+                 type="checkbox" {% if m.kazoo[{kz_user_doc_field field1="call_forward" field2="enabled"}] %}checked="checked"{% endif %} />
     </div>
     <div id="call-forward-data" style="{% if m.kazoo[{kz_user_doc_field field1="call_forward" field2="enabled"}] %}
                                            display: block;
@@ -50,11 +49,8 @@
     </div>
     <div class="form-inline" style="padding-left: 1em; padding-top: 1em;">
         <label>{_ Send Voicemail to Email _}:</label>
-        {% if m.kazoo[{kz_user_doc_field field1="vm_to_email_enabled"}] %}
-            <input id="vm-to-email-checkbox" class="checkbox" name="vm-to-email-checkbox" type="checkbox" checked="checked"/>
-        {% else %}
-            <input id="vm-to-email-checkbox" class="checkbox" name="vm-to-email-checkbox" type="checkbox"/>
-        {% endif %}
+        {% wire id="vm-to-email-checkbox" type="click" action={ toggle target="vm-to-email-input" } %}
+        <input id="vm-to-email-checkbox" class="checkbox" name="vm-to-email-checkbox" type="checkbox" {% if m.kazoo[{kz_user_doc_field field1="vm_to_email_enabled"}] %}checked="checked"{% endif %} />
     </div>
     <div id="vm-to-email-input" class="form-inline" style="padding-left: 3em; padding-top: 1em; padding-bottom: 1em;
                                    {% if m.kazoo[{kz_user_doc_field field1="vm_to_email_enabled"}] %}
@@ -70,5 +66,13 @@
 </form>
 
 {% endwith %}
+ 
+{% javascript %}
+  $('#user_timezone').selectpicker({
+    style: 'btn-xs btn-onnet',
+    size: 7
+  });
+{% endjavascript %}
+
 {% else %}
 {% endif %}

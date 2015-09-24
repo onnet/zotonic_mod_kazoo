@@ -26,16 +26,6 @@
 
 {% block widget_content %}
 
-{% wire id="call-forward-enabled" type="click"
-        action={ toggle target="call-forward-data" }
-%}
-
-{% wire id="vm-to-email-checkbox" type="click"
-        action={ toggle target="vm-to-email-input" }
-%}
-
-{% wire id="user_settings_form_form" type="submit" postback={kazoo_user_settings} delegate="mod_kazoo" %}
-
 <div id="user_settings_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="user_settings_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="user_settings_widget_opened"
@@ -44,12 +34,5 @@
         %}
     </div>
 </div>
-
-{% javascript %}
-  $('#user_timezone').selectpicker({
-    style: 'btn-xs btn-onnet',
-    size: 7
-  });
-{% endjavascript %}
 
 {% endblock %}
