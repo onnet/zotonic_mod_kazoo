@@ -568,10 +568,7 @@ create_kazoo_account(Context) ->
     CreatedUserAccountId = modkazoo_util:get_value([<<"data">>,<<"id">>], jiffy:decode(Body)),
     UserPassword = modkazoo_util:rand_hex_binary(10),
     create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
-    case z_context:get_q("notify_signed_up",Context) of
-        'undefined' -> 'ok';
-        _ -> send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context)
-    end,
+    send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context),
     {'new_account_id', CreatedUserAccountId}.
  
 valid_account_name(Name) when size(Name) < 3 -> 'false';
@@ -669,13 +666,18 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
             ,{clientip, ClientIP}
             ,{phonenumber, z_convert:to_binary(z_context:get_q("phonenumber", Context))}
            ],
-    E_SignUp = #email{
-        to=Email,
-        from=SalesEmail,
-        html_tpl="_email_signup_greeting.tpl",
-        vars=Vars
-    },
-    z_email:send(E_SignUp, Context),
+
+    case z_context:get_q("notify_signed_up",Context) of
+        'undefined' -> 'ok';
+        _ -> 
+            E_SignUp = #email{
+                to=Email,
+                from=SalesEmail,
+                html_tpl="_email_signup_greeting.tpl",
+                vars=Vars
+            },
+            z_email:send(E_SignUp, Context)
+    end,
 
     E_SignUp_Copy = #email{
         to=SalesEmail,
