@@ -898,8 +898,8 @@ event({submit,{addcccppinform, _}, _, _}, Context) ->
     _ = kazoo_util:add_cccp_doc({<<"pin">>, NewAuthPIN}, {<<"outbound_cid">>, OutboundCID}, {<<"user_id">>, UserId}, Context),
     z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
 
-event({postback, del_cccp_doc, TriggerId, _TargetId}, Context) ->
-    _ = kazoo_util:del_cccp_doc(TriggerId, Context),
+event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
+    _ = kazoo_util:del_cccp_doc(DocId, Context),
     z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
 
 event({drag,_,_},Context) ->

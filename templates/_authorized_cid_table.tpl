@@ -15,7 +15,7 @@
             <td style="text-align: center;">{{ m.kazoo[{kz_user_doc_by_ownerid owner_id=cred["user_id"] }][1]["username"] }}</td>
             <td style="text-align: center;"><i id={{ cred["id"] }} style="cursor: pointer;" class="fa fa-trash-o" title="{_ Delete _}"></i></td>
           </tr>
-          {% wire id=cred["id"] action={confirm text=_"Do you really want to delete this CID?" action={postback postback="del_cccp_doc" delegate="mod_kazoo"}} %}
+          {% wire id=cred["id"] action={confirm text=_"Do you really want to delete this CID?" action={postback postback={del_cccp_doc doc_id=cred["id"]} delegate="mod_kazoo"}} %}
         {% endif %}
       {% endfor %}
     </tbody>
