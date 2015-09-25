@@ -25,8 +25,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to delete this Pin?"
+msgstr "Вы действительно хотите удалить этот пин-код?"
+
+msgid "Do you really want to delete this Authorized CID?"
+msgstr "Вы действительно хотите удалить этот авторизованный номер?"
 
 msgid "Music on hold"
 msgstr "Музыка на удержании"

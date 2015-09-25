@@ -1,4 +1,4 @@
-{% extends "onnet_widget_dashboard.tpl" %}
+{% extends "modkazoo_widget_dashboard.tpl" %}
 
 {% block widget_headline %}
 
