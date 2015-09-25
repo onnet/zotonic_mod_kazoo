@@ -28,15 +28,15 @@ observe_postback_notify(A, _Context) ->
     undefined.
 
 event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->
-    Login = iolist_to_binary(z_context:get_q("username",Context)),
-    Password = iolist_to_binary(z_context:get_q("password",Context)),
-    Account = iolist_to_binary(z_context:get_q("account",Context)),
+    Login = z_convert:to_binary(z_context:get_q("username",Context)),
+    Password = z_convert:to_binary(z_context:get_q("password",Context)),
+    Account = z_convert:to_binary(z_context:get_q("account",Context)),
     modkazoo_auth:do_sign_in(Login, Password, Account, Context);
 
 event({submit,{innoauth,[]},"sign_in_page_form","sign_in_page_form"}, Context) ->
-    Login = iolist_to_binary(z_context:get_q("username_page",Context)),
-    Password = iolist_to_binary(z_context:get_q("password_page",Context)),
-    Account = iolist_to_binary(z_context:get_q("account_page",Context)),
+    Login = z_convert:to_binary(z_context:get_q("username_page",Context)),
+    Password = z_convert:to_binary(z_context:get_q("password_page",Context)),
+    Account = z_convert:to_binary(z_context:get_q("account_page",Context)),
     modkazoo_auth:do_sign_in(Login, Password, Account, Context);
 
 event({postback,{signout,[]}, _, _}, Context) ->
@@ -84,23 +84,23 @@ event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _,
     z_render:update("user_portal_voicemails", z_template:render("user_portal_voicemails.tpl", [{headline,?__("Voicemails", Context)}], Context), Context);
 
 event({submit,{forgottenpwd,[]},"forgottenpwd_form","forgottenpwd_form"}, Context) ->
-    Username = iolist_to_binary(z_context:get_q("forgotten_username",Context)),
-    AccountName = iolist_to_binary(z_context:get_q("forgotten_account_name",Context)),
+    Username = z_convert:to_binary(z_context:get_q("forgotten_username",Context)),
+    AccountName = z_convert:to_binary(z_context:get_q("forgotten_account_name",Context)),
     case kazoo_util:password_recovery(Username, AccountName, Context) of
         <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
         Answer -> z_render:growl(?__(Answer, Context), Context)
     end;
 
 event({submit,{forgottenpwd,[]},"password_recovery_page_form","password_recovery_page_form"}, Context) ->
-    Username = iolist_to_binary(z_context:get_q("forgotten_username_page",Context)),
-    AccountName = iolist_to_binary(z_context:get_q("forgotten_account_name_page",Context)),
+    Username = z_convert:to_binary(z_context:get_q("forgotten_username_page",Context)),
+    AccountName = z_convert:to_binary(z_context:get_q("forgotten_account_name_page",Context)),
     case kazoo_util:password_recovery(Username, AccountName, Context) of
         <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
         Answer -> z_render:growl(?__(Answer, Context), Context)
     end;
 
 event({postback,rate_seek,_,_}, Context) ->
-    Number = iolist_to_binary(re:replace(z_context:get_q("rate_seek",Context), "[^0-9]", "", [global, {return, list}])),
+    Number = z_convert:to_binary(re:replace(z_context:get_q("rate_seek",Context), "[^0-9]", "", [global, {return, list}])),
     case kazoo_util:rate_number(Number, Context) of
         {'ok', PriceInfo} -> z_render:update("single_number_rate", z_template:render("_single_number_rate.tpl", [{priceinfo, PriceInfo}], Context), Context);
         _ -> z_render:growl_error(?__("Wrong number provided, please try again.",Context), Context)
@@ -248,14 +248,14 @@ event({postback,invoiceme,TriggerId,_},Context) ->
   end;
 
 event({submit,set_accounts_address,_,_}, Context) ->
-    Line1 = iolist_to_binary(z_context:get_q("line1",Context)),
-    Line2 = iolist_to_binary(z_context:get_q("line2",Context)),
-    Line3 = iolist_to_binary(z_context:get_q("line3",Context)),
+    Line1 = z_convert:to_binary(z_context:get_q("line1",Context)),
+    Line2 = z_convert:to_binary(z_context:get_q("line2",Context)),
+    Line3 = z_convert:to_binary(z_context:get_q("line3",Context)),
     kazoo_util:set_accounts_address(Line1, Line2, Line3, Context),
     z_render:growl(?__("Address successfully updated.", Context), Context);
 
 event({postback,new_numbers_lookup,_,_}, Context) ->
-    AreaCode = case iolist_to_binary(z_context:get_q("areacode",Context)) of
+    AreaCode = case z_convert:to_binary(z_context:get_q("areacode",Context)) of
         <<"0", Number/binary>> -> Number;
         Number -> Number
     end,
@@ -883,6 +883,24 @@ event({postback,rs_account_demask,_,_},Context) ->
     z_context:set_session('account_realm','undefined',Context),
     modkazoo_auth:may_be_add_third_party_billing(Context),
     z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
+
+event({submit,{addcccpcidform, _}, _, _}, Context) ->
+    NewAuthCID = z_convert:to_binary(z_context:get_q("cid_number", Context)),
+    OutboundCID = z_convert:to_binary(z_context:get_q("outbound_cid", Context)),
+    UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
+    _ = kazoo_util:add_cccp_doc({<<"cid">>, NewAuthCID}, {<<"outbound_cid">>, OutboundCID}, {<<"user_id">>, UserId}, Context),
+    z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
+
+event({submit,{addcccppinform, _}, _, _}, Context) ->
+    NewAuthPIN = z_convert:to_binary(z_context:get_q("pin_number", Context)),
+    OutboundCID = z_convert:to_binary(z_context:get_q("outbound_cid", Context)),
+    UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
+    _ = kazoo_util:add_cccp_doc({<<"pin">>, NewAuthPIN}, {<<"outbound_cid">>, OutboundCID}, {<<"user_id">>, UserId}, Context),
+    z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
+
+event({postback, del_cccp_doc, TriggerId, _TargetId}, Context) ->
+    _ = kazoo_util:del_cccp_doc(TriggerId, Context),
+    z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
 
 event({drag,_,_},Context) ->
     Context;

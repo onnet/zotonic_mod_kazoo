@@ -257,6 +257,9 @@ m_find_value(get_callflow_numbers_and_patterns, _M, Context) ->
     CurrCallflow = z_context:get_session('current_callflow', Context),
     modkazoo_util:get_value(<<"numbers">>,CurrCallflow,[])++modkazoo_util:get_value(<<"patterns">>,CurrCallflow,[]);
 
+m_find_value(kz_cccp_creds_list, _M, Context) ->
+    kazoo_util:kz_cccp_creds_list(Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),
