@@ -215,8 +215,9 @@ m_find_value(kz_list_account_media, _M, Context) ->
     kazoo_util:kz_list_account_media(Context);
 
 m_find_value(kz_list_account_media_short, _M, Context) ->
-    lists:map(fun (MediaDoc) -> [z_convert:to_list(modkazoo_util:get_value(<<"id">>,MediaDoc)),modkazoo_util:get_value(<<"name">>,MediaDoc)] end, kazoo_util:kz_list_account_media(Context))
-        ++ [["","Default music"]];
+    [["","Default"]]
+    ++
+    lists:map(fun (MediaDoc) -> [z_convert:to_list(modkazoo_util:get_value(<<"id">>,MediaDoc)),modkazoo_util:get_value(<<"name">>,MediaDoc)] end, kazoo_util:kz_list_account_media(Context));
 
 m_find_value(kz_list_account_menus, _M, Context) ->
     kazoo_util:kz_list_account_menus(Context);

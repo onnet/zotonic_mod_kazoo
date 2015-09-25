@@ -12,14 +12,23 @@
 <form id="form_cf_select_ring_group" method="post" action="postback">
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <input type="text" class="form-control margin-bottom-xs" id="group_name" name="name" placeholder="Enter group name here"
                                                                    value="{{ element_data[1]["data"][1]["name"] }}">
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <select id="strategy" name="strategy" class="form-control margin-bottom-xs" style="text-align:center;">
                 <option value="simultaneous" {% if element_data[1]["data"][1]["strategy"] == "simultaneous" %}selected{% endif %}>{_ At the same time _}</option>
                 <option value="single" {% if element_data[1]["data"][1]["strategy"] == "single" %}selected{% endif %}>{_ In order _}</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <select id="ringback" name="ringback" class="form-control margin-bottom-xs" style="text-align:center;">
+              {% for prompt in m.kazoo.kz_list_account_media_short %}
+                <option value="{{ prompt[1] }}" {% if prompt[1] == element_data[1]["data"][1]["ringback"] %}selected{% endif %}>
+                 {% if prompt[1] %}{{ prompt[2] }}{% else %}{_ Default ringback _}{% endif %}
+                </option>
+              {% endfor %}
             </select>
         </div>
       </div>

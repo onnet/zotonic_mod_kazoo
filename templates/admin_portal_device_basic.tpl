@@ -72,8 +72,14 @@
             %}
         </div>
     </div>
-
-
+    <!-- MOH -->
+    <div class="row">
+        <div class="col-xs-5"><label class="edit_user_label">{_ Music on hold _}</label></div>
+        <div id="device_music_on_holdmedia_id" class="col-xs-5">
+            {% include "_show_field_select.tpl" type="device" doc_id=device_id field_name=["music_on_hold","media_id"]
+                                                options=m.kazoo.kz_list_account_media_short prefix="device_" postfix="_bootsearch" %}
+        </div>
+    </div>
     <br />
     </div>
     <div class="col-xs-2" id="device_enable_control">

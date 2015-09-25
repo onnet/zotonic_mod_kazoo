@@ -593,6 +593,7 @@ event({submit,cf_select_ring_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","name"], z_convert:to_binary(z_context:get_q("name", Context)), Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","strategy"], z_convert:to_binary(z_context:get_q("strategy", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","ringback"], z_convert:to_binary(z_context:get_q("ringback", Context)), Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","endpoints"], kazoo_util:cf_build_ring_group_endpoints(Context), Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","timeout"], kazoo_util:cf_calculate_ring_group_timeout(Context), Context),
     z_render:dialog_close(Context);

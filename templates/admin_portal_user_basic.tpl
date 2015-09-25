@@ -90,6 +90,14 @@
             {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list prefix="user_" postfix="_bootsearch" %}
         </div>
     </div>
+    <!-- MOH -->
+    <div class="row">
+        <div class="col-xs-5"><label class="edit_user_label">{_ Music on hold _}</label></div>
+        <div id="user_music_on_holdmedia_id" class="col-xs-5">
+            {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name=["music_on_hold","media_id"]
+                                                options=m.kazoo.kz_list_account_media_short prefix="user_" postfix="_bootsearch" %}
+        </div>
+    </div>
     <br />
     </div>
     <div class="col-xs-2" id="user_enable_control">
