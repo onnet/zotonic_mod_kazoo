@@ -357,6 +357,14 @@ div.widget {
   margin-bottom: 1em;
 }
 
+.ml-1 {
+  margin-right: 1em;
+}
+
+.mr-1 {
+  margin-right: 1em;
+}
+
 .pt-1 {
   padding-top: 1em;
 }
@@ -375,6 +383,14 @@ div.widget {
 
 .pr-0 {
   padding-right: 0px;
+}
+
+.pl-05 {
+  padding-left: 0.5em;
+}
+
+.pr-05 {
+  padding-right: 0.5em;
 }
 
 .pl-10 {
@@ -735,6 +751,11 @@ border-color: {{ m.config.mod_kazoo.color2.value }}!important;
 #timezone .bootstrap-select.btn-group,
 #user_settings_form_form .bootstrap-select.btn-group {
   width: auto!important;
+}
+
+div.bs-searchbox input.form-control {
+    height: 25px;
+    padding: 3px 6px!important;
 }
 
 </style>
