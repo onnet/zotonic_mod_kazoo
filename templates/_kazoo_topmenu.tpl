@@ -12,6 +12,7 @@
                 <li><a href="/admin_settings">{_ Settings _}</a>
                 <li><a href="/admin_statistics">{_ Statistics _}</a>
                 <li><a href="/admin_feature_codes">{_ Feature Codes _}</a>
+                <li><a href="/callback">{_ Callback _}</a>
               {% endif %}
             </ul>
          </li>

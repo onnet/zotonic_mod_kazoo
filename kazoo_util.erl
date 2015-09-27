@@ -162,6 +162,9 @@
     ,may_be_cid_check_children_clean/1
     ,rs_delete_account/2
     ,toggle_all_calls_recording/1
+    ,kz_cccp_creds_list/1
+    ,add_cccp_doc/4
+    ,del_cccp_doc/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2280,4 +2283,20 @@ toggle_all_calls_recording(Context) ->
         [] -> kz_set_acc_doc([<<"preflow">>,<<"always">>], <<"preflow">>, Context);
         _ -> kz_set_acc_doc([<<"preflow">>,<<"always">>], <<>>, Context)
     end.
+
+kz_cccp_creds_list(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CCCPS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+add_cccp_doc(Field1, Field2, Field3, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CCCPS/binary>>,
+    DataBag = {[{<<"data">>, {[Field1, Field2, Field3, {<<"active">>, true}]}}]},
+    crossbar_account_request('put', API_String, DataBag, Context).
+
+del_cccp_doc(DocId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CCCPS/binary, <<"/">>/binary, (z_convert:to_binary(DocId))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
 

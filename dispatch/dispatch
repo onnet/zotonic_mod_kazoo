@@ -5,6 +5,7 @@
  {admin_statistics,["admin_statistics"],         controller_template,  [ {template, "admin_statistics.tpl"} ]},
  {admin_callflows,["admin_callflows"],         controller_template,  [ {template, "admin_callflows.tpl"} ]},
  {user_portal,["user_portal"],         controller_template,  [ {template, "user_portal.tpl"} ]},
+ {callback, ["callback"], controller_template, [{template, "callback.tpl"}]},
 
  {getinfaxdoc, ["getinfaxdoc","id",id], controller_getinfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
  {getfaxdoc, ["getfaxdoc","id",id], controller_getfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
