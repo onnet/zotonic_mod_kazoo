@@ -268,6 +268,13 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
         'undefined' -> z_render:growl_error(?__("Something wrong happened.", Context), Context);
         NumberToAdd -> 
             _ = kazoo_util:rs_add_number(NumberToAdd, AccountId, Context),
+            lager:info("Number add attempt: ~p",[NumberToAdd]),
+            {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+            Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
+                   ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+                   ,{clientip, ClientIP}
+                   ,{number, NumberToAdd}],
+            spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
             mod_signal:emit({update_rs_allocated_numbers_tpl, [{account_id,AccountId}]}, Context),
             Context
     end;
@@ -309,6 +316,13 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     end;
 
 event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,_}, Context) ->
+    lager:info("Number deallocation attempt: ~p",[Number]),
+    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
+           ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+           ,{clientip, ClientIP}
+           ,{number, Number}],
+    spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
     case kazoo_util:deallocate_number(Number, AccountId, Context) of
         <<>> ->
             Context1 = z_render:update("rs_numbers_list_table" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
