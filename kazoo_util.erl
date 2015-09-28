@@ -166,6 +166,7 @@
     ,add_cccp_doc/4
     ,del_cccp_doc/2
     ,kz_find_account_by_number/2
+    ,kz_get_registrations_by_accountid/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -795,11 +796,14 @@ kz_check_device_registration(DeviceId, Context) ->
     DevicesStatus = crossbar_account_request('get', API_String, [], Context),
     lists:member({[{<<"device_id">>,z_convert:to_binary(DeviceId)},{<<"registered">>,true}]}, DevicesStatus).
 
+kz_get_registrations_by_accountid(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?REGISTRATIONS/binary>>, 
+    crossbar_account_request('get', API_String, [], Context).
+
 kz_get_device_registration_details(DeviceId, Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?REGISTRATIONS/binary>>, 
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    Registrations = kz_get_registrations_by_accountid(AccountId, Context),
     Username = modkazoo_util:get_value([<<"sip">>, <<"username">>], kz_get_device_doc(DeviceId, Context)),
-    Registrations = crossbar_account_request('get', API_String, [], Context),
     get_reg_details(Username, Registrations).
 
 get_reg_details(_, []) -> <<"">>;

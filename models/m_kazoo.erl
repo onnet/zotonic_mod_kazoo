@@ -263,6 +263,9 @@ m_find_value(kz_cccp_creds_list, _M, Context) ->
 m_find_value({kz_find_account_by_number, [{phone_number, Number}]}, _M, Context) ->
     kazoo_util:kz_find_account_by_number(Number, Context);
 
+m_find_value({get_registrations_by_accountid, [{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_get_registrations_by_accountid(AccountId, Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

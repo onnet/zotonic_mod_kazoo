@@ -41,7 +41,7 @@
                     action={ toggle target="arrow_down_"++#id }
                     action={ postback postback={trigger_innoui_widget arg="rs_details_widget_opened" } delegate="mod_kazoo" }
             %}
-              <span id="arrows_{{ #id }}" style="cursor: pointer;">
+              <span id="arrows_{{ #id }}" style="cursor: pointer; padding-left: 0.7em;">
                 <i id="arrow_right_{{ #id }}" style="{% if m.kazoo[{ui_element_opened element="rs_details_widget_opened"}] %}display: none;{% endif %}" 
                                                 class="arrowpad fa fa-arrow-circle-right"></i>
                 <i id="arrow_down_{{ #id }}" style="{% if not m.kazoo[{ui_element_opened element="rs_details_widget_opened"}] %}display: none;{% endif %}" 

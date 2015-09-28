@@ -27,8 +27,10 @@
 
 {% block widget_content %}
 <div id="rs_numbers_list_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="rs_numbers_list_widget_opened"}] %}display: none;{% endif %}">
-<table id="rs_numbers_list_table" class="table table-condensed table-hover table-centered">
-    {% include "rs_numbers_list_table_body.tpl" %}
-</table>
+    <div class="text-center p-3">
+        {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_numbers_list_widget_opened"
+                                                                    template="rs_numbers_list_table_body.tpl" account_id=account_id}
+        %}
+   </div>
 </div>
 {% endblock %}

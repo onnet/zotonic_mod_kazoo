@@ -17,6 +17,7 @@
 </div>
 
 <div class="pl-10 pr-10 col-md-6">
+
   <span id="rs_widget_account_details_tpl">
      <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_widget_account_details_tpl"
@@ -27,6 +28,16 @@
         %}
       </div>
   </span>
+
+  {% wire action={connect signal={update_rs_account_registrations_tpl} action={update target="rs_account_registrations_tpl"
+                                                                                  template="rs_account_registrations.tpl"
+                                                                                  headline=_"Account's current registrations"
+                                                                                  account_id=account_id}}
+  %}
+  <span id="rs_account_registrations_tpl">
+        {% include "rs_account_registrations.tpl" headline=_"Account's current registrations" account_id=account_id %}
+  </span>
+
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_rs_allocated_numbers_tpl} action={update target="rs_allocated_numbers_tpl"
