@@ -260,6 +260,9 @@ m_find_value(get_callflow_numbers_and_patterns, _M, Context) ->
 m_find_value(kz_cccp_creds_list, _M, Context) ->
     kazoo_util:kz_cccp_creds_list(Context);
 
+m_find_value({kz_find_account_by_number, [{phone_number, Number}]}, _M, Context) ->
+    kazoo_util:kz_find_account_by_number(Number, Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

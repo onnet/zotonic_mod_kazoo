@@ -165,6 +165,7 @@
     ,kz_cccp_creds_list/1
     ,add_cccp_doc/4
     ,del_cccp_doc/2
+    ,kz_find_account_by_number/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2299,4 +2300,10 @@ del_cccp_doc(DocId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CCCPS/binary, <<"/">>/binary, (z_convert:to_binary(DocId))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
+
+kz_find_account_by_number(Number, Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
+    lager:info("My API_String: ~p", [API_String]),
+    modkazoo_util:get_value(<<"account_id">>, crossbar_account_request('get', API_String, [], Context)).
 

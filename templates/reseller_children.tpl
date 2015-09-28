@@ -1,5 +1,9 @@
 <div class="row" style="margin-top: 2em; margin-bottom: 1em;">
-  <div class="col-xs-4 col-xs-offset-3">
+  {% wire id="search_account_btn" action={ dialog_open title=_"Account lookup " template="_rs_search_dialog.tpl" } %}
+  <div class="col-xs-2 col-xs-offset-1">
+    <button id="search_account_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Search _}</button>
+  </div>
+  <div class="col-xs-4">
     {% wire id="child_selector" type="change" action={postback postback="rs_child_selected" delegate="mod_kazoo"} %}
     <select id="child_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;" data-live-search="true">
       <option value="">-- {_ Select account to edit _} --</option>

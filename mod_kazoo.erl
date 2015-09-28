@@ -916,6 +916,22 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
     _ = kazoo_util:del_cccp_doc(DocId, Context),
     z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
 
+event({submit,rs_account_lookup,_,_},Context) ->
+    AccountId = case z_context:get_q("search_option", Context) of
+        "by_phone_nunber" ->
+            kazoo_util:kz_find_account_by_number(z_context:get_q("name", Context), Context);
+        _ ->
+            'undefined'
+    end,
+    case AccountId of
+        'undefined' ->
+            Context1 = z_render:dialog_close(Context),
+            z_render:growl_error(?__("Nothing found", Context1), Context1); 
+        _ ->
+            Context1 = z_render:dialog_close(Context),
+            z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context1), Context1)
+    end;
+
 event({drag,_,_},Context) ->
     Context;
 
