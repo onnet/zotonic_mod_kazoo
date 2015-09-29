@@ -29,6 +29,6 @@
 
                 {% else %}-{% endif %}
             </td>
-            <td style="text-align: center;"><i id="info_{{ call["timestamp"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i></td>
-            {% wire id="info_"++call["timestamp"] action={ dialog_open title=_"Call details" template="_details.tpl" arg=call } %}
+            <td style="text-align: center;"><i id="{{ #this_call_info }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i></td>
+            {% wire id=#this_call_info action={ dialog_open title=_"Call details" template="_details.tpl" arg=call } %}
         </tr>
