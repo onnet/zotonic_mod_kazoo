@@ -18,7 +18,7 @@
 </select>
 
 <i class="fa fa-user hidden-md pl-05"></i>
-<select id="cccp_pin_user_id" name="user_id" data-width="8em" data-live-search="true">
+<select id="cccp_pin_user_id" name="user_id" data-width="12em" data-live-search="true">
 {% for user in m.kazoo.kz_list_account_users %}
   <option value="{{ user["id"] }}">{{ user["username"] }}</option>
 {% endfor %}
