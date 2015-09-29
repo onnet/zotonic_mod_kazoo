@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for call in m.kazoo.kz_list_account_cdr %}
+        {% for call in m.kazoo[{kz_list_account_cdr_page page_size=50}] %}
             {% include "admin_cdr_table_line.tpl" %}
         {% endfor %}
     </tbody>
