@@ -6,23 +6,23 @@
             <td style="text-align: center;">
                 {% if call["recording_url"] and (call["billing_seconds"] > 3) %}
 
-                         <audio id="audio_{{ call["timestamp"] }}" preload="none">
+                         <audio id="audio_{{ #this_call }}" preload="none">
                              <source src="{{ m.kazoo[{kz_recording_download_link cdr_id=call["id"]}] }}" type="audio/mp3">
                          </audio>
-                         <a id="play_{{ call["timestamp"] }}" onclick='$("#audio_{{ call["timestamp"] }}").trigger("play");
-                                                                 $("#play_{{ call["timestamp"] }}").toggle();
-                                                                 $("#pause_{{ call["timestamp"] }}").toggle();'>
+                         <a id="play_{{ #this_call }}" onclick='$("#audio_{{ #this_call }}").trigger("play");
+                                                                 $("#play_{{ #this_call }}").toggle();
+                                                                 $("#pause_{{ #this_call }}").toggle();'>
                             <i style="cursor: pointer;" class="fa fa-play" title="{_ Play _}"></i>
                          </a>
-                         <a id="pause_{{ call["timestamp"] }}" style="display: none;" onclick='$("#audio_{{ call["timestamp"] }}").trigger("pause");
-                                                                                         $("#play_{{ call["timestamp"] }}").toggle();
-                                                                                         $("#pause_{{ call["timestamp"] }}").toggle();'>
+                         <a id="pause_{{ #this_call }}" style="display: none;" onclick='$("#audio_{{ #this_call }}").trigger("pause");
+                                                                                         $("#play_{{ #this_call }}").toggle();
+                                                                                         $("#pause_{{ #this_call }}").toggle();'>
                             <i style="cursor: pointer;" class="fa fa-pause" title="{_ Pause _}"></i>
                          </a>
-                         <a  style="cursor: pointer;" id="stop_{{ call["timestamp"] }}" onclick='$("#audio_{{ call["timestamp"] }}").trigger("pause");
-                                                                          $("#audio_{{ call["timestamp"] }}").prop("currentTime",0);
-                                                                          $("#play_{{ call["timestamp"] }}").show();
-                                                                          $("#pause_{{ call["timestamp"] }}").hide();'>
+                         <a  style="cursor: pointer;" id="stop_{{ #this_call }}" onclick='$("#audio_{{ #this_call }}").trigger("pause");
+                                                                          $("#audio_{{ #this_call }}").prop("currentTime",0);
+                                                                          $("#play_{{ #this_call }}").show();
+                                                                          $("#pause_{{ #this_call }}").hide();'>
                             <i class="fa fa-stop" title="{_ Stop _}"></i>
                          </a>
 
