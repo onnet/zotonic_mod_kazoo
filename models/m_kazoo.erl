@@ -148,6 +148,9 @@ m_find_value(current_account_credit, _M, Context) ->
 m_find_value({kz_check_device_registration, [{device_id, DeviceId}]}, _M, Context) ->
     kazoo_util:kz_check_device_registration(DeviceId, Context);
 
+m_find_value({kz_registration_details_by_username, [{username, Username}]}, _M, Context) ->
+    kazoo_util:kz_registration_details_by_username(Username, Context);
+
 m_find_value({kz_get_device_registration_details, [{device_id, DeviceId}]}, _M, Context) ->
     kazoo_util:kz_get_device_registration_details(DeviceId, Context);
 
@@ -266,8 +269,18 @@ m_find_value(kz_cccp_creds_list, _M, Context) ->
 m_find_value({kz_find_account_by_number, [{phone_number, Number}]}, _M, Context) ->
     kazoo_util:kz_find_account_by_number(Number, Context);
 
+m_find_value(get_account_registrations, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kazoo_util:kz_get_registrations_by_accountid(AccountId, Context);
+
 m_find_value({get_registrations_by_accountid, [{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_get_registrations_by_accountid(AccountId, Context);
+
+m_find_value(kz_list_account_trunks, _M, Context) ->
+    kazoo_util:list_account_trunks(Context);
+
+m_find_value({kz_get_account_trunk, [{trunk_id, TrunkId}]}, _M, Context) ->
+    kazoo_util:kz_trunk('get',TrunkId, Context);
 
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
