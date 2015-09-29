@@ -32,6 +32,12 @@
   <span id="admin_portal_conferences_list_tpl">
         {% include "admin_portal_conferences_list.tpl" headline=_"Conferences" %}
   </span>
+
+  {% wire action={connect signal={update_admin_portal_trunk_list_tpl}
+          action={update target="admin_portal_trunk_list_tpl" template="admin_portal_trunk_list.tpl" headline=_"Trunkstore"}} %}
+  <span id="admin_portal_trunk_list_tpl">
+        {% include "admin_portal_trunk_list.tpl" headline=_"Trunkstore" %}
+  </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_admin_portal_devices_list_tpl} action={update target="admin_portal_devices_list_tpl" template="admin_portal_devices_list.tpl" headline=_"Account's Devices"}} %}

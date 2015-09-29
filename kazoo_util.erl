@@ -168,6 +168,10 @@
     ,del_cccp_doc/2
     ,kz_find_account_by_number/2
     ,kz_get_registrations_by_accountid/2
+    ,list_account_trunks/1
+    ,kz_trunk/1
+    ,kz_trunk/3
+    ,kz_registration_details_by_username/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -812,9 +816,12 @@ kz_get_registrations_by_accountid(AccountId, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_device_registration_details(DeviceId, Context) ->
+    Username = modkazoo_util:get_value([<<"sip">>, <<"username">>], kz_get_device_doc(DeviceId, Context)),
+    kz_registration_details_by_username(Username, Context).
+
+kz_registration_details_by_username(Username, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     Registrations = kz_get_registrations_by_accountid(AccountId, Context),
-    Username = modkazoo_util:get_value([<<"sip">>, <<"username">>], kz_get_device_doc(DeviceId, Context)),
     get_reg_details(Username, Registrations).
 
 get_reg_details(_, []) -> <<"">>;
@@ -2321,4 +2328,40 @@ kz_find_account_by_number(Number, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
     lager:info("My API_String: ~p", [API_String]),
     modkazoo_util:get_value(<<"account_id">>, crossbar_account_request('get', API_String, [], Context)).
+
+list_account_trunks(Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONNECTIVITY/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_trunk(Context) ->
+    Id = z_context:get_q("conference_id",Context),
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    Props = [{<<"name">>, z_convert:to_binary(z_context:get_q("name", Context))}
+            ,{<<"member">>, {[{<<"numbers">>, lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),","))}
+                            ,{<<"pins">>, lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),","))}
+                            ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
+                            ,{<<"join_deaf">>, modkazoo_util:on_to_true(z_context:get_q("join_deaf", Context))}]}}
+            ,{<<"owner_id">>, z_convert:to_binary(z_context:get_q("owner_id", Context))}
+            ,{<<"play_name">>, modkazoo_util:on_to_true(z_context:get_q("play_name", Context))}
+            ,{<<"moderator">>, {[{<<"numbers">>, []}
+                            ,{<<"pins">>, []}
+                            ,{<<"join_muted">>, 'false'}
+                            ,{<<"join_deaf">>, 'false'}]}}
+            ,{<<"conference_numbers">>, []}
+            ,{<<"id">>, z_convert:to_binary(Id)}],
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
+    case Id of
+        'undefined'->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary>>,
+            crossbar_account_request('put', API_String, DataBag, Context);
+        _ ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            crossbar_account_request('post', API_String, DataBag, Context)
+    end.
+
+kz_trunk(Verb, TrunkId, Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
+    crossbar_account_request(Verb, API_String, [], Context).
 
