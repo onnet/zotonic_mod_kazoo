@@ -738,7 +738,7 @@ kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"?">>/binary,
                    ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %                  ?START_KEY/binary, (z_convert:to_binary(StartKey))/binary, <<"&">>/binary, ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
-    lager:info("kz_list_account_cdr_page API_String: ~p",[API_String]),                  
+ %  Docs to implement pagination: https://github.com/2600hz/kazoo/blob/master/applications/crossbar/doc/basics.md#pagination                 
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_cdr(CreatedFrom, CreatedTo, Context) ->
