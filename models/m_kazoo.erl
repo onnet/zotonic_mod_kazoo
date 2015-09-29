@@ -134,10 +134,10 @@ m_find_value({kz_incoming_fax_download_link, [{doc_id, DocId}]}, _M, Context) ->
     kazoo_util:kz_incoming_fax_download_link(DocId, Context);
 
 m_find_value(kz_list_account_cdr, _M, Context) ->
-    kazoo_util:kz_list_account_cdr(modkazoo_util:week_ago_tstamp(), modkazoo_util:current_tstamp(), Context);
+    kazoo_util:kz_list_account_cdr(modkazoo_util:day_ago_tstamp(), modkazoo_util:current_tstamp(), Context);
 
 m_find_value(kz_list_user_cdr, _M, Context) ->
-    kazoo_util:kz_list_user_cdr(modkazoo_util:week_ago_tstamp(), modkazoo_util:current_tstamp(), Context);
+    kazoo_util:kz_list_user_cdr(modkazoo_util:day_ago_tstamp(), modkazoo_util:current_tstamp(), Context);
 
 m_find_value(current_account_credit, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(Context));

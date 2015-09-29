@@ -69,17 +69,20 @@
   socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
   socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
   socket.on("CHANNEL_CREATE", function (data) {
-    if ( data["Other-Leg-Call-ID"] ) {
+    if ( data["Other-Leg-Call-ID"] && data["Call-ID"] && data["Other-Leg-Caller-ID-Number"] && data["Caller-ID-Number"] && data["Caller-ID-Number"] != "context_2" && data["Callee-ID-Number"] != "context_2" ) {
         $(".dataTables_empty").remove();
         console.log(data["Call-ID"].toString());
         row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
-        oTable.api().row.add([row_id, 
+        console.log("Attempt to add row_id: "+row_id);
+        if ($("#"+row_id).length == 0) {
+            oTable.api().row.add([row_id, 
                               data["Other-Leg-Caller-ID-Number"], 
                               data["Other-Leg-Caller-ID-Number"], 
                               data["Caller-ID-Number"], 
                               data["Callee-ID-Number"], 
                               '<i class="dark-1 icon-telicon-failover"><i>', 
                               '<i class="dark-1 icon-telicon-hangup"><i>' ]).draw();
+        }
     }
     console.log(data); // data = EventJObj
   });
