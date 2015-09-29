@@ -13,12 +13,14 @@
     <tbody>
         {% for trunk in m.kazoo.kz_list_account_trunks %}
         {% with m.kazoo[{kz_get_account_trunk trunk_id=trunk}] as trunk_details %}
+        {% with m.kazoo[{kz_registration_details_by_username username=trunk_details[1]["servers"][1][1]["auth"][1]["auth_user"]}] as reg_details %}
 	<tr>
             <td style="text-align: center1;">{{ trunk_details[1]["servers"][1][1]["server_name"] }}</td>
             <td style="text-align: center;">{{ trunk_details[1]["servers"][1][1]["auth"][1]["auth_method"] }}</td>
             <td style="text-align: center;">
-              {% if trunk_details[1]["play_name"] %}
-                <i class="fa fa-check zprimary" title="Enabled">
+              {% if reg_details %}
+                {% wire id="info_"++trunk action={ dialog_open title=_"Registration details" template="_details.tpl" arg=reg_details } %}
+                <i id="info_{{ trunk }}" class="fa fa-info-circle zprimary pointer" title="Enabled">
               {% else %}
                 <i class="fa fa-remove zalarm" title="Disabled">
               {% endif %}
@@ -40,15 +42,11 @@
             %}
         </tr>
 {% print trunk_details %}
-{% print trunk_details[1]["servers"][1][1]["auth"][1]["auth_user"] %}
-{% print m.kazoo.get_account_registrations %}
-{% print m.kazoo[{kz_registration_details_by_username username=trunk_details[1]["servers"][1][1]["auth"][1]["auth_user"]}] %}
+        {% endwith %}
         {% endwith %}
         {% endfor %}
     </tbody>
 </table>
-
-{% print m.kazoo.kz_list_account_trunks %}
 
 {% javascript %}
 var oTable = $('#admin_portal_trunk_table').dataTable({
