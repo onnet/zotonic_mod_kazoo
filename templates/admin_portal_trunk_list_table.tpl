@@ -12,15 +12,15 @@
     </thead>
     <tbody>
         {% for trunk in m.kazoo.kz_list_account_trunks %}
-        {% with m.kazoo[{kz_get_account_trunk trunk_id=trunk}] as trunk_details %}
-        {% with m.kazoo[{kz_registration_details_by_username username=trunk_details[1]["servers"][1][1]["auth"][1]["auth_user"]}] as reg_details %}
+        {% for server_details in m.kazoo[{kz_get_account_trunk trunk_id=trunk}][1]["servers"] %}
+        {% with m.kazoo[{kz_registration_details_by_username username=server_details["auth"][1]["auth_user"]}] as reg_details %}
 	<tr>
-            <td style="text-align: center1;">{{ trunk_details[1]["servers"][1][1]["server_name"] }}</td>
-            <td style="text-align: center;">{{ trunk_details[1]["servers"][1][1]["auth"][1]["auth_method"] }}</td>
+            <td style="text-align: center1;">{{ server_details["server_name"] }}</td>
+            <td style="text-align: center;">{{ server_details["auth"][1]["auth_method"] }}</td>
             <td style="text-align: center;">
               {% if reg_details %}
-                {% wire id="info_"++trunk action={ dialog_open title=_"Registration details" template="_details.tpl" arg=reg_details } %}
-                <i id="info_{{ trunk }}" class="fa fa-info-circle zprimary pointer" title="Enabled">
+                {% wire id="info_"++forloop.counter action={ dialog_open title=_"Registration details" template="_details.tpl" arg=reg_details } %}
+                <i id="info_{{ forloop.counter }}" class="fa fa-info-circle zprimary pointer" title="Enabled">
               {% else %}
                 <i class="fa fa-remove zalarm" title="Disabled">
               {% endif %}
@@ -32,18 +32,20 @@
                 <i class="fa fa-remove zalarm" title="Disabled">
               {% endif %}
             </td>
-            <td style="text-align: center;"><i id="edit_{{ trunk["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++trunk["id"] action={ dialog_open title=_"Edit trunk "++trunk_details[1]["servers"][1][1]["server_name"] template="_edit_trunk_lazy.tpl" trunk_id=trunk } %}
-            <td style="text-align: center;"><i id="delete_{{ trunk }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
-            {% wire id="delete_"++trunk
-                    action={confirm text=_"Do you really want to delete trunk "++trunk_details[1]["servers"][1][1]["server_name"]++"?"
+            <td style="text-align: center;"><i id="edit_{{ forloop.counter }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
+            {% wire id="edit_"++forloop.counter action={ dialog_open title=_"Edit trunk "++server_details["server_name"] template="_edit_trunk_lazy.tpl" trunk_id=trunk } %}
+            <td style="text-align: center;"><i id="delete_{{ forloop.counter }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
+            {% wire id="delete_"++forloop.counter
+                    action={confirm text=_"Do you really want to delete trunk "++server_details["server_name"]++"?"
                                 action={postback postback={delete_trunk trunk_id=trunk} delegate="mod_kazoo"}
                            }
             %}
         </tr>
-{% print trunk_details %}
+{% print server_details %}
+{% print server_details %}
         {% endwith %}
-        {% endwith %}
+        {% endfor %}
+{% print m.kazoo[{kz_get_account_trunk trunk_id=trunk}] %}
         {% endfor %}
     </tbody>
 </table>
