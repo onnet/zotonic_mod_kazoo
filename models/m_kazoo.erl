@@ -280,7 +280,7 @@ m_find_value(kz_list_account_trunks, _M, Context) ->
     kazoo_util:list_account_trunks(Context);
 
 m_find_value({kz_get_account_trunk, [{trunk_id, TrunkId}]}, _M, Context) ->
-    kazoo_util:kz_trunk('get',TrunkId, Context);
+    kazoo_util:kz_trunk('get', TrunkId, [], Context);
 
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),

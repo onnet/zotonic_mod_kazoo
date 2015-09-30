@@ -169,9 +169,9 @@
     ,kz_find_account_by_number/2
     ,kz_get_registrations_by_accountid/2
     ,list_account_trunks/1
-    ,kz_trunk/1
-    ,kz_trunk/3
     ,kz_registration_details_by_username/2
+    ,kz_trunk/4
+    ,kz_trunk_server/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2334,34 +2334,64 @@ list_account_trunks(Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONNECTIVITY/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_trunk(Context) ->
-    Id = z_context:get_q("conference_id",Context),
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    Props = [{<<"name">>, z_convert:to_binary(z_context:get_q("name", Context))}
-            ,{<<"member">>, {[{<<"numbers">>, lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),","))}
-                            ,{<<"pins">>, lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),","))}
-                            ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
-                            ,{<<"join_deaf">>, modkazoo_util:on_to_true(z_context:get_q("join_deaf", Context))}]}}
-            ,{<<"owner_id">>, z_convert:to_binary(z_context:get_q("owner_id", Context))}
-            ,{<<"play_name">>, modkazoo_util:on_to_true(z_context:get_q("play_name", Context))}
-            ,{<<"moderator">>, {[{<<"numbers">>, []}
-                            ,{<<"pins">>, []}
-                            ,{<<"join_muted">>, 'false'}
-                            ,{<<"join_deaf">>, 'false'}]}}
-            ,{<<"conference_numbers">>, []}
-            ,{<<"id">>, z_convert:to_binary(Id)}],
-    DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
-    case Id of
-        'undefined'->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary>>,
-            crossbar_account_request('put', API_String, DataBag, Context);
-        _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
-            crossbar_account_request('post', API_String, DataBag, Context)
+kz_trunk_server(Context) ->
+    TrunkId = case z_context:get_q("trunk_id",Context) of
+             'undefined' ->
+                 case list_account_trunks(Context) of
+                     'undefined' ->
+                         DataBag = {[{<<"account">>,
+                                          {[{<<"credits">>,{[{<<"prepay">>,<<"0.00">>}]}},
+                                            {<<"trunks">>,<<"0">>},
+                                            {<<"inbound_trunks">>,<<"0">>},
+                                            {<<"auth_realm">>,<<"office.sip3.onnet.su">>}]},
+                                     {<<"servers">>,[]}
+                                   }]},
+                         _ = kz_trunk('put', <<>>, DataBag, Context),
+                         [CreatedTrunkId|_] = list_account_trunks(Context),
+                         CreatedTrunkId;
+                     ExistingTrunkId -> ExistingTrunkId
+                 end;
+             ContextId -> ContextId
+         end,
+    CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
+    Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
+    NewServers = case z_context:get_q("server_index",Context) of
+        'undefined' -> Servers ++ [update_trunk_server(?EMPTY_JSON_OBJECT, Context)];
+        Ind ->
+            Index = z_convert:to_integer(Ind),
+            lists:sublist(Servers, Index-1) ++ update_trunk_server(lists:nth(Index, Servers), Context) ++ lists:nthtail(Index, Servers)
+    end,
+    NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers,CurrTrunkDoc),
+lager:info("Servers: ~p",[Servers]),
+lager:info("NewServers: ~p",[NewServers]),
+lager:info("NewTrunkDoc: ~p",[NewTrunkDoc]),
+    kz_trunk('post', TrunkId, NewTrunkDoc, Context).
+
+kz_trunk(Verb, TrunkId, DataBag, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    case Verb of
+        'get' ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
+            crossbar_account_request(Verb, API_String, [], Context);
+        'put' -> 
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary>>,
+            crossbar_account_request(Verb, API_String, DataBag, Context);
+        'post' ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
+            crossbar_account_request(Verb, API_String, DataBag, Context);
+        _ -> 'ok'
     end.
 
-kz_trunk(Verb, TrunkId, Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
-    crossbar_account_request(Verb, API_String, [], Context).
-
+update_trunk_server(Server, Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"options">>,<<"enabled">>], 'true', J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"inbound_format">>], <<"e164">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"international">>], 'false', J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"caller_id">>], {[]}, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"e911_info">>], {[]}, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"failover">>], {[]}, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"media_handling">>], <<"bypass">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"permissions">>], {[{<<"users">>,[]}]}, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"monitor">>], {[{<<"monitor_enabled">>,false}]}, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"server_name">>], z_convert:to_binary(z_context:get_q("server_name",Context)), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"server_type">>], <<"FreePBX">>, J) end],
+    lists:foldl(fun(F, J) -> F(J) end, Server, Routines).

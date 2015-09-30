@@ -1,19 +1,19 @@
 {% with m.kazoo[{kz_get_account_trunk trunk_id=trunk_id}] as trunk %}
-{% wire id="form_kz_trunk" type="submit" postback="kz_trunk" delegate="mod_kazoo" %}
+{% wire id="form_kz_trunk" type="submit" postback="kz_trunk_server" delegate="mod_kazoo" %}
 <form id="form_kz_trunk" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Trunk name _}
-            <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="{_ Enter trunk name here _}" value="{{ trunk[1]["name"] }}">
+            <input type="text" class="form-control margin-bottom-xs" id="server_name" name="server_name" placeholder="{_ Enter trunk name here _}" value="{{ trunk[1]["name"] }}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Invite format _}
-          <select id="invite_format" name="owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
+            <select id="invite_format" name="invite_format" class="form-control margin-bottom-xs" style="text-align:center;">
               <option value="e164" {% if trunk == option[1] or (not option[1] and  trunk[1]["owner_id"]) %}selected{% endif %}>E.164@Realm</option>
               <option value="username" {% if trunk == option[1] or (not option[1] and trunk[1]["owner_id"]) %}selected{% endif %}>SIP_Username@Realm</option>
-          </select>
+            </select>
           </label>
         </div>
       </div>
@@ -34,8 +34,11 @@
         </span>
       </div>
     </div>
-    {% if trunk[1]["id"] %}
-      <input type="hidden" name="trunk_id" value="{{ trunk[1]["id"] }}">
+    {% if trunk_id %}
+      <input type="hidden" name="trunk_id" value="{{ trunk_id }}">
+    {% endif %}
+    {% if server_index %}
+      <input type="hidden" name="server_index" value="{{ server_index }}">
     {% endif %}
 </form>
 <div class="form-group">
@@ -45,7 +48,7 @@
     </div>
   </div>
 </div>
-{% wire id="button_cf_time_of_the_day" action={submit target="form_kz_trunk"} %}
+{% wire id="button_add_trunk_save" action={submit target="form_kz_trunk"} %}
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">

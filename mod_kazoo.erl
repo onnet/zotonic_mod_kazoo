@@ -932,6 +932,11 @@ event({submit,rs_account_lookup,_,_},Context) ->
             z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context1), Context1)
     end;
 
+event({submit,kz_trunk_server,_,_},Context) ->
+    _ = kazoo_util:kz_trunk_server(Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 
