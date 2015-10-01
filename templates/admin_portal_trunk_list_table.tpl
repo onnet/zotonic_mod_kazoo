@@ -45,7 +45,6 @@
 {% print server_details %}
         {% endwith %}
         {% endfor %}
-{% print m.kazoo[{kz_get_account_trunk trunk_id=trunk}] %}
         {% endfor %}
     </tbody>
 </table>

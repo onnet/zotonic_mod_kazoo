@@ -172,7 +172,9 @@
     ,kz_registration_details_by_username/2
     ,kz_trunk/4
     ,kz_trunk_server/1
+    ,kz_trunk_server_details/3
     ,kz_trunk_server_delete/3
+    ,kz_trunk_server_numbers/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2380,12 +2382,35 @@ kz_trunk_server(Context) ->
     NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
     kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context).
 
+kz_trunk_server_details('undefined', _, _) ->
+    [];
+kz_trunk_server_details(_, 'undefined', _) ->
+    [];
+kz_trunk_server_details(TrunkId, Index, Context) ->
+    lists:nth(Index, modkazoo_util:get_value(<<"servers">>, kz_trunk('get', TrunkId, [], Context))).
+
 kz_trunk_server_delete(TrunkId, Index, Context) ->
     CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
     Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
     NewServers = lists:sublist(Servers, Index-1) ++ lists:nthtail(Index, Servers),
     NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
     kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context).
+
+kz_trunk_server_numbers(Context) ->
+    case z_context:get_q("trunk_id",Context) of
+        'undefined' -> ok;
+        TrunkId ->
+            TS_Numbers = case z_context:get_q_all("ts_number",Context) of
+                [] -> {[]};
+                NumbersList -> ?JSON_WRAPPER(lists:map(fun(Number) -> {z_convert:to_binary(Number), ?EMPTY_JSON_OBJECT} end, NumbersList))
+            end,
+            Index = z_convert:to_integer(z_context:get_q("server_index",Context)),
+            CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
+            Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
+            NewServers = lists:sublist(Servers, Index-1) ++ [modkazoo_util:set_value(<<"DIDs">>, TS_Numbers, lists:nth(Index, Servers))] ++ lists:nthtail(Index, Servers),
+            NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
+            kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context)
+    end.
 
 kz_trunk(Verb, TrunkId, DataBag, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -2404,6 +2429,7 @@ kz_trunk(Verb, TrunkId, DataBag, Context) ->
 
 update_trunk_server(Server, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"options">>,<<"enabled">>], 'true', J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"inbound_format">>], z_convert:to_binary(z_context:get_q("inbound_format",Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"auth">>,<<"auth_method">>], z_convert:to_binary(z_context:get_q("auth_method",Context)), J) end
                 ,fun(J) -> case z_context:get_q("auth_user",Context) of 'undefined' -> J; User -> modkazoo_util:set_value([<<"auth">>,<<"auth_user">>], z_convert:to_binary(User), J) end end
                 ,fun(J) -> case z_context:get_q("auth_password",Context) of 'undefined' -> J; Pwd -> modkazoo_util:set_value([<<"auth">>,<<"auth_password">>], z_convert:to_binary(Pwd), J) end end
@@ -2411,3 +2437,4 @@ update_trunk_server(Server, Context) ->
                 ,fun(J) -> case z_context:get_q("ipaddress",Context) of 'undefined' -> J; Ip -> modkazoo_util:set_value([<<"options">>,<<"ip">>], z_convert:to_binary(Ip), J) end end
                 ,fun(J) -> modkazoo_util:set_value([<<"server_name">>], z_convert:to_binary(z_context:get_q("server_name",Context)), J) end],
     lists:foldl(fun(F, J) -> F(J) end, Server, Routines).
+

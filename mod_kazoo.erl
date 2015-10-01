@@ -942,6 +942,10 @@ event({postback,{delete_trunk,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, C
     mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context),
     Context;
 
+event({submit,manage_trunk_numbers,_,_}, Context) ->
+    _ = kazoo_util:kz_trunk_server_numbers(Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 
