@@ -43,7 +43,6 @@
             %}
         </tr>
         {% endwith %}
-{% print server_details %}
         {% endfor %}
         {% endfor %}
     </tbody>
