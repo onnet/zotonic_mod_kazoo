@@ -28,7 +28,4 @@
     </div>
 </div>
 
-
-{# print m.kazoo.kz_list_user_devices #}
-
 {% endblock %}

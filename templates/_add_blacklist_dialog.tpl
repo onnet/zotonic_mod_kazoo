@@ -40,6 +40,5 @@
 {% if blacklist_id %}
   <input type="hidden" name="blacklist_id" value="{{ blacklist[1]["id"] }}">
 {% endif %}
-{# print blacklist #}
 </form>
 {% endwith %}

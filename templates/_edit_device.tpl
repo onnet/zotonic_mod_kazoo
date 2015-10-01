@@ -30,7 +30,6 @@
   </div>
   <div class="tab-pane fade" id="restrictions">
     {% include "admin_portal_device_restrictions.tpl" %}
-    {# print device_doc #}
   </div>
 </div>
 </div>

@@ -42,7 +42,6 @@
                            }
             %}
         </tr>
-{% print server_details %}
         {% endwith %}
         {% endfor %}
         {% endfor %}
