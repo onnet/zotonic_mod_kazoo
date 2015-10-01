@@ -22,8 +22,8 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Auth method _}
-            {% wire id="auth_type" type="change" action={ update target="auth_types" template="_add_trunk_dialog_auth_types.tpl" } %}
-            <select name="auth_type" id="auth_type" class="form-control margin-bottom-xs">
+            {% wire id="auth_method" type="change" action={ update target="auth_types" template="_add_trunk_dialog_auth_types.tpl" } %}
+            <select name="auth_method" id="auth_method" class="form-control margin-bottom-xs">
               <option id="Password" value="Password" {% if rule[1]["cycle"] == "weekly" or rule[1]["cycle"] %}selected{% endif %}>{_ Password _}</option>
               <option id="IP" value="IP" {% if rule[1]["cycle"] == "monthly" %}selected{% endif %}>{_ IP _}</option>
             </select>

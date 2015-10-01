@@ -7,12 +7,12 @@
 {% else %}
         <div class="col-sm-3">
           <label class="form-control-onnet margin-bottom-xs">{_ Username _}
-            <input type="text" class="form-control margin-bottom-xs" id="username" name="username" placeholder="{_  _}" value="{{ trunk[1]["name"] }}">
+            <input type="text" class="form-control margin-bottom-xs" id="auth_user" name="auth_user" placeholder="{_  _}" value="{{ trunk[1]["name"] }}">
           </label>
         </div>
         <div class="col-sm-3">
           <label class="form-control-onnet margin-bottom-xs">{_ Password _}
-            <input type="text" class="form-control margin-bottom-xs" id="password" name="password" placeholder="{_  _}" value="{{ trunk[1]["name"] }}">
+            <input type="text" class="form-control margin-bottom-xs" id="auth_password" name="auth_password" placeholder="{_  _}" value="{{ trunk[1]["name"] }}">
           </label>
         </div>
 {% endif %}
