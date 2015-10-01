@@ -26,7 +26,7 @@
               {% endif %}
             </td>
             <td style="text-align: center;">
-              {% if trunk_details[1]["servers"][1][1]["options"][1]["enabled"] %}
+              {% if server_details["options"][1]["enabled"] %}
                 <i class="fa fa-check zprimary" title="Enabled">
               {% else %}
                 <i class="fa fa-remove zalarm" title="Disabled">
@@ -43,6 +43,7 @@
             %}
         </tr>
         {% endwith %}
+{% print server_details %}
         {% endfor %}
         {% endfor %}
     </tbody>
