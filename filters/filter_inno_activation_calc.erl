@@ -5,4 +5,4 @@
 ]).
 
 inno_activation_calc(InitialCharge, _Context) ->
-    inno_util:count_activation_charge(InitialCharge).
+    modkazoo_util:count_activation_charge(InitialCharge).
