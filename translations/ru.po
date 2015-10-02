@@ -31,11 +31,14 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Processing number removal..."
+msgstr "Отключение номера..."
 
-msgid ""
-msgstr ""
+msgid "Do you really want to add this number?"
+msgstr "Вы действительно хотите добавить этот номер?"
+
+msgid "Do you really want to delete this number?"
+msgstr "Вы действительно хотите удалить этот номер?"
 
 msgid "Save settings"
 msgstr "Сохранить настройки"

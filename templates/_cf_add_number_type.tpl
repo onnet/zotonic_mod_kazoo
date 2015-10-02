@@ -6,7 +6,7 @@
     <select name="new_number" class="form-control margin-bottom-xs" style="text-align:center;">
     {% for number in m.kazoo.get_acc_numbers_info %}
       {% if not number[2][1]["used_by"] %}
-      <option value="{{ number[1] }}">{{ number[1] }}</option>
+        <option value="{{ number[1] }}">{{ number[1] }}</option>
       {% endif %}
     {% endfor %}
     </select>

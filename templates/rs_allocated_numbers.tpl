@@ -15,7 +15,7 @@
   </span>
   {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add number" id="addnumberbtn"
-                         action={confirm text=_"Do you really want to add this number? <br />"
+                         action={confirm text=_"Do you really want to add this number?"
                               action={postback postback={rs_add_number account_id=account_id} qarg="new_number_id" delegate="mod_kazoo"}
                               action={mask target="rs_numbers_list_table" message=_"Allocating number..."}
                          }

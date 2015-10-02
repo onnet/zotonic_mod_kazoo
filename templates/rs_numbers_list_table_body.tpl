@@ -15,7 +15,7 @@
              <td class="text-center">{% if number[2][1]["used_by"] %}{{ number[2][1]["used_by"] }}{% else %}spare{% endif %}</td>
              <td class="text-center">
                 {% wire id="delete_number_"++forloop.counter
-                  action={confirm text=_"Do you really want to delete this number? <br />"
+                  action={confirm text=_"Do you really want to delete this number?"++"<br />"
                           action={postback postback={deallocate_number number=number[1] account_id=account_id} delegate="mod_kazoo"}
                           action={mask target="number_line_"++forloop.counter message=_"Processing number removal..."}
                          }

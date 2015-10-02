@@ -1060,9 +1060,13 @@ lookup_numbers(AreaCode, Context) ->
     API_String = <<?V2/binary, ?PHONE_NUMBERS/binary, <<"?">>/binary, ?PREFIX/binary, AreaCode/binary, <<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-rs_add_number(Number, AccountId, Context) ->
-    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>,[],Context),
-    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?ACTIVATE/binary>>,[],Context).
+rs_add_number(Num, AccountId, Context) ->
+    Number = case z_convert:to_binary(Num) of 
+        <<$+, Number/binary>> -> Number;
+        Number -> Number
+    end,
+    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary>>,[],Context),
+    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary, ?ACTIVATE/binary>>,[],Context).
 
 purchase_number(Number, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

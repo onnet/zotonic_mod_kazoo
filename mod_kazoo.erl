@@ -328,7 +328,7 @@ event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,
             Context1 = z_render:update("rs_numbers_list_table" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
             z_render:growl_error(?__("Something wrong happened.", Context1), Context1);
         _ -> 
-            Context1 = z_render:update("rs_numbers_list_table" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
+            Context1 = z_render:update("rs_numbers_list_widget_opened" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
             z_render:growl(?__("Number ", Context1)++z_convert:to_list(Number)++?__(" successfully removed.", Context1), Context1)
     end;
 
