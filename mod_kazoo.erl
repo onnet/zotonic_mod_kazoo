@@ -887,11 +887,13 @@ event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
     z_render:wire({mask, [{target_id, "child_sandbox"}]}, Context);
 
 event({postback,{rs_account_mask,[{account_id,AccountId}]},_,_},Context) ->
+    z_context:set_session(kazoo_owner_id, z_convert:to_binary(z_context:get_q("triggervalue", Context)), Context),
     z_context:set_session(kazoo_account_id, z_convert:to_binary(AccountId), Context),
     modkazoo_auth:may_be_add_third_party_billing(Context),
     z_render:wire({redirect, [{dispatch, "admin_callflows"}]}, Context);
 
 event({postback,rs_account_demask,_,_},Context) ->
+    z_context:set_session(kazoo_owner_id, z_context:get_session(kazoo_reseller_owner_id, Context), Context),
     z_context:set_session(kazoo_account_id, z_context:get_session(kazoo_reseller_account_id, Context), Context),
     z_context:set_session('current_callflow','undefined',Context),
     z_context:set_session('account_realm','undefined',Context),

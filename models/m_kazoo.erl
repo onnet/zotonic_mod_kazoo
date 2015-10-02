@@ -76,6 +76,9 @@ m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}]}, _M,
 m_find_value(kz_list_account_users, _M, Context) ->
     kazoo_util:kz_list_account_users(Context);
 
+m_find_value({kz_list_account_users, [{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_list_account_users(AccountId, Context);
+
 m_find_value(kz_list_account_groups, _M, Context) ->
     kazoo_util:kz_list_account_groups(Context);
 

@@ -13,10 +13,10 @@
             </select>
         </div>
         <div id="number_input_div"class="col-sm-6">
-          Ring this device for
+          {_ Ring this device for _}
           <input type="text" name="timeout" id="parameter_input" maxlength="3" size="3" style="height: 34px; text-align: center;"
                  value="{% if element_data[1]["data"][1]["timeout"] %}{{ element_data[1]["data"][1]["timeout"] }}{% else %}20{% endif %}">
-          seconds.
+          {_ seconds _}.
         </div>
       </div>
     </div>

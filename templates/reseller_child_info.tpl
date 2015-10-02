@@ -1,8 +1,22 @@
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
-  {% wire id="rs_account_mask_btn" action={postback postback={rs_account_mask account_id=account_id} delegate="mod_kazoo"} %}
+
+
   <div class="col-xs-2 col-xs-offset-3">
-    <button id="rs_account_mask_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Mask _}</button>
+    {% wire id="user_mask_selector" type="change" action={postback postback={rs_account_mask account_id=account_id} delegate="mod_kazoo"} %}
+    <select id="user_mask_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" title="{_ Mask _}"  data-live-search="true">
+      <option value="userless_mask">{_ Without user _}</option>
+      {% for option in m.kazoo[{kz_list_account_users account_id=account_id}] %}
+          <option value="{{ option["id"] }}">{{ option["username"] }}</option>
+      {% endfor %}
+    </select>
   </div>
+  {% javascript %}
+    $('#user_mask_selector').selectpicker({
+      style: 'btn-zprimary',
+      size: 5
+    });
+  {% endjavascript %}
+
   {% wire id="cf_details_btn" action={ dialog_open title=_"Account details" template="_account_details.tpl" account_id=account_id class="iamclass" width="auto" } %}
   <div class="col-xs-2">
     <button id="cf_details_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Details _}</button>

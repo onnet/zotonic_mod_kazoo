@@ -20,6 +20,7 @@
     ,kz_create_default_callflow_sec/3
     ,update_kazoo_user/1
     ,kz_list_account_users/1
+    ,kz_list_account_users/2
     ,kz_list_account_devices/1
     ,kz_list_account_cdr/3
     ,kz_list_account_cdr_page/3
@@ -718,8 +719,11 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
     z_email:send(E_SignUp_Copy, Context).
 
 kz_list_account_users(Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_account_users(AccountId, Context).
+
+kz_list_account_users(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?USERS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_devices(Context) ->

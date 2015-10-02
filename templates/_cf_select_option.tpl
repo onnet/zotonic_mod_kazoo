@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6 text-center">
-            Choose menu option
+            {_ Choose menu option _}
         </div>
         <div class="col-sm-6">
             <select id="menu_key_selector" name="switch" class="form-control margin-bottom-xs" style="text-align:center;">

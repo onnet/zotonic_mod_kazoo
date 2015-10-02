@@ -9,7 +9,7 @@
             <select id="menu_key_selector" name="switch" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
               {% for key in available_keys %}
                   <option value="{{ key }}" {% if key == kz_element_id %}selected{% endif %}>
-                    {% if key=="_" %}Default action{% else %}{{ m.kazoo[{kz_get_temporal_rule rule_id=key}][1]["name"] }}{% endif %}
+                    {% if key=="_" %}{_ Default action _}{% else %}{{ m.kazoo[{kz_get_temporal_rule rule_id=key}][1]["name"] }}{% endif %}
                   </option>
               {% endfor %}
             </select>

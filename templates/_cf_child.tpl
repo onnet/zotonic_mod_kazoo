@@ -15,7 +15,7 @@
                 {% wire id=element_id++"_cf_park" action={postback postback={cf_park_element element_id=element_id} delegate="mod_kazoo"} %}
                 <div id="{{ element_id }}_cf_park" class="cf_park"></div>
                 <div class="module">
-                    {% wire id=element_id++"_div_icon" action={ dialog_open title=_"Select " template="_cf_select_"++tool_name++".tpl" element_id=element_id
+                    {% wire id=element_id++"_div_icon" action={ dialog_open title=_"Edit"++" " template="_cf_select_"++tool_name++".tpl" element_id=element_id
                                                                                                                                        tool_name=tool_name
                                                                                                                                        kz_element_id=kz_element_id
                                                                                                                                        kz_element_name=kz_element_name

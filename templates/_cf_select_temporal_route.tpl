@@ -26,6 +26,6 @@
                                   action={submit target="form_cf_select_temporal_route"}
 %}
 {% javascript %}
-    $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+    $('.modal-header h3').text("{_ Select timezone _}");
     $('#temporal_route_selector').selectpicker({size: 5});
 {% endjavascript %}

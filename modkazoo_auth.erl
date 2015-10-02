@@ -68,7 +68,9 @@ choose_page_to_redirect(Context) ->
 
 may_be_set_reseller_data(AccountDoc, Context) ->
     case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
-        'true' -> z_context:set_session(kazoo_reseller_account_id, z_context:get_session(kazoo_account_id, Context), Context);
+        'true' -> 
+            z_context:set_session(kazoo_reseller_owner_id, z_context:get_session(kazoo_owner_id, Context), Context),
+            z_context:set_session(kazoo_reseller_account_id, z_context:get_session(kazoo_account_id, Context), Context);
         'false' -> 'ok'
     end.
 

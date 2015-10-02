@@ -5,7 +5,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="groupname" name="name" value="{{ group_doc["name"] }}" placeholder="Enter group name here" data-toggle="popover" data-placement="left" data-trigger="focus" data-content="Enter group name here." data-original-title="GroupName">
+          <input type="text" class="form-control margin-bottom-xs" id="groupname" name="name" value="{{ group_doc["name"] }}" placeholder="{_ Enter group name here _}">
         </div>
       </div>
     </div>

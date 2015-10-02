@@ -13,7 +13,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-4">
-          <input type="text" class="form-control margin-bottom-xs" id="group_name" name="name" placeholder="Enter group name here"
+          <input type="text" class="form-control margin-bottom-xs" id="group_name" name="name" placeholder="{_ Enter group name here _}"
                                                                    value="{{ element_data[1]["data"][1]["name"] }}">
         </div>
         <div class="col-sm-4">
@@ -53,7 +53,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-4">
-          <h4 class="text-center">Groups:</h4>
+          <h4 class="text-center">{_ Groups _}:</h4>
           {% wire id="group_selector" type="change" action={ postback postback={cf_ring_group_select element_type="group"}  delegate="mod_kazoo"}
                                                      action={script script="$('#group_selector').get(0).selectedIndex = 0;"}
           %}
@@ -71,7 +71,7 @@
           </select>
         </div>
         <div class="col-sm-4">
-          <h4 class="text-center">Users:</h4>
+          <h4 class="text-center">{_ Users _}:</h4>
           {% wire id="user_selector" type="change" action={ postback postback={cf_ring_group_select element_type="user"}  delegate="mod_kazoo"}
                                                      action={script script="$('#user_selector').get(0).selectedIndex = 0;"}
           %}
@@ -91,7 +91,7 @@
           </select>
         </div>
         <div class="col-sm-4">
-          <h4 class="text-center">Devices:</h4>
+          <h4 class="text-center">{_ Devices _}:</h4>
           {% wire id="device_selector" type="change" action={ postback postback={cf_ring_group_select element_type="device"}  delegate="mod_kazoo"}
                                                      action={script script="$('#device_selector').get(0).selectedIndex = 0;"}
           %}
@@ -119,7 +119,7 @@
                                             action={script script="$('#"++element_id++"_details').text(($('#group_name').val()))"}
                                             action={submit target="form_cf_select_ring_group"}
           %}
-          <button id="cf_select_ring_group" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Commit Ring Group</button>
+          <button id="cf_select_ring_group" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="group_name" name="name" placeholder="Enter group name here"
+          <input type="text" class="form-control margin-bottom-xs" id="group_name" name="name" placeholder="{_ Enter group name here _}"
                                                                    value="{{ element_data[1]["data"][1]["name"] }}">
         </div>
         <div class="col-sm-6">
@@ -104,7 +104,7 @@
                                             action={script script="$('#"++element_id++"_details').text(($('#group_name').val()))"}
                                             action={submit target="form_cf_select_page_group"}
           %}
-          <button id="cf_select_page_group" class="col-xs-12 btn btn-zprimary margin-bottom-xs">Commit Ring Group</button>
+          <button id="cf_select_page_group" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
         </div>
       </div>
     </div>

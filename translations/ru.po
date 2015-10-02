@@ -31,6 +31,51 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Without user"
+msgstr "Без пользователя"
+
+msgid "Default music"
+msgstr "Музыка по умолчанию"
+
+msgid "Select timezone"
+msgstr "Выберите часовой пояс"
+
+msgid "Ring this device for"
+msgstr "Звонить на это устройство"
+
+msgid "seconds"
+msgstr "секунд"
+
+msgid "Add new Callflow"
+msgstr "Добавить маршрут"
+
+msgid "Pattern"
+msgstr "Шаблон"
+
+msgid "Extension"
+msgstr "Внутренний номер"
+
+msgid "Spare numbers"
+msgstr "Свободные номера"
+
+msgid "Select voice prompt"
+msgstr "Выберите запись"
+
+msgid "Default ringback"
+msgstr "Обычный гудок"
+
+msgid "In order"
+msgstr "Последовательно"
+
+msgid "At the same time"
+msgstr "Одновременно"
+
 msgid "Processing number removal..."
 msgstr "Отключение номера..."
 
