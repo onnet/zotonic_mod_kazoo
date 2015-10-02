@@ -25,6 +25,54 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Save settings"
+msgstr "Сохранить настройки"
+
+msgid "Select number to add"
+msgstr "Добавить номер"
+
+msgid "Select to add"
+msgstr "Добавить"
+
+msgid "Save numbers list"
+msgstr "Сохранить список номеров"
+
+msgid "Manage trunk numbers"
+msgstr "Управление номерами"
+
+msgid "Auth method"
+msgstr "Метод авторизации"
+
+msgid "Invite format"
+msgstr "Формат вызова"
+
+msgid "Trunk name"
+msgstr "Название АТС"
+
+msgid "add trunk"
+msgstr "добавить АТС"
+
+msgid "Add trunk"
+msgstr "Добавить АТС"
+
+msgid "Edit trunk"
+msgstr "Редактировать АТС"
+
+msgid "Trunkstore"
+msgstr "Внешние АТС"
+
 msgid "Do you really want to delete this Pin?"
 msgstr "Вы действительно хотите удалить этот пин-код?"
 

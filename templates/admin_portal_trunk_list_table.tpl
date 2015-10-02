@@ -33,7 +33,7 @@
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_{{ forloop.counter }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++forloop.counter action={ dialog_open title=_"Edit trunk "++server_details["server_name"] template="_edit_trunk_lazy.tpl"
+            {% wire id="edit_"++forloop.counter action={ dialog_open title=_"Edit trunk"++" "++server_details["server_name"] template="_edit_trunk_lazy.tpl"
                                                                      trunk_id=trunk server_index=forloop.counter width="auto"} %}
             <td style="text-align: center;"><i id="delete_{{ forloop.counter }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++forloop.counter

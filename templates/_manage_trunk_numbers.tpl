@@ -9,7 +9,7 @@
                                                            action={script script="$('#spare_number_selector').get(0).selectedIndex = 0;"}
           %}
           <select id="spare_number_selector" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
-            <option style="text-align:center;">{_ -- Select number to add -- _}</option>
+            <option style="text-align:center;"> -- {_ Select number to add _} -- </option>
             {% for spare_number in m.kazoo.get_acc_numbers_info %}
               <option id="option_{{ spare_number|element:1|cleanout }}" name="spare_number" value="{{ spare_number|element:1 }}"
                                            {% if spare_number[2][1]["used_by"] %}style="display:none;"{% else %}style="text-align:center;"{% endif %}>

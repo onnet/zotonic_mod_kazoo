@@ -55,7 +55,7 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">
-      <button id="button_add_trunk_save" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save trunk _}</button>
+      <button id="button_add_trunk_save" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save settings _}</button>
     </div>
   </div>
 </div>
