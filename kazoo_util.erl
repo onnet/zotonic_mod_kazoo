@@ -38,6 +38,7 @@
     ,set_vm_message_folder/4
     ,password_recovery/3
     ,current_account_credit/1
+    ,current_account_credit/2
     ,kz_check_device_registration/2
     ,kz_recording_download_link/2
     ,kz_get_device_registration_details/2
@@ -823,8 +824,11 @@ password_recovery(Username, AccountName, Context) ->
     crossbar_noauth_request('put', API_String, DataBag, Context). 
 
 current_account_credit(Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?BRAINTREE/binary, ?CREDITS/binary>>, 
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    current_account_credit(AccountId, Context).
+
+current_account_credit(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?CREDITS/binary>>, 
     crossbar_account_request('get', API_String, [], Context).
 
 kz_check_device_registration(DeviceId, Context) ->

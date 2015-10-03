@@ -148,6 +148,9 @@ m_find_value(kz_list_user_cdr, _M, Context) ->
 m_find_value(current_account_credit, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(Context));
 
+m_find_value({current_account_credit, [{account_id, AccountId}]}, _M, Context) ->
+    modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
+
 m_find_value({kz_check_device_registration, [{device_id, DeviceId}]}, _M, Context) ->
     kazoo_util:kz_check_device_registration(DeviceId, Context);
 
