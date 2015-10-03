@@ -2,7 +2,12 @@
   <div class="pull-right">
   <p>
     {_ Logged in as _}
-    <span style="color:{{ m.config.mod_kazoo.color2.value }};">{{ m.session.kazoo_login_name }}@{{ m.session.kazoo_account_name }}</span>
+    <span style="color:{{ m.config.mod_kazoo.color2.value }};">
+      {{ m.kazoo[{kz_doc_field type="user" doc_id=m.session.kazoo_owner_id field="first_name"}] }}
+      {{ m.kazoo[{kz_doc_field type="user" doc_id=m.session.kazoo_owner_id field="last_name"}] }}
+      at
+      {{ m.kazoo[{kz_doc_field type="account" doc_id=m.session.kazoo_account_id field="name"}] }}
+    </span>
   </p>
   </div>
   <h2>{{ title }}</h2>
