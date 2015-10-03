@@ -1066,8 +1066,8 @@ lookup_numbers(AreaCode, Context) ->
 
 rs_add_number(Num, AccountId, Context) ->
     Number = case z_convert:to_binary(Num) of 
-        <<$+, Number/binary>> -> Number;
-        Number -> Number
+        <<$+, BNum/binary>> -> BNum;
+        BNum -> BNum
     end,
     _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary>>,[],Context),
     _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary, ?ACTIVATE/binary>>,[],Context).
