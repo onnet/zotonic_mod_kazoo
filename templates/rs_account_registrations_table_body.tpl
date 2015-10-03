@@ -12,7 +12,7 @@
           <tr>
              <td class="text-center">{{ device["username"] }}</td>
              <td class="text-center">{{ device["user_agent"] }}</td>
-             <td class="text-center">{{ device["contact_ip"] }}</td>
+             <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
              <td style="text-align: center;">
                     <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
                     {% wire id="info_"++device["username"] action={ dialog_open title=_"Registration details" template="_details.tpl" arg=device } %}
