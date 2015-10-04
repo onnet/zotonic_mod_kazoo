@@ -4,9 +4,9 @@
 <div class="row" style="padding: 1em;">
   <div class="col-xs-2">
     {% wire id="callflow_manager_selector" type="change" action={ postback postback={cf_load}  delegate="mod_kazoo"} %}
-    <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;" data-live-search="true">
+    <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker"
+                                           style="text-align:center;display: none;" title="-- {_ Select to edit _} --" data-live-search="true">
       {% if not m.session.current_callflow %}
-      <option value="">-- {_ Select to edit _} --</option>
       {% endif %}
       <option value="new">-- {_ Add new Callflow _} --</option>
       {% for option in m.kazoo.kz_list_account_callflows %}

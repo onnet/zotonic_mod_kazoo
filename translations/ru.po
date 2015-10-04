@@ -31,11 +31,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Select to edit"
+msgstr "Редактировать"
 
-msgid ""
-msgstr ""
+msgid "Select account to edit"
+msgstr "Выбрать учетную запись"
 
 msgid "Without user"
 msgstr "Без пользователя"
