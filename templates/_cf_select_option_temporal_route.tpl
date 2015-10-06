@@ -19,7 +19,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          {% wire id="button_cf_select_time_of_the_day_create" action={dialog_open title=_"Add Time of Day rule" template="_add_time_of_the_day_dialog.tpl"} %}
+          {% wire id="button_cf_select_time_of_the_day_create" action={dialog_open title=_"Add Time of Day rule" template="_add_time_of_the_day_dialog.tpl" width="auto"} %}
           <button id="button_cf_select_time_of_the_day_create" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add Time of Day rule _}</button>
         </div>
         {% wire name="refresh_edit_time_of_the_day_btn_cf_time_of_the_day" action={ update target="edit_time_of_the_day_btn_cf_time_of_the_day" template="_cf_edit_time_of_the_day_button.tpl" } %}

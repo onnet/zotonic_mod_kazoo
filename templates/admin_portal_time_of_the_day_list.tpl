@@ -14,7 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"add rule" action={ dialog_open title=_"Add Time of Day rule" template="_add_time_of_the_day_dialog.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add rule" action={ dialog_open title=_"Add Time of Day rule" template="_add_time_of_the_day_dialog.tpl" width="auto"} %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
