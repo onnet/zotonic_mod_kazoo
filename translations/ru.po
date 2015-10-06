@@ -16,8 +16,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "No custom prompt"
+msgstr "Без приветствия"
 
 msgid "Last"
 msgstr "Последний(яя/ее)"
