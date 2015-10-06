@@ -9,9 +9,9 @@
         </div>
         <div class="col-sm-6">
           <select name="enabled" id="enabled" class="form-control margin-bottom-xs">
-            <option value="" {% if rule[1]["enabled"] == undefined %}selected{% endif %}> Based on time </option>
-            <option value="true" {% if rule[1]["enabled"] == "true" %}selected{% endif %}> Forced On </option>
-            <option value="false" {% if rule[1]["enabled"] == "false" %}selected{% endif %}> Forced Off </option>
+            <option value="" {% if rule[1]["enabled"] == undefined %}selected{% endif %}>{_ Based on time _}</option>
+            <option value="true" {% if rule[1]["enabled"] == "true" %}selected{% endif %}>{_ Forced On _}</option>
+            <option value="false" {% if rule[1]["enabled"] == "false" %}selected{% endif %}>{_ Forced Off _}</option>
           </select>
         </div>
       </div>
@@ -21,9 +21,9 @@
         <div class="col-sm-6">
           {% wire id="cycle" type="change" action={ update target="cycle_types" template="_add_time_of_the_day_dialog_cycles.tpl" } %}
           <select name="cycle" id="cycle" class="form-control margin-bottom-xs">
-            <option id="weekly" value="weekly" {% if rule[1]["cycle"] == "weekly" or not rule[1]["cycle"] %}selected{% endif %}> Weekly </option>
-            <option id="monthly" value="monthly" {% if rule[1]["cycle"] == "monthly" %}selected{% endif %}> Monthly </option>
-            <option id="yearly" value="yearly" {% if rule[1]["cycle"] == "yearly" %}selected{% endif %}> Yearly </option>
+            <option id="weekly" value="weekly" {% if rule[1]["cycle"] == "weekly" or not rule[1]["cycle"] %}selected{% endif %}>{_ Weekly _}</option>
+            <option id="monthly" value="monthly" {% if rule[1]["cycle"] == "monthly" %}selected{% endif %}>{_ Monthly _}</option>
+            <option id="yearly" value="yearly" {% if rule[1]["cycle"] == "yearly" %}selected{% endif %}>{_ Yearly _}</option>
           </select>
         </div>
         <div class="col-sm-6">

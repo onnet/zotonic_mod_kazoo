@@ -1,9 +1,9 @@
 {% if q.triggervalue=="monthly" or rule[1]["cycle"] == "monthly" %}
         <div class="col-sm-6">
-          <div class="col-xs-3 form-control-text">Every:</div>
+          <div class="col-xs-3 form-control-text">{_ Every _}:</div>
           <div class="col-xs-3"><input id="interval_week" class="form-control margin-bottom-xs" name="interval" type="text" placeholder="1"
                                        value="{% if rule[1]["interval"] %}{{ rule[1]["interval"] }}{% else %}1{% endif %}"></div>
-          <div class="col-xs-3 form-control-text">month(s)</div>
+          <div class="col-xs-3 form-control-text">{_ month _}</div>
         </div>
         <div class="col-sm-6">
           <div class="col-sm-6" style="padding-left:0;">
@@ -17,18 +17,18 @@
 {% elseif q.triggervalue=="yearly" or rule[1]["cycle"] == "yearly" %}
         <div class="col-sm-6">
           <select name="month" id="month" class="form-control margin-bottom-xs">
-            <option value="1" {% if rule[1]["month"] == "1" %}selected{% endif %}>January</option>
-            <option value="2" {% if rule[1]["month"] == "2" %}selected{% endif %}>February</option>
-            <option value="3" {% if rule[1]["month"] == "3" %}selected{% endif %}>March</option>
-            <option value="4" {% if rule[1]["month"] == "4" %}selected{% endif %}>April</option>
-            <option value="5" {% if rule[1]["month"] == "5" %}selected{% endif %}>May</option>
-            <option value="6" {% if rule[1]["month"] == "6" %}selected{% endif %}>June</option>
-            <option value="7" {% if rule[1]["month"] == "7" %}selected{% endif %}>July</option>
-            <option value="8" {% if rule[1]["month"] == "8" %}selected{% endif %}>August</option>
-            <option value="9" {% if rule[1]["month"] == "9" %}selected{% endif %}>September</option>
-            <option value="10" {% if rule[1]["month"] == "10" %}selected{% endif %}>October</option>
-            <option value="11" {% if rule[1]["month"] == "11" %}selected{% endif %}>November</option>
-            <option value="12" {% if rule[1]["month"] == "12" %}selected{% endif %}>December</option>
+            <option value="1" {% if rule[1]["month"] == "1" %}selected{% endif %}>{_ January _}</option>
+            <option value="2" {% if rule[1]["month"] == "2" %}selected{% endif %}>{_ February _}</option>
+            <option value="3" {% if rule[1]["month"] == "3" %}selected{% endif %}>{_ March _}</option>
+            <option value="4" {% if rule[1]["month"] == "4" %}selected{% endif %}>{_ April _}</option>
+            <option value="5" {% if rule[1]["month"] == "5" %}selected{% endif %}>{_ May _}</option>
+            <option value="6" {% if rule[1]["month"] == "6" %}selected{% endif %}>{_ June _}</option>
+            <option value="7" {% if rule[1]["month"] == "7" %}selected{% endif %}>{_ July _}</option>
+            <option value="8" {% if rule[1]["month"] == "8" %}selected{% endif %}>{_ August _}</option>
+            <option value="9" {% if rule[1]["month"] == "9" %}selected{% endif %}>{_ September _}</option>
+            <option value="10" {% if rule[1]["month"] == "10" %}selected{% endif %}>{_ October _}</option>
+            <option value="11" {% if rule[1]["month"] == "11" %}selected{% endif %}>{_ November _}</option>
+            <option value="12" {% if rule[1]["month"] == "12" %}selected{% endif %}>{_ December _}</option>
           </select>
         </div>
         <div class="col-sm-6">
@@ -42,10 +42,10 @@
         </div>
 {% else %}
         <div class="col-sm-6">
-          <div class="col-xs-3 form-control-text">Every:</div>
+          <div class="col-xs-3 form-control-text">{_ Every _}:</div>
           <div class="col-xs-3"><input id="interval_week" class="form-control margin-bottom-xs" name="interval" type="text" placeholder="1"
                                         value="{% if rule[1]["interval"] %}{{ rule[1]["interval"] }}{% else %}1{% endif %}"></div>
-          <div class="col-xs-3 form-control-text">week(s)</div>
+          <div class="col-xs-3 form-control-text">{_ week _}</div>
         </div>
         <div class="col-sm-6">
           <div class="btn-group" data-toggle="buttons">

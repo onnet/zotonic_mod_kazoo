@@ -19,17 +19,92 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Last"
+msgstr "Последний(яя/ее)"
 
-msgid ""
-msgstr ""
+msgid "Fifth"
+msgstr "Пятый(ая/ое)"
 
-msgid ""
-msgstr ""
+msgid "Fourth"
+msgstr "Четвертый(ая/ое)"
 
-msgid ""
-msgstr ""
+msgid "Third"
+msgstr "Третий(ья/ье)"
+
+msgid "Second"
+msgstr "Второй(ая/ое)"
+
+msgid "First"
+msgstr "Первый(ая/ое)"
+
+msgid "December"
+msgstr "Декабрь"
+
+msgid "November"
+msgstr "Ноябрь"
+
+msgid "October"
+msgstr "Октябрь"
+
+msgid "September"
+msgstr "Сентябрь"
+
+msgid "August"
+msgstr "Август"
+
+msgid "July"
+msgstr "Июль"
+
+msgid "June"
+msgstr "Июнь"
+
+msgid "May"
+msgstr "Май"
+
+msgid "April"
+msgstr "Апрель"
+
+msgid "March"
+msgstr "Март"
+
+msgid "February"
+msgstr "Февраль"
+
+msgid "January"
+msgstr "Январь"
+
+msgid "month"
+msgstr "месяц"
+
+msgid "week"
+msgstr "неделя"
+
+msgid "week(s)"
+msgstr "неделя(и)"
+
+msgid "month(s)"
+msgstr "месяц(ы)"
+
+msgid "Every"
+msgstr "Каждый(ая)"
+
+msgid "Forced Off"
+msgstr "Принудительно выключить"
+
+msgid "Forced On"
+msgstr "Принудительно включить"
+
+msgid "Based on time"
+msgstr "В соответствии с интервалом"
+
+msgid "Yearly"
+msgstr "Ежегодно"
+
+msgid "Monthly"
+msgstr "Ежемесячно"
+
+msgid "Weekly"
+msgstr "Еженедельно"
 
 msgid "Select to edit"
 msgstr "Редактировать"
