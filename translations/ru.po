@@ -95,7 +95,7 @@ msgid "Forced On"
 msgstr "Принудительно включить"
 
 msgid "Based on time"
-msgstr "В соответствии с интервалом"
+msgstr "Интервал"
 
 msgid "Yearly"
 msgstr "Ежегодно"
