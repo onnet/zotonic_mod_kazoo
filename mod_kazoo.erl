@@ -85,10 +85,14 @@ event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _,
 
 event({submit,{forgottenpwd,[]},"forgottenpwd_form","forgottenpwd_form"}, Context) ->
     Username = z_convert:to_binary(z_context:get_q("forgotten_username",Context)),
-    AccountName = z_convert:to_binary(z_context:get_q("forgotten_account_name",Context)),
+    Number = z_context:get_q("forgotten_account_number",Context),
+    AccountName = kazoo_util:kz_admin_find_accountname_by_number(Number, Context),
     case kazoo_util:password_recovery(Username, AccountName, Context) of
-        <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
-        Answer -> z_render:growl(?__(Answer, Context), Context)
+        <<"">> -> z_render:growl_error(?__("No account found",Context), Context);
+        Answer -> 
+            lager:info("Password recovery request answer: ~p",[Answer]),
+            Context1 = z_render:wire([{set_class, [{target, "forgot-pwd-box"},{class,"search-box hidden"}]}], Context),
+            z_render:growl(?__("Please check your mailbox", Context1), Context1)
     end;
 
 event({submit,{forgottenpwd,[]},"password_recovery_page_form","password_recovery_page_form"}, Context) ->

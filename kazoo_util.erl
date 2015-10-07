@@ -169,6 +169,7 @@
     ,add_cccp_doc/4
     ,del_cccp_doc/2
     ,kz_find_account_by_number/2
+    ,kz_admin_find_accountname_by_number/2
     ,kz_get_registrations_by_accountid/2
     ,list_account_trunks/1
     ,kz_registration_details_by_username/2
@@ -346,6 +347,13 @@ kz_get_acc_doc_by_account_id('undefined', _Context) ->
 kz_get_acc_doc_by_account_id(Account_Id, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(Account_Id))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_adminget_acc_doc_by_account_id('undefined', _Context) ->
+    <<>>;
+kz_adminget_acc_doc_by_account_id(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
+    {'ok', _, _, Body} = crossbar_admin_request('get', API_String, [], Context),
+    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)).
 
 kz_set_acc_doc(K, V, Context) ->
     CurrDoc = kz_get_acc_doc(Context),
@@ -2356,8 +2364,18 @@ del_cccp_doc(DocId, Context) ->
 kz_find_account_by_number(Number, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
-    lager:info("My API_String: ~p", [API_String]),
+    lager:info("My API_String: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     modkazoo_util:get_value(<<"account_id">>, crossbar_account_request('get', API_String, [], Context)).
+
+kz_admin_find_accountname_by_number(Number, Context) ->
+    modkazoo_util:get_value(<<"name">>,kz_adminget_acc_doc_by_account_id(kz_admin_get_account_by_number(Number, Context),Context)).
+
+kz_admin_get_account_by_number(Number, Context) ->
+    {'ok', {'account_id', AccountId}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
+    URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
+    {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers(AuthToken), 'get', [], [], 10000),
+    modkazoo_util:get_value([<<"data">>,<<"account_id">>], jiffy:decode(Body)).
 
 list_account_trunks(Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),

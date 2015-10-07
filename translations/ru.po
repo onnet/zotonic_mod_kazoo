@@ -13,8 +13,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Change password"
+msgstr "Изменить пароль"
 
 msgid "No custom prompt"
 msgstr "Без приветствия"
@@ -731,7 +731,7 @@ msgid "Timeout"
 msgstr "Таймаут"
 
 msgid "Owner"
-msgstr "Хозяин"
+msgstr "Владелец"
 
 msgid "Retries"
 msgstr "Попыток"
