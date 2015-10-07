@@ -825,8 +825,8 @@ update_folder1(Message, _, _, _) ->
 password_recovery(Username, AccountName, Context) ->
     API_String = <<?V1/binary, ?USER_AUTH/binary, ?RECOVERY/binary>>,
     DataBag = {[{<<"data">>,
-                  {[{<<"username">>, Username}
-                    ,{<<"account_name">>, AccountName}
+                  {[{<<"username">>, z_convert:to_binary(Username)}
+                    ,{<<"account_name">>, z_convert:to_binary(AccountName)}
                   ]}
               }]},
     crossbar_noauth_request('put', API_String, DataBag, Context). 

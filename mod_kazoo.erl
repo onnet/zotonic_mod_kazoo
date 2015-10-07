@@ -85,8 +85,11 @@ event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _,
 
 event({submit,{forgottenpwd,[]},"forgottenpwd_form","forgottenpwd_form"}, Context) ->
     Username = z_convert:to_binary(z_context:get_q("forgotten_username",Context)),
-    Number = z_context:get_q("forgotten_account_number",Context),
-    AccountName = kazoo_util:kz_admin_find_accountname_by_number(Number, Context),
+    NumberOrName = modkazoo_util:normalize_account_name(z_context:get_q("forgotten_account_name",Context)),
+    AccountName = case kazoo_util:kz_admin_find_accountname_by_number(NumberOrName, Context) of
+        'undefined' -> NumberOrName;
+         NameFound -> NameFound
+    end,
     case kazoo_util:password_recovery(Username, AccountName, Context) of
         <<"">> -> z_render:growl_error(?__("No account found",Context), Context);
         Answer -> 
