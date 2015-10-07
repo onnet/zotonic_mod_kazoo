@@ -13,6 +13,9 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid "Account or Phone number"
+msgstr "Учетная запись или телефон"
+
 msgid "Change password"
 msgstr "Изменить пароль"
 
