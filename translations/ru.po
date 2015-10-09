@@ -938,7 +938,7 @@ msgid "Statistics"
 msgstr "Статистика"
 
 msgid "Payments"
-msgstr "Оплата"
+msgstr "Оплата услуг"
 
 msgid "Delivery"
 msgstr "Доставка"

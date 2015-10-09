@@ -5,11 +5,7 @@
 {% endblock %}
 
 {% block main %}
-{% if not m.kazoo.is_auth %}
-{% javascript %}
-  z_notify("no_auth");
-{% endjavascript %}
-{% else %}
+{% if m.kazoo.is_auth or m.session.lb_user_id %}
   <div class="wrapper">
     <div class="container" style="width: 95%">
       <div id="page_title_row" class="row">
@@ -25,5 +21,9 @@
       {# include "services_row.tpl" #}
     </div>
   </div>
+{% else %}
+{% javascript %}
+  z_notify("no_auth");
+{% endjavascript %}
 {% endif %}
 {% endblock %}
