@@ -55,6 +55,7 @@
         <tr><td>{_ Account Name _}</td><td>{{ account_doc[1]["name"] }}</td></tr>
         <tr><td>{_ Realm _}</td><td>{{ account_doc[1]["realm"] }}</td></tr>
         <tr><td>{_ Account ID _}</td><td>{{ account_id }}</td></tr>
+        <tr><td>{_ Database _}</td><td>{{ account_id|account_id_to_encoded }}</td></tr>
     </tbody>
 </table>
 {% endwith %}

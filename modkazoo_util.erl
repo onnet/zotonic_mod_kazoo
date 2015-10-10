@@ -46,6 +46,7 @@
     ,set_session_jobj/5
     ,delete_session_jobj_key/3
     ,split_b/2
+    ,format_account_id/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -438,3 +439,9 @@ delete_session_jobj_key(SessionKey, K, Context) ->
  
 split_b(String,Divider) ->
     lists:map(fun (K) -> z_convert:to_binary(K) end, z_string:split(String,Divider)).
+
+format_account_id(AccountId, 'encoded') when is_binary(AccountId) ->
+    [Id1, Id2, Id3, Id4 | IdRest] = z_convert:to_list(AccountId),
+    z_convert:to_binary(["account%2F", Id1, Id2, "%2F", Id3, Id4, "%2F", IdRest]);
+format_account_id(AccountId, 'raw') -> AccountId.
+
