@@ -25,8 +25,9 @@
                                                                           $("#pause_{{ #this_call }}").hide();'>
                             <i class="fa fa-stop" title="{_ Stop _}"></i>
                          </a>
-
-
+                         <a href="{{ m.kazoo[{kz_recording_download_link cdr_id=call["id"]}] }}" download>
+                            <i style="cursor: pointer;" class="fa fa-download" title="{_ Download _}"></i>
+                         </a>
                 {% else %}-{% endif %}
             </td>
             <td style="text-align: center;"><i id="{{ #this_call_info }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i></td>

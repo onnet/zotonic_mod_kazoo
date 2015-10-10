@@ -8,5 +8,5 @@
     z_event("update_devices_status");
     console.log('Refresh event sent');
   }
-  setInterval(refresh, 10000);
+  setInterval(refresh, 15000);
 {% endjavascript %}
