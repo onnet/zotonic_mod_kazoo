@@ -7,11 +7,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Please check your mailbox"
+msgstr "Пожалуйста проверьте свой электронный ящик"
 
-msgid ""
-msgstr ""
+msgid "No account found"
+msgstr "Учетная запись не найдена"
 
 msgid "Account or Phone number"
 msgstr "Учетная запись или телефон"
