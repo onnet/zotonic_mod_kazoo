@@ -2386,14 +2386,13 @@ kz_trunk_server(Context) ->
     TrunkId = case z_context:get_q("trunk_id",Context) of
              'undefined' ->
                  case list_account_trunks(Context) of
-                     'undefined' ->
-                         DataBag = {[{<<"account">>,
-                                          {[{<<"credits">>,{[{<<"prepay">>,<<"0.00">>}]}},
-                                            {<<"trunks">>,<<"0">>},
-                                            {<<"inbound_trunks">>,<<"0">>},
-                                            {<<"auth_realm">>,<<"office.sip3.onnet.su">>}]},
-                                     {<<"servers">>,[]}
-                                   }]},
+                     [] ->
+                         DataBag = ?MK_DATABAG({[{<<"account">>,
+                                                  {[{<<"credits">>,{[{<<"prepay">>,<<"0.00">>}]}},
+                                                    {<<"trunks">>,<<"0">>},
+                                                    {<<"inbound_trunks">>,<<"0">>},
+                                                    {<<"auth_realm">>,<<"office.sip3.onnet.su">>}]}},
+                                                 {<<"servers">>,[]}]}),
                          _ = kz_trunk('put', <<>>, DataBag, Context),
                          [CreatedTrunkId|_] = list_account_trunks(Context),
                          CreatedTrunkId;
