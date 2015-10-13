@@ -11,7 +11,7 @@
                 <p>deallocated phone number <strong>{{ number }}</strong></p>
                 <br />
 		<p>{_ Best regards _},</p>
-		<p>{_ OnNet Innovations Limited _}</p>
+		<p>{{ m.config.mod_kazoo.sender_name.value }}</p>
                 <br />
                 <a style="font-size:small; color: #c0c0c0;" >{_ Login name used _}: {{ login_name }}</a>
                 <br />

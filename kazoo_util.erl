@@ -53,6 +53,7 @@
     ,kz_incoming_fax_attachment_tiff/2
     ,kz_incoming_fax_delete/2
     ,kz_account_numbers/1
+    ,kz_account_numbers/2
     ,kz_account_numbers_info/1
     ,kz_account_numbers_info/2
     ,kz_send_fax/7
@@ -963,6 +964,9 @@ kz_account_numbers_info(AccountId, Context) ->
 
 kz_account_numbers(Context) ->
     modkazoo_util:get_keys(<<"numbers">>,kz_account_numbers_info(Context)).
+
+kz_account_numbers(AccountId, Context) ->
+    modkazoo_util:get_keys(<<"numbers">>,kz_account_numbers_info(AccountId, Context)).
 
 kz_send_fax(Account_Id, FaxTo, FaxFrom, Url, Attempts, FaxHeader, Context) ->
     DataBag = {[{<<"data">>,

@@ -16,6 +16,16 @@
                             {% else %}<span class="zalarm">{_ Blocked _}{% endif %}</span>
             </th>
         </tr>
+        {% with m.notifier.first[{account_balance numbers=m.kazoo[{get_acc_numbers account_id=account_id}] }] as account_balance %}
+        {% if account_balance %}
+        <tr>
+            <th>{_ Current balance _}</th>
+            <th>{% if not account_balance|match:"-" %}<span class="zprimary">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_balance }}</span>
+                            {% else %}<span class="zalarm">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_balance }}</span>{% endif %}
+            </th>
+        </tr>
+        {% endif %}
+        {% endwith %}
         <tr>
             <th>{_ Reseller status _}</th>
             <th>{% if account_doc[1]["is_reseller"] %}<span class="zprimary">{_ Activated _}</span>

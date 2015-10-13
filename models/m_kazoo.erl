@@ -169,6 +169,9 @@ m_find_value(kz_list_incoming_faxes, _M, Context) ->
 m_find_value(get_acc_numbers, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_account_numbers(Context)));
 
+m_find_value({get_acc_numbers, [{account_id,AccountId}]}, _M, Context) ->
+    kazoo_util:kz_account_numbers(AccountId,Context);
+
 m_find_value(get_acc_numbers_info, _M, Context) ->
     modkazoo_util:to_proplist(<<"numbers">>, kazoo_util:kz_account_numbers_info(Context));
 
