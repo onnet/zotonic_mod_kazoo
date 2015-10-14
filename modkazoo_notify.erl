@@ -13,6 +13,7 @@ email_attachment(CustomerEmail, FileName, Template, Vars, Data, Context) ->
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     Attachment = #upload{
         filename = z_convert:to_list(FileName),
+        tmpfile=FileName,
         data = Data,
         mime = "application/pdf"
     },
