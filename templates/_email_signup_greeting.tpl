@@ -28,7 +28,7 @@
                 <br />
                 <br />
 		<p>{_ Regards _},</p>
-		<p>{_ OnNet Communications Inc. _}</p>
+		<p>{{ m.config.mod_kazoo.sender_name.value }}</p>
                 <br />
                 <br />
                 <a style="font-size:small; color: #c0c0c0;" >{_ Requester's IP address _}: {{ clientip }}</a>
