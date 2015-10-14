@@ -365,6 +365,14 @@ div.widget {
   margin-right: 1em;
 }
 
+.pl-1 {
+  padding-left: 1em;
+}
+
+.pr-1 {
+  padding-right: 1em;
+}
+
 .pt-1 {
   padding-top: 1em;
 }

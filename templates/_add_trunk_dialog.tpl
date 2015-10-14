@@ -34,6 +34,15 @@
         </span>
       </div>
     </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-6">
+          <label class="form-control-onnet margin-bottom-xs pl-1">{_ Realm _}:
+            <input type="text" class="form-control margin-bottom-xs zprimary" style="background-color: white!important;" value="{{ m.kazoo.get_account_realm }}" readonly>
+          </label>
+        </div>
+      </div>
+    </div>
     {% if trunk_id %}
       <input type="hidden" name="trunk_id" value="{{ trunk_id }}">
     {% endif %}
