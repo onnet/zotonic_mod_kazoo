@@ -63,9 +63,16 @@
     </tbody>
     <tbody id="rs_details_widget_opened" style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_details_widget_opened"}] %}display: none;{% endif %}">
         <tr><td>{_ Account Name _}</td><td>{{ account_doc[1]["name"] }}</td></tr>
+        <tr><td>{_ Date of creation _}</td><td>{{ account_doc[1]["created"]|inno_timestamp_to_date }}</td></tr>
         <tr><td>{_ Realm _}</td><td>{{ account_doc[1]["realm"] }}</td></tr>
         <tr><td>{_ Account ID _}</td><td>{{ account_id }}</td></tr>
         <tr><td>{_ Database _}</td><td>{{ account_id|account_id_to_encoded }}</td></tr>
+        <tr><td>{_ Notify on de-register _}</td>
+            <td><span id="notificationsderegistersend_to">
+                    {% include "_show_field.tpl" type="account" doc_id="_no_need_" field_name=["notifications","deregister","send_to"] account_id=account_id %}
+                </span>
+            </td>
+        </tr>
     </tbody>
 </table>
 {% endwith %}

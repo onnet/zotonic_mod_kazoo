@@ -64,6 +64,18 @@ m_find_value({kz_user_doc_field, [{field1, Field1}, {field2, Field2}, {field3, F
 m_find_value({kz_device_doc_field, [{device_id, DeviceId}, {field, Field}]}, _M, Context) ->
     kazoo_util:kz_device_doc_field(Field, DeviceId, Context);
 
+m_find_value({kz_doc_field, [{type,Type}, {doc_id, _DocId}, {field, Field}, {account_id, 'undefined'}]}, _M, Context) ->
+    m_find_value({kz_doc_field, [{type,Type}, {doc_id, _DocId}, {field, Field}, {account_id, z_context:get_session(kazoo_account_id, Context)}]}, _M, Context);
+
+m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}, {account_id, AccountId}]}, _M, Context) ->
+    case Type of
+        "account" -> kazoo_util:kz_account_doc_field(Field, AccountId, Context);
+        "user" -> kazoo_util:kz_user_doc_field(Field, DocId, Context);
+        "device" -> kazoo_util:kz_device_doc_field(Field, DocId, Context);
+        "media" -> kazoo_util:kz_media_doc_field(Field, DocId, Context);
+        E -> lager:info("kz_doc_field Error: ~p",[E])
+    end;
+
 m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}]}, _M, Context) ->
     case Type of
         "account" -> kazoo_util:kz_account_doc_field(Field, Context);

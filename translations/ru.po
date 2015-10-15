@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Notify on de-register"
+msgstr "Уведомлять о потере регистрации"
 
-msgid ""
-msgstr ""
+msgid "Date of creation"
+msgstr "Дата создания"
 
 msgid "Please check your mailbox"
 msgstr "Пожалуйста проверьте свой электронный ящик"

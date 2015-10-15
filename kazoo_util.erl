@@ -8,6 +8,7 @@
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
     ,kz_account_doc_field/2
+    ,kz_account_doc_field/3
     ,kz_get_user_doc/1
     ,kz_get_user_doc/2
     ,kz_user_doc_field/2
@@ -72,6 +73,7 @@
     ,kz_toggle_user_doc/3
     ,kz_toggle_device_doc/3
     ,kz_set_acc_doc/3
+    ,kz_set_acc_doc/4
     ,trigger_innoui_widget/2
     ,ui_element_state/2
     ,set_accounts_address/4
@@ -357,12 +359,14 @@ kz_adminget_acc_doc_by_account_id(AccountId, Context) ->
     modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)).
 
 kz_set_acc_doc(K, V, Context) ->
-    CurrDoc = kz_get_acc_doc(Context),
+    kz_set_acc_doc(K, V, z_context:get_session('kazoo_account_id', Context), Context).
+
+kz_set_acc_doc(K, V, AccountId, Context) ->
+    CurrDoc = kz_get_acc_doc_by_account_id(AccountId, Context),
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    case Account_Id =:= 'undefined' of
+    case AccountId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
         'true' -> []
     end.
@@ -488,10 +492,15 @@ crossbar_account_request(Verb, API_String, DataBag, Context) ->
                 _ -> 
                     lager:info("crossbar_account_request API String: ~p:~p", [Verb,API_String]),
                     lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
+                    lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
+                    lager:info("crossbar_account_request Verb: ~p", [Verb]),
                     <<"">>
             end;
         E -> 
             lager:info("crossbar_account_request Error: ~p", [E]),
+            lager:info("crossbar_account_request Error Verb: ~p", [Verb]),
+            lager:info("crossbar_account_request Error API_String: ~p", [API_String]),
+            lager:info("crossbar_account_request Error DataBag: ~p", [DataBag]),
             <<"">>
     end.
 
@@ -518,14 +527,19 @@ crossbar_admin_request(Verb, API_String, DataBag, Timeout, Context) ->
               end,
     ibrowse:send_req(URL, req_headers(AuthToken), Verb, Payload, [], Timeout).
 
-kz_account_doc_field(Field, Context) when is_binary(Field) ->
-    modkazoo_util:get_value(Field, kz_get_acc_doc_by_account_id(z_context:get_session(kazoo_account_id, Context), Context));
-kz_account_doc_field(Field, Context) when is_list(hd(Field)) ->
-    modkazoo_util:get_value([z_convert:to_binary(X) || X <- Field], kz_get_acc_doc_by_account_id(z_context:get_session(kazoo_account_id, Context), Context));
-kz_account_doc_field(Field, Context) when is_binary(hd(Field)) ->
-    modkazoo_util:get_value(Field, kz_get_acc_doc_by_account_id(z_context:get_session(kazoo_account_id, Context), Context));
-kz_account_doc_field(Field, Context) when is_list(Field) ->
-    modkazoo_util:get_value(z_convert:to_binary(Field), kz_get_acc_doc_by_account_id(z_context:get_session(kazoo_account_id, Context), Context)).
+kz_account_doc_field(Field, Context) ->
+    kz_account_doc_field(Field, z_context:get_session(kazoo_account_id, Context), Context).
+
+kz_account_doc_field(Field, 'undefined', Context) ->
+    kz_account_doc_field(Field, z_context:get_session(kazoo_account_id, Context), Context);
+kz_account_doc_field(Field, AccountId, Context) when is_binary(Field) ->
+    modkazoo_util:get_value(Field, kz_get_acc_doc_by_account_id(AccountId, Context));
+kz_account_doc_field(Field, AccountId, Context) when is_list(hd(Field)) ->
+    modkazoo_util:get_value([z_convert:to_binary(X) || X <- Field], kz_get_acc_doc_by_account_id(AccountId, Context));
+kz_account_doc_field(Field, AccountId, Context) when is_binary(hd(Field)) ->
+    modkazoo_util:get_value(Field, kz_get_acc_doc_by_account_id(AccountId, Context));
+kz_account_doc_field(Field, AccountId, Context) when is_list(Field) ->
+    modkazoo_util:get_value(z_convert:to_binary(Field), kz_get_acc_doc_by_account_id(AccountId, Context)).
 
 kz_user_doc_field(Field, Context) ->
     OwnerId = z_context:get_session('kazoo_owner_id', Context),

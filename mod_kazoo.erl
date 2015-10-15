@@ -436,7 +436,16 @@ event({submit,add_new_user_form,_,_}, Context) ->
     end;
 
 event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
+    event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+
+event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, 'undefined'}]},_,_}, Context) ->
+    event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+
+event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, AccountId}]},_,_}, Context) ->
     case Type of
+        "account" ->
+            _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
+            z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{account_id, AccountId}], Context), Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
