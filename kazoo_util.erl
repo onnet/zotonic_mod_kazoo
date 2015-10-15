@@ -2409,7 +2409,7 @@ kz_trunk_server(Context) ->
                                                   {[{<<"credits">>,{[{<<"prepay">>,<<"0.00">>}]}},
                                                     {<<"trunks">>,<<"0">>},
                                                     {<<"inbound_trunks">>,<<"0">>},
-                                                    {<<"auth_realm">>,<<"office.sip3.onnet.su">>}]}},
+                                                    {<<"auth_realm">>,get_account_realm(Context)}]}},
                                                  {<<"servers">>,[]}]}),
                          _ = kz_trunk('put', <<>>, DataBag, Context),
                          [CreatedTrunkId|_] = list_account_trunks(Context),
