@@ -17,8 +17,8 @@
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
         <td style="text-align: center;"> </td>
         <td style="text-align: center;"> </td>
-        <td style="text-align: center;"> </td>
         <td style="text-align: center;">{{ running_call["destination"] }} </td>
+        <td style="text-align: center;">{{ m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}][1]["destination"] }}</td>
         <td style="text-align: center;"><i class="dark-1 icon-telicon-failover"><i></td>
         <td style="text-align: center;"><i class="dark-1 icon-telicon-hangup"><i></td>
      </tr>
@@ -26,6 +26,12 @@
   {% endfor %}
 </tbody>
 </table>
+
+  {# for running_call in m.kazoo[{kz_list_account_channels account_id=account_id}] #} 
+    {# print forloop.counter #}
+    {# print running_call #}
+    {# print m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}] #}
+  {# endfor #}
 
 {% javascript %}
   function myreplace(stringtowork){
