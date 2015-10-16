@@ -11,7 +11,7 @@
   </td>
 </thead>
 <tbody id="currentcallstableid">
-  {% for running_call in m.kazoo.kz_list_account_channels %} 
+  {% for running_call in m.kazoo[{kz_list_account_channels account_id=account_id}] %} 
   {% if running_call["direction"]=="outbound" %}
      <tr>
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
@@ -65,9 +65,12 @@
   });
 
   var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
-  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
-  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
-  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
+  socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
+  socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
+  socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
+//  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
+//  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
+//  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
   socket.on("CHANNEL_CREATE", function (data) {
     if ( data["Other-Leg-Call-ID"] && data["Call-ID"] && data["Other-Leg-Caller-ID-Number"] && data["Caller-ID-Number"] && data["Caller-ID-Number"] != "context_2" && data["Callee-ID-Number"] != "context_2" ) {
         $(".dataTables_empty").remove();

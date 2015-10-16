@@ -27,6 +27,7 @@
     ,kz_list_account_cdr_page/3
     ,kz_list_account_children/1
     ,kz_list_account_channels/1
+    ,kz_list_account_channels/2
     ,kz_list_user_devices/1
     ,kz_get_device_doc/2
     ,kz_set_device_doc/4
@@ -1269,8 +1270,12 @@ kz_list_account_children(Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_channels(Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CHANNELS/binary>>,
+    kz_list_account_channels(z_context:get_session('kazoo_account_id', Context), Context).
+
+kz_list_account_channels('undefined', Context) ->
+    kz_list_account_channels(z_context:get_session('kazoo_account_id', Context), Context);
+kz_list_account_channels(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_account_channel(CallId, Context) ->

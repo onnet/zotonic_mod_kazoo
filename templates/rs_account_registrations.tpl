@@ -14,7 +14,10 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
   {{ headline }}
-  {% button class="btn btn-xs btn-onnet pull-right" text=_"current calls" id="currentcallsbtn" %}
+  {% button class="btn btn-xs btn-onnet pull-right" text=_"current calls" id="currentcallsbtn"
+            action={ dialog_open title=_"Current account calls" template="admin_portal_current_calls_table.tpl" class="iamclass" account_id=account_id width="auto" }
+  %}
+
 
 {% endblock %}
 

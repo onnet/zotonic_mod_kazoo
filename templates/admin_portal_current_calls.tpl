@@ -22,7 +22,7 @@
 <div id="ap_current_calls_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="ap_current_calls_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_current_calls_widget_opened"
-                                                                    template="admin_portal_current_calls_table.tpl"}
+                                                                    template="admin_portal_current_calls_table.tpl" account_id=m.session.kazoo_account_id}
         %}
     </div>
 </div>
