@@ -269,7 +269,7 @@ msgid "Voicemail number"
 msgstr "Номер ящика"
 
 msgid "Voicemail owner"
-msgstr "Хозяин ящика"
+msgstr "Владелец ящика"
 
 msgid "Voicemail name"
 msgstr "Название ящика"
