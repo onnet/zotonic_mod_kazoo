@@ -28,8 +28,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "call restrictions"
+msgstr "ограничения вызовов"
 
 msgid "Account level call restrictions"
 msgstr "Ограничения вызовов для учетной записи"
