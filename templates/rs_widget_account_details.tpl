@@ -57,7 +57,8 @@
                 <i id="arrow_down_{{ #id }}" style="{% if not m.kazoo[{ui_element_opened element="rs_details_widget_opened"}] %}display: none;{% endif %}" 
                                                class="arrowpad fa fa-arrow-circle-down"></i>
               </span>
-                Details:
+               {_ Details _}:
+               {% button class="btn btn-xs btn-onnet pull-right" text=_"call restrictions" id="callrestrictionsbtn" %}
             </th>
         </tr>
     </tbody>
