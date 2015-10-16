@@ -458,7 +458,17 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
 
 event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options}]},_,_}, Context) ->
     event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,""},{postfix,""}]},"",""}, Context);
+
+
 event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix}]},_,_}, Context) ->
+    event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix}
+                                       ,{postfix,RawPostfix},{account_id,z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+
+event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix},{account_id,'undefined'}]},_,_}, Context) ->
+    event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix}
+                                       ,{postfix,RawPostfix},{account_id,z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+
+event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix},{account_id,AccountId}]},_,_}, Context) ->
     Prefix = case RawPrefix of
         'undefined' -> "";
         Pre -> Pre
@@ -469,9 +479,9 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
     end,
     case Type of
         "account" ->
-            _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), Context),
+            _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
             z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix}], Context), Context);
+                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix},{account_id, AccountId}], Context), Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
