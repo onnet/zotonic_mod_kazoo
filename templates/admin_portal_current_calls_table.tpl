@@ -12,13 +12,13 @@
 </thead>
 <tbody id="currentcallstableid">
   {% for running_call in m.kazoo[{kz_list_account_channels account_id=account_id}] %} 
-  {% if running_call["direction"]=="outbound" %}
+  {% if running_call["direction"]=="inbound" %}
      <tr>
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
         <td style="text-align: center;"> </td>
         <td style="text-align: center;"> </td>
+        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }} </td>
         <td style="text-align: center;">{{ running_call["destination"] }} </td>
-        <td style="text-align: center;">{{ m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}][1]["destination"] }}</td>
         <td style="text-align: center;"><i class="dark-1 icon-telicon-failover"><i></td>
         <td style="text-align: center;"><i class="dark-1 icon-telicon-hangup"><i></td>
      </tr>
@@ -32,6 +32,8 @@
     {# print running_call #}
     {# print m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}] #}
   {# endfor #}
+
+{# m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}][1]["destination"] #}
 
 {% javascript %}
   function myreplace(stringtowork){
@@ -71,12 +73,10 @@
   });
 
   var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
+  socket.emit("unsubscribe");
   socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
   socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
   socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
-//  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
-//  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
-//  socket.emit("subscribe", { account_id: "{{ m.session.kazoo_account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
   socket.on("CHANNEL_CREATE", function (data) {
     if ( data["Other-Leg-Call-ID"] && data["Call-ID"] && data["Other-Leg-Caller-ID-Number"] && data["Caller-ID-Number"] && data["Caller-ID-Number"] != "context_2" && data["Callee-ID-Number"] != "context_2" ) {
         $(".dataTables_empty").remove();
