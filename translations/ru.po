@@ -19,11 +19,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "answered"
+msgstr "разговор"
 
-msgid ""
-msgstr ""
+msgid "ringing"
+msgstr "вызов"
 
 msgid "current calls"
 msgstr "текущие вызовы"

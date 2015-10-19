@@ -766,4 +766,11 @@ div.bs-searchbox input.form-control {
     padding: 3px 6px!important;
 }
 
+table.dataTable thead .sorting { background: url('/lib/images/sort_both.png') no-repeat center right; }
+table.dataTable thead .sorting_asc { background: url('/lib/images/sort_asc.png') no-repeat center right; }
+table.dataTable thead .sorting_desc { background: url('/lib/images/sort_desc.png') no-repeat center right; }
+
+table.dataTable thead .sorting_asc_disabled { background: url('/lib/images/sort_asc_disabled.png') no-repeat center right; }
+table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort_desc_disabled.png') no-repeat center right; }
+
 </style>
