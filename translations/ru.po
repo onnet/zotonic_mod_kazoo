@@ -13,11 +13,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Account's allocated numbers"
+msgstr "Присвоенные номера"
 
-msgid ""
-msgstr ""
+msgid "Account's current registrations"
+msgstr "Текущие регистрации"
 
 msgid "answered"
 msgstr "разговор"
