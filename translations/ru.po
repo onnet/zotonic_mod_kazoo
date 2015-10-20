@@ -10,8 +10,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Incoming call from"
+msgstr "Входящий вызов от"
 
 msgid "Account's allocated numbers"
 msgstr "Присвоенные номера"
