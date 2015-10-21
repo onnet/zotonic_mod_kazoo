@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Contact IP"
+msgstr "IP адрес"
 
-msgid ""
-msgstr ""
+msgid "User agent"
+msgstr "Тип оборудования"
 
-msgid ""
-msgstr ""
+msgid "Current account calls"
+msgstr "Текущие вызовы учетной записи"
 
 msgid "Incoming call from"
 msgstr "Входящий вызов от"

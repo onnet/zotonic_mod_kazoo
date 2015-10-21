@@ -70,7 +70,7 @@
   });
 
   var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
-  socket.emit("unsubscribe");
+  socket.emit("unsubscribe", { auth_token: "{{ m.session.kazoo_auth_token }}" });
   socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
   socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
   socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
