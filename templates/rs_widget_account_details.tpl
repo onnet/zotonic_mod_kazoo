@@ -4,7 +4,8 @@
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" id="child_area_refresh"
               action={update target="rs_widget_account_details_tpl" template="rs_widget_account_details.tpl" account_id=account_id headline=_"Account details"}
-              action={emit signal={update_rs_account_registrations_tpl}}
+              action={emit signal={update_rs_account_registrations_tpl account_id=account_id}}
+              action={emit signal={update_rs_allocated_numbers_tpl account_id=account_id}}
     %}
 {% endblock %}
 
