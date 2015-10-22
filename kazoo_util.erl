@@ -184,6 +184,10 @@
     ,kz_trunk_server_details/3
     ,kz_trunk_server_delete/3
     ,kz_trunk_server_numbers/1
+    ,kz_list_account_webhooks/1
+    ,kz_webhook_info/2
+    ,kz_flush_registration_by_username/2
+    ,kz_flush_registration_by_username/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -243,6 +247,7 @@
 -define(CHILDREN, <<"/children">>).
 -define(PAGE_SIZE, <<"page_size=">>).
 -define(START_KEY, <<"start_key=">>).
+-define(WEBHOOKS, <<"/webhooks">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -882,6 +887,13 @@ get_reg_details(Username, [Registration|T]) ->
         Username -> Registration;
         _ -> get_reg_details(Username, T)
     end.
+
+kz_flush_registration_by_username(Username, Context) ->
+    kz_flush_registration_by_username(Username, z_context:get_session('kazoo_account_id', Context), Context).
+
+kz_flush_registration_by_username(Username, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?REGISTRATIONS/binary, <<"/">>/binary, (z_convert:to_binary(Username))/binary>>, 
+    crossbar_account_request('delete', API_String, [], Context).
 
 azrates(Context) ->
     {{Year,Month,Day},{Hour,_,_}} = erlang:localtime(),
@@ -2501,3 +2513,12 @@ update_trunk_server(Server, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"server_name">>], z_convert:to_binary(z_context:get_q("server_name",Context)), J) end],
     lists:foldl(fun(F, J) -> F(J) end, Server, Routines).
 
+kz_list_account_webhooks(Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?WEBHOOKS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_webhook_info(WebhookId, Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?WEBHOOKS/binary, <<"/">>/binary, (z_convert:to_binary(WebhookId))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).

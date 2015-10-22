@@ -977,6 +977,11 @@ event({submit,manage_trunk_numbers,_,_}, Context) ->
     _ = kazoo_util:kz_trunk_server_numbers(Context),
     z_render:dialog_close(Context);
 
+event({postback,{flush_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->
+    _ = kazoo_util:kz_flush_registration_by_username(Username, Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

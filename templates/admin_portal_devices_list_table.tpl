@@ -8,6 +8,7 @@
             <th style="text-align: center;">{_ CID Number _}</th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
+            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>
@@ -46,6 +47,17 @@
             </td>
             <td style="text-align: center;"><i id="edit_{{ device["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
             {% wire id="edit_"++device["id"] action={ dialog_open title=_"Edit device"++" "++device["name"] template="_edit_device_lazy.tpl" device_id=device["id"] width="auto" } %}
+            <td style="text-align: center;">
+                {% if device_registered %}
+                    <i id="flush_{{ device["id"] }}" class="fa fa-eraser zprimary pointer" title="{_ Flush registration _}"></i>
+                    {% wire id="flush_"++device["id"] action={confirm text=_"Do you really want to flush registration for device"++" "++device["name"]|truncate:13++"?"
+                                                                      action={postback postback={flush_registration_by_username sip_username=device_doc[1]["sip"][1]["username"]} delegate="mod_kazoo"}
+                                                             }
+                    %}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
             <td style="text-align: center;">
                 {% if device_registered %}
                     <i id="info_{{ device["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>

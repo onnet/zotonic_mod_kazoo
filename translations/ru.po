@@ -16,8 +16,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to flush registration for device"
+msgstr "Вы действительно хотите удалить информацию о регистрации устройства"
 
 msgid "answered"
 msgstr "разговор"

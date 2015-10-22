@@ -312,6 +312,12 @@ m_find_value({kz_get_account_trunk, [{trunk_id, TrunkId}]}, _M, Context) ->
 m_find_value({kz_get_trunk_server, [{trunk_id, TrunkId},{server_index, Index}]}, _M, Context) ->
     kazoo_util:kz_trunk_server_details(TrunkId, Index, Context);
 
+m_find_value(kz_list_account_webhooks, _M, Context) ->
+    kazoo_util:kz_list_account_webhooks(Context);
+
+m_find_value({kz_webhook_info, [{webhook_id, WebhookId}]}, _M, Context) ->
+    kazoo_util:kz_webhook_info(WebhookId, Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),
