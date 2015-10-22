@@ -36,7 +36,6 @@
      <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_widget_account_details_tpl"
                                                                     template="rs_widget_account_details.tpl"
-                                                                    dashboard
                                                                     account_id=account_id
                                                                     headline=_"Account details"}
         %}

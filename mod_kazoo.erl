@@ -982,6 +982,11 @@ event({postback,{flush_registration_by_username,[{sip_username, Username}]},_,_}
     mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
     Context;
 
+event({submit,kz_webhook,_,_},Context) ->
+    _ = kazoo_util:kz_webhook(Context),
+    mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 

@@ -188,6 +188,7 @@
     ,kz_webhook_info/2
     ,kz_flush_registration_by_username/2
     ,kz_flush_registration_by_username/3
+    ,kz_webhook/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2523,3 +2524,22 @@ kz_webhook_info(WebhookId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?WEBHOOKS/binary, <<"/">>/binary, (z_convert:to_binary(WebhookId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_webhook(Context) ->
+    lager:info("kz_webhook event variables: ~p", [z_context:get_q_all(Context)]),
+    _All = z_context:get_q_all(Context),
+    CurrDoc = case z_context:get_q("webhook_id", Context) of
+        'undefined' -> ?EMPTY_JSON_OBJECT;
+         WebhookId -> kz_webhook_info(WebhookId, Context)
+    end,
+lager:info("CurrDoc: ~p",[CurrDoc]),
+    Routines = [fun(J) -> modkazoo_util:set_value(<<"name">>, modkazoo_util:get_q_bin("name",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"hook">>, modkazoo_util:get_q_bin("hook",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"enabled">>, modkazoo_util:get_q_atom("enabled",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"http_verb">>, modkazoo_util:get_q_bin("http_verb",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"retries">>, modkazoo_util:get_q_integer("retries",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"uri">>, modkazoo_util:get_q_bin("uri",Context), J) end
+               ],
+    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
+lager:info("NewDoc: ~p",[NewDoc]),
+    ok.

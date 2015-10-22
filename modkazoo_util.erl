@@ -48,6 +48,8 @@
     ,split_b/2
     ,format_account_id/2
     ,get_q_bin/2
+    ,get_q_atom/2
+    ,get_q_integer/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -448,3 +450,9 @@ format_account_id(AccountId, 'raw') -> AccountId.
 
 get_q_bin(Key, Context) ->
     z_convert:to_binary(z_context:get_q(Key, Context)).
+
+get_q_atom(Key, Context) ->
+    z_convert:to_atom(z_context:get_q(Key, Context)).
+
+get_q_integer(Key, Context) ->
+    z_convert:to_integer(z_context:get_q(Key, Context)).
