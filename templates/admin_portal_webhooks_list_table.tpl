@@ -37,8 +37,6 @@
                            }
             %}
         </tr>
-{% print webhook %}
-{% print webhook_details %}
         {% endwith %}
         {% endfor %}
     </tbody>

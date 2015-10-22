@@ -67,7 +67,7 @@
   </span>
 
   {% wire action={connect signal={update_admin_portal_webhooks_list_tpl} action={update target="admin_portal_webhooks_list_tpl" template="admin_portal_webhooks_list.tpl" headline=_"Webhooks"}} %}
-  <span id="admin_portal_vms_list_tpl">
+  <span id="admin_portal_webhooks_list_tpl">
         {% include "admin_portal_webhooks_list.tpl" headline=_"Webhooks" %}
   </span>
 </div>

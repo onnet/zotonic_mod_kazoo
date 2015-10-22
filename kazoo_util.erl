@@ -186,6 +186,8 @@
     ,kz_trunk_server_numbers/1
     ,kz_list_account_webhooks/1
     ,kz_webhook_info/2
+    ,kz_webhook_delete/2
+    ,kz_webhook_toggle/2
     ,kz_flush_registration_by_username/2
     ,kz_flush_registration_by_username/3
     ,kz_webhook/1
@@ -2522,12 +2524,26 @@ kz_list_account_webhooks(Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_webhook_info(WebhookId, Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?WEBHOOKS/binary, <<"/">>/binary, (z_convert:to_binary(WebhookId))/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?WEBHOOKS/binary, <<"/">>/binary, (z_convert:to_binary(WebhookId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+kz_webhook_delete(WebhookId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?WEBHOOKS/binary, <<"/">>/binary, (z_convert:to_binary(WebhookId))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
+
+kz_webhook_toggle(WebhookId, Context) ->
+    CurrDoc = kz_webhook_info(WebhookId, Context),
+    NewDoc = case modkazoo_util:get_value(<<"enabled">>, CurrDoc) of
+        'true' -> modkazoo_util:set_value(<<"enabled">>, 'false', CurrDoc);
+        'false' -> modkazoo_util:set_value(<<"enabled">>, 'true', CurrDoc)
+    end,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(z_context:get_session('kazoo_account_id', Context)))/binary, ?WEBHOOKS/binary
+                                                                                                          ,<<"/">>/binary, (z_convert:to_binary(WebhookId))/binary>>,
+    crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
+
 kz_webhook(Context) ->
-    lager:info("kz_webhook event variables: ~p", [z_context:get_q_all(Context)]),
     CurrDoc = case z_context:get_q("webhook_id", Context) of
         'undefined' -> ?EMPTY_JSON_OBJECT;
          WebhookId -> kz_webhook_info(WebhookId, Context)
@@ -2540,9 +2556,18 @@ kz_webhook(Context) ->
                 ,fun(J) -> modkazoo_util:set_value(<<"uri">>, modkazoo_util:get_q_bin("uri",Context), J) end
                ] ++ [filter_custom_fields(Pair, Context) || Pair <- z_context:get_q_all(Context)],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, modkazoo_util:delete_key(<<"custom_data">>,CurrDoc), Routines),
-lager:info("NewDoc: ~p",[NewDoc]),
-    ok.
+    case z_context:get_q("webhook_id", Context) of
+        'undefined'->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(z_context:get_session('kazoo_account_id', Context)))/binary, ?WEBHOOKS/binary>>,
+            crossbar_account_request('put', API_String, ?MK_DATABAG(NewDoc), Context);
+        Id ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(z_context:get_session('kazoo_account_id', Context)))/binary, ?WEBHOOKS/binary
+                                                                                                          ,<<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
+    end.
 
-filter_custom_fields({"custom_key_" ++ T, Key}, Context) -> fun(J) -> modkazoo_util:set_value([<<"custom_data">>,z_convert:to_binary(Key)], modkazoo_util:get_q_bin(T,Context), J) end;
-filter_custom_fields(_, _Context) -> fun(J) -> J end.
+filter_custom_fields({"custom_key_" ++ T, Key}, Context) ->
+    fun(J) -> modkazoo_util:set_value([<<"custom_data">>,z_convert:to_binary(Key)], modkazoo_util:get_q_bin(T,Context), J) end;
+filter_custom_fields(_, _Context) ->
+    fun(J) -> J end.
 

@@ -25,7 +25,7 @@
           <label class="form-control-onnet margin-bottom-xs">{_ Enabled _}
           <select id="enabled" name="enabled" class="form-control margin-bottom-xs" style="text-align:center;">
                   <option value="true" {% if webhook[1]["enabled"] %}selected{% endif %}>{_ Enabled _}</option>
-                  <option value="false" {% if not webhook[1]["enabled"] %}selected{% endif %}>{_ Disabled _}</option>
+                  <option value="false" {% if not webhook[1]["enabled"] and webhook[1]["id"] %}selected{% endif %}>{_ Disabled _}</option>
           </select>
           </label>
         </div>

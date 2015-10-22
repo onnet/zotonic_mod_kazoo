@@ -987,6 +987,16 @@ event({submit,kz_webhook,_,_},Context) ->
     mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
     z_render:dialog_close(Context);
 
+event({postback,{delete_webhook,[{webhook_id, WebhookId}]},_,_},Context) ->
+    _ = kazoo_util:kz_webhook_delete(WebhookId, Context),
+    mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    Context;
+
+event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
+    _ = kazoo_util:kz_webhook_toggle(WebhookId, Context),
+    mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 
