@@ -2528,7 +2528,6 @@ kz_webhook_info(WebhookId, Context) ->
 
 kz_webhook(Context) ->
     lager:info("kz_webhook event variables: ~p", [z_context:get_q_all(Context)]),
-    All = z_context:get_q_all(Context),
     CurrDoc = case z_context:get_q("webhook_id", Context) of
         'undefined' -> ?EMPTY_JSON_OBJECT;
          WebhookId -> kz_webhook_info(WebhookId, Context)
@@ -2539,7 +2538,7 @@ kz_webhook(Context) ->
                 ,fun(J) -> modkazoo_util:set_value(<<"http_verb">>, modkazoo_util:get_q_bin("http_verb",Context), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"retries">>, modkazoo_util:get_q_integer("retries",Context), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"uri">>, modkazoo_util:get_q_bin("uri",Context), J) end
-               ] ++ [filter_custom_fields(Pair, Context) || Pair <- All],
+               ] ++ [filter_custom_fields(Pair, Context) || Pair <- z_context:get_q_all(Context)],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, modkazoo_util:delete_key(<<"custom_data">>,CurrDoc), Routines),
 lager:info("NewDoc: ~p",[NewDoc]),
     ok.
