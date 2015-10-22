@@ -1247,6 +1247,7 @@ add_device(Context) ->
     Props = modkazoo_util:filter_empty(
         [{[<<"data">>,<<"sip">>,<<"username">>],z_context:get_q("sipusername",Context)}
         ,{[<<"data">>,<<"sip">>,<<"password">>],z_context:get_q("sippassword",Context)}
+        ,{[<<"data">>,<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
         ,{[<<"data">>,<<"call_forward">>,<<"number">>],z_context:get_q("cellphonenumber",Context)}
         ,{[<<"data">>,<<"name">>],z_context:get_q("name",Context)}
         ,{[<<"data">>,<<"owner_id">>],z_context:get_q("device_owner_id",Context)}

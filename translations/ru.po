@@ -1,23 +1,26 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Contact IP"
+msgstr "IP адрес"
 
-msgid ""
-msgstr ""
+msgid "User agent"
+msgstr "Тип оборудования"
 
-msgid ""
-msgstr ""
+msgid "Current account calls"
+msgstr "Текущие вызовы учетной записи"
 
-msgid ""
-msgstr ""
+msgid "Incoming call from"
+msgstr "Входящий вызов от"
 
-msgid ""
-msgstr ""
+msgid "Account's allocated numbers"
+msgstr "Присвоенные номера"
 
 msgid "Do you really want to flush registration for device"
 msgstr "Вы действительно хотите удалить информацию о регистрации устройства"
+
+msgid "Account's current registrations"
+msgstr "Текущие регистрации"
 
 msgid "answered"
 msgstr "разговор"

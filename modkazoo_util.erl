@@ -47,6 +47,7 @@
     ,delete_session_jobj_key/3
     ,split_b/2
     ,format_account_id/2
+    ,get_q_bin/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -445,3 +446,5 @@ format_account_id(AccountId, 'encoded') when is_binary(AccountId) ->
     z_convert:to_binary(["account%2F", Id1, Id2, "%2F", Id3, Id4, "%2F", IdRest]);
 format_account_id(AccountId, 'raw') -> AccountId.
 
+get_q_bin(Key, Context) ->
+    z_convert:to_binary(z_context:get_q(Key, Context)).
