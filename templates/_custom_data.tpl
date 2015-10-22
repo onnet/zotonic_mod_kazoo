@@ -1,4 +1,4 @@
-    <div class="form-group">
+    <div id="div_{{ #cus }}" class="form-group">
       <div class="row">
         <div class="col-sm-4">
           <label class="form-control-onnet margin-bottom-xs">{_ Key _}
@@ -11,6 +11,7 @@
           </label>
         </div>
         <div class="col-sm-1">
+            {% wire id="delete_"++#cus action={remove target="div_"++#cus} %}
             <i id="delete_{{ #cus }}" class="fa fa-trash-o pointer" style="padding-top: 2em;" title="Delete"></i>
         </div>
       </div>

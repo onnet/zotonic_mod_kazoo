@@ -57,17 +57,20 @@
         </div>
       </div>
     </div>
-    {% for custom_pair in webhook[1]["custom_data"][1] %}
-        {% include "_custom_data.tpl" custom_pair=custom_pair %}
-    {% endfor %}
-    {% if webhook[1]["id"] %}
-      <input type="hidden" name="webhook_id" value="{{ webhook[1]["id"] }}">
-    {% endif %}
+    <span id="custom_data_span">
+      {% for custom_pair in webhook[1]["custom_data"][1] %}
+          {% include "_custom_data.tpl" custom_pair=custom_pair %}
+      {% endfor %}
+      {% if webhook[1]["id"] %}
+        <input type="hidden" name="webhook_id" value="{{ webhook[1]["id"] }}">
+      {% endif %}
+    </span>
 </form>
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">
-      <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add custom data _}</button>
+      {% wire id="add_custom_data_field" action={insert_bottom target="custom_data_span" template="_custom_data.tpl"} %}
+      <button id="add_custom_data_field" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add custom data _}</button>
     </div>
   </div>
 </div>
