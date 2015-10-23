@@ -997,6 +997,12 @@ event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
     mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
     Context;
 
+event({postback,refresh_admin_callstats,_,_}, Context) ->
+    SelectedDay = z_context:get_q("callstatsdayInput",Context),
+lager:info("SelectedDay: ~p",[SelectedDay]),
+    mod_signal:emit({update_admin_portal_call_history_tpl, [{selected_day, SelectedDay}]}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

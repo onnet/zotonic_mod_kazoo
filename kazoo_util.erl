@@ -252,6 +252,7 @@
 -define(PAGE_SIZE, <<"page_size=">>).
 -define(START_KEY, <<"start_key=">>).
 -define(WEBHOOKS, <<"/webhooks">>).
+-define(NO_PAGINATION, <<"&paginate=false">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -791,8 +792,9 @@ kz_list_user_vmbox_details(VMBoxId, Context) ->
 
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"?">>/binary, 
-                   ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"?">>/binary, 
+                   ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
+lager:info("API_String: ~p",[API_String]),
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
@@ -801,7 +803,9 @@ kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
                    ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %                  ?START_KEY/binary, (z_convert:to_binary(StartKey))/binary, <<"&">>/binary, ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %  Docs to implement pagination: https://github.com/2600hz/kazoo/blob/master/applications/crossbar/doc/basics.md#pagination                 
-    crossbar_account_request('get', API_String, [], Context).
+    Res = crossbar_account_request('get', API_String, [], Context),
+    lager:info("res: ~p",[Res]),
+    Res.
 
 kz_list_user_cdr(CreatedFrom, CreatedTo, Context) ->
     OwnerId = z_context:get_session('kazoo_owner_id', Context),

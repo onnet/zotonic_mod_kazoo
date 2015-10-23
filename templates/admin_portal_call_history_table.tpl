@@ -11,8 +11,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for call in m.kazoo[{kz_list_account_cdr_page page_size=50}] %}
-            {% include "admin_cdr_table_line.tpl" %}
+        {% for call in m.kazoo[{kz_list_account_cdr selected_day=selected_day}]%}
+            {% include "admin_cdr_table_line.tpl" call=call %}
         {% endfor %}
     </tbody>
 </table>

@@ -32,6 +32,9 @@
     ,rand_hex_binary/1
     ,on_to_true/1
     ,current_tstamp/0
+    ,today_begins_tstamp/0
+    ,day_begins_tstamp/1
+    ,day_ends_tstamp/1
     ,day_ago_tstamp/0
     ,week_ago_tstamp/0
     ,month_ago_tstamp/0
@@ -273,6 +276,15 @@ on_to_true(Res) ->
 
 current_tstamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time()).
+
+today_begins_tstamp() ->
+    calendar:datetime_to_gregorian_seconds({erlang:date(),{0,0,0}}).
+
+day_begins_tstamp(Day) ->
+    calendar:datetime_to_gregorian_seconds({Day,{0,0,0}}).
+
+day_ends_tstamp(Day) ->
+    calendar:datetime_to_gregorian_seconds({Day,{23,59,59}}).
 
 day_ago_tstamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 86400.
