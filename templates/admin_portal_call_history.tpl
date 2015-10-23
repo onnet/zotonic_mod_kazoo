@@ -24,7 +24,7 @@
                                                     data-date-start-date="-6m"
                                                     data-date-end-date="+0d"
                                                     readonly/>
-    <span class="pull-right pr-05"> {_ Choose day _}: </span>
+    <span class="pull-right pr-05"> {_ Choose date _}: </span>
     {% javascript %}
         $('#callstatsdayInput').datepicker();
     {% endjavascript %}
