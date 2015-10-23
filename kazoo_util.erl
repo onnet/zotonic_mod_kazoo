@@ -1286,7 +1286,7 @@ kz_get_account_callflow(CallflowId, Context) ->
 kz_list_account_children(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CHILDREN/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    lists:reverse(crossbar_account_request('get', API_String, [], Context)).
 
 kz_list_account_channels(Context) ->
     kz_list_account_channels(z_context:get_session('kazoo_account_id', Context), Context).
