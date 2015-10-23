@@ -37,6 +37,7 @@
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_calls_list_widget_opened"
                                                                     template="admin_portal_call_history_table.tpl"
+                                                                    calls=m.kazoo[{kz_list_account_cdr selected_day=m.signal[signal].selected_day}]
                                                                     selected_day=m.signal[signal].selected_day}
         %}
     </div>
