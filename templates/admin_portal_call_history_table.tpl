@@ -2,6 +2,7 @@
 <table id="user_portal_call_history_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
+            <th style="text-align: center;"></th>
             <th style="text-align: center;">{_ Date _}</th>
             <th style="text-align: center;">{_ From _}</th>
             <th style="text-align: center;">{_ To _}</th>
@@ -23,6 +24,10 @@ var oTable = $('#user_portal_call_history_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
 "aaSorting": [[ 0, "desc" ]],
+"aoColumnDefs" : [{
+        "aTargets" : [0],
+        "bVisible" : false
+}],
 "aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
 "iDisplayLength" : 5,
 "oLanguage" : {
