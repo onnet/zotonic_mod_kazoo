@@ -31,14 +31,14 @@
     ,lcfirst_binary/1
     ,rand_hex_binary/1
     ,on_to_true/1
-    ,current_tstamp/0
-    ,today_begins_tstamp/0
-    ,today_ends_tstamp/0
-    ,day_begins_tstamp/1
-    ,day_ends_tstamp/1
-    ,day_ago_tstamp/0
-    ,week_ago_tstamp/0
-    ,month_ago_tstamp/0
+    ,current_tstamp/1
+    ,today_begins_tstamp/1
+    ,today_ends_tstamp/1
+    ,day_begins_tstamp/2
+    ,day_ends_tstamp/2
+    ,day_ago_tstamp/1
+    ,week_ago_tstamp/1
+    ,month_ago_tstamp/1
     ,filter_undefined/1
     ,filter_empty/1
     ,check_file_size_exceeded/3
@@ -275,29 +275,32 @@ on_to_true(Res) ->
         _ -> 'false'
     end.
 
-current_tstamp() ->
-    calendar:datetime_to_gregorian_seconds(calendar:universal_time()).
+current_tstamp(Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt(calendar:universal_time(), Context)).
 
-today_begins_tstamp() ->
-    calendar:datetime_to_gregorian_seconds({erlang:date(),{0,0,0}}).
+today_begins_tstamp(Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt({erlang:date(),{0,0,0}}, Context)).
 
-today_ends_tstamp() ->
-    calendar:datetime_to_gregorian_seconds({erlang:date(),{23,59,59}}).
+today_ends_tstamp(Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt({erlang:date(),{23,59,59}}, Context)).
 
-day_begins_tstamp(Day) ->
-    calendar:datetime_to_gregorian_seconds({Day,{0,0,0}}).
+day_begins_tstamp(Day, Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt({Day,{0,0,0}}, Context)).
 
-day_ends_tstamp(Day) ->
-    calendar:datetime_to_gregorian_seconds({Day,{23,59,59}}).
+day_ends_tstamp(Day, Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt({Day,{23,59,59}}, Context)).
 
-day_ago_tstamp() ->
-    calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 86400.
+day_ago_tstamp(Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt(calendar:universal_time(), Context)) - 86400.
 
-week_ago_tstamp() ->
-    calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 604800.
+week_ago_tstamp(Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt(calendar:universal_time(), Context)) - 604800.
 
-month_ago_tstamp() ->
-    calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - 2678400.
+month_ago_tstamp(Context) ->
+    calendar:datetime_to_gregorian_seconds(back_to_gmt(calendar:universal_time(), Context)) - 2678400.
+
+back_to_gmt(DateTime, Context) ->
+    localtime:local_to_local(DateTime, z_convert:to_list(kazoo_util:may_be_get_timezone(Context)), "GMT").
 
 filter_undefined(Props) ->
     [KV || KV <- Props,
