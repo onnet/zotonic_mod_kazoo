@@ -848,7 +848,7 @@ kz_cdr_element_reduce({CdrElement}, Timezone, Context) ->
                     ({<<"id">>,_}) -> true;
                     ({<<"call_id">>,_}) -> true;
                     (_) -> false end,
-    T = list_to_integer(binary_to_list(proplists:get_value(<<"unix_timestamp">>,CdrElement))),
+    T = z_convert:to_integer(proplists:get_value(<<"unix_timestamp">>,CdrElement)),
     ?JSON_WRAPPER(lists:filter(FilterFun, CdrElement)
       ++[{<<"kz_recording_download_link">>, kz_recording_download_link(proplists:get_value(<<"id">>,CdrElement), Context)}]
       ++[{<<"filtered_call_date">>, localtime:local_to_local(calendar:now_to_universal_time({T div 1000000, T rem 1000000, 0}), "GMT", Timezone)}]).
