@@ -797,7 +797,6 @@ kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"?">>/binary, 
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
-lager:info("API_String: ~p",[API_String]),
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
