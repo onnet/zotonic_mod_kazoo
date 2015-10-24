@@ -155,6 +155,7 @@ m_find_value({kz_incoming_fax_download_link, [{doc_id, DocId}]}, _M, Context) ->
     kazoo_util:kz_incoming_fax_download_link(DocId, Context);
 
 m_find_value({kz_list_account_cdr,[{selected_day, 'undefined'}]}, _M, Context) ->
+%    kazoo_util:kz_cdr_list_reduce(kazoo_util:kz_list_account_cdr_page(0, 100, Context), Context);
     kazoo_util:kz_list_account_cdr_reduced(modkazoo_util:today_begins_tstamp(), modkazoo_util:today_ends_tstamp(), Context);
 
 m_find_value({kz_list_account_cdr,[{selected_day, SelectedDay}]}, _M, Context) ->

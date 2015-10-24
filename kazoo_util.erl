@@ -28,6 +28,7 @@
     ,kz_list_account_cdr_reduced/3
     ,kz_list_user_cdr/3
     ,kz_fetch_cdr_details/2
+    ,kz_cdr_list_reduce/2
     ,kz_list_account_children/1
     ,kz_list_account_channels/1
     ,kz_list_account_channels/2
@@ -805,9 +806,7 @@ kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
                    ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %                  ?START_KEY/binary, (z_convert:to_binary(StartKey))/binary, <<"&">>/binary, ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %  Docs to implement pagination: https://github.com/2600hz/kazoo/blob/master/applications/crossbar/doc/basics.md#pagination                 
-    Res = crossbar_account_request('get', API_String, [], Context),
-    lager:info("res: ~p",[Res]),
-    Res.
+    crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_cdr(CreatedFrom, CreatedTo, Context) ->
     OwnerId = z_context:get_session('kazoo_owner_id', Context),
