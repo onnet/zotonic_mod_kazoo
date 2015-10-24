@@ -14,7 +14,9 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" action={postback postback="refresh_admin_callstats" delegate="mod_kazoo" qarg="callstatsdayInput"} text=_"refresh results" %}
+    {% button class="btn btn-xs btn-onnet pull-right" action={postback postback="refresh_admin_callstats" delegate="mod_kazoo" qarg="callstatsdayInput"} text=_"refresh results"
+                                                      action={mask target="user_portal_call_history_table" message=_"Sending request"++"..."}
+    %}
      <input id="callstatsdayInput" type="text" class="input-small-onnet pull-right" name="callstatsdayInput"
                                                     value="{% if m.signal[signal].selected_day %}{{ m.signal[signal].selected_day }}{% else %}{{ now|date: 'd/m/Y' }}{% endif %}"
                                                     data-date="{% if m.signal[signal].selected_day %}{{ m.signal[signal].selected_day }}{% else %}{{ now|date: 'd/m/Y' }}{% endif %}"

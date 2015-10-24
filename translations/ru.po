@@ -28,8 +28,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Sending request"
+msgstr "Отправляется запрос"
 
 msgid "Choose date"
 msgstr "Выберите дату"
