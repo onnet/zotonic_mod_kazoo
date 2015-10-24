@@ -25,6 +25,9 @@
     ,kz_list_account_devices/1
     ,kz_list_account_cdr/3
     ,kz_list_account_cdr_page/3
+    ,kz_list_account_cdr_reduced/3
+    ,kz_list_user_cdr/3
+    ,kz_fetch_cdr_details/2
     ,kz_list_account_children/1
     ,kz_list_account_channels/1
     ,kz_list_account_channels/2
@@ -36,7 +39,6 @@
     ,kz_list_account_vmboxes/1
     ,kz_list_user_vmboxes/1
     ,kz_list_user_vmbox_details/2
-    ,kz_list_user_cdr/3
     ,kz_vmessage_download_link/3
     ,is_kazoo_account_admin/1
     ,set_vm_message_folder/4
@@ -814,6 +816,11 @@ kz_list_user_cdr(CreatedFrom, CreatedTo, Context) ->
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+kz_fetch_cdr_details(CdrId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"/">>/binary, (z_convert:to_binary(CdrId))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
 kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VMBoxId))/binary,
@@ -826,6 +833,30 @@ kz_recording_download_link(CallId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?THIRD_PARTY_RECORDING/binary, <<"/">>/binary, (z_convert:to_binary(CallId))/binary,
                    ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+
+kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
+    Timezone = z_convert:to_list(kazoo_util:may_be_get_timezone(Context)),
+    [ kz_cdr_element_reduce(Element, Timezone, Context) || Element <- CdrList ];
+kz_cdr_list_reduce(_,_) ->
+    [].
+
+kz_cdr_element_reduce({CdrElement}, Timezone, Context) ->
+    FilterFun = fun ({<<"timestamp">>,_}) -> true;
+                    ({<<"calling_from">>,_}) -> true;
+                    ({<<"dialed_number">>,_}) -> true;
+                    ({<<"duration_seconds">>,_}) -> true;
+                    ({<<"billing_seconds">>,_}) -> true;
+                    ({<<"recording_url">>,_}) -> true;
+                    ({<<"id">>,_}) -> true;
+                    ({<<"call_id">>,_}) -> true;
+                    (_) -> false end,
+    T = list_to_integer(binary_to_list(proplists:get_value(<<"unix_timestamp">>,CdrElement))),
+    ?JSON_WRAPPER(lists:filter(FilterFun, CdrElement)
+      ++[{<<"kz_recording_download_link">>, kz_recording_download_link(proplists:get_value(<<"id">>,CdrElement), Context)}]
+      ++[{<<"filtered_call_date">>, localtime:local_to_local(calendar:now_to_universal_time({T div 1000000, T rem 1000000, 0}), "GMT", Timezone)}]).
+
+kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
+    kz_cdr_list_reduce(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context).
     
 kz_incoming_fax_download_link(DocId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),

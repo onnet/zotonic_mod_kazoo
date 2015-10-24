@@ -155,18 +155,22 @@ m_find_value({kz_incoming_fax_download_link, [{doc_id, DocId}]}, _M, Context) ->
     kazoo_util:kz_incoming_fax_download_link(DocId, Context);
 
 m_find_value({kz_list_account_cdr,[{selected_day, 'undefined'}]}, _M, Context) ->
-    kazoo_util:kz_list_account_cdr(modkazoo_util:today_begins_tstamp(), modkazoo_util:current_tstamp(), Context);
+    kazoo_util:kz_list_account_cdr_reduced(modkazoo_util:today_begins_tstamp(), modkazoo_util:current_tstamp(), Context);
 
 m_find_value({kz_list_account_cdr,[{selected_day, SelectedDay}]}, _M, Context) ->
 lager:info("SelectedDay: ~p",[SelectedDay]),
     [Day, Month, Year] = string:tokens(SelectedDay,"/"),
     Date = {z_convert:to_integer(Year), z_convert:to_integer(Month), z_convert:to_integer(Day)},
-    Res = kazoo_util:kz_list_account_cdr(modkazoo_util:day_begins_tstamp(Date), modkazoo_util:day_ends_tstamp(Date), Context),
+    Res = kazoo_util:kz_list_account_cdr_reduced(modkazoo_util:day_begins_tstamp(Date), modkazoo_util:day_ends_tstamp(Date), Context),
 lager:info("Res: ~p",[Res]),
     Res;
 
 m_find_value({kz_list_account_cdr_page, [{page_size, PageSize}]}, _M, Context) ->
     kazoo_util:kz_list_account_cdr_page(0, PageSize, Context);
+
+m_find_value({kz_fetch_cdr_details, [{cdr_id, CDR_Id}]}, _M, Context) ->
+lager:info("CDR_Id: ~p",[CDR_Id]),
+    kazoo_util:kz_fetch_cdr_details(CDR_Id, Context);
 
 m_find_value(kz_list_user_cdr, _M, Context) ->
     kazoo_util:kz_list_user_cdr(modkazoo_util:day_ago_tstamp(), modkazoo_util:current_tstamp(), Context);
