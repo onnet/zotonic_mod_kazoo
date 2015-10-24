@@ -8,8 +8,8 @@ inno_timestamp_to_date(Seconds, Context) ->
     case Seconds of
         'undefined' -> {{0000,0,00},{00,00,0}};
         _ -> 
-            GMT = calendar:gregorian_seconds_to_datetime(z_convert:to_integer(Seconds)),
-            localtime:local_to_local(GMT, "GMT", z_convert:to_list(kazoo_util:may_be_get_timezone(Context)))
+            DateTime = calendar:gregorian_seconds_to_datetime(z_convert:to_integer(Seconds)),
+            localtime:local_to_local(DateTime, "UTC", z_convert:to_list(kazoo_util:may_be_get_timezone(Context)))
     end.
 
 inno_timestamp_to_date(Seconds, Args, _Context) ->
