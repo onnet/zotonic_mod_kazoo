@@ -506,6 +506,7 @@ crossbar_account_request(Verb, API_String, DataBag, Context) ->
                     {JsonData} = jiffy:decode(Body),
                     proplists:get_value(<<"data">>, JsonData);
                 _ -> 
+                    z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context),
                     lager:info("crossbar_account_request API String: ~p:~p", [Verb,API_String]),
                     lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
                     lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
