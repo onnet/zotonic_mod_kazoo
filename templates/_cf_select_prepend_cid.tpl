@@ -11,8 +11,6 @@
       </div>
     </div>
     <input type="hidden" name="element_id" value="{{ element_id }}">
-    <input type="hidden" name="kz_element_id" value="{{ kz_element_id }}">
-    <input type="hidden" name="kz_element_name" value="{{ kz_element_name }}">
 </form>
 <div class="form-group">
   <div class="row">
