@@ -1778,7 +1778,8 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"cid_chec
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"prepend_cid">> ->
     CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name_prefix">>],z_context:get_session('current_callflow', Context)),
     CallerIdNumberPrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_number_prefix">>],z_context:get_session('current_callflow', Context)),
-    ['undeined',<<CallerIdNamePrefix/binary,<<" ">>/binary,CallerIdNumberPrefix/binary>>];
+    ['undeined',[CallerIdNamePrefix ,CallerIdNumberPrefix]];
+%    ['undeined',<<CallerIdNamePrefix/binary,<<" ">>/binary,CallerIdNumberPrefix/binary>>];
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"conference">> ->
     Id = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
     case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],z_context:get_session('current_callflow', Context)) of

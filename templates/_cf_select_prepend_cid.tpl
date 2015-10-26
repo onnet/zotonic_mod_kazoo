@@ -3,14 +3,16 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="caller_id_name_prefix" name="caller_id_name_prefix" placeholder="Caller-ID Name Prefix">
+          <input type="text" class="form-control margin-bottom-xs" id="caller_id_name_prefix" name="caller_id_name_prefix" placeholder="Caller-ID Name Prefix" value="{{ kz_element_name[1] }}">
         </div>
         <div class="col-sm-6">
-          <input type="text" class="form-control" id="caller_id_number_prefix" name="caller_id_number_prefix" placeholder="Caller-ID Number Prefix">
+          <input type="text" class="form-control" id="caller_id_number_prefix" name="caller_id_number_prefix" placeholder="Caller-ID Number Prefix" value="{{ kz_element_name[2] }}">
         </div>
       </div>
     </div>
     <input type="hidden" name="element_id" value="{{ element_id }}">
+    <input type="hidden" name="kz_element_id" value="{{ kz_element_id }}">
+    <input type="hidden" name="kz_element_name" value="{{ kz_element_name }}">
 </form>
 <div class="form-group">
   <div class="row">
