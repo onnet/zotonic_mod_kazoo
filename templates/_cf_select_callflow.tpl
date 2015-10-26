@@ -6,7 +6,9 @@
             <select id="callflow_selector" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
               {% for option in m.kazoo.kz_list_account_callflows %}
                 {% if option["numbers"][1]|match:"^\\+?\\d+$" %}
-                  <option value="{{ option["id"] }}" selected="selected">{% if option["name"] %}{{ option["name"] }}{% else %}{{ option["numbers"][1] }}{% endif %}</option>
+                  <option value="{{ option["id"] }}" {% if option["id"]==kz_element_id %}selected="selected"{% endif %}>
+                    {% if option["name"] %}{{ option["name"] }}{% else %}{{ option["numbers"][1] }}{% endif %}
+                  </option>
                 {% endif %}
               {% endfor %}
             </select>
@@ -14,6 +16,8 @@
       </div>
     </div>
     <input type="hidden" name="element_id" value="{{ element_id }}">
+    <input type="hidden" name="element_id" value="{{ kz_element_id }}">
+    <input type="hidden" name="element_id" value="{{ kz_element_name }}">
 </form>
 <div class="form-group">
   <div class="row">
