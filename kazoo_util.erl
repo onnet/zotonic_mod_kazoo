@@ -2445,8 +2445,7 @@ record_call_doc_id(Context) ->
             modkazoo_util:get_value(<<"id">>,NewCf);
         [Cf|_] -> 
             modkazoo_util:get_value(<<"id">>,Cf)
-    end,
-    lager:info("Cfs: ~p",[Cfs]).
+    end.
 
 create_record_call_cacllflow(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
