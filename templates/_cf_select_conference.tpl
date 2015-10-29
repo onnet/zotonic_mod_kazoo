@@ -17,7 +17,7 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-6">
-      {% wire id="button_cf_select_conference_create" action={dialog_open title=_"Add conference" template="_add_conference_dialog.tpl"} %}
+      {% wire id="button_cf_select_conference_create" action={dialog_open title=_"Add conference" template="_add_conference_dialog.tpl" width="auto"} %}
       <button id="button_cf_select_conference_create" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Add conference _}</button>
     </div>
     {% wire name="refresh_edit_conference_btn_cf_conference" action={ update target="edit_conference_btn_cf_conference" template="_cf_edit_conference_button.tpl" } %}

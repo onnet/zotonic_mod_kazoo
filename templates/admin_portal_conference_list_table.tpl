@@ -31,7 +31,7 @@
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_{{ conference["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++conference["id"] action={ dialog_open title=_"Edit conference "++conference["name"] template="_edit_conference_lazy.tpl" conference_id=conference["id"] } %}
+            {% wire id="edit_"++conference["id"] action={ dialog_open title=_"Edit conference "++conference["name"] template="_edit_conference_lazy.tpl" conference_id=conference["id"] width="auto" } %}
             <td style="text-align: center;"><i id="delete_{{ conference["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++conference["id"]
                     action={confirm text=_"Do you really want to delete conference "++conference["name"]++"?"
