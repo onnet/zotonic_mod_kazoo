@@ -8,6 +8,7 @@
 -export([
      observe_search_query/2
     ,observe_postback_notify/2
+    ,observe_kazoo_notify/2
     ,event/2
 ]).
 
@@ -25,6 +26,16 @@ observe_postback_notify({postback_notify, "no_auth",_,_,_}, Context) ->
 
 observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
+    undefined.
+
+observe_kazoo_notify({kazoo_notify, "no_auth",_,_,_}, Context) ->
+    lager:info("Catched kazoo notify: no_auth"),
+    z_session:add_script(<<"z_notify('no_auth');">>, Context#context.session_pid);
+ %   {ok, Context1} = z_session_manager:stop_session(Context),
+ %   z_render:wire({redirect, [{dispatch, "home"}]}, Context1);
+
+observe_kazoo_notify(A, _Context) ->
+    lager:info("Catched kazoo notify: ~p", [A]),
     undefined.
 
 event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->

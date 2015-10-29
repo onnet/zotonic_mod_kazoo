@@ -35,10 +35,10 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <div class="col-xs-1 col-xs-offset-2 text-center"></div>
+        <div class="col-xs-1 col-xs-offset-1 text-center"></div>
         <div class="col-xs-4 text-center"></div>
-        <div class="col-xs-1 text-center">Delay</div>
-        <div class="col-xs-1 text-center">Timeout</div>
+        <div class="col-xs-1 text-center" style="padding-left: 3em;">{_ Delay _}</div>
+        <div class="col-xs-2 text-center" style="padding-left: 5em;">{_ Timeout _}</div>
         <div class="col-xs-1 text-center"></div>
       </div>
     </div>
