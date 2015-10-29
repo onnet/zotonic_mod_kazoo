@@ -2430,9 +2430,37 @@ toggle_all_calls_recording(Context) ->
         Value -> Value
     end,
     case RecState of
-        [] -> kz_set_acc_doc([<<"preflow">>,<<"always">>], <<"preflow">>, Context);
-        _ -> kz_set_acc_doc([<<"preflow">>,<<"always">>], <<>>, Context)
+        [] ->
+            kz_set_acc_doc([<<"preflow">>,<<"always">>], record_call_doc_id(Context), Context);
+        _ ->
+            kz_set_acc_doc([<<"preflow">>,<<"always">>], <<>>, Context)
     end.
+
+record_call_doc_id(Context) ->
+    Cfs = kz_list_account_callflows(Context),
+    case lists:filter(fun(X) -> [<<"record_call">>] =:= modkazoo_util:get_value(<<"numbers">>,X) end, Cfs) of
+        [] ->
+            _ = create_record_call_cacllflow(Context),
+            NewCf = lists:filter(fun(X) -> [<<"record_call">>] =:= modkazoo_util:get_value(<<"numbers">>,X) end, Cfs),
+            modkazoo_util:get_value(<<"id">>,NewCf);
+        [Cf|_] -> 
+            modkazoo_util:get_value(<<"id">>,Cf)
+    end,
+    lager:info("Cfs: ~p",[Cfs]).
+
+create_record_call_cacllflow(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"name">>], <<"record_call">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"record_call">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"contact_list">>, <<"exclude">>], true, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"record_call">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>, <<"action">>], <<"start">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>, <<"url">>], <<>>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>, <<"format">>], <<"mp3">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>, <<"time_limit">>], <<"6000">>, J) end],
+    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
+    crossbar_account_request('put', API_String, DataBag, Context).
 
 kz_cccp_creds_list(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
