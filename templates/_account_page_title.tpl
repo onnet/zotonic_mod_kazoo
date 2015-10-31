@@ -3,9 +3,13 @@
   <p>
     {_ Logged in as _}
     <span style="color:{{ m.config.mod_kazoo.color2.value }};">
-      {{ m.kazoo[{kz_doc_field type="user" doc_id=m.session.kazoo_owner_id field="first_name"}] }}
-      {{ m.kazoo[{kz_doc_field type="user" doc_id=m.session.kazoo_owner_id field="last_name"}] }}
-      at
+      {% if m.session.kazoo_owner_id != "userless_mask" %}
+        {{ m.kazoo[{kz_doc_field type="user" doc_id=m.session.kazoo_owner_id field="first_name"}] }}
+        {{ m.kazoo[{kz_doc_field type="user" doc_id=m.session.kazoo_owner_id field="last_name"}] }}
+      {% else %}
+        {_ Without user _}
+      {% endif %}
+      {_ at _}
       {{ m.kazoo[{kz_doc_field type="account" doc_id=m.session.kazoo_account_id field="name"}] }}
     </span>
   </p>

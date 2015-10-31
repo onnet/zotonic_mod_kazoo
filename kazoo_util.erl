@@ -195,6 +195,8 @@
     ,kz_flush_registration_by_username/3
     ,kz_webhook/1
     ,filter_custom_fields/2
+    ,kz_current_context_reseller/1
+    ,kz_current_context_superadmin/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2636,3 +2638,8 @@ filter_custom_fields({"custom_key_" ++ T, Key}, Context) ->
 filter_custom_fields(_, _Context) ->
     fun(J) -> J end.
 
+kz_current_context_reseller(Context) ->
+    modkazoo_util:get_value(<<"is_reseller">>, kazoo_util:kz_get_acc_doc(Context)).
+
+kz_current_context_superadmin(Context) ->
+    modkazoo_util:get_value(<<"superduper_admin">>, kazoo_util:kz_get_acc_doc(Context)).

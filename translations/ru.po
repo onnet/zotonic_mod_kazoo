@@ -22,8 +22,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "at"
+msgstr "в"
 
 msgid "Delay"
 msgstr "Задержка"

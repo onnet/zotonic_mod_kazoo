@@ -7,7 +7,9 @@
     ,gcapture_check/1
     ,process_signup_form/1
     ,may_be_add_third_party_billing/1
-    ,may_be_set_reseller_data/2
+    ,may_be_set_reseller_data/1
+    ,may_be_set_user_data/1
+    ,choose_page_to_redirect/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -38,37 +40,47 @@ do_sign_in(Login, Password, Account, Context) ->
             z_context:set_session(kazoo_account_id, Account_Id, Context),
             z_context:set_session(kazoo_account_name, Account_Name, Context),
             z_context:set_session(kazoo_login_name, Login, Context),
-            case kazoo_util:kz_user_doc_field(<<"priv_level">>, Context) of
-                <<"admin">> -> 
-                    z_context:set_session('kazoo_account_admin', 'true', Context),
-                    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
-                    z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
-                    z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
-                    _ = may_be_set_reseller_data(AccountDoc, Context),
-                    _ = may_be_add_third_party_billing(Context),
-                    choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context));
-                _ ->
-                    z_context:set_session('kazoo_account_admin', 'false', Context),
-                    _ = may_be_add_third_party_billing(Context),
-                    Context1 = z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context),
-                    z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context1)
-            end;
+            _ = may_be_add_third_party_billing(Context),
+            _ = may_be_set_user_data(Context),
+            _ = may_be_set_reseller_data(Context),
+            choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context));
         _ ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
     end.
 
 choose_page_to_redirect(Context) ->
-    case z_dispatcher:url_for('dashboard',Context) of
-        'undefined' -> 
-            case z_context:get_session(kazoo_reseller_account_id, Context) of 
-                'undefined' -> z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context);
-                _ -> z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context)
-            end;
-        _ -> z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context) 
+    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
+lager:info("redir AccDoc: ~p", [AccountDoc]),
+lager:info("redir is_reseller: ~p", [modkazoo_util:get_value(<<"is_reseller">>,AccountDoc)]),
+lager:info("redir is_super: ~p", [modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc)]),
+    case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
+        'true' ->
+            z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
+        'false' -> 
+            case z_dispatcher:url_for('dashboard',Context) of
+                'undefined' -> 
+                    case z_context:get_session('kazoo_account_admin', Context) of 
+                        'true' -> z_render:wire({redirect, [{dispatch, "admin_settings"}]}, Context);
+                        'false' -> z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context)
+                    end;
+                _ ->
+                    z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context) 
+            end
     end.
 
-may_be_set_reseller_data(AccountDoc, Context) ->
+may_be_set_user_data(Context) ->
+    case kazoo_util:kz_user_doc_field(<<"priv_level">>, Context) of
+                <<"admin">> ->
+                    z_context:set_session('kazoo_account_admin', 'true', Context);
+                _ ->
+                    z_context:set_session('kazoo_account_admin', 'false', Context)
+    end.
+
+may_be_set_reseller_data(Context) ->
+    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
+    z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
+    z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
     case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
         'true' -> 
             AccountId = z_context:get_session(kazoo_account_id, Context),

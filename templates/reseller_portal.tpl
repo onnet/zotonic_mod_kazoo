@@ -9,7 +9,7 @@
 
 {% wire action={connect signal={update_reseller_children_area} action={update target="reseller_children_area" template="reseller_children.tpl"}} %}
 <span id="reseller_children_area">
-  {% include "reseller_children.tpl" %}
+  {% include "reseller_children.tpl" account_id=account_id %}
 </span>
 
 {% endblock %}
