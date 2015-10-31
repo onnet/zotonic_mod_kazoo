@@ -49,6 +49,7 @@
     ,count_activation_charge/1
     ,set_session_jobj/5
     ,delete_session_jobj_key/3
+    ,get_session_jobj_value/3
     ,split_b/2
     ,format_account_id/2
     ,get_q_bin/2
@@ -458,6 +459,9 @@ delete_session_jobj_key(SessionKey, K, Context) ->
         'undefined' -> 'ok';
         JObj -> z_context:set_session(SessionKey,delete_key(K,JObj), Context)
     end.
+
+get_session_jobj_value(SessionKey, K, Context) ->
+    get_value(K, z_context:get_session(SessionKey, Context)).
  
 split_b(String,Divider) ->
     lists:map(fun (K) -> z_convert:to_binary(K) end, z_string:split(String,Divider)).
