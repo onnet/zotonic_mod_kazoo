@@ -2442,14 +2442,14 @@ record_call_doc_id(Context) ->
     Cfs = kz_list_account_callflows(Context),
     case lists:filter(fun(X) -> [<<"record_call">>] =:= modkazoo_util:get_value(<<"numbers">>,X) end, Cfs) of
         [] ->
-            _ = create_record_call_cacllflow(Context),
+            _ = create_record_call_callflow(Context),
             NewCf = lists:filter(fun(X) -> [<<"record_call">>] =:= modkazoo_util:get_value(<<"numbers">>,X) end, Cfs),
             modkazoo_util:get_value(<<"id">>,NewCf);
         [Cf|_] -> 
             modkazoo_util:get_value(<<"id">>,Cf)
     end.
 
-create_record_call_cacllflow(Context) ->
+create_record_call_callflow(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     Routines = [fun(J) -> modkazoo_util:set_value([<<"name">>], <<"record_call">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"record_call">>], J) end
