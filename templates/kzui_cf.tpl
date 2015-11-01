@@ -1,7 +1,4 @@
-<div class="row text-center" style="padding-right: 195px;">
-<h3>{_ Callflow Builder _}</h3>
-</div>
-<div class="row" style="padding: 1em;">
+<div class="row">
   <div class="col-xs-2">
     {% wire id="callflow_manager_selector" type="change" action={ postback postback={cf_load}  delegate="mod_kazoo"} %}
     <select id="callflow_manager_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker"

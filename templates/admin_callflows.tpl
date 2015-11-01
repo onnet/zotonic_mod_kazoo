@@ -1,5 +1,10 @@
 {% extends "dashboard_base.tpl" %}
 
+{% block header_title %}
+  {% include "_account_page_title.tpl" title=_"Callflow Builder" %}
+{% endblock %}
+
+
 {% block service_description %}
 
 
