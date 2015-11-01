@@ -799,7 +799,8 @@ event({postback,{delete_conference,[{conference_id,ConferenceId}]},_,_},Context)
 event({submit,cf_select_conference,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     case z_context:get_q("selected", Context) of
-        [] -> ok;
+        [] -> 
+            _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], ?EMPTY_JSON_OBJECT, Context);
         Id -> 
             _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(Id), Context)
     end,
