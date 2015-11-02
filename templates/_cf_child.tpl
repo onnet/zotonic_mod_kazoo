@@ -1,5 +1,5 @@
 <div id="{{ element_id }}_child" class="child">
-    {% if drop_parent == "menu" or drop_parent == "temporal_route" or drop_parent == "cid_check" %}
+    {% if drop_parent == "menu" or drop_parent == "temporal_route" or drop_parent == "check_cid" %}
       {% include "_cf_child_head_option.tpl" %}
     {% else %}
       {% include "_cf_child_head.tpl" %}

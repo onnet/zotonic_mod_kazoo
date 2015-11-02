@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-            {% wire id="menu_key_selector" type="change" action={ update target="check_value_id" template="_cf_select_option_cid_check_value.tpl" }%}
+            {% wire id="menu_key_selector" type="change" action={ update target="check_value_id" template="_cf_select_option_check_cid_value.tpl" }%}
             <select id="menu_key_selector" name="pre_switch" class="form-control margin-bottom-xs" style="text-align:center;">
                   <option value=""> - {_ Select route key _} - </option>
               {% for key in available_keys %}
@@ -17,7 +17,7 @@
             </select>
         </div>
         <div id="check_value_id" class="col-sm-6">
-          {% include "_cf_select_option_cid_check_value.tpl" available_keys=available_keys %}
+          {% include "_cf_select_option_check_cid_value.tpl" available_keys=available_keys %}
         </div>
       </div>
     </div>

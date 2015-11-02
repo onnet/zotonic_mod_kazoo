@@ -33,7 +33,7 @@
                 <div class="content">
                     {% include "_cf_tool_element.tpl" tool_id="callflow" tool_name="callflow" tool_descr="Callflow" icon="callflow" help=_"Transfer the call to another call flow" %}
                     {% include "_cf_tool_element.tpl" tool_id="voicemail" tool_name="voicemail" tool_descr="Voicemail" icon="voicemail" help="Direct a caller to leave a voicemail message" %}
-                    {% include "_cf_tool_element.tpl" tool_id="cid_check" tool_name="cid_check" tool_descr="CID Check" icon="circle_graph" help="Route incoming call based on Caller ID." %}
+                    {% include "_cf_tool_element.tpl" tool_id="check_cid" tool_name="check_cid" tool_descr="CID Check" icon="circle_graph" help="Route incoming call based on Caller ID." %}
                     {% include "_cf_tool_element.tpl" tool_id="prepend_cid" tool_name="prepend_cid" tool_descr="CID Prepend" icon="plus_circle" help="Prepend Caller ID with a text." %}
                     {% include "_cf_tool_element.tpl" tool_id="group_pickup" tool_name="group_pickup" tool_descr="Group Pickup" icon="sip" 
                                                                                                       help="Setup the group pickup feature for a user, device or a group." %}

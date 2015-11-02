@@ -171,7 +171,7 @@
     ,kz_get_account_blacklist/2
     ,set_blacklist_doc/4
     ,kz_delete_blacklist/2
-    ,may_be_cid_check_children_clean/1
+    ,may_be_check_cid_children_clean/1
     ,rs_delete_account/2
     ,toggle_all_calls_recording/1
     ,kz_cccp_creds_list/1
@@ -1775,7 +1775,7 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"ring_gro
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"page_group">> ->
     Name = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"name">>],z_context:get_session('current_callflow', Context)),
     ['undefined', Name];
-cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"cid_check">> ->
+cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"check_cid">> ->
     case modkazoo_util:get_value(ModulePath++[<<"data">>,<<"use_absolute_mode">>],z_context:get_session('current_callflow', Context)) of
         'true' -> ['undefined', <<"Exact numbers">>];
         'false' -> ['undefined', <<"Regex match">>];
@@ -1837,7 +1837,7 @@ cf_get_element_by_id(ElementId, Context) ->
 cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},mod_kazoo,BranchId}},Context) ->
     lager:info("Drop DropParent: ~p",[DropParent]),
     case z_convert:to_list(DropParent) of
-        "cid_check" ->
+        "check_cid" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
             [KeysList,AddOn] = case modkazoo_util:get_value(cf_element_path(BranchId)++[<<"data">>,<<"use_absolute_mode">>], z_context:get_session('current_callflow', Context)) of
                            'false' -> [[<<"nomatch">>,<<"match">>],[]];
@@ -1847,7 +1847,7 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
                 [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
                 AvailableKeys ->
                     z_render:dialog(?__("Choose route option",Context)
-                                         ,"_cf_select_option_cid_check.tpl"
+                                         ,"_cf_select_option_check_cid.tpl"
                                          ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,AvailableKeys}]
                                          ,Context)
             end;
@@ -1890,7 +1890,7 @@ cf_available_keys(KeysList,ElementPath,AddOn,Context) ->
 
 cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
     case DropParent of
-        "cid_check" ->
+        "check_cid" ->
             lager:info("Drop ExistingElementId: ~p",[ExistingElementId]),
             lager:info("Drop TL: ~p",[lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))]),
             lager:info("Switch: ~p",[hd(lists:reverse(cf_element_path(ExistingElementId)))]),
@@ -1900,7 +1900,7 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
                            'true' -> [[<<"nomatch">>],[<<"caller_id">>]]
                        end,
             z_render:dialog(?__("Choose route option",Context)
-                                 , "_cf_select_option_cid_check.tpl"
+                                 , "_cf_select_option_check_cid.tpl"
                                  ,[{existing_element_id,ExistingElementId}
                                  ,{switch,hd(lists:reverse(cf_element_path(ExistingElementId)))}
                                   ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),AddOn,Context)}]
@@ -2387,17 +2387,17 @@ kz_delete_blacklist(BlacklistId,Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?BLACKLISTS/binary, <<"/">>/binary, (z_convert:to_binary(BlacklistId))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
-may_be_cid_check_children_clean(Context) ->
+may_be_check_cid_children_clean(Context) ->
     ElementId = z_context:get_q("element_id", Context),
     case z_convert:to_atom(z_context:get_q("selected", Context))
           ==
          modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"data">>,<<"use_absolute_mode">>], z_context:get_session('current_callflow', Context))
          of
         'true' -> 'ok';
-        'false' -> cid_check_children_clean(Context)
+        'false' -> check_cid_children_clean(Context)
     end. 
 
-cid_check_children_clean(Context) ->
+check_cid_children_clean(Context) ->
     CurrentCallflow = z_context:get_session('current_callflow', Context),
     ElementId = z_context:get_q("element_id", Context),
     case z_context:get_q("selected", Context) of
