@@ -2653,7 +2653,7 @@ kz_callflows_numbers(Context) ->
     kz_callflows_numbers(AccountId, Context).
 
 kz_callflows_numbers(AccountId, Context) ->
-    lists:foldl(fun(X,Acc) -> modkazoo_util:get_value([<<"numbers">>],X) ++ Acc end, [], kz_list_account_callflows(Context)).
+    lists:foldl(fun(X,Acc) -> modkazoo_util:get_value([<<"numbers">>],X) ++ Acc end, [], kz_list_account_callflows(AccountId, Context)).
 
 kz_spare_numbers(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
