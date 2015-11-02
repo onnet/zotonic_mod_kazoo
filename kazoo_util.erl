@@ -198,6 +198,10 @@
     ,filter_custom_fields/2
     ,kz_current_context_reseller/1
     ,kz_current_context_superadmin/1
+    ,kz_callflows_numbers/1
+    ,kz_callflows_numbers/2
+    ,kz_spare_numbers/1
+    ,kz_spare_numbers/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2643,3 +2647,18 @@ kz_current_context_reseller(Context) ->
 
 kz_current_context_superadmin(Context) ->
     modkazoo_util:get_value(<<"superduper_admin">>, kazoo_util:kz_get_acc_doc(Context)).
+
+kz_callflows_numbers(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_callflows_numbers(AccountId, Context).
+
+kz_callflows_numbers(AccountId, Context) ->
+    lists:foldl(fun(X,Acc) -> modkazoo_util:get_value([<<"numbers">>],X) ++ Acc end, [], kz_list_account_callflows(Context)).
+
+kz_spare_numbers(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_spare_numbers(AccountId, Context).
+
+kz_spare_numbers(AccountId, Context) ->
+    UsedNumbers = kz_callflows_numbers(AccountId, Context),
+    lists:filter(fun(X) -> 'true' =/= lists:member(X, UsedNumbers) end, kz_account_numbers(AccountId, Context)).

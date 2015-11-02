@@ -47,7 +47,6 @@
     <button id="cf_delete_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs">{_ Delete _}</button>
   </div>
 </div>
-
 <div id="callflow_container" style="width:100%!important; padding-top:1em;">
   <div class="callflow-view clearfix">
     <div class="real-content">
