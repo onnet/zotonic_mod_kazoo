@@ -992,6 +992,9 @@ msgid "Sign Out"
 msgstr "Выход"
 
 msgid "Hosted PBX"
+msgstr "Виртуальная АТС"
+
+msgid "HOSTED PBX"
 msgstr "Виртуальный офис"
 
 msgid "User Portal"

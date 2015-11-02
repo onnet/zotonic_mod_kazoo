@@ -934,6 +934,7 @@ event({postback,{rs_account_mask,[{account_id,AccountIdRaw}]},_,_},Context) ->
     modkazoo_util:set_session_jobj('kazoo_reseller_user_tracking', AccountId, KazooOwnerId, ?EMPTY_JSON_OBJECT, Context),
     z_context:set_session(kazoo_account_id, AccountId, Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
+    _ = modkazoo_auth:may_be_set_user_data(Context),
     modkazoo_auth:choose_page_to_redirect(Context);
 
 event({postback,rs_account_demask,_,_},Context) ->
@@ -945,6 +946,7 @@ event({postback,rs_account_demask,_,_},Context) ->
     z_context:set_session('current_callflow','undefined',Context),
     z_context:set_session('account_realm','undefined',Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
+    _ = modkazoo_auth:may_be_set_user_data(Context),
     z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
 
 event({submit,{addcccpcidform, _}, _, _}, Context) ->
