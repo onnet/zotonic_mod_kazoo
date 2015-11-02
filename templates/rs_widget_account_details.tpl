@@ -3,9 +3,7 @@
 {% block widget_headline %}
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" id="child_area_refresh"
-              action={update target="rs_widget_account_details_tpl" template="rs_widget_account_details.tpl" account_id=account_id headline=_"Account details"}
-              action={emit signal={update_rs_account_registrations_tpl account_id=account_id}}
-              action={emit signal={update_rs_allocated_numbers_tpl account_id=account_id}}
+              action={update target="reseller_children_area" template="reseller_children.tpl" account_id=account_id headline=_"Account details"}
     %}
 {% endblock %}
 

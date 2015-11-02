@@ -106,6 +106,7 @@
     ,kz_list_account_groups/1
     ,kz_list_account_blacklists/1
     ,kz_list_account_callflows/1
+    ,kz_list_account_callflows/2
     ,kz_get_account_callflow/2
     ,kz_get_account_channel/2
     ,delete_group/2
@@ -1314,6 +1315,9 @@ kz_list_account_blacklists(Context) ->
 
 kz_list_account_callflows(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_account_callflows(AccountId, Context).
+
+kz_list_account_callflows(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
@@ -1825,7 +1829,6 @@ cf_delete_element(ElementId,Context) ->
 cf_park_element(ElementId,Context) ->
     ParkCandidate = modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)),
     z_context:set_session('cf_park_slot1', ParkCandidate, Context),
-lager:info("Cf_park slot 1: ~p",[z_context:get_session('cf_park_slot1', Context)]),
     z_render:growl(?__("Branch saved", Context), Context).
 
 cf_element_path(ElementId) ->
@@ -2060,8 +2063,6 @@ kz_vmbox(Context) ->
             ,{<<"delete_after_notify">>, modkazoo_util:on_to_true(z_context:get_q("delete_after_notify", Context))}
             ,{<<"id">>, z_convert:to_binary(Id)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
-lager:info("kz_vmbox Darabag: ~p", [DataBag]),
-lager:info("kz_vmbox unavailable_message_id: ~p", [z_context:get_q("unavailable_message_id", Context)]),
     case Id of
         'undefined'->
             API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary>>,
@@ -2482,7 +2483,6 @@ del_cccp_doc(DocId, Context) ->
 kz_find_account_by_number(Number, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
-    lager:info("My API_String: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     modkazoo_util:get_value(<<"account_id">>, crossbar_account_request('get', API_String, [], Context)).
 
 kz_admin_find_accountname_by_number(Number, Context) ->

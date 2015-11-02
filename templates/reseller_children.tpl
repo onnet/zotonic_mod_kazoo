@@ -8,7 +8,7 @@
     <select id="child_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;"
                                 title=" -- {_ Select account to edit _} -- " data-live-search="true">
       {% for option in m.kazoo.kz_list_account_children %}
-          <option value="{{ option["id"] }}">
+          <option value="{{ option["id"] }}" {% if option["id"] == account_id %}selected{% endif %}>
             {{ option["name"] }} - {{ option["realm"] }}
           </option>
       {% endfor %}

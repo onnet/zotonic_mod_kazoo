@@ -293,7 +293,8 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
                    ,{clientip, ClientIP}
                    ,{number, NumberToAdd}],
             spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
-            mod_signal:emit({update_rs_allocated_numbers_tpl, [{account_id,AccountId}]}, Context),
+            lager:info("Number add attempt AccountId: ~p",[ AccountId]),
+            mod_signal:emit({update_rs_allocated_numbers_tpl, [{account_id, AccountId}]}, Context),
             Context
     end;
 
@@ -921,7 +922,7 @@ event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
     Context;
 
 event({postback,rs_child_selected,_,_},Context) ->
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, z_context:get_q("triggervalue", Context)}], Context), Context);
+    z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, z_context:get_q("triggervalue", Context)}], Context), Context);
 
 event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
     spawn(kazoo_util,rs_delete_account,[AccountId,Context]),
