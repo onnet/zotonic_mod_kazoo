@@ -48,7 +48,7 @@
   </div>
 </div>
 
-<div id="callflow_container" style="width:100%!important">
+<div id="callflow_container" style="width:100%!important; padding-top:1em;">
   <div class="callflow-view clearfix">
     <div class="real-content">
       <div id="ws_callflow" class="clearfix">
