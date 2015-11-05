@@ -84,6 +84,7 @@
                 </span>
             </td>
         </tr>
+        <tr><td>{_ Outbound routing _}</td><td>{{ m.kazoo[{outbound_routing_strategy account_id=account_id}] }}</td></tr>
     </tbody>
 </table>
 {% endwith %}

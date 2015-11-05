@@ -19,8 +19,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Outbound routing"
+msgstr "Исходящая маршрутизация"
 
 msgid "at"
 msgstr "в"

@@ -108,6 +108,7 @@
     ,kz_list_account_callflows/1
     ,kz_list_account_callflows/2
     ,kz_get_account_callflow/2
+    ,kz_get_account_callflow/3
     ,kz_get_account_channel/2
     ,delete_group/2
     ,kz_get_group_doc/2
@@ -202,6 +203,8 @@
     ,kz_callflows_numbers/2
     ,kz_spare_numbers/1
     ,kz_spare_numbers/2
+    ,kz_callflow_by_number/2
+    ,kz_callflow_by_number/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1322,12 +1325,15 @@ kz_list_account_callflows(Context) ->
     kz_list_account_callflows(AccountId, Context).
 
 kz_list_account_callflows(AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_account_callflow(CallflowId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (z_convert:to_binary(CallflowId))/binary>>,
+    kz_get_account_callflow(CallflowId, AccountId, Context).
+
+kz_get_account_callflow(CallflowId, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, <<"/">>/binary, (z_convert:to_binary(CallflowId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_children(Context) ->
@@ -2662,3 +2668,11 @@ kz_spare_numbers(Context) ->
 kz_spare_numbers(AccountId, Context) ->
     UsedNumbers = kz_callflows_numbers(AccountId, Context),
     lists:filter(fun(X) -> 'true' =/= lists:member(X, UsedNumbers) end, kz_account_numbers(AccountId, Context)).
+
+kz_callflow_by_number(Number, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_callflow_by_number(Number, AccountId, Context).
+
+kz_callflow_by_number(Number, AccountId, Context) ->
+    [CF|_] = lists:filter(fun(X) -> modkazoo_util:get_value([<<"numbers">>],X) == [Number] end, kz_list_account_callflows(AccountId, Context)),
+    kz_get_account_callflow(modkazoo_util:get_value(<<"id">>, CF), AccountId, Context).

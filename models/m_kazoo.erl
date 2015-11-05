@@ -339,6 +339,11 @@ m_find_value(kz_callflows_numbers, _M, Context) ->
 m_find_value(kz_spare_numbers, _M, Context) ->
     kazoo_util:kz_spare_numbers(Context);
 
+m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context) ->
+    CF = kazoo_util:kz_callflow_by_number(<<"no_match">>, AccountId, Context),
+lager:info("CF: ~p",[CF]),
+    modkazoo_util:get_value([<<"flow">>, <<"module">>], CF);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),
