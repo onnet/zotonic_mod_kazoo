@@ -198,6 +198,7 @@
     ,kz_webhook/1
     ,filter_custom_fields/2
     ,kz_current_context_reseller/1
+    ,kz_current_context_reseller_id/1
     ,kz_current_context_superadmin/1
     ,kz_callflows_numbers/1
     ,kz_callflows_numbers/2
@@ -205,6 +206,9 @@
     ,kz_spare_numbers/2
     ,kz_callflow_by_number/2
     ,kz_callflow_by_number/3
+    ,set_global_carrier_routing/2
+    ,set_reseller_based_routing/3
+    ,set_account_based_routing/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2651,6 +2655,9 @@ filter_custom_fields(_, _Context) ->
 kz_current_context_reseller(Context) ->
     modkazoo_util:get_value(<<"is_reseller">>, kazoo_util:kz_get_acc_doc(Context)).
 
+kz_current_context_reseller_id(Context) ->
+    modkazoo_util:get_value(<<"reseller_id">>, kazoo_util:kz_get_acc_doc(Context)).
+
 kz_current_context_superadmin(Context) ->
     modkazoo_util:get_value(<<"superduper_admin">>, kazoo_util:kz_get_acc_doc(Context)).
 
@@ -2674,5 +2681,29 @@ kz_callflow_by_number(Number, Context) ->
     kz_callflow_by_number(Number, AccountId, Context).
 
 kz_callflow_by_number(Number, AccountId, Context) ->
-    [CF|_] = lists:filter(fun(X) -> modkazoo_util:get_value([<<"numbers">>],X) == [Number] end, kz_list_account_callflows(AccountId, Context)),
-    kz_get_account_callflow(modkazoo_util:get_value(<<"id">>, CF), AccountId, Context).
+    case lists:filter(fun(X) -> modkazoo_util:get_value([<<"numbers">>],X) == [Number] end, kz_list_account_callflows(AccountId, Context)) of
+        [CF|_] -> kz_get_account_callflow(modkazoo_util:get_value(<<"id">>, CF), AccountId, Context);
+        _ -> ?EMPTY_JSON_OBJECT
+    end.
+
+set_global_carrier_routing(AccountId, Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>], ?EMPTY_JSON_OBJECT, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"offnet">>, J) end],
+    set_no_match_routing(Routines, AccountId, Context).
+
+set_reseller_based_routing(ResellerId, AccountId, Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>, <<"hunt_account_id">>], ResellerId, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"resources">>, J) end],
+    set_no_match_routing(Routines, AccountId, Context).
+
+set_account_based_routing(AccountId, Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"data">>], ?EMPTY_JSON_OBJECT, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"resources">>, J) end],
+    set_no_match_routing(Routines, AccountId, Context).
+
+set_no_match_routing(Routines, AccountId, Context) ->
+    CurrDoc = kz_callflow_by_number(<<"no_match">>, AccountId, Context),
+    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines)),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>, CurrDoc))/binary>>,
+    crossbar_account_request('post', API_String, DataBag, Context).
+

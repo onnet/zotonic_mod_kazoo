@@ -51,10 +51,6 @@ do_sign_in(Login, Password, Account, Context) ->
 
 choose_page_to_redirect(Context) ->
     AccountDoc = kazoo_util:kz_get_acc_doc(Context),
-lager:info("redir AccDoc: ~p", [AccountDoc]),
-lager:info("redir is_reseller: ~p", [modkazoo_util:get_value(<<"is_reseller">>,AccountDoc)]),
-lager:info("redir is_super: ~p", [modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc)]),
-lager:info("redir is user admin: ~p", [z_context:get_session('kazoo_account_admin', Context)]),
     case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
         'true' ->
             z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
