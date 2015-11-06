@@ -1025,7 +1025,7 @@ event({postback,refresh_admin_callstats,_,_}, Context) ->
 
 event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:set_global_carrier_routing(AccountId, Context),
-    z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
     ResellerId = case kazoo_util:kz_current_context_reseller(Context) of
@@ -1033,11 +1033,11 @@ event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context)
         _ -> kazoo_util:kz_current_context_reseller_id(Context)
     end,
     _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context),
-    z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:set_account_based_routing(AccountId, Context),
-    z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
 event({drag,_,_},Context) ->
     Context;
