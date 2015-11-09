@@ -343,6 +343,14 @@ m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context
     CF = kazoo_util:kz_callflow_by_number(<<"no_match">>, AccountId, Context),
     [modkazoo_util:get_value([<<"flow">>, <<"module">>], CF), modkazoo_util:get_value([<<"flow">>, <<"data">>, <<"hunt_account_id">>], CF)];
 
+m_find_value(kz_list_account_resources, _M, Context) ->
+    kazoo_util:kz_list_account_resources(Context);
+
+m_find_value({kz_resource_info, [{resource_id, 'undefined'}]}, _M, Context) ->
+    'undefined';
+m_find_value({kz_resource_info, [{resource_id, ResourceId}]}, _M, Context) ->
+    kazoo_util:kz_resource_info(ResourceId, Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

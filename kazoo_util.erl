@@ -209,6 +209,11 @@
     ,set_global_carrier_routing/2
     ,set_reseller_based_routing/3
     ,set_account_based_routing/2
+    ,kz_list_account_resources/1
+    ,kz_resource_info/2
+    ,kz_resource_info/3
+    ,toggle_resource/2
+    ,toggle_resource/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -270,6 +275,7 @@
 -define(START_KEY, <<"start_key=">>).
 -define(WEBHOOKS, <<"/webhooks">>).
 -define(NO_PAGINATION, <<"&paginate=false">>).
+-define(RESOURCES, <<"/resources">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -2706,4 +2712,40 @@ set_no_match_routing(Routines, AccountId, Context) ->
     DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines)),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>, CurrDoc))/binary>>,
     crossbar_account_request('post', API_String, DataBag, Context).
+
+kz_list_account_resources(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?RESOURCES/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary>>
+    end,
+    crossbar_account_request('get', API_String, [], Context).
+    
+kz_resource_info(ResourceId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_resource_info(ResourceId, AccountId, Context).
+
+kz_resource_info(ResourceId, AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>
+    end,
+    crossbar_account_request('get', API_String, [], Context).
+
+toggle_resource(ResourceId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    toggle_resource(ResourceId, AccountId, Context).
+
+toggle_resource(ResourceId, AccountId, Context) ->
+    CurrDoc = kz_resource_info(ResourceId, AccountId, Context),
+    NewDoc = case modkazoo_util:get_value(<<"enabled">>, CurrDoc) of
+        'false' -> modkazoo_util:set_value(<<"enabled">>, 'true', CurrDoc);
+        'true' -> modkazoo_util:set_value(<<"enabled">>, 'false', CurrDoc)
+    end,
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>
+    end,
+    crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
+    
 

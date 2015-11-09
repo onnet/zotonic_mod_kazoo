@@ -1039,6 +1039,16 @@ event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) 
     _ = kazoo_util:set_account_based_routing(AccountId, Context),
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
+event({postback,{delete_resource,[{resource_id,ResourceId}]},_,_}, Context) ->
+    _ = kazoo_util:delete_resource(ResourceId, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    Context;
+
+event({postback,{toggle_resource,[{resource_id,ResourceId}]},_,_},Context) ->
+    _ = kazoo_util:toggle_resource(ResourceId, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

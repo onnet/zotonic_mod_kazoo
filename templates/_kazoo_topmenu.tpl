@@ -4,6 +4,7 @@
             <ul class="dropdown-menu">
               {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller) and m.kazoo.is_kazoo_account_admin %}
                 <li><a href="/reseller_portal">{_ Reseller Portal _}</a>
+                <li><a href="/reseller_settings">{_ Reseller Settings _}</a>
               {% else %}
                 {% if m.session.kazoo_owner_id != "userless_mask" %}
                   <li><a href="/user_portal">{_ User Portal _}</a>
