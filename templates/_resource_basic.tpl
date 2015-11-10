@@ -4,8 +4,11 @@
         <div class="col-sm-6">
           <input id="name" name="name" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter resource name here _}" value="{{ resource["name"] }}">
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <input id="server" name="server" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter server address here _}" value="{{ resource["gateways"][1][1]["server"] }}">
+        </div>
+        <div class="col-sm-2">
+          <input id="port" name="port" type="text" class="form-control margin-bottom-xs" placeholder="{_ Port _}" value="{{ resource["gateways"][1][1]["port"] }}">
         </div>
       </div>
     </div>
@@ -22,24 +25,25 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="realm" name="realm" type="text" class="form-control margin-bottom-xs" placeholder="{_ Flags (comma separated)_}" value="{{ resource["flags"] }}">
+          <input id="flags" name="flags" type="text" class="form-control margin-bottom-xs" placeholder="{_ Flags (comma separated)_}"
+                            value="{% for flag in resource["flags"] %}{{ flag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
         </div>
         <div class="col-sm-2">
-          <label for="hunt" class="checkbox-inline {% if menu[1]["hunt"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="hunt" name="hunt" {% if menu[1]["hunt"] %}checked{% endif %}>
-            {_ G711a _}
+          <label for="PCMA" class="checkbox-inline {% if "PCMA"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}" style="width: 100%">
+            <input type="checkbox" id="PCMA" name="codecs" value="PCMA" {% if "PCMA"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}>
+            {_ PCMA _}
           </label>
         </div>
         <div class="col-sm-2">
-          <label for="allow_record_from_offnet" class="checkbox-inline {% if menu[1]["allow_record_from_offnet"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="allow_record_from_offnet" name="allow_record_from_offnet" {% if menu[1]["allow_record_from_offnet"] %}checked{% endif %}>
-            {_ G711u _}
+          <label for="PCMU" class="checkbox-inline {% if "PCMU"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}" style="width: 100%">
+            <input type="checkbox" id="PCMU" name="codecs" value="PCMU" {% if "PCMU"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}>
+            {_ PCMU _}
           </label>
         </div>
         <div class="col-sm-2">
-          <label for="suppress_media" class="checkbox-inline {% if menu[1]["suppress_media"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="suppress_media" name="suppress_media" {% if menu[1]["suppress_media"] %}checked{% endif %}>
-            {_ G722 _}
+          <label for="OPUS" class="checkbox-inline {% if "OPUS"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}" style="width: 100%">
+            <input type="checkbox" id="OPUS" name="codecs" value="OPUS" {% if "OPUS"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}>
+            {_ OPUS _}
           </label>
         </div>
       </div>

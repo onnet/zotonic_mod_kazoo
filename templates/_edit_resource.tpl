@@ -27,7 +27,7 @@
     </div>
   </div>
 </div>
-{# print resource #}
+{% print resource %}
 {% wire id="button_edit_resources" action={submit target="resource-form"} %}
 {% endwith %}
 

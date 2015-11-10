@@ -212,8 +212,11 @@
     ,kz_list_account_resources/1
     ,kz_resource_info/2
     ,kz_resource_info/3
+    ,kz_resource_delete/2
+    ,kz_resource_delete/3
     ,toggle_resource/2
     ,toggle_resource/3
+    ,resource/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -338,6 +341,38 @@
       {<<"permissions">>,{[{<<"users">>,[]}]}},
       {<<"monitor">>,{[{<<"monitor_enabled">>,false}]}},
       {<<"server_type">>,<<"FreePBX">>}
+]}).
+
+-define(EMPTY_RESOURCE,
+{[{<<"weight_cost">>,<<"50">>},
+  {<<"enabled">>,false},
+  {<<"gateways">>,
+   [{[{<<"prefix">>,<<>>},
+      {<<"codecs">>,[<<"PCMA">>]},
+      {<<"progress_timeout">>,<<"7">>},
+      {<<"server">>,<<>>},
+      {<<"username">>,<<>>},
+      {<<"password">>,<<>>},
+      {<<"realm">>,<<>>},
+      {<<"format_from_uri">>,false},
+      {<<"suffix">>,<<>>},
+      {<<"channel_selection">>,<<"ascending">>},
+      {<<"custom_sip_headers">>,{[]}},
+      {<<"emergency">>,false},
+      {<<"enabled">>,true},
+      {<<"endpoint_type">>,<<"sip">>},
+      {<<"force_port">>,false},
+      {<<"invite_format">>,<<"route">>},
+      {<<"port">>,5060},
+      {<<"skype_rr">>,false}]}]},
+  {<<"rules">>,[]},
+  {<<"cid_rules">>,[]},
+  {<<"caller_id_options">>,{[{<<"type">>,<<"external">>}]}},
+  {<<"type">>,<<"local">>},
+  {<<"name">>,<<>>},
+  {<<"emergency">>,false},
+  {<<"grace_period">>,5},
+  {<<"flags">>,[<<"fax">>]}
 ]}).
 
 -define(MK_DATABAG(JObj), {[{<<"data">>, JObj}]}).
@@ -2731,6 +2766,17 @@ kz_resource_info(ResourceId, AccountId, Context) ->
         'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>
     end,
     crossbar_account_request('get', API_String, [], Context).
+    
+kz_resource_delete(ResourceId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_resource_delete(ResourceId, AccountId, Context).
+
+kz_resource_delete(ResourceId, AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>
+    end,
+    crossbar_account_request('delete', API_String, [], Context).
 
 toggle_resource(ResourceId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -2748,4 +2794,58 @@ toggle_resource(ResourceId, AccountId, Context) ->
     end,
     crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
     
+resource(Context) ->
+    ResourceId = modkazoo_util:get_q_bin("resource_id",Context),
+    PropsGateway = modkazoo_util:filter_empty(
+        [{[<<"server">>],modkazoo_util:get_q_bin("server",Context)}
+        ,{<<"port">>,modkazoo_util:get_q_bin("port",Context)}
+        ,{<<"username">>,modkazoo_util:get_q_bin("username",Context)}
+        ,{<<"password">>,modkazoo_util:get_q_bin("password",Context)}
+        ,{<<"prefix">>,modkazoo_util:get_q_bin("prefix",Context)}
+        ,{<<"suffix">>,modkazoo_util:get_q_bin("suffix",Context)}
+        ,{<<"progress_timeout">>,modkazoo_util:get_q_bin("progress_timeout",Context)}
+        ,{<<"realm">>,modkazoo_util:get_q_bin("realm",Context)}
+        ,{<<"format_from_uri">>,modkazoo_util:on_to_true(z_context:get_q("format_from_uri",Context))}
+        ,{<<"codecs">>,lists:foldl(fun(Codec,J) -> case Codec of [] -> J; _ -> J ++ [z_convert:to_binary(Codec)] end end, [], z_context:get_q_all("codecs",Context))}
+        ]),
+    PropsResource = modkazoo_util:filter_empty(
+        [{<<"name">>,modkazoo_util:get_q_bin("name",Context)}
+        ,{<<"weight_cost">>,modkazoo_util:get_q_bin("weight_cost",Context)}
+        ,{<<"rules">>,[modkazoo_util:get_q_bin("rules",Context)]}
+        ,{<<"cid_rules">>,[modkazoo_util:get_q_bin("cid_rules",Context)]}
+        ,{[<<"caller_id_options">>,<<"type">>],modkazoo_util:get_q_bin("caller_id_options_type",Context)}]) ++
+        [{<<"flags">>,case z_context:get_q("flags", Context) of
+                          'undefined' -> [];
+                          [] -> [];
+                           Flags -> lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(Flags,","))
+                      end
+         }
+        ],
+    [Gateway, Resource] = case ResourceId of
+        <<>> ->
+            [CurrGateway|_] = modkazoo_util:get_value(<<"gateways">>,?EMPTY_RESOURCE),
+            [lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, CurrGateway, PropsGateway),
+             lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?EMPTY_RESOURCE, PropsResource)];
+        _ ->
+            CurrResource = kz_resource_info(ResourceId, Context),
+            [CurrGateway|_] = modkazoo_util:get_value(<<"gateways">>,CurrResource),
+            [lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, CurrGateway, PropsGateway),
+             lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, CurrResource, PropsResource)]
+    end,
+    DataBag = ?MK_DATABAG(modkazoo_util:set_value(<<"gateways">>,[Gateway],Resource)),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    case ResourceId of
+        <<>> ->
+            API_String = case kz_current_context_superadmin(Context) of
+                'true' -> <<?V2/binary, ?RESOURCES/binary>>; 
+                'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary>>
+            end,
+            _ = crossbar_account_request('put', API_String, DataBag, Context);
+        _ ->
+            API_String = case kz_current_context_superadmin(Context) of
+                'true' -> <<?V2/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>; 
+                'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>
+            end,
+            _ = crossbar_account_request('post', API_String, DataBag, Context)
+    end.
 

@@ -1040,7 +1040,7 @@ event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) 
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{delete_resource,[{resource_id,ResourceId}]},_,_}, Context) ->
-    _ = kazoo_util:delete_resource(ResourceId, Context),
+    _ = kazoo_util:kz_resource_delete(ResourceId, Context),
     mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
     Context;
 
@@ -1048,6 +1048,11 @@ event({postback,{toggle_resource,[{resource_id,ResourceId}]},_,_},Context) ->
     _ = kazoo_util:toggle_resource(ResourceId, Context),
     mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
     Context;
+
+event({submit,resource_form,_,_}, Context) ->
+    _ = kazoo_util:resource(Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    z_render:dialog_close(Context);
 
 event({drag,_,_},Context) ->
     Context;
@@ -1058,5 +1063,6 @@ event({sort,_,_},Context) ->
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
+    lager:info("Unknown event variables: ~p", [z_context:get_q_all("codecs", Context)]),
     lager:info("Unknown event Context: ~p", [Context]),
     Context.
