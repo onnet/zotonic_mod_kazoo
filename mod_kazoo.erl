@@ -1063,6 +1063,5 @@ event({sort,_,_},Context) ->
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
-    lager:info("Unknown event variables: ~p", [z_context:get_q_all("codecs", Context)]),
     lager:info("Unknown event Context: ~p", [Context]),
     Context.
