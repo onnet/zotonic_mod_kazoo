@@ -30,13 +30,6 @@
             {_ Pass realm _}
           </label>
         </div>
-        <div class="col-sm-6">
-          <input id="realm" name="realm" type="text" class="form-control margin-bottom-xs" placeholder="{_ Flags (comma separated)_}" value="{{ resource["flags"] }}">
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="row">
         <div class="col-sm-3">
           <input id="progress_timeout" name="progress_timeout" type="text" class="form-control margin-bottom-xs" placeholder="{_ Progress timeout _}"
                                                                                                                  value="{{ resource["gateways"][1][1]["progress_timeout"] }}">
@@ -48,24 +41,7 @@
             <option value="emergency">emergency</option>
           </select>
         </div>
-        <div class="col-sm-2">
-          <label for="hunt" class="checkbox-inline {% if menu[1]["hunt"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="hunt" name="hunt" {% if menu[1]["hunt"] %}checked{% endif %}>
-            {_ G711a _}
-          </label>
-        </div>
-        <div class="col-sm-2">
-          <label for="allow_record_from_offnet" class="checkbox-inline {% if menu[1]["allow_record_from_offnet"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="allow_record_from_offnet" name="allow_record_from_offnet" {% if menu[1]["allow_record_from_offnet"] %}checked{% endif %}>
-            {_ G711u _}
-          </label>
-        </div>
-        <div class="col-sm-2">
-          <label for="suppress_media" class="checkbox-inline {% if menu[1]["suppress_media"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="suppress_media" name="suppress_media" {% if menu[1]["suppress_media"] %}checked{% endif %}>
-            {_ G722 _}
-          </label>
-        </div>
+      </div>
     </div>
   </div>
 
