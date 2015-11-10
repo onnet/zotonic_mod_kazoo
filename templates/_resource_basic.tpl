@@ -12,10 +12,10 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="username" name="username" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter username here _}" value="{{ resource["gateways"][1][1]["username"] }}">
+          <input id="rules" name="rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter rules here _}:  ^\+?(\d*)$" value="{{ resource["rules"] }}">
         </div>
         <div class="col-sm-6">
-          <input id="password" name="password" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter password here _}" value="{{ resource["gateways"][1][1]["password"] }}">
+          <input id="cid_rules" name="cid_rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter cid_rules here _}:  ^(\+?7812\d{7})$" value="{{ resource["cid_rules"] }}">
         </div>
       </div>
     </div>
