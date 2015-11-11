@@ -15,6 +15,7 @@
   </span>
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add trunk" action={ dialog_open title=_"Add trunk" template="_add_trunk_dialog.tpl" width="auto" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh list" action={emit signal={update_admin_portal_trunk_list_tpl} } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

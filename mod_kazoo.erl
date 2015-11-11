@@ -1027,13 +1027,41 @@ event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context)
     _ = kazoo_util:set_global_carrier_routing(AccountId, Context),
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
-event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
+event({postback,reseller_based_routing,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    {'ok', {'account_id', SuperAccountId}, {'auth_token', _}, {'crossbar', _}} = kazoo_util:kz_admin_creds(Context),
     ResellerId = case kazoo_util:kz_current_context_reseller(Context) of
         'true' -> z_context:get_session(kazoo_account_id, Context);
         _ -> kazoo_util:kz_current_context_reseller_id(Context)
     end,
-    _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context),
+    case ResellerId == SuperAccountId of
+        'true' ->
+            _ = kazoo_util:set_global_carrier_routing(AccountId, Context);
+        'false' ->
+            _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context)
+    end,
+    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    z_render:update("account_outbound_routing_selection", z_template:render("_account_outbound_routing_selection.tpl", [], Context), Context);
+
+event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
+    {'ok', {'account_id', SuperAccountId}, {'auth_token', _}, {'crossbar', _}} = kazoo_util:kz_admin_creds(Context),
+    ResellerId = case kazoo_util:kz_current_context_reseller(Context) of
+        'true' -> z_context:get_session(kazoo_account_id, Context);
+        _ -> kazoo_util:kz_current_context_reseller_id(Context)
+    end,
+    case ResellerId == SuperAccountId of
+        'true' ->
+            _ = kazoo_util:set_global_carrier_routing(AccountId, Context);
+        'false' ->
+            _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context)
+    end,
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
+
+event({postback,account_based_routing,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    _ = kazoo_util:set_account_based_routing(AccountId, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    z_render:update("account_outbound_routing_selection", z_template:render("_account_outbound_routing_selection.tpl", [], Context), Context);
 
 event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:set_account_based_routing(AccountId, Context),

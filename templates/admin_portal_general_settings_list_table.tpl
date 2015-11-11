@@ -46,6 +46,14 @@
              </span>
             </th>
         </tr>
+        <tr>
+            <th class="text-center1">{_ Outbound routing _}</th>
+            <th class="text-left">
+             <span id="account_outbound_routing_selection">
+                {% include "_account_outbound_routing_selection.tpl" %}
+             </span>
+            </th>
+        </tr>
     </thead>
 </table>
 {% endwith %}

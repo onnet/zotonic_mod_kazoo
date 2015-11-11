@@ -38,6 +38,11 @@
   <span id="admin_portal_trunk_list_tpl">
         {% include "admin_portal_trunk_list.tpl" headline=_"Trunkstore" %}
   </span>
+
+  {% wire action={connect signal={update_reseller_portal_resources_tpl} action={update target="reseller_portal_resources_tpl" template="admin_portal_resources.tpl"}} %}
+  <span id="reseller_portal_resources_tpl">
+            {% include "admin_portal_resources.tpl" %}
+  </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_admin_portal_devices_list_tpl} action={update target="admin_portal_devices_list_tpl" template="admin_portal_devices_list.tpl" headline=_"Account's Devices"}} %}
