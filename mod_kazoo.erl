@@ -1028,11 +1028,17 @@ event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context)
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
+    {'ok', {'account_id', SuperAccountId}, {'auth_token', _}, {'crossbar', _}} = kazoo_util:kz_admin_creds(Context),
     ResellerId = case kazoo_util:kz_current_context_reseller(Context) of
         'true' -> z_context:get_session(kazoo_account_id, Context);
         _ -> kazoo_util:kz_current_context_reseller_id(Context)
     end,
-    _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context),
+    case ResellerId == SuperAccountId of
+        'true' ->
+            _ = kazoo_util:set_global_carrier_routing(AccountId, Context);
+        'false' ->
+            _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context)
+    end,
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
