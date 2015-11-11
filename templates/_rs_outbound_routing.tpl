@@ -2,15 +2,13 @@
             <td>{_ Outbound routing _}</td>
             <td>
               <div class="btn-group pull-right">
-                    {% if m.kazoo.kz_current_context_superadmin or not (m.kazoo.kz_current_context_reseller or m.kazoo.is_kazoo_account_admin) %}
-                        {% wire id="global_carrier_routing" action={postback postback={global_carrier_routing account_id=account_id} delegate="mod_kazoo"} %}
-                        <button id="global_carrier_routing" class="btn btn-xs btn-onnet">
-                           <i style="visibility:{% if routing[1] == "offnet" %}visible{% else %}hidden{% endif %};" class="fa fa-check"></i>
-                           {_ Global carrier _}
-                        </button>
-                    {% endif %}
+                    {% wire id="global_carrier_routing" action={postback postback={global_carrier_routing account_id=account_id} delegate="mod_kazoo"} %}
+                    <button id="global_carrier_routing" class="btn btn-xs btn-onnet">
+                       <i style="visibility:{% if routing[1] == "offnet" %}visible{% else %}hidden{% endif %};" class="fa fa-check"></i>
+                       {_ Global carrier _}
+                    </button>
 
-                    {% if not m.kazoo.is_kazoo_account_admin %}
+                    {% if not m.kazoo.kz_current_context_superadmin %}
                         {% wire id="reseller_based_routing" action={postback postback={reseller_based_routing account_id=account_id} delegate="mod_kazoo"} %}
                         <button id="reseller_based_routing" class="btn btn-xs btn-onnet">
                            <i style="visibility:{% if routing[1] == "resources" and routing[2] %}visible{% else %}hidden{% endif %};" class="fa fa-check"></i>

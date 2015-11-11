@@ -20,16 +20,11 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-            
-<div id="ap_resources_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="ap_resources_widget_opened"}] %}display: none;{% endif %}">
+  <div id="ap_resources_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="ap_resources_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_resources_widget_opened"
                                                                     template="admin_portal_resources_table.tpl"}
         %}
     </div>
-</div>
-
-
-
-
+  </div>
 {% endblock %}
