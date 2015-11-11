@@ -346,7 +346,7 @@ m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context
 m_find_value(kz_list_account_resources, _M, Context) ->
     kazoo_util:kz_list_account_resources(Context);
 
-m_find_value({kz_resource_info, [{resource_id, 'undefined'}]}, _M, Context) ->
+m_find_value({kz_resource_info, [{resource_id, 'undefined'}]}, _M, _Context) ->
     'undefined';
 m_find_value({kz_resource_info, [{resource_id, ResourceId}]}, _M, Context) ->
     kazoo_util:kz_resource_info(ResourceId, Context);
