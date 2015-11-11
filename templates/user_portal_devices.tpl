@@ -14,6 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh list" action={emit signal={update_user_portal_devices_tpl} } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

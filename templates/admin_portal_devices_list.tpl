@@ -15,6 +15,7 @@
   </span>
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add device" action={ dialog_open title=_"Add device" template="_add_device_dialog.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh list" action={emit signal={update_admin_portal_devices_list_tpl} } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

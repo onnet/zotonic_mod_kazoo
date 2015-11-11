@@ -4,8 +4,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "refresh list"
+msgstr "обновить список"
 
 msgid "Flags (comma separated)"
 msgstr "Флаги (через запятую)"
