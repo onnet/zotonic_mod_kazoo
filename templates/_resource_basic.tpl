@@ -15,17 +15,17 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="rules" name="rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter rules here _}:  ^\+?(\d*)$" value="{{ resource["rules"] }}">
+          <input id="rules" name="rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter destination mask here _}:  ^\+?(\d*)$" value="{{ resource["rules"] }}">
         </div>
         <div class="col-sm-6">
-          <input id="cid_rules" name="cid_rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter cid_rules here _}:  ^(\+?7812\d{7})$" value="{{ resource["cid_rules"] }}">
+          <input id="cid_rules" name="cid_rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter CID mask here _}:  ^(\+?7812\d{7})$" value="{{ resource["cid_rules"] }}">
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="flags" name="flags" type="text" class="form-control margin-bottom-xs" placeholder="{_ Flags (comma separated)_}"
+          <input id="flags" name="flags" type="text" class="form-control margin-bottom-xs" placeholder="{_ Flags (comma separated) _}"
                             value="{% for flag in resource["flags"] %}{{ flag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
         </div>
         <div class="col-sm-2">

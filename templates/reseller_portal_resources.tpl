@@ -14,7 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"add resource" action={ dialog_open title=_"Add resource" template="_edit_resource.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add route" action={ dialog_open title=_"Add route" template="_edit_resource.tpl" width="auto" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

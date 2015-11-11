@@ -7,17 +7,56 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Flags (comma separated)"
+msgstr "Флаги (через запятую)"
 
-msgid ""
-msgstr ""
+msgid "Enter CID mask here"
+msgstr "Введите маску АОН"
 
-msgid ""
-msgstr ""
+msgid "Enter destination mask here"
+msgstr "Введите маску направления"
 
-msgid ""
-msgstr ""
+msgid "Enter server address here"
+msgstr "Введите название шлюза"
+
+msgid "Enter resource name here"
+msgstr "Введите название маршрута"
+
+msgid "Progress timeout"
+msgstr "Porgess таймаут"
+
+msgid "Pass realm"
+msgstr "Использовать р/м"
+
+msgid "Enter realm here"
+msgstr "Введите реалм"
+
+msgid "Enter suffix here"
+msgstr "Введите суфикс"
+
+msgid "Enter prefix here"
+msgstr "Введите префикс"
+
+msgid "Reseller Settings"
+msgstr "Настройки реселлера"
+
+msgid "Do you really want to delete route"
+msgstr "Вы действительно хотите удалить маршрут"
+
+msgid "Resource name"
+msgstr "Название маршрута"
+
+msgid "Weight cost"
+msgstr "Приоритет"
+
+msgid "Edit route"
+msgstr "Изменить маршрут"
+
+msgid "Add route"
+msgstr "Добавить маршрут"
+
+msgid "add route"
+msgstr "добавить маршрут"
 
 msgid "Outbound routing"
 msgstr "Исходящая маршрутизация"

@@ -13,9 +13,9 @@
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_reseller_portal_resources_tpl} action={update target="reseller_portal_resources_tpl" template="reseller_portal_resources.tpl" headline=_"Resources"}} %}
+  {% wire action={connect signal={update_reseller_portal_resources_tpl} action={update target="reseller_portal_resources_tpl" template="reseller_portal_resources.tpl" headline=_"Outbound routing"}} %}
   <span id="reseller_portal_resources_tpl">
-        {% include "reseller_portal_resources.tpl" headline=_"Resources" %}
+        {% include "reseller_portal_resources.tpl" headline=_"Outbound routing" %}
   </span>
 </div>
 

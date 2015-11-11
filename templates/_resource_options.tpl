@@ -36,9 +36,9 @@
         </div>
         <div class="col-sm-3">
           <select name="caller_id_options_type" id="caller_id_options_type" class="col-xs-12 form-control margin-bottom-xs">   
-            <option value="external" {% if resource["caller_id_options"][1]["type"] == "external" %}selected{% endif %}>external</option>
-            <option value="internal" {% if resource["caller_id_options"][1]["type"] == "internal" %}selected{% endif %}>internal</option>
-            <option value="emergency" {% if resource["caller_id_options"][1]["type"] == "emergency" %}selected{% endif %}>emergency</option>
+            <option value="external" {% if resource["caller_id_options"][1]["type"] == "external" %}selected{% endif %}>external CID</option>
+            <option value="internal" {% if resource["caller_id_options"][1]["type"] == "internal" %}selected{% endif %}>internal CID</option>
+            <option value="emergency" {% if resource["caller_id_options"][1]["type"] == "emergency" %}selected{% endif %}>emergency CID</option>
           </select>
         </div>
       </div>

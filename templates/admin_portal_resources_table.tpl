@@ -2,7 +2,7 @@
 <table id="admin_portal_resources_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
-            <th style="text-align: center1;">{_ Resource Name _}</th>
+            <th style="text-align: center1;">{_ Resource name _}</th>
             <th style="text-align: center;">{_ Weight cost _}</th>
             <th style="text-align: center;">{_ Enabled _}</th>
             <th style="text-align: center;"></th>
@@ -26,10 +26,10 @@
              {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_{{ resource["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++resource["id"] action={ dialog_open title=_"Edit resource"++" "++resource["name"] template="_edit_resource_lazy.tpl" resource_id=resource["id"] } %}
+            {% wire id="edit_"++resource["id"] action={ dialog_open title=_"Edit route"++" "++resource["name"] template="_edit_resource_lazy.tpl" resource_id=resource["id"] width="auto" } %}
             <td style="text-align: center;"><i id="delete_{{ resource["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++resource["id"]
-                    action={confirm text=_"Do you really want to delete this gateway "++resource["name"]++"?"
+                    action={confirm text=_"Do you really want to delete route"++" "++resource["name"]++"?"
                                 action={postback postback={delete_resource resource_id=resource["id"]} delegate="mod_kazoo"}
                            }
             %}
