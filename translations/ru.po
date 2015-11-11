@@ -32,7 +32,7 @@ msgid "Enter realm here"
 msgstr "Введите реалм"
 
 msgid "Enter suffix here"
-msgstr "Введите суфикс"
+msgstr "Введите суффикс"
 
 msgid "Enter prefix here"
 msgstr "Введите префикс"
