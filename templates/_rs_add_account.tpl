@@ -30,7 +30,28 @@
       </div>
     </div>
   </div>
-  <br />
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="controls">
+          <textarea rows="4" cols="10" id="comments" name="comments" placeholder=" {_ Comments _}"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-12">
+        <input type="file" name="signup_file" class="file">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="{_ Upload document _}">
+          <span class="input-group-btn">
+            <button class="browse btn btn-zprimary margin-bottom-xs" type="button"><i class="glyphicon glyphicon-search"></i> {_ Browse _}</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="form-group">
     <div class="row">
       <div class="col-sm-12">
@@ -41,3 +62,20 @@
   <input type="checkbox" id="checkbox" name="checkbox" checked style="display: none;"/>
   <input type="hidden" id="rs_sign_up" name="rs_sign_up" value="1"/>
 </form>
+
+<style>
+.file {
+  visibility: hidden;
+  position: absolute;
+}
+</style>
+
+{% javascript %}
+  $(document).on('click', '.browse', function(){
+    var file = $(this).parent().parent().parent().find('.file');
+    file.trigger('click');
+  });
+  $(document).on('change', '.file', function(){
+    $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+  });
+{% endjavascript %}

@@ -6,6 +6,7 @@
      translit/1
     ,rand_hex_binary/1
     ,to_hex/1
+    ,check_file_size_exceeded/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -62,4 +63,12 @@ rand_hex_binary(Size) when is_integer(Size) andalso Size > 0 ->
 
 binary_to_hex_char(N) when N < 10 -> $0 + N;
 binary_to_hex_char(N) when N < 16 -> $a - 10 + N.
+
+check_file_size_exceeded(Id, FileName, MaxSize) ->
+    case filelib:file_size(FileName) > MaxSize of
+        false ->
+            false;
+        true ->
+            {true, Id}
+    end.
 

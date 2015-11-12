@@ -34,5 +34,13 @@
                 <a style="font-size:small; color: #c0c0c0;" >{_ Requester's IP address _}: {{ clientip }}</a>
                 <br />
                 <a style="font-size:small; color: #c0c0c0;" >{_ Contact phone number provided _}: {{ phonenumber }}</a>
+                {% if comments %}
+                  <br />
+                  <a style="font-size:small; color: #c0c0c0;" >{_ Comments _}: {{ comments }}</a>
+                {% endif %}
+                {% if signup_file %}
+                  <br />
+                  <a style="font-size:small; color: #c0c0c0;" >{_ Attached file _}: {{ signup_file }}</a>
+                {% endif %}
 	</body>
 </html>

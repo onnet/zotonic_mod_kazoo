@@ -787,6 +787,19 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
 send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Context) ->
     {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
     SalesEmail = m_config:get_value('mod_kazoo', sales_email, Context),
+    case z_context:get_q("signup_file", Context) of
+        {upload, SignUploadFilename, SignUploadTmp, _, _} ->
+            false = modkazoo_util2:check_file_size_exceeded(signup_file, SignUploadTmp, 15000000),
+            SignUploadFilenameVar = [{signup_file, SignUploadFilename}],
+            {ok, FileData} = file:read_file(SignUploadTmp),
+            {ok, FileIdnProps} = z_media_identify:identify(SignUploadTmp, Context),
+            SignUpload = [#upload{tmpfile=SignUploadTmp, data=FileData, filename=modkazoo_util2:translit(SignUploadFilename), mime=proplists:get_value(mime, FileIdnProps)}];
+        _ ->
+            SignUpload = [],
+            SignUploadFilenameVar = []
+    end,
+
+
     Vars = [{email, Email}
             ,{accountname, Accountname}
             ,{username, Username}
@@ -794,8 +807,11 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
             ,{surname, Surname}
             ,{password, Password}
             ,{clientip, ClientIP}
+            ,{comments, z_convert:to_binary(z_context:get_q("comments", Context))}
             ,{phonenumber, z_convert:to_binary(z_context:get_q("phonenumber", Context))}
-           ],
+           ] ++ SignUploadFilenameVar,
+
+    Attachments = SignUpload,
 
     case z_context:get_q("notify_signed_up",Context) of
         'undefined' -> 'ok';
@@ -804,7 +820,8 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
                 to=Email,
                 from=SalesEmail,
                 html_tpl="_email_signup_greeting.tpl",
-                vars=Vars
+                vars=Vars,
+                attachments=Attachments
             },
             z_email:send(E_SignUp, Context)
     end,
@@ -813,7 +830,8 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
         to=SalesEmail,
         from=SalesEmail,
         html_tpl="_email_signup_greeting.tpl",
-        vars=Vars
+        vars=Vars,
+        attachments=Attachments
     },
     z_email:send(E_SignUp_Copy, Context).
 

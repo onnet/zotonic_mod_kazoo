@@ -42,12 +42,26 @@
                 </div>
               </div>
             </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="controls">
+                    <textarea rows="4" cols="10" id="comments" name="comments" placeholder=" {_ Comments _}"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-sm-6">
             <div class="checkbox">
               <label>
                 <input type="checkbox" id="checkbox" name="checkbox" />{_ I agree to the _} <a href="/termscons">{_ Terms of Service _}</a>
               </label>
             </div>
-            <br />
+                </div>
+              </div>
+            </div>
             <div class="form-group">
               <div class="row">
                 <div class="col-sm-6">

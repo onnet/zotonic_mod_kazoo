@@ -28,11 +28,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Browse"
+msgstr "Выбрать"
 
-msgid ""
-msgstr ""
+msgid "Upload document"
+msgstr "Загрузить документ"
 
 msgid "General routing"
 msgstr "Общая"
