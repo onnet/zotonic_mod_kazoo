@@ -217,6 +217,7 @@
     ,toggle_resource/2
     ,toggle_resource/3
     ,resource/1
+    ,super_account_id/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2867,3 +2868,12 @@ resource(Context) ->
             _ = crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
+super_account_id(Context) ->
+    case z_context:get_session('super_account_id', Context) of
+        'undefined' ->
+            {'ok', {'account_id', SuperAccountId}, {'auth_token', _}, {'crossbar', _}} = kazoo_util:kz_admin_creds(Context),
+            z_context:set_session('super_account_id', SuperAccountId, Context),
+            SuperAccountId;
+        AccountId ->
+             AccountId
+    end.
