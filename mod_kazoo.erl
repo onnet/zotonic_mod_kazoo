@@ -290,6 +290,7 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
             {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
             Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
                    ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+                   ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
                    ,{clientip, ClientIP}
                    ,{number, NumberToAdd}],
             spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
