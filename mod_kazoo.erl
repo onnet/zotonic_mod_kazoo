@@ -303,6 +303,7 @@ event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+           ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
            ,{clientip, ClientIP}
            ,{number, Number}],
     case kazoo_util:is_creditable(Context) of
@@ -320,6 +321,7 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+           ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
            ,{clientip, ClientIP}
            ,{number, Number}],
     spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
@@ -339,6 +341,7 @@ event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+           ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
            ,{clientip, ClientIP}
            ,{number, Number}],
     spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
