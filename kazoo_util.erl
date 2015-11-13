@@ -815,7 +815,15 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
     Attachments = SignUpload,
 
     case z_context:get_q("notify_signed_up",Context) of
-        'undefined' -> 'ok';
+        'undefined' -> 
+            E_SignUp = #email{
+                to=kz_user_doc_field(<<"email">>, Context),
+                from=SalesEmail,
+                html_tpl="_email_signup_greeting.tpl",
+                vars=Vars,
+                attachments=Attachments
+            },
+            z_email:send(E_SignUp, Context);
         _ -> 
             E_SignUp = #email{
                 to=Email,
@@ -2877,3 +2885,4 @@ super_account_id(Context) ->
         AccountId ->
              AccountId
     end.
+
