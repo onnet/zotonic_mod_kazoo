@@ -7,7 +7,7 @@
                     </button>
 
                     {% wire id="account_based_routing" action={postback postback="account_based_routing" delegate="mod_kazoo"} %}
-                    <button id="account_based_routing" class="btn btn-xs btn-onnet hidden-md">
+                    <button id="account_based_routing" class="btn btn-xs btn-onnet">
                        <i style="visibility:{% if routing[1] == "resources" and not routing[2] %}visible{% else %}hidden{% endif %};" class="fa fa-check"></i>
                        {_ Account defined _}
                     </button>
