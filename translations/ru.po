@@ -13,20 +13,23 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Notifications"
+msgstr "Уведомления"
 
-msgid ""
-msgstr ""
+msgid "Template name"
+msgstr "Название шаблона"
 
-msgid ""
-msgstr ""
+msgid "Lists"
+msgstr "Списки"
 
-msgid ""
-msgstr ""
+msgid "Add webhook"
+msgstr "Добавить уведомление"
 
-msgid ""
-msgstr ""
+msgid "add webhook"
+msgstr "добавить уведомление"
+
+msgid "Webhooks"
+msgstr "Уведомления"
 
 msgid "Browse"
 msgstr "Выбрать"
@@ -574,6 +577,9 @@ msgstr "Добавить черный список"
 msgid "Save blacklist"
 msgstr "Сохранить черный список"
 
+msgid "List name"
+msgstr "Название списка"
+
 msgid "Blacklist Name"
 msgstr "Название черного списка"
 
@@ -732,6 +738,9 @@ msgstr "Расчеты"
 
 msgid "Finance"
 msgstr "Финансы"
+
+msgid "add list"
+msgstr "добавить список"
 
 msgid "add blacklist"
 msgstr "добавить черный список"

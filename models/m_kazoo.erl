@@ -344,6 +344,8 @@ m_find_value(outbound_routing_strategy, _M, Context) ->
     m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context);
 
 m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context) ->
+    ['undefined', 'undefined'];
+m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context) ->
     CF = kazoo_util:kz_callflow_by_number(<<"no_match">>, AccountId, Context),
     [modkazoo_util:get_value([<<"flow">>, <<"module">>], CF), modkazoo_util:get_value([<<"flow">>, <<"data">>, <<"hunt_account_id">>], CF)];
 
@@ -354,6 +356,25 @@ m_find_value({kz_resource_info, [{resource_id, 'undefined'}]}, _M, _Context) ->
     'undefined';
 m_find_value({kz_resource_info, [{resource_id, ResourceId}]}, _M, Context) ->
     kazoo_util:kz_resource_info(ResourceId, Context);
+
+m_find_value(kz_list_account_notifications, _M, Context) ->
+    kazoo_util:kz_list_account_notifications(Context);
+
+m_find_value({kz_notification_info, [{notification_id, 'undefined'}]}, _M, _Context) ->
+    'undefined';
+m_find_value({kz_notification_info, [{notification_id, TemplateId}]}, _M, Context) ->
+    kazoo_util:kz_notification_info(TemplateId, Context);
+
+m_find_value(kz_list_account_lists, _M, Context) ->
+    kazoo_util:kz_list_account_lists(Context);
+
+m_find_value({kz_get_account_list, [{list_id, 'undefined'}]}, _M, _Context) ->
+    'undefined';
+m_find_value({kz_get_account_list, [{list_id, ListId}]}, _M, Context) ->
+    kazoo_util:kz_get_account_list(ListId, Context);
+
+m_find_value({kz_list_account_list_entries, [{list_id, ListId}]}, _M, Context) ->
+    kazoo_util:kz_list_account_list_entries(ListId, Context);
 
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),

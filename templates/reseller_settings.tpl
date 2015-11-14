@@ -7,13 +7,21 @@
 {% block service_description %}
 
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_reseller_portal_general_settings_tpl} action={update target="reseller_portal_general_settings_tpl" template="reseller_portal_general_settings.tpl" headline=_"General settings"}} %}
+  {% wire action={connect signal={update_reseller_portal_general_settings_tpl}
+                          action={update target="reseller_portal_general_settings_tpl" template="reseller_portal_general_settings.tpl" headline=_"General settings"}} %}
   <span id="reseller_portal_general_settings_tpl">
         {% include "reseller_portal_general_settings.tpl" headline=_"General settings" %}
   </span>
+
+  {% wire action={connect signal={update_reseller_portal_notifications_tpl}
+                          action={update target="reseller_portal_notifications_tpl" template="reseller_portal_notifications.tpl" headline=_"Notifications"}} %}
+  <span id="reseller_portal_notifications_tpl">
+        {% include "reseller_portal_notifications.tpl" headline=_"Notifications" %}
+  </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_reseller_portal_resources_tpl} action={update target="reseller_portal_resources_tpl" template="reseller_portal_resources.tpl" headline=_"Outbound routing"}} %}
+  {% wire action={connect signal={update_reseller_portal_resources_tpl}
+                          action={update target="reseller_portal_resources_tpl" template="reseller_portal_resources.tpl" headline=_"Outbound routing"}} %}
   <span id="reseller_portal_resources_tpl">
         {% include "reseller_portal_resources.tpl" headline=_"Outbound routing" %}
   </span>

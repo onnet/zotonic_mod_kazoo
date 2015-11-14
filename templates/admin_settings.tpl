@@ -75,6 +75,11 @@
   <span id="admin_portal_webhooks_list_tpl">
         {% include "admin_portal_webhooks_list.tpl" headline=_"Webhooks" %}
   </span>
+
+  {% wire action={connect signal={update_admin_portal_lists_tpl} action={update target="admin_portal_lists_tpl" template="admin_portal_lists.tpl" headline=_"Lists"}} %}
+  <span id="admin_portal_lists_tpl">
+        {% include "admin_portal_lists.tpl" headline=_"Lists" %}
+  </span>
 </div>
 
 {% endblock %}

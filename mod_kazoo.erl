@@ -1084,6 +1084,21 @@ event({submit,resource_form,_,_}, Context) ->
     mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
     z_render:dialog_close(Context);
 
+event({submit,add_new_list,_,_}, Context) ->
+    _ = kazoo_util:account_list(Context),
+    mod_signal:emit({update_admin_portal_lists_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
+event({postback,{delete_list,[{list_id, ListId}]},_,_}, Context) ->
+    _ = kazoo_util:delete_account_list(ListId, Context),
+    mod_signal:emit({update_admin_portal_lists_tpl, []}, Context);
+
+event({submit,add_new_list_entry,_,_}, Context) ->
+    ListId = z_context:get_q("list_id", Context),
+    _ = kazoo_util:kz_account_list_add_entry(ListId, Context),
+    mod_signal:emit({update_admin_portal_lists_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 

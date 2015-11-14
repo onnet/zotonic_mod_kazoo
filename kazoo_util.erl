@@ -218,6 +218,15 @@
     ,toggle_resource/3
     ,resource/1
     ,super_account_id/1
+    ,kz_list_account_notifications/1
+    ,kz_notification_info/2
+    ,kz_notification_info/3
+    ,kz_list_account_lists/1
+    ,account_list/1
+    ,delete_account_list/2
+    ,kz_get_account_list/2
+    ,kz_list_account_list_entries/2
+    ,kz_account_list_add_entry/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -274,12 +283,15 @@
 -define(TEMPORAL_RULES, <<"/temporal_rules">>).
 -define(CONFERENCES, <<"/conferences">>).
 -define(BLACKLISTS, <<"/blacklists">>).
+-define(LISTS, <<"/lists">>).
+-define(ENTRIES, <<"/entries">>).
 -define(CHILDREN, <<"/children">>).
 -define(PAGE_SIZE, <<"page_size=">>).
 -define(START_KEY, <<"start_key=">>).
 -define(WEBHOOKS, <<"/webhooks">>).
 -define(NO_PAGINATION, <<"&paginate=false">>).
 -define(RESOURCES, <<"/resources">>).
+-define(NOTIFICATIONS, <<"/notifications">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -2886,3 +2898,87 @@ super_account_id(Context) ->
              AccountId
     end.
 
+kz_list_account_notifications(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary>>
+    end,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_notification_info(TemplateId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_notification_info(TemplateId, AccountId, Context).
+
+kz_notification_info(TemplateId, AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId, Context))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId, Context))/binary>>
+    end,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_list_account_lists(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+account_list(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    ListId = z_context:get_q("list_id", Context),
+    CurrDoc = case ListId of
+        'undefined' -> ?EMPTY_JSON_OBJECT;
+         _ -> kz_get_account_list(ListId, Context)
+    end,
+    Routines = [fun(J) -> modkazoo_util:set_value(<<"name">>, modkazoo_util:get_q_bin("list_name",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"description">>, modkazoo_util:get_q_bin("list_description",Context), J) end
+               ],
+    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
+    case ListId of
+        'undefined' ->
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary>>,
+            crossbar_account_request('put', API_String, ?MK_DATABAG(NewDoc), Context);
+        _ ->
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary>>,
+            crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
+    end.
+
+delete_account_list(ListId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
+
+kz_get_account_list(ListId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_list_account_list_entries(ListId,Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_account_list_add_entry(ListId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    EntryId = z_context:get_q("entry_id", Context),
+    CurrDoc = case EntryId of
+        'undefined' -> ?EMPTY_JSON_OBJECT;
+         _ -> kz_get_account_list_entry(EntryId, ListId, Context)
+    end,
+    Routines = [fun(J) -> modkazoo_util:set_value(<<"number">>, modkazoo_util:get_q_bin("list_entry_number",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"displayname">>, modkazoo_util:get_q_bin("list_entry_displayname",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"iamtest">>, <<"just_my_var">>, J) end
+               ],
+    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
+    case EntryId of
+        'undefined' ->
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
+            crossbar_account_request('put', API_String, ?MK_DATABAG(NewDoc), Context);
+        _ ->
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary,
+                                                                           ?ENTRIES/binary, <<"/">>/binary, (z_convert:to_binary(EntryId, Context))/binary>>,
+            crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
+    end.
+
+kz_get_account_list_entry(EntryId, ListId, Context) ->
+    ?EMPTY_JSON_OBJECT.
