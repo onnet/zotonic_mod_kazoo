@@ -343,7 +343,7 @@ m_find_value(outbound_routing_strategy, _M, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context);
 
-m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context) ->
+m_find_value({outbound_routing_strategy, [{account_id, 'undefined'}]}, _M, Context) ->
     ['undefined', 'undefined'];
 m_find_value({outbound_routing_strategy, [{account_id, AccountId}]}, _M, Context) ->
     CF = kazoo_util:kz_callflow_by_number(<<"no_match">>, AccountId, Context),
