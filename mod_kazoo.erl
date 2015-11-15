@@ -1093,11 +1093,14 @@ event({postback,{delete_list,[{list_id, ListId}]},_,_}, Context) ->
     _ = kazoo_util:delete_account_list(ListId, Context),
     mod_signal:emit({update_admin_portal_lists_tpl, []}, Context);
 
-event({submit,add_new_list_entry,_,_}, Context) ->
+event({submit,account_list_entries,_,_}, Context) ->
     ListId = z_context:get_q("list_id", Context),
     _ = kazoo_util:kz_account_list_add_entry(ListId, Context),
-    mod_signal:emit({update_admin_portal_lists_tpl, []}, Context),
-    z_render:dialog_close(Context);
+    z_render:update("list_entries_div", z_template:render("_list_entries_dialog.tpl", [{list_id, ListId}], Context), Context);
+
+event({postback,{delete_account_list_entry,[{list_id,ListId},{entry_id,EntryId}]},_,_}, Context) ->
+    _ = kazoo_util:delete_account_list_entry(EntryId, ListId, Context),
+    z_render:update("list_entries_div", z_template:render("_list_entries_dialog.tpl", [{list_id, ListId}], Context), Context);
 
 event({drag,_,_},Context) ->
     Context;

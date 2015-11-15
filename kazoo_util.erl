@@ -227,6 +227,7 @@
     ,kz_get_account_list/2
     ,kz_list_account_list_entries/2
     ,kz_account_list_add_entry/2
+    ,delete_account_list_entry/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -2947,6 +2948,12 @@ delete_account_list(ListId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
+delete_account_list_entry(EntryId, ListId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary,
+                                                                   ?ENTRIES/binary, <<"/">>/binary, (z_convert:to_binary(EntryId, Context))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
+
 kz_get_account_list(ListId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary>>,
@@ -2964,7 +2971,7 @@ kz_account_list_add_entry(ListId, Context) ->
         'undefined' -> ?EMPTY_JSON_OBJECT;
          _ -> kz_get_account_list_entry(EntryId, ListId, Context)
     end,
-    Routines = [fun(J) -> modkazoo_util:set_value(<<"number">>, modkazoo_util:get_q_bin("list_entry_number",Context), J) end
+    Routines = [fun(J) -> modkazoo_util:set_value(<<"number">>, re:replace(z_context:get_q("list_entry_number", Context), "[^0-9]", "", [global, {return, binary}]), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"displayname">>, modkazoo_util:get_q_bin("list_entry_displayname",Context), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"iamtest">>, <<"just_my_var">>, J) end
                ],

@@ -7,11 +7,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Edit entries"
+msgstr "Редактировать записи"
 
-msgid ""
-msgstr ""
+msgid "Add entry"
+msgstr "Добавить запись"
 
 msgid "Notifications"
 msgstr "Уведомления"
