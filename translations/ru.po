@@ -62,7 +62,7 @@ msgid "Enter resource name here"
 msgstr "Введите название маршрута"
 
 msgid "Progress timeout"
-msgstr "Progess таймаут"
+msgstr "Progress таймаут"
 
 msgid "Pass realm"
 msgstr "Использ. реалм"
