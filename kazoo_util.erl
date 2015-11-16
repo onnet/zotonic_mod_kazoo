@@ -154,6 +154,7 @@
     ,kz_vmbox/3
     ,kz_conference/1
     ,kz_conference/3
+    ,kz_conference_details/2
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
@@ -283,6 +284,7 @@
 -define(MENUS, <<"/menus">>).
 -define(TEMPORAL_RULES, <<"/temporal_rules">>).
 -define(CONFERENCES, <<"/conferences">>).
+-define(DETAILS, <<"/details">>).
 -define(BLACKLISTS, <<"/blacklists">>).
 -define(LISTS, <<"/lists">>).
 -define(ENTRIES, <<"/entries">>).
@@ -2203,6 +2205,11 @@ kz_conference(Verb, ConferenceId,Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
+kz_conference_details(ConferenceId,Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary, ?DETAILS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
 kz_get_featurecode_by_name(FCName, Context) ->
     case lists:filter(fun(X) -> z_convert:to_binary(FCName) == modkazoo_util:get_value([<<"featurecode">>,<<"name">>],X) end, kz_list_account_callflows(Context)) of
         [] -> [];
@@ -2465,7 +2472,7 @@ kz_get_account_blacklist(BlacklistId, Context) ->
 set_blacklist_doc(Id, Name, Nums, Context) ->
     Props =  [{<<"name">>, z_convert:to_binary(Name)}
              ,{<<"id">>, z_convert:to_binary(Id)}
-             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {z_convert:to_binary(X), ?EMPTY_JSON_OBJECT} end, Nums))}],
+             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {z_convert:to_binary(modkazoo_util:cleanout(X)), ?EMPTY_JSON_OBJECT} end, Nums))}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case Id of

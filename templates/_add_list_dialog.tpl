@@ -22,5 +22,4 @@
   <input type="hidden" name="list_id" value="{{ list[1]["id"] }}">
 {% endif %}
 </form>
-{% print list[1] %}
 {% endwith %}

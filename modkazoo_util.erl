@@ -55,6 +55,7 @@
     ,get_q_bin/2
     ,get_q_atom/2
     ,get_q_integer/2
+    ,cleanout/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -479,3 +480,13 @@ get_q_atom(Key, Context) ->
 
 get_q_integer(Key, Context) ->
     z_convert:to_integer(z_context:get_q(Key, Context)).
+
+cleanout(String) when is_list(hd(String)) orelse is_binary(hd(String)) ->
+    lists:map(fun(X) -> re:replace(X, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, String);
+cleanout(String) when is_list(String) ->
+    re:replace(String, "[^A-Za-z0-9]", "", [global, {return, binary}]);
+cleanout(String) when is_binary(String) ->
+    re:replace(String, "[^A-Za-z0-9]", "", [global, {return, binary}]);
+cleanout(String) ->
+    String.
+
