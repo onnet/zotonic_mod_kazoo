@@ -62,10 +62,10 @@ msgid "Enter resource name here"
 msgstr "Введите название маршрута"
 
 msgid "Progress timeout"
-msgstr "Porgess таймаут"
+msgstr "Progess таймаут"
 
 msgid "Pass realm"
-msgstr "Использовать р/м"
+msgstr "Использ. реалм"
 
 msgid "Enter realm here"
 msgstr "Введите реалм"
@@ -653,7 +653,7 @@ msgid "Mask"
 msgstr "Маскироваться"
 
 msgid "Please check your mailbox for further instructions"
-msgstr "Пожалуйста проверьте свой электронный почтовы ящик для получения реквизитов доступа на портал"
+msgstr "Пожалуйста, проверьте свой электронный почтовый ящик для получения реквизитов доступа на портал"
 
 msgid "Best regards"
 msgstr "С уважением"
