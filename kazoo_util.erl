@@ -570,6 +570,9 @@ crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
     ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 10000}]).
 
 crossbar_account_request(Verb, API_String, DataBag, Context) ->
+    crossbar_account_request(Verb, API_String, DataBag, Context, <<>>).
+
+crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
     case crossbar_account_send_request(Verb, API_String, DataBag, Context) of
         {'ok', ReturnCode, _, Body} ->
             case ReturnCode of
@@ -585,14 +588,14 @@ crossbar_account_request(Verb, API_String, DataBag, Context) ->
                     lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
                     lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
                     lager:info("crossbar_account_request Verb: ~p", [Verb]),
-                    <<"">>
+                    Default
             end;
         E -> 
             lager:info("crossbar_account_request Error: ~p", [E]),
             lager:info("crossbar_account_request Error Verb: ~p", [Verb]),
             lager:info("crossbar_account_request Error API_String: ~p", [API_String]),
             lager:info("crossbar_account_request Error DataBag: ~p", [DataBag]),
-            <<"">>
+            Default
     end.
 
 crossbar_account_attachment_request(Verb, API_String, DataBag, Context) ->
@@ -1413,7 +1416,7 @@ kz_list_account_callflows(Context) ->
 
 kz_list_account_callflows(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    crossbar_account_request('get', API_String, [], Context, []).
 
 kz_get_account_callflow(CallflowId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
