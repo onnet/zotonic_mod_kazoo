@@ -9,7 +9,7 @@
         {% for number in m.kazoo.get_acc_numbers_info %}
           <tr  id="number_line_{{ forloop.counter }}">
              <td class="text-center">{{ number[1] }}</td>
-             <td class="text-center"></td>
+             <td class="text-center">{{ m.kazoo[{kz_doc_field type="account" doc_id="no_matter" field="name" account_id=number[2][1]["assigned_to"]}] }}</td>
           </tr>
         {% endfor %}
     </tbody>
