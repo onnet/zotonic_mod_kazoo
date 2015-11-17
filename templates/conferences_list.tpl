@@ -18,9 +18,9 @@
       size: 7
     });
   {% endjavascript %}
-  {% wire id="create_account_btn" action={ dialog_open title=_"Create an account" template="_rs_add_account.tpl" } %}
+  {% wire id="create_conference_btn" action={  dialog_open title=_"Add conference" template="_add_conference_dialog.tpl" width="auto"  } %}
   <div class="col-xs-2">
-    <button id="create_account_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Create _}</button>
+    <button id="create_conference_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Create _}</button>
   </div>
 </div>
 
