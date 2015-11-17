@@ -2,7 +2,7 @@
 
 
   <div class="col-xs-2 col-xs-offset-1">
-    {% wire id="user_mask_selector" type="change" action={postback postback={rs_account_mask conference_id=conference_id} delegate="mod_kazoo"} %}
+    {% wire id="account_conference_edit_btn" action={ dialog_open title=_"Edit conference " template="_edit_conference_lazy.tpl" conference_id=conference_id width="auto" } %}
     <button id="account_conference_edit_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Settings _}</button>
   </div>
   <div class="col-xs-3">
