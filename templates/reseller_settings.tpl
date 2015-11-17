@@ -25,6 +25,15 @@
   <span id="reseller_portal_resources_tpl">
         {% include "reseller_portal_resources.tpl" headline=_"Outbound routing" %}
   </span>
+
+  {% wire action={connect signal={update_rs_allocated_numbers_tpl} action={update target="rs_allocated_numbers_tpl"
+                                                                                  template="rs_allocated_numbers.tpl"
+                                                                                  headline=_"Account's allocated numbers"
+                                                                                  account_id=account_id}}
+  %}
+  <span id="account_allocated_numbers_tpl">
+        {% include "account_allocated_numbers.tpl" headline=_"Allocated numbers" %}
+  </span>
 </div>
 
 {% endblock %}
