@@ -13,6 +13,11 @@
         {% include "reseller_portal_general_settings.tpl" headline=_"General settings" %}
   </span>
 
+  {% wire action={connect signal={update_admin_portal_users_list_tpl} action={update target="admin_portal_users_list_tpl" template="admin_portal_users_list.tpl" headline=_"Account's Users"}} %}
+  <span id="admin_portal_users_list_tpl">
+        {% include "admin_portal_users_list.tpl" headline=_"Account's Users" %}
+  </span>
+
   {% wire action={connect signal={update_reseller_portal_notifications_tpl}
                           action={update target="reseller_portal_notifications_tpl" template="reseller_portal_notifications.tpl" headline=_"Notifications"}} %}
   <span id="reseller_portal_notifications_tpl">
