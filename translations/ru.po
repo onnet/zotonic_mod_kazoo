@@ -4,6 +4,39 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "add participant"
+msgstr "добавить участника"
+
+msgid "Kick off"
+msgstr "Отключить"
+
+msgid "Mute/Unmute"
+msgstr "Микрофон"
+
+msgid "Participant"
+msgstr "Участник"
+
+msgid "Current conference participants"
+msgstr "Текущие участники конференции"
+
+msgid "Participants list"
+msgstr "Список участников"
+
+msgid "Play message"
+msgstr "Проиграть сообщение"
+
+msgid "Start"
+msgstr "Запуск"
+
 msgid "Allocated to"
 msgstr "Владелец"
 

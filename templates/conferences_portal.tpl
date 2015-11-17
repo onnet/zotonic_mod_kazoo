@@ -10,7 +10,5 @@
   {% include "conferences_list.tpl" conference_id=conference_id %}
 </span>
 
-{% print m.kazoo.kz_list_account_conferences %}
-
 {% endblock %}
 

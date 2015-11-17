@@ -1102,6 +1102,9 @@ event({postback,{delete_account_list_entry,[{list_id,ListId},{entry_id,EntryId}]
     _ = kazoo_util:delete_account_list_entry(EntryId, ListId, Context),
     z_render:update("list_entries_div", z_template:render("_list_entries_dialog.tpl", [{list_id, ListId}], Context), Context);
 
+event({postback,conference_selected,_,_},Context) ->
+    z_render:update("child_sandbox", z_template:render("conference_info.tpl", [{conference_id, z_context:get_q("triggervalue", Context)}], Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 
