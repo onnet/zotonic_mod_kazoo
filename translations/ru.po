@@ -10,8 +10,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to add participant"
+msgstr "Вы действительно хотите добавить участника в конференцию"
 
 msgid "add participant"
 msgstr "добавить участника"
@@ -25,8 +25,8 @@ msgstr "Микрофон"
 msgid "Participant"
 msgstr "Участник"
 
-msgid "Current conference participants"
-msgstr "Текущие участники конференции"
+msgid "Current participants"
+msgstr "Текущие участники"
 
 msgid "Participants list"
 msgstr "Список участников"

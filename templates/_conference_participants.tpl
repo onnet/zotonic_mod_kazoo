@@ -14,8 +14,9 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" action={emit signal={update_conference_participants_tpl} } %}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
-                         action={confirm text=_"Do you really want to add participant?"
+                         action={confirm text=_"Do you really want to add participant"++"?"
                               action={postback postback={add_conf_participant account_id=account_id} qarg="new_number_id" delegate="mod_kazoo"}
                          }
     %}

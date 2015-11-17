@@ -43,11 +43,11 @@
 
   {% wire action={connect signal={update_conference_participants_tpl} action={update target="conference_participants_tpl"
                                                                                   template="_conference_participants.tpl"
-                                                                                  headline=_"Current conference participants"
+                                                                                  headline=_"Current participants"
                                                                                   conference_id=conference_id}}
   %}
   <span id="conference_participants_tpl">
-        {% include "_conference_participants.tpl" headline=_"Current conference participants" conference_id=conference_id %}
+        {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}
   </span>
 
 </div>
