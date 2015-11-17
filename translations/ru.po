@@ -4,8 +4,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Allocated to"
+msgstr "Владелец"
+
+msgid "Allocated numbers"
+msgstr "Присвоенные номера"
 
 msgid "Edit entries"
 msgstr "Редактировать записи"

@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>
-                {_ Welcome to _} {_ OnNet Communications Inc._}
+                {_ Welcome to _} {_ OnNet Communications Inc. _}
                 </title>
 	</head>
 	<body>
