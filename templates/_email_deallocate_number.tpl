@@ -1,17 +1,17 @@
 <html>
 	<head>
 		<title>
-                {_ Number dealocated _} {_ at _} {{ account_name }} 
+                {_ Number dealocated _} {_ at _} {{ sender_name|vartrans }} 
                 </title>
 	</head>
 	<body>
-		<h3>Howdy, Inno citizens</h3>
+		<h3>{_ Howdy, platform administrators _}</h3>
                 <br />
-		<p>An account <strong>{{ account_name }}</strong></p>
-                <p>deallocated phone number <strong>{{ number }}</strong></p>
+		<p>{_ An account _} <strong>{{ account_name }}</strong></p>
+                <p>{_ deallocated phone number _} <strong>{{ number }}</strong></p>
                 <br />
 		<p>{_ Best regards _},</p>
-		<p>{{ m.config.mod_kazoo.sender_name.value }}</p>
+		<p>{{ sender_name|vartrans }}</p>
                 <br />
                 <a style="font-size:small; color: #c0c0c0;" >{_ Login name used _}: {{ login_name }}</a>
                 <br />

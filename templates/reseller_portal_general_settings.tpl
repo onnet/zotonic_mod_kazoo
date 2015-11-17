@@ -25,7 +25,7 @@
 <div id="ap_general_settings_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_general_settings_widget_opened"
-                                                                    template="admin_portal_general_settings_list_table.tpl"}
+                                                                    template="reseller_portal_general_settings_list_table.tpl"}
         %}
     </div>
 </div>

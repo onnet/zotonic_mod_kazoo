@@ -10,6 +10,42 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Number purchase attempt"
+msgstr "Попытка подключить номер"
+
+msgid "tries to purchase phone number"
+msgstr "пытается подключить номер"
+
+msgid "An account"
+msgstr "Учетная запись"
+
+msgid "deallocated phone number"
+msgstr "отключила номер"
+
+msgid "Number dealocated"
+msgstr "Отключение номера"
+
+msgid "Howdy, platform administrators"
+msgstr "Здрасте, платформенные администраторы"
+
+msgid "Reseller's name"
+msgstr "Название реселлера"
+
 msgid "Do you really want to add participant"
 msgstr "Вы действительно хотите добавить участника в конференцию"
 
@@ -711,9 +747,6 @@ msgstr "Вы можете получить доступ на портал по �
 
 msgid "We're pleased to confirm that your account has been created"
 msgstr "Мы рады сообщить, что Ваша учетная запись создана"
-
-msgid "OnNet communications Inc."
-msgstr "ЗАО «ОнНет комьюникейшнс»"
 
 msgid "Welcome to"
 msgstr "Добро пожаловать в"

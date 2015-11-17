@@ -288,10 +288,12 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
             _ = kazoo_util:rs_add_number(NumberToAdd, AccountId, Context),
             lager:info("Number add attempt: ~p",[NumberToAdd]),
             {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+            SenderName = kazoo_util:email_sender_name(Context),
             Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
                    ,{login_name, z_context:get_session('kazoo_login_name', Context)}
                    ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
                    ,{clientip, ClientIP}
+                   ,{sender_name, SenderName}
                    ,{number, NumberToAdd}],
             spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
             lager:info("Number add attempt AccountId: ~p",[ AccountId]),
@@ -302,10 +304,12 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
 event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
     lager:info("Number purchase attempt: ~p",[Number]),
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    SenderName = kazoo_util:email_sender_name(Context),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
            ,{clientip, ClientIP}
+           ,{sender_name, SenderName}
            ,{number, Number}],
     case kazoo_util:is_creditable(Context) of
         'true' ->
@@ -320,9 +324,11 @@ event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
 event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     lager:info("Number deallocation attempt: ~p",[Number]),
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    SenderName = kazoo_util:email_sender_name(Context),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
+           ,{sender_name, SenderName}
            ,{clientip, ClientIP}
            ,{number, Number}],
     spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
@@ -339,11 +345,13 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
 
 event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,_}, Context) ->
     lager:info("Number deallocation attempt: ~p",[Number]),
+    SenderName = kazoo_util:email_sender_name(Context),
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
            ,{clientip, ClientIP}
+           ,{sender_name, SenderName}
            ,{number, Number}],
     spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
     case kazoo_util:deallocate_number(Number, AccountId, Context) of

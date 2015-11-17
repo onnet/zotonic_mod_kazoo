@@ -229,6 +229,7 @@
     ,kz_list_account_list_entries/2
     ,kz_account_list_add_entry/2
     ,delete_account_list_entry/3
+    ,email_sender_name/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -803,9 +804,20 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
     crossbar_admin_request('put', API_String, DataBag, Context).
 
+email_sender_name(Context) ->
+    case z_context:get_session('kazoo_account_id', Context) of
+        'undefined' -> m_config:get_value('mod_kazoo', 'sender_name', Context);
+        ResellerId ->
+            case kz_account_doc_field(<<"sender_name">>, ResellerId, Context) of
+                'undefined' -> m_config:get_value('mod_kazoo', 'sender_name', Context);
+                SenderName -> lager:info("SenderName: ~p", [SenderName]), SenderName
+            end
+    end.
+
 send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Context) ->
     {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
     SalesEmail = m_config:get_value('mod_kazoo', sales_email, Context),
+    SenderName = email_sender_name(Context),
     case z_context:get_q("signup_file", Context) of
         {upload, SignUploadFilename, SignUploadTmp, _, _} ->
             false = modkazoo_util2:check_file_size_exceeded(signup_file, SignUploadTmp, 15000000),
@@ -820,6 +832,7 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
 
 
     Vars = [{email, Email}
+            ,{sender_name, SenderName}
             ,{accountname, Accountname}
             ,{username, Username}
             ,{firstname, Firstname}

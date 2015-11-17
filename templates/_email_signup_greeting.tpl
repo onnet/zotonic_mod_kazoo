@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>
-                {_ Welcome to _} {_ OnNet Communications Inc. _}
+                {_ Welcome to _} {{ sender_name|vartrans }}
                 </title>
 	</head>
 	<body>
@@ -28,7 +28,7 @@
                 <br />
                 <br />
 		<p>{_ Regards _},</p>
-		<p>{{ m.config.mod_kazoo.sender_name.value }}</p>
+		<p>{{ sender_name|vartrans }}</p>
                 <br />
                 <br />
                 <a style="font-size:small; color: #c0c0c0;" >{_ Requester's IP address _}: {{ clientip }}</a>
