@@ -19,29 +19,10 @@
             </th>
         </tr>
         <tr>
-            <th class="text-center1">{_ All calls recording _}</th>
-            <th>
-              <span id="all_calls_recording_enabled">
-                {% if account_doc[1]["preflow"][1]["always"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
-                <i id="toggle_all_calls_recording_enabled" class="fa fa-refresh pointer" title="Change"></i>
-                {% wire id="toggle_all_calls_recording_enabled" type="click" action={ postback postback="toggle_all_calls_recording" delegate="mod_kazoo"} %}
-              </span>
-            </th>
-        </tr>
-        <tr>
             <th class="text-center1">{_ Account timezone _}</th>
             <th class="text-left">
              <span id="general_timezone">
                 {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name="timezone" options=m.kazoo.tz_list prefix="general_" postfix="_bootsearch" %}
-             </span>
-            </th>
-        </tr>
-        <tr>
-            <th style="width: 40%;"class="text-center1">{_ Music on hold _}</th>
-            <th class="text-left">
-             <span id="account_music_on_holdmedia_id">
-                {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name=["music_on_hold","media_id"] 
-                                                    options=m.kazoo.kz_list_account_media_short prefix="account_" postfix="_bootsearch" %}
              </span>
             </th>
         </tr>
