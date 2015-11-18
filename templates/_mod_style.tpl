@@ -436,49 +436,6 @@ div#recaptcha_widget {
   margin-left: 90px;
 }
 
-#sign-in-box {
-  position: absolute;
-  right: -90px;
-  bottom: -200px;
-  width: 250px;
-  padding: 10px;
-  background: #E86110;
-  display: none;
-}
-
-#admin-sign-in-box {
-  position: absolute;
-  right: -110px;
-  bottom: -235px;
-  right: -145px;
-/*  width: 250px; */
-  padding: 10px;
-  background: #E86110;
-  display: none;
-}
-
-@media (max-width: 992px) { /* Adjusting for small devices */
-    #admin-sign-in-box {
-      right: -95px!important;
-    }
-}
-
-
-#forgot-pwd-box {
-  position: absolute;
-  right: -90px;
-  bottom: -182px;
-  width: 250px;
-  padding: 10px;
-  background: #E86110;
-  display: none;
-}
-
-#forgot-pwd {
-  padding-top: 16px;
-  text-transform: none;
-}
-
 .alert-error {
   color: #b94a48;
   background-color: #f2dede;
