@@ -222,6 +222,8 @@
     ,kz_list_account_notifications/1
     ,kz_notification_info/2
     ,kz_notification_info/3
+    ,kz_notification_template/3
+    ,kz_notification_template/4
     ,kz_list_account_lists/1
     ,account_list/1
     ,delete_account_list/2
@@ -564,6 +566,17 @@ crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
               end,
     ibrowse:send_req(URL, req_headers(AuthToken), Verb, Payload, [{'inactivity_timeout', 10000}]).
 
+crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
+    case crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) of
+        {'ok', ReturnCode, _, Body} -> Body;
+        E -> 
+            lager:info("crossbar_account_send_raw_request_body Error: ~p", [E]),
+            lager:info("crossbar_account_send_raw_request_body Error Verb: ~p", [Verb]),
+            lager:info("crossbar_account_send_raw_request_body Error API_String: ~p", [API_String]),
+            lager:info("crossbar_account_send_raw_request_body Error Data: ~p", [Data]),
+            <<>>
+    end.
+        
 crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
@@ -2941,6 +2954,17 @@ kz_notification_info(TemplateId, AccountId, Context) ->
     end,
     crossbar_account_request('get', API_String, [], Context).
 
+kz_notification_template(ContextType, TemplateId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_notification_template(ContextType, TemplateId, AccountId, Context).
+
+kz_notification_template(ContextType, TemplateId, AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId, Context))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId, Context))/binary>>
+    end,
+    crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContextType}], [], Context).
+
 kz_list_account_lists(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary>>,
@@ -3010,5 +3034,5 @@ kz_account_list_add_entry(ListId, Context) ->
             crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
     end.
 
-kz_get_account_list_entry(EntryId, ListId, Context) ->
+kz_get_account_list_entry(_EntryId, _ListId, _Context) ->
     ?EMPTY_JSON_OBJECT.

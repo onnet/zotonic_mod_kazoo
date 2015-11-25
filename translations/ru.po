@@ -148,6 +148,9 @@ msgstr "Введите суффикс"
 msgid "Enter prefix here"
 msgstr "Введите префикс"
 
+msgid "Reseller settings"
+msgstr "Настройки реселлера"
+
 msgid "Reseller Settings"
 msgstr "Настройки реселлера"
 

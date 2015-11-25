@@ -20,7 +20,7 @@
             </th>
         </tr>
         {% with m.notifier.first[{account_balance numbers=m.kazoo[{get_acc_numbers account_id=account_id}] }] as account_balance %}
-        {% if account_balance %}
+        {% if account_balance and not account_doc[1]["is_reseller"] %}
         <tr>
             <th>{_ Current balance _}</th>
             <th>{% if not account_balance|match:"-" %}<span class="zprimary">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_balance }}</span>

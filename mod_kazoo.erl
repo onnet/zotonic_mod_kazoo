@@ -958,7 +958,11 @@ event({postback,rs_account_demask,_,_},Context) ->
     z_context:set_session(kazoo_account_id, ResellerId, Context),
     z_context:set_session('current_callflow','undefined',Context),
     z_context:set_session('account_realm','undefined',Context),
-    _ = modkazoo_auth:may_be_add_third_party_billing(Context),
+    modkazoo_auth:may_be_clean_third_party_billing(Context),
+    case modkazoo_util:get_value(<<"is_reseller">>, kazoo_util:kz_get_acc_doc(Context)) of
+        'true' -> 'ok';
+        _ -> _ = modkazoo_auth:may_be_add_third_party_billing(Context)
+    end,
     _ = modkazoo_auth:may_be_set_user_data(Context),
     z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
 

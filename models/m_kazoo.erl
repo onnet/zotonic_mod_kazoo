@@ -365,6 +365,13 @@ m_find_value({kz_notification_info, [{notification_id, 'undefined'}]}, _M, _Cont
 m_find_value({kz_notification_info, [{notification_id, TemplateId}]}, _M, Context) ->
     kazoo_util:kz_notification_info(TemplateId, Context);
 
+m_find_value({kz_notification_template, [{notification_id, 'undefined'}, {context_type, _}]}, _M, _Context) ->
+    'undefined';
+m_find_value({kz_notification_template, [{notification_id, _}, {context_type, 'undefined'}]}, _M, _Context) ->
+    'undefined';
+m_find_value({kz_notification_template, [{notification_id, TemplateId}, {context_type, ContextType}]}, _M, Context) ->
+    kazoo_util:kz_notification_template(ContextType, TemplateId, Context);
+
 m_find_value(kz_list_account_lists, _M, Context) ->
     kazoo_util:kz_list_account_lists(Context);
 
