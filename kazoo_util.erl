@@ -395,6 +395,8 @@
 ]}).
 
 -define(MK_DATABAG(JObj), {[{<<"data">>, JObj}]}).
+-define(DEFAULT_RESOURCE_RULES, [<<"^\\+?(\\d*)$">>]).
+-define(DEFAULT_RESOURCE_CIDRULES, []).
 
 kz_admin_creds(Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
@@ -2871,6 +2873,7 @@ toggle_resource(ResourceId, AccountId, Context) ->
     crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
     
 resource(Context) ->
+lager:info("IAM modkazoo_util:get_q_bin(rules,Context): ~p",[modkazoo_util:get_q_bin("rules",Context)]),
     ResourceId = modkazoo_util:get_q_bin("resource_id",Context),
     PropsGateway = modkazoo_util:filter_empty(
         [{[<<"server">>],modkazoo_util:get_q_bin("server",Context)}
@@ -2887,8 +2890,8 @@ resource(Context) ->
     PropsResource = modkazoo_util:filter_empty(
         [{<<"name">>,modkazoo_util:get_q_bin("name",Context)}
         ,{<<"weight_cost">>,modkazoo_util:get_q_bin("weight_cost",Context)}
-        ,{<<"rules">>,[modkazoo_util:get_q_bin("rules",Context)]}
-        ,{<<"cid_rules">>,[modkazoo_util:get_q_bin("cid_rules",Context)]}
+        ,{<<"rules">>,case modkazoo_util:get_q_bin("rules",Context) of <<>> -> ?DEFAULT_RESOURCE_RULES; Rules -> [Rules] end}
+        ,{<<"cid_rules">>,case modkazoo_util:get_q_bin("cid_rules",Context) of <<>> -> ?DEFAULT_RESOURCE_CIDRULES; Rules -> [Rules] end}
         ,{[<<"caller_id_options">>,<<"type">>],modkazoo_util:get_q_bin("caller_id_options_type",Context)}]) ++
         [{<<"flags">>,case z_context:get_q("flags", Context) of
                           'undefined' -> [];

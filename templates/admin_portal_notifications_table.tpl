@@ -7,6 +7,7 @@
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
+            <th style="text-align: center;"></th>
             <th style="text-align: center;">{_ Enabled _}</th>
         </tr>
     </thead>
@@ -24,6 +25,9 @@
             <td style="text-align: center;"><i id="text_{{ notification["id"] }}" class="fa fa-file-text-o pointer" title="{_ Edit _}"></i></td>
             {% wire id="text_"++notification["id"] action={ dialog_open title=_"Edit txt template"++" "++notification["name"]
                                                                         template="_edit_notification_text.tpl" notification_id=notification["id"] width="auto" } %}
+            <td style="text-align: center;"><i id="sendmail_{{ notification["id"] }}" class="fa fa-envelope-o pointer" title="{_ Edit _}"></i></td>
+            {% wire id="sendmail_"++notification["id"] action={ dialog_open title=_"Edit txt template"++" "++notification["name"]
+                                                                        template="_sendmail_test_notification.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;">
              {% if notification["enabled"] %}
                 <i id="toggle_notification_{{ notification["id"] }}" class="fa fa-check zprimary pointer" title="Active"></i>
