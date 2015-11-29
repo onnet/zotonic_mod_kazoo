@@ -2873,7 +2873,6 @@ toggle_resource(ResourceId, AccountId, Context) ->
     crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
     
 resource(Context) ->
-lager:info("IAM modkazoo_util:get_q_bin(rules,Context): ~p",[modkazoo_util:get_q_bin("rules",Context)]),
     ResourceId = modkazoo_util:get_q_bin("resource_id",Context),
     PropsGateway = modkazoo_util:filter_empty(
         [{[<<"server">>],modkazoo_util:get_q_bin("server",Context)}
@@ -2890,10 +2889,10 @@ lager:info("IAM modkazoo_util:get_q_bin(rules,Context): ~p",[modkazoo_util:get_q
     PropsResource = modkazoo_util:filter_empty(
         [{<<"name">>,modkazoo_util:get_q_bin("name",Context)}
         ,{<<"weight_cost">>,modkazoo_util:get_q_bin("weight_cost",Context)}
-        ,{<<"rules">>,case modkazoo_util:get_q_bin("rules",Context) of <<>> -> ?DEFAULT_RESOURCE_RULES; Rules -> [Rules] end}
-        ,{<<"cid_rules">>,case modkazoo_util:get_q_bin("cid_rules",Context) of <<>> -> ?DEFAULT_RESOURCE_CIDRULES; Rules -> [Rules] end}
         ,{[<<"caller_id_options">>,<<"type">>],modkazoo_util:get_q_bin("caller_id_options_type",Context)}]) ++
-        [{<<"flags">>,case z_context:get_q("flags", Context) of
+        [{<<"rules">>,case modkazoo_util:get_q_bin("rules",Context) of <<>> -> ?DEFAULT_RESOURCE_RULES; Rules -> [Rules] end}
+        ,{<<"cid_rules">>,case modkazoo_util:get_q_bin("cid_rules",Context) of <<>> -> ?DEFAULT_RESOURCE_CIDRULES; Rules -> [Rules] end}
+        ,{<<"flags">>,case z_context:get_q("flags", Context) of
                           'undefined' -> [];
                           [] -> [];
                            Flags -> lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(Flags,","))
