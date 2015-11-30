@@ -37,6 +37,10 @@
  
     {% lib "js/apps/zotonic-1.0.js" %}
     {% lib "js/apps/z.widgetmanager.js" %}
+    {% lib "js/tinymce-4.1.6/tiny-init.js" %}
+<script type="text/javascript" src="/lib/js/tinymce-3.5.0/tinymce/tiny_mce.js"></script>
+<script type="text/javascript" src="/lib/js/tinymce-3.5.0/tinymce/jquery.tinymce.js"></script>
+    {% lib "js/modules/z.adminwidget.js" %}
     {% lib "js/modules/z.notice.js" %}
     {% lib "js/z.dialog.bootstrap3.js" %}
     {% lib "js/modules/ubf.js" %}

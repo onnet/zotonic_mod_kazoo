@@ -17,16 +17,16 @@
             <td style="text-align: center1;">{{ notification["friendly_name"] }}</td>
             <td style="text-align: center;">{{ notification["category"] }}</td>
             <td style="text-align: center;"><i id="edit_{{ notification["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++notification["id"] action={ dialog_open title=_"Edit settings"++" "++notification["name"]
+            {% wire id="edit_"++notification["id"] action={ dialog_open title=_"Edit settings"++":"++" "++notification["friendly_name"]
                                                                         template="_edit_notification_lazy.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;"><i id="html_{{ notification["id"] }}" class="fa fa-html5 pointer" title="{_ Edit _}"></i></td>
-            {% wire id="html_"++notification["id"] action={ dialog_open title=_"Edit html template"++" "++notification["name"]
+            {% wire id="html_"++notification["id"] action={ dialog_open title=_"Edit html template"++":"++" "++notification["friendly_name"]
                                                                         template="_edit_notification_html.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;"><i id="text_{{ notification["id"] }}" class="fa fa-file-text-o pointer" title="{_ Edit _}"></i></td>
-            {% wire id="text_"++notification["id"] action={ dialog_open title=_"Edit txt template"++" "++notification["name"]
+            {% wire id="text_"++notification["id"] action={ dialog_open title=_"Edit txt template"++":"++" "++notification["friendly_name"]
                                                                         template="_edit_notification_text.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;"><i id="sendmail_{{ notification["id"] }}" class="fa fa-envelope-o pointer" title="{_ Edit _}"></i></td>
-            {% wire id="sendmail_"++notification["id"] action={ dialog_open title=_"Edit txt template"++" "++notification["name"]
+            {% wire id="sendmail_"++notification["id"] action={ dialog_open title=_"Send test message"++":"++" "++notification["friendly_name"]
                                                                         template="_sendmail_test_notification.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;">
              {% if notification["enabled"] %}

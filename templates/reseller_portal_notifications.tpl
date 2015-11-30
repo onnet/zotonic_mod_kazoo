@@ -14,6 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"sent notifications" action={dialog_open title=_"SMTP logs" template="_notifications_smtplog_details.tpl" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

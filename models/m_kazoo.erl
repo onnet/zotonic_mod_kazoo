@@ -386,6 +386,9 @@ m_find_value({kz_list_account_list_entries, [{list_id, ListId}]}, _M, Context) -
 m_find_value({kz_conference_details, [{conference_id, ConferenceId}]}, _M, Context) ->
     kazoo_util:kz_conference_details(ConferenceId,Context);
 
+m_find_value(notifications_smtplog, _M, Context) ->
+    kazoo_util:notifications_smtplog(Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),
