@@ -224,6 +224,8 @@
     ,kz_notification_info/3
     ,kz_notification_template/3
     ,kz_notification_template/4
+    ,kz_save_notification_template/5
+    ,kz_delete_notification_template/3
     ,kz_list_account_lists/1
     ,account_list/1
     ,delete_account_list/2
@@ -568,21 +570,31 @@ crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
     end.
 
 req_headers(Token) ->
+    req_headers("application/json", Token).
+
+req_headers(ContentType, Token) ->
     modkazoo_util:filter_undefined(
-        [{"Content-Type", "application/json"}
+        [{"Content-Type", ContentType}
          ,{"X-Auth-Token", z_convert:to_list(Token)}
          ,{"User-Agent", z_convert:to_list(erlang:node())}
         ]).
 
 crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
+    crossbar_account_send_request(Verb, API_String, "application/json", DataBag, Context).
+
+crossbar_account_send_request(Verb, API_String, ContextType, DataBag, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
-                   _ -> jiffy:encode(DataBag)
+                  _ ->
+                      case ContextType of
+                          "application/json" -> jiffy:encode(DataBag);
+                          _ -> DataBag
+                      end
               end,
-    ibrowse:send_req(URL, req_headers(AuthToken), Verb, Payload, [{'inactivity_timeout', 10000}]).
+    ibrowse:send_req(URL, req_headers(ContextType, AuthToken), Verb, Payload, [{'inactivity_timeout', 10000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
     case crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) of
@@ -2961,27 +2973,38 @@ kz_list_account_notifications(Context) ->
     end,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_notification_info(TemplateId, Context) ->
+kz_notification_info(NotificationId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    kz_notification_info(TemplateId, AccountId, Context).
+    kz_notification_info(NotificationId, AccountId, Context).
 
-kz_notification_info(TemplateId, AccountId, Context) ->
+kz_notification_info(NotificationId, AccountId, Context) ->
     API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId))/binary>>
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
     end,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_notification_template(ContextType, TemplateId, Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    kz_notification_template(ContextType, TemplateId, AccountId, Context).
+kz_delete_notification_template(NotificationId, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
 
-kz_notification_template(ContextType, TemplateId, AccountId, Context) ->
+kz_notification_template(ContextType, NotificationId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_notification_template(ContextType, NotificationId, AccountId, Context).
+
+kz_notification_template(ContextType, NotificationId, AccountId, Context) ->
     API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(TemplateId))/binary>>
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
     end,
     crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContextType}], [], Context).
+
+kz_save_notification_template(ContextType, NotificationId, AccountId, MessageBody, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
+    end,
+    crossbar_account_send_request('post', API_String, ContextType, MessageBody, Context).
 
 kz_list_account_lists(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -3058,6 +3081,7 @@ kz_get_account_list_entry(_EntryId, _ListId, _Context) ->
 sendmail_test_notification(Email, AccountId, NotificationId, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], [z_convert:to_binary(Email)], J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"from">>, z_convert:to_binary(Email), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"reply_to">>, z_convert:to_binary(Email), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_convert:to_binary(kz_notification_template("text/plain", NotificationId, AccountId, Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(kz_notification_template("text/html", NotificationId, AccountId, Context)), J) end
                ],
@@ -3071,4 +3095,6 @@ sendmail_test_notification(Email, AccountId, NotificationId, Context) ->
 notifications_smtplog(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?SMTPLOG/binary>>,
-    crossbar_account_send_raw_request_body('get', API_String, [{"Accept", "text/plain"}], [], Context).
+    {'ok', _, _, Body} = crossbar_account_send_request('get', API_String, "text/plain", [], Context),
+    modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)). 
+

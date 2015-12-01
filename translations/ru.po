@@ -19,11 +19,14 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "System default"
+msgstr "Стандартный"
 
-msgid ""
-msgstr ""
+msgid "Changed"
+msgstr "Изменен"
+
+msgid "Overridden"
+msgstr "Изменен"
 
 msgid "Number purchase attempt"
 msgstr "Попытка подключить номер"
@@ -447,6 +450,9 @@ msgstr "обновить"
 
 msgid "back to send fax form"
 msgstr "вернуться к отправке"
+
+msgid "sent notifications"
+msgstr "отправленные уведомления"
 
 msgid "show sent faxes"
 msgstr "показать отправленные"

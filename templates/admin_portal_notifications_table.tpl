@@ -8,7 +8,7 @@
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
-            <th style="text-align: center;">{_ Enabled _}</th>
+            <th style="text-align: center;">{_ Changed _}</th>
         </tr>
     </thead>
     <tbody>
@@ -29,16 +29,16 @@
             {% wire id="sendmail_"++notification["id"] action={ dialog_open title=_"Send test message"++":"++" "++notification["friendly_name"]
                                                                         template="_sendmail_test_notification.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;">
-             {% if notification["enabled"] %}
-                <i id="toggle_notification_{{ notification["id"] }}" class="fa fa-check zprimary pointer" title="Active"></i>
+             {% if notification["account_overridden"] %}
+                <i id="toggle_notification_{{ notification["id"] }}" class="fa fa-check zprimary pointer" title="{_ Overridden _}"></i>
+                {% wire id="toggle_notification_"++notification["id"] action={confirm text=_"Do you really want to discard this template changes?"
+                                                                              action={ postback postback={remove_notification_template notification_id=notification["id"]} delegate="mod_kazoo"}
+                                                                      }
+                %}
              {% else %}
-                <i id="toggle_notification_{{ notification["id"] }}" class="fa fa-remove zalarm pointer" title="Deactivated"></i>
+                <i class="fa fa-remove zalarm" title="{_ System default _}"></i>
              {% endif %}
             </td>
-            {% wire id="toggle_notification_"++notification["id"] action={confirm text=_"Do you really want to change this setting?"
-                                                                            action={ postback postback={toggle_notification notification_id=notification["id"]} delegate="mod_kazoo"}
-                                                                    }
-            %}
         </tr>
         {% endfor %}
     </tbody>

@@ -1124,6 +1124,28 @@ event({submit,sendmail_test_notification,_,_}, Context) ->
     _ = kazoo_util:sendmail_test_notification(Email, AccountId, NotificationId, Context),
     z_render:dialog_close(Context);
 
+event({submit,edit_notification_html,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    NotificationId = z_context:get_q("notification_id", Context),
+    MessageBody = z_context:get_q("html_body", Context),
+    _ = kazoo_util:kz_save_notification_template("text/html", NotificationId, AccountId, MessageBody, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
+event({submit,edit_notification_text,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    NotificationId = z_context:get_q("notification_id", Context),
+    MessageBody = z_context:get_q("text_body", Context),
+    _ = kazoo_util:kz_save_notification_template("text/plain", NotificationId, AccountId, MessageBody, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
+event({postback,{remove_notification_template,[{notification_id,NotificationId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    _ = kazoo_util:kz_delete_notification_template(NotificationId, AccountId, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 
