@@ -20,7 +20,10 @@
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="kick_{{ participant["Participant-ID"] }}" style="cursor: pointer;" class="fa fa-trash-o" title="Delete"></i></td>
-            <td style="text-align: center;"><i id="info_{{ conference["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Participant information _}"></i></td>
+            <td style="text-align: center;"><i id="info1_{{ participant["Call-ID"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Participant information _}"></i></td>
+            {% wire id="info_"++participant["Call-ID"] action={ dialog_open title=_"Current status about"++" "++participant["Call-ID"] template="_details_conference.tpl"
+                                                                                                                             conference_id=conference["id"] width="auto" }
+            %}
         </tr>
         {% endfor %}
     </tbody>
