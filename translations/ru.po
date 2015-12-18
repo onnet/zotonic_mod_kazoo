@@ -16,8 +16,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Select Callflow"
+msgstr "Выбрать маршрут"
 
 msgid "System default"
 msgstr "Стандартный"

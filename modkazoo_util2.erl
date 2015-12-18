@@ -7,6 +7,7 @@
     ,rand_hex_binary/1
     ,to_hex/1
     ,check_file_size_exceeded/3
+    ,if_substring_in_json/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -72,3 +73,8 @@ check_file_size_exceeded(Id, FileName, MaxSize) ->
             {true, Id}
     end.
 
+if_substring_in_json(Substring, JObj) ->
+    case re:run(jiffy:encode(JObj), Substring, []) of
+        {match,_} -> 'true';
+        _ -> 'false'
+    end.

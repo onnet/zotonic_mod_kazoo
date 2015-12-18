@@ -1146,6 +1146,11 @@ event({postback,{remove_notification_template,[{notification_id,NotificationId}]
     mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
     Context;
 
+event({postback,{add_conf_participant,[{conference_id,ConferenceId}]},_,_}, Context) ->
+    _ = kazoo_util:add_conf_participant(ConferenceId, Context),
+    mod_signal:emit({update_conference_participants_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

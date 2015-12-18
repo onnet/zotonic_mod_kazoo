@@ -115,6 +115,10 @@ m_find_value({kz_get_account_channel, [{call_id, CallId}]}, _M, Context) ->
 m_find_value(kz_list_account_callflows, _M, Context) ->
     kazoo_util:kz_list_account_callflows(Context);
 
+m_find_value({kz_list_account_callflows, [{filter, Filter}]}, _M, Context) ->
+    JObjs = kazoo_util:kz_list_account_callflows(Context),
+    lists:filter(fun(X) -> modkazoo_util2:if_substring_in_json(Filter, kazoo_util:kz_get_account_callflow(modkazoo_util:get_value(<<"id">>,X), Context)) end, JObjs);
+
 m_find_value({kz_get_account_callflow, [{callflow_id,CallflowId}]}, _M, Context) ->
     kazoo_util:kz_get_account_callflow(CallflowId, Context);
 

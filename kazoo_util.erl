@@ -155,6 +155,7 @@
     ,kz_conference/1
     ,kz_conference/3
     ,kz_conference_details/2
+    ,add_conf_participant/2
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
@@ -179,6 +180,7 @@
     ,toggle_all_calls_recording/1
     ,kz_cccp_creds_list/1
     ,add_cccp_doc/4
+    ,add_cccp_autodial/4
     ,del_cccp_doc/2
     ,kz_find_account_by_number/2
     ,kz_admin_find_accountname_by_number/2
@@ -258,6 +260,7 @@
 -define(CLASSIFIERS, <<"/classifiers">>).
 -define(USERS, <<"/users">>).
 -define(CCCPS, <<"/cccps">>).
+-define(AUTODIAL, <<"/autodial">>).
 -define(CALLFLOWS, <<"/callflows">>).
 -define(DEVICES, <<"/devices">>).
 -define(VMBOXES, <<"/vmboxes">>).
@@ -2269,6 +2272,12 @@ kz_conference_details(ConferenceId,Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary, ?DETAILS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+add_conf_participant(_ConferenceId, Context) ->
+    ALegNumber = z_context:get_q('a_leg_number', Context),
+    BLegNumber = z_context:get_q('b_leg_number', Context),
+    [OutboundCID|_] = kz_account_numbers(Context),
+    add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context).
+
 kz_get_featurecode_by_name(FCName, Context) ->
     case lists:filter(fun(X) -> z_convert:to_binary(FCName) == modkazoo_util:get_value([<<"featurecode">>,<<"name">>],X) end, kz_list_account_callflows(Context)) of
         [] -> [];
@@ -2634,6 +2643,15 @@ add_cccp_doc(Field1, Field2, Field3, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CCCPS/binary>>,
     DataBag = {[{<<"data">>, {[Field1, Field2, Field3, {<<"active">>, true}]}}]},
+    crossbar_account_request('put', API_String, DataBag, Context).
+
+add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CCCPS/binary, ?AUTODIAL/binary>>,
+    DataBag = ?MK_DATABAG({[{<<"a_leg_number">>, z_convert:to_binary(ALegNumber)}
+               ,{<<"b_leg_number">>, z_convert:to_binary(BLegNumber)}
+               ,{<<"outbound_cid">>, z_convert:to_binary(OutboundCID)}
+               ,{<<"callback_delay">>, 1}]}),
     crossbar_account_request('put', API_String, DataBag, Context).
 
 del_cccp_doc(DocId, Context) ->

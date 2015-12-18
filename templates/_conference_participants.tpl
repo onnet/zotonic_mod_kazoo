@@ -17,10 +17,10 @@
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" action={emit signal={update_conference_participants_tpl} } %}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
                          action={confirm text=_"Do you really want to add participant"++"?"
-                              action={postback postback={add_conf_participant account_id=account_id} qarg="new_number_id" delegate="mod_kazoo"}
+                              action={postback postback={add_conf_participant conference_id=conference_id} qarg="a_leg_number" qarg="callflow_number_selector" delegate="mod_kazoo"}
                          }
     %}
-    <input id="new_participant_number" class="input input-number-onnet pull-right" type="text" name="new_participant_number" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
+    <input id="a_leg_number" class="input input-number-onnet pull-right" type="text" name="a_leg_number" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
