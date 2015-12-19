@@ -36,7 +36,7 @@
     <button id="start_conference_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs">{_ Start _}</button>
   </div>
   {% wire id="start_conference_btn" action={confirm text="Do you really want to start conference?"
-                                     action={postback postback={start_outbound_conference conference_id=conference_id} delegate="mod_kazoo"}
+                                     action={postback postback={start_outbound_conference conference_id=conference_id} qarg="account_list_selector" qarg="callflow_number_selector" delegate="mod_kazoo"}
                              }
   %}
 </div>

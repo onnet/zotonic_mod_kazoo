@@ -1147,9 +1147,11 @@ event({postback,{remove_notification_template,[{notification_id,NotificationId}]
     Context;
 
 event({postback,{add_conf_participant,[{conference_id,ConferenceId}]},_,_}, Context) ->
-    _ = kazoo_util:add_conf_participant(ConferenceId, Context),
-    mod_signal:emit({update_conference_participants_tpl, []}, Context),
-    Context;
+    kazoo_util:add_conf_participant(ConferenceId, Context);
+
+event({postback,{start_outbound_conference,[{conference_id,ConferenceId}]},_,_}, Context) ->
+    lager:info("IAM event variables: ~p", [z_context:get_q_all(Context)]),
+    kazoo_util:start_outbound_conference(ConferenceId, Context);
 
 event({drag,_,_},Context) ->
     Context;

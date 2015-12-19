@@ -155,6 +155,7 @@
     ,kz_conference/1
     ,kz_conference/3
     ,kz_conference_details/2
+    ,start_outbound_conference/2
     ,add_conf_participant/2
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
@@ -2272,11 +2273,35 @@ kz_conference_details(ConferenceId,Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary, ?DETAILS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+start_outbound_conference(_ConferenceId, Context) ->
+    SelectedList = z_context:get_q('selected_list', Context),
+    BLegNumber = z_context:get_q('b_leg_number', Context),
+    start_outbound_conference(_ConferenceId, SelectedList, BLegNumber, Context).
+
+start_outbound_conference(_, [], _, Context) ->
+    z_render:growl_error(?__("No participants list chosen.",Context), Context);
+start_outbound_conference(_, _, [], Context) ->
+    z_render:growl_error(?__("No callflow chosen.",Context), Context);
+start_outbound_conference(_ConferenceId, ListId, BLegNumber, Context) ->
+    [OutboundCID|_] = kz_account_numbers(Context),
+    NumbersList = [modkazoo_util:get_value([<<"value">>,<<"number">>],JObj) || JObj <- kz_list_account_list_entries(ListId, Context)],
+    [add_cccp_autodial(ParticipantNumber, BLegNumber, OutboundCID, Context) || ParticipantNumber <- NumbersList],
+    z_render:growl(?__("Attempt sent.",Context), Context).
+
 add_conf_participant(_ConferenceId, Context) ->
     ALegNumber = z_context:get_q('a_leg_number', Context),
     BLegNumber = z_context:get_q('b_leg_number', Context),
+    add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context).
+
+add_conf_participant(_, [], _, Context) ->
+    z_render:growl_error(?__("No participant number filled in.",Context), Context);
+add_conf_participant(_, _, [], Context) ->
+    z_render:growl_error(?__("No callflow chosen.",Context), Context);
+add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context) ->
     [OutboundCID|_] = kz_account_numbers(Context),
-    add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context).
+    add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context),
+    mod_signal:emit({update_conference_participants_tpl, []}, Context),
+    z_render:growl(?__("Attempt sent.",Context), Context).
 
 kz_get_featurecode_by_name(FCName, Context) ->
     case lists:filter(fun(X) -> z_convert:to_binary(FCName) == modkazoo_util:get_value([<<"featurecode">>,<<"name">>],X) end, kz_list_account_callflows(Context)) of
