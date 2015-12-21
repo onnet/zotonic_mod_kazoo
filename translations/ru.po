@@ -13,8 +13,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Microphone"
+msgstr "Микрофон"
 
 msgid "Select Callflow"
 msgstr "Выбрать маршрут"

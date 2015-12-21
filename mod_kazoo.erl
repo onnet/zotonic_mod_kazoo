@@ -1153,6 +1153,11 @@ event({postback,{start_outbound_conference,[{conference_id,ConferenceId}]},_,_},
     lager:info("IAM event variables: ~p", [z_context:get_q_all(Context)]),
     kazoo_util:start_outbound_conference(ConferenceId, Context);
 
+event({postback,{do_conference_action,[{conference_id,ConferenceId},{action, Action},{participant_id,ParticipantId}]},_,_}, Context) ->
+    _ = kazoo_util:do_conference_action(ParticipantId, Action, ConferenceId, Context),
+    mod_signal:emit({update_conference_participants_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

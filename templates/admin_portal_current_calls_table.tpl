@@ -17,8 +17,8 @@
         <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }} </td>
         <td style="text-align: center;">{{ running_call["destination"] }}</td>
         <td style="text-align: center;">{% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}</td>
-        <td style="text-align: center;"><i class="dark-1 icon-telicon-failover"><i></td>
-        <td style="text-align: center;"><i class="dark-1 icon-telicon-hangup"><i></td>
+        <td style="text-align: center;"><i class="dark-1 icon-telicon-failover"></i></td>
+        <td style="text-align: center;"><i class="dark-1 icon-telicon-hangup"></i></td>
      </tr>
   {% endif %}
   {% endfor %}
@@ -85,8 +85,8 @@
                               data["Caller-ID-Number"], 
                               data["Callee-ID-Number"], 
                               '{_ ringing _}', 
-                              '<i class="dark-1 icon-telicon-failover"><i>', 
-                              '<i class="dark-1 icon-telicon-hangup"><i>' ]).draw();
+                              '<i class="dark-1 icon-telicon-failover"></i>', 
+                              '<i class="dark-1 icon-telicon-hangup"></i>' ]).draw();
         }
     }
     console.log(data); // data = EventJObj
@@ -97,8 +97,8 @@
                               data["Caller-ID-Number"], 
                               data["Callee-ID-Number"], 
                               '{_ answered _}', 
-                              '<i class="dark-1 icon-telicon-failover"><i>', 
-                              '<i class="dark-1 icon-telicon-hangup"><i>' ]).draw();
+                              '<i class="dark-1 icon-telicon-failover"></i>', 
+                              '<i class="dark-1 icon-telicon-hangup"></i>' ]).draw();
     console.log(data);
   });
   socket.on("CHANNEL_DESTROY", function (data) {

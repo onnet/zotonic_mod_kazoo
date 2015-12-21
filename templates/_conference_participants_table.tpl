@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th style="text-align: center1;">{_ Participant _}</th>
-            <th style="text-align: center;">{_ Mute/Unmute _}</th>
+            <th style="text-align: center;">{_ Microphone _}</th>
             <th style="text-align: center;">{_ Kick off _}</th>
             <th style="text-align: center;"></th>
         </tr>
@@ -13,13 +13,37 @@
 	<tr>
             <td style="text-align: center1;">{{ participant["Custom-Channel-Vars"][1]["Presence-ID"]|split:"@"|first }}</td>
             <td style="text-align: center;">
-              {% if participant[1]["play_name"] %}
-                <i class="fa fa-check zprimary pointer" title="Enabled"></i>
+              {% if not participant["Mute"] %}
+                <i id="mic_{{ participant["Participant-ID"] }}" class="fa fa-check zprimary pointer" title="Enabled"></i>
+               {% wire id="mic_"++participant["Participant-ID"] action={confirm text="Do you really want to switch mocrophone off?"
+                                                                            action={postback postback={do_conference_action conference_id=conference_id 
+                                                                                                                            action="mute"
+                                                                                                                            participant_id=participant["Participant-ID"]}
+                                                                                             delegate="mod_kazoo"
+                                                                                   }
+                                                                        }
+               %} 
               {% else %}
-                <i class="fa fa-remove zalarm pointer" title="Disabled"></i>
+                <i id="mic_{{ participant["Participant-ID"] }}"  class="fa fa-remove zalarm pointer" title="Disabled"></i>
+               {% wire id="mic_"++participant["Participant-ID"] action={confirm text="Do you really want to switch mocrophone on?"
+                                                                            action={postback postback={do_conference_action conference_id=conference_id 
+                                                                                                                            action="unmute"
+                                                                                                                            participant_id=participant["Participant-ID"]}
+                                                                                             delegate="mod_kazoo"
+                                                                                   }
+                                                                        }
+               %} 
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="kick_{{ participant["Participant-ID"] }}" style="cursor: pointer;" class="fa fa-trash-o" title="Delete"></i></td>
+            {% wire id="kick_"++participant["Participant-ID"] action={confirm text="Do you really want to kick this participant off?"
+                                                                         action={postback postback={do_conference_action conference_id=conference_id 
+                                                                                                                         action="kick"
+                                                                                                                         participant_id=participant["Participant-ID"]}
+                                                                                          delegate="mod_kazoo"
+                                                                                }
+                                                                     }
+            %} 
             <td style="text-align: center;"><i id="pinfo_{{ participant["Participant-ID"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Participant information _}"></i></td>
             {% wire id="pinfo_"++participant["Participant-ID"] action={ dialog_open title=participant["Custom-Channel-Vars"][1]["Presence-ID"]|split:"@"|first
                                                                                     template="_details_conference.tpl"
@@ -54,6 +78,34 @@ var oTable = $('#current_participants_table').dataTable({
 ],
 
 });
+
+
+  var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
+  socket.emit("unsubscribe", { auth_token: "{{ m.session.kazoo_auth_token }}" });
+  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.event.{{ conference_id }}" });
+  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.command.{{ conference_id }}" });
+
+
+  socket.on('search_req', function (data) {
+    console.log(data);
+    z_event("update_conference_participants");
+  });
+
+  socket.on('unmute_participant', function (data) {
+    console.log(data);
+    z_event("update_conference_participants");
+  });
+
+  socket.on('mute_participant', function (data) {
+    console.log(data);
+    z_event("update_conference_participants");
+  });
+
+  socket.on('participants_event', function (data) {
+    console.log(data);
+    z_event("update_conference_participants");
+  });
+
 {% endjavascript %}
 {% else %}
 {% endif %}

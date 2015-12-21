@@ -157,6 +157,7 @@
     ,kz_conference_details/2
     ,start_outbound_conference/2
     ,add_conf_participant/2
+    ,do_conference_action/4
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
@@ -419,6 +420,10 @@
   {<<"enabled">>, 'true'}
 ]}).
 
+-define(CONFERENCE_ACTION(Action, ParticipantId),
+{[{<<"action">>, z_convert:to_binary(Action)}
+ ,{<<"participant">>, z_convert:to_binary(ParticipantId)}
+]}).
 
 kz_admin_creds(Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
@@ -2264,9 +2269,12 @@ kz_conference(Context) ->
     end.
 
 kz_conference(Verb, ConferenceId,Context) ->
+    kz_conference(Verb, ConferenceId, [], Context).
+
+kz_conference(Verb, ConferenceId, DataBag, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary>>,
-    crossbar_account_request(Verb, API_String, [], Context).
+    crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_conference_details(ConferenceId,Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
@@ -2292,6 +2300,10 @@ add_conf_participant(_ConferenceId, Context) ->
     ALegNumber = z_context:get_q('a_leg_number', Context),
     BLegNumber = z_context:get_q('b_leg_number', Context),
     add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context).
+
+do_conference_action(ParticipantId, Action, ConferenceId, Context) ->
+    DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action, ParticipantId)),
+    kz_conference('post', ConferenceId, DataBag, Context).
 
 add_conf_participant(_, [], _, Context) ->
     z_render:growl_error(?__("No participant number filled in.",Context), Context);

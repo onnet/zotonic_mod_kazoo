@@ -2,8 +2,8 @@
 
 
   <div class="col-xs-2 col-xs-offset-1">
-    {% wire id="account_conference_edit_btn" action={ dialog_open title=_"Edit conference " template="_edit_conference_lazy.tpl" conference_id=conference_id width="auto" } %}
-    <button id="account_conference_edit_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Settings _}</button>
+    {# wire id="account_conference_edit_btn" action={ dialog_open title=_"Edit conference " template="_edit_conference_lazy.tpl" conference_id=conference_id width="auto" } #}
+   <!-- <button id="account_conference_edit_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Settings _}</button> -->
   </div>
   <div class="col-xs-2">
     <select id="account_list_selector" name="selected_list" class="col-xs-12 form-control margin-bottom-xs selectpicker" title="{_ Participants list _}"  data-live-search="true">
@@ -41,13 +41,14 @@
   %}
 </div>
 
-<div class="pl-10 pr-10 col-md-6">
+<div class="pl-10 pr-10 col-md-6 col-md-offset-3">
 
   {% wire action={connect signal={update_conference_participants_tpl} action={update target="conference_participants_tpl"
                                                                                   template="_conference_participants.tpl"
                                                                                   headline=_"Current participants"
                                                                                   conference_id=conference_id}}
   %}
+  {% wire name="update_conference_participants" action={emit signal={update_conference_participants_tpl}} %}
   <span id="conference_participants_tpl">
         {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}
   </span>
