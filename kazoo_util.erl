@@ -2245,9 +2245,11 @@ kz_vmbox(Verb, VmboxId,Context) ->
 kz_conference(Context) ->
     Id = z_context:get_q("conference_id",Context),
     Account_Id = z_context:get_session('kazoo_account_id', Context),
+    Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),",")),
+    Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),",")),
     Props = [{<<"name">>, z_convert:to_binary(z_context:get_q("name", Context))}
-            ,{<<"member">>, {[{<<"numbers">>, lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),","))}
-                            ,{<<"pins">>, lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),","))}
+            ,{<<"member">>, {[{<<"numbers">>, case Numbers of [<<>>] -> []; _ -> Numbers end}
+                            ,{<<"pins">>, case Pins of [<<>>] -> []; _ -> Pins end}
                             ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
                             ,{<<"join_deaf">>, modkazoo_util:on_to_true(z_context:get_q("join_deaf", Context))}]}}
             ,{<<"owner_id">>, z_convert:to_binary(z_context:get_q("owner_id", Context))}

@@ -79,33 +79,6 @@ var oTable = $('#current_participants_table').dataTable({
 
 });
 
-
-  var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
-  socket.emit("unsubscribe", { auth_token: "{{ m.session.kazoo_auth_token }}" });
-  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.event.{{ conference_id }}" });
-  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.command.{{ conference_id }}" });
-
-
-  socket.on('search_req', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('unmute_participant', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('mute_participant', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('participants_event', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
 {% endjavascript %}
 {% else %}
 {% endif %}
