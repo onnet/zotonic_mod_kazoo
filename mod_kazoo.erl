@@ -1184,6 +1184,19 @@ event({postback,{channel_eavesdrop,[{channel_id,ChannelId}]},_,_}, Context) ->
     _ = kazoo_util:kz_channel_eavesdrop(Id, Mode, ChannelId, AccountId, Context),
     z_render:dialog_close(Context);
 
+event({postback,{channel_transfer_dialog,[{channel_id,ChannelId}]},_,_}, Context) ->
+    z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context), "_channel_transfer_dialog.tpl", [{channel_id, ChannelId}], Context);
+
+event({postback,channel_transfer_dialog,_,_}, Context) ->
+    ChannelId = z_context:get_q("channel_id", Context),
+    z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context), "_channel_transfer_dialog.tpl", [{channel_id, ChannelId}], Context);
+
+event({postback,{channel_transfer,[{channel_id,ChannelId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    Target = z_context:get_q("target", Context),
+    _ = kazoo_util:kz_channel_transfer(Target, ChannelId, AccountId, Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 

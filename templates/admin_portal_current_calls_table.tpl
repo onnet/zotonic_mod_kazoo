@@ -1,4 +1,5 @@
 {% wire name="channel_hangup" action={postback postback="channel_hangup_confirm" delegate="mod_kazoo"} %}
+{% wire name="channel_transfer" action={postback postback="channel_transfer_dialog" delegate="mod_kazoo"} %}
 {% wire name="channel_eavesdrop" action={postback postback="channel_eavesdrop_dialog" delegate="mod_kazoo"} %}
 <table id="admin_portal_current_calls_table" class="table display table-striped table-condensed">
 <thead>
@@ -16,14 +17,25 @@
   {% if running_call["direction"]=="inbound" %}
      <tr>
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
-        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }} {% if running_call["answered"] %}<i class="dark-1 icon-telicon-failover"></i>{% endif %}</td>
-        <td style="text-align: center;">{{ running_call["destination"] }} {% if running_call["answered"] %}<i class="dark-1 icon-telicon-failover"></i>{% endif %}</td>
+        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}
+                                        {% if running_call["answered"] %}
+                                          <i id="caller_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i>
+                                        {% endif %}
+        </td>
+        {% wire id="caller_"++running_call["uuid"]|cleanout action={postback postback={channel_transfer_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"} %}
+        <td style="text-align: center;">{{ running_call["destination"] }}
+                                        {% if running_call["answered"] %}
+                                          <i id="callee_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i>
+                                        {% endif %}
+        </td>
+        {% wire id="callee_"++running_call["uuid"]|cleanout action={postback postback={channel_transfer_dialog channel_id=running_call["other_leg"]} delegate="mod_kazoo"} %}
         <td style="text-align: center;">{% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}</td>
         <td style="text-align: center;"><i id="eavesdrop_{{ running_call["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i></td>
         {% wire id="eavesdrop_"++running_call["uuid"]|cleanout action={postback postback={channel_eavesdrop_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"} %}
         <td style="text-align: center;"><i id="hangup_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-hangup pointer"></i></td>
         {% wire id="hangup_"++running_call["uuid"]|cleanout action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]} delegate="mod_kazoo"} %}
      </tr>
+  {# print running_call #}
   {% endif %}
   {% endfor %}
 </tbody>
@@ -98,11 +110,11 @@
   socket.on("CHANNEL_ANSWER", function (data) {
         row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
         oTable.api().row('#'+row_id).data([row_id,
-                              data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover"></i>', 
-                              data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover"></i>', 
-                              '{_ answered _}', 
-                              '<i class="fa fa-volume-up pointer" onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>',
-                              '<i class="dark-1 icon-telicon-hangup pointer" onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>' ]).draw();
+                          data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>', 
+                          data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Other-Leg-Call-ID"]+"'"+' });"></i>', 
+                          '{_ answered _}', 
+                          '<i class="fa fa-volume-up pointer" onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>',
+                          '<i class="dark-1 icon-telicon-hangup pointer" onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>' ]).draw();
     console.log(data);
   });
   socket.on("CHANNEL_DESTROY", function (data) {

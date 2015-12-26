@@ -37,6 +37,7 @@
     ,kz_channel_action/3
     ,kz_channel_action/4
     ,kz_channel_hangup/3
+    ,kz_channel_transfer/4
     ,kz_channel_eavesdrop/5
     ,kz_list_user_devices/1
     ,kz_get_device_doc/2
@@ -1530,6 +1531,10 @@ kz_channel_action(CallId, DataBag, AccountId, Context) ->
 
 kz_channel_hangup(CallId, AccountId, Context) ->
     DataBag = {[{<<"data">>, {[{<<"action">>, <<"hangup">>}]}}]},
+    kz_channel_action(CallId, DataBag, AccountId, Context).
+
+kz_channel_transfer(Target, CallId, AccountId, Context) ->
+    DataBag = {[{<<"data">>, {[{<<"action">>, <<"transfer">>}, {<<"target">>, z_convert:to_binary(Target)}, {<<"takeback_dtmf">>, <<"*1">>}]}}]},
     kz_channel_action(CallId, DataBag, AccountId, Context).
 
 kz_channel_eavesdrop(Id, Mode, CallId, AccountId, Context) ->
