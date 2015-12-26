@@ -68,6 +68,16 @@
   socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.command.*" });
 
 
+  socket.on('start-talking', function (data) {
+    console.log(data);
+    z_event("update_conference_participants");
+  });
+
+  socket.on('stop-talking', function (data) {
+    console.log(data);
+    z_event("update_conference_participants");
+  });
+
   socket.on('kick-member', function (data) {
     console.log(data);
     z_event("update_conference_participants");

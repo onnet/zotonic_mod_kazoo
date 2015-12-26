@@ -1158,6 +1158,18 @@ event({postback,{do_conference_action,[{conference_id,ConferenceId},{action, Act
     mod_signal:emit({update_conference_participants_tpl, []}, Context),
     Context;
 
+event({postback,{channel_hangup,[{channel_id,ChannelId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    _ = kazoo_util:kz_channel_hangup(ChannelId, AccountId, Context),
+    z_render:dialog_close(Context);
+
+event({postback,{channel_hangup_confirm,[{channel_id,ChannelId}]},_,_}, Context) ->
+    z_render:dialog(?__("Please confirm ",Context), "_confirm_channel_hangup.tpl", [{channel_id, ChannelId}], Context);
+
+event({postback,channel_hangup_confirm,_,_}, Context) ->
+    ChannelId = z_context:get_q("channel_id", Context),
+    z_render:dialog(?__("Please confirm ",Context), "_confirm_channel_hangup.tpl", [{channel_id, ChannelId}], Context);
+
 event({drag,_,_},Context) ->
     Context;
 

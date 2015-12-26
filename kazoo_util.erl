@@ -34,6 +34,9 @@
     ,kz_list_account_channels/2
     ,kz_channel_info/2
     ,kz_channel_info/3
+    ,kz_channel_action/3
+    ,kz_channel_action/4
+    ,kz_channel_hangup/3
     ,kz_list_user_devices/1
     ,kz_get_device_doc/2
     ,kz_set_device_doc/4
@@ -109,7 +112,6 @@
     ,kz_list_account_callflows/2
     ,kz_get_account_callflow/2
     ,kz_get_account_callflow/3
-    ,kz_get_account_channel/2
     ,delete_group/2
     ,kz_get_group_doc/2
     ,kz_set_group_doc/4
@@ -1505,19 +1507,27 @@ kz_list_account_channels(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_channel_info(UUId, Context) ->
-    kz_channel_info(UUId, z_context:get_session('kazoo_account_id', Context), Context).
+kz_channel_info(CallId, Context) ->
+    kz_channel_info(CallId, z_context:get_session('kazoo_account_id', Context), Context).
 
-kz_channel_info(UUId, 'undefined', Context) ->
-    kz_channel_info(UUId, z_context:get_session('kazoo_account_id', Context), Context);
-kz_channel_info(UUId, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, <<"/">>/binary , (z_convert:to_binary(UUId))/binary>>,
+kz_channel_info(CallId, 'undefined', Context) ->
+    kz_channel_info(CallId, z_context:get_session('kazoo_account_id', Context), Context);
+kz_channel_info(CallId, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, <<"/">>/binary , (z_convert:to_binary(CallId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_get_account_channel(CallId, Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CHANNELS/binary, <<"/">>/binary, CallId/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+kz_channel_action(CallId, DataBag, Context) ->
+    kz_channel_action(CallId, DataBag, z_context:get_session('kazoo_account_id', Context), Context).
+
+kz_channel_action(CallId, DataBag, 'undefined', Context) ->
+    kz_channel_action(CallId, DataBag, z_context:get_session('kazoo_account_id', Context), Context);
+kz_channel_action(CallId, DataBag, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, <<"/">>/binary , (z_convert:to_binary(CallId))/binary>>,
+    crossbar_account_request('post', API_String, DataBag, Context).
+
+kz_channel_hangup(CallId, AccountId, Context) ->
+    DataBag = {[{<<"data">>, {[{<<"action">>, <<"hangup">>}]}}]},
+    kz_channel_action(CallId, DataBag, AccountId, Context).
 
 add_group(Context) ->
     Endpoints = lists:foldr(fun(T,J) -> case T of

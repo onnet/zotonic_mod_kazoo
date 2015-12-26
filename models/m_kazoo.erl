@@ -109,9 +109,6 @@ m_find_value({kz_list_account_channels, [{account_id, AccountId}]}, _M, Context)
 m_find_value({kz_channel_info, [{uuid, UUId}, {account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_channel_info(UUId, AccountId, Context);
 
-m_find_value({kz_get_account_channel, [{call_id, CallId}]}, _M, Context) ->
-    kazoo_util:kz_get_account_channel(CallId, Context);
-
 m_find_value(kz_list_account_callflows, _M, Context) ->
     kazoo_util:kz_list_account_callflows(Context);
 
