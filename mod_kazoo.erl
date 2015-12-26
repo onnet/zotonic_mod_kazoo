@@ -1170,6 +1170,20 @@ event({postback,channel_hangup_confirm,_,_}, Context) ->
     ChannelId = z_context:get_q("channel_id", Context),
     z_render:dialog(?__("Please confirm ",Context), "_confirm_channel_hangup.tpl", [{channel_id, ChannelId}], Context);
 
+event({postback,{channel_eavesdrop_dialog,[{channel_id,ChannelId}]},_,_}, Context) ->
+    z_render:dialog(?__("Please choose device to eavesdrop with ",Context), "_channel_eavesdrop_dialog.tpl", [{channel_id, ChannelId}], Context);
+
+event({postback,channel_eavesdrop_dialog,_,_}, Context) ->
+    ChannelId = z_context:get_q("channel_id", Context),
+    z_render:dialog(?__("Please choose device to eavesdrop with ",Context), "_channel_eavesdrop_dialog.tpl", [{channel_id, ChannelId}], Context);
+
+event({postback,{channel_eavesdrop,[{channel_id,ChannelId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    Id = z_context:get_q("id", Context),
+    Mode = z_context:get_q("mode", Context),
+    _ = kazoo_util:kz_channel_eavesdrop(Id, Mode, ChannelId, AccountId, Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 

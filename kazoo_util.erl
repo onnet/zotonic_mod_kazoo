@@ -37,6 +37,7 @@
     ,kz_channel_action/3
     ,kz_channel_action/4
     ,kz_channel_hangup/3
+    ,kz_channel_eavesdrop/5
     ,kz_list_user_devices/1
     ,kz_get_device_doc/2
     ,kz_set_device_doc/4
@@ -311,6 +312,8 @@
 -define(NOTIFICATIONS, <<"/notifications">>).
 -define(PREVIEW, <<"/preview">>).
 -define(SMTPLOG, <<"/smtplog">>).
+-define(QUEUES, <<"/queues">>).
+-define(EAVESDROP, <<"/eavesdrop">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -1528,6 +1531,11 @@ kz_channel_action(CallId, DataBag, AccountId, Context) ->
 kz_channel_hangup(CallId, AccountId, Context) ->
     DataBag = {[{<<"data">>, {[{<<"action">>, <<"hangup">>}]}}]},
     kz_channel_action(CallId, DataBag, AccountId, Context).
+
+kz_channel_eavesdrop(Id, Mode, CallId, AccountId, Context) ->
+    DataBag = {[{<<"data">>, {[{<<"call_id">>, z_convert:to_binary(CallId)}, {<<"mode">>, z_convert:to_binary(Mode)}, {<<"id">>, z_convert:to_binary(Id)}]}}]},
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?QUEUES/binary, ?EAVESDROP/binary>>,
+    crossbar_account_request('put', API_String, DataBag, Context).
 
 add_group(Context) ->
     Endpoints = lists:foldr(fun(T,J) -> case T of
