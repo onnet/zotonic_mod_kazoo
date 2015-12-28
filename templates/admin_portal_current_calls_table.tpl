@@ -18,15 +18,15 @@
      <tr>
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
         <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}
-                                        {% if running_call["answered"] %}
+                                        {# if running_call["answered"] #}
                                           <i id="caller_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i>
-                                        {% endif %}
+                                        {# endif #}
         </td>
         {% wire id="caller_"++running_call["uuid"]|cleanout action={postback postback={channel_transfer_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"} %}
         <td style="text-align: center;">{{ running_call["destination"] }}
-                                        {% if running_call["answered"] %}
+                                        {# if running_call["answered"] #}
                                           <i id="callee_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i>
-                                        {% endif %}
+                                        {# endif #}
         </td>
         {% wire id="callee_"++running_call["uuid"]|cleanout action={postback postback={channel_transfer_dialog channel_id=running_call["other_leg"]} delegate="mod_kazoo"} %}
         <td style="text-align: center;">{% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}</td>
@@ -110,8 +110,10 @@
   socket.on("CHANNEL_ANSWER", function (data) {
         row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
         oTable.api().row('#'+row_id).data([row_id,
-                          data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>', 
-                          data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Other-Leg-Call-ID"]+"'"+' });"></i>', 
+                          data["Caller-ID-Number"], 
+                          data["Callee-ID-Number"], 
+                    //    data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>', 
+                    //    data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Other-Leg-Call-ID"]+"'"+' });"></i>', 
                           '{_ answered _}', 
                           '<i class="fa fa-volume-up pointer" onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>',
                           '<i class="dark-1 icon-telicon-hangup pointer" onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>' ]).draw();
