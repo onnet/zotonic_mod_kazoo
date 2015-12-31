@@ -28,9 +28,17 @@
             </td>
             <td style="text-align: center;">
               {% if server_details["options"][1]["enabled"] %}
-                <i class="fa fa-check zprimary" title="Enabled"></i>
+                <i id="ts_servers_options_enabled" class="fa fa-check zprimary pointer" title="Enabled"></i>
+                {% wire id="ts_servers_options_enabled" action={confirm text=_"Do you really want to disable this trunk"++"?"
+                                                                        action={postback postback={ts_trunk_disable trunk_id=trunk_id server_index=forloop.counter} delegate="mod_kazoo"}
+                                                               }
+                %}
               {% else %}
-                <i class="fa fa-remove zalarm" title="Disabled"></i>
+                <i id="ts_servers_options_disabled" class="fa fa-remove zalarm pointer" title="Disabled"></i>
+                {% wire id="ts_servers_options_disabled" action={confirm text=_"Do you really want to enable this trunk"++"?"
+                                                                        action={postback postback={ts_trunk_enable trunk_id=trunk_id server_index=forloop.counter} delegate="mod_kazoo"}
+                                                                }
+                %}
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_{{ forloop.counter }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>

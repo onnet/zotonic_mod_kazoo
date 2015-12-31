@@ -201,6 +201,8 @@
     ,kz_trunk_server_delete/3
     ,kz_trunk_server_numbers/1
     ,sync_trunkstore_realms/2
+    ,ts_trunk_disable/3
+    ,ts_trunk_enable/3
     ,kz_list_account_webhooks/1
     ,kz_webhook_info/2
     ,kz_webhook_delete/2
@@ -2845,6 +2847,20 @@ sync_trunkstore_realms(AccountId, Context) ->
     AccountRealm = get_account_realm(AccountId, Context),
     [sync_trunkstore_realm(TrunkId, AccountId, Context) || TrunkId <- list_account_trunks(AccountId, Context)
                                                           ,get_trunk_doc_field([<<"account">>,<<"auth_realm">>], TrunkId, AccountId, Context) =/= AccountRealm].
+
+ts_trunk_disable(Ind, TrunkId, Context) ->
+    ts_server_set_field([<<"options">>,<<"enabled">>], 'false', Ind, TrunkId, Context).
+
+ts_trunk_enable(Ind, TrunkId, Context) ->
+    ts_server_set_field([<<"options">>,<<"enabled">>], 'true', Ind, TrunkId, Context).
+
+ts_server_set_field(K, V, Ind, TrunkId, Context) ->
+    Index = z_convert:to_integer(Ind),
+    CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
+    Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
+    NewServers = lists:sublist(Servers, Index-1) ++ [modkazoo_util:set_value(K, V, lists:nth(Index, Servers))] ++ lists:nthtail(Index, Servers),
+    NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
+    kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context).
 
 update_trunk_server(Server, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"options">>,<<"enabled">>], 'true', J) end

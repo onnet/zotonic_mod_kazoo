@@ -1201,6 +1201,14 @@ event({postback,{sync_trunkstore_realms,[{account_id, AccountId}]},_,_}, Context
     _ = kazoo_util:sync_trunkstore_realms(AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
+event({postback,{ts_trunk_disable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
+    _ = kazoo_util:ts_trunk_disable(Index, TrunkId, Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context);
+
+event({postback,{ts_trunk_enable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
+    _ = kazoo_util:ts_trunk_enable(Index, TrunkId, Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context);
+
 event({drag,_,_},Context) ->
     Context;
 
