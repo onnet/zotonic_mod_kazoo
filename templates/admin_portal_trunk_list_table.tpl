@@ -8,6 +8,7 @@
             <th style="text-align: center;">{_ Active _}</th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
+            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>
@@ -44,6 +45,15 @@
             <td style="text-align: center;"><i id="edit_{{ forloop.counter }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
             {% wire id="edit_"++forloop.counter action={ dialog_open title=_"Edit trunk"++" "++server_details["server_name"] template="_edit_trunk_lazy.tpl"
                                                                      trunk_id=trunk_id server_index=forloop.counter width="auto"} %}
+            <td style="text-align: center;">
+              {% if reg_details %}
+                    <i id="flush_{{ forloop.counter }}" class="fa fa-eraser zprimary pointer" title="{_ Flush registration _}"></i>
+                    {% wire id="flush_"++forloop.counter action={confirm text=_"Do you really want to flush registration for trunk"++" "++server_details["server_name"]++"?"
+                                                                  action={postback postback={flush_pbx_registration_by_username sip_username=server_details["auth"][1]["auth_user"]} delegate="mod_kazoo"}
+                                                              }
+                    %}
+              {% endif %}
+            </td>
             <td style="text-align: center;"><i id="delete_{{ forloop.counter }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++forloop.counter
                     action={confirm text=_"Do you really want to delete trunk "++server_details["server_name"]++"?"
