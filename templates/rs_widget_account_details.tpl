@@ -75,7 +75,12 @@
             </td>
         </tr>
         <tr><td>{_ Date of creation _}</td><td>{{ account_doc[1]["created"]|inno_timestamp_to_date }}</td></tr>
-        <tr><td>{_ Realm _}</td><td>{{ account_doc[1]["realm"] }}</td></tr>
+        <tr><td>{_ Realm _}</td>
+            <td><span id="realm">
+                    {% include "_show_field.tpl" type="account" doc_id="_no_need_" field_name=["realm"] account_id=account_id %}
+                </span>
+            </td>
+        </tr>
         <tr><td>{_ Account ID _}</td><td>{{ account_id }}</td></tr>
         <tr><td>{_ Database _}</td><td>{{ account_id|account_id_to_encoded }}</td></tr>
         <tr><td>{_ Notify on de-register _}</td>
