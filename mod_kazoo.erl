@@ -1197,6 +1197,10 @@ event({postback,{channel_transfer,[{channel_id,ChannelId}]},_,_}, Context) ->
     _ = kazoo_util:kz_channel_transfer(Target, ChannelId, AccountId, Context),
     z_render:dialog_close(Context);
 
+event({postback,{sync_trunkstore_realms,[{account_id, AccountId}]},_,_}, Context) ->
+    _ = kazoo_util:sync_trunkstore_realms(AccountId, Context),
+    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 

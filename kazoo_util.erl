@@ -102,6 +102,7 @@
     ,may_be_get_timezone/1
     ,is_service_plan_applied/1
     ,get_account_realm/1
+    ,get_account_realm/2
     ,delete_account/2
     ,delete_user/2
     ,delete_device/2
@@ -192,12 +193,14 @@
     ,kz_admin_find_accountname_by_number/2
     ,kz_get_registrations_by_accountid/2
     ,list_account_trunks/1
+    ,list_trunks_realm/2
     ,kz_registration_details_by_username/2
     ,kz_trunk/4
     ,kz_trunk_server/1
     ,kz_trunk_server_details/3
     ,kz_trunk_server_delete/3
     ,kz_trunk_server_numbers/1
+    ,sync_trunkstore_realms/2
     ,kz_list_account_webhooks/1
     ,kz_webhook_info/2
     ,kz_webhook_delete/2
@@ -1424,6 +1427,9 @@ get_account_realm(Context) ->
             Realm;
         Realm -> Realm
     end.
+
+get_account_realm(AccountId, Context) ->
+    kz_account_doc_field(<<"realm">>, AccountId, Context).
 
 delete_account(AccountId,Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
@@ -2737,8 +2743,11 @@ kz_admin_get_account_by_number(Number, Context) ->
     modkazoo_util:get_value([<<"data">>,<<"account_id">>], jiffy:decode(Body)).
 
 list_account_trunks(Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONNECTIVITY/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    list_account_trunks(AccountId, Context).
+
+list_account_trunks(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CONNECTIVITY/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_trunk_server(Context) ->
@@ -2802,18 +2811,40 @@ kz_trunk_server_numbers(Context) ->
 
 kz_trunk(Verb, TrunkId, DataBag, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_trunk(Verb, TrunkId, AccountId, DataBag, Context).
+
+kz_trunk(Verb, TrunkId, AccountId, DataBag, Context) ->
     case Verb of
         'get' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
             crossbar_account_request(Verb, API_String, [], Context);
         'put' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CONNECTIVITY/binary>>,
             crossbar_account_request(Verb, API_String, DataBag, Context);
         'post' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CONNECTIVITY/binary, <<"/">>/binary, (z_convert:to_binary(TrunkId))/binary>>,
             crossbar_account_request(Verb, API_String, DataBag, Context);
         _ -> 'ok'
     end.
+
+get_trunk_doc_field(K, TrunkId, AccountId, Context) ->
+    modkazoo_util:get_value(K, kz_trunk('get', TrunkId, AccountId, [], Context)).
+
+set_trunk_doc_field(K, V, TrunkId, AccountId, Context) ->
+    TrunkDoc = kz_trunk('get', TrunkId, AccountId, [], Context),
+    kz_trunk('post', TrunkId, AccountId, ?MK_DATABAG(modkazoo_util:set_value(K, V, TrunkDoc)), Context).
+
+list_trunks_realm(AccountId, Context) ->
+    [get_trunk_doc_field([<<"account">>,<<"auth_realm">>], TrunkId, AccountId, Context) || TrunkId <- list_account_trunks(AccountId, Context)].
+
+sync_trunkstore_realm(TrunkId, AccountId, Context) ->
+    AccountRealm = kazoo_util:get_account_realm(AccountId, Context),
+    set_trunk_doc_field([<<"account">>,<<"auth_realm">>], AccountRealm, TrunkId, AccountId, Context).
+
+sync_trunkstore_realms(AccountId, Context) ->
+    AccountRealm = get_account_realm(AccountId, Context),
+    [sync_trunkstore_realm(TrunkId, AccountId, Context) || TrunkId <- list_account_trunks(AccountId, Context)
+                                                          ,get_trunk_doc_field([<<"account">>,<<"auth_realm">>], TrunkId, AccountId, Context) =/= AccountRealm].
 
 update_trunk_server(Server, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"options">>,<<"enabled">>], 'true', J) end

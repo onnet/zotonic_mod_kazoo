@@ -79,6 +79,11 @@
             <td><span id="realm">
                     {% include "_show_field.tpl" type="account" doc_id="_no_need_" field_name=["realm"] account_id=account_id %}
                 </span>
+               {% if not m.kazoo[{is_realms_synced account_id=account_id}] %}
+                 {% button class="btn btn-xs btn-onnet pull-right" text=_"sync trunkstore"
+                           action={postback postback={sync_trunkstore_realms account_id=account_id} delegate="mod_kazoo"}
+                 %}
+               {% endif %}
             </td>
         </tr>
         <tr><td>{_ Account ID _}</td><td>{{ account_id }}</td></tr>

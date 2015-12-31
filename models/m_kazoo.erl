@@ -316,6 +316,10 @@ m_find_value({get_registrations_by_accountid, [{account_id, AccountId}]}, _M, Co
 m_find_value(kz_list_account_trunks, _M, Context) ->
     kazoo_util:list_account_trunks(Context);
 
+m_find_value({is_realms_synced, [{account_id, AccountId}]}, _M, Context) ->
+    AccountRealm = kazoo_util:get_account_realm(AccountId, Context),
+    lists:foldl(fun(X, Sum) -> (AccountRealm == X) and Sum end, 'true', kazoo_util:list_trunks_realm(AccountId, Context));
+
 m_find_value({kz_get_account_trunk, [{trunk_id, TrunkId}]}, _M, Context) ->
     kazoo_util:kz_trunk('get', TrunkId, [], Context);
 
