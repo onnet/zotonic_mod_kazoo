@@ -376,10 +376,25 @@ function onAccepted () {
   to_conversation_state();
 }
 
-function onProgress () {
-  console.log('Got progress event');
-  to_progress_state();
+function onProgress (response) {
+  console.log('Got Progress: '+response.status_code);
+  if (response.status_code === 183 && response.body && session.hasOffer && !session.dialog) {
+    if (!response.hasHeader('require') || response.getHeader('require').indexOf('100rel') === -1) {
+      session.mediaHandler.setDescription(response.body).then(function onSuccess () {
+        session.status = SIP.Session.C.STATUS_EARLY_MEDIA;
+        session.mediaHandler.getRemoteStreams().forEach(
+          attachMediaStream.bind(null, PhonePage('remote-media'))
+        );
+        session.mute();
+      }, function onFailure (e) {
+        session.logger.warn(e);
+        session.acceptAndTerminate(response, 488, 'Not Acceptable Here');
+        session.failed(response, SIP.C.causes.BAD_MEDIA_DESCRIPTION);
+      });
+    }
+  }
 }
+
 
 function attachMediaStream (element, stream) {
   if (typeof element.src !== 'undefined') {
