@@ -92,7 +92,8 @@ event({postback,{set_vm_message_folder,[{folder, Folder}, {vmbox_id,VMBoxId}, {m
 
 event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _, _}, Context) ->
     kazoo_util:set_vm_message_folder(<<"deleted">>, VMBoxId, MediaId, Context),
-    z_render:update("user_portal_voicemails", z_template:render("user_portal_voicemails.tpl", [{headline,?__("Voicemails", Context)}], Context), Context);
+    mod_signal:emit({user_portal_voicemails_tpl, []}, Context),
+    Context;
 
 event({submit,{forgottenpwd,[]},"forgottenpwd_form","forgottenpwd_form"}, Context) ->
     Username = z_convert:to_binary(z_context:get_q("forgotten_username",Context)),
