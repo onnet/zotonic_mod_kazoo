@@ -8,7 +8,7 @@
 
 {% block service_description %}
 
-  {% lib "js/sip-0.7.0.js" %}
+  {% lib "js/sip-0.7.2.js" %}
   {% lib "css/user_portal_phone.css" %}
 
 <div class="pl-10 pr-10 col-md-6">
