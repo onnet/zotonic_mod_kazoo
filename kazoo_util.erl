@@ -320,6 +320,7 @@
 -define(SMTPLOG, <<"/smtplog">>).
 -define(QUEUES, <<"/queues">>).
 -define(EAVESDROP, <<"/eavesdrop">>).
+-define(CLICKTOCALL, <<"/clicktocall">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 

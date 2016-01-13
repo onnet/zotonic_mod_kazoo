@@ -15,6 +15,7 @@
                   <li><a href="/admin_statistics">{_ Statistics _}</a>
                   <li><a href="/admin_feature_codes">{_ Feature Codes _}</a>
                   <li><a href="/callback">{_ Callback _}</a>
+                  <li><a href="/conference_manager">{_ Conference manager _}</a>
                 {% endif %}
               {% endif %}
             </ul>

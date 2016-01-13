@@ -10,8 +10,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Conference manager"
+msgstr "Менеджер конференций"
 
 msgid "Microphone"
 msgstr "Микрофон"
