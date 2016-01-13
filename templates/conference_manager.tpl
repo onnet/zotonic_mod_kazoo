@@ -2,6 +2,8 @@
 
 {% block service_description %}
 
+  {% include "_account_page_title.tpl" title=_"Conference manager" %}
+
 {# include "cf_app_style.tpl" #}
 {# lib "css/kazoo/cf_tables.css" #}
 {# lib "css/kazoo/cf_mod_kazoo.css" #}
