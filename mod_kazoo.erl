@@ -1215,6 +1215,16 @@ event({postback,{ts_trunk_enable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}
     _ = kazoo_util:ts_trunk_enable(Index, TrunkId, Context),
     mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context);
 
+event({submit,kz_c2call,_,_},Context) ->
+    _ = kazoo_util:kz_c2call(Context),
+    mod_signal:emit({update_admin_portal_c2call_list_tpl, []}, Context),
+    z_render:dialog_close(Context);
+
+event({postback,{delete_c2call,[{c2call_id, C2CallId}]},_,_}, Context) ->
+    _ = kazoo_util:kz_c2call('delete',C2CallId,Context),
+    mod_signal:emit({update_admin_portal_c2call_list_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

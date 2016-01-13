@@ -163,6 +163,7 @@
     ,kz_conference_details/2
     ,kz_c2call/1
     ,kz_c2call/3
+    ,kz_c2call_hyperlink/2
     ,start_outbound_conference/2
     ,add_conf_participant/2
     ,do_conference_action/4
@@ -270,6 +271,7 @@
 -define(FAXES_OUTGOING, <<"/faxes/outgoing/">>).
 -define(FAXES_INCOMING, <<"/faxes/incoming/">>).
 -define(ATTACHMENT, <<"/attachment">>).
+-define(CONNECT, <<"/connect">>).
 -define(CONNECTIVITY, <<"/connectivity">>).
 -define(CLASSIFIERS, <<"/classifiers">>).
 -define(USERS, <<"/users">>).
@@ -2358,22 +2360,15 @@ add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context) ->
     z_render:growl(?__("Attempt sent.",Context), Context).
 
 kz_c2call(Context) ->
-    Id = z_context:get_q("conference_id",Context),
+    Id = z_context:get_q("c2call_id",Context),
     Account_Id = z_context:get_session('kazoo_account_id', Context),
-    Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),",")),
-    Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),",")),
     Props = [{<<"name">>, z_convert:to_binary(z_context:get_q("name", Context))}
-            ,{<<"member">>, {[{<<"numbers">>, case Numbers of [<<>>] -> []; _ -> Numbers end}
-                            ,{<<"pins">>, case Pins of [<<>>] -> []; _ -> Pins end}
-                            ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
-                            ,{<<"join_deaf">>, modkazoo_util:on_to_true(z_context:get_q("join_deaf", Context))}]}}
-            ,{<<"owner_id">>, z_convert:to_binary(z_context:get_q("owner_id", Context))}
-            ,{<<"play_name">>, modkazoo_util:on_to_true(z_context:get_q("play_name", Context))}
-            ,{<<"moderator">>, {[{<<"numbers">>, []}
-                            ,{<<"pins">>, []}
-                            ,{<<"join_muted">>, 'false'}
-                            ,{<<"join_deaf">>, 'false'}]}}
-            ,{<<"conference_numbers">>, []}
+            ,{<<"auth_required">>, modkazoo_util:on_to_true(z_context:get_q("auth_required", Context))}
+            ,{<<"dial_first">>, z_convert:to_binary(z_context:get_q("dial_first", Context))}
+            ,{<<"extension">>, z_convert:to_binary(z_context:get_q("extension", Context))}
+            ,{<<"caller_id_number">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
+            ,{<<"outbound_callee_id_name">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
+            ,{<<"outbound_callee_id_number">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
             ,{<<"id">>, z_convert:to_binary(Id)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
@@ -2392,6 +2387,12 @@ kz_c2call(Verb, C2CallId, DataBag, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(C2CallId))/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_c2call_hyperlink(C2CallId, Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(C2CallId))/binary, ?CONNECT/binary>>,
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    <<Crossbar_URL/binary, API_String/binary>>.
 
 kz_get_featurecode_by_name(FCName, Context) ->
     case lists:filter(fun(X) -> z_convert:to_binary(FCName) == modkazoo_util:get_value([<<"featurecode">>,<<"name">>],X) end, kz_list_account_callflows(Context)) of

@@ -10,6 +10,39 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Rule name"
+msgstr "Название правила"
+
+msgid "Click-to-Call"
+msgstr "Заказ обратного звонока"
+
+msgid "Auth required"
+msgstr "Требуется авторизация"
+
+msgid "Dial first"
+msgstr "Первый"
+
 msgid "Conference manager"
 msgstr "Менеджер конференций"
 
@@ -135,6 +168,9 @@ msgstr "Введите название шлюза"
 
 msgid "Enter resource name here"
 msgstr "Введите название маршрута"
+
+msgid "Enter Click-to-Call name here"
+msgstr "Введите название правила"
 
 msgid "Progress timeout"
 msgstr "Progress таймаут"
@@ -362,7 +398,7 @@ msgid "Pattern"
 msgstr "Шаблон"
 
 msgid "Extension"
-msgstr "Внутренний номер"
+msgstr "Номер"
 
 msgid "Spare numbers"
 msgstr "Свободные номера"

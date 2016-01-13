@@ -5,7 +5,7 @@
             <th style="text-align: center1;">{_ Name _}</th>
             <th style="text-align: center;">{_ Extension _}</th>
             <th style="text-align: center;">{_ Dial first _}</th>
-            <th style="text-align: center;">{_ Auth required _}</th>
+            <th style="text-align: center;">{_ Auth _}</th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
@@ -26,9 +26,13 @@
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="info_{{ c2call["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Current information _}"></i></td>
-            {% wire id="info_"++c2call["id"] action={ dialog_open title=_"Click-to-Call details" template="_details.tpl" arg=c2call_details} %}
+            {% wire id="info_"++c2call["id"] action={ dialog_open title=_"Click-to-Call hyperlink"
+                                                                  template="_c2call_details.tpl"
+                                                                  c2call_id=c2call["id"]
+                                                    }
+             %}
             <td style="text-align: center;"><i id="edit_{{ c2call["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++c2call["id"] action={ dialog_open title=_"Edit c2call "++c2call["name"] template="_edit_c2call_lazy.tpl" c2call_id=c2call["id"] width="auto" } %}
+            {% wire id="edit_"++c2call["id"] action={ dialog_open title=_"Edit "++c2call["name"] template="_edit_c2call_lazy.tpl" c2call_id=c2call["id"] width="auto" } %}
             <td style="text-align: center;"><i id="delete_{{ c2call["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++c2call["id"]
                     action={confirm text=_"Do you really want to delete c2call "++c2call["name"]++"?"
@@ -36,7 +40,6 @@
                            }
             %}
         </tr>
-{% print c2call_details %}
         {% endwith %}
         {% endfor %}
     </tbody>

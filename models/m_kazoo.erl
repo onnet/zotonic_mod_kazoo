@@ -296,6 +296,9 @@ m_find_value(kz_list_account_c2calls, _M, Context) ->
 m_find_value({kz_get_account_c2call, [{c2call_id, C2CallId}]}, _M, Context) ->
     kazoo_util:kz_c2call('get', C2CallId, Context);
 
+m_find_value({kz_c2call_hyperlink, [{c2call_id, C2CallId}]}, _M, Context) ->
+    kazoo_util:kz_c2call_hyperlink(C2CallId, Context);
+
 m_find_value({kz_get_account_conference, [{conference_id, ConferenceId}]}, _M, Context) ->
     kazoo_util:kz_conference('get', ConferenceId, Context);
 
