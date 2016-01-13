@@ -155,11 +155,14 @@
     ,kz_get_account_prompt_attachment/2
     ,cf_get_module_info/3
     ,kz_list_account_conferences/1
+    ,kz_list_account_c2calls/1
     ,kz_vmbox/1
     ,kz_vmbox/3
     ,kz_conference/1
     ,kz_conference/3
     ,kz_conference_details/2
+    ,kz_c2call/1
+    ,kz_c2call/3
     ,start_outbound_conference/2
     ,add_conf_participant/2
     ,do_conference_action/4
@@ -2243,6 +2246,11 @@ kz_list_account_conferences(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONFERENCES/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+kz_list_account_c2calls(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CLICKTOCALL/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
 kz_vmbox(Context) ->
     Id = z_context:get_q("vmbox_id",Context),
     Account_Id = z_context:get_session('kazoo_account_id', Context),
@@ -2348,6 +2356,42 @@ add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context) ->
     add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context),
     mod_signal:emit({update_conference_participants_tpl, []}, Context),
     z_render:growl(?__("Attempt sent.",Context), Context).
+
+kz_c2call(Context) ->
+    Id = z_context:get_q("conference_id",Context),
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),",")),
+    Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),",")),
+    Props = [{<<"name">>, z_convert:to_binary(z_context:get_q("name", Context))}
+            ,{<<"member">>, {[{<<"numbers">>, case Numbers of [<<>>] -> []; _ -> Numbers end}
+                            ,{<<"pins">>, case Pins of [<<>>] -> []; _ -> Pins end}
+                            ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
+                            ,{<<"join_deaf">>, modkazoo_util:on_to_true(z_context:get_q("join_deaf", Context))}]}}
+            ,{<<"owner_id">>, z_convert:to_binary(z_context:get_q("owner_id", Context))}
+            ,{<<"play_name">>, modkazoo_util:on_to_true(z_context:get_q("play_name", Context))}
+            ,{<<"moderator">>, {[{<<"numbers">>, []}
+                            ,{<<"pins">>, []}
+                            ,{<<"join_muted">>, 'false'}
+                            ,{<<"join_deaf">>, 'false'}]}}
+            ,{<<"conference_numbers">>, []}
+            ,{<<"id">>, z_convert:to_binary(Id)}],
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
+    case Id of
+        'undefined'->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CLICKTOCALL/binary>>,
+            crossbar_account_request('put', API_String, DataBag, Context);
+        _ ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            crossbar_account_request('post', API_String, DataBag, Context)
+    end.
+
+kz_c2call(Verb, C2CallId,Context) ->
+    kz_c2call(Verb, C2CallId, [], Context).
+
+kz_c2call(Verb, C2CallId, DataBag, Context) ->
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(C2CallId))/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_get_featurecode_by_name(FCName, Context) ->
     case lists:filter(fun(X) -> z_convert:to_binary(FCName) == modkazoo_util:get_value([<<"featurecode">>,<<"name">>],X) end, kz_list_account_callflows(Context)) of

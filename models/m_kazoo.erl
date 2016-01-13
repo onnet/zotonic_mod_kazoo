@@ -290,8 +290,14 @@ m_find_value({cf_get_module_info, [{module_name, ModuleName},{module_path,Module
 m_find_value(kz_list_account_conferences, _M, Context) ->
     kazoo_util:kz_list_account_conferences(Context);
 
+m_find_value(kz_list_account_c2calls, _M, Context) ->
+    kazoo_util:kz_list_account_c2calls(Context);
+
+m_find_value({kz_get_account_c2call, [{c2call_id, C2CallId}]}, _M, Context) ->
+    kazoo_util:kz_c2call('get', C2CallId, Context);
+
 m_find_value({kz_get_account_conference, [{conference_id, ConferenceId}]}, _M, Context) ->
-    kazoo_util:kz_conference('get',ConferenceId, Context);
+    kazoo_util:kz_conference('get', ConferenceId, Context);
 
 m_find_value({kz_get_featurecode_by_name, [{featurecode_name, FCName}]}, _M, Context) ->
     kazoo_util:kz_get_featurecode_by_name(FCName, Context);

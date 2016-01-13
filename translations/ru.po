@@ -1036,6 +1036,9 @@ msgstr "Настройки учетной записи"
 msgid "Add conference"
 msgstr "Добавить конференцию"
 
+msgid "add click-to-call"
+msgstr "добавить click-to-call"
+
 msgid "add conference"
 msgstr "добавить конференцию"
 
