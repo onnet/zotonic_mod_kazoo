@@ -45,6 +45,8 @@
     ,kz_list_account_vmboxes/1
     ,kz_list_user_vmboxes/1
     ,kz_list_user_vmbox_details/2
+    ,kz_purge_voicemails/3
+    ,kz_purge_voicemail/4
     ,kz_vmessage_download_link/3
     ,is_kazoo_account_admin/1
     ,set_vm_message_folder/4
@@ -978,6 +980,18 @@ kz_list_user_vmbox_details(VMBoxId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VMBoxId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
+    Candidates = modkazoo_util:get_value(<<"messages">>, kz_list_user_vmbox_details(VMBoxId, Context)),
+    FilterTS = calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - (z_convert:to_integer(DaysTo) * 86400),
+    MediaIds = [modkazoo_util:get_value(<<"media_id">>, X) || X <- Candidates,
+                (FilterTS > (z_convert:to_integer(modkazoo_util:get_value(<<"timestamp">>, X)))) andalso (modkazoo_util:get_value(<<"folder">>, X) =/= <<"deleted">>)],
+    lists:foldl(fun(MediaId, Delay) -> spawn(?MODULE, kz_purge_voicemail, [VMBoxId, MediaId, Delay, Context]), Delay + 1 end, 0, MediaIds),
+    length(MediaIds) + 2.
+
+kz_purge_voicemail(VMBoxId, MediaId, Delay, Context) ->
+    timer:sleep(Delay * ?MILLISECONDS_IN_SECOND),
+    set_vm_message_folder(<<"deleted">>, VMBoxId, MediaId, Context).
 
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

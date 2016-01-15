@@ -1156,7 +1156,6 @@ event({postback,{add_conf_participant,[{conference_id,ConferenceId}]},_,_}, Cont
     kazoo_util:add_conf_participant(ConferenceId, Context);
 
 event({postback,{start_outbound_conference,[{conference_id,ConferenceId}]},_,_}, Context) ->
-    lager:info("IAM event variables: ~p", [z_context:get_q_all(Context)]),
     kazoo_util:start_outbound_conference(ConferenceId, Context);
 
 event({postback,{do_conference_action,[{conference_id,ConferenceId},{action, Action},{participant_id,ParticipantId}]},_,_}, Context) ->
@@ -1224,6 +1223,17 @@ event({postback,{delete_c2call,[{c2call_id, C2CallId}]},_,_}, Context) ->
     _ = kazoo_util:kz_c2call('delete',C2CallId,Context),
     mod_signal:emit({update_admin_portal_c2call_list_tpl, []}, Context),
     Context;
+
+event({submit,kz_purge_voicemails,_,_}, Context) ->
+    Count = kazoo_util:kz_purge_voicemails(z_convert:to_binary(z_context:get_q("vmbox_id", Context)), z_convert:to_binary(z_context:get_q("days_to", Context)), Context),
+    case Count > 2 of
+        'true' ->
+            spawn(fun() -> timer:sleep(Count * ?MILLISECONDS_IN_SECOND), mod_signal:emit({user_portal_voicemails_tpl, []}, Context) end),
+            Context1 = z_render:growl(?__("Messages removal started", Context), Context);
+        'false' ->
+            Context1 = z_render:growl(?__("No messages to remove", Context), Context)
+    end,
+    z_render:dialog_close(Context1);
 
 event({drag,_,_},Context) ->
     Context;

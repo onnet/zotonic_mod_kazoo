@@ -14,6 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"purge messages" action={ dialog_open title=_"Clean up Voicemail Boxes" template="_cleanup_vmboxes.tpl" width="auto" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

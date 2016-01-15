@@ -382,3 +382,4 @@
              <<"Pacific/Wallis">>,
              <<"Pacific/Yap">>]).
 
+-define(MILLISECONDS_IN_SECOND, 1000).
