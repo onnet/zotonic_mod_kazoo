@@ -17,7 +17,7 @@
           </label>
         </div>
         <div class="col-sm-3">
-          <label class="form-control-onnet margin-bottom-xs">{_ Dial First _}
+          <label class="form-control-onnet margin-bottom-xs">{_ Dial first _}
           <select id="dial_first" name="dial_first" class="form-control margin-bottom-xs" style="text-align:center;">
                   <option value="contact" {% if c2call[1]["dial_first"] == "contact" %}selected{% endif %}>contact</option>
                   <option value="extension" {% if c2call[1]["dial_first"] == "extension" %}selected{% endif %}>extension</option>
@@ -53,7 +53,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save c2call _}</button>
+          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save Click-to-Call _}</button>
         </div>
       </div>
     </div>

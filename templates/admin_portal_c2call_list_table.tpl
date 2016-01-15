@@ -32,7 +32,7 @@
                                                     }
              %}
             <td style="text-align: center;"><i id="edit_{{ c2call["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++c2call["id"] action={ dialog_open title=_"Edit "++c2call["name"] template="_edit_c2call_lazy.tpl" c2call_id=c2call["id"] width="auto" } %}
+            {% wire id="edit_"++c2call["id"] action={ dialog_open title=_"Edit" ++ " " ++ c2call["name"] template="_edit_c2call_lazy.tpl" c2call_id=c2call["id"] width="auto" } %}
             <td style="text-align: center;"><i id="delete_{{ c2call["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++c2call["id"]
                     action={confirm text=_"Do you really want to delete c2call "++c2call["name"]++"?"

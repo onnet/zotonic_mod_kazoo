@@ -1,6 +1,45 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Save Click-to-Call"
+msgstr "Созранить правило"
+
+msgid "Add Click-to-Call"
+msgstr "Добавить правило заказа обратного звонка"
+
 msgid "Enter number to call here"
 msgstr "Введите номер телефона"
 
@@ -50,7 +89,7 @@ msgid "Click-to-Call"
 msgstr "Заказ обратного звонока"
 
 msgid "Auth required"
-msgstr "Требуется авторизация"
+msgstr "Авторизация"
 
 msgid "Dial first"
 msgstr "Первый"
