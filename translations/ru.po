@@ -1,17 +1,14 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Enter number to call here"
+msgstr "Введите номер телефона"
 
-msgid ""
-msgstr ""
+msgid "Place test call"
+msgstr "Совершить тестовый вызов"
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
+msgid "Test"
+msgstr "Тест"
 
 msgid "1 day"
 msgstr "1 день"
@@ -45,6 +42,9 @@ msgstr "удалить сообщения"
 
 msgid "Rule name"
 msgstr "Название правила"
+
+msgid "Request example"
+msgstr "Пример запроса"
 
 msgid "Click-to-Call"
 msgstr "Заказ обратного звонока"

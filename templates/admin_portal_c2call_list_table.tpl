@@ -26,7 +26,7 @@
               {% endif %}
             </td>
             <td style="text-align: center;"><i id="info_{{ c2call["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Current information _}"></i></td>
-            {% wire id="info_"++c2call["id"] action={ dialog_open title=_"Click-to-Call hyperlink"
+            {% wire id="info_"++c2call["id"] action={ dialog_open title=c2call["name"]
                                                                   template="_c2call_details.tpl"
                                                                   c2call_id=c2call["id"]
                                                     }
