@@ -5,7 +5,7 @@
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Choose VMBox _}
             <select id="vmbox_id" name="vmbox_id" class="form-control margin-bottom-xs" style="text-align:center;">
-              {% for vmbox in m.kazoo.kz_list_user_vmboxes %}
+              {% for vmbox in vmboxes %}
                 <option value="{{ vmbox["id"] }}">{{ vmbox["name"] }} ({{ vmbox["mailbox"] }})</option>
               {% endfor %}
             </select>
