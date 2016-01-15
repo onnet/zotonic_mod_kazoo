@@ -8,7 +8,7 @@
 {_ Request example _}:
 
 <pre>
-curl -v -X POST {{ m.kazoo[{kz_c2call_hyperlink c2call_id=c2call_id}] }} -d '{"data": {"contact": "9169944"}}'
+curl -v -X POST {{ m.kazoo[{kz_c2call_hyperlink c2call_id=c2call_id}] }} -d '{"data": {"contact": "4992726200"}}'
 </pre>
 
 {_ Test _}:
