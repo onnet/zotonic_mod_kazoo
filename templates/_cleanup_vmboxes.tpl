@@ -14,8 +14,9 @@
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Older than _}
             <select id="days_to" name="days_to" class="form-control margin-bottom-xs" style="text-align:center;">
+              <option value="0"> All messages</option>
               <option value="1"> 1 day</option>
-              <option value="3"> 3 day</option>
+              <option value="3"> 3 days</option>
               <option value="7" selected> 7 days</option>
               <option value="15"> 15 days</option>
             </select>
