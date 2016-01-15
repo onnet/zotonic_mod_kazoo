@@ -13,23 +13,35 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "1 day"
+msgstr "1 день"
 
-msgid ""
-msgstr ""
+msgid "3 days"
+msgstr "3 дня"
 
-msgid ""
-msgstr ""
+msgid "7 days"
+msgstr "7 дней"
 
-msgid ""
-msgstr ""
+msgid "15 days"
+msgstr "15 дней"
 
-msgid ""
-msgstr ""
+msgid "Delete all messages"
+msgstr "Удалить все сообщения"
 
-msgid ""
-msgstr ""
+msgid "Older than"
+msgstr "Старше чем"
+
+msgid "Choose VMBox"
+msgstr "Выберите ящик"
+
+msgid "Clean up Voicemail Boxes"
+msgstr "Очистка ящиков голосовой почты"
+
+msgid "Purge messages"
+msgstr "Удалить сообщения"
+
+msgid "purge messages"
+msgstr "удалить сообщения"
 
 msgid "Rule name"
 msgstr "Название правила"
