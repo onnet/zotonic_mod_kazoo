@@ -2381,8 +2381,9 @@ kz_c2call(Context) ->
             ,{<<"dial_first">>, z_convert:to_binary(z_context:get_q("dial_first", Context))}
             ,{<<"extension">>, z_convert:to_binary(z_context:get_q("extension", Context))}
             ,{<<"caller_id_number">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
-            ,{<<"outbound_callee_id_name">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
+        %    ,{<<"outbound_callee_id_name">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
             ,{<<"outbound_callee_id_number">>, z_convert:to_binary(z_context:get_q("caller_id_number", Context))}
+        %    ,{<<"retain_cid">>, 'false'}
             ,{<<"id">>, z_convert:to_binary(Id)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
