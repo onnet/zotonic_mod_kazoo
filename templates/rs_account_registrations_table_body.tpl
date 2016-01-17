@@ -11,7 +11,7 @@
         {% for device in m.kazoo[{get_registrations_by_accountid account_id=account_id}] %}
           <tr>
              <td class="text-center">{{ device["username"] }}</td>
-             <td class="text-center">{{ device["user_agent"] }}</td>
+             <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
              <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
              <td style="text-align: center;">
                     <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
