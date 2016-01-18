@@ -1128,6 +1128,7 @@ event({submit,sendmail_test_notification,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     NotificationId = z_context:get_q("notification_id", Context),
     _ = kazoo_util:sendmail_test_notification(Email, AccountId, NotificationId, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
     z_render:dialog_close(Context);
 
 event({submit,edit_notification_html,_,_}, Context) ->
