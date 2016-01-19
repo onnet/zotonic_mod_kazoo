@@ -2,9 +2,16 @@
 <script>
     tinyMCE.remove('#html_body');
     tinymce.init({ selector:'#html_body',
-             //      plugins: "save",
-             //      toolbar: "save",
-             //      save_enablewhendirty: true
+                   theme: 'modern',
+                   plugins: [
+                     'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                     'searchreplace wordcount visualblocks visualchars code fullscreen',
+                     'insertdatetime media nonbreaking save table contextmenu directionality',
+                     'emoticons template paste textcolor colorpicker textpattern imagetools'
+                   ],
+                   toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
+                   toolbar2: 'print preview media | forecolor backcolor emoticons',
+                   image_advtab: true,
                 });
 </script>
 
