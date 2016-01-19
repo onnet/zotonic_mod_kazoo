@@ -12,6 +12,11 @@
         {% include "admin_portal_general_settings.tpl" headline=_"General settings" %}
   </span>
 
+  {% wire action={connect signal={update_reseller_portal_resources_tpl} action={update target="reseller_portal_resources_tpl" template="admin_portal_resources.tpl"}} %}
+  <span id="reseller_portal_resources_tpl">
+            {% include "admin_portal_resources.tpl" %}
+  </span>
+
   {% wire action={connect signal={update_admin_portal_users_list_tpl} action={update target="admin_portal_users_list_tpl" template="admin_portal_users_list.tpl" headline=_"Account's Users"}} %}
   <span id="admin_portal_users_list_tpl">
         {% include "admin_portal_users_list.tpl" headline=_"Account's Users" %}
@@ -37,11 +42,6 @@
           action={update target="admin_portal_trunk_list_tpl" template="admin_portal_trunk_list.tpl" headline=_"Trunkstore"}} %}
   <span id="admin_portal_trunk_list_tpl">
         {% include "admin_portal_trunk_list.tpl" headline=_"Trunkstore" %}
-  </span>
-
-  {% wire action={connect signal={update_reseller_portal_resources_tpl} action={update target="reseller_portal_resources_tpl" template="admin_portal_resources.tpl"}} %}
-  <span id="reseller_portal_resources_tpl">
-            {% include "admin_portal_resources.tpl" %}
   </span>
 
   {% wire action={connect signal={update_admin_portal_c2call_list_tpl}
