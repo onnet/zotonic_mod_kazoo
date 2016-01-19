@@ -1134,6 +1134,13 @@ event({submit,sendmail_test_notification,_,_}, Context) ->
 event({submit,edit_notification_html,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     NotificationId = z_context:get_q("notification_id", Context),
+    CurrNotifyDoc = kazoo_util:kz_notification_info(NotificationId, Context),
+    case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
+        'undefined' ->
+            Plain = kazoo_util:kz_notification_template("text/plain", NotificationId, AccountId, Context),
+            _ = kazoo_util:kz_save_notification_template("text/plain", NotificationId, AccountId, Plain, Context);
+        _ -> 'ok'
+    end,
     MessageBody = z_context:get_q("html_body", Context),
     _ = kazoo_util:kz_save_notification_template("text/html", NotificationId, AccountId, MessageBody, Context),
     mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
@@ -1142,6 +1149,13 @@ event({submit,edit_notification_html,_,_}, Context) ->
 event({submit,edit_notification_text,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     NotificationId = z_context:get_q("notification_id", Context),
+    CurrNotifyDoc = kazoo_util:kz_notification_info(NotificationId, Context),
+    case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
+        'undefined' ->
+            HTML = kazoo_util:kz_notification_template("text/html", NotificationId, AccountId, Context),
+            _ = kazoo_util:kz_save_notification_template("text/html", NotificationId, AccountId, HTML, Context);
+        _ -> 'ok'
+    end,
     MessageBody = z_context:get_q("text_body", Context),
     _ = kazoo_util:kz_save_notification_template("text/plain", NotificationId, AccountId, MessageBody, Context),
     mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),

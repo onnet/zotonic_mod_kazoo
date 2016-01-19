@@ -72,11 +72,3 @@
 </div>
 {% endwith %}
 {% endwith %}
-
-<script type="text/javascript">
-$(document).ready(function() {
-	$('.form-group').on('click','input[type=checkbox]',function() {
-		$(this).closest('.checkbox-inline, .checkbox').toggleClass('checked');
-	});
-});
-</script>
