@@ -28,11 +28,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "BCC"
+msgstr "Скрытая копия"
 
-msgid ""
-msgstr ""
+msgid "CC"
+msgstr "Копия"
 
 msgid "Save Click-to-Call"
 msgstr "Созранить правило"
