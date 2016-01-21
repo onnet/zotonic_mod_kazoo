@@ -46,6 +46,43 @@ msgstr "Введите номер телефона"
 msgid "Place test call"
 msgstr "Совершить тестовый вызов"
 
+msgid "Show code"
+msgstr "Показать пример кода"
+
+msgid "Hide code"
+msgstr "Скрыть пример кода"
+
+msgid "Test"
+msgstr "Тест"
+
+msgid "1 day"
+msgstr "1 день"
+
+msgid "3 days"
+msgstr "3 дня"
+
+msgid "7 days"
+msgstr "7 дней"
+
+msgid "15 days"
+msgstr "15 дней"
+
+msgid "Delete all messages"
+msgstr "Удалить все сообщения"
+
+msgid "Older than"
+msgstr "Старше чем"
+
+msgid "Choose VMBox"
+msgstr "Выберите ящик"
+
+msgid "Clean up Voicemail Boxes"
+msgstr "Очистка ящиков голосовой почты"
+
+msgid "Purge messages"
+msgstr "Удалить сообщения"
+
+
 msgid "Test"
 msgstr "Тест"
 
