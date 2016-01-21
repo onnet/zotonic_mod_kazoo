@@ -184,7 +184,8 @@
     ,toggle_featurecode_call_forward_deactivate/1
     ,toggle_featurecode_call_forward_toggle/1
     ,toggle_featurecode_call_forward_update/1
-    ,toggle_featurecode_dynamic_cid/1
+    ,set_featurecode_dynamic_cid/2
+    ,delete_featurecode_dynamic_cid/1
     ,toggle_blacklist_member/2
     ,kz_get_account_blacklist/2
     ,set_blacklist_doc/4
@@ -2529,9 +2530,9 @@ kz_add_featurecode_call_forward_update(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"56">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
-kz_add_featurecode_dynamic_cid(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"list">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"id">>], <<"cidlist">>, J) end
+set_featurecode_dynamic_cid(ListId, Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"lists">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"id">>], z_convert:to_binary(ListId), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"dynamic_cid">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*69([0-9]{2,})$">>], J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"69">>, J) end
@@ -2664,14 +2665,11 @@ toggle_featurecode_call_forward_update(Context) ->
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
-toggle_featurecode_dynamic_cid(Context) ->
-    case kz_get_featurecode_by_name(<<"dynamic_cid">>, Context) of
-        [] -> kz_add_featurecode_dynamic_cid(Context);
-        JObj -> 
-            AccountId = z_context:get_session('kazoo_account_id', Context),
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
-            crossbar_account_request('delete', API_String, [], Context)
-    end.
+delete_featurecode_dynamic_cid(Context) ->
+    JObj = kz_get_featurecode_by_name(<<"dynamic_cid">>, Context),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+    crossbar_account_request('delete', API_String, [], Context).
 
 toggle_blacklist_member(BlacklistId,Context) ->
     Blacklists = case kazoo_util:kz_account_doc_field(<<"blacklists">>, Context) of

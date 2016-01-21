@@ -909,10 +909,15 @@ event({postback,toggle_featurecode_call_forward_update,_,_}, Context) ->
     mod_signal:emit({signal_featurecode_call_forward_update, []}, Context),
     Context;
 
-event({postback,toggle_featurecode_dynamic_cid,_,_}, Context) ->
-    _ = kazoo_util:toggle_featurecode_dynamic_cid(Context),
+event({postback,set_featurecode_dynamic_cid,_,_}, Context) ->
+    _ = kazoo_util:set_featurecode_dynamic_cid(z_context:get_q("dynamic_cid_list_id",Context), Context),
     mod_signal:emit({signal_featurecode_dynamic_cid, []}, Context),
-    Context;
+    z_render:dialog_close(Context);
+
+event({postback,delete_featurecode_dynamic_cid,_,_}, Context) ->
+    _ = kazoo_util:delete_featurecode_dynamic_cid(Context),
+    mod_signal:emit({signal_featurecode_dynamic_cid, []}, Context),
+    z_render:dialog_close(Context);
 
 event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Context) ->
     _ = kazoo_util:toggle_blacklist_member(BlacklistId,Context),
