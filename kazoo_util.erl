@@ -184,6 +184,7 @@
     ,toggle_featurecode_call_forward_deactivate/1
     ,toggle_featurecode_call_forward_toggle/1
     ,toggle_featurecode_call_forward_update/1
+    ,toggle_featurecode_dynamic_cid/1
     ,toggle_blacklist_member/2
     ,kz_get_account_blacklist/2
     ,set_blacklist_doc/4
@@ -250,7 +251,7 @@
     ,delete_account_list/2
     ,kz_get_account_list/2
     ,kz_list_account_list_entries/2
-    ,kz_account_list_add_entry/2
+    ,kz_account_list_add_entry/3
     ,delete_account_list_entry/3
     ,email_sender_name/1
     ,sendmail_test_notification/4
@@ -2528,6 +2529,15 @@ kz_add_featurecode_call_forward_update(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"56">>, J) end],
     kz_account_create_callflow(Routines, Context).
 
+kz_add_featurecode_dynamic_cid(Context) ->
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"list">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"id">>], <<"cidlist">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"dynamic_cid">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*69([0-9]{2,})$">>], J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"69">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"dynamic_cid">>, J) end],
+    kz_account_create_callflow(Routines, Context).
+
 toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
         [] -> kz_add_featurecode_voicemail_check(Context);
@@ -2648,6 +2658,15 @@ toggle_featurecode_call_forward_toggle(Context) ->
 toggle_featurecode_call_forward_update(Context) ->
     case kz_get_featurecode_by_name(<<"call_forward[action=update]">>, Context) of
         [] -> kz_add_featurecode_call_forward_update(Context);
+        JObj -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            crossbar_account_request('delete', API_String, [], Context)
+    end.
+
+toggle_featurecode_dynamic_cid(Context) ->
+    case kz_get_featurecode_by_name(<<"dynamic_cid">>, Context) of
+        [] -> kz_add_featurecode_dynamic_cid(Context);
         JObj -> 
             AccountId = z_context:get_session('kazoo_account_id', Context),
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
@@ -3209,6 +3228,7 @@ account_list(Context) ->
     end,
     Routines = [fun(J) -> modkazoo_util:set_value(<<"name">>, modkazoo_util:get_q_bin("list_name",Context), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"description">>, modkazoo_util:get_q_bin("list_description",Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"list_type">>, modkazoo_util:get_q_bin("list_type",Context), J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
     case ListId of
@@ -3241,17 +3261,14 @@ kz_list_account_list_entries(ListId,Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_account_list_add_entry(ListId, Context) ->
+kz_account_list_add_entry(ListType, ListId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     EntryId = z_context:get_q("entry_id", Context),
     CurrDoc = case EntryId of
         'undefined' -> ?EMPTY_JSON_OBJECT;
          _ -> kz_get_account_list_entry(EntryId, ListId, Context)
     end,
-    Routines = [fun(J) -> modkazoo_util:set_value(<<"number">>, re:replace(z_context:get_q("list_entry_number", Context), "[^0-9]", "", [global, {return, binary}]), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"displayname">>, modkazoo_util:get_q_bin("list_entry_displayname",Context), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"iamtest">>, <<"just_my_var">>, J) end
-               ],
+    Routines = list_routines(ListType, Context),
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
     case EntryId of
@@ -3263,6 +3280,18 @@ kz_account_list_add_entry(ListId, Context) ->
                                                                            ?ENTRIES/binary, <<"/">>/binary, (z_convert:to_binary(EntryId, Context))/binary>>,
             crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
     end.
+
+list_routines(<<"phone_book">>, Context) ->
+    [fun(J) -> modkazoo_util:set_value(<<"number">>, re:replace(z_context:get_q("list_entry_number", Context), "[^0-9]", "", [global, {return, binary}]), J) end
+     ,fun(J) -> modkazoo_util:set_value(<<"displayname">>, modkazoo_util:get_q_bin("list_entry_displayname",Context), J) end
+    ];
+list_routines(<<"dynamic_cid">>, Context) ->
+    [fun(J) -> modkazoo_util:set_value(<<"cid_key">>, modkazoo_util:get_q_bin("cid_key", Context), J) end
+     ,fun(J) -> modkazoo_util:set_value(<<"cid_name">>, modkazoo_util:get_q_bin("cid_name",Context), J) end
+     ,fun(J) -> modkazoo_util:set_value(<<"cid_number">>, modkazoo_util:get_q_bin("cid_number",Context), J) end
+    ];
+list_routines(_, Context) ->
+    list_routines(<<"phone_book">>, Context).
 
 kz_get_account_list_entry(_EntryId, _ListId, _Context) ->
     ?EMPTY_JSON_OBJECT.
@@ -3300,3 +3329,15 @@ notifications_smtplog(Context) ->
     {'ok', _, _, Body} = crossbar_account_send_request('get', API_String, "text/plain", [], Context),
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)). 
 
+%kz_notifications(Context) ->
+%    lager:info("kz_notifications event variables: ~p", [z_context:get_q_all(Context)]),
+%    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], [z_convert:to_binary(Email)], J) end
+%                ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], <<"specified">>, J) end
+%                ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
+%                ,fun(J) -> modkazoo_util:set_value([<<"enabled">>], 'true', J) end
+%                ,fun(J) -> modkazoo_util:set_value(<<"from">>, z_convert:to_binary(Email), J) end
+%                ,fun(J) -> modkazoo_util:set_value(<<"reply_to">>, z_convert:to_binary(Email), J) end
+%                ,fun(J) -> modkazoo_util:set_value(<<"plain">>, Plain, J) end
+%                ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
+%               ],
+%    ok.

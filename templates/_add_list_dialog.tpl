@@ -3,7 +3,13 @@
 <form id="form_add_list" method="post" action="postback">
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
+            <select id="list_type_id" name="list_type" class="form-control margin-bottom-xs" title="-- {_ List type _} --" style="text-align:center;">
+                <option value="phone_book" {% if list[1]["list_type"] == "phone_book" %}selected{% endif %}>Phone book</option>
+                <option value="dynamic_cid" {% if list[1]["list_type"] == "dynamic_cid" %}selected{% endif %}>Dynamic CID</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
           <input type="text" class="form-control margin-bottom-xs" id="list_name" name="list_name" placeholder="{_ Enter list name here _}" value="{{ list[1]["name"] }}">
         </div>
         <div class="col-sm-6">

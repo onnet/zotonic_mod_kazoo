@@ -909,6 +909,11 @@ event({postback,toggle_featurecode_call_forward_update,_,_}, Context) ->
     mod_signal:emit({signal_featurecode_call_forward_update, []}, Context),
     Context;
 
+event({postback,toggle_featurecode_dynamic_cid,_,_}, Context) ->
+    _ = kazoo_util:toggle_featurecode_dynamic_cid(Context),
+    mod_signal:emit({signal_featurecode_dynamic_cid, []}, Context),
+    Context;
+
 event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Context) ->
     _ = kazoo_util:toggle_blacklist_member(BlacklistId,Context),
     mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
@@ -1113,12 +1118,14 @@ event({postback,{delete_list,[{list_id, ListId}]},_,_}, Context) ->
 
 event({submit,account_list_entries,_,_}, Context) ->
     ListId = z_context:get_q("list_id", Context),
-    _ = kazoo_util:kz_account_list_add_entry(ListId, Context),
-    z_render:update("list_entries_div", z_template:render("_list_entries_dialog.tpl", [{list_id, ListId}], Context), Context);
+    ListType = z_convert:to_binary(z_context:get_q("list_type", Context)),
+    TemplateName = z_context:get_q("template_name", Context),
+    _ = kazoo_util:kz_account_list_add_entry(ListType, ListId, Context),
+    z_render:update("list_entries_div", z_template:render(TemplateName, [{list_id, ListId}], Context), Context);
 
-event({postback,{delete_account_list_entry,[{list_id,ListId},{entry_id,EntryId}]},_,_}, Context) ->
+event({postback,{delete_account_list_entry,[{list_id,ListId},{entry_id,EntryId},{template_name, TemplateName}]},_,_}, Context) ->
     _ = kazoo_util:delete_account_list_entry(EntryId, ListId, Context),
-    z_render:update("list_entries_div", z_template:render("_list_entries_dialog.tpl", [{list_id, ListId}], Context), Context);
+    z_render:update("list_entries_div", z_template:render(TemplateName, [{list_id, ListId}], Context), Context);
 
 event({postback,conference_selected,_,_},Context) ->
     z_render:update("child_sandbox", z_template:render("conference_info.tpl", [{conference_id, z_context:get_q("triggervalue", Context)}], Context), Context);
@@ -1249,6 +1256,11 @@ event({submit,kz_purge_voicemails,_,_}, Context) ->
             Context1 = z_render:growl(?__("No messages to remove", Context), Context)
     end,
     z_render:dialog_close(Context1);
+
+event({submit,kz_notifications,_,_}, Context) ->
+    _ = kazoo_util:kz_notifications(Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    z_render:dialog_close(Context);
 
 event({drag,_,_},Context) ->
     Context;

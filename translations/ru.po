@@ -13,20 +13,20 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Add list"
+msgstr "Добавить список"
 
-msgid ""
-msgstr ""
+msgid "Enter description name here"
+msgstr "Введите описание списка"
 
-msgid ""
-msgstr ""
+msgid "Enter list name here"
+msgstr "Введите название списка"
 
-msgid ""
-msgstr ""
+msgid "Save list"
+msgstr "Сохранить список"
 
-msgid ""
-msgstr ""
+msgid "Dynamic CID"
+msgstr "Выбор АОНа"
 
 msgid "BCC"
 msgstr "Скрытая копия"
