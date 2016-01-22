@@ -16,7 +16,7 @@
             <td style="text-align: center1;">
               {{ list["name"] }}
               <i id="edit_{{ list["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i>
-              {% wire id="edit_"++list["id"] action={ dialog_open title=_"Edit list"++" "++list["name"] template="_edit_list_lazy.tpl" list_id=list["id"] } %}
+              {% wire id="edit_"++list["id"] action={ dialog_open title=_"Edit list"++" "++list["name"] template="_edit_list_lazy.tpl" list_id=list["id"] width="auto"} %}
             </td>
             <td style="text-align: center1;">{{ list["description"] }}</td>
             {% wire id="toggle_bl_member_"++list["id"] action={confirm text=_"Do you really want to change this setting?"
@@ -31,7 +31,8 @@
              {% endif %}
             </td>
             <td style="text-align: center;"><i id="edit_entries_{{ list["id"] }}" class="fa fa-edit pointer" title="{_ Edit entries _}"></i></td>
-            {% wire id="edit_entries_"++list["id"] action={ dialog_open title=_"Edit entries"++" "++list["name"] template="_edit_list_entries_lazy.tpl" list_id=list["id"] list_type=list["list_type"]} %}
+            {% wire id="edit_entries_"++list["id"] action={ dialog_open title=_"Edit entries"++" "++list["name"] template="_edit_list_entries_lazy.tpl"
+                                                                                                                 list_id=list["id"] list_type=list["list_type"] width="auto"} %}
             <td style="text-align: center;"><i id="delete_{{ list["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
             {% wire id="delete_"++list["id"]
                     action={confirm text=_"Do you really want to delete list "++list["name"]++"?"
