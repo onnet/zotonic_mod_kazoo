@@ -15,6 +15,8 @@
       </div>
     </div>
     <input type="hidden" name="list_id" value="{{ list_id }}" />
+    <input type="hidden" name="list_type" value="{{ list_type }}" />
+    <input type="hidden" name="template_name" value="_list_entries_dialog.tpl" />
 </form>
   <div class="form-group">
     <div class="row">

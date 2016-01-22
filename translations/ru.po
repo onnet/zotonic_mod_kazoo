@@ -7,32 +7,32 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Edit dynamic CID settings"
+msgstr "Изменить настройки опции Выбор АОН"
 
-msgid ""
-msgstr ""
+msgid "Switch off dynamic CID feature"
+msgstr "Отключить опцию выбора АОН"
 
-msgid ""
-msgstr ""
+msgid "Add list"
+msgstr "Добавить список"
 
-msgid ""
-msgstr ""
+msgid "Enter description name here"
+msgstr "Введите описание списка"
 
-msgid ""
-msgstr ""
+msgid "Enter list name here"
+msgstr "Введите название списка"
 
-msgid ""
-msgstr ""
+msgid "Save list"
+msgstr "Сохранить список"
 
-msgid ""
-msgstr ""
+msgid "Dynamic CID"
+msgstr "Выбор АОНа"
 
-msgid ""
-msgstr ""
+msgid "BCC"
+msgstr "Скрытая копия"
 
-msgid ""
-msgstr ""
+msgid "CC"
+msgstr "Копия"
 
 msgid "Save Click-to-Call"
 msgstr "Созранить правило"
@@ -45,6 +45,43 @@ msgstr "Введите номер телефона"
 
 msgid "Place test call"
 msgstr "Совершить тестовый вызов"
+
+msgid "Show code"
+msgstr "Показать пример кода"
+
+msgid "Hide code"
+msgstr "Скрыть пример кода"
+
+msgid "Test"
+msgstr "Тест"
+
+msgid "1 day"
+msgstr "1 день"
+
+msgid "3 days"
+msgstr "3 дня"
+
+msgid "7 days"
+msgstr "7 дней"
+
+msgid "15 days"
+msgstr "15 дней"
+
+msgid "Delete all messages"
+msgstr "Удалить все сообщения"
+
+msgid "Older than"
+msgstr "Старше чем"
+
+msgid "Choose VMBox"
+msgstr "Выберите ящик"
+
+msgid "Clean up Voicemail Boxes"
+msgstr "Очистка ящиков голосовой почты"
+
+msgid "Purge messages"
+msgstr "Удалить сообщения"
+
 
 msgid "Test"
 msgstr "Тест"

@@ -37,9 +37,6 @@
  
     {% lib "js/apps/zotonic-1.0.js" %}
     {% lib "js/apps/z.widgetmanager.js" %}
-    {% lib "js/tinymce-4.1.6/tiny-init.js" %}
-<script type="text/javascript" src="/lib/js/tinymce-3.5.0/tinymce/tiny_mce.js"></script>
-<script type="text/javascript" src="/lib/js/tinymce-3.5.0/tinymce/jquery.tinymce.js"></script>
     {% lib "js/modules/z.adminwidget.js" %}
     {% lib "js/modules/z.notice.js" %}
     {% lib "js/z.dialog.bootstrap3.js" %}
@@ -80,6 +77,7 @@
     <![endif]-->
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.6/socket.io.min.js"></script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   </head>
   <body>
     {% include "topmenu.tpl" %}
