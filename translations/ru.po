@@ -7,11 +7,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Edit dynamic CID settings"
+msgstr "Изменить настройки опции Выбор АОН"
 
-msgid ""
-msgstr ""
+msgid "Switch off dynamic CID feature"
+msgstr "Отключить опцию выбора АОН"
 
 msgid "Add list"
 msgstr "Добавить список"

@@ -21,7 +21,7 @@
           %}
         </div>
         <div class="col-sm-6">
-          {% button class="col-xs-12 btn btn-zalarm margin-bottom-xs" text=_"Switch off dynamic CID" 
+          {% button class="col-xs-12 btn btn-zalarm margin-bottom-xs" text=_"Switch off dynamic CID feature" 
                     action={postback postback="delete_featurecode_dynamic_cid" delegate="mod_kazoo"}
           %}
         </div>

@@ -802,6 +802,8 @@ kz_account_create_callflow(Routines, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
+lager:info("API_String: ~p",[API_String]),
+lager:info("DataBag: ~p",[DataBag]),
     crossbar_account_request('put', API_String, DataBag, Context).
 
 kz_create_default_callflow_sec(Seconds,AccountId, Context) ->
@@ -3232,6 +3234,9 @@ account_list(Context) ->
     case ListId of
         'undefined' ->
             API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary>>,
+lager:info("Auth_Token: ~p",[z_context:get_session(kazoo_auth_token, Context)]),
+lager:info("API_String: ~p",[API_String]),
+lager:info("DataBag: ~p",[?MK_DATABAG(NewDoc)]),
             crossbar_account_request('put', API_String, ?MK_DATABAG(NewDoc), Context);
         _ ->
             API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary>>,
@@ -3271,6 +3276,8 @@ kz_account_list_add_entry(ListType, ListId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
     case EntryId of
         'undefined' ->
+lager:info("API_String: ~p",[API_String]),
+lager:info("DataBag: ~p",[?MK_DATABAG(NewDoc)]),
             API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?LISTS/binary, <<"/">>/binary, (z_convert:to_binary(ListId, Context))/binary, ?ENTRIES/binary>>,
             crossbar_account_request('put', API_String, ?MK_DATABAG(NewDoc), Context);
         _ ->
