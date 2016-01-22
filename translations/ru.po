@@ -225,7 +225,7 @@ msgid "add webhook"
 msgstr "добавить уведомление"
 
 msgid "Webhooks"
-msgstr "Уведомления (webhooks))"
+msgstr "Уведомления (webhooks)"
 
 msgid "Browse"
 msgstr "Выбрать"
