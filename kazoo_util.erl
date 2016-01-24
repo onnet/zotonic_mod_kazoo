@@ -258,6 +258,7 @@
     ,email_sender_name/1
     ,sendmail_test_notification/4
     ,notifications_smtplog/1
+    ,kz_notifications/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -3333,15 +3334,36 @@ notifications_smtplog(Context) ->
     {'ok', _, _, Body} = crossbar_account_send_request('get', API_String, "text/plain", [], Context),
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)). 
 
-%kz_notifications(Context) ->
-%    lager:info("kz_notifications event variables: ~p", [z_context:get_q_all(Context)]),
-%    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], [z_convert:to_binary(Email)], J) end
-%                ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], <<"specified">>, J) end
-%                ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
-%                ,fun(J) -> modkazoo_util:set_value([<<"enabled">>], 'true', J) end
-%                ,fun(J) -> modkazoo_util:set_value(<<"from">>, z_convert:to_binary(Email), J) end
-%                ,fun(J) -> modkazoo_util:set_value(<<"reply_to">>, z_convert:to_binary(Email), J) end
-%                ,fun(J) -> modkazoo_util:set_value(<<"plain">>, Plain, J) end
-%                ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
-%               ],
-%    ok.
+kz_notifications(Context) ->
+    lager:info("kz_notifications event variables: ~p", [z_context:get_q_all(Context)]),
+    lager:info("kz_notifications event cc: ~p", [z_context:get_q("cc", Context)]),
+    lager:info("kz_notifications event cc: ~p", [modkazoo_util:get_q_bin("cc", Context)]),
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    NotificationId = z_context:get_q("notification_id", Context),
+    CurrNotifyDoc = kz_notification_info(NotificationId, Context),
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], modkazoo_util:get_q_bin("to", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"email_addresses">>], emails_list("input_cc", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"type">>], modkazoo_util:get_q_bin("cc", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"email_addresses">>], emails_list("input_bcc", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"type">>], modkazoo_util:get_q_bin("bcc", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"from">>], modkazoo_util:get_q_bin("from", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"subject">>], modkazoo_util:get_q_bin("subject", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"enabled">>], 'true', J) end
+     %           ,fun(J) -> modkazoo_util:set_value(<<"plain">>, Plain, J) end
+     %           ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
+               ],
+    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
+lager:info("IAM kz_notifications NewDoc: ~p",[NewDoc]),
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
+    end,
+    _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
+
+emails_list(Field, Context) ->
+    case z_context:get_q(Field, Context) of
+        'undefined' -> [];
+        List -> lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9@_.-]", "", [global, {return, binary}]) end, z_string:split(List,","))
+    end.
