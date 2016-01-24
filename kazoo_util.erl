@@ -163,6 +163,7 @@
     ,kz_conference/1
     ,kz_conference/3
     ,kz_conference_details/2
+    ,dedup_kz_conference_details/2
     ,kz_c2call/1
     ,kz_c2call/3
     ,kz_c2call_hyperlink/2
@@ -2340,7 +2341,12 @@ kz_conference(Verb, ConferenceId, DataBag, Context) ->
 kz_conference_details(ConferenceId,Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, Account_Id/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary, ?DETAILS/binary>>,
+lager:info("IAM kz_conference_details: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
+
+dedup_kz_conference_details(ConferenceId,Context) ->
+    JObj = kz_conference_details(ConferenceId,Context),
+    'ok'.
 
 start_outbound_conference(_ConferenceId, Context) ->
     SelectedList = z_context:get_q('selected_list', Context),
