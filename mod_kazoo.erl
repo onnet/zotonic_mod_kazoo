@@ -1267,6 +1267,16 @@ event({submit,kz_notifications,_,_}, Context) ->
     mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
     z_render:dialog_close(Context);
 
+event({postback,{enable_notification,[{notification_id,NotificationId}]},_,_}, Context) ->
+    _ = kazoo_util:kz_notification_toggle('true', NotificationId, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    Context;
+
+event({postback,{disable_notification,[{notification_id,NotificationId}]},_,_}, Context) ->
+    _ = kazoo_util:kz_notification_toggle('false', NotificationId, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

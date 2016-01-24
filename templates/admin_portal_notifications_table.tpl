@@ -2,6 +2,7 @@
 <table id="admin_portal_notifications_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
+            <th style="text-align: center;"></th>
             <th style="text-align: center1;">{_ Template name _}</th>
             <th style="text-align: center;">{_ Category _}</th>
             <th style="text-align: center;"></th>
@@ -14,6 +15,23 @@
     <tbody>
         {% for notification in m.kazoo.kz_list_account_notifications %}
 	<tr>
+            <td style="text-align: center1;">
+              {% if notification["account_overridden"] %}
+                {% if notification["enabled"] == "false" %}
+                  {% wire id="disabled_"++notification["id"] action={confirm text=_"Do you really want to enable this notification?"
+                                                                                action={ postback postback={enable_notification notification_id=notification["id"]} delegate="mod_kazoo"}
+                                                                        }
+                  %}
+                  <i id="disabled_{{ notification["id"] }}" class="fa fa-toggle-off pointer" title="{_ Disabled _}"></i>
+                {% else %}
+                  {% wire id="enabled_"++notification["id"] action={confirm text=_"Do you really want to disable this notification?"
+                                                                                action={ postback postback={disable_notification notification_id=notification["id"]} delegate="mod_kazoo"}
+                                                                        }
+                  %}
+                  <i id="enabled_{{ notification["id"] }}" class="fa fa-toggle-on pointer" title="{_ Enabled _}"></i>
+                {% endif %}
+              {% endif %}
+            </td>
             <td style="text-align: center1;">{{ notification["friendly_name"] }}</td>
             <td style="text-align: center;">{{ notification["category"] }}</td>
             <td style="text-align: center;"><i id="edit_{{ notification["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>

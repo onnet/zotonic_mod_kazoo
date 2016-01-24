@@ -259,6 +259,7 @@
     ,sendmail_test_notification/4
     ,notifications_smtplog/1
     ,kz_notifications/1
+    ,kz_notification_toggle/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -3324,7 +3325,6 @@ sendmail_test_notification(Email, AccountId, NotificationId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value(<<"plain">>, Plain, J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
                ],
- %   NewDoc = lists:foldl(fun(F, J) -> F(J) end, ?NOTIFY_PREVIEW, Routines),
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
     API_String = case kz_current_context_superadmin(Context) of
         'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary, ?PREVIEW/binary>>; 
@@ -3345,12 +3345,11 @@ notifications_smtplog(Context) ->
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)). 
 
 kz_notifications(Context) ->
-    lager:info("kz_notifications event variables: ~p", [z_context:get_q_all(Context)]),
-    lager:info("kz_notifications event cc: ~p", [z_context:get_q("cc", Context)]),
-    lager:info("kz_notifications event cc: ~p", [modkazoo_util:get_q_bin("cc", Context)]),
     AccountId = z_context:get_session(kazoo_account_id, Context),
     NotificationId = z_context:get_q("notification_id", Context),
     CurrNotifyDoc = kz_notification_info(NotificationId, Context),
+    Plain = z_convert:to_binary(kz_notification_template("text/plain", NotificationId, AccountId, Context)),
+    HTML = kz_notification_template("text/html", NotificationId, AccountId, Context),
     Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], modkazoo_util:get_q_bin("to", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"email_addresses">>], emails_list("input_cc", Context), J) end
@@ -3360,20 +3359,41 @@ kz_notifications(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"from">>], modkazoo_util:get_q_bin("from", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"subject">>], modkazoo_util:get_q_bin("subject", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"enabled">>], 'true', J) end
-     %           ,fun(J) -> modkazoo_util:set_value(<<"plain">>, Plain, J) end
-     %           ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-lager:info("IAM kz_notifications NewDoc: ~p",[NewDoc]),
     API_String = case kz_current_context_superadmin(Context) of
         'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
         'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
     end,
-    _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
+    _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
+    case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
+        'undefined' ->
+            _ = kz_save_notification_template("text/html", NotificationId, AccountId, HTML, Context),
+            _ = kz_save_notification_template("text/plain", NotificationId, AccountId, Plain, Context);
+        _ -> 'ok'
+    end.
 
 emails_list(Field, Context) ->
     case z_context:get_q(Field, Context) of
         'undefined' -> [];
         List -> lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9@_.-]", "", [global, {return, binary}]) end, z_string:split(List,","))
+    end.
+
+kz_notification_toggle(State, NotificationId, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    CurrNotifyDoc = kz_notification_info(NotificationId, Context),
+    Plain = z_convert:to_binary(kz_notification_template("text/plain", NotificationId, AccountId, Context)),
+    HTML = kz_notification_template("text/html", NotificationId, AccountId, Context),
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"enabled">>], State, J) end],
+    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
+    end,
+    _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
+    case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
+        'undefined' ->
+            _ = kz_save_notification_template("text/html", NotificationId, AccountId, HTML, Context),
+            _ = kz_save_notification_template("text/plain", NotificationId, AccountId, Plain, Context);
+        _ -> 'ok'
     end.

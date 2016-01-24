@@ -21,14 +21,14 @@
           <label class="form-control-onnet margin-bottom-xs">{_ To _}:
             {% wire id="to" type="change" action={ update target="maybe_to_input" template="_notice_field_choice.tpl" field_type="to" } %}
             <select name="to" id="to" class="form-control margin-bottom-xs">
-              <option id="user" value="user" {% if notification[1]["to"][1]["type"] == "user" %}selected{% endif %}>{_ Original user _}</option>
+              <option id="original" value="original" {% if notification[1]["to"][1]["type"] == "original" %}selected{% endif %}>{_ Original user _}</option>
               <option id="admins" value="admins" {% if notification[1]["to"][1]["type"] == "admins" %}selected{% endif %}>{_ All account administrators _}</option>
               <option id="specified" value="specified" {% if notification[1]["to"][1]["type"] == "specified" %}selected{% endif %}>{_ Specified email address _}</option>
             </select>
           </label>
         </div>
         <span id="maybe_to_input">
-            {% include "_notice_field_choice.tpl" field_type="to" recipient_type=notification[1]["to"][1]["type"] %}
+            {% include "_notice_field_choice.tpl" field_type="to" recipient_type=notification[1]["to"][1]["type"] input_value=notification[1]["to"][1]["email_addresses"] %}
         </span>
       </div>
     </div>
@@ -38,14 +38,14 @@
           <label class="form-control-onnet margin-bottom-xs">{_ CC _}:
             {% wire id="cc" type="change" action={ update target="maybe_cc_input" template="_notice_field_choice.tpl" field_type="cc" } %}
             <select name="cc" id="cc" class="form-control margin-bottom-xs">
-              <option id="user" value="user" {% if notification[1]["cc"][1]["type"] == "user" %}selected{% endif %}>{_ Original user _}</option>
+              <option id="original" value="original" {% if notification[1]["cc"][1]["type"] == "original" %}selected{% endif %}>{_ Original user _}</option>
               <option id="admins" value="admins" {% if notification[1]["cc"][1]["type"] == "admins" %}selected{% endif %}>{_ All account administrators _}</option>
               <option id="specified" value="specified" {% if notification[1]["cc"][1]["type"] == "specified" %}selected{% endif %}>{_ Specified email address _}</option>
             </select>
           </label>
         </div>
         <span id="maybe_cc_input">
-            {% include "_notice_field_choice.tpl" field_type="cc" recipient_type=notification[1]["cc"][1]["type"] %}
+            {% include "_notice_field_choice.tpl" field_type="cc" recipient_type=notification[1]["cc"][1]["type"] input_value=notification[1]["cc"][1]["email_addresses"] %}
         </span>
       </div>
     </div>
@@ -55,14 +55,14 @@
           <label class="form-control-onnet margin-bottom-xs">{_ BCC _}:
             {% wire id="bcc" type="change" action={ update target="maybe_bcc_input" template="_notice_field_choice.tpl" field_type="bcc" } %}
             <select name="bcc" id="bcc" class="form-control margin-bottom-xs">
-              <option id="user" value="user" {% if notification[1]["bcc"][1]["type"] == "user" %}selected{% endif %}>{_ Original user _}</option>
+              <option id="original" value="original" {% if notification[1]["bcc"][1]["type"] == "original" %}selected{% endif %}>{_ Original user _}</option>
               <option id="admins" value="admins" {% if notification[1]["bcc"][1]["type"] == "admins" %}selected{% endif %}>{_ All account administrators _}</option>
               <option id="specified" value="specified" {% if notification[1]["bcc"][1]["type"] == "specified" %}selected{% endif %}>{_ Specified email address _}</option>
             </select>
           </label>
         </div>
         <span id="maybe_bcc_input">
-            {% include "_notice_field_choice.tpl" field_type="bcc" recipient_type=notification[1]["bcc"][1]["type"] %}
+            {% include "_notice_field_choice.tpl" field_type="bcc" recipient_type=notification[1]["bcc"][1]["type"] input_value=notification[1]["bcc"][1]["email_addresses"] %}
         </span>
       </div>
     </div>
