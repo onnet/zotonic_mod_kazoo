@@ -56,6 +56,7 @@
     ,get_q_atom/2
     ,get_q_integer/2
     ,cleanout/1
+    ,props_get_values/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -489,4 +490,8 @@ cleanout(String) when is_binary(String) ->
     re:replace(String, "[^A-Za-z0-9]", "", [global, {return, binary}]);
 cleanout(String) ->
     String.
+
+props_get_values(K,L) ->
+    lists:map(fun(X) -> modkazoo_util:get_value(K, X) end, L).
+
 
