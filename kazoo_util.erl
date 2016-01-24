@@ -2345,8 +2345,18 @@ lager:info("IAM kz_conference_details: ~p", [crossbar_account_request('get', API
     crossbar_account_request('get', API_String, [], Context).
 
 dedup_kz_conference_details(ConferenceId,Context) ->
-    JObj = kz_conference_details(ConferenceId,Context),
-    'ok'.
+    case kz_conference_details(ConferenceId,Context) of
+        <<>> -> <<>>;
+        Pts ->
+            lists:foldl(fun(X,Acc) ->
+                            case lists:member(modkazoo_util:get_value(<<"Participant-ID">>, X), modkazoo_util:props_get_values(<<"Participant-ID">>, Acc)) of
+                                'true' -> Acc;
+                                'false' -> Acc ++ [X]
+                            end
+                        end
+                        ,[]
+                        ,Pts)
+    end.
 
 start_outbound_conference(_ConferenceId, Context) ->
     SelectedList = z_context:get_q('selected_list', Context),
