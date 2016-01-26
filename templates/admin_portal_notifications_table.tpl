@@ -9,7 +9,7 @@
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
-            <th style="text-align: center;">{_ Changed _}</th>
+            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>
@@ -48,13 +48,13 @@
                                                                         template="_sendmail_test_notification.tpl" notification_id=notification["id"] width="auto" } %}
             <td style="text-align: center;">
              {% if notification["account_overridden"] %}
-                <i id="toggle_notification_{{ notification["id"] }}" class="fa fa-check zprimary pointer" title="{_ Overridden _}"></i>
+                <i id="toggle_notification_{{ notification["id"] }}" class="fa fa-files-o zalarm pointer" title="{_ Overridden _}"></i>
                 {% wire id="toggle_notification_"++notification["id"] action={confirm text=_"Do you really want to discard this template changes?"
                                                                               action={ postback postback={remove_notification_template notification_id=notification["id"]} delegate="mod_kazoo"}
                                                                       }
                 %}
              {% else %}
-                <i class="fa fa-remove zalarm" title="{_ System default _}"></i>
+                <i class="fa fa-file-o zprimary" title="{_ System default _}"></i>
              {% endif %}
             </td>
         </tr>
@@ -66,7 +66,7 @@
 var oTable = $('#admin_portal_notifications_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
-"aaSorting": [[ 0, "desc" ]],
+"aaSorting": [[ 2, "asc" ]],
 "aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
 "iDisplayLength" : 5,
 "oLanguage" : {
