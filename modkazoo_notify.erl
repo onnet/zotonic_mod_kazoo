@@ -85,8 +85,7 @@ rs_send_customer_update(Context) ->
     RecipientAccountDoc = kazoo_util:kz_get_acc_doc_by_account_id(RecipientAccountId, Context),
 
     Vars = [
-            {from, modkazoo_util:get_q_bin("from", Context)}
-            ,{sender_name, m_config:get_value('mod_kazoo', 'sender_name', Context)}
+            {{sender_name, m_config:get_value('mod_kazoo', 'sender_name', Context)}
             ,{accountname, modkazoo_util:get_value(<<"name">>, RecipientAccountDoc)}
            ],
 
@@ -116,7 +115,7 @@ rs_send_user_update(UserId, ModHTML, ModText, CustomerVars, Context) ->
 
     Email = #email{
         subject=z_context:get_q("subject", Context),
-        from=m_config:get_value('mod_kazoo', sales_email, Context),
+        from=z_context:get_q("from", Context),
         to=To,
         html=HTML,
         text=Text,
