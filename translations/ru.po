@@ -4,8 +4,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Send message"
+msgstr "Отправить сообщение"
+
+msgid "send message"
+msgstr "отправить сообщение"
 
 msgid "Edit dynamic CID settings"
 msgstr "Изменить настройки опции Выбор АОН"

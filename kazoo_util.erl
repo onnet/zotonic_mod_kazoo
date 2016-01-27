@@ -11,6 +11,7 @@
     ,kz_account_doc_field/3
     ,kz_get_user_doc/1
     ,kz_get_user_doc/2
+    ,kz_get_user_doc/3
     ,kz_user_doc_field/2
     ,kz_user_doc_field/3
     ,kz_device_doc_field/3
@@ -521,6 +522,9 @@ kz_get_user_doc(Context) ->
 
 kz_get_user_doc(OwnerId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_get_user_doc(OwnerId, AccountId, Context).
+
+kz_get_user_doc(OwnerId, AccountId, Context) ->
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, (z_convert:to_binary(OwnerId))/binary>>,

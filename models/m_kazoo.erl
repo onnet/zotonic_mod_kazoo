@@ -403,6 +403,33 @@ m_find_value({kz_conference_details, [{conference_id, ConferenceId}]}, _M, Conte
 m_find_value(notifications_smtplog, _M, Context) ->
     kazoo_util:notifications_smtplog(Context);
 
+m_find_value(rs_customer_update_subject, _M, Context) ->
+    Filename = "/tmp/" ++ z_convert:to_list(z_context:get_session(kazoo_account_id, Context)) ++ "_subject.tpl",
+    case file:read_file(Filename) of
+        {'ok', Data} -> Data;
+        _ -> m_config:get_value('mod_kazoo', 'sender_name', Context)
+    end;
+
+m_find_value(rs_customer_update_html, _M, Context) ->
+    Filename = "/tmp/" ++ z_convert:to_list(z_context:get_session(kazoo_account_id, Context)) ++ "_html.tpl",
+    case file:read_file(Filename) of
+        {'ok', Data} ->
+            Data;
+        _ ->
+            {Html, Context} = z_template:render_to_iolist("rs_customer_udate_html.tpl", [], Context),
+            Html
+    end;
+
+m_find_value(rs_customer_update_text, _M, Context) ->
+    Filename = "/tmp/" ++ z_convert:to_list(z_context:get_session(kazoo_account_id, Context)) ++ "_text.tpl",
+    case file:read_file(Filename) of
+        {'ok', Data} ->
+            Data;
+        _ ->
+            {Text, Context} = z_template:render_to_iolist("rs_customer_udate_text.tpl", [], Context),
+            Text
+    end;
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

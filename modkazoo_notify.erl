@@ -3,6 +3,7 @@
 
 -export([email_attachment/6
         ,send_invoice/2
+        ,rs_send_customer_update/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -55,4 +56,72 @@ create_invoice(Amount, Context) ->
         E ->
             {'error', E}
     end.
+
+rs_send_customer_update(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    RecipientAccountId = z_context:get_q("account_id", Context),
+
+
+    {'ok', ModHTML} = erlydtl:compile(z_convert:to_binary(z_context:get_q("html_body", Context))
+                                      ,z_convert:to_list(AccountId) ++ "_html"
+                                      ,Context),
+
+    {'ok', ModText} = erlydtl:compile(z_convert:to_binary(z_context:get_q("text_body", Context))
+                                      ,z_convert:to_list(AccountId) ++ "_text"
+                                      ,Context),
+
+    _ = file:write_file(lists:flatten(["/tmp/",z_convert:to_list(AccountId),"_subject.tpl"])
+                        ,z_context:get_q("subject", Context)),
+    _ = file:write_file(lists:flatten(["/tmp/",z_convert:to_list(AccountId),"_html.tpl"])
+                        ,z_context:get_q("html_body", Context)),
+    _ = file:write_file(lists:flatten(["/tmp/",z_convert:to_list(AccountId),"_text.tpl"])
+                        ,z_context:get_q("text_body", Context)),
+
+    RecipientsList = case modkazoo_util:get_q_bin("selected_user", Context) of
+                         <<"all_users">> -> modkazoo_util:props_get_values(<<"id">>, kazoo_util:kz_list_account_users(RecipientAccountId, Context));
+                         UserId -> [UserId]
+                     end,
+
+    RecipientAccountDoc = kazoo_util:kz_get_acc_doc_by_account_id(RecipientAccountId, Context),
+
+    Vars = [
+            {from, modkazoo_util:get_q_bin("from", Context)}
+            ,{sender_name, m_config:get_value('mod_kazoo', 'sender_name', Context)}
+            ,{accountname, modkazoo_util:get_value(<<"name">>, RecipientAccountDoc)}
+           ],
+
+    rs_send_users_update(RecipientsList, ModHTML, ModText, Vars, Context),
+    lager:info("All variables: ~p", [z_context:get_q_all(Context)]),
+    lager:info("IAM RecipientsList ~p", [RecipientsList]).
+
+rs_send_users_update([], _, _, _, _) ->
+    'ok';
+rs_send_users_update([H|T], ModHTML, ModText, CustomerVars, Context) ->
+    rs_send_user_update(H, ModHTML, ModText, CustomerVars, Context), 
+    rs_send_users_update(T, ModHTML, ModText, CustomerVars, Context).
+
+rs_send_user_update(UserId, ModHTML, ModText, CustomerVars, Context) ->
+    AccountId = modkazoo_util:get_q_bin("account_id", Context),
+    UserDoc = kazoo_util:kz_get_user_doc(UserId, AccountId, Context),
+    To = modkazoo_util:get_value_bin(<<"email">>, UserDoc),
+
+    Vars = [
+            {username, modkazoo_util:get_value_bin(<<"username">>, UserDoc)}
+            ,{firstname, modkazoo_util:get_value_bin(<<"first_name">>, UserDoc)}
+            ,{surname, modkazoo_util:get_value_bin(<<"last_name">>, UserDoc)}
+           ] ++ CustomerVars,
+
+    {'ok', HTML} = ModHTML:render(Vars, Context),
+    {'ok', Text} = ModText:render(Vars, Context),
+
+    Email = #email{
+        subject=z_context:get_q("subject", Context),
+        from=m_config:get_value('mod_kazoo', sales_email, Context),
+        to=To,
+        html=HTML,
+        text=Text,
+        vars=Vars
+    },
+
+    z_email:send(Email, Context).
 

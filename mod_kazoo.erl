@@ -1277,6 +1277,10 @@ event({postback,{disable_notification,[{notification_id,NotificationId}]},_,_}, 
     mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
     Context;
 
+event({submit,rs_send_message,_,_}, Context) ->
+    _ = modkazoo_notify:rs_send_customer_update(Context),
+    z_render:dialog_close(Context);
+
 event({drag,_,_},Context) ->
     Context;
 
