@@ -85,7 +85,7 @@ rs_send_customer_update(Context) ->
     RecipientAccountDoc = kazoo_util:kz_get_acc_doc_by_account_id(RecipientAccountId, Context),
 
     Vars = [
-            {{sender_name, m_config:get_value('mod_kazoo', 'sender_name', Context)}
+             {sender_name, m_config:get_value('mod_kazoo', 'sender_name', Context)}
             ,{accountname, modkazoo_util:get_value(<<"name">>, RecipientAccountDoc)}
            ],
 
