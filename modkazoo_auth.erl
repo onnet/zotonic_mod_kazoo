@@ -124,7 +124,7 @@ process_signup_form(Context) ->
 
 may_be_add_third_party_billing(Context) ->
     case z_module_manager:active('mod_lb', Context) of
-        'true' -> lb_auth:lb_auth_addon(kazoo_util:kz_account_numbers(Context), Context);
+        'true' -> lb_auth:lb_auth_search(kazoo_util:kz_account_numbers(Context), Context);
         'false' -> 'ok'
     end.
 
