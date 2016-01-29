@@ -14,6 +14,16 @@
                 <option value="07" {% if list[1]["cid_key"] == "07" %}selected{% endif %}> 07</option>
                 <option value="08" {% if list[1]["cid_key"] == "08" %}selected{% endif %}> 08</option>
                 <option value="09" {% if list[1]["cid_key"] == "09" %}selected{% endif %}> 09</option>
+                <option value="10" {% if list[1]["cid_key"] == "10" %}selected{% endif %}> 10</option>
+                <option value="11" {% if list[1]["cid_key"] == "11" %}selected{% endif %}> 11</option>
+                <option value="12" {% if list[1]["cid_key"] == "12" %}selected{% endif %}> 12</option>
+                <option value="13" {% if list[1]["cid_key"] == "13" %}selected{% endif %}> 13</option>
+                <option value="14" {% if list[1]["cid_key"] == "14" %}selected{% endif %}> 14</option>
+                <option value="15" {% if list[1]["cid_key"] == "15" %}selected{% endif %}> 15</option>
+                <option value="16" {% if list[1]["cid_key"] == "16" %}selected{% endif %}> 16</option>
+                <option value="17" {% if list[1]["cid_key"] == "17" %}selected{% endif %}> 17</option>
+                <option value="18" {% if list[1]["cid_key"] == "18" %}selected{% endif %}> 18</option>
+                <option value="19" {% if list[1]["cid_key"] == "19" %}selected{% endif %}> 19</option>
             </select>
         </div>
         <div class="col-sm-4">
