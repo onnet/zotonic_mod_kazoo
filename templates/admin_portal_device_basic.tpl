@@ -4,7 +4,13 @@
     <!-- Device Nickname field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Device Nickname _}</label></div>
-        <div id="edit_username" class="col-xs-5 zalarm">{{ device_doc["name"] }}</div>
+        <div id="name" class="col-xs-5">
+            {% wire id="edit_name" type="click" action={ update target="name" template="_edit_field.tpl" type="device" doc_id=device_id field_name=["name"] } %}
+            <span>
+                {{ device_doc["name"] }}
+                <i id="edit_name" class="fa fa-edit pointer" title="Edit field"></i>
+            </span>
+        </div>
     </div>
     <!-- User status -->
     <div class="row">
