@@ -75,7 +75,7 @@
 <script type="text/javascript">
 
 var config = {
-  wsServers: "wss://{{ m.config.mod_kazoo.sip_registrar.value }}:9443",
+  wsServers: "wss://{{ m.config.mod_kazoo.sip_registrar.value }}:5065",
   uri: "sip:{{ m.session.webrtc_dev_sip_username }}@{{ m.kazoo.get_account_realm }}",
   authorizationUser: "{{ m.session.webrtc_dev_sip_username }}",
   password: "{{ m.session.webrtc_dev_sip_password }}",

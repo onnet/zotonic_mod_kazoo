@@ -41,12 +41,9 @@ do_sign_in(Login, Password, Account, Context) ->
             z_context:set_session(kazoo_account_id, Account_Id, Context),
             z_context:set_session(kazoo_account_name, Account_Name, Context),
             z_context:set_session(kazoo_login_name, Login, Context),
-            case modkazoo_util:get_value(<<"is_reseller">>, kazoo_util:kz_get_acc_doc(Context)) of
-                'true' -> 'ok';
-                _ -> _ = may_be_add_third_party_billing(Context)
-            end,
             _ = may_be_set_user_data(Context),
             _ = may_be_set_reseller_data(Context),
+            _ = may_be_add_third_party_billing(Context),
             choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context));
         _ ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
@@ -124,7 +121,7 @@ process_signup_form(Context) ->
 
 may_be_add_third_party_billing(Context) ->
     case z_module_manager:active('mod_lb', Context) of
-        'true' -> lb_auth:lb_auth_addon(kazoo_util:kz_account_numbers(Context), Context);
+        'true' -> lb_auth:lb_auth_search(kazoo_util:kz_account_numbers(Context), Context);
         'false' -> 'ok'
     end.
 
