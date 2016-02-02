@@ -56,7 +56,7 @@
             <div class="button button_clear" onclick="ph_clear();">Backspace</div>
           </div>
           <div class="line">
-            <div class="button button_delete" onclick="ph_delete();">Clean</div>
+            <div class="button button_delete" onclick="ph_delete();">Clear</div>
           </div>
           <div class="line">
             <div class="button button_hold" onclick="call_hold();">Hold</div>

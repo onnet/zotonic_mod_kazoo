@@ -85,7 +85,6 @@ msgstr "Очистка ящиков голосовой почты"
 msgid "Purge messages"
 msgstr "Удалить сообщения"
 
-
 msgid "Test"
 msgstr "Тест"
 
