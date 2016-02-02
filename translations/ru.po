@@ -829,6 +829,9 @@ msgstr "АОН"
 msgid "CID"
 msgstr "АОН"
 
+msgid "Choose a device to register then make calls from right here in your web browser"
+msgstr "Пожалуйста выберите устройство для регистрации, после чего Вы сможете позвонить из броузера"
+
 msgid "Please choose sip device to register with"
 msgstr "Пожалуйста выберите устройство для регистрации"
 
