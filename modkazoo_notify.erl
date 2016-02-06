@@ -3,7 +3,9 @@
 
 -export([email_attachment/6
         ,send_invoice/2
-        ,rs_send_customer_update/1
+        ,rs_send_message/1
+        ,rs_kz_customer_udate/1
+        ,rs_kz_all_customers_udate/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -57,7 +59,7 @@ create_invoice(Amount, Context) ->
             {'error', E}
     end.
 
-rs_send_customer_update(Context) ->
+rs_send_message(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     RecipientAccountId = z_context:get_q("account_id", Context),
 
@@ -124,3 +126,11 @@ rs_send_user_update(UserId, ModHTML, ModText, CustomerVars, Context) ->
 
     z_email:send(Email, Context).
 
+rs_kz_customer_udate(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    RecipientAccountId = z_context:get_q("account_id", Context),
+    kazoo_util:rs_kz_customer_udate(RecipientAccountId, AccountId, Context).
+
+rs_kz_all_customers_udate(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kazoo_util:rs_kz_all_customers_udate(AccountId, Context).

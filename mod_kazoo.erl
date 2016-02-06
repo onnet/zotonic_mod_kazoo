@@ -1275,7 +1275,15 @@ event({postback,{disable_notification,[{notification_id,NotificationId}]},_,_}, 
     Context;
 
 event({submit,rs_send_message,_,_}, Context) ->
-    _ = modkazoo_notify:rs_send_customer_update(Context),
+    _ = modkazoo_notify:rs_send_message(Context),
+    z_render:dialog_close(Context);
+
+event({submit,rs_kz_customer_udate,_,_}, Context) ->
+    _ = modkazoo_notify:rs_kz_customer_udate(Context),
+    z_render:dialog_close(Context);
+
+event({submit,rs_kz_all_customers_udate,_,_}, Context) ->
+    _ = modkazoo_notify:rs_kz_all_customers_udate(Context),
     z_render:dialog_close(Context);
 
 event({drag,_,_},Context) ->

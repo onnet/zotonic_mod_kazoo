@@ -1,4 +1,4 @@
-{% wire id="form_rs_send_message" type="submit" postback="rs_send_message" delegate="mod_kazoo" %}
+{% wire id="form_rs_send_message" type="submit" postback="rs_kz_customer_udate" delegate="mod_kazoo" %}
 <form id="form_rs_send_message" method="post" action="postback">
     <div class="form-group">
       <div class="row">
