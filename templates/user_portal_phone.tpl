@@ -1,5 +1,5 @@
 {% if not m.session.webrtc_dev_sip_username %}
-    {_ Please choose sip device to register with _}.
+    {_ Choose a device to register then make calls from right here in your web browser _}.
 {% else %}
 
     <audio id="ringtone" src="/lib/images/incoming.mp3" loop></audio>
@@ -56,7 +56,7 @@
             <div class="button button_clear" onclick="ph_clear();">Backspace</div>
           </div>
           <div class="line">
-            <div class="button button_delete" onclick="ph_delete();">Clean</div>
+            <div class="button button_delete" onclick="ph_delete();">Clear</div>
           </div>
           <div class="line">
             <div class="button button_hold" onclick="call_hold();">Hold</div>
@@ -75,7 +75,7 @@
 <script type="text/javascript">
 
 var config = {
-  wsServers: "wss://{{ m.config.mod_kazoo.sip_registrar.value }}:5065",
+  wsServers: "wss://{{ m.config.mod_kazoo.sip_registrar.value }}:{{ m.config.mod_kazoo.wss_port.value }}",
   uri: "sip:{{ m.session.webrtc_dev_sip_username }}@{{ m.kazoo.get_account_realm }}",
   authorizationUser: "{{ m.session.webrtc_dev_sip_username }}",
   password: "{{ m.session.webrtc_dev_sip_password }}",

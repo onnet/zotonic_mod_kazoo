@@ -16,7 +16,7 @@
         {% for attempt in m.kazoo.kz_list_incoming_faxes %}
           {% if attempt["timestamp"] %}
             <tr>
-                <td style="text-align: center; white-space: nowrap;">{{ attempt["timestamp"]|inno_timestamp_to_date:[4] }}</td>
+                <td style="text-align: center; white-space: nowrap;">{{ attempt["timestamp"]|inno_timestamp_to_date }}</td>
                 <td style="text-align: center;">{{ attempt["from_number"]|pretty_phonenumber }}</td>
                 <td style="text-align: center;">{% if attempt["rx_result"][1]["success"] %}{_ Success _}{% else %}{_ Failed _}{% endif %}</td>
                 <td style="text-align: center;"><a href="/getinfaxdoc/id/{{ attempt["id"] }}"><i class="fa fa-download" title="{_ Download _}"></i></a></td>

@@ -150,7 +150,8 @@ event({submit, send_fax, _, _}, Context) ->
                                         H <- z_convert:to_list(base64:encode(crypto:strong_rand_bytes(8)))]))))/binary>>,
             FileName = z_convert:to_binary(io_lib:format("~s.~s", [DocName, Ext])),
             _ = file:write_file(<<<<"/tmp/">>/binary, FileName/binary>>, FaxData),
-            AttachmentUrl = <<<<"https://">>/binary, (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, <<"/getfaxdoc/id/">>/binary, FileName/binary>>,
+       %     AttachmentUrl = <<<<"https://">>/binary, (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, <<"/getfaxdoc/id/">>/binary, FileName/binary>>,
+            AttachmentUrl = <<<<"http://">>/binary, (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, <<"/getfaxdoc/id/">>/binary, FileName/binary>>,
             FaxHeader = case z_context:get_q("company_name_checkbox", Context) of
                             "checked" -> z_context:get_session('kazoo_account_name', Context);
                             _ -> <<"Fax Service https://onnet.info">>
