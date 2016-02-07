@@ -3250,6 +3250,7 @@ rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_convert:to_binary(z_context:get_q("text_body", Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(z_convert:to_binary(z_context:get_q("html_body", Context))), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"user_type">>], modkazoo_util:get_q_bin("selected_user", Context), J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
     API_String = case kz_current_context_superadmin(Context) of
@@ -3273,6 +3274,7 @@ rs_kz_all_customers_udate(AccountId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_convert:to_binary(z_context:get_q("text_body", Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(z_convert:to_binary(z_context:get_q("html_body", Context))), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"user_type">>], modkazoo_util:get_q_bin("selected_user", Context), J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
     API_String = case kz_current_context_superadmin(Context) of
