@@ -3259,6 +3259,8 @@ rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
         'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary
                                  ,?SEND_MESSAGE/binary, <<"/">>/binary, (z_convert:to_binary(RecipientAccountId))/binary>>
     end,
+lager:info("IAM API_String: ~p",[API_String]),
+lager:info("IAM MK_DATABAG: ~p",[?MK_DATABAG(NewDoc)]),
     crossbar_account_send_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
 
 rs_kz_all_customers_udate(AccountId, Context) ->

@@ -76,7 +76,7 @@
     </div>
   </div>
 </div>
-{% print notification_id %}
-{% print notification[1]["to"][1]["type"] %}
-{% print notification %}
+{# print notification_id #}
+{# print notification[1]["to"][1]["type"] #}
+{# print notification #}
 {% endwith %}
