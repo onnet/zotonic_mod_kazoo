@@ -36,7 +36,7 @@
         <div class="col-sm-12">
           <label class="form-control-onnet margin-bottom-xs">{_ HTML body: _}
           <script>
-              tinyMCE.remove('#html_body');
+              tinymce.remove('#html_body');
               tinymce.init({ selector:'#html_body',
                              theme: 'modern',
                              plugins: [

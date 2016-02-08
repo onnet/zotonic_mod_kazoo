@@ -1,6 +1,5 @@
-
 <script>
-    tinyMCE.remove('#html_body');
+    tinymce.remove('#html_body');
     tinymce.init({ selector:'#html_body',
                    theme: 'modern',
                    plugins: [
