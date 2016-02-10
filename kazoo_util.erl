@@ -337,6 +337,7 @@
 -define(QUEUES, <<"/queues">>).
 -define(EAVESDROP, <<"/eavesdrop">>).
 -define(CLICKTOCALL, <<"/clicktocall">>).
+-define(DIALPLANS, <<"/dialplans">>).
 -define(SEND_MESSAGE, <<"/send_message">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
@@ -3452,3 +3453,5 @@ kz_notification_toggle(State, NotificationId, Context) ->
             _ = kz_save_notification_template("text/plain", NotificationId, AccountId, Plain, Context);
         _ -> 'ok'
     end.
+
+% list_system_dialplans(Context)
