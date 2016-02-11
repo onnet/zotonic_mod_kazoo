@@ -18,7 +18,7 @@
               action={dialog_open title=_"SMTP logs" template="_notifications_smtplog_details.tpl" }
     %}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"send customers update"
-              action={dialog_open title=_"Send an update" template="rs_kz_customer_udate.tpl" }
+              action={dialog_open title=_"Send an update" template="rs_kz_customer_udate.tpl" account_id="all_accounts_broadcast"}
     %}
 {% endblock %}
 

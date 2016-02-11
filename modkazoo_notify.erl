@@ -5,7 +5,6 @@
         ,send_invoice/2
         ,rs_send_message/1
         ,rs_kz_customer_udate/1
-        ,rs_kz_all_customers_udate/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -128,9 +127,10 @@ rs_send_user_update(UserId, ModHTML, ModText, CustomerVars, Context) ->
 
 rs_kz_customer_udate(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    RecipientAccountId = z_context:get_q("account_id", Context),
-    kazoo_util:rs_kz_customer_udate(RecipientAccountId, AccountId, Context).
-
-rs_kz_all_customers_udate(Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    kazoo_util:rs_kz_all_customers_udate(AccountId, Context).
+    case modkazoo_util:get_q_bin("account_id", Context) of
+        <<>> -> 'ok'; 
+        <<"all_accounts_broadcast">> ->
+            kazoo_util:rs_kz_customer_udate('undefined', AccountId, Context);
+        RecipientAccountId ->
+            kazoo_util:rs_kz_customer_udate(RecipientAccountId, AccountId, Context)
+    end.

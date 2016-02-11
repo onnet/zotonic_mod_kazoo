@@ -338,7 +338,7 @@
 -define(EAVESDROP, <<"/eavesdrop">>).
 -define(CLICKTOCALL, <<"/clicktocall">>).
 -define(DIALPLANS, <<"/dialplans">>).
--define(SEND_MESSAGE, <<"/send_message">>).
+-define(MESSAGE, <<"/message">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -3238,6 +3238,9 @@ kz_save_notification_template(ContextType, NotificationId, AccountId, MessageBod
     end,
     crossbar_account_send_request('post', API_String, ContextType, MessageBody, Context).
 
+rs_kz_all_customers_udate(AccountId, Context) ->
+    rs_kz_customer_udate('undefined', AccountId, Context).
+
 rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
     CurrNotifyDoc = kz_notification_info(<<"customer_update">>, Context),
     Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
@@ -3251,39 +3254,16 @@ rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_convert:to_binary(z_context:get_q("text_body", Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(z_convert:to_binary(z_context:get_q("html_body", Context))), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"user_type">>], modkazoo_util:get_q_bin("selected_user", Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"user_type">>, modkazoo_util:get_q_bin("selected_user", Context), J) end
+                ,fun(J) when RecipientAccountId == 'undefined' -> J; (J) -> modkazoo_util:set_value(<<"recipient_id">>, RecipientAccountId, J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
     API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary
-                                 ,?SEND_MESSAGE/binary, <<"/">>/binary, (z_convert:to_binary(RecipientAccountId))/binary>>;
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary
-                                 ,?SEND_MESSAGE/binary, <<"/">>/binary, (z_convert:to_binary(RecipientAccountId))/binary>>
+        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>;
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>
     end,
 lager:info("IAM API_String: ~p",[API_String]),
 lager:info("IAM MK_DATABAG: ~p",[?MK_DATABAG(NewDoc)]),
-    crossbar_account_send_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
-
-rs_kz_all_customers_udate(AccountId, Context) ->
-    CurrNotifyDoc = kz_notification_info(<<"customer_update">>, Context),
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], modkazoo_util:get_q_bin("to", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"email_addresses">>], emails_list("input_cc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"type">>], modkazoo_util:get_q_bin("cc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"email_addresses">>], emails_list("input_bcc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"type">>], modkazoo_util:get_q_bin("bcc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"from">>], modkazoo_util:get_q_bin("from", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"subject">>], modkazoo_util:get_q_bin("subject", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_convert:to_binary(z_context:get_q("text_body", Context)), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(z_convert:to_binary(z_context:get_q("html_body", Context))), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"user_type">>], modkazoo_util:get_q_bin("selected_user", Context), J) end
-               ],
-    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?SEND_MESSAGE/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?SEND_MESSAGE/binary>>
-    end,
     crossbar_account_send_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
 
 kz_list_account_lists(Context) ->
