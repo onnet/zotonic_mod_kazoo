@@ -38,7 +38,7 @@ msgid "CC"
 msgstr "Копия"
 
 msgid "Save Click-to-Call"
-msgstr "Созранить правило"
+msgstr "Сохранить правило"
 
 msgid "Add Click-to-Call"
 msgstr "Добавить правило заказа обратного звонка"
