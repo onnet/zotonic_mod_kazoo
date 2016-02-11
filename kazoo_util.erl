@@ -3446,7 +3446,10 @@ list_system_dialplans(Context) ->
         'true' -> <<?V2/binary, ?DIALPLANS/binary>>; 
         'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?DIALPLANS/binary>>
     end,
-    crossbar_account_request('get', API_String, [], Context).
+    case crossbar_account_request('get', API_String, [], Context) of
+        <<>> -> {[]};
+        JObj -> JObj
+    end.
 
 list_system_dialplans_names(Context) -> 
     Dialplans = modkazoo_util:to_proplist(list_system_dialplans(Context)),
