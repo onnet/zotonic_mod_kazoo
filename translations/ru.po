@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Dialplan"
+msgstr "План набора"
 
 msgid "Send message"
 msgstr "Отправить сообщение"

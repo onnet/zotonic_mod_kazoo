@@ -90,6 +90,14 @@
             {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list prefix="user_" postfix="_bootsearch" %}
         </div>
     </div>
+    <!-- Dialplan -->
+    <div class="row">
+        <div class="col-xs-5"><label class="edit_user_label">{_ Dialplan _}</label></div>
+        <div id="user_dial_plansystem" class="col-xs-5">
+            {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name=["dial_plan","system"]
+                                                options=m.kazoo.list_system_dialplans_names prefix="user_" postfix="_bootsearch" %}
+        </div>
+    </div>
     <!-- MOH -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Music on hold _}</label></div>

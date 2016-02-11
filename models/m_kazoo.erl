@@ -430,6 +430,9 @@ m_find_value(rs_customer_update_text, _M, Context) ->
             Text
     end;
 
+m_find_value(list_system_dialplans_names, _M, Context) ->
+    kazoo_util:list_system_dialplans_names(Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

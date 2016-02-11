@@ -47,6 +47,15 @@
             </th>
         </tr>
         <tr>
+            <th style="width: 40%;"class="text-center1">{_ Dialplan _}</th>
+            <th class="text-left">
+             <span id="account_dial_plansystem">
+                {% include "_show_field_select.tpl" type="account" doc_id="_no_need_" field_name=["dial_plan","system"] 
+                                                    options=m.kazoo.list_system_dialplans_names prefix="account_" postfix="_bootsearch" %}
+             </span>
+            </th>
+        </tr>
+        <tr>
             <th class="text-center1">{_ Outbound routing _}</th>
             <th class="text-left">
              <span id="account_outbound_routing_selection">

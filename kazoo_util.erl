@@ -263,6 +263,8 @@
     ,kz_notification_toggle/3
     ,rs_kz_customer_udate/3
     ,rs_kz_all_customers_udate/2
+    ,list_system_dialplans/1
+    ,list_system_dialplans_names/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -511,6 +513,8 @@ kz_adminget_acc_doc_by_account_id(AccountId, Context) ->
 kz_set_acc_doc(K, V, Context) ->
     kz_set_acc_doc(K, V, z_context:get_session('kazoo_account_id', Context), Context).
 
+kz_set_acc_doc(["dial_plan","system"], V, AccountId, Context) ->
+    kz_set_acc_doc([<<"dial_plan">>,<<"system">>], [z_convert:to_binary(V)], AccountId, Context);
 kz_set_acc_doc(K, V, AccountId, Context) ->
     CurrDoc = kz_get_acc_doc_by_account_id(AccountId, Context),
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
@@ -541,6 +545,8 @@ kz_set_user_doc(K, V, Context) ->
     OwnerId = z_context:get_session('kazoo_owner_id', Context),
     kz_set_user_doc(K, V, OwnerId, Context).
 
+kz_set_user_doc(["dial_plan","system"], V, OwnerId, Context) ->
+    kz_set_user_doc([<<"dial_plan">>,<<"system">>], [z_convert:to_binary(V)], OwnerId, Context);
 kz_set_user_doc(K, V, OwnerId, Context) ->
     CurrDoc = kz_get_user_doc(OwnerId, Context),
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
@@ -577,6 +583,8 @@ kz_get_device_doc(DeviceId, Context) ->
         'true' -> []
     end.
 
+kz_set_device_doc(["dial_plan","system"], V, DeviceId, Context) ->
+    kz_set_device_doc([<<"dial_plan">>,<<"system">>], [z_convert:to_binary(V)], DeviceId, Context);
 kz_set_device_doc(K, V, DeviceId, Context) ->
     CurrDoc = kz_get_device_doc(DeviceId, Context),
     NewDoc = case V of
@@ -3262,8 +3270,6 @@ rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
         'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>;
         'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>
     end,
-lager:info("IAM API_String: ~p",[API_String]),
-lager:info("IAM MK_DATABAG: ~p",[?MK_DATABAG(NewDoc)]),
     crossbar_account_send_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
 
 kz_list_account_lists(Context) ->
@@ -3434,4 +3440,22 @@ kz_notification_toggle(State, NotificationId, Context) ->
         _ -> 'ok'
     end.
 
-% list_system_dialplans(Context)
+list_system_dialplans(Context) -> 
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    API_String = case kz_current_context_superadmin(Context) of
+        'true' -> <<?V2/binary, ?DIALPLANS/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?DIALPLANS/binary>>
+    end,
+    crossbar_account_request('get', API_String, [], Context).
+
+list_system_dialplans_names(Context) -> 
+    Dialplans = modkazoo_util:to_proplist(list_system_dialplans(Context)),
+    lists:usort(lists:foldl(fold_dialplan_names(), [], Dialplans)).
+
+fold_dialplan_names() ->
+    fun({Key, Val}, Acc) when is_list(Val) ->
+        lists:foldl(fun(ValElem, A) -> [modkazoo_util:get_value(<<"name">>, ValElem)] ++ A end, Acc, Val);
+       ({Key, Val}, Acc) ->
+        [modkazoo_util:get_value(<<"name">>, Val)] ++ Acc
+    end.
+
