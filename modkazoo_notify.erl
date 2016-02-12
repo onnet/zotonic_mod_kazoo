@@ -90,9 +90,7 @@ rs_send_message(Context) ->
             ,{accountname, modkazoo_util:get_value(<<"name">>, RecipientAccountDoc)}
            ],
 
-    rs_send_users_update(RecipientsList, ModHTML, ModText, Vars, Context),
-    lager:info("All variables: ~p", [z_context:get_q_all(Context)]),
-    lager:info("IAM RecipientsList ~p", [RecipientsList]).
+    rs_send_users_update(RecipientsList, ModHTML, ModText, Vars, Context).
 
 rs_send_users_update([], _, _, _, _) ->
     'ok';
