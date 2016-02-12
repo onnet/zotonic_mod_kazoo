@@ -34,7 +34,7 @@
             <select id="timeout" name="timeout" class="form-control-onnet">
               <option value="1000" {% if menu[1]["timeout"] == "1000" %}selected{% endif %}>1</option>
               <option value="2000" {% if menu[1]["timeout"] == "2000" %}selected{% endif %}>2</option>
-              <option value="3000" {% if menu[1]["timeout"] == "3000" %}selected{% endif %}>3</option>
+              <option value="3000" {% if menu[1]["timeout"] == "3000" or not menu[1]["timeout"] %}selected{% endif %}>3</option>
               <option value="4000" {% if menu[1]["timeout"] == "4000" %}selected{% endif %}>4</option>
               <option value="5000" {% if menu[1]["timeout"] == "5000" %}selected{% endif %}>5</option>
               <option value="6000" {% if menu[1]["timeout"] == "6000" %}selected{% endif %}>6</option>
