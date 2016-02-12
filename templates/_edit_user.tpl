@@ -5,6 +5,7 @@
   <li><a href="#callerid" role="tab" data-toggle="tab">{_ CID _}</a></li>
   <li><a href="#diversion" role="tab" data-toggle="tab">{_ Diversion _}</a></li>
   <li><a href="#password" role="tab" data-toggle="tab">{_ Password _}</a></li>
+  <li><a href="#devices" role="tab" data-toggle="tab">{_ Devices _}</a></li>
   <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
 </ul>
 
@@ -23,6 +24,9 @@
   </div>
   <div class="tab-pane fade" id="password">
     {% include "admin_portal_user_password.tpl" %}
+  </div>
+  <div class="tab-pane fade" id="devices">
+    {% include "admin_portal_user_devices_lazy.tpl" %}
   </div>
   <div class="tab-pane fade" id="restrictions">
     {% include "admin_portal_user_restrictions.tpl" %}

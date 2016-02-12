@@ -137,6 +137,9 @@ m_find_value(kz_list_account_devices_short, _M, Context) ->
 m_find_value(kz_list_user_devices, _M, Context) ->
     kazoo_util:kz_list_user_devices(Context);
 
+m_find_value({kz_list_user_devices, [{owner_id, OwnerId}]}, _M, Context) ->
+    kazoo_util:kz_list_user_devices(OwnerId, Context);
+
 m_find_value(kz_list_account_vmboxes, _M, Context) ->
     kazoo_util:kz_list_account_vmboxes(Context);
 

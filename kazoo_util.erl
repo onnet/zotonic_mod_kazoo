@@ -41,6 +41,7 @@
     ,kz_channel_transfer/4
     ,kz_channel_eavesdrop/5
     ,kz_list_user_devices/1
+    ,kz_list_user_devices/2
     ,kz_get_device_doc/2
     ,kz_set_device_doc/4
     ,kz_list_account_vmboxes/1
@@ -984,6 +985,9 @@ kz_list_account_devices(Context) ->
 
 kz_list_user_devices(Context) ->
     Owner_Id = z_context:get_session('kazoo_owner_id', Context),
+    kz_list_user_devices(Owner_Id, Context).
+
+kz_list_user_devices(Owner_Id, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, <<"?">>/binary, ?FILTER_OWNER/binary, Owner_Id/binary>>,
     crossbar_account_request('get', API_String, [], Context).
