@@ -20,7 +20,12 @@
 <span id="pwmatch" class="fa fa-remove" style="color:#FF0004;"></span> {_ Passwords match _}
 </div>
 </div>
-{% button class="col-xs-12 btn btn-zprimary mt-1 mb-1" text=_"Change Password"  action={script script="mypwdsubmit()"} %}
+{% button class="col-xs-12 btn btn-zprimary mt-1" text=_"Change password"  action={script script="mypwdsubmit()"} %}
+{% button class="col-xs-12 btn btn-zalarm mt-1 mb-1" text=_"Reset and email password"
+                                     action={confirm text=_"Do you really want to reset password?"
+                                                     action={postback postback={reset_password username=user_doc["username"]} delegate="mod_kazoo"}
+                                            }
+%}
 </form>
 </div><!--/col-sm-6-->
 </div><!--/row-->

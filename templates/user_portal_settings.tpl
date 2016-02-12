@@ -6,6 +6,7 @@
         action={ toggle target="arrow_right_"++#dtid }
         action={ toggle target="arrow_down_"++#dtid }
         action={ toggle target="btn_"++#dtid }
+        action={ toggle target="pwdbtn_"++#dtid }
         action={ postback postback={trigger_innoui_widget arg="user_settings_widget_opened" } delegate="mod_kazoo" }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
@@ -17,8 +18,12 @@
     {{ headline }}
     {% if not m.kazoo[{ui_element_opened element="user_settings_widget_opened"}] %}
         {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right display_none" text=_"submit" action={submit target="user_settings_form_form"} %}
+        {% button id="pwdbtn_"++#dtid class="btn btn-xs btn-onnet pull-right display_none" text=_"change password"
+                                      action={dialog_open title=_"Change password" template="_change_user_password.tpl"} %}
     {% else %}
         {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right" text=_"submit" action={submit target="user_settings_form_form"} %}
+        {% button id="pwdbtn_"++#dtid class="btn btn-xs btn-onnet pull-right" text=_"change password"
+                                      action={dialog_open title=_"Change password" template="_change_user_password.tpl"} %}
     {% endif %}
 {% endblock %}
 

@@ -23,7 +23,7 @@
     {% include "admin_portal_user_call_forward.tpl" %}
   </div>
   <div class="tab-pane fade" id="password">
-    {% include "admin_portal_user_password.tpl" %}
+    {% include "_change_user_password.tpl" %}
   </div>
   <div class="tab-pane fade" id="devices">
     {% include "admin_portal_user_devices_lazy.tpl" %}

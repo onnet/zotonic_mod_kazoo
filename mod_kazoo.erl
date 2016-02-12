@@ -118,6 +118,18 @@ event({submit,{forgottenpwd,[]},"password_recovery_page_form","password_recovery
         Answer -> z_render:growl(?__(Answer, Context), Context)
     end;
 
+event({postback,{reset_password,[{username,FormUsername}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    AccountName = kazoo_util:kz_account_doc_field(<<"name">>, AccountId, Context),
+    Username = case FormUsername of
+                   'undefined' -> kazoo_util:kz_user_doc_field(<<"username">>, Context);
+                    FormUsername -> FormUsername
+               end,
+    case kazoo_util:password_recovery(Username, AccountName, Context) of
+        <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
+        Answer -> z_render:growl(?__(Answer, Context), Context)
+    end;
+
 event({postback,rate_seek,_,_}, Context) ->
     Number = z_convert:to_binary(re:replace(z_context:get_q("rate_seek",Context), "[^0-9]", "", [global, {return, list}])),
     case kazoo_util:rate_number(Number, Context) of
