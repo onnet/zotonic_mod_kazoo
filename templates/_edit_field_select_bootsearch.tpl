@@ -2,9 +2,9 @@
   {% with m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name}] as current_value %}
   {% for option in options %}
     {% if option[1]|is_list %}
-        <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>{{ option[2] }}</option>
+        <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>{{ option[2]|vartrans }}</option>
     {% else %}
-        <option value="{{ option }}" {% if option == current_value %}selected{% endif %}>{{ option }}</option>
+        <option value="{{ option }}" {% if option == current_value %}selected{% endif %}>{{ option|vartrans }}</option>
     {% endif %}
   {% endfor %}
   {% endwith %}
