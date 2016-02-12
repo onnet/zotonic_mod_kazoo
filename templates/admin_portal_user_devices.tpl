@@ -12,7 +12,6 @@
             <th style="text-align: center;">{_ Name _}</th>
             <th style="text-align: center;">{_ IP address _}</th>
             <th style="text-align: center;">{_ Agent _}</th>
-            <th style="text-align: center;">{_ Info _}</th>
         </tr>
     </thead>
     <tbody>
@@ -44,14 +43,6 @@
             <td style="text-align: center;">{{ device["name"] }}</td>
             <td style="text-align: center;">{% if device_registered %}{{ device_details[1]["contact_ip"] }}{% else %}-{% endif %}</td>
             <td style="text-align: center;">{% if device_registered %}{{ device_details[1]["user_agent"] }}{% else %}-{% endif %}</td>
-            {% wire id="info_"++device["id"] action={ dialog_open title=_"Registration details" template="_details.tpl" arg=device_details } %}
-            <td style="text-align: center;">
-              {% if device_registered %}
-                <i id="info_{{ device["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-              {% else %}
-                -
-              {% endif %}
-            </td>
         </tr>
         {% endwith %}
         {% endwith %}
@@ -65,7 +56,7 @@
 var oTable = $('#admin_portal_user_devices_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
-"aaSorting": [[ 0, "desc" ]],
+"aaSorting": [[ 0, "asc" ]],
 "aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
 "iDisplayLength" : 5,
 "oLanguage" : {
