@@ -25,11 +25,11 @@ curl -v -X POST {{ m.kazoo[{kz_c2call_hyperlink c2call_id=c2call_id}] }} -d '{"d
 
 <style type="text/css">
     .form-jquery {display:none; width:100%; height: 122%; position: absolute; top: -22%; left: 0; background-color: rgba(0, 0, 0, 0.7);}
-    .form-jquery .form-group {width:470px; height: 130px; margin: 15% auto; border-radius: 10px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
+    .form-jquery .form-group {width:470px; height: 130px; margin: 15% auto; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
     .form-jquery .row p {padding: 10px 10px; text-align: center;}
     .form-jquery .form-jquery-close {cursor: pointer; display:block; width:10px; height: 10px; float: right;}
     .form-jquery-succ {display:none; width:100%; height: 122%; position: absolute; top: -22%; left: 0; background-color: rgba(0, 0, 0, 0.7);}
-    .form-jquery-succ .form-group {width:470px; height: 130px; margin: 15% auto; border-radius: 10px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
+    .form-jquery-succ .form-group {width:470px; height: 130px; margin: 15% auto; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
     .form-jquery-succ .row p {padding: 10px 10px; text-align: center;}
     .form-jquery-succ .row {margin:33px 0;}
     .form-jquery-succ .form-jquery-close {cursor: pointer; display:block; width:10px; height: 10px; float: right;}
@@ -64,11 +64,11 @@ curl -v -X POST {{ m.kazoo[{kz_c2call_hyperlink c2call_id=c2call_id}] }} -d '{"d
 <pre>
 &lt;style type="text/css"&gt;
     .form-jquery {display:none; width:100%; height: 122%; position: absolute; top: -22%; left: 0; background-color: rgba(0, 0, 0, 0.7);}
-    .form-jquery .form-group {width:470px; height: 130px; margin: 15% auto; border-radius: 10px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
+    .form-jquery .form-group {width:470px; height: 130px; margin: 15% auto; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
     .form-jquery .row p {padding: 10px 10px; text-align: center;}
     .form-jquery .form-jquery-close {cursor: pointer; display:block; width:10px; height: 10px; float: right;}
     .form-jquery-succ {display:none; width:100%; height: 122%; position: absolute; top: -22%; left: 0; background-color: rgba(0, 0, 0, 0.7);}
-    .form-jquery-succ .form-group {width:470px; height: 130px; margin: 15% auto; border-radius: 10px; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
+    .form-jquery-succ .form-group {width:470px; height: 130px; margin: 15% auto; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 10px;}
     .form-jquery-succ .row p {padding: 10px 10px; text-align: center;}
     .form-jquery-succ .row {margin:33px 0;}
     .form-jquery-succ .form-jquery-close {cursor: pointer; display:block; width:10px; height: 10px; float: right;}
