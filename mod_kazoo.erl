@@ -401,8 +401,37 @@ event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName
     end;
 
 event({submit,passwordForm,_,_}, Context) ->
-    _ = kazoo_util:kz_set_user_doc(<<"password">>, z_convert:to_binary(z_context:get_q("password1", Context)), z_convert:to_binary(z_context:get_q("chpwd_user_id", Context)), Context),
-    z_render:growl(?__("Password changed", Context), Context);
+    lager:info("passwordForm event variables: ~p", [z_context:get_q_all(Context)]),
+  try
+    case z_context:get_q("username",Context) of
+        [] -> 
+            _ = kazoo_util:kz_set_user_doc(<<"password">>, z_convert:to_binary(z_context:get_q("password1", Context))
+                                           ,z_convert:to_binary(z_context:get_q("chpwd_user_id", Context))
+                                           ,Context),
+            z_render:growl(?__("Password changed", Context), Context);
+        Username ->
+            {{ok, _}, _} = validator_base_email:validate(email, 2, Username, [], Context),
+            case z_context:get_q("email",Context) of
+                Username -> 'ok';
+                _ -> throw({'error', 'emails_not_equal'})
+            end,
+            _ = kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context),
+    %         Routines = [fun(J) -> z_render:wire([{hide, [{target, "save_user_creds_btn"}]}], J) end
+    %                    ,fun(J) -> z_render:wire([{hide, [{target, "reset_password_to_tandom_btn"}]}], J) end
+    %                    ,fun(J) -> z_render:wire([{show, [{target, "close_user_creds_window_btn"}]}], J) end
+    %                    ,fun(J) -> z_render:growl(?__("Password changed", J), J) end],
+    %         lists:foldl(fun(F, J) -> F(J) end, Context, Routines)
+            mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+            z_render:dialog_close(z_render:growl(?__("User cedentials changed", Context), Context))
+    end
+  catch
+      error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
+      error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
+      throw:{error,emails_not_equal} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
+      E1:E2 ->
+          lager:info("Err ~p:~p", [E1, E2]),
+          z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
+  end;
 
 event({postback,{delete_user,[{user_id,UserId}]},_,_}, Context) ->
     _ = kazoo_util:delete_user(UserId, Context),

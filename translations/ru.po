@@ -4,32 +4,32 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to reset password?"
+msgstr "Вы действительно хотите сбросить пароль?"
 
-msgid ""
-msgstr ""
+msgid "Back to user's credentials change"
+msgstr "Вернуться к смене пароля"
 
-msgid ""
-msgstr ""
+msgid "Close window"
+msgstr "Закрыть окно"
 
-msgid ""
-msgstr ""
+msgid "Digits"
+msgstr "Цифры"
 
-msgid ""
-msgstr ""
+msgid "Enter an email address here"
+msgstr "Введите Ваш email"
 
-msgid ""
-msgstr ""
+msgid "Enter an email address for new login name or leave blank to keep an existing one"
+msgstr "Введите новый email для использования в качестве логина и уведомлений или оставьте поле пустым"
 
-msgid ""
-msgstr ""
+msgid "Enter new password"
+msgstr "Введите новый пароль"
 
-msgid ""
-msgstr ""
+msgid "Save new user credentials"
+msgstr "Сохранить новые реквизиты доступа"
 
-msgid ""
-msgstr ""
+msgid "Reset password to random and email to owner"
+msgstr "Сгенерировать пароль и отправить на email пользователя"
 
 msgid "Reset and email password"
 msgstr "Сгенерировать и отправить на email"
@@ -749,7 +749,7 @@ msgid "Lowercase letters"
 msgstr "Строчные буквы"
 
 msgid "10 Characters long"
-msgstr "10 симвоов длинной"
+msgstr "10 симвоов"
 
 msgid "New password"
 msgstr "Новый пароль"

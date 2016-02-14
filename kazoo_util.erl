@@ -53,6 +53,7 @@
     ,is_kazoo_account_admin/1
     ,set_vm_message_folder/4
     ,password_recovery/3
+    ,change_credentials/4
     ,current_account_credit/1
     ,current_account_credit/2
     ,kz_check_device_registration/2
@@ -1117,6 +1118,20 @@ password_recovery(Username, AccountName, Context) ->
                   ]}
               }]},
     crossbar_noauth_request('put', API_String, DataBag, Context). 
+
+change_credentials(Username, Password, OwnerId, Context) ->
+    CurrDoc = kz_get_user_doc(OwnerId, Context),
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"username">>], z_convert:to_binary(Username), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"email">>], z_convert:to_binary(Username), J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"password">>], z_convert:to_binary(Password), J) end],
+    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
+    Account_Id = z_context:get_session('kazoo_account_id', Context),
+    case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of
+        'false' ->
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, <<"/">>/binary, (z_convert:to_binary(OwnerId))/binary>>,
+            crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
+        'true' -> []
+    end.
 
 current_account_credit(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -3460,9 +3475,9 @@ list_system_dialplans_names(Context) ->
     lists:usort(lists:foldl(fold_dialplan_names(), [], Dialplans)).
 
 fold_dialplan_names() ->
-    fun({Key, Val}, Acc) when is_list(Val) ->
+    fun({_, Val}, Acc) when is_list(Val) ->
         lists:foldl(fun(ValElem, A) -> [modkazoo_util:get_value(<<"name">>, ValElem)] ++ A end, Acc, Val);
-       ({Key, Val}, Acc) ->
+       ({_, Val}, Acc) ->
         [modkazoo_util:get_value(<<"name">>, Val)] ++ Acc
     end.
 
