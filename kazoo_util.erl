@@ -685,7 +685,7 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                     lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
                     lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
                     lager:info("crossbar_account_request Verb: ~p", [Verb]),
-                    Default
+                    error_return(ReturnCode, Body, Default)
             end;
         E -> 
             lager:info("crossbar_account_request Error: ~p", [E]),
@@ -693,6 +693,12 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
             lager:info("crossbar_account_request Error API_String: ~p", [API_String]),
             lager:info("crossbar_account_request Error DataBag: ~p", [DataBag]),
             Default
+    end.
+
+error_return(ReturnCode, Body, Default) ->
+    case Default of
+        'return_error' -> {'error', ReturnCode, Body};
+        _ -> Default
     end.
 
 crossbar_account_attachment_request(Verb, API_String, DataBag, Context) ->
@@ -1129,7 +1135,7 @@ change_credentials(Username, Password, OwnerId, Context) ->
     case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' ->
             API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, <<"/">>/binary, (z_convert:to_binary(OwnerId))/binary>>,
-            crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
+            crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context, 'return_error');
         'true' -> []
     end.
 

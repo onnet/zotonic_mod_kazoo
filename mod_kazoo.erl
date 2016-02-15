@@ -415,7 +415,8 @@ event({submit,passwordForm,_,_}, Context) ->
                 Username -> 'ok';
                 _ -> throw({'error', 'emails_not_equal'})
             end,
-            _ = kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context),
+            Res = kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context),
+lager:info("IAM Res: ~p",[Res]),
     %         Routines = [fun(J) -> z_render:wire([{hide, [{target, "save_user_creds_btn"}]}], J) end
     %                    ,fun(J) -> z_render:wire([{hide, [{target, "reset_password_to_tandom_btn"}]}], J) end
     %                    ,fun(J) -> z_render:wire([{show, [{target, "close_user_creds_window_btn"}]}], J) end
