@@ -78,6 +78,7 @@ event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
       error:{badmatch, []} -> z_render:growl_error(?__("Please accept our Terms of Service and Privacy Policy",Context), Context);
       error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
       throw:{error,emails_not_equal} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
+      throw:{error,account_name_already_in_use} -> z_render:growl_error(?__("Account name already in use",Context), Context);
       E1:E2 ->
           lager:info("Err ~p:~p", [E1, E2]), 
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)

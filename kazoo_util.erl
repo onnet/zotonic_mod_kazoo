@@ -818,7 +818,10 @@ create_kazoo_account(Context) ->
         'undefined' -> {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context);
         _ -> {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, [], jiffy:encode(DataBag), Context)
     end,
-    CreatedUserAccountId = modkazoo_util:get_value([<<"data">>,<<"id">>], jiffy:decode(Body)),
+    CreatedUserAccountId =  case modkazoo_util:get_value([<<"data">>,<<"id">>], jiffy:decode(Body)) of
+                                'undefined' -> throw({'error', 'account_name_already_in_use'});
+                                 AccId -> AccId
+                            end,
     UserPassword = modkazoo_util:rand_hex_binary(10),
     create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
     send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context),

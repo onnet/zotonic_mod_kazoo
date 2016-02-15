@@ -111,7 +111,7 @@ gcapture_check(Context) ->
 process_signup_form(Context) ->
     {'new_account_id', AccountId} = kazoo_util:create_kazoo_account(Context),
     spawn('kazoo_util', 'kz_create_default_callflow_sec', [20000, AccountId, Context]),
- %   _ = kazoo_util:add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), AccountId, Context),
+%   _ = kazoo_util:add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), AccountId, Context),
     case z_context:get_q("rs_sign_up",Context) of
         'undefined' -> z_render:update("sign_up_div", z_template:render("_registration_completed.tpl", [], Context), Context);
         _ -> 

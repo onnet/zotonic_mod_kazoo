@@ -16,8 +16,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Account name already exists"
+msgstr "Аккаунт с таким именем уже существует"
 
 msgid "In order to replace email address change username"
 msgstr "Для того, чтобы изменить email, поменяйте имя пользователя"
