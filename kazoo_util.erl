@@ -103,6 +103,7 @@
     ,valid_card_exists/1
     ,is_creditable/1
     ,process_purchase_number/2
+    ,get_account_timezone/1
     ,get_user_timezone/1
     ,may_be_get_timezone/1
     ,is_service_plan_applied/1
@@ -804,7 +805,7 @@ create_kazoo_account(Context) ->
                      }
                     ,{<<"timezone">>,case m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context) of
                                          'undefined' -> <<"Europe/London">>;
-                                          Lang -> z_convert:to_binary(Lang)
+                                          TZ -> z_convert:to_binary(TZ)
                                       end
                      }
                     ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
@@ -899,7 +900,7 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
                     {<<"vm_to_email_enabled">>,true},
                     {<<"fax_to_email_enabled">>,true},
                     {<<"verified">>,false},
-                    {<<"timezone">>,<<"Europe/London">>},
+                    {<<"timezone">>,get_account_timezone(Context)},
                     {<<"record_call">>,false}
                    ]}
                }]},
@@ -1471,6 +1472,12 @@ is_creditable(Context) ->
 kz_get_user_timezone(Context) ->
     case kz_user_doc_field(<<"timezone">>, Context) of
         'undefined' -> kz_account_doc_field(<<"timezone">>, Context);
+        Timezone -> Timezone
+    end.
+
+get_account_timezone(Context) ->
+    case kz_account_doc_field(<<"timezone">>, Context) of
+        'undefined' -> m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
         Timezone -> Timezone
     end.
 

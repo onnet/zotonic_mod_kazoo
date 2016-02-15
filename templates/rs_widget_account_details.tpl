@@ -22,13 +22,19 @@
                             {% else %}<span class="zalarm">{_ Blocked _}{% endif %}</span>
             </th>
         </tr>
-        {% with m.notifier.first[{account_balance numbers=m.kazoo[{get_acc_numbers account_id=account_id}] }] as account_balance %}
-        {% if account_balance and not account_doc[1]["is_reseller"] %}
+        {% with m.notifier.first[{account_balance numbers=m.kazoo[{get_acc_numbers account_id=account_id}] }] as account_data %}
+        
+        {% if account_data[1] and not account_doc[1]["is_reseller"] %}
         <tr>
             <th>{_ Current balance _}</th>
-            <th>{% if not account_balance|match:"-" %}<span class="zprimary">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_balance }}</span>
-                            {% else %}<span class="zalarm">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_balance }}</span>{% endif %}
+            <th>{% if not account_data[1]|match:"-" %}<span class="zprimary">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_data[1] }}</span>
+                            {% else %}<span class="zalarm">{{ m.config.mod_kazoo.local_currency_sign.value }} {{ account_data[1] }}</span>{% endif %}
             </th>
+        </tr>
+	<tr>
+            <th colspan=2>   <span id="rs_set_lb_notify_level_tpl">
+        {% include "rs_set_lb_notify_level.tpl" uid=account_data[2] %}
+    </span></th>
         </tr>
         {% endif %}
         {% endwith %}
