@@ -59,9 +59,8 @@
                                        display: none;
                                    {% endif %}">
         <label>{_ Email Address _}:</label>
-        <input id="vm-to-email-txt" name="vm-to-email-txt" type="text"
-                                    style="text-align: center; border: 1px solid rgb(153, 153, 153); border-radius: 3px;"  
-                                    value="{{ m.kazoo[{kz_user_doc_field field1="email"}] }}"/>
+        <span class="zalarm">{{ m.kazoo[{kz_user_doc_field field1="email"}] }}</span>
+        <i class="fa fa-info-circle pointer zprimary" title="{_ In order to replace email address change username _}"></i>
     </div>
 </form>
 
