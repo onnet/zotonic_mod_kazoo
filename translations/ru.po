@@ -16,6 +16,9 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid "Account name already in use"
+msgstr "Аккаунт с таким именем уже существует"
+
 msgid "Account name already exists"
 msgstr "Аккаунт с таким именем уже существует"
 
