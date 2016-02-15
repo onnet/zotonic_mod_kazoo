@@ -417,6 +417,10 @@ event({submit,passwordForm,_,_}, Context) ->
             end,
             Res = kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context),
 lager:info("IAM Res: ~p",[Res]),
+            case Res of
+                {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
+                _ -> 'ok'
+            end, 
     %         Routines = [fun(J) -> z_render:wire([{hide, [{target, "save_user_creds_btn"}]}], J) end
     %                    ,fun(J) -> z_render:wire([{hide, [{target, "reset_password_to_tandom_btn"}]}], J) end
     %                    ,fun(J) -> z_render:wire([{show, [{target, "close_user_creds_window_btn"}]}], J) end
@@ -428,7 +432,8 @@ lager:info("IAM Res: ~p",[Res]),
   catch
       error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
       error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
-      throw:{error,emails_not_equal} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
+      throw:{error,'emails_not_equal'} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
+      throw:{error,'username_already_in_use'} -> z_render:growl_error(?__("Username/Email already in use",Context), Context);
       E1:E2 ->
           lager:info("Err ~p:~p", [E1, E2]),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)

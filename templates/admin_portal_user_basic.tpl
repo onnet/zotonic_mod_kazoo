@@ -37,10 +37,10 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Email _}</label></div>
         <div id="email" class="col-xs-5">
-            {% wire id="edit_email" type="click" action={ update target="email" template="_edit_field.tpl" type="user" doc_id=user_id field_name="email" } %}
+            {# wire id="edit_email" type="click" action={ update target="email" template="_edit_field.tpl" type="user" doc_id=user_id field_name="email" } #}
             <span>
                 {{ user_doc["email"] }}
-                <i id="edit_email" class="fa fa-edit pointer" title="Edit field"></i>
+                <i id="edit_email" class="fa fa-info-circle pointer" title="{_ In order to replace email address change username _}"></i>
             </span>
         </div>
     </div>
