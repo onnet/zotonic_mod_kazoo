@@ -416,9 +416,7 @@ event({submit,passwordForm,_,_}, Context) ->
                 Username -> 'ok';
                 _ -> throw({'error', 'emails_not_equal'})
             end,
-            Res = kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context),
-lager:info("IAM Res: ~p",[Res]),
-            case Res of
+            case kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context) of
                 {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
                 _ -> 'ok'
             end, 
