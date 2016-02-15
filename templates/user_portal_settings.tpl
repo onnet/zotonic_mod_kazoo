@@ -19,11 +19,11 @@
     {% if not m.kazoo[{ui_element_opened element="user_settings_widget_opened"}] %}
         {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right display_none" text=_"submit" action={submit target="user_settings_form_form"} %}
         {% button id="pwdbtn_"++#dtid class="btn btn-xs btn-onnet pull-right display_none" text=_"change password"
-                                      action={dialog_open title=_"Change password" template="_change_user_password.tpl"} %}
+                                      action={dialog_open title=_"Change password" template="_change_user_password.tpl" width="auto"} %}
     {% else %}
         {% button id="btn_"++#dtid class="btn btn-xs btn-onnet pull-right" text=_"submit" action={submit target="user_settings_form_form"} %}
         {% button id="pwdbtn_"++#dtid class="btn btn-xs btn-onnet pull-right" text=_"change password"
-                                      action={dialog_open title=_"Change password" template="_change_user_password.tpl"} %}
+                                      action={dialog_open title=_"Change password" template="_change_user_password.tpl" width="auto"} %}
     {% endif %}
 {% endblock %}
 

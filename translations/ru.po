@@ -4,6 +4,27 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "In order to replace email address change username"
+msgstr "Для того, чтобы изменить email, поменяйте имя пользователя"
+
+msgid "Username/Email already in use"
+msgstr "Пользователь/email уже используется"
+
 msgid "Do you really want to reset password?"
 msgstr "Вы действительно хотите сбросить пароль?"
 
