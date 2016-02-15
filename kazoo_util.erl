@@ -2829,8 +2829,7 @@ record_call_doc_id(Context) ->
     case lists:filter(fun(X) -> [<<"record_call">>] =:= modkazoo_util:get_value(<<"numbers">>,X) end, Cfs) of
         [] ->
             _ = create_record_call_callflow(Context),
-            NewCf = lists:filter(fun(X) -> [<<"record_call">>] =:= modkazoo_util:get_value(<<"numbers">>,X) end, Cfs),
-            modkazoo_util:get_value(<<"id">>,NewCf);
+            record_call_doc_id(Context);
         [Cf|_] -> 
             modkazoo_util:get_value(<<"id">>,Cf)
     end.
