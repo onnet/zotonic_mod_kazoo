@@ -3,7 +3,7 @@
 
 vartrans(undefined, _Context) ->
     undefined;
-vartrans([N|_]=M, Context) ->
+vartrans([N|_]=M, Context) when is_list(N)->
 	try
 	    z_trans:trans(N, Context)
 	catch
