@@ -4,11 +4,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Enter description for new number"
+msgstr "Опишите причину блокировки"
 
-msgid ""
-msgstr ""
+msgid "Enter new number"
+msgstr "Введите номер"
 
 msgid "Blacklisted numbers"
 msgstr "Список заблокированных номеров"

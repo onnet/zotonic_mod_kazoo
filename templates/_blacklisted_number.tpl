@@ -1,5 +1,5 @@
 <li id="li_{{ blacklisted_number|cleanout }}" class="list-group-item text-center_no">
-  {{ blacklisted_number }} - {{ blacklisted_description }}
+  {{ blacklisted_number }} {% if blacklisted_description %} - {{ blacklisted_description }} {% endif %}
   <input type="hidden" name="blacklisted_number" value="{{ blacklisted_number }}" />
   <input type="hidden" name="{{ blacklisted_number }}" value="{{ blacklisted_description }}" />
   {% wire id="delete_"++blacklisted_number|cleanout action={remove target="li_"++blacklisted_number|cleanout} %}
