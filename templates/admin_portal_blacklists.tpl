@@ -14,7 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"add blacklist" action={ dialog_open title=_"Add blacklist" template="_add_blacklist_dialog.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add blacklist" action={ dialog_open title=_"Add blacklist" template="_add_blacklist_dialog.tpl" width="auto" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
