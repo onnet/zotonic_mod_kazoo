@@ -2756,10 +2756,17 @@ kz_get_account_blacklist(BlacklistId, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 set_blacklist_doc(Id, Name, Nums, Context) ->
+lager:info("IAM Nums: ~p",[Nums]),
     Props =  [{<<"name">>, z_convert:to_binary(Name)}
              ,{<<"id">>, z_convert:to_binary(Id)}
-             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {z_convert:to_binary(modkazoo_util:cleanout(X)), ?EMPTY_JSON_OBJECT} end, Nums))}],
+             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {z_convert:to_binary(modkazoo_util:cleanout(X))
+                                                                ,modkazoo_util:set_value(<<"description">>, modkazoo_util:get_q_bin(X, Context), ?EMPTY_JSON_OBJECT)}
+                                                      end
+                                           ,Nums))
+              }
+             ],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
+lager:info("IAM DataBag: ~p",[DataBag]),
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case Id of
         'undefined'->

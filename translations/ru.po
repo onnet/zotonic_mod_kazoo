@@ -10,11 +10,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Blacklisted numbers"
+msgstr "Список заблокированных номеров"
 
-msgid ""
-msgstr ""
+msgid "Add new number to blacklist"
+msgstr "Добавить номер в черный список"
 
 msgid "Account name already in use"
 msgstr "Аккаунт с таким именем уже существует"

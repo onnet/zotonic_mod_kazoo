@@ -978,10 +978,14 @@ event({postback,toggle_all_calls_recording,_,_}, Context) ->
 event({postback,add_blacklisted_number,_,_},Context) ->
     case z_context:get_q("new_blacklisted_number",Context) of
         [] -> Context;
-        Number -> z_render:insert_top("blacklisted_numbers_list",z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}],Context),Context) 
+        Number -> z_render:insert_top("blacklisted_numbers_list",z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}
+                                                                                                             ,{blacklisted_description,modkazoo_util:get_q_bin("new_blacklisted_description", Context)}
+                                                                                                             ],Context),Context) 
     end;
 
 event({submit,add_new_blacklist,_,_},Context) ->
+    lager:info("add_new_blacklis event variables: ~p", [z_context:get_q_all(Context)]),
+    lager:info("IAM add_new_blacklis event variable: ~p", [z_context:get_q("+78123276261", Context)]),
     _ = kazoo_util:set_blacklist_doc(z_context:get_q("blacklist_id", Context), z_context:get_q("blacklist_name", Context), z_context:get_q_all("blacklisted_number", Context), Context),
     mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
     z_render:dialog_close(Context);
