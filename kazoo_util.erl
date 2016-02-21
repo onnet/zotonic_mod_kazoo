@@ -224,7 +224,7 @@
     ,kz_flush_registration_by_username/3
     ,kz_webhook/1
     ,filter_custom_fields/2
-    ,kz_current_context_reseller/1
+    ,kz_current_context_reseller_status/1
     ,kz_current_context_reseller_id/1
     ,kz_current_context_superadmin/1
     ,kz_callflows_numbers/1
@@ -268,6 +268,7 @@
     ,rs_kz_all_customers_udate/2
     ,list_system_dialplans/1
     ,list_system_dialplans_names/1
+    ,kz_toggle_reseller_status/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -344,6 +345,7 @@
 -define(CLICKTOCALL, <<"/clicktocall">>).
 -define(DIALPLANS, <<"/dialplans">>).
 -define(MESSAGE, <<"/message">>).
+-define(RESELLER, <<"/reseller">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 
@@ -1413,7 +1415,7 @@ purchase_number(Number, Context) ->
     crossbar_account_request('put', API_String, DataBag, Context).
 
 process_purchase_number(Number, Context) ->
-    case kazoo_util:purchase_number(Number, Context) of
+    case purchase_number(Number, Context) of
         <<>> ->
             Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
             Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
@@ -1894,7 +1896,7 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                     Context2 = z_render:dialog_close(Context),
                     z_render:growl(?__("No saved brunch", Context2), Context2);
                 ParkedBranch ->
-                    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-"), ParkedBranch, Context),
+                    _ = cf_set_session('current_callflow', z_string:split(ElementId,"-"), ParkedBranch, Context),
                     mod_signal:emit({update_cf_builder_area, []}, Context),
                     z_render:dialog_close(Context)
             end;
@@ -1906,8 +1908,8 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                                                                         ,{switch,Switch}]
                                                         ,Context)
                                      ,Context),
-            kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], z_convert:to_binary(ToolName), Context),
-            kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
+            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], z_convert:to_binary(ToolName), Context),
+            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
             z_render:dialog(?__("Select ",Context1), "_cf_select_"++ToolName++".tpl", [{element_id, ElementId},{tool_name,ToolName}], Context1)
     end.
 
@@ -2150,7 +2152,7 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
                 "flow0" -> "";
                 _ -> "_"
             end,
-            kazoo_util:cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{switch,Switch}],Context)
+            cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{switch,Switch}],Context)
     end.
 
 cf_available_keys(KeysList,ElementPath,Context) ->
@@ -2741,7 +2743,7 @@ delete_featurecode_dynamic_cid(Context) ->
     crossbar_account_request('delete', API_String, [], Context).
 
 toggle_blacklist_member(BlacklistId,Context) ->
-    Blacklists = case kazoo_util:kz_account_doc_field(<<"blacklists">>, Context) of
+    Blacklists = case kz_account_doc_field(<<"blacklists">>, Context) of
         'undefined' -> [];
         Value -> Value
     end,
@@ -2756,7 +2758,6 @@ kz_get_account_blacklist(BlacklistId, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 set_blacklist_doc(Id, Name, Nums, Context) ->
-lager:info("IAM Nums: ~p",[Nums]),
     Props =  [{<<"name">>, z_convert:to_binary(Name)}
              ,{<<"id">>, z_convert:to_binary(Id)}
              ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {z_convert:to_binary(modkazoo_util:cleanout(X))
@@ -2766,7 +2767,6 @@ lager:info("IAM Nums: ~p",[Nums]),
               }
              ],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
-lager:info("IAM DataBag: ~p",[DataBag]),
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case Id of
         'undefined'->
@@ -2994,7 +2994,7 @@ list_trunks_realm(AccountId, Context) ->
     [get_trunk_doc_field([<<"account">>,<<"auth_realm">>], TrunkId, AccountId, Context) || TrunkId <- list_account_trunks(AccountId, Context)].
 
 sync_trunkstore_realm(TrunkId, AccountId, Context) ->
-    AccountRealm = kazoo_util:get_account_realm(AccountId, Context),
+    AccountRealm = get_account_realm(AccountId, Context),
     set_trunk_doc_field([<<"account">>,<<"auth_realm">>], AccountRealm, TrunkId, AccountId, Context).
 
 sync_trunkstore_realms(AccountId, Context) ->
@@ -3080,14 +3080,18 @@ filter_custom_fields({"custom_key_" ++ T, Key}, Context) ->
 filter_custom_fields(_, _Context) ->
     fun(J) -> J end.
 
-kz_current_context_reseller(Context) ->
-    modkazoo_util:get_value(<<"is_reseller">>, kazoo_util:kz_get_acc_doc(Context)).
+kz_current_context_reseller_status(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_reseller_status(AccountId, Context).
+
+kz_reseller_status(AccountId, Context) ->
+    modkazoo_util:get_value(<<"is_reseller">>, kz_get_acc_doc_by_account_id(AccountId, Context)).
 
 kz_current_context_reseller_id(Context) ->
-    modkazoo_util:get_value(<<"reseller_id">>, kazoo_util:kz_get_acc_doc(Context)).
+    modkazoo_util:get_value(<<"reseller_id">>, kz_get_acc_doc(Context)).
 
 kz_current_context_superadmin(Context) ->
-    modkazoo_util:get_value(<<"superduper_admin">>, kazoo_util:kz_get_acc_doc(Context)).
+    modkazoo_util:get_value(<<"superduper_admin">>, kz_get_acc_doc(Context)).
 
 kz_callflows_numbers(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -3239,7 +3243,7 @@ resource(Context) ->
 super_account_id(Context) ->
     case z_context:get_session('super_account_id', Context) of
         'undefined' ->
-            {'ok', {'account_id', SuperAccountId}, {'auth_token', _}, {'crossbar', _}} = kazoo_util:kz_admin_creds(Context),
+            {'ok', {'account_id', SuperAccountId}, {'auth_token', _}, {'crossbar', _}} = kz_admin_creds(Context),
             z_context:set_session('super_account_id', SuperAccountId, Context),
             SuperAccountId;
         AccountId ->
@@ -3479,3 +3483,12 @@ fold_dialplan_names() ->
         [modkazoo_util:get_value(<<"name">>, Val)] ++ Acc
     end.
 
+kz_set_reseller_status(Verb, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?RESELLER/binary>>,
+    crossbar_account_request(Verb, API_String, [], Context).
+
+kz_toggle_reseller_status(AccountId, Context) ->
+    case kz_reseller_status(AccountId, Context) of
+        'true' -> kz_set_reseller_status('delete', AccountId, Context);
+        _ -> kz_set_reseller_status('put', AccountId, Context)
+    end.

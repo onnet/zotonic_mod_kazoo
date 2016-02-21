@@ -2,7 +2,7 @@
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ HOSTED PBX _} <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller) and m.kazoo.is_kazoo_account_admin %}
+              {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) and m.kazoo.is_kazoo_account_admin %}
                 <li><a href="/reseller_portal">{_ Reseller Portal _}</a>
                 <li><a href="/reseller_settings">{_ Reseller Settings _}</a>
               {% else %}

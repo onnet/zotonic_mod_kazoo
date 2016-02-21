@@ -344,8 +344,8 @@ m_find_value(kz_list_account_webhooks, _M, Context) ->
 m_find_value({kz_webhook_info, [{webhook_id, WebhookId}]}, _M, Context) ->
     kazoo_util:kz_webhook_info(WebhookId, Context);
 
-m_find_value(kz_current_context_reseller, _M, Context) ->
-    kazoo_util:kz_current_context_reseller(Context);
+m_find_value(kz_current_context_reseller_status, _M, Context) ->
+    kazoo_util:kz_current_context_reseller_status(Context);
 
 m_find_value(kz_current_context_superadmin, _M, Context) ->
     kazoo_util:kz_current_context_superadmin(Context);

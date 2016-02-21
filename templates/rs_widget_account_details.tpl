@@ -35,9 +35,21 @@
         {% endwith %}
         <tr>
             <th>{_ Reseller status _}</th>
-            <th>{% if account_doc[1]["is_reseller"] %}<span class="zprimary">{_ Activated _}</span>
-                            {% else %}<span class="zalarm">{_ Not provided _}{% endif %}</span>
+            <th>{% if account_doc[1]["is_reseller"] %}
+                  <span class="zprimary">{_ Activated _}</span>
+                  {% if m.kazoo.kz_current_context_superadmin %}
+                    <i id="reseller_status_toggler" class="fa fa-toggle-on pointer" style="float: right;" title="{_ Click to demote _}"></i>
+                  {% endif %}
+                {% else %}
+                  <span class="zalarm">{_ Not provided _}</span>
+                  {% if m.kazoo.kz_current_context_superadmin %}
+                    <i id="reseller_status_toggler" class="fa fa-toggle-off pointer" style="float: right;" title="{_ Click to promote _}"></i>
+                  {% endif %}
+                {% endif %}
             </th>
+            {% if m.kazoo.kz_current_context_superadmin %}
+              {% wire id="reseller_status_toggler" type="click" action={postback postback={toggle_reseller_status account_id=account_id} delegate="mod_kazoo"} %}
+            {% endif %}
         </tr>
         <tr>
             <th>{_ Numbers management _}</th>

@@ -984,8 +984,6 @@ event({postback,add_blacklisted_number,_,_},Context) ->
     end;
 
 event({submit,add_new_blacklist,_,_},Context) ->
-    lager:info("add_new_blacklis event variables: ~p", [z_context:get_q_all(Context)]),
-    lager:info("IAM add_new_blacklis event variable: ~p", [z_context:get_q("+78123276261", Context)]),
     _ = kazoo_util:set_blacklist_doc(z_context:get_q("blacklist_id", Context), z_context:get_q("blacklist_name", Context), z_context:get_q_all("blacklisted_number", Context), Context),
     mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
     z_render:dialog_close(Context);
@@ -1109,7 +1107,7 @@ event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context)
 
 event({postback,reseller_based_routing,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
-    ResellerId = case kazoo_util:kz_current_context_reseller(Context) of
+    ResellerId = case kazoo_util:kz_current_context_reseller_status(Context) of
         'true' -> z_context:get_session(kazoo_account_id, Context);
         _ -> kazoo_util:kz_current_context_reseller_id(Context)
     end,
@@ -1123,7 +1121,7 @@ event({postback,reseller_based_routing,_,_}, Context) ->
     z_render:update("account_outbound_routing_selection", z_template:render("_account_outbound_routing_selection.tpl", [], Context), Context);
 
 event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
-    ResellerId = case kazoo_util:kz_current_context_reseller(Context) of
+    ResellerId = case kazoo_util:kz_current_context_reseller_status(Context) of
         'true' -> z_context:get_session(kazoo_account_id, Context);
         _ -> kazoo_util:kz_current_context_reseller_id(Context)
     end,
@@ -1332,6 +1330,10 @@ event({submit,rs_send_message,_,_}, Context) ->
 event({submit,rs_kz_customer_udate,_,_}, Context) ->
     _ = modkazoo_notify:rs_kz_customer_udate(Context),
     z_render:dialog_close(Context);
+
+event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context) ->
+    kazoo_util:kz_toggle_reseller_status(AccountId, Context),
+    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({drag,_,_},Context) ->
     Context;
