@@ -3248,10 +3248,7 @@ super_account_id(Context) ->
 
 kz_list_account_notifications(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_notification_info(NotificationId, Context) ->
@@ -3259,10 +3256,7 @@ kz_notification_info(NotificationId, Context) ->
     kz_notification_info(NotificationId, AccountId, Context).
 
 kz_notification_info(NotificationId, AccountId, Context) ->
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_delete_notification_template(NotificationId, AccountId, Context) ->
@@ -3274,17 +3268,11 @@ kz_notification_template(ContextType, NotificationId, Context) ->
     kz_notification_template(ContextType, NotificationId, AccountId, Context).
 
 kz_notification_template(ContextType, NotificationId, AccountId, Context) ->
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
     crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContextType}], [], Context).
 
 kz_save_notification_template(ContextType, NotificationId, AccountId, MessageBody, Context) ->
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
     crossbar_account_send_request('post', API_String, ContextType, MessageBody, Context).
 
 rs_kz_all_customers_udate(AccountId, Context) ->
@@ -3307,10 +3295,7 @@ rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
                 ,fun(J) when RecipientAccountId == 'undefined' -> J; (J) -> modkazoo_util:set_value(<<"recipient_id">>, RecipientAccountId, J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>;
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>,
     crossbar_account_send_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
 
 kz_list_account_lists(Context) ->
@@ -3409,10 +3394,7 @@ sendmail_test_notification(Email, AccountId, NotificationId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary, ?PREVIEW/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary, ?PREVIEW/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary, ?PREVIEW/binary>>,
     _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
         'undefined' ->
@@ -3444,10 +3426,7 @@ kz_notifications(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
     _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
         'undefined' ->
@@ -3469,10 +3448,7 @@ kz_notification_toggle(State, NotificationId, Context) ->
     HTML = kz_notification_template("text/html", NotificationId, AccountId, Context),
     Routines = [fun(J) -> modkazoo_util:set_value([<<"enabled">>], State, J) end],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>
-    end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
     _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
         'undefined' ->
