@@ -2057,7 +2057,8 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"page_gro
     ['undefined', Name];
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"cidlistmatch">> ->
     ListId = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
-    ['undefined', ListId];
+    List = kz_get_account_list(ListId, Context),
+    [ListId, modkazoo_util:get_value(<<"name">>,List)];
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"check_cid">> ->
     case modkazoo_util:get_value(ModulePath++[<<"data">>,<<"use_absolute_mode">>],z_context:get_session('current_callflow', Context)) of
         'true' -> ['undefined', <<"Exact numbers">>];

@@ -1,6 +1,7 @@
 {% with m.kazoo[{cf_get_module_info module_name=tool_name module_path=element_id}] as this_cidlistmatch %}
 {% wire id="form_cf_select_cidlistmatch" type="submit" postback="cf_select_cidlistmatch" delegate="mod_kazoo" %}
 <form id="form_cf_select_cidlistmatch" method="post" action="postback">
+{% print this_cidlistmatch %}
    <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
