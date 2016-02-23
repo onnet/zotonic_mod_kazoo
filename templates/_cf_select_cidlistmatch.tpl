@@ -1,14 +1,13 @@
 {% with m.kazoo[{cf_get_module_info module_name=tool_name module_path=element_id}] as this_cidlistmatch %}
 {% wire id="form_cf_select_cidlistmatch" type="submit" postback="cf_select_cidlistmatch" delegate="mod_kazoo" %}
 <form id="form_cf_select_cidlistmatch" method="post" action="postback">
-{% print this_cidlistmatch %}
    <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
             <select id="match_cid_list" name="selected" class="form-control margin-bottom-xs" style="text-align:center;">
             {% for list in m.kazoo.kz_list_account_lists %}
               {% if list["list_type"] == "phone_book" %}
-                <option value="{{ list["id"] }}" {% if list["id"] == "phone_book" %}selected{% endif %}>{{ list["name"] }}</option>
+                <option value="{{ list["id"] }}" {% if list["id"] == this_cidlistmatch[1] %}selected{% endif %}>{{ list["name"] }}</option>
               {% endif %}
             {% endfor %}
             </select>
