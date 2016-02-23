@@ -734,6 +734,11 @@ event({submit,cf_select_temporal_route,_,_}, Context) ->
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","timezone"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
     z_render:dialog_close(Context);
 
+event({submit,cf_select_cidlistmatch,_,_}, Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    z_render:dialog_close(Context);
+
 event({submit,cf_select_check_cid,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], z_context:get_session('current_callflow', Context), ?EMPTY_JSON_OBJECT) of
@@ -833,8 +838,26 @@ event({submit,kz_menu,_,_},Context) ->
 event({submit,cf_select_prepend_cid,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"prepend">>, Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","caller_id_name_prefix"], z_convert:to_binary(z_context:get_q("caller_id_name_prefix", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","caller_id_number_prefix"], z_convert:to_binary(z_context:get_q("caller_id_number_prefix", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                  ,z_string:split(ElementId,"-")++["data","caller_id_name_prefix"]
+                                  ,z_convert:to_binary(z_context:get_q("caller_id_name_prefix", Context))
+                                  ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                  ,z_string:split(ElementId,"-")++["data","caller_id_number_prefix"]
+                                  ,z_convert:to_binary(z_context:get_q("caller_id_number_prefix", Context))
+                                  ,Context),
+    z_render:dialog_close(Context);
+
+event({submit,cf_select_set_cid,_,_},Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                  ,z_string:split(ElementId,"-")++["data","caller_id_name"]
+                                  ,z_convert:to_binary(z_context:get_q("caller_id_name", Context))
+                                  ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                  ,z_string:split(ElementId,"-")++["data","caller_id_number"]
+                                  ,z_convert:to_binary(z_context:get_q("caller_id_number", Context))
+                                  ,Context),
     z_render:dialog_close(Context);
 
 event({submit,kz_vmbox,_,_},Context) ->
