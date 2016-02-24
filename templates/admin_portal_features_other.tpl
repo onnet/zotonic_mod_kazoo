@@ -40,6 +40,10 @@
 		<div id="featurecode_privacy_id" class="featurecode_line">
                     {% include "_featurecode_privacy.tpl" %}
 		</div>	
+                {% wire action={connect signal={signal_featurecode_eavesdrop} action={update target="featurecode_eavesdrop_id" template="_featurecode_eavesdrop.tpl"}} %}
+		<div id="featurecode_eavesdrop_id" class="featurecode_line">
+                    {% include "_featurecode_eavesdrop.tpl" %}
+		</div>	
                 {% wire action={connect signal={signal_featurecode_dynamic_cid} action={update target="featurecode_dynamic_cid_id" template="_featurecode_dynamic_cid.tpl"}} %}
 		<div id="featurecode_dynamic_cid_id" class="featurecode_line">
                     {% include "_featurecode_dynamic_cid.tpl" %}

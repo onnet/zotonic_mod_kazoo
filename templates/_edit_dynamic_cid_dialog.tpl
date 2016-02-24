@@ -1,4 +1,5 @@
-{% with m.kazoo[{kz_get_account_prompt prompt_id=prompt_id}] as eprompt %}
+{% with m.kazoo[{kz_get_featurecode_by_name featurecode_name="dynamic_cid"}] as dynamic_cid %}
+{% with m.kazoo[{kz_get_account_callflow callflow_id=dynamic_cid[1]["id"]}] as dynamic_cid_cf %}
 <form id="form_edit_dynamic_cid_dialog" method="post" action="postback">
     <div class="form-group">
       <div class="row">
@@ -6,7 +7,9 @@
           <select id="dynamic_cid_list_id" name="dynamic_cid_list_id" class="form-control margin-bottom-xs" title="-- {_ List type _} --" style="text-align:center;">
             {% for list in m.kazoo.kz_list_account_lists %}
               {% if list["list_type"] == "dynamic_cid" %}
-                <option value="{{ list["id"] }}" {% if list["id"] == "phone_book" %}selected{% endif %}> {{ list["name"] }} - {{ list["description"] }}</option>
+                <option value="{{ list["id"] }}" {% if list["id"] == dynamic_cid_cf[1]["flow"][1]["data"][1]["id"] %}selected{% endif %}>
+                 {{ list["name"] }} - {{ list["description"] }}
+                </option>
               {% endif %}
             {% endfor %}
           </select>
@@ -28,4 +31,5 @@
       </div>
     </div>
 </form>
+{% endwith %}
 {% endwith %}
