@@ -985,7 +985,6 @@ event({postback,set_featurecode_dynamic_cid,_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({postback,set_featurecode_eavesdrop,_,_}, Context) ->
- lager:info("set_featurecode_eavesdrop event variables: ~p", [z_context:get_q_all(Context)]),
     _ = kazoo_util:set_featurecode_eavesdrop(z_context:get_q("eavesdrop_approved_list_id",Context), z_context:get_q("eavesdrop_target_list_id",Context), Context),
     mod_signal:emit({signal_featurecode_eavesdrop, []}, Context),
     z_render:dialog_close(Context);

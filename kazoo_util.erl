@@ -2642,7 +2642,13 @@ set_featurecode_eavesdrop(ApprovedGroupId, TargetGroupId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"eavesdrop_feature">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*68([0-9]{2,})$">>], J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"68">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"approved_group_id">>], z_convert:to_binary(ApprovedGroupId), J) end
+                ,fun(J) -> case ApprovedGroupId of
+                               [] -> 
+                                   modkazoo_util:delete_key([<<"flow">>,<<"data">>,<<"approved_group_id">>], J);
+                               _ -> 
+                                   modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"approved_group_id">>], z_convert:to_binary(ApprovedGroupId), J)
+                           end
+                 end
                 ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"group_id">>], z_convert:to_binary(TargetGroupId), J) end],
     update_featurecode(<<"eavesdrop_feature">>, Routines, Context).
 
