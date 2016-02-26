@@ -1,6 +1,54 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Admins only"
+msgstr "Только администраторам"
+
+msgid "All users"
+msgstr "Всем пользователям"
+
+msgid "Enter message subject here"
+msgstr "Введите заголовок сообщения"
+
+msgid "Enter sender's email adress here"
+msgstr "Введите адрес отправителя"
+
+msgid "From (email address)"
+msgstr "От (email)"
+
+msgid "Subject"
+msgstr "Заголовок"
+
+msgid "Send an update"
+msgstr "Отправить уведомление"
+
+msgid "send customers update"
+msgstr "разослать уведомление"
+
+msgid "or"
+msgstr "или"
+
+msgid "Web access restrictions setup"
+msgstr "Настройки доступа к порталу"
+
+msgid "Save ACL"
+msgstr "Сохранить настройки доступа"
+
+msgid "access restrtictions"
+msgstr "ограничение доступа"
+
 msgid "Available keys"
 msgstr "Доступные ключи"
 

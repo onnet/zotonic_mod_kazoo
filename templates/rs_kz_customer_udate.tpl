@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <label class="form-control-onnet margin-bottom-xs">{_ From (email address): _}
+          <label class="form-control-onnet margin-bottom-xs">{_ From (email address) _}:
             <input type="text" class="form-control margin-bottom-xs" id="from" name="from" placeholder="{_ Enter sender's email adress here _}"
                                                                                            value="{{ m.config.mod_kazoo.sales_email.value }}">
           </label>
@@ -24,7 +24,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <label class="form-control-onnet margin-bottom-xs">{_ Subject: _}
+          <label class="form-control-onnet margin-bottom-xs">{_ Subject _}:
             <input type="text" class="form-control margin-bottom-xs" id="subject" name="subject" placeholder="{_ Enter message subject here _}"
                                                                      value="{{ m.kazoo[{kz_notification_info notification_id="customer_update"}][1]["subject"] }}">
           </label>
@@ -34,7 +34,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <label class="form-control-onnet margin-bottom-xs">{_ HTML body: _}
+          <label class="form-control-onnet margin-bottom-xs">{_ HTML body _}:
           <script>
               tinymce.remove('#html_body');
               tinymce.init({ selector:'#html_body',
@@ -60,7 +60,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <label class="form-control-onnet margin-bottom-xs">{_ Text body: _}
+          <label class="form-control-onnet margin-bottom-xs">{_ Text body _}:
             <textarea name="text_body" style="height: 200px; width: 100%">{{ m.kazoo[{kz_notification_template notification_id="customer_update" context_type="text/plain"}] }}</textarea>
           </label>
         </div>

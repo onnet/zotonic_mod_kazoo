@@ -4,12 +4,12 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <label class="form-control-onnet margin-bottom-xs">{_ From (email address): _}
+          <label class="form-control-onnet margin-bottom-xs">{_ From (email address) _}:
             <input type="text" class="form-control margin-bottom-xs" id="from" name="from" placeholder="{_ Enter sender's email adress here _}" value="{{ notification[1]["from"] }}">
           </label>
         </div>
         <div class="col-sm-6">
-          <label class="form-control-onnet margin-bottom-xs">{_ Subject: _}
+          <label class="form-control-onnet margin-bottom-xs">{_ Subject _}:
             <input type="text" class="form-control margin-bottom-xs" id="subject" name="subject" placeholder="{_ Enter message subject here _}" value="{{ notification[1]["subject"] }}">
           </label>
         </div>
