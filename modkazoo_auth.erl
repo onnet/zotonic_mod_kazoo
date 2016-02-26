@@ -36,19 +36,37 @@ do_sign_in(Login, Password, Account, Context) ->
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
         {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', _Crossbar_URL}, {'account_name', Account_Name}} ->
             lager:info("Succesfull authentication of Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
-            z_context:set_session(kazoo_owner_id, Owner_Id, Context),
-            z_context:set_session(kazoo_auth_token, Auth_Token, Context),
-            z_context:set_session(kazoo_account_id, Account_Id, Context),
-            z_context:set_session(kazoo_account_name, Account_Name, Context),
-            z_context:set_session(kazoo_login_name, Login, Context),
-            _ = may_be_set_user_data(Context),
-            _ = may_be_set_reseller_data(Context),
-            _ = may_be_add_third_party_billing(Context),
-            choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context));
+            AccountDoc = kazoo_util:kz_get_acc_doc_by_account_id_and_authtoken(Account_Id, Auth_Token, Context),
+            case modkazoo_util:get_value(<<"crossbar_ip_acl">>, AccountDoc) of
+                'undefined' ->
+                    setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context);
+                ACL ->
+                    maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context)
+            end;
         _ ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
     end.
+
+maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context) ->
+    case run_ip_acl(ACL, ClientIP) of
+        'true' ->
+            setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context);
+        _ -> 
+            lager:info("Failed to pass IP ACL check ~p. IP address: ~p.", [ACL,ClientIP]),
+            z_render:growl_error(?__("ACL violation.", Context), Context)
+    end.
+
+setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context) ->
+    z_context:set_session(kazoo_owner_id, Owner_Id, Context),
+    z_context:set_session(kazoo_auth_token, Auth_Token, Context),
+    z_context:set_session(kazoo_account_id, Account_Id, Context),
+    z_context:set_session(kazoo_account_name, Account_Name, Context),
+    z_context:set_session(kazoo_login_name, Login, Context),
+    _ = may_be_set_user_data(Context),
+    _ = may_be_set_reseller_data(Context),
+    _ = may_be_add_third_party_billing(Context),
+    choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context)).
 
 choose_page_to_redirect(Context) ->
     AccountDoc = kazoo_util:kz_get_acc_doc(Context),
@@ -130,3 +148,10 @@ may_be_clean_third_party_billing(Context) ->
         'true' -> lb_auth:lb_auth_clean_session(Context);
         'false' -> 'ok'
     end.
+
+run_ip_acl([H|T], ClientIP) ->
+    case orber_acl:verify(ClientIP, z_convert:to_list(H), inet) of
+        true -> true;
+        _ -> run_ip_acl(T,ClientIP)
+    end;
+run_ip_acl(_,_) -> false.

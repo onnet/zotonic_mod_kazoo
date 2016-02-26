@@ -7,6 +7,7 @@
     ,crossbar_admin_request/5
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
+    ,kz_get_acc_doc_by_account_id_and_authtoken/3
     ,kz_account_doc_field/2
     ,kz_account_doc_field/3
     ,kz_get_user_doc/1
@@ -500,14 +501,19 @@ kz_user_creds(Login, Password, Account, Context) ->
     end.
 
 kz_get_acc_doc(Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    kz_get_acc_doc_by_account_id(Account_Id, Context).
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_get_acc_doc_by_account_id(AccountId, Context).
 
 kz_get_acc_doc_by_account_id('undefined', _Context) ->
     <<>>;
-kz_get_acc_doc_by_account_id(Account_Id, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(Account_Id))/binary>>,
+kz_get_acc_doc_by_account_id(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_get_acc_doc_by_account_id_and_authtoken(AccountId, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
+    crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
+
 
 kz_adminget_acc_doc_by_account_id('undefined', _Context) ->
     <<>>;
@@ -644,6 +650,9 @@ crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
 
 crossbar_account_send_request(Verb, API_String, ContextType, DataBag, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken, Context).
+
+crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
@@ -699,6 +708,24 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
             lager:info("crossbar_account_request Error Verb: ~p", [Verb]),
             lager:info("crossbar_account_request Error API_String: ~p", [API_String]),
             lager:info("crossbar_account_request Error DataBag: ~p", [DataBag]),
+            Default
+    end.
+
+crossbar_account_authtoken_request(Verb, API_String, DataBag, AuthToken, Context, Default) ->
+    case crossbar_account_send_request(Verb, API_String, "application/json", DataBag, AuthToken, Context) of
+        {'ok', ReturnCode, _, Body} ->
+            case ReturnCode of
+                [50,_,_] ->
+                    {JsonData} = jiffy:decode(Body),
+                    proplists:get_value(<<"data">>, JsonData);
+                _ -> 
+                    case ReturnCode of
+                        "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
+                        _ -> 'ok'
+                    end,
+                    error_return(ReturnCode, Body, Default)
+            end;
+        E -> 
             Default
     end.
 
