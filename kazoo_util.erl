@@ -523,7 +523,10 @@ kz_set_acc_doc(["dial_plan","system"], V, AccountId, Context) ->
     kz_set_acc_doc([<<"dial_plan">>,<<"system">>], [z_convert:to_binary(V)], AccountId, Context);
 kz_set_acc_doc(K, V, AccountId, Context) ->
     CurrDoc = kz_get_acc_doc_by_account_id(AccountId, Context),
-    NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
+    NewDoc = case V of
+        'undefined' -> modkazoo_util:delete_key(K, CurrDoc);
+         _ -> modkazoo_util:set_value(K, V, CurrDoc)
+    end,
     case AccountId =:= 'undefined' of
         'false' -> 
             API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,

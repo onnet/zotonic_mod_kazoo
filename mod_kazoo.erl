@@ -1011,9 +1011,10 @@ event({postback,toggle_all_calls_recording,_,_}, Context) ->
 event({postback,add_blacklisted_number,_,_},Context) ->
     case z_context:get_q("new_blacklisted_number",Context) of
         [] -> Context;
-        Number -> z_render:insert_top("blacklisted_numbers_list",z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}
-                                                                                                             ,{blacklisted_description,modkazoo_util:get_q_bin("new_blacklisted_description", Context)}
-                                                                                                             ],Context),Context) 
+        Number -> z_render:insert_top("blacklisted_numbers_list"
+                                      ,z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}
+                                                                                    ,{blacklisted_description,modkazoo_util:get_q_bin("new_blacklisted_description", Context)}
+                                                                                   ],Context),Context) 
     end;
 
 event({submit,add_new_blacklist,_,_},Context) ->
@@ -1367,6 +1368,25 @@ event({submit,rs_kz_customer_udate,_,_}, Context) ->
 event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:kz_toggle_reseller_status(AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+
+event({postback,add_account_ip_acl_entry,_,_}, Context) ->
+    case z_context:get_q("new_ip_entry",Context) of
+        [] -> Context;
+        IP_Entry ->
+            z_render:insert_top("account_ip_acl_entries_list"
+                                ,z_template:render("_account_ip_acl_entry.tpl",[{account_ip_acl_entry,z_convert:to_binary(IP_Entry)}],Context)
+                                ,Context
+                               ) 
+    end;
+
+event({submit,add_account_ip_acl,_,_}, Context) ->
+    case z_context:get_q_all("ip_acl_entry", Context) of
+        [] ->
+            _ = kazoo_util:kz_set_acc_doc(<<"crossbar_ip_acl">>, 'undefined', Context);
+        IP_ACL_Entries ->
+            _ = kazoo_util:kz_set_acc_doc(<<"crossbar_ip_acl">>, lists:map(fun(X) -> z_convert:to_binary(X) end, IP_ACL_Entries), Context)
+    end,
+    z_render:dialog_close(Context);
 
 event({drag,_,_},Context) ->
     Context;
