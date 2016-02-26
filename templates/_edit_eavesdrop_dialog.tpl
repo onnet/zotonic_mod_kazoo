@@ -8,7 +8,7 @@
           <select id="eavesdrop_approved_list_id" name="eavesdrop_approved_list_id" class="form-control margin-bottom-xs" title="-- {_ Select group _} --" style="text-align:center;">
                 <option value> {_ All users _}</option>
             {% for group in m.kazoo.kz_list_account_groups %}
-                <option value="{{ group["id"] }}" {% if group["id"] == eavesdrop_cf_id[1]["flow"][1]["data"][1]["id"] %}selected{% endif %}>
+                <option value="{{ group["id"] }}" {% if group["id"] == eavesdrop_cf[1]["flow"][1]["data"][1]["approved_group_id"] %}selected{% endif %}>
                  {{ group["name"] }}
                 </option>
             {% endfor %}
@@ -19,9 +19,32 @@
          <label class="form-control-onnet margin-bottom-xs">{_ Target group _}:
           <select id="eavesdrop_target_list_id" name="eavesdrop_target_list_id" class="form-control margin-bottom-xs" title="-- {_ Select group _} --" style="text-align:center;">
             {% for group in m.kazoo.kz_list_account_groups %}
-                <option value="{{ group["id"] }}" {% if group["id"] == "phone_book" %}selected{% endif %}> {{ group["name"] }}</option>
+                <option value="{{ group["id"] }}" {% if group["id"] == eavesdrop_cf[1]["flow"][1]["data"][1]["group_id"] %}selected{% endif %}>
+                 {{ group["name"] }}
+                </option>
             {% endfor %}
           </select>
+         </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-12">
+         <label class="form-control-onnet margin-bottom-xs">{_ Available keys _}:
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-4">
+          {_ Listen _} - 1
+          </div>
+          <div class="col-sm-4">
+          {_ Whisper _} - 2
+          </div>
+          <div class="col-sm-4">
+          {_ Full _} - 3
+          </div>
+        </div>
+      </div>
          </label>
         </div>
       </div>

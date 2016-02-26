@@ -1,8 +1,29 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Available keys"
+msgstr "Доступные ключи"
+
+msgid "Full"
+msgstr "3-х сторонняя слышимость"
+
+msgid "Whisper"
+msgstr "Суфлёр"
+
+msgid "Edit eavesdrop settings"
+msgstr "Настройка прослушивания абоенетов"
+
+msgid "Eavesdrop"
+msgstr "Прослушка"
+
+msgid "Switch off eavesdrop"
+msgstr "Отключить прослушку"
+
+msgid "Target group"
+msgstr "Целевая группа"
+
+msgid "Approved users"
+msgstr "Допущенные"
 
 msgid "Enter description for new number"
 msgstr "Опишите причину блокировки"
