@@ -182,6 +182,12 @@ m_find_value(current_account_credit, _M, Context) ->
 m_find_value({current_account_credit, [{account_id, AccountId}]}, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
 
+m_find_value(kz_current_services, _M, Context) ->
+    kazoo_util:current_service_plans(Context);
+
+m_find_value({kz_current_services, [{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:current_service_plans(AccountId, Context);
+
 m_find_value({kz_check_device_registration, [{device_id, DeviceId}]}, _M, Context) ->
     kazoo_util:kz_check_device_registration(DeviceId, Context);
 
@@ -223,9 +229,6 @@ m_find_value(kz_bt_customer, _M, Context) ->
 
 m_find_value({ui_element_opened,[{element, ElementName}]}, _M, Context) ->
     kazoo_util:ui_element_state(ElementName, Context);
-
-m_find_value(kz_current_services, _M, Context) ->
-    kazoo_util:current_service_plans(Context);
 
 m_find_value(kz_list_subscriptions, _M, Context) ->
     kazoo_util:kz_list_subscriptions(Context);

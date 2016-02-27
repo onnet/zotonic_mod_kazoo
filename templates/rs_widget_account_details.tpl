@@ -76,6 +76,7 @@
     <tbody>
         {% if m.modules.info.mod_bt.enabled %}
           <tr><td>{_ Current balance _}</td><td>£{{ m.kazoo[{current_account_credit account_id=account_id}]|format_price }}</td></tr>
+          <tr><td>{_ Service plans _}</td><td>{% print m.kazoo[{kz_current_services account_id=account_id}] %}</td></tr>
         {% endif %}
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
         <tr><th colspan="2">

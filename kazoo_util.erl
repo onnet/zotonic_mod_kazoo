@@ -100,6 +100,7 @@
     ,deallocate_number/2
     ,deallocate_number/3
     ,current_service_plans/1
+    ,current_service_plans/2
     ,add_service_plan/3
     ,valid_card_exists/1
     ,is_creditable/1
@@ -1473,6 +1474,9 @@ deallocate_number(Number, AccountId, Context) ->
 
 current_service_plans(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
+    current_service_plans(AccountId, Context).
+
+current_service_plans(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, ?CURRENT/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
