@@ -221,6 +221,9 @@ m_find_value(kz_list_outgoing_faxes, _M, Context) ->
 m_find_value(kz_list_transactions, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(Context)));
 
+m_find_value({kz_list_transactions,[{account_id,AccountId}]}, _M, Context) ->
+    lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId,Context)));
+
 m_find_value(bt_client_token, _M, Context) ->
     bt_util:bt_client_token(Context);
 
@@ -235,6 +238,12 @@ m_find_value(kz_list_subscriptions, _M, Context) ->
 
 m_find_value({kz_get_subscription,[{subscription_id, SubscriptionId}]}, _M, Context) ->
     kazoo_util:kz_get_subscription(SubscriptionId, kazoo_util:kz_list_subscriptions(Context));
+
+m_find_value({kz_get_subscription,[{subscription_id, SubscriptionId},{account_id, 'undefined'}]}, _M, Context) ->
+    m_find_value({kz_get_subscription,[{subscription_id, SubscriptionId}]}, _M, Context);
+
+m_find_value({kz_get_subscription,[{subscription_id, SubscriptionId},{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_get_subscription(SubscriptionId, kazoo_util:kz_list_subscriptions(AccountId, Context));
 
 m_find_value(get_user_timezone, _M, Context) ->
     kazoo_util:get_user_timezone(Context);

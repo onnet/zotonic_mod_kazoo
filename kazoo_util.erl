@@ -77,7 +77,9 @@
     ,kz_send_fax/7
     ,kz_list_outgoing_faxes/1
     ,kz_list_transactions/1
+    ,kz_list_transactions/2
     ,kz_list_subscriptions/1
+    ,kz_list_subscriptions/2
     ,kz_get_subscription/2
     ,kz_bt_customer/1
     ,bt_delete_card/2
@@ -1345,11 +1347,19 @@ kz_list_outgoing_faxes(Context) ->
     [{[{<<"a">>, TimeStamp}, A, B, C, D]} || {[A, B, C, D, {<<"created">>,TimeStamp}=_E]} <- crossbar_account_request('get', API_String, [], Context)].
 
 kz_list_transactions(Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_context:get_session('kazoo_account_id', Context))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_transactions(AccountId, Context).
+
+kz_list_transactions(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_subscriptions(Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_context:get_session('kazoo_account_id', Context))/binary, ?TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_subscriptions(AccountId, Context).
+
+kz_list_subscriptions(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
     lager:info("kz_list_subscriptions: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
 
