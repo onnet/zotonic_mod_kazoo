@@ -1477,7 +1477,7 @@ current_service_plans(Context) ->
     current_service_plans(AccountId, Context).
 
 current_service_plans(AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, ?CURRENT/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, ?CURRENT/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 add_service_plan(PlanId, AccountId, Context) ->

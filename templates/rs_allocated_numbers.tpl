@@ -20,7 +20,7 @@
                               action={mask target="rs_numbers_list_table" message=_"Allocating number..."}
                          }
     %}
-    <input id="new_number_id" class="input input-number-onnet pull-right" type="text" name="new_number_to_add" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
+    <input id="new_number_id" class="input input-number-onnet pull-right" type="text" name="new_number_to_add" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="13">
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

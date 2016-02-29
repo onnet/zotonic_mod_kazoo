@@ -58,25 +58,26 @@
             </th>
         </tr>
     </thead>
-    <tbody>
-        {% with m.notifier.first[{account_balance numbers=m.kazoo[{get_acc_numbers account_id=account_id}] }] as account_data %}
-
+    {% if m.modules.info.mod_lb.enabled %}
+     <tbody>
+      {% with m.notifier.first[{account_balance numbers=m.kazoo[{get_acc_numbers account_id=account_id}] }] as account_data %}
         {% if account_data[2] and not account_doc[1]["is_reseller"] %}
-        <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
-        <tr>
+          <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
+          <tr>
             <td colspan=2>
-                <span id="rs_set_lb_notify_level_tpl">
-        {% include "rs_set_lb_notify_level.tpl" uid=account_data[2] %}
-                </span>
-    </td>
-        </tr>
+              <span id="rs_set_lb_notify_level_tpl">
+                {% include "rs_set_lb_notify_level.tpl" uid=account_data[2] %}
+              </span>
+            </td>
+          </tr>
         {% endif %}
-        {% endwith %}
-    </tbody>
+      {% endwith %}
+     </tbody>
+    {% endif %}
     <tbody>
         {% if m.modules.info.mod_bt.enabled %}
           <tr><td>{_ Current balance _}</td><td>£{{ m.kazoo[{current_account_credit account_id=account_id}]|format_price }}</td></tr>
-          <tr><td>{_ Service plans _}</td><td>{% print m.kazoo[{kz_current_services account_id=account_id}] %}</td></tr>
+          <tr><td>{_ Service plans _}</td><td>{{ m.kazoo[{kz_current_services account_id=account_id}][1]["plans"][1][1][1] }}</td></tr>
         {% endif %}
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
         <tr><th colspan="2">
