@@ -3118,8 +3118,16 @@ update_trunk_server(Server, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"options">>,<<"enabled">>], 'true', J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"inbound_format">>], z_convert:to_binary(z_context:get_q("inbound_format",Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"auth">>,<<"auth_method">>], z_convert:to_binary(z_context:get_q("auth_method",Context)), J) end
-                ,fun(J) -> case z_context:get_q("auth_user",Context) of 'undefined' -> J; User -> modkazoo_util:set_value([<<"auth">>,<<"auth_user">>], z_convert:to_binary(User), J) end end
-                ,fun(J) -> case z_context:get_q("auth_password",Context) of 'undefined' -> J; Pwd -> modkazoo_util:set_value([<<"auth">>,<<"auth_password">>], z_convert:to_binary(Pwd), J) end end
+                ,fun(J) -> case z_context:get_q("auth_trunk_user",Context) of
+                               'undefined' -> J;
+                               User -> modkazoo_util:set_value([<<"auth">>,<<"auth_user">>], z_convert:to_binary(User), J)
+                           end
+                 end
+                ,fun(J) -> case z_context:get_q("auth_password",Context) of
+                               'undefined' -> J;
+                               Pwd -> modkazoo_util:set_value([<<"auth">>,<<"auth_password">>], z_convert:to_binary(Pwd), J)
+                           end
+                 end
                 ,fun(J) -> case z_context:get_q("ipaddress",Context) of 'undefined' -> J; Ip -> modkazoo_util:set_value([<<"auth">>,<<"ip">>], z_convert:to_binary(Ip), J) end end
                 ,fun(J) -> case z_context:get_q("ipaddress",Context) of 'undefined' -> J; Ip -> modkazoo_util:set_value([<<"options">>,<<"ip">>], z_convert:to_binary(Ip), J) end end
                 ,fun(J) -> modkazoo_util:set_value([<<"server_name">>], z_convert:to_binary(z_context:get_q("server_name",Context)), J) end],
