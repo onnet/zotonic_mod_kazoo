@@ -63,14 +63,7 @@
   </span>
   {% if m.modules.info.mod_bt.enabled %}
     <span id="rs_widget_payments_list_tpl">
-        <div class="text-center p-3">
-          {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_widget_payments_list_tpl"
-                                                       template="rs_widget_payments_list.tpl"
-                                                       account_id=account_id
-                                                       child_account_doc=child_account_doc
-                                                       headline=_"Payments list"}
-          %}
-        </div>
+        {% include "rs_widget_payments_list.tpl" headline=_"Payments list" account_id=account_id child_account_doc=child_account_doc %}
     </span>
   {% endif %}
 </div>

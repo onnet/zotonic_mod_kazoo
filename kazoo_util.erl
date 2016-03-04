@@ -80,6 +80,8 @@
     ,kz_list_transactions/2
     ,kz_list_subscriptions/1
     ,kz_list_subscriptions/2
+    ,kz_transactions_credit/5
+    ,kz_transactions_debit/5
     ,kz_get_subscription/2
     ,kz_bt_customer/1
     ,bt_delete_card/2
@@ -318,6 +320,8 @@
 -define(CUSTOMER, <<"/customer">>).
 -define(TRANSACTIONS, <<"/transactions">>).
 -define(SUBSCRIPTIONS, <<"/subscriptions">>).
+-define(CREDIT, <<"/credit">>).
+-define(DEBIT, <<"/debit">>).
 -define(CARDS, <<"/cards">>).
 -define(PREFIX, <<"prefix=">>).
 -define(QUANTITY, <<"quantity=">>).
@@ -728,7 +732,7 @@ crossbar_account_authtoken_request(Verb, API_String, DataBag, AuthToken, Context
                     end,
                     error_return(ReturnCode, Body, Default)
             end;
-        E -> 
+        _E -> 
             Default
     end.
 
@@ -1351,7 +1355,10 @@ kz_list_transactions(Context) ->
     kz_list_transactions(AccountId, Context).
 
 kz_list_transactions(AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
+    API_StringT = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary>>,
+    lager:info("IAM TTrans: ~p", [crossbar_account_request('get', API_StringT, [], Context)]),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary>>,
+ %   API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_subscriptions(Context) ->
@@ -1362,6 +1369,24 @@ kz_list_subscriptions(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
     lager:info("kz_list_subscriptions: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
+
+kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?CREDIT/binary>>,
+    DataBag = {[{<<"data">>,{[{<<"amount">>, z_convert:to_binary(Amount)}
+                              ,{<<"reason">>, z_convert:to_binary(Reason)}
+                              ,{<<"description">>, z_convert:to_binary(Description)}
+                             ]}}]},
+    lager:info("kz_transactions_credit DataBag: ~p", [DataBag]),
+    crossbar_account_request('put', API_String, DataBag, Context).
+
+kz_transactions_debit(Amount, Reason, Description, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?DEBIT/binary>>,
+    DataBag = {[{<<"data">>,{[{<<"amount">>, z_convert:to_binary(Amount)}
+                              ,{<<"reason">>, z_convert:to_binary(Reason)}
+                              ,{<<"description">>, z_convert:to_binary(Description)}
+                             ]}}]},
+    lager:info("kz_transactions_debit DataBag: ~p", [DataBag]),
+    crossbar_account_request('delete', API_String, DataBag, Context).
 
 kz_get_subscription(SubscriptionId, [H|T]) ->
     case modkazoo_util:get_value(<<"id">>, H) of

@@ -730,4 +730,8 @@ table.dataTable thead .sorting_desc { background: url('/lib/images/sort_desc.png
 table.dataTable thead .sorting_asc_disabled { background: url('/lib/images/sort_asc_disabled.png') no-repeat center right; }
 table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort_desc_disabled.png') no-repeat center right; }
 
+.bg_color_white {
+  background-color: white!important;
+}
+
 </style>
