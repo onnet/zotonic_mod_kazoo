@@ -50,7 +50,6 @@
             {% endfor %}
     </tbody>
 </table>
-</span>
 
 {% javascript %}
 //var initSearchParam = $.getURLParam("filter");
@@ -78,3 +77,4 @@ var oTable = $('#rs_monthly_fees_lists_table').dataTable({
 
 {% endjavascript %}
 
+</span>

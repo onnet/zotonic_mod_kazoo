@@ -16,7 +16,7 @@
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh results" 
               action={postback postback={refresh_rs_payments_list account_id child_account_doc}
-                               delegate="mod_onbill"
+                               delegate="mod_kazoo"
                                qarg="payments_month_chosen"
                                inject_args account_id=account_id child_account_doc=child_account_doc
                      }

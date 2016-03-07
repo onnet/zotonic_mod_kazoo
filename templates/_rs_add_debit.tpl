@@ -1,4 +1,4 @@
-{% wire id="form_add_debit" type="submit" postback="add_debit" delegate="mod_onbill" %}
+{% wire id="form_add_debit" type="submit" postback="add_debit" delegate="mod_kazoo" %}
 <form id="form_add_debit" method="post" action="postback">
     <div class="form-group">
       <div class="row">
