@@ -250,7 +250,11 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chose
     Transactions = kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, 'undefined', Context),
     case Type of
         "debit" -> kazoo_util:debit_transactions(Transactions);
-        "credit" -> kazoo_util:credit_transactions(Transactions)
+        "debit_summ" -> lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:debit_transactions(Transactions));
+        "credit" -> kazoo_util:credit_transactions(Transactions);
+        "credit_summ" -> lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:credit_transactions(Transactions));
+        "per_minute_calls_summ" -> lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:per_minute_calls(Transactions));
+        "monthly_rollup" -> kazoo_util:monthly_rollup(Transactions)
     end;
 
 m_find_value(bt_client_token, _M, Context) ->

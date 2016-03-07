@@ -37,7 +37,10 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Credit acccount _}</button>
+          {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Credit acccount"
+                    action={submit target="form_add_credit"}
+                    action={update target="reseller_children_area" template="reseller_children.tpl" account_id=account_id headline=_"Account details"}
+          %}
         </div>
       </div>
     </div>

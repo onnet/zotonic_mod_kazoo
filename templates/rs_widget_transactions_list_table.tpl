@@ -1,6 +1,16 @@
 <table class="table table-condensed table-centered">
     <thead>
-        <tr><th colspan="2">Opening balance</th><th></th></tr>
+        <tr>
+          <th colspan="3">
+            {_ Opening balance _}
+            <span style="float:right; padding-right:2em;">
+              {{ m.config.mod_kazoo.local_currency_sign.value
+              }}{{
+                 m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="monthly_rollup"}][1][1]["amount"]|format_price:[".",""]
+              }}
+            </span>
+          </th>
+        </tr>
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="3"></td></tr>
     </thead>
 </table>

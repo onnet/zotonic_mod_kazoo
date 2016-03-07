@@ -19,7 +19,7 @@
                     <td class="td-center">{{ transaction["metadata"][1]["to"]|split:"@"|first }}</td>
                     <td class="td-center">{{ transaction["metadata"][1]["duration"] }}</td>
                     <td class="td-center">
-                      {{ m.config.mod_kazoo.local_currency_sign.value }}{{ transaction["amount"] }}
+                      {{ m.config.mod_kazoo.local_currency_sign.value }}{{ transaction["amount"]|format_price:[".",""] }}
                     </td>
                 </tr>
             {% endfor %}

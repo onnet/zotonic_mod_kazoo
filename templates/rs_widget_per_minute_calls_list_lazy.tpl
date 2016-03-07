@@ -15,6 +15,12 @@
                                                class="arrowpad fa fa-arrow-circle-down"></i>
               </span>
                {_ Per minute calls _}
+               <span style="float:right; padding-right:2em;">
+                 {{ m.config.mod_kazoo.local_currency_sign.value
+                 }}{{
+                    m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="per_minute_calls_summ"}]|format_price:[".",""]
+                 }}
+               </span>
             </th>
         </tr>
         <tr id="{{ #mytr }}" style="{% if not m.kazoo[{ui_element_opened element="rs_per_minute_calls_lists_table_opened"}] %}display: none;{% endif %}"><th colspan="3"></th></tr>
