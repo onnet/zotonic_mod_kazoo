@@ -78,6 +78,9 @@
     ,kz_list_outgoing_faxes/1
     ,kz_list_transactions/1
     ,kz_list_transactions/2
+    ,kz_list_transactions/3
+    ,kz_list_transactions/4
+    ,kz_list_transactions/5
     ,kz_list_subscriptions/1
     ,kz_list_subscriptions/2
     ,kz_transactions_credit/5
@@ -276,6 +279,10 @@
     ,list_system_dialplans/1
     ,list_system_dialplans_names/1
     ,kz_toggle_reseller_status/2
+    ,monthly_rollup/1
+    ,per_minute_calls/1
+    ,credit_transactions/1
+    ,debit_transactions/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -357,6 +364,7 @@
 -define(RESELLER, <<"/reseller">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
+-define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", (z_convert:to_binary(Reason))/binary>> end).
 
 -define(MENU_KEYS_LIST, [<<"_">>,<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>]).
 
@@ -1355,10 +1363,24 @@ kz_list_transactions(Context) ->
     kz_list_transactions(AccountId, Context).
 
 kz_list_transactions(AccountId, Context) ->
-    API_StringT = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary>>,
-    lager:info("IAM TTrans: ~p", [crossbar_account_request('get', API_StringT, [], Context)]),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary>>,
+    {Year, Month, _} = erlang:date(),
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context).
+
+kz_list_transactions(CreatedFrom, CreatedTo, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context).
+
+kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
+                   ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
  %   API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
+                   ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?SET_REASON(Reason)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_subscriptions(Context) ->
@@ -1546,7 +1568,7 @@ is_creditable(Context) ->
 
 kz_get_user_timezone(Context) ->
     case kz_user_doc_field(<<"timezone">>, Context) of
-        'undefined' -> kz_account_doc_field(<<"timezone">>, Context);
+        'undefined' -> get_account_timezone(Context);
         Timezone -> Timezone
     end.
 
@@ -3623,3 +3645,28 @@ kz_toggle_reseller_status(AccountId, Context) ->
         'true' -> kz_set_reseller_status('delete', AccountId, Context);
         _ -> kz_set_reseller_status('put', AccountId, Context)
     end.
+
+monthly_rollup(Transactions) ->
+    Fun = fun(Transaction) -> modkazoo_util:get_value(<<"id">>, Transaction) == <<"monthly_rollup">> end,
+    modkazoo_util:filter(Fun, Transactions).
+
+per_minute_calls(Transactions) ->
+    Fun = fun(Transaction) -> modkazoo_util:get_value(<<"reason">>, Transaction) == <<"per_minute_call">> end,
+    modkazoo_util:filter(Fun, Transactions).
+
+credit_transactions(Transactions) ->
+    Fun = fun(Transaction) ->
+              (modkazoo_util:get_value(<<"type">>, Transaction) == <<"credit">>)
+              and
+              (modkazoo_util:get_value(<<"reason">>, Transaction) =/= <<"database_rollup">>)
+          end,
+    modkazoo_util:filter(Fun, Transactions).
+
+debit_transactions(Transactions) ->
+    Fun = fun(Transaction) ->
+              (modkazoo_util:get_value(<<"type">>, Transaction) == <<"debit">>)
+              and
+              (modkazoo_util:get_value(<<"reason">>, Transaction) =/= <<"per_minute_call">>)
+          end,
+    modkazoo_util:filter(Fun, Transactions).
+

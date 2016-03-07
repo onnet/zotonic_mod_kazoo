@@ -12,6 +12,11 @@ inno_timestamp_to_date(Seconds, Context) ->
             localtime:local_to_local(DateTime, "UTC", z_convert:to_list(kazoo_util:may_be_get_timezone(Context)))
     end.
 
+inno_timestamp_to_date(Seconds, "show_tz_name", Context) ->
+    DateTime = calendar:gregorian_seconds_to_datetime(z_convert:to_integer(Seconds)),
+    {TZN1, _TZN2} = localtime:tz_name(DateTime, z_convert:to_list(kazoo_util:may_be_get_timezone(Context))),
+    TZN1;
+
 inno_timestamp_to_date(Seconds, Args, _Context) ->
     case Seconds of
         'undefined' -> {{0000,0,00},{00,00,0}};

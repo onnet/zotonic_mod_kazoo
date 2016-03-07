@@ -39,6 +39,7 @@
     ,day_ago_tstamp/1
     ,week_ago_tstamp/1
     ,month_ago_tstamp/1
+    ,filter/2
     ,filter_undefined/1
     ,filter_empty/1
     ,check_file_size_exceeded/3
@@ -304,6 +305,11 @@ month_ago_tstamp(Context) ->
 
 back_to_gmt(DateTime, Context) ->
     localtime:local_to_local(DateTime, z_convert:to_list(kazoo_util:may_be_get_timezone(Context)), "GMT").
+
+filter(Fun, Props) when is_function(Fun, 1), is_list(Props) ->
+    [P || P <- Props, Fun(P)];
+filter(Props, Term) when is_list(Props) ->
+    [P || P <- Props, P =/= Term].
 
 filter_undefined(Props) ->
     [KV || KV <- Props,

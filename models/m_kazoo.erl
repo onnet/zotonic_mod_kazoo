@@ -3,7 +3,6 @@
 
 -behaviour(gen_model).
 
-%% interface functions
 -export([
     m_find_value/3,
     m_to_list/2,
@@ -223,6 +222,36 @@ m_find_value(kz_list_transactions, _M, Context) ->
 
 m_find_value({kz_list_transactions,[{account_id,AccountId}]}, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId,Context)));
+
+m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,'undefined'},{reason,Reason}]}, _M, Context) ->
+    {Year, Month, _} = erlang:date(),
+    PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
+    m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context);
+
+m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context) ->
+    [MonthS,YearS] = z_string:split(PaymentsMonthChosen, "/"),
+    Month = z_convert:to_integer(MonthS),
+    Year = z_convert:to_integer(YearS),
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context)));
+
+m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,'undefined'},{type,Type}]}, _M, Context) ->
+    {Year, Month, _} = erlang:date(),
+    PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
+    m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{type,Type}]}, _M, Context);
+
+m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{type,Type}]}, _M, Context) ->
+    [MonthS,YearS] = z_string:split(PaymentsMonthChosen, "/"),
+    Month = z_convert:to_integer(MonthS),
+    Year = z_convert:to_integer(YearS),
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    Transactions = kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, 'undefined', Context),
+    case Type of
+        "debit" -> kazoo_util:debit_transactions(Transactions);
+        "credit" -> kazoo_util:credit_transactions(Transactions)
+    end;
 
 m_find_value(bt_client_token, _M, Context) ->
     bt_util:bt_client_token(Context);
