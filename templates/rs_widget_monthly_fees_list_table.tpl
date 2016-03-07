@@ -1,26 +1,3 @@
-<table class="table table-condensed table-centered">
-    <thead>
-        <tr><th colspan="3">
-            {% wire id="arrows_"++#rsmfeesid type="click"
-                    action={ toggle target="rs_monthly_fees_lists_table_opened" }
-                    action={ toggle target=#mytr }
-                    action={ toggle target="arrow_right_"++#rsmfeesid }
-                    action={ toggle target="arrow_down_"++#rsmfeesid }
-                    action={ postback postback={trigger_innoui_widget arg="rs_monthly_fees_lists_table_opened" } delegate="mod_kazoo" }
-            %}
-              <span id="arrows_{{ #rsmfeesid }}" style="cursor: pointer; padding-left: 0.7em;">
-                <i id="arrow_right_{{ #rsmfeesid }}" style="{% if m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}" 
-                                                class="arrowpad fa fa-arrow-circle-right"></i>
-                <i id="arrow_down_{{ #rsmfeesid }}" style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}" 
-                                               class="arrowpad fa fa-arrow-circle-down"></i>
-              </span>
-               {_ Monthly fees _}
-            </th>
-        </tr>
-        <tr id="{{ #mytr }}" style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}"><th colspan="3"></th></tr>
-    </thead>
-</table>
-<span id="rs_monthly_fees_lists_table_opened" style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}">
 <table id="rs_monthly_fees_lists_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
@@ -77,4 +54,3 @@ var oTable = $('#rs_monthly_fees_lists_table').dataTable({
 
 {% endjavascript %}
 
-</span>

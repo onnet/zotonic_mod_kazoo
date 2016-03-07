@@ -42,8 +42,6 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-{% with m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen reason=reason}] as transactions %}
-{# print transactions #}
 <div id="rs_payments_list_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_payments_list_widget_opened"
@@ -56,5 +54,4 @@
         %}
    </div>
 </div>
-{% endwith %}
 {% endblock %}

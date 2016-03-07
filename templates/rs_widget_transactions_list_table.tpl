@@ -5,7 +5,7 @@
     </thead>
 </table>
 
-{% include  "rs_widget_payments_list_table.tpl" transactions=transactions %}
+{% include  "rs_widget_payments_list_lazy.tpl" transactions=transactions %}
 
 <table class="table table-condensed table-centered">
     <thead>
@@ -13,7 +13,7 @@
     </thead>
 </table>
 
-{% include  "rs_widget_monthly_fees_list_table.tpl" transactions=transactions %}
+{% include  "rs_widget_monthly_fees_list_lazy.tpl" transactions=transactions %}
 
 <table class="table table-condensed table-centered">
     <thead>
@@ -21,4 +21,4 @@
     </thead>
 </table>
 
-{% include  "rs_widget_per_minute_calls_list_table.tpl" transactions=transactions %}
+{% include  "rs_widget_per_minute_calls_list_lazy.tpl" transactions=transactions %}
