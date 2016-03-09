@@ -83,6 +83,7 @@
     ,kz_list_transactions/5
     ,kz_list_subscriptions/1
     ,kz_list_subscriptions/2
+    ,kz_current_balance/2
     ,kz_transactions_credit/5
     ,kz_transactions_debit/5
     ,kz_get_subscription/2
@@ -362,6 +363,7 @@
 -define(DIALPLANS, <<"/dialplans">>).
 -define(MESSAGE, <<"/message">>).
 -define(RESELLER, <<"/reseller">>).
+-define(CURRENT_BALANCE, <<"/current_balance">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", (z_convert:to_binary(Reason))/binary>> end).
@@ -1390,6 +1392,10 @@ kz_list_subscriptions(Context) ->
 kz_list_subscriptions(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
     lager:info("kz_list_subscriptions: ~p", [crossbar_account_request('get', API_String, [], Context)]),
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_current_balance(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?CURRENT_BALANCE/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
@@ -3648,7 +3654,10 @@ kz_toggle_reseller_status(AccountId, Context) ->
 
 monthly_rollup(Transactions) ->
     Fun = fun(Transaction) -> modkazoo_util:get_value(<<"id">>, Transaction) == <<"monthly_rollup">> end,
-    modkazoo_util:filter(Fun, Transactions).
+    case modkazoo_util:filter(Fun, Transactions) of
+        [] -> {[]};
+        [H|_] -> H
+    end.
 
 per_minute_calls(Transactions) ->
     Fun = fun(Transaction) -> modkazoo_util:get_value(<<"reason">>, Transaction) == <<"per_minute_call">> end,

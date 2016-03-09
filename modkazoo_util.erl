@@ -39,6 +39,9 @@
     ,day_ago_tstamp/1
     ,week_ago_tstamp/1
     ,month_ago_tstamp/1
+    ,month_range/2
+    ,curr_month_range/0
+    ,next_month_range/2
     ,filter/2
     ,filter_undefined/1
     ,filter_empty/1
@@ -306,6 +309,22 @@ month_ago_tstamp(Context) ->
 back_to_gmt(DateTime, Context) ->
     localtime:local_to_local(DateTime, z_convert:to_list(kazoo_util:may_be_get_timezone(Context)), "GMT").
 
+next_month_range(Month, Year) when Month > 0, Month < 12 ->
+    month_range(Month+1, Year);
+next_month_range(Month, Year) when Month == 12 ->
+    month_range(1, Year+1).
+    
+curr_month_range() ->
+    {Year, Month, _} = erlang:date(),
+    month_range(Month, Year).
+
+month_range(Month, Year) ->
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    {CreatedFrom, CreatedTo}.
+
+filter(_, []) ->
+    [];
 filter(Fun, Props) when is_function(Fun, 1), is_list(Props) ->
     [P || P <- Props, Fun(P)];
 filter(Props, Term) when is_list(Props) ->
