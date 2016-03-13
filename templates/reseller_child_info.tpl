@@ -61,7 +61,7 @@
   <span id="rs_allocated_numbers_tpl">
         {% include "rs_allocated_numbers.tpl" headline=_"Account's allocated numbers" account_id=account_id %}
   </span>
-  {% if m.modules.info.mod_bt.enabled %}
+  {% if m.modules.info.mod_onbill.enabled %}
     <span id="rs_widget_transactions_list_tpl">
         {% include "rs_widget_transactions_list.tpl" headline=_"Transactions list" account_id=account_id child_account_doc=child_account_doc %}
     </span>

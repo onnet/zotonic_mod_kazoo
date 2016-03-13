@@ -38,7 +38,11 @@
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="3"></td></tr>
         <tr>
           <th colspan="3">
-            {_ Closing balance _}
+            {% if payments_month_chosen == now|date: 'm/Y' or not payments_month_chosen %} 
+              {_ Current balance _}
+            {% else %}
+              {_ Closing balance _}
+            {% endif %}
             <span style="float:right; padding-right:2em;">
               {{ m.config.mod_kazoo.local_currency_sign.value
               }}{{

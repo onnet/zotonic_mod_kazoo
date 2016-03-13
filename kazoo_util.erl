@@ -81,6 +81,7 @@
     ,kz_list_transactions/3
     ,kz_list_transactions/4
     ,kz_list_transactions/5
+    ,kz_bt_transactions/1
     ,kz_list_subscriptions/1
     ,kz_list_subscriptions/2
     ,kz_current_balance/2
@@ -1383,6 +1384,11 @@ kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context) ->
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?SET_REASON(Reason)/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_bt_transactions(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_subscriptions(Context) ->

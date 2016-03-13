@@ -217,6 +217,9 @@ m_find_value({get_acc_numbers_info, [{account_id,AccountId}]}, _M, Context) ->
 m_find_value(kz_list_outgoing_faxes, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_outgoing_faxes(Context)));
 
+m_find_value(kz_bt_transactions, _M, Context) ->
+    lists:sort(z_convert:to_list(kazoo_util:kz_bt_transactions(Context)));
+
 m_find_value(kz_list_transactions, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(Context)));
 
