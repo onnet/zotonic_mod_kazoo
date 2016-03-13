@@ -1,4 +1,3 @@
-{% with m.kazoo[{kz_get_acc_doc_by_account_id account_id=account_id}] as child_account_doc %}
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
 
   <div class="col-xs-2 col-xs-offset-3">
@@ -63,8 +62,7 @@
   </span>
   {% if m.modules.info.mod_onbill.enabled %}
     <span id="rs_widget_transactions_list_tpl">
-        {% include "rs_widget_transactions_list.tpl" headline=_"Transactions list" account_id=account_id child_account_doc=child_account_doc %}
+        {% include "rs_widget_transactions_list.tpl" headline=_"Transactions list" account_id=account_id %}
     </span>
   {% endif %}
 </div>
-{% endwith %}

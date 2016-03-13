@@ -226,6 +226,10 @@ m_find_value(kz_list_transactions, _M, Context) ->
 m_find_value({kz_list_transactions,[{account_id,AccountId}]}, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId,Context)));
 
+m_find_value({kz_list_transactions,[{account_id,'undefined'},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context);
+
 m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,'undefined'},{reason,Reason}]}, _M, Context) ->
     {Year, Month, _} = erlang:date(),
     PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
@@ -242,6 +246,10 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chose
 m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,'undefined'},{type,Type}]}, _M, Context) ->
     {Year, Month, _} = erlang:date(),
     PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
+    m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{type,Type}]}, _M, Context);
+
+m_find_value({kz_list_transactions,[{account_id, 'undefined'},{payments_month_chosen,PaymentsMonthChosen},{type,Type}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
     m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{type,Type}]}, _M, Context);
 
 m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{type,Type}]}, _M, Context) ->

@@ -1407,13 +1407,12 @@ event({submit,add_debit,_,_}, Context) ->
     kazoo_util:kz_transactions_debit(Amount, Reason, Description, AccountId, Context),
     z_render:dialog_close(Context);
 
-event({postback,{refresh_rs_payments_list,[{account_id, AccountId},{child_account_doc, ChildAccountDoc}]},_,_}, Context) ->
+event({postback,{refresh_rs_payments_list,[{account_id, AccountId}]},_,_}, Context) ->
     PaymentsMonthChosen  = z_context:get_q("payments_month_chosen", Context),
     z_render:update("rs_widget_transactions_list_tpl"
                    ,z_template:render("rs_widget_transactions_list.tpl"
                                      ,[{headline, ?__("Transactions list", Context)}
                                       ,{account_id, AccountId}
-                                      ,{child_account_doc, ChildAccountDoc}
                                       ,{payments_month_chosen, PaymentsMonthChosen}]
                                      ,Context)
                    ,Context);

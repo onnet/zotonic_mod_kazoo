@@ -15,10 +15,10 @@
   </span>
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh results" 
-              action={postback postback={refresh_rs_payments_list account_id child_account_doc}
+              action={postback postback={refresh_rs_payments_list account_id}
                                delegate="mod_kazoo"
                                qarg="payments_month_chosen"
-                               inject_args account_id=account_id child_account_doc=child_account_doc
+                               inject_args account_id=account_id
                      }
               action={mask target="payments_lists_table" message=_"Sending request"++"..."}
     %}
@@ -47,7 +47,6 @@
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_payments_list_widget_opened"
                                                                     template="rs_widget_transactions_list_table.tpl"
                                                                     account_id=account_id
-                                                                    child_account_doc=child_account_doc
                                                                     payments_month_chosen=payments_month_chosen
                                                                     transactions=transactions
                                                                     headline=_"Transactions list"}

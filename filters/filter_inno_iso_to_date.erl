@@ -5,7 +5,6 @@
 ]).
 
 inno_iso_to_date(ISOTime, _Context) when is_binary(ISOTime) ->
-    lager:info("ISOTime: ~p", [ISOTime]),
     <<Year:4/binary, _:1/binary, Month:2/binary, _:1/binary, Day:2/binary
      ,_:1/binary
      ,Hours:2/binary, _:1/binary, Minutes:2/binary, _:1/binary, Sec:2/binary, _/binary>> = ISOTime,
