@@ -323,6 +323,8 @@ month_range(Month, Year) ->
     CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
     {CreatedFrom, CreatedTo}.
 
+filter(_, <<>>) ->
+    [];
 filter(_, []) ->
     [];
 filter(Fun, Props) when is_function(Fun, 1), is_list(Props) ->
