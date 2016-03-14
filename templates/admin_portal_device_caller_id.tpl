@@ -38,7 +38,7 @@
         <div id="device_caller_idexternalnumber" class="col-xs-6" >
             <span>{{ device_doc["caller_id"][1]["external"][1]["number"] }}</span>
             <i id="edit_caller_idexternalnumber" class="fa fa-edit pointer" title="Edit field"></i>
-            {% wire id="edit_caller_idexternalnumber" type="click" action={ update target="device_caller_idexternalnumber" template="_edit_field_select_bootsearch.tpl" type="device" doc_id=device_id field_name=["caller_id","external","number"] options=m.kazoo.get_acc_numbers|cleanout++[["","- No CID -"]] prefix="device_" postfix="_bootsearch" } %}
+            {% wire id="edit_caller_idexternalnumber" type="click" action={ update target="device_caller_idexternalnumber" template="_edit_field_select_bootsearch.tpl" type="device" doc_id=device_id field_name=["caller_id","external","number"] options=[["", _"- No CID -"]]++m.kazoo.get_acc_numbers|cleanout prefix="device_" postfix="_bootsearch" } %}
         </div>
     </div>
 
