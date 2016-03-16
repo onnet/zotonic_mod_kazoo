@@ -10,8 +10,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "- No CID -"
+msgstr "Не выбран"
 
 msgid "Admins only"
 msgstr "Только администраторам"
