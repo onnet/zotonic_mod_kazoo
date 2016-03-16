@@ -14,13 +14,12 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh results" 
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"send request" 
               action={postback postback={refresh_rs_payments_list account_id}
                                delegate="mod_kazoo"
                                qarg="payments_month_chosen"
                                inject_args account_id=account_id
                      }
-              action={mask target="payments_lists_table" message=_"Sending request"++"..."}
     %}
      <input id="payments_month_chosen" type="text" class="input-small-onnet pull-right" name="payments_month_chosen"
                                                     value="{% if payments_month_chosen %}{{ payments_month_chosen }}{% else %}{{ now|date: 'm/Y' }}{% endif %}"

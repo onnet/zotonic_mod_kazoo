@@ -190,15 +190,12 @@ event({postback,kazoo_transaction,_,_}, Context) ->
             JObj = kazoo_util:make_payment(Amount, z_context:get_session('kazoo_account_id', Context), Context),
             case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
                 <<"submitted_for_settlement">> ->
-                    Context1 = z_render:growl(?__("£"++z_convert:to_list(Amount)++" successfully added.",Context), Context),
-                    Context2 = z_render:update("onnet_widget_finance_tpl"
-                                     ,z_template:render("onnet_widget_finance.tpl", [{cat, "text"}, {headline, "Account"}], Context1), Context1),
-                    Context3 = z_render:update("onnet_widget_make_payment_tpl" ,z_template:render("onnet_widget_make_payment.tpl", [{cat, "text"}, 
-                                                        {headline, "Online payments"}, {bt_customer, kazoo_util:kz_bt_customer(Context2)}], Context2), Context2),
-                    z_render:update("onnet_widget_payments_list_tpl"
-                                     ,z_template:render("onnet_widget_payments_list.tpl", [{headline, "Payments list"}], Context3), Context3);
+                    spawn(fun() -> timer:sleep(1000), mod_signal:emit({update_onnet_widget_finance_tpl, []}, Context) end),
+                    spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_onnet_widget_make_payment_tpl, []}, Context) end),
+        %            z_render:growl("£"++z_convert:to_list(Amount)++?__(" successfully added.",Context), Context);
+                    z_render:growl(?__(" successfully added.",Context), Context);
                 E ->
-                    z_render:growl_error(?__("Something went wrong Response code: "++z_convert:to_list(E), Context), Context)
+                    z_render:growl_error(?__("Something went wrong Response code: ", Context)++z_convert:to_list(E), Context)
             end;
         _ -> 
             Context1 = z_render:growl_error(?__("Payment failed!<br />Please input correct amount.", Context), Context),
