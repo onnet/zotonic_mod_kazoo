@@ -92,6 +92,38 @@
           </tr>
           <tr><td>{_ Service plans _}</td><td>{{ m.kazoo[{kz_current_services account_id=account_id}][1]["plans"][1][1][1] }}</td></tr>
         {% endif %}
+    </tbody>
+    <tbody>
+        <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
+        <tr><th colspan="2">
+            {% wire id="arrows_"++#spid type="click"
+                    action={ toggle target="rs_service_plans_widget_opened" }
+                    action={ toggle target="arrow_right_"++#spid }
+                    action={ toggle target="arrow_down_"++#spid }
+                    action={ postback postback={trigger_innoui_widget arg="rs_service_plans_widget_opened" } delegate="mod_kazoo" }
+            %}
+              <span id="arrows_{{ #spid }}" style="cursor: pointer; padding-left: 0.7em;">
+                <i id="arrow_right_{{ #spid }}" style="{% if m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}" 
+                                                class="arrowpad fa fa-arrow-circle-right"></i>
+                <i id="arrow_down_{{ #spid }}" style="{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}" 
+                                               class="arrowpad fa fa-arrow-circle-down"></i>
+              </span>
+               {_ Service plans _}:
+               {% button class="btn btn-xs btn-onnet pull-right" text=_"edit service plans list" id="serviceplanslistbtn"
+                         action={ dialog_open title=_"Account level call restrictions" template="admin_portal_account_restrictions.tpl" class="iamclass" account_id=account_id }
+               %}
+            </th>
+        </tr>
+    </tbody>
+    <tbody id="rs_service_plans_widget_opened" style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}">
+        <tr><td>{_ Account name _}</td>
+            <td><span id="name">
+                    {% include "_show_field.tpl" type="account" doc_id="_no_need_" field_name=["name"] account_id=account_id %}
+                </span>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
         <tr><th colspan="2">
             {% wire id="arrows_"++#id type="click"

@@ -1547,6 +1547,7 @@ current_service_plans(Context) ->
 
 current_service_plans(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, ?CURRENT/binary>>,
+lager:info("IAM current_service_plans: ~p",[crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
 
 add_service_plan(PlanId, AccountId, Context) ->

@@ -192,6 +192,7 @@ event({postback,kazoo_transaction,_,_}, Context) ->
                 <<"submitted_for_settlement">> ->
                     spawn(fun() -> timer:sleep(1000), mod_signal:emit({update_onnet_widget_finance_tpl, []}, Context) end),
                     spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_onnet_widget_make_payment_tpl, []}, Context) end),
+                    spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_rs_widget_transactions_list_tpl, [{headline,?__("Transactions list", Context)}]}, Context) end),
         %            z_render:growl("£"++z_convert:to_list(Amount)++?__(" successfully added.",Context), Context);
                     z_render:growl(?__(" successfully added.",Context), Context);
                 E ->
