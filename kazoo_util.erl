@@ -108,9 +108,16 @@
     ,purchase_number/2
     ,deallocate_number/2
     ,deallocate_number/3
+    ,service_plan/2
+    ,service_plan/3
+    ,service_plans/1
+    ,service_plans/2
+    ,available_service_plans/1
+    ,available_service_plans/2
     ,current_service_plans/1
     ,current_service_plans/2
     ,add_service_plan/3
+    ,delete_service_plan_from_account/3
     ,valid_card_exists/1
     ,is_creditable/1
     ,process_purchase_number/2
@@ -365,6 +372,7 @@
 -define(MESSAGE, <<"/message">>).
 -define(RESELLER, <<"/reseller">>).
 -define(CURRENT_BALANCE, <<"/current_balance">>).
+-define(AVAILABLE, <<"/available">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", (z_convert:to_binary(Reason))/binary>> end).
@@ -1541,19 +1549,46 @@ deallocate_number(Number, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
+service_plan(PlanId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    service_plan(PlanId, AccountId, Context).
+
+service_plan(PlanId, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    crossbar_admin_request('get', API_String, [], Context).
+
+service_plans(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    service_plans(AccountId, Context).
+
+service_plans(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+available_service_plans(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    available_service_plans(AccountId, Context).
+
+available_service_plans(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, ?AVAILABLE/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
 current_service_plans(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     current_service_plans(AccountId, Context).
 
 current_service_plans(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, ?CURRENT/binary>>,
-lager:info("IAM current_service_plans: ~p",[crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
 
 add_service_plan(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
     DataBag = {[{<<"data">>, {[{<<"id">>, z_convert:to_binary(PlanId)}]}}]},
     crossbar_admin_request('post', API_String, DataBag, Context).
+
+delete_service_plan_from_account(PlanId, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    crossbar_admin_request('delete', API_String, [], Context).
 
 is_service_plan_applied(Context) ->
     case modkazoo_util:get_value(<<"plans">>, current_service_plans(Context)) of

@@ -1415,6 +1415,11 @@ event({postback,{refresh_rs_payments_list,[{account_id, AccountId}]},_,_}, Conte
                                      ,Context)
                    ,Context);
 
+event({postback,{add_chosen_service_plan,[{account_id,AccountId}]},_,_}, Context) ->
+    PlanId = z_context:get_q("selected_service_plan", Context),
+    _ = kazoo_util:add_service_plan(PlanId, AccountId, Context),
+    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 

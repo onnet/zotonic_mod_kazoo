@@ -90,7 +90,6 @@
                 {% endif %}
             </td>
           </tr>
-          <tr><td>{_ Service plans _}</td><td>{{ m.kazoo[{kz_current_services account_id=account_id}][1]["plans"][1][1][1] }}</td></tr>
         {% endif %}
     </tbody>
     <tbody>
@@ -109,19 +108,45 @@
                                                class="arrowpad fa fa-arrow-circle-down"></i>
               </span>
                {_ Service plans _}:
-               {% button class="btn btn-xs btn-onnet pull-right" text=_"edit service plans list" id="serviceplanslistbtn"
-                         action={ dialog_open title=_"Account level call restrictions" template="admin_portal_account_restrictions.tpl" class="iamclass" account_id=account_id }
+               {% button class="btn btn-xs btn-onnet pull-right"
+                         text=_"add service plan"
+                         id="serviceplanslistbtn"
+                         action={enable target="add_service_plan_tr_id"}
+                         action={disable target="serviceplanslistbtn"}
                %}
             </th>
         </tr>
     </tbody>
     <tbody id="rs_service_plans_widget_opened" style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}">
-        <tr><td>{_ Account name _}</td>
-            <td><span id="name">
-                    {% include "_show_field.tpl" type="account" doc_id="_no_need_" field_name=["name"] account_id=account_id %}
-                </span>
+        <tr id="add_service_plan_tr_id" class="disabled">
+          <td colspan="2">
+           {_ Choose service plan to add _}:
+            <select id="selected_service_plan" name="selected_service_plan">
+            {% for service_plan_available in m.kazoo.kz_service_plans_available %}
+              <option name="service_plan_available" value="{{ service_plan_available["id"] }}">
+                {{ service_plan_available["name"] }}
+              </option>
+            {% endfor %}
+            </select>
+           <span class="pull-right pl-15"><i id="close_number_search" class="fa fa-times pointer"></i></span>
+           {% button class="btn btn-xs btn-onnet pull-right" text=_"add chosen service plan"
+                     action={postback postback={add_chosen_service_plan account_id}
+                                      inject_args account_id=account_id
+                                      qarg="selected_service_plan"
+                                      delegate="mod_kazoo"
+                            }
+           %}
+          </td>
+        </tr>
+      {% for service_plan in m.kazoo[{kz_current_services account_id=account_id}] %}
+        <tr>
+            <td colspan="2">
+              {{ service_plan["plans"][1][1][1] }} 
+              {% print service_plan["plans"][1] %} 
+              <i id="delete_{{ service_plan["plans"][1][1][1] }}" class="fa fa-trash-o pointer pull-right" title="{_ Delete _}"></i>
             </td>
         </tr>
+      {% endfor %}
     </tbody>
     <tbody>
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
