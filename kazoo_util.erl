@@ -29,6 +29,7 @@
     ,kz_list_account_cdr_page/3
     ,kz_list_account_cdr_reduced/3
     ,kz_list_user_cdr/3
+    ,kz_list_user_cdr_reduced/3
     ,kz_fetch_cdr_details/2
     ,kz_cdr_list_reduce/2
     ,kz_list_account_children/1
@@ -1115,6 +1116,9 @@ kz_list_user_cdr(CreatedFrom, CreatedTo, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, OwnerId/binary, ?CDRS/binary, <<"?">>/binary, 
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_list_user_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
+    kz_cdr_list_reduce(kz_list_user_cdr(CreatedFrom, CreatedTo, Context), Context).
 
 kz_fetch_cdr_details(CdrId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
