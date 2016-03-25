@@ -133,24 +133,28 @@
            %}
            <span class="pull-right pl-15"><i id="close_add_service_plan" class="fa fa-times pointer"></i></span>
            {% button class="btn btn-xs btn-onnet pull-right" text=_"add chosen service plan"
-                     action={postback postback={add_chosen_service_plan account_id}
-                                      inject_args account_id=account_id
-                                      qarg="selected_service_plan"
-                                      delegate="mod_kazoo"
+                     action={confirm text=_"Do you really want to add service plan?"
+                                     action={postback postback={add_chosen_service_plan account_id}
+                                                      inject_args account_id=account_id
+                                                      qarg="selected_service_plan"
+                                                      delegate="mod_kazoo"
+                                            }
                             }
            %}
           </td>
         </tr>
-      {% for service_plan in m.kazoo[{kz_current_services account_id=account_id}] %}
-        {% with service_plan["plans"][1][1][1] as service_plan_id %}
+      {% for service_plan in m.kazoo[{kz_current_services account_id=account_id}][1]["plans"][1] %}
+        {% with service_plan[1] as service_plan_id %}
         <tr>
           <td colspan="2">
-            {{ service_plan_id }} 
+            {{ service_plan_id }}
             {% wire id="delete_"++service_plan_id
+                 action={confirm text=_"Do you really want to remove "++service_plan_id++" service plan?"
                     action={postback postback={remove_service_plan_from_account account_id service_plan_id}
                                       inject_args account_id=account_id service_plan_id=service_plan_id
                                       delegate="mod_kazoo"
                            }
+                         }
             %}
             <i id="delete_{{ service_plan_id }}" class="fa fa-trash-o pointer pull-right" title="{_ Delete _}"></i>
           </td>
