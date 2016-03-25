@@ -109,6 +109,13 @@
               </span>
                {_ Service plans _}:
                {% button class="btn btn-xs btn-onnet pull-right"
+                         text=_"sync services"
+                         id="sync_services_btn"
+                         action={confirm text=_"Do you really want to sync services?"
+                                         action={postback postback={sync_account_services account_id=account_id} delegate="mod_kazoo"}
+                                }
+               %}
+               {% button class="btn btn-xs btn-onnet pull-right"
                          text=_"add service plan"
                          id="add_serviceplan_btn"
                          action={enable target="add_service_plan_tr_id"}
@@ -134,8 +141,7 @@
            <span class="pull-right pl-15"><i id="close_add_service_plan" class="fa fa-times pointer"></i></span>
            {% button class="btn btn-xs btn-onnet pull-right" text=_"add chosen service plan"
                      action={confirm text=_"Do you really want to add service plan?"
-                                     action={postback postback={add_chosen_service_plan account_id}
-                                                      inject_args account_id=account_id
+                                     action={postback postback={add_chosen_service_plan account_id=account_id}
                                                       qarg="selected_service_plan"
                                                       delegate="mod_kazoo"
                                             }

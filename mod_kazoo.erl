@@ -1424,6 +1424,10 @@ event({postback,{remove_service_plan_from_account,[{account_id,AccountId},{servi
     kazoo_util:remove_service_plan_from_account(PlanId, AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
+event({postback,{sync_account_services,[{account_id,AccountId}]},_,_}, Context) ->
+    _ = kazoo_util:sync_service_plans(AccountId, Context),
+    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 
