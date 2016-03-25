@@ -1420,6 +1420,10 @@ event({postback,{add_chosen_service_plan,[{account_id,AccountId}]},_,_}, Context
     _ = kazoo_util:add_service_plan(PlanId, AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
+event({postback,{remove_service_plan_from_account,[{account_id,AccountId},{service_plan_id,PlanId}]},_,_}, Context) ->
+    kazoo_util:remove_service_plan_from_account(PlanId, AccountId, Context),
+    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 
