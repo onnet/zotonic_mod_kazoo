@@ -2,7 +2,7 @@
 <table id="admin_portal_users_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
-            <th style="text-align: center1;">{_ Login Name _}</th>
+            <th style="text-align: center1;">{_ Username _}</th>
             <th style="text-align: center;">{_ First Name _}</th>
             <th style="text-align: center;">{_ Last Name _}</th>
             <th style="text-align: center;">{_ Privilege _}</th>
