@@ -340,6 +340,7 @@
 -define(NUMBER, <<"/number">>).
 -define(CUSTOMER, <<"/customer">>).
 -define(TRANSACTIONS, <<"/transactions">>).
+-define(ONBILL_TRANSACTIONS, <<"/onbill_transactions">>).
 -define(SUBSCRIPTIONS, <<"/subscriptions">>).
 -define(CREDIT, <<"/credit">>).
 -define(DEBIT, <<"/debit">>).
@@ -1393,13 +1394,13 @@ kz_list_transactions(CreatedFrom, CreatedTo, Context) ->
     kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context).
 
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?ONBILL_TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
  %   API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?ONBILL_TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?SET_REASON(Reason)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
@@ -1413,16 +1414,16 @@ kz_list_subscriptions(Context) ->
     kz_list_subscriptions(AccountId, Context).
 
 kz_list_subscriptions(AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?ONBILL_TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
     lager:info("kz_list_subscriptions: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
 
 kz_current_balance(AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?CURRENT_BALANCE/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?ONBILL_TRANSACTIONS/binary, ?CURRENT_BALANCE/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?CREDIT/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?ONBILL_TRANSACTIONS/binary, ?CREDIT/binary>>,
     DataBag = {[{<<"data">>,{[{<<"amount">>, z_convert:to_binary(Amount)}
                               ,{<<"reason">>, z_convert:to_binary(Reason)}
                               ,{<<"description">>, z_convert:to_binary(Description)}
@@ -1431,7 +1432,7 @@ kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
     crossbar_account_request('put', API_String, DataBag, Context).
 
 kz_transactions_debit(Amount, Reason, Description, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?TRANSACTIONS/binary, ?DEBIT/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?ONBILL_TRANSACTIONS/binary, ?DEBIT/binary>>,
     DataBag = {[{<<"data">>,{[{<<"amount">>, z_convert:to_binary(Amount)}
                               ,{<<"reason">>, z_convert:to_binary(Reason)}
                               ,{<<"description">>, z_convert:to_binary(Description)}
@@ -1757,7 +1758,7 @@ kz_list_account_channels(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_admin_list_account_channels(AccountId, Number, Context) ->
+kz_admin_list_account_channels(AccountId, _Number, Context) ->
     {'ok', {'account_id', _}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
     URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
@@ -1770,7 +1771,7 @@ kz_admin_list_account_channels(AccountId, Number, Context) ->
                                                           ],
     jiffy:encode(Data2).
 
-kz_admin_list_account_channels_need(Calls, Context) ->
+kz_admin_list_account_channels_need(Calls, _Context) ->
     %[modkazoo_util:get_value(<<"destination">>, Calls),
     % modkazoo_util:get_value(<<"answered">>, Calls),
     % modkazoo_util:get_value(<<"elapsed_s">>, Calls)].
