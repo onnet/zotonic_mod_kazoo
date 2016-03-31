@@ -31,8 +31,12 @@ forbidden(ReqData, Context) ->
     {false, ReqData, Context}.
 
 content_types_provided(ReqData, Context) ->
- %   {[{z_context:get(mime, Context), provide_content}], ReqData, Context}.
-    {[{"application/pdf", provide_content}], ReqData, Context}.
+    case z_context:get_q("doc_type", Context) of
+        "onbill_doc" ->
+            {[{"application/pdf", provide_content}], ReqData, Context};
+        "call_recording" ->
+            {[{"audio/mpeg", provide_content}], ReqData, Context}
+    end.
 
 encodings_provided(ReqData, Context) ->
     Encodings = [{"identity", fun(Data) -> Data end}], 
@@ -56,7 +60,7 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
           end,
     case z_context:get_q("doc_type", Context) of
         "onbill_doc" ->
-                    {'ok', Body} = onbill_doc(Context),
+                    {'ok', Body} = onbill_doc_attachment(Context),
                     {Body, ReqData1, z_context:set(body, Body, Context)};
         "call_recording" ->
                     {'ok', Body} = call_recording_attachment(Context),
@@ -68,8 +72,12 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
 finish_request(ReqData, Context) ->
     {ok, ReqData, Context}.
 
-onbill_doc(_Context) ->
-    {ok, <<"Hello from controller">>}.
+onbill_doc_attachment(Context) ->
+    AccountId = z_context:get_q("account_id", Context),
+    CallId = z_context:get_q("call_id", Context),
+    AuthToken = z_context:get_q("auth_token", Context),
+    Body = kazoo_util:onbill_doc_attachment(AccountId, CallId, AuthToken, Context),
+    {ok, Body}.
 
 call_recording_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),

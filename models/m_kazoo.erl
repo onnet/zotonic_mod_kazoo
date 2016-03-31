@@ -151,8 +151,10 @@ m_find_value({kz_list_user_vmbox_details, [{vmbox_id, VMBoxId}]}, _M, Context) -
 m_find_value({kz_vmessage_download_link, [{vmbox_id, VMBoxId}, {media_id, MediaId}]}, _M, Context) ->
     kazoo_util:kz_vmessage_download_link(VMBoxId, MediaId, Context);
 
-m_find_value({kz_recording_download_link, [{cdr_id, CallId}]}, _M, Context) ->
-    kazoo_util:kz_recording_download_link(CallId, Context);
+m_find_value({z_recording_download_link, [{cdr_id, CallId}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    kazoo_util:kz_kzattachment_link(AccountId, CallId, AuthToken, "call_recording", Context);
 
 m_find_value({kz_incoming_fax_download_link, [{doc_id, DocId}]}, _M, Context) ->
     kazoo_util:kz_incoming_fax_download_link(DocId, Context);
