@@ -5,6 +5,7 @@
     ,kz_user_creds/4
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
+    ,crossbar_account_request/4
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
     ,kz_get_acc_doc_by_account_id_and_authtoken/3
@@ -60,6 +61,9 @@
     ,current_account_credit/2
     ,kz_check_device_registration/2
     ,kz_recording_download_link/2
+    ,kz_recording_download_link/3
+    ,kz_recording_download_link/4
+    ,call_recording_attachment/4
     ,kz_get_device_registration_details/2
     ,azrates/1
     ,azrates_refresh/1
@@ -699,7 +703,11 @@ crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken,
     ibrowse:send_req(URL, req_headers(ContextType, AuthToken), Verb, Payload, [{'inactivity_timeout', 10000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
-    case crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) of
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context).
+
+crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context) ->
+    case crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) of
         {'ok', _ReturnCode, _, Body} -> Body;
         E -> 
             lager:info("crossbar_account_send_raw_request_body Error: ~p", [E]),
@@ -711,6 +719,9 @@ crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context)
         
 crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context).
+
+crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 10000}]).
@@ -1134,10 +1145,22 @@ kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
 kz_recording_download_link(CallId, Context) ->
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?THIRD_PARTY_RECORDING/binary, <<"/">>/binary, (z_convert:to_binary(CallId))/binary,
-                   ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_recording_download_link(AccountId, CallId, Context).
+
+kz_recording_download_link(AccountId, CallId, Context) ->
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    kz_recording_download_link(AccountId, CallId, AuthToken, Context).
+
+kz_recording_download_link(AccountId, CallId, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?THIRD_PARTY_RECORDING/binary, <<"/">>/binary, (z_convert:to_binary(CallId))/binary,
+                   ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_convert:to_binary(AuthToken))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+
+call_recording_attachment(AccountId, CallId, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary
+                   ,?THIRD_PARTY_RECORDING/binary,<<"/">>/binary,(z_convert:to_binary(CallId))/binary, ?ATTACHMENT/binary>>,
+    crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [], [], Context).
 
 kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
     Timezone = z_convert:to_list(kazoo_util:may_be_get_timezone(Context)),
