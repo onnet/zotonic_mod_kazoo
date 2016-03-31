@@ -46,10 +46,7 @@ resource_exists(ReqData, Context) ->
     {true , ReqData, Context}.
 
 charsets_provided(ReqData, Context) ->
-    case is_text(z_context:get(mime, Context)) of
-        true -> {[{"utf-8", fun(X) -> X end}], ReqData, Context};
-        _ -> {no_charset, ReqData, Context}
-    end.
+    {no_charset, ReqData, Context}.
 
 provide_content(ReqData, Context) ->
 lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
@@ -85,10 +82,4 @@ call_recording_attachment(Context) ->
     AuthToken = z_context:get_q("auth_token", Context),
     Body = kazoo_util:call_recording_attachment(AccountId, CallId, AuthToken, Context),
     {ok, Body}.
-
-is_text("text/" ++ _) -> true;
-is_text("application/x-javascript") -> true;
-is_text("application/xhtml+xml") -> true;
-is_text("application/xml") -> true;
-is_text(_Mime) -> false.
 
