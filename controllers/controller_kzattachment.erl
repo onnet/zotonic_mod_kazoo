@@ -50,11 +50,14 @@ charsets_provided(ReqData, Context) ->
 
 provide_content(ReqData, Context) ->
 lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
-    ReqData1 = case z_context:get(content_disposition, Context) of
-              inline ->     wrq:set_resp_header("Content-Disposition", "inline", ReqData);
-              attachment -> wrq:set_resp_header("Content-Disposition", "attachment", ReqData);
-              undefined ->  ReqData
-          end,
+    ReqData1 = case z_context:get_q("doc_type", Context) of
+                   "onbill_doc" ->
+                       MediaName = z_context:get_q("doc_id", Context),
+                       wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".pdf", ReqData);
+                   "call_recording" ->
+                       MediaName = z_context:get_q("call_id", Context),
+                       wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".mp3", ReqData)
+               end,
     case z_context:get_q("doc_type", Context) of
         "onbill_doc" ->
                     {'ok', Body} = onbill_attachment(Context),
