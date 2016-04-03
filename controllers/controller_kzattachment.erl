@@ -76,7 +76,9 @@ onbill_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),
     DocId = z_context:get_q("doc_id", Context),
     AuthToken = z_context:get_q("auth_token", Context),
-    Body = onbill_util:onbill_attachment(AccountId, DocId, AuthToken, Context),
+    Year = z_context:get_q("year", Context),
+    Month = z_context:get_q("month", Context),
+    Body = onbill_util:onbill_attachment(AccountId, DocId, AuthToken, Year, Month, Context),
     {ok, Body}.
 
 call_recording_attachment(Context) ->
