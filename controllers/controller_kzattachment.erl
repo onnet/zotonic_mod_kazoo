@@ -60,8 +60,11 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
                end,
     case z_context:get_q("doc_type", Context) of
         "onbill_doc" ->
-                    {'ok', Body} = onbill_attachment(Context),
-                    {Body, ReqData1, z_context:set(body, Body, Context)};
+                    case onbill_attachment(Context) of
+                        {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
+                        _ ->
+                            api_error(404, 0, "No IAMs authorization", ReqData, Context)
+                    end;
         "call_recording" ->
                     {'ok', Body} = call_recording_attachment(Context),
                     {Body, ReqData1, z_context:set(body, Body, Context)};
@@ -78,8 +81,10 @@ onbill_attachment(Context) ->
     AuthToken = z_context:get_q("auth_token", Context),
     Year = z_context:get_q("year", Context),
     Month = z_context:get_q("month", Context),
-    Body = onbill_util:onbill_attachment(AccountId, DocId, AuthToken, Year, Month, Context),
-    {ok, Body}.
+    case onbill_util:onbill_attachment(AccountId, DocId, AuthToken, Year, Month, Context) of
+        <<>> -> {error, <<>>};
+        Body -> {ok, Body}
+    end.
 
 call_recording_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),
@@ -87,4 +92,8 @@ call_recording_attachment(Context) ->
     AuthToken = z_context:get_q("auth_token", Context),
     Body = kazoo_util:call_recording_attachment(AccountId, CallId, AuthToken, Context),
     {ok, Body}.
+
+api_error(HttpCode, ErrCode, Message, ReqData, Context) ->
+    R = {struct, [{error, {struct, [{code, ErrCode}, {message, Message}]}}]},
+    {{halt, HttpCode}, wrq:set_resp_body(mochijson:encode(R), ReqData), Context}.
 

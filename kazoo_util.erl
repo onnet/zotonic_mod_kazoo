@@ -707,7 +707,7 @@ crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context)
 
 crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context) ->
     case crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) of
-        {'ok', _ReturnCode, _, Body} -> Body;
+        {'ok', [50,_,_], _, Body} ->  Body; %  50 = "2"
         E -> 
             lager:info("crossbar_account_send_raw_request_body Error: ~p", [E]),
             lager:info("crossbar_account_send_raw_request_body Error Verb: ~p", [Verb]),
