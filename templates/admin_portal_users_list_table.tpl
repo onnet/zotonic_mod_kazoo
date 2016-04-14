@@ -2,7 +2,7 @@
 <table id="admin_portal_users_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
-            <th style="text-align: center;">{_ Login _}</th>
+            <th style="text-align: center1;">{_ Username _}</th>
             <th style="text-align: center;">{_ First Name _}</th>
             <th style="text-align: center;">{_ Last Name _}</th>
             <th style="text-align: center;">{_ Privilege _}</th>
@@ -16,7 +16,7 @@
         {% with m.kazoo[{kz_user_doc_by_ownerid owner_id=user["id"]}] as user_doc %}
         {% with user_doc[1]["caller_id"][1]["internal"][1]["number"], user_doc[1]["caller_id"][1]["external"][1]["number"] as internal_cid, external_cid %} 
 	<tr>
-            <td style="text-align: center;">{{ user["username"] }}</td>
+            <td style="text-align: left;">{{ user["username"] }}</td>
             <td style="text-align: center;">{{ user["first_name"]|truncate:13 }}</td>
             <td style="text-align: center;">{{ user["last_name"]|truncate:13 }}</td>
             <td style="text-align: center;">{{ user["priv_level"] }}</td>
@@ -57,7 +57,7 @@ var oTable = $('#admin_portal_users_table').dataTable({
 },
 "columnDefs": [
             {
-                "targets": [ 0 ],
+                "targets": [ 1,2 ],
                 "visible": false
             }
 ],

@@ -13,6 +13,8 @@
  {getfaxdoc, ["getfaxdoc","id",id], controller_getfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
  {getprompt, ["getprompt","id",id], controller_getprompt, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
 
+ {kzattachment, ["kzattachment"], controller_kzattachment, [{use_cache, false},{content_disposition, attachment},{ssl, any}]},
+
  {signup,["signup"],         controller_template,  [ {template, "sign_up.tpl"} ]}
 
 ].

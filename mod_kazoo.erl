@@ -54,6 +54,7 @@ event({postback,{signout,[]}, _, _}, Context) ->
     modkazoo_auth:signout(Context);
 
 event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
+    lager:info("innosignup event variables: ~p", [z_context:get_q_all(Context)]),
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
       'ok' = modkazoo_util:check_field_filled("surname",Context),
@@ -1126,6 +1127,11 @@ event({postback,{delete_webhook,[{webhook_id, WebhookId}]},_,_},Context) ->
 event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
     _ = kazoo_util:kz_webhook_toggle(WebhookId, Context),
     mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    Context;
+
+event({postback,refresh_user_callstats,_,_}, Context) ->
+    SelectedDay = z_context:get_q("callstatsdayInput",Context),
+    mod_signal:emit({update_user_portal_call_history_tpl, [{selected_day, SelectedDay}]}, Context),
     Context;
 
 event({postback,refresh_admin_callstats,_,_}, Context) ->

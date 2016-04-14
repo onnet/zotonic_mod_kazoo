@@ -43,7 +43,7 @@
       </div>
   </span>
 
-     {% wire action={connect signal={user_portal_call_history_tpl} action={update target="user_portal_call_history_tpl" template="user_portal_call_history.tpl" headline=_"Call History"}} %}
+     {% wire action={connect signal={update_user_portal_call_history_tpl} action={update target="user_portal_call_history_tpl" template="user_portal_call_history.tpl" headline=_"Call History"}} %}
   <span id="user_portal_call_history_tpl">
         {% include "user_portal_call_history.tpl" headline=_"Call History" %}
   </span>
