@@ -7,8 +7,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Integrations"
+msgstr "Интеграции"
 
 msgid "- No CID -"
 msgstr "Не выбран"
