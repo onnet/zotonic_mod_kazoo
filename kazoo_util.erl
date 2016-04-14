@@ -230,7 +230,6 @@
     ,kz_find_account_by_number/2
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
-    ,kz_admin_list_account_channels/3
     ,kz_get_registrations_by_accountid/2
     ,list_account_trunks/1
     ,list_trunks_realm/2
@@ -3131,6 +3130,7 @@ kz_admin_get_account_by_number(Number, Context) ->
     {'ok', {'account_id', AccountId}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
     URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
+    lager:info("Vlad URL: ~p",[URL]),
     {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers(AuthToken), 'get', [], [], 10000),
     lager:info("action: ~p",[Body]),
     modkazoo_util:get_value([<<"data">>,<<"account_id">>], jiffy:decode(Body)).
