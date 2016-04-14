@@ -226,7 +226,6 @@
     ,kz_find_account_by_number/2
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
-    ,kz_admin_list_account_channels/3
     ,kz_get_registrations_by_accountid/2
     ,list_account_trunks/1
     ,list_trunks_realm/2
@@ -1753,25 +1752,6 @@ kz_list_account_channels(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_admin_list_account_channels(AccountId, Number, Context) ->
-    {'ok', {'account_id', _}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
-    URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
-    {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers(AuthToken), 'get', [], [], 10000),
-    Data = modkazoo_util:get_value([<<"data">>], jiffy:decode(z_convert:to_binary(Body))),
-    Data2 = [kz_admin_list_account_channels_need(Calls, Context) || Calls <- Data
-                                                          %, (modkazoo_util:get_value(<<"direction">>, Calls) == <<"inbound">>
-                                                          % andalso modkazoo_util:get_value(<<"username">>, Calls)
-                                                          % == z_convert:to_binary(Number))
-                                                          ],
-    jiffy:encode(Data2).
-
-kz_admin_list_account_channels_need(Calls, Context) ->
-    %[modkazoo_util:get_value(<<"destination">>, Calls),
-    % modkazoo_util:get_value(<<"answered">>, Calls),
-    % modkazoo_util:get_value(<<"elapsed_s">>, Calls)].
-Calls.
-
 kz_channel_info(CallId, Context) ->
     kz_channel_info(CallId, z_context:get_session('kazoo_account_id', Context), Context).
 
@@ -3121,8 +3101,8 @@ kz_admin_get_account_by_number(Number, Context) ->
     {'ok', {'account_id', AccountId}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary, ?IDENTIFY/binary>>,
     URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
+    lager:info("Vlad URL ~p",[URL]),
     {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers(AuthToken), 'get', [], [], 10000),
-    lager:info("action: ~p",[Body]),
     modkazoo_util:get_value([<<"data">>,<<"account_id">>], jiffy:decode(Body)).
 
 list_account_trunks(Context) ->

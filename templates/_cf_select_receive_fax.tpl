@@ -12,8 +12,8 @@
             </select>
         </div>
         <div id="number_input_div"class="col-sm-6">
-          <label for="t_38_checkbox">Enable T.38?</label>
-          <input id="t_38_checkbox" name="t_38_checkbox"type="checkbox" checked>
+          <label for="t_38_checkbox" style="display: none">Enable T.38?</label>
+          <input id="t_38_checkbox" style="display: none" name="t_38_checkbox" type="checkbox">
         </div>
       </div>
     </div>
