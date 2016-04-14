@@ -15,6 +15,13 @@
         {% include "admin_portal_webhooks_list.tpl" headline=_"Webhooks" %}
   </span>
 
+  {% wire action={connect signal={update_crm_integrations_widget_tpl}
+                          action={update target="crm_integrations_widget_tpl" template="crm_integrations_widget.tpl" headline=_"CRM Integrations"}
+                 }
+  %}
+  <span id="crm_integrations_widget_tpl">
+        {% include "crm_integrations_widget.tpl" headline=_"CRM Integrations" %}
+  </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_admin_portal_c2call_list_tpl}
