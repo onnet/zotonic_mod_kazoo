@@ -63,7 +63,7 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
                     case onbill_attachment(Context) of
                         {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
                         _ ->
-                            api_error(404, 0, "No IAMs authorization", ReqData, Context)
+                            api_error(404, 0, "No attachment found", ReqData, Context)
                     end;
         "call_recording" ->
                     {'ok', Body} = call_recording_attachment(Context),

@@ -1630,7 +1630,8 @@ admin_add_service_plan(PlanId, AccountId, Context) ->
 
 remove_service_plan_from_account(PlanId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
-    crossbar_account_request('delete', API_String, [], Context).
+lager:info("IAM remove service plan API_String: ~p",[API_String]),
+    crossbar_account_request('delete', API_String, ?MK_DATABAG({[]}), Context).
 
 is_service_plan_applied(Context) ->
     case modkazoo_util:get_value(<<"plans">>, current_service_plans(Context)) of
