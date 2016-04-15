@@ -53,6 +53,7 @@
                     {% include "_cf_tool_element.tpl" tool_id="conference" tool_name="conference" tool_descr="Conference" icon="conference"
                        help="Connect a caller to a Meet-Me conference bridge"
                     %}
+                    {% include "_cf_tool_element.tpl" tool_id="dead_air" tool_name="dead_air" tool_descr="Dead air" icon="skull2" help="Answer and keep silence" %}
                     <div class="clear">
                     </div>
                     <div class="app_list_nav">

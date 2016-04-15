@@ -2082,6 +2082,17 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                     mod_signal:emit({update_cf_builder_area, []}, Context),
                     z_render:dialog_close(Context)
             end;
+        "dead_air" ->
+            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], z_convert:to_binary(ToolName), Context),
+            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
+            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], {[]}, Context),
+            z_render:insert_bottom(PathToChildren
+                          ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
+                                                             ,{element_id, ElementId}
+                                                             ,{drop_parent,DropParent}
+                                                             ,{switch,Switch}]
+                                             ,Context)
+                          ,Context);
         _ ->
             Context1 = z_render:insert_bottom(PathToChildren
                                      ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
