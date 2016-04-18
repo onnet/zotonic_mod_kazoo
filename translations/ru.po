@@ -4,8 +4,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Current state"
+msgstr "Текущее состояние"
 
 msgid "Integrations"
 msgstr "Интеграции"

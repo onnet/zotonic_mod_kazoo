@@ -12,7 +12,7 @@
     </thead>
     <tbody>
         {% for call in calls %}
-            {% include "admin_cdr_table_line.tpl" call=call %}
+            {% include "admin_cdr_leg_table_line.tpl" call=call %}
         {% endfor %}
     </tbody>
 </table>

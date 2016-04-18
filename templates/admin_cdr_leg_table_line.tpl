@@ -1,7 +1,7 @@
         <tr>
             <td style="text-align: center;">{{ call["filtered_call_date"] }}</td>
-            <td style="text-align: center;">{{ call["calling_from"] }}</td>
-            <td style="text-align: center;">{{ call["dialed_number"] }}</td>
+            <td style="text-align: center;">{{ call["from"]|split:"@"|first }}</td>
+            <td style="text-align: center;">{{ call["to"]|split:"@"|first }}</td>
             <td style="text-align: center;">{{ call["duration_seconds"] }}/{{ call["billing_seconds"] }}</td>
             <td style="text-align: center;">
                 {% if call["recording_url"] and (call["billing_seconds"] > 3) %}
@@ -31,11 +31,5 @@
                 {% else %}-{% endif %}
             </td>
             <td style="text-align: center;"><i id="{{ #this_call_info }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i></td>
-            {% wire id=#this_call_info action={update target="admin_portal_call_details_tpl"
-                                                      title=_"Call details"
-                                                      template="admin_portal_call_details.tpl"
-                                                      cdr_id=call["id"]
-                                                      headline=_"Call details"
-                                              }
-            %}
+            {% wire id=#this_call_info action={ dialog_open title=_"Call details" template="_call_details.tpl" cdr_id=call["id"] width="auto" } %}
         </tr>

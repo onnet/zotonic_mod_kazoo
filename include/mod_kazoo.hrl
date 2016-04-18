@@ -382,4 +382,28 @@
              <<"Pacific/Wallis">>,
              <<"Pacific/Yap">>]).
 
+-define(MICROSECONDS_IN_SECOND, 1000000).
+
 -define(MILLISECONDS_IN_SECOND, 1000).
+-define(MILLISECONDS_IN_MINUTE, 60000).
+-define(MILLISECONDS_IN_HOUR, 3600000).
+-define(MILLISECONDS_IN_DAY, 86400000).
+
+-define(SECONDS_IN_MINUTE, 60).
+-define(SECONDS_IN_HOUR, 3600).
+-define(SECONDS_IN_DAY, 86400).
+-define(SECONDS_IN_WEEK, 604800).
+-define(SECONDS_IN_YEAR, 31540000).
+
+-define(BYTES_K, 1024).
+-define(BYTES_M, 1048576).
+-define(BYTES_G, 1073741824).
+-define(BYTES_T, 1099511627776).
+
+
+%% result of calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}).
+%% %% Subtract this value from a gregorian seconds version of a date
+%% %% to get the Unix timestamp
+%% %% datetime_to_gregorian_seconds({date(),time()}) - ?UNIX_EPOCH_IN_GREGORIAN.
+%%
+-define(UNIX_EPOCH_IN_GREGORIAN, 62167219200).
