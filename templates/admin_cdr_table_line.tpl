@@ -37,5 +37,8 @@
                                                       cdr_id=call["id"]
                                                       headline=_"Call details"
                                               }
+                                       action={script script="$('i.zalarm').addClass('zprimary'); $('i.zalarm').removeClass('zalarm');"}
+                                       action={remove_class target=#this_call_info class="zprimary"}
+                                       action={add_class target=#this_call_info class="zalarm"}
             %}
         </tr>
