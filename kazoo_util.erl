@@ -1112,13 +1112,13 @@ kz_purge_voicemail(VMBoxId, MediaId, Delay, Context) ->
 
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, ?INTERACTION/binary, <<"?">>/binary, 
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, ?INTERACTION/binary, <<"?">>/binary, 
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"?">>/binary,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, ?INTERACTION/binary, <<"?">>/binary,
                    ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %                  ?START_KEY/binary, (z_convert:to_binary(StartKey))/binary, <<"&">>/binary, ?PAGE_SIZE/binary, (z_convert:to_binary(PageSize))/binary>>,
  %  Docs to implement pagination: https://github.com/2600hz/kazoo/blob/master/applications/crossbar/doc/basics.md#pagination                 
@@ -1145,7 +1145,6 @@ kz_cdr_legs(CdrId, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_cdr_legs_reduced(CdrId, Context) ->
-    Legs = kz_cdr_legs(CdrId, Context),
     kz_cdr_list_reduce(kz_cdr_legs(CdrId, Context), Context).
 
 kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
@@ -1180,7 +1179,7 @@ kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
 kz_cdr_list_reduce(_,_) ->
     [].
 
-kz_cdr_element_reduce({CdrElement}, Timezone, Context) ->
+kz_cdr_element_reduce({CdrElement} = Element, Timezone, Context) ->
     FilterFun = fun ({<<"timestamp">>,_}) -> true;
                     ({<<"calling_from">>,_}) -> true;
                     ({<<"from">>,_}) -> true;
@@ -1188,12 +1187,12 @@ kz_cdr_element_reduce({CdrElement}, Timezone, Context) ->
                     ({<<"to">>,_}) -> true;
                     ({<<"duration_seconds">>,_}) -> true;
                     ({<<"billing_seconds">>,_}) -> true;
-                    ({<<"recording_url">>,_}) -> true;
                     ({<<"id">>,_}) -> true;
                     ({<<"call_id">>,_}) -> true;
                     (_) -> false end,
     T = z_convert:to_integer(proplists:get_value(<<"timestamp">>,CdrElement)),
     ?JSON_WRAPPER(lists:filter(FilterFun, CdrElement)
+      ++[{<<"media_name">>,  Element}]
       ++[{<<"z_recording_download_link">>, kz_kzattachment_link(proplists:get_value(<<"id">>, CdrElement), "call_recording", Context)}]
       ++[{<<"filtered_call_date">>, localtime:local_to_local(calendar:gregorian_seconds_to_datetime(T), "UTC", Timezone)}]).
 
@@ -1380,7 +1379,7 @@ kz_account_numbers_info(Context) ->
     kz_account_numbers_info(AccountId, Context).
 
 kz_account_numbers_info(AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary>>,
     case crossbar_account_request('get', API_String, [], Context) of
         <<>> -> [<<"">>];
         Result -> Result
@@ -1561,8 +1560,17 @@ rs_add_number(Num, AccountId, Context) ->
         <<$+, BNum/binary>> -> BNum;
         BNum -> BNum
     end,
-    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary>>,[],Context),
-    _ = crossbar_account_request('put', <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary, ?ACTIVATE/binary>>,[],Context).
+    DataBag = {[{<<"data">>, {[{<<"numbers">>, [Number]}]}},{<<"accept_charges">>, true}]},
+    _ = crossbar_account_request('put'
+                                 ,<<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary>>
+                                 ,DataBag
+                                 ,Context
+                                ),
+    _ = crossbar_account_request('put'
+                                 ,<<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary, ?ACTIVATE/binary>>
+                                 ,[]
+                                 ,Context
+                                ).
 
 purchase_number(Number, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -1734,7 +1742,7 @@ delete_device(DeviceId, Context) ->
 
 kz_list_classifiers(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, ?CLASSIFIERS/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, ?CLASSIFIERS/binary>>,
     case crossbar_account_request('get', API_String, [], Context) of
         <<>> -> [<<"">>];
         Result -> Result
