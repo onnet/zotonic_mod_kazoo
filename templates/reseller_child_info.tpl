@@ -60,9 +60,7 @@
   <span id="rs_allocated_numbers_tpl">
         {% include "rs_allocated_numbers.tpl" headline=_"Account's allocated numbers" account_id=account_id %}
   </span>
-  {% if m.modules.info.mod_onbill.enabled %}
-    <span id="rs_widget_transactions_list_tpl">
-        {% include "rs_widget_transactions_list.tpl" headline=_"Transactions list" account_id=account_id %}
-    </span>
-  {% endif %}
+  <span id="onbill_rs_widgets_tpl">
+        {% include "onbill_rs_widgets.tpl" account_id=account_id %}
+  </span>
 </div>
