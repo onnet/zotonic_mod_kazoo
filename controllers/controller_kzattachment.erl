@@ -32,7 +32,7 @@ forbidden(ReqData, Context) ->
 
 content_types_provided(ReqData, Context) ->
     case z_context:get_q("doc_type", Context) of
-        "onbill_doc" ->
+        "onbill" ->
             {[{"application/pdf", provide_content}], ReqData, Context};
         "call_recording" ->
             {[{"audio/mpeg", provide_content}], ReqData, Context}
@@ -51,7 +51,7 @@ charsets_provided(ReqData, Context) ->
 provide_content(ReqData, Context) ->
 lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
     ReqData1 = case z_context:get_q("doc_type", Context) of
-                   "onbill_doc" ->
+                   "onbill" ->
                        MediaName = z_context:get_q("doc_id", Context),
                        wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".pdf", ReqData);
                    "call_recording" ->
@@ -59,7 +59,7 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
                        wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".mp3", ReqData)
                end,
     case z_context:get_q("doc_type", Context) of
-        "onbill_doc" ->
+        "onbill" ->
                     case onbill_attachment(Context) of
                         {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
                         _ ->
