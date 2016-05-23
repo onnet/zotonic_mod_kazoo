@@ -304,6 +304,40 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chose
             end
     end;
 
+m_find_value({kz_list_ledgers,[{account_id,AccountId},{payments_month_chosen,'undefined'},{ledger_id,LedgerId}]}, _M, Context) ->
+    {Year, Month, _} = erlang:date(),
+    PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
+    m_find_value({kz_list_ledgers,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context);
+
+m_find_value({kz_list_ledgers,[{account_id, 'undefined'},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({kz_list_ledgers,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context);
+
+m_find_value({kz_list_ledgers,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context) ->
+    [MonthS,YearS] = z_string:split(PaymentsMonthChosen, "/"),
+    Month = z_convert:to_integer(MonthS),
+    Year = z_convert:to_integer(YearS),
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    kazoo_util:kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context);
+
+m_find_value({kz_ledgers_summ,[{account_id,AccountId},{payments_month_chosen,'undefined'},{ledger_id,LedgerId}]}, _M, Context) ->
+    {Year, Month, _} = erlang:date(),
+    PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
+    m_find_value({kz_ledgers_summ,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context);
+
+m_find_value({kz_ledgers_summ,[{account_id, 'undefined'},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({kz_ledgers_summ,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context);
+
+m_find_value({kz_ledgers_summ,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{ledger_id,LedgerId}]}, _M, Context) ->
+    [MonthS,YearS] = z_string:split(PaymentsMonthChosen, "/"),
+    Month = z_convert:to_integer(MonthS),
+    Year = z_convert:to_integer(YearS),
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    modkazoo_util:get_value(z_convert:to_binary(LedgerId), kazoo_util:kz_ledgers_summary(AccountId, CreatedFrom, CreatedTo, Context));
+
 m_find_value(bt_client_token, _M, Context) ->
     bt_util:bt_client_token(Context);
 

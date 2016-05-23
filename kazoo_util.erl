@@ -82,6 +82,11 @@
     ,kz_account_numbers_info/2
     ,kz_send_fax/7
     ,kz_list_outgoing_faxes/1
+    ,kz_list_ledgers/2
+    ,kz_list_ledgers/3
+    ,kz_list_ledgers/4
+    ,kz_list_ledgers/5
+    ,kz_ledgers_summary/4
     ,kz_list_transactions/1
     ,kz_list_transactions/2
     ,kz_list_transactions/3
@@ -386,6 +391,7 @@
 -define(SYNCHRONIZATION, <<"/synchronization">>).
 -define(INTERACTION, <<"/interaction">>).
 -define(LEGS, <<"/legs">>).
+-define(LEDGERS, <<"/ledgers">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", (z_convert:to_binary(Reason))/binary>> end).
@@ -1414,6 +1420,30 @@ kz_send_fax(Account_Id, FaxTo, FaxFrom, Url, Attempts, FaxHeader, Context) ->
 kz_list_outgoing_faxes(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_context:get_session('kazoo_account_id', Context))/binary, ?FAXES_OUTGOING/binary>>,
     [{[{<<"a">>, TimeStamp}, A, B, C, D]} || {[A, B, C, D, {<<"created">>,TimeStamp}=_E]} <- crossbar_account_request('get', API_String, [], Context)].
+
+kz_list_ledgers(LedgerId, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_ledgers(LedgerId, AccountId, Context).
+
+kz_list_ledgers(LedgerId, AccountId, Context) ->
+    {Year, Month, _} = erlang:date(),
+    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
+    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
+    kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context).
+
+kz_list_ledgers(LedgerId, CreatedFrom, CreatedTo, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context).
+
+kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?LEDGERS/binary, "/", (z_convert:to_binary(LedgerId))/binary
+                   ,"?", ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_ledgers_summary(AccountId, CreatedFrom, CreatedTo, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?LEDGERS/binary
+                   ,"?", ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
 
 kz_list_transactions(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

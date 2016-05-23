@@ -9,17 +9,17 @@
         </tr>
     </thead>
     <tbody>
-            {% for transaction in m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen reason="per_minute_call"}] %}
-                <tr id={{ transaction["id"] }} {% if transaction["subscription_id"] %}style="cursor: pointer;"{% endif %}>
+            {% for ledger in m.kazoo[{kz_list_ledgers account_id=account_id payments_month_chosen=payments_month_chosen ledger_id="per-minute-voip"}] %}
+                <tr id={{ ledger["id"] }} {% if ledger["subscription_id"] %}style="cursor: pointer;"{% endif %}>
                     <td class="td-center">
-                      {{ transaction["created"]|inno_timestamp_to_date }}
-                      {{ transaction["created"]|inno_timestamp_to_date:"show_tz_name" }}
+                      {{ ledger["period"][1]["start"]|inno_timestamp_to_date }}
+                      {{ ledger["period"][1]["start"]|inno_timestamp_to_date:"show_tz_name" }}
                     </td>
-                    <td class="td-center">{{ transaction["metadata"][1]["from"]|split:"@"|first }}</td>
-                    <td class="td-center">{{ transaction["metadata"][1]["to"]|split:"@"|first }}</td>
-                    <td class="td-center">{{ transaction["metadata"][1]["duration"] }}</td>
+                    <td class="td-center">{{ ledger["metadata"][1]["caller_id_number"] }}</td>
+                    <td class="td-center">{{ ledger["metadata"][1]["callee_id_number"] }}</td>
+                    <td class="td-center">{{ (ledger["usage"][1]["quantity"]/60)|to_integer }} {_ min _}</td>
                     <td class="td-center">
-                      {{ m.config.mod_kazoo.local_currency_sign.value }}{{ transaction["amount"]|format_price:[".",""] }}
+                      {{ m.config.mod_kazoo.local_currency_sign.value }}{{ ledger["amount"]|units_to_money|format_price:[".",""] }}
                     </td>
                 </tr>
             {% endfor %}
