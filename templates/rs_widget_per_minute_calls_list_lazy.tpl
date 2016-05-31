@@ -18,7 +18,7 @@
                <span style="float:right; padding-right:2em;">
                  {{ m.config.mod_kazoo.local_currency_sign.value
                  }}{{
-                    (-1 * m.kazoo[{kz_ledgers_summ account_id=account_id payments_month_chosen=payments_month_chosen ledger_id="per-minute-voip"}])|units_to_money|format_price:[".",""]
+                    m.kazoo[{kz_ledgers_summ account_id=account_id payments_month_chosen=payments_month_chosen ledger_id="per-minute-voip"}]|units_to_money|format_price:[".",""]
                  }}
                </span>
             </th>

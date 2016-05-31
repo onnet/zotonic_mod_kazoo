@@ -1438,7 +1438,7 @@ kz_list_ledgers(LedgerId, CreatedFrom, CreatedTo, Context) ->
 kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?LEDGERS/binary, "/", (z_convert:to_binary(LedgerId))/binary
                    ,"?", ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    crossbar_account_request('get', API_String, [], Context, []).
 
 kz_ledgers_summary(AccountId, CreatedFrom, CreatedTo, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?LEDGERS/binary

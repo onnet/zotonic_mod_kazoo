@@ -336,7 +336,15 @@ m_find_value({kz_ledgers_summ,[{account_id,AccountId},{payments_month_chosen,Pay
     Year = z_convert:to_integer(YearS),
     CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
     CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
-    modkazoo_util:get_value(z_convert:to_binary(LedgerId), kazoo_util:kz_ledgers_summary(AccountId, CreatedFrom, CreatedTo, Context));
+    LedgersList = kazoo_util:kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context),
+    lists:foldl(fun(X, Acc) -> case z_convert:to_list(modkazoo_util:get_value([<<"source">>,<<"service">>], X)) of
+                                   LedgerId -> Acc + modkazoo_util:get_value([<<"amount">>], X);
+                                   _ -> Acc
+                               end
+                 end
+                ,0
+                ,LedgersList);
+ %   modkazoo_util:get_value(z_convert:to_binary(LedgerId), kazoo_util:kz_ledgers_summary(AccountId, CreatedFrom, CreatedTo, Context));
 
 m_find_value(bt_client_token, _M, Context) ->
     bt_util:bt_client_token(Context);
