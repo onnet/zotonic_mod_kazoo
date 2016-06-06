@@ -4,7 +4,7 @@
 {_ Thank you for registering _}!
 {_ We're pleased to confirm that your account has been created _}.
 {_ As an account holder you now have access to our customer portal at _} https://{{ m.site.hostname }}
-{_ The following access credentials are valid for portal _}:
+{_ The following access credentials are valid for the portal _}:
                 
 {_ Username _}: {{ username }}
 {_ Password _}: {{ password }}

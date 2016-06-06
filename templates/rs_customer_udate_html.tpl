@@ -10,7 +10,7 @@
                 <h3>{_ Thank you for registering _}!</h3>
                 <p>{_ We're pleased to confirm that your account has been created _}.</p>
                 <h4>{_ As an account holder you now have access to our customer portal at _} &nbsp;<a href="https://{{ m.site.hostname }}">https://{{ m.site.hostname }}</a></h4> 
-                <p>{_ The following access credentials are valid for portal _}:</p>
+                <p>{_ The following access credentials are valid for the portal _}:</p>
                 <br />
                 <table border="1" cellspacing="0" cellpadding="10">
                     <thead>

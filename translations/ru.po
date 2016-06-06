@@ -1003,7 +1003,7 @@ msgstr "Вы также можете обращаться в техническ�
 msgid "Support Centre"
 msgstr "Поддержка"
 
-msgid "The following access credentials are valid for portal"
+msgid "The following access credentials are valid for the portal"
 msgstr "Следующие реквизиты доступа могут быть использованы для авторизации"
 
 msgid "As an account holder you now have access to our customer portal at"
