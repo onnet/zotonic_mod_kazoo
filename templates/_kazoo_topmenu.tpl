@@ -5,6 +5,9 @@
               {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) and m.kazoo.is_kazoo_account_admin %}
                 <li><a href="/reseller_portal">{_ Reseller Portal _}</a>
                 <li><a href="/reseller_settings">{_ Reseller Settings _}</a>
+                {% if m.modules.info.mod_onbill.enabled %}
+                  <li><a href="/billing_settings">{_ Billing Settings _}</a>
+                {% endif %}
               {% else %}
                 {% if m.session.kazoo_owner_id != "userless_mask" %}
                   <li><a href="/user_portal">{_ User Portal _}</a>

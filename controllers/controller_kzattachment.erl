@@ -32,7 +32,7 @@ forbidden(ReqData, Context) ->
 
 content_types_provided(ReqData, Context) ->
     case z_context:get_q("doc_type", Context) of
-        "onbill" ->
+        "onbill_modb" ->
             {[{"application/pdf", provide_content}], ReqData, Context};
         "call_recording" ->
             {[{"audio/mpeg", provide_content}], ReqData, Context}
@@ -51,7 +51,7 @@ charsets_provided(ReqData, Context) ->
 provide_content(ReqData, Context) ->
 lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
     ReqData1 = case z_context:get_q("doc_type", Context) of
-                   "onbill" ->
+                   "onbill_modb" ->
                        MediaName = z_context:get_q("doc_id", Context),
                        wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".pdf", ReqData);
                    "call_recording" ->
@@ -59,8 +59,8 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
                        wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".mp3", ReqData)
                end,
     case z_context:get_q("doc_type", Context) of
-        "onbill" ->
-                    case onbill_attachment(Context) of
+        "onbill_modb" ->
+                    case onbill_modb_attachment(Context) of
                         {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
                         _ ->
                             api_error(404, 0, "No attachment found", ReqData, Context)
@@ -75,13 +75,13 @@ lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
 finish_request(ReqData, Context) ->
     {ok, ReqData, Context}.
 
-onbill_attachment(Context) ->
+onbill_modb_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),
     DocId = z_context:get_q("doc_id", Context),
     AuthToken = z_context:get_q("auth_token", Context),
     Year = z_context:get_q("year", Context),
     Month = z_context:get_q("month", Context),
-    case onbill_util:onbill_attachment(AccountId, DocId, AuthToken, Year, Month, Context) of
+    case onbill_util:onbill_modb_attachment(AccountId, DocId, AuthToken, Year, Month, Context) of
         <<>> -> {error, <<>>};
         Body -> {ok, Body}
     end.

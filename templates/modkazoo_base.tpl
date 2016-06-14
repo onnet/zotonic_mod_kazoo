@@ -67,6 +67,7 @@
     {% lib "js/dataTables.bootstrap.js" %}
     {% lib "js/jquery.dataTables.columnFilter.js" %}
     {% lib "js/jquery.slider.min.js" %}
+    {% lib "js/jsoneditor.min.js" %}
     {% lib "css/kazoo/jslider.css" %}
     {% lib "css/kazoo/timeofday.css" %}
 
