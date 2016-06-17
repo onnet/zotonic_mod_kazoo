@@ -3,12 +3,13 @@
 
 -mod_title("Kazoo UI").
 -mod_description("Zotonic Kazoo user interface module").
--mod_prio(5).
+-mod_prio(11).
 
 -export([
      observe_search_query/2
     ,observe_postback_notify/2
     ,observe_kazoo_notify/2
+    ,observe_topmenu_element/2
     ,event/2
 ]).
 
@@ -37,6 +38,13 @@ observe_kazoo_notify({kazoo_notify, "no_auth",_,_,_}, Context) ->
 observe_kazoo_notify(A, _Context) ->
     lager:info("Catched kazoo notify: ~p", [A]),
     undefined.
+
+observe_topmenu_element(A, Context) ->
+    lager:info("Catched kazoo topmenu_element: ~p", [A]),
+    case modkazoo_auth:is_auth(Context) of
+        'false' -> 'undefined';
+        'true' -> <<"_kazoo_topmenu.tpl">>
+    end.
 
 event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->
     Login = z_convert:to_binary(z_context:get_q("username",Context)),
