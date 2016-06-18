@@ -39,11 +39,16 @@ observe_kazoo_notify(A, _Context) ->
     lager:info("Catched kazoo notify: ~p", [A]),
     undefined.
 
-observe_topmenu_element(A, Context) ->
-    lager:info("Catched kazoo topmenu_element: ~p", [A]),
+observe_topmenu_element(_, Context) ->
     case modkazoo_auth:is_auth(Context) of
         'false' -> 'undefined';
-        'true' -> <<"_kazoo_topmenu.tpl">>
+        'true' -> choose_topmenu(Context)
+    end.
+
+choose_topmenu(Context) ->
+    case modkazoo_auth:is_superadmin_or_reseller(Context) of
+        'true' -> <<"_kazoo_topmenu_reseller.tpl">>;
+        'false' -> <<"_kazoo_topmenu_hosted_pbx.tpl">>
     end.
 
 event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->
@@ -1047,6 +1052,7 @@ event({postback,{rs_account_mask,[{account_id,AccountIdRaw}]},_,_},Context) ->
     z_context:set_session(kazoo_owner_id, KazooOwnerId, Context),
     modkazoo_util:set_session_jobj('kazoo_reseller_user_tracking', AccountId, KazooOwnerId, ?EMPTY_JSON_OBJECT, Context),
     z_context:set_session(kazoo_account_id, AccountId, Context),
+    _ = modkazoo_auth:refresh_superadmin_and_reseller_flags(Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
     _ = modkazoo_auth:may_be_set_user_data(Context),
     modkazoo_auth:choose_page_to_redirect(Context);
@@ -1059,7 +1065,8 @@ event({postback,rs_account_demask,_,_},Context) ->
     z_context:set_session(kazoo_account_id, ResellerId, Context),
     z_context:set_session('current_callflow','undefined',Context),
     z_context:set_session('account_realm','undefined',Context),
-    modkazoo_auth:may_be_clean_third_party_billing(Context),
+    _ = modkazoo_auth:refresh_superadmin_and_reseller_flags(Context),
+    _ = modkazoo_auth:may_be_clean_third_party_billing(Context),
     _ = modkazoo_auth:may_be_set_user_data(Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
     z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);

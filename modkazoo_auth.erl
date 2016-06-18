@@ -2,6 +2,8 @@
 -author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 
 -export([is_auth/1
+    ,is_superadmin_or_reseller/1
+    ,refresh_superadmin_and_reseller_flags/1
     ,do_sign_in/4
     ,signout/1
     ,gcapture_check/1
@@ -24,6 +26,28 @@ is_auth(Context) ->
                 andalso
              modkazoo_util:is_defined(z_context:get_session(kazoo_account_id, Context)))
     end.
+
+is_superadmin_or_reseller(Context) ->
+    case z_context:get_session('kazoo_is_reseller', Context) of
+        'undefined' ->
+            _ = set_superadmin_and_reseller_flags(Context),
+            z_context:get_session('kazoo_superduper_admin', Context, 'false') orelse z_context:get_session('kazoo_is_reseller', Context, 'false');
+        _ ->
+            z_context:get_session('kazoo_superduper_admin', Context, 'false') orelse z_context:get_session('kazoo_is_reseller', Context, 'false')
+    end.
+
+set_superadmin_and_reseller_flags(Context) ->
+    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
+    z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
+    z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context).
+
+clean_superadmin_and_reseller_flags(Context) ->
+    z_context:set_session('kazoo_is_reseller', 'undefined', Context),
+    z_context:set_session('kazoo_superduper_admin', 'undefined', Context).
+
+refresh_superadmin_and_reseller_flags(Context) ->
+    _ = clean_superadmin_and_reseller_flags(Context),
+    _ = set_superadmin_and_reseller_flags(Context).
 
 do_sign_in(Login, Password, Account, Context) ->
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
@@ -69,8 +93,7 @@ setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context
     choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context)).
 
 choose_page_to_redirect(Context) ->
-    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
-    case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
+    case is_superadmin_or_reseller(Context) of
         'true' ->
             z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
         'false' -> 
@@ -96,17 +119,16 @@ may_be_set_user_data(Context) ->
     end.
 
 may_be_set_reseller_data(Context) ->
-    AccountDoc = kazoo_util:kz_get_acc_doc(Context),
-    z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
-    z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
-    case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
+    _ = clean_superadmin_and_reseller_flags(Context),
+    case is_superadmin_or_reseller(Context) of
         'true' -> 
             AccountId = z_context:get_session(kazoo_account_id, Context),
             KazooOwnerId = z_context:get_session(kazoo_owner_id, Context),
             modkazoo_util:set_session_jobj('kazoo_reseller_user_tracking', AccountId, KazooOwnerId, ?EMPTY_JSON_OBJECT, Context),
             z_context:set_session(kazoo_reseller_owner_id, KazooOwnerId, Context),
             z_context:set_session(kazoo_reseller_account_id, AccountId, Context);
-        'false' -> 'ok'
+        'false' ->
+            clean_superadmin_and_reseller_flags(Context)
     end.
 
 signout(Context) ->
