@@ -1439,6 +1439,16 @@ event({postback,{sync_account_services,[{account_id,AccountId}]},_,_}, Context) 
     _ = kazoo_util:sync_service_plans(AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
+event({postback,notify_submit_btn,_,_}, Context) ->
+    Blevel = z_context:get_q("balance",Context),
+    _ = kazoo_util:kz_set_acc_doc([<<"notifications">>, <<"low_balance">>, <<"threshold">>], z_convert:to_float(Blevel), Context),
+    _ = kazoo_util:kz_set_acc_doc([<<"notifications">>, <<"low_balance">>, <<"enabled">>], 'true', Context),
+    z_render:update("set_notify_level_tpl", z_template:render("_set_notify_level.tpl", [], Context), Context);
+
+event({postback,notify_disable_btn,_,_}, Context) ->
+    _ = kazoo_util:kz_set_acc_doc([<<"notifications">>, <<"low_balance">>, <<"enabled">>], 'false', Context),
+    z_render:update("set_notify_level_tpl", z_template:render("_set_notify_level.tpl", [], Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 
