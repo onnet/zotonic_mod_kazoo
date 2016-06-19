@@ -6,7 +6,11 @@
 
 {% block widget_content %}
 
-{% include "bt_widget_online_payment.tpl" %}
+{% for online_payment_system_body in m.notifier.map.online_payment_systems %}
+  {% if online_payment_system_body %}
+    {% include online_payment_system_body %}
+  {% endif %}
+{% endfor %}
 
 {% endblock %}
 
