@@ -21,7 +21,7 @@
             {% if m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "enabled"]}] %}
             <th>
                   <span class="pull-right" style="padding-right: 1em;">
-                  {{ m.config.mod_kazoo.local_currency_sign.value }}{{ notify }}
+                  {{ m.config.mod_kazoo.local_currency_sign.value }}{{ notify|format_price }}
                 </span>
             </th>
             {% else %}
@@ -41,7 +41,7 @@
             <td class="td-center" colspan="2">
                {_ Notify when balance falls below _}
                {{ m.config.mod_kazoo.local_currency_sign.value }}
-               <input class="input input-xsmall-onnet" type="text" id="balance" name="balance" maxlength="5" size="5" style="text-align:center;" value="{{ notify }}" />
+               <input class="input input-xsmall-onnet" type="text" id="balance" name="balance" maxlength="5" size="5" style="text-align:center;" value="{{ notify|format_price }}" />
                 {% button id="notify_disable_btn" class="btn btn-xs btn-onnet pull-right" text=_"disable alert"
                     action={postback postback="notify_disable_btn" delegate="mod_kazoo"}
                 %}
