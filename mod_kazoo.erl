@@ -205,7 +205,7 @@ event({postback,kazoo_transaction,_,_}, Context) ->
             case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
                 <<"submitted_for_settlement">> ->
                     spawn(fun() -> timer:sleep(1000), mod_signal:emit({update_onnet_widget_finance_tpl, []}, Context) end),
-                    spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_onnet_widget_make_payment_tpl, []}, Context) end),
+                    spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_onnet_widget_online_payment_tpl, []}, Context) end),
                     spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_rs_widget_transactions_list_tpl, [{headline,?__("Transactions list", Context)}]}, Context) end),
         %            z_render:growl("£"++z_convert:to_list(Amount)++?__(" successfully added.",Context), Context);
                     z_render:growl(?__(" successfully added.",Context), Context);
@@ -214,7 +214,7 @@ event({postback,kazoo_transaction,_,_}, Context) ->
             end;
         _ -> 
             Context1 = z_render:growl_error(?__("Payment failed!<br />Please input correct amount.", Context), Context),
-            z_render:update("onnet_widget_make_payment_tpl" ,z_template:render("onnet_widget_make_payment.tpl", [{cat, "text"}, 
+            z_render:update("onnet_widget_online_payment_tpl" ,z_template:render("onnet_widget_online_payment.tpl", [{cat, "text"}, 
                              {headline, "Online payments"}, {bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1)
     end;
 
@@ -238,8 +238,8 @@ event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
                                      ,z_template:render("_make_payment_manage_cards.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1);
                 E ->
                     Context1 = z_render:growl_error(?__(E, Context), Context),
-                    z_render:update("onnet_widget_make_payment_tpl"
-                                     ,z_template:render("onnet_widget_make_payment.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1)
+                    z_render:update("onnet_widget_online_payment_tpl"
+                                     ,z_template:render("onnet_widget_online_payment.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1)
             end
     end;
 
