@@ -21,6 +21,13 @@
                     m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="credit_summ"}]|format_price:[".",""]
                  }}
                </span>
+               {% if account_id %}
+                 <span style="float:right; padding-right:2em;">
+                  {% button class="btn btn-xs btn-onnet pull-right" text=_"add credit" id="child_area_add_credit"
+                            action={dialog_open title=_"Add credit to "++account_doc[1]["name"] template="_rs_add_credit.tpl" account_id=account_id}
+                  %}
+                 </span>
+               {% endif %}
             </th>
         </tr>
         <tr id="{{ #mytr }}" style="{% if not m.kazoo[{ui_element_opened element="rs_payments_lists_table_opened"}] %}display: none;{% endif %}"><th colspan="3"></th></tr>

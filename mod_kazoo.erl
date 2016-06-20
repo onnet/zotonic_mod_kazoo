@@ -1040,7 +1040,9 @@ event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
     Context;
 
 event({postback,rs_child_selected,_,_},Context) ->
-    z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, z_context:get_q("triggervalue", Context)}], Context), Context);
+    AccountId =  z_context:get_q("triggervalue", Context),
+    _ = z_session:set('rs_selected_account_id', AccountId, Context),
+    z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context);
 
 event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
     spawn(kazoo_util,rs_delete_account,[AccountId,Context]),

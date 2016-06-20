@@ -1,4 +1,4 @@
--module(scomp_kazoo_set_balance_level_notify).
+-module(scomp_kazoo_rs_service_plans_manager).
 -behaviour(gen_scomp).
 
 -export([vary/2, render/3]).
@@ -9,6 +9,6 @@ vary(_Params, _Context) -> nocache.
 
 render(Params, Vars, Context) ->
     case z_convert:to_bool(m_config:get_value('mod_kazoo', show_finance_info, 'false', Context)) of
-        'true' -> {'ok', z_template:render("_set_notify_level.tpl", Params ++ Vars, Context)};
-        'false' -> {'ok', 'undefined'}
+        'true' -> {ok, z_template:render("_rs_service_plans_manager.tpl", Params ++ Vars, Context)};
+        'false' -> {ok, 'undefined'}
     end.

@@ -39,7 +39,7 @@
         <div class="col-sm-12">
           {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Debit acccount"
                     action={submit target="form_add_debit"}
-                    action={update target="reseller_children_area" template="reseller_children.tpl" account_id=account_id headline=_"Account details"}
+                    action={update target="billing_children_area" template="billing_children.tpl"}
           %}
         </div>
       </div>

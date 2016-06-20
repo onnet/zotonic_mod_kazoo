@@ -7,7 +7,7 @@
 {# lib "css/kazoo/cf_mod_kazoo.css" #}
 
 <span id="reseller_children_area">
-  {% include "reseller_children.tpl" account_id=account_id %}
+  {% include "reseller_children.tpl" %}
 </span>
 
 {% endblock %}

@@ -21,6 +21,13 @@
                     m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="debit_summ"}]|format_price:[".",""]
                  }}
                </span>
+               {% if account_id %}
+                 <span style="float:right; padding-right:2em;">
+                  {% button class="btn btn-xs btn-onnet pull-right" text=_"add debit" id="child_area_add_debit"
+                            action={dialog_open title=_"Add debit to "++account_doc[1]["name"] template="_rs_add_debit.tpl" account_id=account_id}
+                  %}
+                 </span>
+               {% endif %}
             </th>
         </tr>
         <tr id="{{ #mytr }}" style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}"><th colspan="3"></th></tr>

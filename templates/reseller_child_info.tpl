@@ -1,6 +1,12 @@
+{% with m.session.rs_selected_account_id as account_id %}
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
 
-  <div class="col-xs-2 col-xs-offset-3">
+  {% wire id="to_reseller_portal" action={redirect dispatch="billing_transactions"} %}
+  <div class="col-xs-2 col-xs-offset-1">
+    <button id="to_reseller_portal" class="col-xs-12 btn btn-zalarm margin-bottom-xs">{_ Transactions _}</button>
+  </div>
+
+  <div class="col-xs-2">
     {% wire id="user_mask_selector" type="change" action={postback postback={rs_account_mask account_id=account_id} delegate="mod_kazoo"} %}
     <select id="user_mask_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" title="{_ Mask _}"  data-live-search="true">
       <option value="userless_mask">{_ Without user _}</option>
@@ -41,15 +47,6 @@
       </div>
   </span>
 
-  {% wire action={connect signal={update_rs_account_registrations_tpl} action={update target="rs_account_registrations_tpl"
-                                                                                  template="rs_account_registrations.tpl"
-                                                                                  headline=_"Account's current registrations"
-                                                                                  account_id=account_id}}
-  %}
-  <span id="rs_account_registrations_tpl">
-        {% include "rs_account_registrations.tpl" headline=_"Account's current registrations" account_id=account_id %}
-  </span>
-
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_rs_allocated_numbers_tpl} action={update target="rs_allocated_numbers_tpl"
@@ -60,7 +57,14 @@
   <span id="rs_allocated_numbers_tpl">
         {% include "rs_allocated_numbers.tpl" headline=_"Account's allocated numbers" account_id=account_id %}
   </span>
-  <span id="onbill_rs_widgets_tpl">
-        {% include "onbill_rs_widgets.tpl" account_id=account_id %}
+
+  {% wire action={connect signal={update_rs_account_registrations_tpl} action={update target="rs_account_registrations_tpl"
+                                                                                  template="rs_account_registrations.tpl"
+                                                                                  headline=_"Account's current registrations"
+                                                                                  account_id=account_id}}
+  %}
+  <span id="rs_account_registrations_tpl">
+        {% include "rs_account_registrations.tpl" headline=_"Account's current registrations" account_id=account_id %}
   </span>
 </div>
+{% endwith %}
