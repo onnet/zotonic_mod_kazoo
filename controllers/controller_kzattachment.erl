@@ -49,7 +49,6 @@ charsets_provided(ReqData, Context) ->
     {no_charset, ReqData, Context}.
 
 provide_content(ReqData, Context) ->
-lager:info("IAM provide_content/2. Q ALL: ~p ",[z_context:get_q_all(Context)]),
     ReqData1 = case z_context:get_q("doc_type", Context) of
                    "onbill_modb" ->
                        MediaName = z_context:get_q("doc_id", Context),

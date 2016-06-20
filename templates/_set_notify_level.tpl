@@ -1,11 +1,13 @@
-{%  with m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "threshold"]}] as notify %}
-
+{%  with m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "threshold"] account_id=account_id}]
+        ,m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "enabled"] account_id=account_id}]
+    as notify, notify_enabled
+%}
 <table class="table table-hover table-centered table-condensed">
     <thead>
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="5"></td></tr>
         <tr>
             <th>
-                <span id="arrows_{{ #topup }}" style="cursor: pointer;">
+                <span id="arrows_{{ #topup }}" style="cursor: pointer; {% if account_id %}padding-left: 0.7em;{% endif %}">
                   {% wire id="arrows_"++#topup type="click"
                           action={ toggle target="top_up_settings" }
                           action={ toggle target="arrow_right_"++#topup }
@@ -18,7 +20,7 @@
                   {_ Low balance notify level _}
                 </span>
             </th>
-            {% if m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "enabled"]}] %}
+            {% if notify_enabled %}
             <th>
                   <span class="pull-right" style="padding-right: 1em;">
                   {{ m.config.mod_kazoo.local_currency_sign.value }}{{ notify|format_price }}
@@ -42,12 +44,14 @@
                {_ Notify when balance falls below _}
                {{ m.config.mod_kazoo.local_currency_sign.value }}
                <input class="input input-xsmall-onnet" type="text" id="balance" name="balance" maxlength="5" size="5" style="text-align:center;" value="{{ notify|format_price }}" />
-                {% button id="notify_disable_btn" class="btn btn-xs btn-onnet pull-right" text=_"disable alert"
-                    action={postback postback="notify_disable_btn" delegate="mod_kazoo"}
-                %}
-                {% button id="notify_submit_btn" class="btn btn-xs btn-onnet pull-right" text=_"save"
-                    action={postback postback="notify_submit_btn" delegate="mod_kazoo" qarg="balance" }
-                %}
+               {% if notify_enabled %}
+                 {% button id="notify_disable_btn" class="btn btn-xs btn-onnet pull-right" text=_"disable alert"
+                     action={postback postback=[{notify_disable_btn account_id=account_id}] delegate="mod_kazoo"}
+                 %}
+               {% endif %}
+               {% button id="notify_submit_btn" class="btn btn-xs btn-onnet pull-right" text=_"save"
+                   action={postback postback=[{notify_submit_btn account_id=account_id}] delegate="mod_kazoo" qarg="balance" }
+               %}
             </td>
         </tr>
     </tbody>
