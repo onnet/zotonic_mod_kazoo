@@ -8,6 +8,7 @@
     ,crossbar_account_request/4
     ,crossbar_account_send_raw_request_body/5
     ,crossbar_account_send_raw_request_body/6
+    ,crossbar_noauth_request/4
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
     ,kz_get_acc_doc_by_account_id_and_authtoken/3
