@@ -1,3 +1,7 @@
+{_ Site LINK _}:
+<pre>
+{{ m.integra[{kz_c2call_hyperlink c2call_id=c2call_id}] }}
+</pre>
 
 {_ URL _}:
 
