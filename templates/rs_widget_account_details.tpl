@@ -61,10 +61,10 @@
             </th>
         </tr>
     </thead>
-    <span id="set_notify_level_tpl">
-      {% set_balance_level_notify %}
-    </span>
 </table>
+<span id="set_notify_level_tpl">
+  {% set_balance_level_notify %}
+</span>
 {% rs_service_plans_manager %}
 <table class="table table-condensed table-centered">
     <tbody>

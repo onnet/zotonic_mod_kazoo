@@ -2,7 +2,7 @@
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
 
   {% if m.modules.info.mod_onbill.enabled %}
-    {% wire id="to_reseller_portal" action={redirect dispatch="billing_transactions"} %}
+    {% wire id="to_reseller_portal" action={redirect dispatch="account_transactions"} %}
     <div class="col-xs-2 col-xs-offset-1">
       <button id="to_reseller_portal" class="col-xs-12 btn btn-zalarm margin-bottom-xs">{_ Transactions _}</button>
     </div>
