@@ -6,7 +6,7 @@
               action={update target="reseller_children_area" template="reseller_children.tpl" headline=_"Account details"}
     %}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"send message" id="child_area_send_message"
-              action={dialog_open title=_"Send message to customer" template="rs_kz_customer_udate.tpl" account_id=account_id}
+              action={dialog_open title=_"Send message to customer" template="rs_kz_customer_update.tpl" account_id=account_id}
     %}
 {% endblock %}
 

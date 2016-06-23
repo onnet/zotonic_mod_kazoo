@@ -553,7 +553,7 @@ m_find_value(rs_customer_update_html, _M, Context) ->
         {'ok', Data} ->
             Data;
         _ ->
-            {Html, Context} = z_template:render_to_iolist("rs_customer_udate_html.tpl", [], Context),
+            {Html, Context} = z_template:render_to_iolist("rs_customer_update_html.tpl", [], Context),
             Html
     end;
 
@@ -563,7 +563,7 @@ m_find_value(rs_customer_update_text, _M, Context) ->
         {'ok', Data} ->
             Data;
         _ ->
-            {Text, Context} = z_template:render_to_iolist("rs_customer_udate_text.tpl", [], Context),
+            {Text, Context} = z_template:render_to_iolist("rs_customer_update_text.tpl", [], Context),
             Text
     end;
 

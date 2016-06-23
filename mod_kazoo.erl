@@ -1382,8 +1382,8 @@ event({submit,rs_send_message,_,_}, Context) ->
     _ = modkazoo_notify:rs_send_message(Context),
     z_render:dialog_close(Context);
 
-event({submit,rs_kz_customer_udate,_,_}, Context) ->
-    _ = modkazoo_notify:rs_kz_customer_udate(Context),
+event({submit,rs_kz_customer_update,_,_}, Context) ->
+    _ = modkazoo_notify:rs_kz_customer_update(Context),
     z_render:dialog_close(Context);
 
 event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context) ->

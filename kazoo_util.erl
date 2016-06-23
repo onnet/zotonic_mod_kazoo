@@ -299,8 +299,8 @@
     ,notifications_smtplog/1
     ,kz_notifications/1
     ,kz_notification_toggle/3
-    ,rs_kz_customer_udate/3
-    ,rs_kz_all_customers_udate/2
+    ,rs_kz_customer_update/3
+    ,rs_kz_all_customers_update/2
     ,list_system_dialplans/1
     ,list_system_dialplans_names/1
     ,kz_toggle_reseller_status/2
@@ -3590,10 +3590,10 @@ kz_save_notification_template(ContextType, NotificationId, AccountId, MessageBod
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, <<"/">>/binary, (z_convert:to_binary(NotificationId))/binary>>,
     crossbar_account_send_request('post', API_String, ContextType, MessageBody, Context).
 
-rs_kz_all_customers_udate(AccountId, Context) ->
-    rs_kz_customer_udate('undefined', AccountId, Context).
+rs_kz_all_customers_update(AccountId, Context) ->
+    rs_kz_customer_update('undefined', AccountId, Context).
 
-rs_kz_customer_udate(RecipientAccountId, AccountId, Context) ->
+rs_kz_customer_update(RecipientAccountId, AccountId, Context) ->
     CurrNotifyDoc = kz_notification_info(<<"customer_update">>, Context),
     Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], modkazoo_util:get_q_bin("to", Context), J) end

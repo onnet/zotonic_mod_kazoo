@@ -1,5 +1,5 @@
-{% wire id="form_rs_kz_customer_udate" type="submit" postback="rs_kz_customer_udate" delegate="mod_kazoo" %}
-<form id="form_rs_kz_customer_udate" method="post" action="postback">
+{% wire id="form_rs_kz_customer_update" type="submit" postback="rs_kz_customer_update" delegate="mod_kazoo" %}
+<form id="form_rs_kz_customer_update" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
