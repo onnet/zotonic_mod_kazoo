@@ -24,6 +24,17 @@
                 <option value="17" {% if list[1]["cid_key"] == "17" %}selected{% endif %}> 17</option>
                 <option value="18" {% if list[1]["cid_key"] == "18" %}selected{% endif %}> 18</option>
                 <option value="19" {% if list[1]["cid_key"] == "19" %}selected{% endif %}> 19</option>
+                <option value="20" {% if list[1]["cid_key"] == "20" %}selected{% endif %}> 20</option>
+                <option value="21" {% if list[1]["cid_key"] == "21" %}selected{% endif %}> 21</option>
+                <option value="22" {% if list[1]["cid_key"] == "22" %}selected{% endif %}> 22</option>
+                <option value="23" {% if list[1]["cid_key"] == "23" %}selected{% endif %}> 23</option>
+                <option value="24" {% if list[1]["cid_key"] == "24" %}selected{% endif %}> 24</option>
+                <option value="25" {% if list[1]["cid_key"] == "25" %}selected{% endif %}> 25</option>
+                <option value="26" {% if list[1]["cid_key"] == "26" %}selected{% endif %}> 26</option>
+                <option value="27" {% if list[1]["cid_key"] == "27" %}selected{% endif %}> 27</option>
+                <option value="28" {% if list[1]["cid_key"] == "28" %}selected{% endif %}> 28</option>
+                <option value="29" {% if list[1]["cid_key"] == "29" %}selected{% endif %}> 29</option>
+                <option value="30" {% if list[1]["cid_key"] == "30" %}selected{% endif %}> 30</option>
             </select>
         </div>
         <div class="col-sm-4">
