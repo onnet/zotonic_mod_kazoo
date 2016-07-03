@@ -8,8 +8,10 @@
   {% endif %}
   <i class="fa fa-long-arrow-right"></i>
   {{ call_doc[1]["to"]|split:"@"|first }} 
-  {% if call_doc[1]["to"]|split:"@"|first|slice:[-2,] != call_doc[1]["callee_id_number"]|slice:[-2,] %}
-    ({{ call_doc[1]["callee_id_number"] }})
+  {% if call_doc[1]["callee_id_number"] %}
+    {% if call_doc[1]["to"]|split:"@"|first|slice:[-2,] != call_doc[1]["callee_id_number"]|slice:[-2,] %}
+      ({{ call_doc[1]["callee_id_number"] }})
+    {% endif %}
   {% endif %}
 </div>
 <div class="col-sm-12" style="margin-top: 1em;">
