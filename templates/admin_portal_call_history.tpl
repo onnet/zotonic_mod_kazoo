@@ -25,7 +25,7 @@
                                                     data-date-autoclose="true"
                                                     data-date-language={{ z_language }}
                                                     data-date-start-date="-6m"
-                                                    data-date-end-date="+0d"
+                                                    data-date-end-date="+1d"
                                                     readonly/>
     <span class="pull-right pr-05"> {_ Choose date _}: </span>
     {% javascript %}
