@@ -28,6 +28,7 @@
     ,kz_list_account_cdr/3
     ,kz_list_account_cdr_page/3
     ,kz_list_account_cdr_reduced/3
+    ,kz_list_account_cdr_filtered/3
     ,kz_list_user_cdr/3
     ,kz_list_user_cdr_reduced/3
     ,kz_fetch_cdr_details/2
@@ -1160,7 +1161,23 @@ kz_cdr_element_reduce({CdrElement}, Timezone, Context) ->
       ++[{<<"filtered_call_date">>, localtime:local_to_local(calendar:now_to_universal_time({T div 1000000, T rem 1000000, 0}), "UTC", Timezone)}]).
 
 kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
-    kz_cdr_list_reduce(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context).
+    case z_context:get_session('show_cdr_legs', Context) of
+        'true' ->
+            kz_cdr_list_reduce(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context);
+        _ ->
+            kz_list_account_cdr_filtered(CreatedFrom, CreatedTo, Context)
+    end.
+
+kz_list_account_cdr_filtered(CreatedFrom, CreatedTo, Context) ->
+    kz_cdr_list_filter(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context).
+
+kz_cdr_list_filter(CdrList, Context) when is_list(CdrList) ->
+    Timezone = z_convert:to_list(kazoo_util:may_be_get_timezone(Context)),
+    [kz_cdr_element_reduce(Element, Timezone, Context) || Element <- CdrList
+     ,modkazoo_util:get_value(<<"call_id">>, Element) == modkazoo_util:get_value(<<"bridge_id">>, Element)
+    ];
+kz_cdr_list_filter(_,_) ->
+    [].
     
 kz_incoming_fax_download_link(DocId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
