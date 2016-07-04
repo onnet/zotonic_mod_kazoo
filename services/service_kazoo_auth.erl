@@ -9,11 +9,8 @@
 
 process_post(_ReqData, Context) ->
     PostDataStr = get_post_data(z_context:get_q_all_noz(Context)),
-    lager:info("PostDataStr: ~p",[PostDataStr]),
     PostDataJObj = jiffy:decode(PostDataStr),
-    lager:info("PostDataJObj: ~p",[PostDataJObj]),
     ReqJObj = modkazoo_util:get_value(<<"data">>, PostDataJObj),
-    lager:info("ReqJObj: ~p",[ReqJObj]),
     case modkazoo_util:get_value(<<"api_key">>, ReqJObj) of
         'undefined' ->
             Login = modkazoo_util:get_value(<<"login">>, ReqJObj),
@@ -21,7 +18,6 @@ process_post(_ReqData, Context) ->
             Account = modkazoo_util:get_value(<<"account">>, ReqJObj),
             reply_auth_result(kazoo_util:kz_user_creds(Login, Password, Account, Context), Context);
         API_Key ->
-lager:info("kazoo_util:kz_api_key_creds: ~p",[kazoo_util:kz_api_key_creds(API_Key, Context)]),
             reply_auth_result(kazoo_util:kz_api_key_creds(API_Key, Context), Context)
     end.
 
