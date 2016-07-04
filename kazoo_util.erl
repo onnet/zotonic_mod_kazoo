@@ -3,6 +3,7 @@
 
 -export([kz_admin_creds/1
     ,kz_user_creds/4
+    ,kz_api_key_creds/2
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
     ,kz_get_acc_doc/1
@@ -514,12 +515,21 @@ kz_admin_creds(Context) ->
     {'ok', {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}}. 
 
 kz_user_creds(Login, Password, Account, Context) ->
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
+    Creds = io_lib:format("~s:~s", [Login, Password]),
+    Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
+    DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, Account}]}}]},
+    kz_creds(URL, DataBag, Context).
+
+kz_api_key_creds(API_Key, Context) ->
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?API_AUTH/binary>>),
+    DataBag = {[{<<"data">>, {[{<<"api_key">>, z_convert:to_binary(API_Key)}]}}]},
+    kz_creds(URL, DataBag, Context).
+
+kz_creds(URL, DataBag, Context) ->
     try
-        Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-        URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
-        Creds = io_lib:format("~s:~s", [Login, Password]),
-        Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
-        DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, Account}]}}]},
         Payload = jiffy:encode(DataBag),
         {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 10000}]),
         {JsonData} = jiffy:decode(Body),
@@ -528,6 +538,7 @@ kz_user_creds(Login, Password, Account, Context) ->
         Account_Id = proplists:get_value(<<"account_id">>, AccountData),
         Account_Name = proplists:get_value(<<"account_name">>, AccountData),
         Auth_Token = proplists:get_value(<<"auth_token">>, JsonData),
+        Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
         {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}, {'account_name', Account_Name}}
     catch
         _:_ -> <<"Auth exception">>
