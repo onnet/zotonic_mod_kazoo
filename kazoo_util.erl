@@ -27,9 +27,11 @@
     ,kz_list_account_users/2
     ,kz_list_account_devices/1
     ,kz_list_account_cdr/3
+    ,kz_list_account_cdr/5
     ,kz_list_account_cdr_page/3
     ,kz_list_account_cdr_reduced/3
     ,kz_list_account_cdr_filtered/3
+    ,kz_cdr_list_filter/2
     ,kz_list_user_cdr/3
     ,kz_list_user_cdr_reduced/3
     ,kz_fetch_cdr_details/2
@@ -557,7 +559,6 @@ kz_get_acc_doc_by_account_id(AccountId, Context) ->
 kz_get_acc_doc_by_account_id_and_authtoken(AccountId, AuthToken, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
     crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
-
 
 kz_adminget_acc_doc_by_account_id('undefined', _Context) ->
     <<>>;
@@ -1110,9 +1111,13 @@ kz_purge_voicemail(VMBoxId, MediaId, Delay, Context) ->
 
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, <<"?">>/binary, 
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    kz_list_account_cdr(AccountId, CreatedFrom, CreatedTo, AuthToken, Context).
+
+kz_list_account_cdr(AccountId, CreatedFrom, CreatedTo, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CDRS/binary, <<"?">>/binary, 
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
 
 kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
