@@ -2,6 +2,7 @@
 -author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 
 -export([kz_admin_creds/1
+    ,kz_user_creds/3
     ,kz_user_creds/4
     ,kz_api_key_creds/2
     ,crossbar_admin_request/4
@@ -56,6 +57,9 @@
     ,kz_purge_voicemails/3
     ,kz_purge_voicemail/4
     ,kz_vmessage_download_link/3
+    ,kz_kzattachment_link/3
+    ,kz_kzattachment_link/5
+    ,call_recording_attachment/4
     ,is_kazoo_account_admin/1
     ,set_vm_message_folder/4
     ,password_recovery/3
@@ -231,7 +235,6 @@
     ,kz_find_account_by_number/2
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
-    ,kz_admin_list_account_channels/3
     ,kz_get_registrations_by_accountid/2
     ,list_account_trunks/1
     ,list_trunks_realm/2
@@ -516,12 +519,15 @@ kz_admin_creds(Context) ->
     Auth_Token = proplists:get_value(<<"auth_token">>, JsonData),
     {'ok', {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}}. 
 
-kz_user_creds(Login, Password, Account, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
+kz_user_creds(Login, Password, AccountName, Context) ->
     Creds = io_lib:format("~s:~s", [Login, Password]),
     Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
-    DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, Account}]}}]},
+    kz_user_creds(Md5Hash, AccountName, Context).
+
+kz_user_creds(Md5Hash, AccountName, Context) ->
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
+    DataBag = {[{<<"data">>, {[{<<"credentials">>, z_convert:to_binary(Md5Hash)}, {<<"account_name">>, AccountName}]}}]},
     kz_creds(URL, DataBag, Context).
 
 kz_api_key_creds(API_Key, Context) ->
@@ -711,8 +717,12 @@ crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken,
     ibrowse:send_req(URL, req_headers(ContextType, AuthToken), Verb, Payload, [{'inactivity_timeout', 10000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
-    case crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) of
-        {'ok', _ReturnCode, _, Body} -> Body;
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context).
+
+crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context) ->
+    case crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) of
+        {'ok', [50,_,_], _, Body} ->  Body; %  50 = "2"
         E -> 
             lager:info("crossbar_account_send_raw_request_body Error: ~p", [E]),
             lager:info("crossbar_account_send_raw_request_body Error Verb: ~p", [Verb]),
@@ -723,6 +733,9 @@ crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context)
         
 crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context).
+
+crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 10000}]).
@@ -1154,6 +1167,25 @@ kz_recording_download_link(CallId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?THIRD_PARTY_RECORDING/binary, <<"/">>/binary, (z_convert:to_binary(CallId))/binary,
                    ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+
+kz_kzattachment_link(CallId, DocType, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    kz_kzattachment_link(AccountId, CallId, AuthToken, DocType, Context).
+
+kz_kzattachment_link(AccountId, CallId, AuthToken, DocType, Context) ->
+    API_String = <<"/kzattachment?"
+                   ,"account_id=", (z_convert:to_binary(AccountId))/binary
+                   ,"&call_id=", (z_convert:to_binary(CallId))/binary
+                   ,"&auth_token=", (z_convert:to_binary(AuthToken))/binary
+                   ,"&doc_type=", (z_convert:to_binary(DocType))/binary
+                 >>,
+    <<"https://", (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, API_String/binary>>. 
+
+call_recording_attachment(AccountId, CallId, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary
+                   ,?THIRD_PARTY_RECORDING/binary,<<"/">>/binary,(z_convert:to_binary(CallId))/binary, ?ATTACHMENT/binary>>,
+    crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [], [], Context).
 
 kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
     Timezone = z_convert:to_list(kazoo_util:may_be_get_timezone(Context)),
@@ -1789,25 +1821,6 @@ kz_list_account_channels('undefined', Context) ->
 kz_list_account_channels(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
-
-kz_admin_list_account_channels(AccountId, Number, Context) ->
-    {'ok', {'account_id', _}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary>>,
-    URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
-    {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers(AuthToken), 'get', [], [], 10000),
-    Data = modkazoo_util:get_value([<<"data">>], jiffy:decode(z_convert:to_binary(Body))),
-    Data2 = [kz_admin_list_account_channels_need(Calls, Context) || Calls <- Data
-                                                          %, (modkazoo_util:get_value(<<"direction">>, Calls) == <<"inbound">>
-                                                          % andalso modkazoo_util:get_value(<<"username">>, Calls)
-                                                          % == z_convert:to_binary(Number))
-                                                          ],
-    jiffy:encode(Data2).
-
-kz_admin_list_account_channels_need(Calls, Context) ->
-    %[modkazoo_util:get_value(<<"destination">>, Calls),
-    % modkazoo_util:get_value(<<"answered">>, Calls),
-    % modkazoo_util:get_value(<<"elapsed_s">>, Calls)].
-Calls.
 
 kz_channel_info(CallId, Context) ->
     kz_channel_info(CallId, z_context:get_session('kazoo_account_id', Context), Context).
