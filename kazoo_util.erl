@@ -3,6 +3,7 @@
 
 -export([kz_admin_creds/1
     ,kz_user_creds/4
+    ,kz_api_key_creds/2
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
     ,crossbar_account_request/4
@@ -32,6 +33,7 @@
     ,kz_list_account_cdr/3
     ,kz_list_account_cdr_page/3
     ,kz_list_account_cdr_reduced/3
+    ,kz_list_account_cdr_filtered/3
     ,kz_list_user_cdr/3
     ,kz_list_user_cdr_reduced/3
     ,kz_fetch_cdr_details/2
@@ -528,12 +530,21 @@ kz_admin_creds(Context) ->
     {'ok', {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}}. 
 
 kz_user_creds(Login, Password, Account, Context) ->
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
+    Creds = io_lib:format("~s:~s", [Login, Password]),
+    Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
+    DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, Account}]}}]},
+    kz_creds(URL, DataBag, Context).
+
+kz_api_key_creds(API_Key, Context) ->
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?API_AUTH/binary>>),
+    DataBag = {[{<<"data">>, {[{<<"api_key">>, z_convert:to_binary(API_Key)}]}}]},
+    kz_creds(URL, DataBag, Context).
+
+kz_creds(URL, DataBag, Context) ->
     try
-        Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-        URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
-        Creds = io_lib:format("~s:~s", [Login, Password]),
-        Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
-        DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, Account}]}}]},
         Payload = jiffy:encode(DataBag),
         {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 10000}]),
         {JsonData} = jiffy:decode(Body),
@@ -542,6 +553,7 @@ kz_user_creds(Login, Password, Account, Context) ->
         Account_Id = proplists:get_value(<<"account_id">>, AccountData),
         Account_Name = proplists:get_value(<<"account_name">>, AccountData),
         Auth_Token = proplists:get_value(<<"auth_token">>, JsonData),
+        Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
         {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}, {'account_name', Account_Name}}
     catch
         _:_ -> <<"Auth exception">>
@@ -1205,7 +1217,23 @@ kz_cdr_element_reduce({CdrElement} = Element, Timezone, Context) ->
       ++[{<<"filtered_call_date">>, localtime:local_to_local(calendar:gregorian_seconds_to_datetime(T), "UTC", Timezone)}]).
 
 kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
-    kz_cdr_list_reduce(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context).
+    case z_context:get_session('show_cdr_legs', Context) of
+        'true' ->
+            kz_cdr_list_reduce(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context);
+        _ ->
+            kz_list_account_cdr_filtered(CreatedFrom, CreatedTo, Context)
+    end.
+
+kz_list_account_cdr_filtered(CreatedFrom, CreatedTo, Context) ->
+    kz_cdr_list_filter(kz_list_account_cdr(CreatedFrom, CreatedTo, Context), Context).
+
+kz_cdr_list_filter(CdrList, Context) when is_list(CdrList) ->
+    Timezone = z_convert:to_list(kazoo_util:may_be_get_timezone(Context)),
+    [kz_cdr_element_reduce(Element, Timezone, Context) || Element <- CdrList
+     ,modkazoo_util:get_value(<<"call_id">>, Element) == modkazoo_util:get_value(<<"bridge_id">>, Element)
+    ];
+kz_cdr_list_filter(_,_) ->
+    [].
     
 kz_incoming_fax_download_link(DocId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),

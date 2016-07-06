@@ -14,9 +14,9 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" action={postback postback="refresh_admin_callstats" delegate="mod_kazoo" qarg="callstatsdayInput"} text=_"refresh results"
-                                                      action={mask target="user_portal_call_history_table" message=_"Sending request"++"..."}
-                                                      action={emit signal={update_admin_portal_call_details_tpl} }
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh results"
+              action={postback postback="refresh_admin_callstats" delegate="mod_kazoo" qarg="callstatsdayInput"}
+              action={mask target="user_portal_call_history_table" message=_"Sending request"++"..."}
     %}
      <input id="callstatsdayInput" type="text" class="input-small-onnet pull-right" name="callstatsdayInput"
                                                     value="{% if m.signal[signal].selected_day %}{{ m.signal[signal].selected_day }}{% else %}{{ now|date: 'd/m/Y' }}{% endif %}"
@@ -25,12 +25,15 @@
                                                     data-date-autoclose="true"
                                                     data-date-language={{ z_language }}
                                                     data-date-start-date="-6m"
-                                                    data-date-end-date="+0d"
+                                                    data-date-end-date="+1d"
                                                     readonly/>
     <span class="pull-right pr-05"> {_ Choose date _}: </span>
     {% javascript %}
         $('#callstatsdayInput').datepicker();
     {% endjavascript %}
+    <i id="show_legs_toggler" class="fa fa-toggle-{% if m.session.show_cdr_legs %}on{% else %}off{% endif %} pointer pull-right" style="margin: 0.1em 1em 0 0"></i>
+    {% wire id="show_legs_toggler" type="click" action={postback postback="toggle_show_legs_status" delegate="mod_kazoo"} %}
+    <span class="pull-right pr-05"> {_ Detailed _}: </span>
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

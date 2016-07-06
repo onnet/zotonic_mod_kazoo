@@ -1457,6 +1457,16 @@ event({postback,[{notify_disable_btn,[{account_id,AccountId}]}],_,_}, Context) -
     _ = kazoo_util:kz_set_acc_doc([<<"notifications">>, <<"low_balance">>, <<"enabled">>], 'false', AccountId, Context),
     z_render:update("set_notify_level_tpl", z_template:render("_set_notify_level.tpl", [{'account_id', AccountId}], Context), Context);
 
+event({postback,toggle_show_legs_status,_,_}, Context) ->
+    case z_context:get_session('show_cdr_legs', Context) of
+        'true' ->
+            z_context:set_session('show_cdr_legs', 'false', Context),
+            z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-off pointer pull-right"}]}], Context);
+        _ ->
+            z_context:set_session('show_cdr_legs', 'true', Context),
+            z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-on pointer pull-right"}]}], Context)
+    end;
+
 event({drag,_,_},Context) ->
     Context;
 
