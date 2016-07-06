@@ -2,6 +2,7 @@
 -author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 
 -export([kz_admin_creds/1
+    ,kz_user_creds/3
     ,kz_user_creds/4
     ,kz_api_key_creds/2
     ,crossbar_admin_request/4
@@ -31,9 +32,11 @@
     ,kz_list_account_users/2
     ,kz_list_account_devices/1
     ,kz_list_account_cdr/3
+    ,kz_list_account_cdr/5
     ,kz_list_account_cdr_page/3
     ,kz_list_account_cdr_reduced/3
     ,kz_list_account_cdr_filtered/3
+    ,kz_cdr_list_filter/2
     ,kz_list_user_cdr/3
     ,kz_list_user_cdr_reduced/3
     ,kz_fetch_cdr_details/2
@@ -529,12 +532,15 @@ kz_admin_creds(Context) ->
     Auth_Token = proplists:get_value(<<"auth_token">>, JsonData),
     {'ok', {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}}. 
 
-kz_user_creds(Login, Password, Account, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
+kz_user_creds(Login, Password, AccountName, Context) ->
     Creds = io_lib:format("~s:~s", [Login, Password]),
     Md5Hash = iolist_to_binary([io_lib:format("~2.16.0b", [C]) || <<C>> <= erlang:md5(Creds)]),
-    DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, Account}]}}]},
+    kz_user_creds(Md5Hash, AccountName, Context).
+
+kz_user_creds(Md5Hash, AccountName, Context) ->
+    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
+    DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, AccountName}]}}]},
     kz_creds(URL, DataBag, Context).
 
 kz_api_key_creds(API_Key, Context) ->
@@ -572,7 +578,6 @@ kz_get_acc_doc_by_account_id(AccountId, Context) ->
 kz_get_acc_doc_by_account_id_and_authtoken(AccountId, AuthToken, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary>>,
     crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
-
 
 kz_adminget_acc_doc_by_account_id('undefined', _Context) ->
     <<>>;
@@ -1132,9 +1137,13 @@ kz_purge_voicemail(VMBoxId, MediaId, Delay, Context) ->
 
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CDRS/binary, ?INTERACTION/binary, <<"?">>/binary, 
-                   ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    kz_list_account_cdr(AccountId, CreatedFrom, CreatedTo, AuthToken, Context).
+
+kz_list_account_cdr(AccountId, CreatedFrom, CreatedTo, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CDRS/binary, <<"?">>/binary, 
+                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
+    crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
 
 kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
