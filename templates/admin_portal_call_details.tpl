@@ -1,17 +1,14 @@
 {% extends "modkazoo_widget_dashboard.tpl" %}
 
 {% block widget_headline %}
-{% wire id="arrows_"++#dtid type="click"
+{% wire id="arrows_calls_details_widget" type="click"
         action={ toggle target="ap_calls_details_widget_opened" }
-        action={ toggle target="arrow_right_"++#dtid }
-        action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="ap_calls_details_widget_opened" } delegate="mod_kazoo" }
+        action={ toggle target="arrow_right_calls_details_widget" }
+        action={ toggle target="arrow_down_calls_details_widget" }
 %}
-  <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
-    <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="ap_calls_details_widget_opened"}] %}display: none;{% endif %}" 
-                                    class="arrowpad fa fa-arrow-circle-right"></i>
-    <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="ap_calls_details_widget_opened"}] %}display: none;{% endif %}" 
-                                   class="arrowpad fa fa-arrow-circle-down"></i>
+  <span id="arrows_calls_details_widget" style="cursor: pointer;">
+    <i id="arrow_right_calls_details_widget" {% if cdr_id %}style="display: none;"{% endif %} class="arrowpad fa fa-arrow-circle-right"></i>
+    <i id="arrow_down_calls_details_widget" {% if not cdr_id %}style="display: none;"{% endif %} class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
 {% endblock %}
@@ -19,7 +16,7 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-<div id="ap_calls_details_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="ap_calls_details_widget_opened"}] %}display: none;{% endif %}">
+<div id="ap_calls_details_widget_opened" {% if not cdr_id %}style="display: none;"{% endif %}>
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_calls_details_widget_opened"
                                                                     template="admin_portal_call_details_table.tpl"

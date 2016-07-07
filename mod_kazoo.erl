@@ -1461,10 +1461,16 @@ event({postback,toggle_show_legs_status,_,_}, Context) ->
     case z_context:get_session('show_cdr_legs', Context) of
         'true' ->
             z_context:set_session('show_cdr_legs', 'false', Context),
-            z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-off pointer pull-right"}]}], Context);
+            mod_signal:emit({update_admin_portal_call_details_tpl, []}, Context),
+            Routines = [fun(J) -> z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-off pointer pull-right"}]}], J) end
+                       ,fun(J) -> z_render:wire([{fade_in, [{target, "admin_portal_call_details_tpl"}]}], J) end],
+            lists:foldl(fun(F, J) -> F(J) end, Context, Routines);
         _ ->
             z_context:set_session('show_cdr_legs', 'true', Context),
-            z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-on pointer pull-right"}]}], Context)
+            mod_signal:emit({update_admin_portal_call_details_tpl, []}, Context),
+            Routines = [fun(J) -> z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-on pointer pull-right"}]}], J) end
+                       ,fun(J) -> z_render:wire([{fade_out, [{target, "admin_portal_call_details_tpl"}]}], J) end],
+            lists:foldl(fun(F, J) -> F(J) end, Context, Routines)
     end;
 
 event({drag,_,_},Context) ->

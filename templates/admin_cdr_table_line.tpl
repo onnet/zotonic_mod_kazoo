@@ -31,12 +31,8 @@
                 {% else %}-{% endif %}
             </td>
             <td style="text-align: center;">
-                <i id="{{ #this_call_info }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-
-            <i id="{{ #this_call_info2 }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-            {% wire id=#this_call_info2 action={ dialog_open title=_"Call details" template="_call_details.tpl" cdr_id=call["id"] width="auto" } %}
-
-            </td>
+            {% if not m.session.show_cdr_legs %}
+            <i id="{{ #this_call_info }}" class="fa fa-object-ungroup zprimary pointer" title="{_ Details _}"></i>
             {% wire id=#this_call_info action={update target="admin_portal_call_details_tpl"
                                                       title=_"Call details"
                                                       template="admin_portal_call_details.tpl"
@@ -46,6 +42,12 @@
                                        action={script script="$('i.zalarm').addClass('zprimary'); $('i.zalarm').removeClass('zalarm');"}
                                        action={remove_class target=#this_call_info class="zprimary"}
                                        action={add_class target=#this_call_info class="zalarm"}
+
             %}
+            {% else %}
+            <i id="{{ #this_call_info2 }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+            {% wire id=#this_call_info2 action={ dialog_open title=_"Call details" template="_call_details.tpl" cdr_id=call["id"] width="auto" } %}
+            {% endif %}
+            </td>
         </tr>
-{% print call %}
+{# print call #}
