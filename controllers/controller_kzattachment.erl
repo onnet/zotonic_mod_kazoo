@@ -54,8 +54,8 @@ provide_content(ReqData, Context) ->
                        MediaName = z_context:get_q("doc_id", Context),
                        wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".pdf", ReqData);
                    "call_recording" ->
-                       MediaName = z_context:get_q("call_id", Context),
-                       wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".mp3", ReqData)
+                       MediaName = z_context:get_q("media_name", Context),
+                       wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName, ReqData)
                end,
     case z_context:get_q("doc_type", Context) of
         "onbill_modb" ->
@@ -87,9 +87,10 @@ onbill_modb_attachment(Context) ->
 
 call_recording_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),
-    CallId = z_context:get_q("call_id", Context),
+    CdrId = z_context:get_q("cdr_id", Context),
+    MediaName = z_context:get_q("media_name", Context),
     AuthToken = z_context:get_q("auth_token", Context),
-    Body = kazoo_util:call_recording_attachment(AccountId, CallId, AuthToken, Context),
+    Body = kazoo_util:call_recording_attachment(AccountId, CdrId, MediaName, AuthToken, Context),
     {ok, Body}.
 
 api_error(HttpCode, ErrCode, Message, ReqData, Context) ->

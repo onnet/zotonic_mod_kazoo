@@ -70,8 +70,8 @@
     ,current_account_credit/1
     ,current_account_credit/2
     ,kz_check_device_registration/2
-    ,kz_kzattachment_link/5
-    ,call_recording_attachment/4
+    ,kz_kzattachment_link/6
+    ,call_recording_attachment/5
     ,kz_get_device_registration_details/2
     ,azrates/1
     ,azrates_refresh/1
@@ -352,7 +352,7 @@
 -define(CREDITS, <<"/credits">>).
 -define(STATUS, <<"/status">>).
 -define(RATES, <<"/v1/rates">>).
--define(THIRD_PARTY_RECORDING, <<"/third_party_couch/call_recordings">>).
+-define(RECORDINGS, <<"/recordings">>).
 -define(NUMBER, <<"/number">>).
 -define(CUSTOMER, <<"/customer">>).
 -define(TRANSACTIONS, <<"/transactions">>).
@@ -1143,6 +1143,7 @@ kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
 kz_list_account_cdr(AccountId, CreatedFrom, CreatedTo, AuthToken, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CDRS/binary, <<"?">>/binary, 
                     ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary, ?NO_PAGINATION/binary>>,
+  lager:info("API_String: ~p",[API_String]),
     crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
 
 kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
@@ -1183,23 +1184,25 @@ kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
-kz_kzattachment_link(CallId, DocType, Context) ->
+kz_kzattachment_link(CrdId, MediaName, DocType, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
-    kz_kzattachment_link(AccountId, CallId, AuthToken, DocType, Context).
+    kz_kzattachment_link(AccountId, CrdId, MediaName, AuthToken, DocType, Context).
 
-kz_kzattachment_link(AccountId, CallId, AuthToken, DocType, Context) ->
+kz_kzattachment_link(AccountId, CdrId, MediaName, AuthToken, DocType, Context) ->
     API_String = <<"/kzattachment?"
                    ,"account_id=", (z_convert:to_binary(AccountId))/binary
-                   ,"&call_id=", (z_convert:to_binary(CallId))/binary
+                   ,"&cdr_id=", (z_convert:to_binary(CdrId))/binary
+                   ,"&media_name=", (z_convert:to_binary(MediaName))/binary
                    ,"&auth_token=", (z_convert:to_binary(AuthToken))/binary
                    ,"&doc_type=", (z_convert:to_binary(DocType))/binary
                  >>,
     <<"https://", (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, API_String/binary>>. 
 
-call_recording_attachment(AccountId, CallId, AuthToken, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary
-                   ,?THIRD_PARTY_RECORDING/binary,<<"/">>/binary,(z_convert:to_binary(CallId))/binary, ?ATTACHMENT/binary>>,
+call_recording_attachment(AccountId, CdrId, MediaName, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary,?RECORDINGS/binary,"/"
+                  ,(z_convert:to_binary(CdrId))/binary,"/",(z_convert:to_binary(MediaName))/binary, ?ATTACHMENT/binary
+                 >>,
     crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [], [], Context).
 
 kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
@@ -1208,7 +1211,8 @@ kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
 kz_cdr_list_reduce(_,_) ->
     [].
 
-kz_cdr_element_reduce({CdrElement} = Element, Timezone, Context) ->
+kz_cdr_element_reduce({CdrElement} = _Element, Timezone, Context) ->
+  lager:info("CdrElement: ~p",[CdrElement]),
     FilterFun = fun ({<<"timestamp">>,_}) -> true;
                     ({<<"calling_from">>,_}) -> true;
                     ({<<"from">>,_}) -> true;
@@ -1218,11 +1222,16 @@ kz_cdr_element_reduce({CdrElement} = Element, Timezone, Context) ->
                     ({<<"billing_seconds">>,_}) -> true;
                     ({<<"id">>,_}) -> true;
                     ({<<"call_id">>,_}) -> true;
+                    ({<<"media_name">>,_}) -> true;
                     (_) -> false end,
     T = z_convert:to_integer(proplists:get_value(<<"timestamp">>,CdrElement)),
     ?JSON_WRAPPER(lists:filter(FilterFun, CdrElement)
-      ++[{<<"media_name">>,  Element}]
-      ++[{<<"z_recording_download_link">>, kz_kzattachment_link(proplists:get_value(<<"id">>, CdrElement), "call_recording", Context)}]
+ %     ++[{<<"full_element">>,  Element}]
+      ++[{<<"z_recording_download_link">>, kz_kzattachment_link(proplists:get_value(<<"id">>, CdrElement)
+                                                                ,proplists:get_value(<<"media_name">>, CdrElement)
+                                                                ,"call_recording"
+                                                                ,Context)
+        }]
       ++[{<<"filtered_call_date">>, localtime:local_to_local(calendar:gregorian_seconds_to_datetime(T), "UTC", Timezone)}]).
 
 kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
