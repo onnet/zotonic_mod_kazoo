@@ -411,7 +411,6 @@ event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName
                    'undefined' -> FieldName;
                    L -> L ++ FieldName
                end,
-lager:info("TargetId: ~p",[TargetId]),
     case Type of
         "account" ->
             _ = kazoo_util:kz_toggle_account_doc(FieldName, Context),
@@ -1059,7 +1058,8 @@ event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
 event({postback,rs_child_selected,_,_},Context) ->
     AccountId =  z_context:get_q("triggervalue", Context),
     _ = z_session:set('rs_selected_account_id', AccountId, Context),
-    z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context);
+    z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context),
+    Context;
 
 event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
     spawn(kazoo_util,rs_delete_account,[AccountId,Context]),
