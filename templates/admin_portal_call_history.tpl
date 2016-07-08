@@ -15,8 +15,8 @@
   </span>
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh results"
+              action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
               action={postback postback="refresh_admin_callstats" delegate="mod_kazoo" qarg="callstatsdayInput"}
-              action={mask target="user_portal_call_history_table" message=_"Sending request"++"..."}
     %}
      <input id="callstatsdayInput" type="text" class="input-small-onnet pull-right" name="callstatsdayInput"
                                                     value="{% if m.signal[signal].selected_day %}{{ m.signal[signal].selected_day }}{% else %}{{ now|date: 'd/m/Y' }}{% endif %}"
@@ -32,7 +32,12 @@
         $('#callstatsdayInput').datepicker();
     {% endjavascript %}
     <i id="show_legs_toggler" class="fa fa-toggle-{% if m.session.show_cdr_legs %}on{% else %}off{% endif %} pointer pull-right" style="margin: 0.1em 1em 0 0"></i>
-    {% wire id="show_legs_toggler" type="click" action={postback postback="toggle_show_legs_status" delegate="mod_kazoo"} %}
+    {% wire id="show_legs_toggler"
+            type="click"
+            action={postback postback="toggle_show_legs_status" delegate="mod_kazoo"}
+            action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
+            action={postback postback="refresh_admin_callstats" delegate="mod_kazoo" qarg="callstatsdayInput"}
+    %}
     <span class="pull-right pr-05"> {_ Detailed _}: </span>
 {% endblock %}
 

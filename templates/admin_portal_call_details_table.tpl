@@ -1,5 +1,5 @@
 {% if m.kazoo[{ui_element_opened element="ap_calls_list_widget_opened"}] %}
-<table id={{ #user_portal_call_history_table }} class="table display table-striped table-condensed">
+<table id="admin_portal_call_details_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
             <th style="text-align: center;">{_ Date _}</th>
@@ -19,7 +19,7 @@
 
 {% javascript %}
 //var initSearchParam = $.getURLParam("filter");
-var oTable = $('#{{ #user_portal_call_history_table }}').dataTable({
+var oTable = $('#admin_portal_call_details_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
 "aaSorting": [[ 0, "desc" ]],
