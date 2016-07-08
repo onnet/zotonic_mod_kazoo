@@ -404,21 +404,29 @@ event({postback,{delete_incoming_fax,[{fax_id, FaxId}]},_,_}, Context) ->
     z_render:update("user_portal_faxes_incoming", z_template:render("user_portal_faxes_incoming.tpl", [{headline,?__("Incoming faxes", Context)}], Context), Context);
 
 event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
+    event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, 'undefined'}]},<<>>,<<>>}, Context);
+
+event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, Prefix}]},_,_}, Context) ->
+    TargetId = case Prefix of
+                   'undefined' -> FieldName;
+                   L -> L ++ FieldName
+               end,
+lager:info("TargetId: ~p",[TargetId]),
     case Type of
         "account" ->
             _ = kazoo_util:kz_toggle_account_doc(FieldName, Context),
-            z_render:update(FieldName
-                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context)
+            z_render:update(TargetId
+                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}], Context)
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_toggle_user_doc(FieldName, DocId, Context),
-            z_render:update(FieldName
-                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context)
+            z_render:update(TargetId
+                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}], Context)
                            ,Context);
         "device" ->
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
-            z_render:update(FieldName
-                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context)
+            z_render:update(TargetId
+                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}], Context)
                            ,Context)
     end;
 

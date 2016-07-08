@@ -22,16 +22,18 @@
         <tr>
             <th class="text-center1">{_ All calls recording _}</th>
             <th>
-              <span id="record_call">
+              <span id="account_record_call">
                 {% if account_doc[1]["record_call"] %}
                   <i class="fa fa-check-circle" title="Enabled"></i>
                 {% else %}
                   <i class="fa fa-ban" title="Disabled"></i>
                 {% endif %}
-                <i id="toggle_all_calls_recording_enabled" class="fa fa-refresh pointer" title="Change"></i>
-                {% wire id="toggle_all_calls_recording_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                              delegate="mod_kazoo"
-                                                                              inject_args type="account" doc_id="_no_need_" field_name="record_call"}
+                <i id="toggle_account_record_call" class="fa fa-refresh pointer" title="Change"></i>
+                {% wire id="toggle_account_record_call"
+                        type="click"
+                        action={ postback postback={toggle_field type doc_id field_name prefix}
+                        delegate="mod_kazoo"
+                        inject_args type="account" doc_id="_no_need_" field_name="record_call" prefix="account_"}
                 %}
               </span>
             </th>
