@@ -113,6 +113,7 @@
     ,topup_disable/2
     ,kz_set_user_doc/3
     ,kz_set_user_doc/4
+    ,kz_toggle_account_doc/2
     ,kz_toggle_user_doc/2
     ,kz_toggle_user_doc/3
     ,kz_toggle_device_doc/3
@@ -635,6 +636,12 @@ kz_set_user_doc(K, V, OwnerId, Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, <<"/">>/binary, OwnerId/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
         'true' -> []
+    end.
+
+kz_toggle_account_doc(K, Context) ->
+    case kz_account_doc_field(K, Context) of
+        'true' -> kz_set_acc_doc(K, 'false', Context);
+        _ -> kz_set_acc_doc(K, 'true', Context)
     end.
 
 kz_toggle_user_doc(K, Context) ->

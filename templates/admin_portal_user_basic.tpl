@@ -106,6 +106,22 @@
                                                 options=m.kazoo.kz_list_account_media_short prefix="user_" postfix="_bootsearch" %}
         </div>
     </div>
+    <!-- Record calls -->
+    <div class="row">
+        <div class="col-xs-5"><label class="edit_user_label">{_ Record calls _}</label></div>
+        <div id="record_call" class="col-xs-5">
+            {% if user_doc["record_call"] %}
+              <i class="fa fa-check-circle" title="Enabled"></i>
+            {% else %}
+              <i class="fa fa-ban" title="Disabled"></i>
+            {% endif %}
+            <i id="toggle_record_call" class="fa fa-refresh pointer" title="Change"></i>
+            {% wire id="toggle_record_call" type="click" action={ postback postback={toggle_field type doc_id field_name}
+                                                                          delegate="mod_kazoo"
+                                                                          inject_args type="user" doc_id=user_id field_name="record_call"}
+            %}
+        </div>
+    </div>
     <br />
     </div>
     <div class="col-xs-2" id="user_enable_control">

@@ -6,7 +6,11 @@
     <div class="row">
         <div class="col-xs-7"><label class="edit_user_label">{_ Enable Call-Forward _}</label></div>
         <div id="call_forwardenabled" class="col-xs-4">
-            {% if user_doc["call_forward"][1]["enabled"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
+            {% if user_doc["call_forward"][1]["enabled"] %}
+              <i class="fa fa-check-circle" title="Enabled"></i>
+            {% else %}
+              <i class="fa fa-ban" title="Disabled"></i>
+            {% endif %}
             <i id="toggle_call_forwardenabled" class="fa fa-refresh pointer" title="Change"></i>
             {% wire id="toggle_call_forwardenabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
                                                                           delegate="mod_kazoo"
