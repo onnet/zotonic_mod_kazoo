@@ -6,6 +6,8 @@
             <th style="text-align: center;">{_ From _}</th>
             <th style="text-align: center;">{_ To _}</th>
             <th style="text-align: center;">{_ Duration _}</th>
+            <th style="text-align: center;">{_ Rate _}</th>
+            <th style="text-align: center;">{_ Cost _}</th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
         </tr>

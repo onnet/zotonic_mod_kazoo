@@ -188,7 +188,7 @@ m_find_value(kz_list_user_cdr, _M, Context) ->
 m_find_value({kz_cdr_legs,[{cdr_id,undefined}]}, _M, _Context) ->
     [];
 m_find_value({kz_cdr_legs,[{cdr_id,CDR_Id}]}, _M, Context) ->
-    kazoo_util:kz_cdr_legs_reduced(CDR_Id, Context);
+    kazoo_util:kz_cdr_legs_localized(CDR_Id, Context);
 
 m_find_value(current_account_credit, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(Context));

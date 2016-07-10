@@ -3,9 +3,13 @@
     <thead>
         <tr>
             <th style="text-align: center;">{_ Date _}</th>
+            <th style="text-align: center;">{_ Agent/Direction _}</th>
             <th style="text-align: center;">{_ From _}</th>
             <th style="text-align: center;">{_ To _}</th>
             <th style="text-align: center;">{_ Duration _}</th>
+            <th style="text-align: center;">{_ Leg direction _}</th>
+            <th style="text-align: center;">{_ Hangup/Limits _}</th>
+            <th style="text-align: center;">{_ Type/Trunks _}</th>
             <th style="text-align: center;"></th>
             <th style="text-align: center;"></th>
         </tr>
