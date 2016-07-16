@@ -1490,6 +1490,11 @@ event({postback,toggle_show_legs_status,_,_}, Context) ->
             lists:foldl(fun(F, J) -> F(J) end, Context, Routines)
     end;
 
+event({postback,{toggle_cccp_retain_cid,[{doc_id,DocId},{signal_id,SignalId}]},_,_}, Context) ->
+    _ = kazoo_util:toggle_cccp_retain_cid(DocId, Context),
+    mod_signal:emit({z_convert:to_atom(SignalId), []}, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 
