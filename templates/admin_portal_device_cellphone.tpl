@@ -4,7 +4,9 @@
     <!-- Device Nickname field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Device Nickname</label></div>
-        <div id="edit_username" class="col-xs-5 zalarm">{{ device_doc["name"] }}</div>
+        <div id="name" class="col-xs-5 zalarm">
+          {% include "_show_field.tpl" type="device" doc_id=device_id field_name=["name"] %}
+        </div>
     </div>
     <!-- User status -->
     <div class="row">
