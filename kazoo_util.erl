@@ -237,10 +237,10 @@
     ,rs_delete_account/2
     ,toggle_all_calls_recording/1
     ,kz_cccp_creds_list/1
-    ,add_cccp_doc/4
+    ,add_cccp_doc/3
     ,add_cccp_autodial/4
     ,del_cccp_doc/2
-    ,toggle_cccp_retain_cid/2
+    ,cccp_field_toggler/3
     ,kz_find_account_by_number/2
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
@@ -1223,7 +1223,6 @@ kz_cdr_list_reduce(_,_) ->
     [].
 
 kz_cdr_element_reduce({CdrElement} = _Element, Timezone, Context) ->
-  lager:info("CdrElement: ~p",[CdrElement]),
     FilterFun = fun ({<<"timestamp">>,_}) -> true;
                     ({<<"calling_from">>,_}) -> true;
                     ({<<"from">>,_}) -> true;
@@ -3152,9 +3151,9 @@ kz_cccp_creds_list(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-add_cccp_doc(Field1, Field2, Field3, Context) ->
+add_cccp_doc(Field1, Field2, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary>>,
-    DataBag = {[{<<"data">>, {[Field1, Field2, Field3, {<<"active">>, true}]}}]},
+    DataBag = {[{<<"data">>, {[Field1, Field2, {<<"active">>, true}]}}]},
     crossbar_account_request('put', API_String, DataBag, Context).
 
 add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context) ->
@@ -3173,11 +3172,11 @@ get_cccp_doc(DocId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, "/", ?TO_BIN(DocId)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-toggle_cccp_retain_cid(DocId, Context) ->
+cccp_field_toggler(DocId, FieldName, Context) ->
     CurrDoc = get_cccp_doc(DocId, Context),
-    NewDoc = case modkazoo_util:get_value(<<"retain_cid">>, CurrDoc) of
-        'true' -> modkazoo_util:set_value(<<"retain_cid">>, 'false', CurrDoc);
-        _ -> modkazoo_util:set_value(<<"retain_cid">>, 'true', CurrDoc)
+    NewDoc = case modkazoo_util:get_value(?TO_BIN(FieldName), CurrDoc) of
+        'true' -> modkazoo_util:set_value(?TO_BIN(FieldName), 'false', CurrDoc);
+        _ -> modkazoo_util:set_value(?TO_BIN(FieldName), 'true', CurrDoc)
     end,
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, "/", ?TO_BIN(DocId)/binary>>,
     crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).

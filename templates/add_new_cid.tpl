@@ -9,13 +9,6 @@
 <i class="fa fa-mobile-phone fa-lg hidden-md"></i>
 <input type="text" class="input input-number-onnet" name="cid_number" placeholder="1234567" maxlength="12"/>
 
-<i class="fa fa-slack hidden-md pl-05"></i>
-<select id="cccp_outbound_cid_selector" name="outbound_cid" data-width="8em" data-live-search="true">
-{% for number in m.kazoo.get_acc_numbers %}
-  <option value="{{ number }}">{{ number }}</option>
-{% endfor %}
-</select>
-
 <i class="fa fa-user hidden-md pl-05"></i>
 <select id="cccp_cid_user_id" name="user_id" data-width="12em" data-live-search="true">
 {% for user in m.kazoo.kz_list_account_users %}

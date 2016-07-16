@@ -1092,16 +1092,14 @@ event({postback,rs_account_demask,_,_},Context) ->
 
 event({submit,{addcccpcidform, _}, _, _}, Context) ->
     NewAuthCID = z_convert:to_binary(z_context:get_q("cid_number", Context)),
-    OutboundCID = z_convert:to_binary(z_context:get_q("outbound_cid", Context)),
     UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
-    _ = kazoo_util:add_cccp_doc({<<"cid">>, NewAuthCID}, {<<"outbound_cid">>, OutboundCID}, {<<"user_id">>, UserId}, Context),
+    _ = kazoo_util:add_cccp_doc({<<"cid">>, NewAuthCID}, {<<"user_id">>, UserId}, Context),
     z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
 
 event({submit,{addcccppinform, _}, _, _}, Context) ->
     NewAuthPIN = z_convert:to_binary(z_context:get_q("pin_number", Context)),
-    OutboundCID = z_convert:to_binary(z_context:get_q("outbound_cid", Context)),
     UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
-    _ = kazoo_util:add_cccp_doc({<<"pin">>, NewAuthPIN}, {<<"outbound_cid">>, OutboundCID}, {<<"user_id">>, UserId}, Context),
+    _ = kazoo_util:add_cccp_doc({<<"pin">>, NewAuthPIN}, {<<"user_id">>, UserId}, Context),
     z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
 
 event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
@@ -1490,8 +1488,8 @@ event({postback,toggle_show_legs_status,_,_}, Context) ->
             lists:foldl(fun(F, J) -> F(J) end, Context, Routines)
     end;
 
-event({postback,{toggle_cccp_retain_cid,[{doc_id,DocId},{signal_id,SignalId}]},_,_}, Context) ->
-    _ = kazoo_util:toggle_cccp_retain_cid(DocId, Context),
+event({postback,{cccp_field_toggler,[{doc_id,DocId},{field_name,FieldName},{signal_id,SignalId}]},_,_}, Context) ->
+    _ = kazoo_util:cccp_field_toggler(DocId, FieldName, Context),
     mod_signal:emit({z_convert:to_atom(SignalId), []}, Context),
     Context;
 

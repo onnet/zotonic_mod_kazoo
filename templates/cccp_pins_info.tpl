@@ -22,6 +22,7 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
+{% wire action={connect signal={update_authorized_pin_table_tpl} action={update target="auth_pin_table" template="_authorized_pin_table.tpl"}} %}
 <table id="auth_pin_table" class="table table-condensed table-hover table-centered">
     {% include "_authorized_pin_table.tpl" %}
 </table>
