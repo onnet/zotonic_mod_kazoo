@@ -43,8 +43,8 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Keep Caller ID</label></div>
         <div id="call_forwardkeep_caller_id" class="col-xs-5">
-            {% if device_doc["call_forward"][1]["keep_caller_id"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
-            <i id="toggle_call_forwardkeep_caller_id" class="fa fa-refresh pointer" title="Change"></i>
+          <i id="toggle_call_forwardkeep_caller_id"
+             class="fa fa-toggle-{% if device_doc["call_forward"][1]["keep_caller_id"] %}on{% else %}off{% endif %} pointer"></i>
             {% wire id="toggle_call_forwardkeep_caller_id" type="click" action={ postback postback={toggle_field type doc_id field_name}
                                                                           delegate="mod_kazoo"
                                                                           inject_args type="device" doc_id=device_id field_name=["call_forward","keep_caller_id"]}
@@ -55,8 +55,8 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">Require Key Press</label></div>
         <div id="call_forwardrequire_keypress" class="col-xs-5">
-            {% if device_doc["call_forward"][1]["require_keypress"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
-            <i id="toggle_call_forwardrequire_keypress" class="fa fa-refresh pointer" title="Change"></i>
+          <i id="toggle_call_forwardrequire_keypress"
+             class="fa fa-toggle-{% if device_doc["call_forward"][1]["require_keypress"] %}on{% else %}off{% endif %} pointer"></i>
             {% wire id="toggle_call_forwardrequire_keypress" type="click" action={ postback postback={toggle_field type doc_id field_name}
                                                                           delegate="mod_kazoo"
                                                                           inject_args type="device" doc_id=device_id field_name=["call_forward","require_keypress"]}

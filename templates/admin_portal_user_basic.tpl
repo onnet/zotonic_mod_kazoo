@@ -62,23 +62,23 @@
         <div>
             Voicemail
             <span id="vm_to_email_enabled">
-                {% if user_doc["vm_to_email_enabled"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
-                <i id="toggle_vm_to_email_enabled" class="fa fa-refresh pointer" title="Change"></i>
-                {% wire id="toggle_vm_to_email_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                              delegate="mod_kazoo"
-                                                                              inject_args type="user" doc_id=user_id field_name="vm_to_email_enabled"}
-                %}
+              <i id="toggle_vm_to_email_enabled"
+                class="fa fa-toggle-{% if user_doc["vm_to_email_enabled"] %}on{% else %}off{% endif %} pointer"></i>
+              {% wire id="toggle_vm_to_email_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
+                                                                            delegate="mod_kazoo"
+                                                                            inject_args type="user" doc_id=user_id field_name="vm_to_email_enabled"}
+              %}
             </span>
         </div>
         <div>
             Fax
             <span id="fax_to_email_enabled">
-                {% if user_doc["fax_to_email_enabled"] %}<i class="fa fa-check-circle" title="Enabled"></i>{% else %}<i class="fa fa-ban" title="Disabled"></i>{% endif %}
-                <i id="toggle_fax_to_email_enabled" class="fa fa-refresh pointer" title="Change"></i>
-                {% wire id="toggle_fax_to_email_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
-                                                                              delegate="mod_kazoo"
-                                                                              inject_args type="user" doc_id=user_id field_name="fax_to_email_enabled"}
-                %}
+              <i id="toggle_fax_to_email_enabled"
+                class="fa fa-toggle-{% if user_doc["fax_to_email_enabled"] %}on{% else %}off{% endif %} pointer"></i>
+              {% wire id="toggle_fax_to_email_enabled" type="click" action={ postback postback={toggle_field type doc_id field_name}
+                                                                            delegate="mod_kazoo"
+                                                                            inject_args type="user" doc_id=user_id field_name="fax_to_email_enabled"}
+              %}
             </span>
         </div>
         </div>
@@ -110,18 +110,14 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Record calls _}</label></div>
         <div id="user_record_call" class="col-xs-5">
-            {% if user_doc["record_call"] %}
-              <i class="fa fa-check-circle" title="Enabled"></i>
-            {% else %}
-              <i class="fa fa-ban" title="Disabled"></i>
-            {% endif %}
-            <i id="toggle_user_record_call" class="fa fa-refresh pointer" title="Change"></i>
-            {% wire id="toggle_user_record_call"
-                    type="click"
-                    action={ postback postback={toggle_field type doc_id field_name prefix}
-                                      delegate="mod_kazoo"
-                                      inject_args type="user" doc_id=user_id field_name="record_call" prefix="user_"}
-            %}
+          <i id="toggle_user_record_call"
+            class="fa fa-toggle-{% if user_doc["record_call"] %}on{% else %}off{% endif %} pointer"></i>
+          {% wire id="toggle_user_record_call"
+                  type="click"
+                  action={ postback postback={toggle_field type doc_id field_name prefix}
+                                    delegate="mod_kazoo"
+                                    inject_args type="user" doc_id=user_id field_name="record_call" prefix="user_"}
+          %}
         </div>
     </div>
     <br />
