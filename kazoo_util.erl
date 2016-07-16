@@ -7,6 +7,7 @@
     ,kz_api_key_creds/2
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
+    ,crossbar_account_request/4
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
     ,kz_get_acc_doc_by_account_id_and_authtoken/3

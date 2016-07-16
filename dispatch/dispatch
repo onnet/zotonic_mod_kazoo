@@ -3,6 +3,7 @@
  {reseller_settings,["reseller_settings"],         controller_template,  [ {template, "reseller_settings.tpl"} ]},
  {admin_settings,["admin_settings"],         controller_template,  [ {template, "admin_settings.tpl"} ]},
  {admin_feature_codes,["admin_feature_codes"],         controller_template,  [ {template, "admin_feature_codes.tpl"} ]},
+ {admin_integrations,["admin_integrations"],         controller_template,  [ {template, "admin_integrations.tpl"} ]},
  {admin_statistics,["admin_statistics"],         controller_template,  [ {template, "admin_statistics.tpl"} ]},
  {admin_callflows,["admin_callflows"],         controller_template,  [ {template, "admin_callflows.tpl"} ]},
  {user_portal,["user_portal"],         controller_template,  [ {template, "user_portal.tpl"} ]},
