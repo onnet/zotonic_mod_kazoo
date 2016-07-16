@@ -616,7 +616,7 @@ kz_get_user_doc(OwnerId, Context) ->
 kz_get_user_doc(OwnerId, AccountId, Context) ->
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, (z_convert:to_binary(OwnerId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", (z_convert:to_binary(OwnerId))/binary>>,
             crossbar_account_request('get', API_String, [], Context);
         'true' -> []
     end.
@@ -633,7 +633,7 @@ kz_set_user_doc(K, V, OwnerId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, <<"/">>/binary, OwnerId/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, "/", OwnerId/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
         'true' -> []
     end.
@@ -664,7 +664,7 @@ kz_get_device_doc(DeviceId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse DeviceId =:= 'undefoned' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, <<"/">>/binary, (z_convert:to_binary(DeviceId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", (z_convert:to_binary(DeviceId))/binary>>,
             crossbar_account_request('get', API_String, [], Context);
         'true' -> []
     end.
@@ -680,7 +680,7 @@ kz_set_device_doc(K, V, DeviceId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse DeviceId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, <<"/">>/binary, (z_convert:to_binary(DeviceId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", (z_convert:to_binary(DeviceId))/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
         'true' -> []
     end.
@@ -980,7 +980,7 @@ update_kazoo_user(Context) ->
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrentDoc, Routines),
     Owner_Id = z_context:get_session('kazoo_owner_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?USERS/binary, <<"/">>/binary, Owner_Id/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?USERS/binary, "/", Owner_Id/binary>>,
     crossbar_account_request('post', API_String, {[{<<"data">>, NewDoc}]}, Context),
     Context.
 
@@ -1107,7 +1107,7 @@ kz_list_user_devices(Context) ->
     kz_list_user_devices(Owner_Id, Context).
 
 kz_list_user_devices(Owner_Id, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary, <<"?">>/binary, ?FILTER_OWNER/binary, Owner_Id/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary, "?", ?FILTER_OWNER/binary, Owner_Id/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_vmboxes(Context) ->
@@ -1116,11 +1116,11 @@ kz_list_account_vmboxes(Context) ->
 
 kz_list_user_vmboxes(Context) ->
     Owner_Id = z_context:get_session('kazoo_owner_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, <<"?">>/binary, ?FILTER_OWNER/binary, Owner_Id/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "?", ?FILTER_OWNER/binary, Owner_Id/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_vmbox_details(VMBoxId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VMBoxId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", (z_convert:to_binary(VMBoxId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
@@ -1164,7 +1164,7 @@ kz_list_account_cdr_page(_StartKey, PageSize, Context) ->
 
 kz_list_user_cdr(CreatedFrom, CreatedTo, Context) ->
     OwnerId = z_context:get_session('kazoo_owner_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?USERS/binary, <<"/">>/binary, OwnerId/binary, ?CDRS/binary, <<"?">>/binary, 
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?USERS/binary, "/", OwnerId/binary, ?CDRS/binary, <<"?">>/binary, 
                    ?MK_TIME_FILTER((z_convert:to_binary(CreatedFrom)), (z_convert:to_binary(CreatedTo)))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
@@ -1172,11 +1172,11 @@ kz_list_user_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
     kz_cdr_list_reduce(kz_list_user_cdr(CreatedFrom, CreatedTo, Context), Context).
 
 kz_fetch_cdr_details(CdrId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CDRS/binary, <<"/">>/binary, (z_convert:to_binary(CdrId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CDRS/binary, "/", (z_convert:to_binary(CdrId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_cdr_legs(CdrId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CDRS/binary, ?LEGS/binary, <<"/">>/binary, (z_convert:to_binary(CdrId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CDRS/binary, ?LEGS/binary, "/", (z_convert:to_binary(CdrId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_cdr_legs_localized(CdrId, Context) ->
@@ -1190,8 +1190,8 @@ cdr_jobj_add_localtime(CdrElement, Timezone) ->
                            ,CdrElement).
 
 kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VMBoxId))/binary,
-                   ?MESSAGES/binary, <<"/">>/binary, (z_convert:to_binary(MediaId))/binary, ?RAW/binary, <<"?">>/binary,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", (z_convert:to_binary(VMBoxId))/binary,
+                   ?MESSAGES/binary, "/", (z_convert:to_binary(MediaId))/binary, ?RAW/binary, <<"?">>/binary,
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
@@ -1272,7 +1272,7 @@ set_vm_message_folder(Folder, VMBoxId, MediaId, Context) ->
     Messages = [update_folder1(Message, Folder, MediaId, modkazoo_util:get_value(<<"media_id">>, Message))
                 || Message <- modkazoo_util:get_value(<<"messages">>, CurrVMBox, [])],
     NewVMBox = modkazoo_util:set_value(<<"messages">>, Messages, CurrVMBox),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VMBoxId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", (z_convert:to_binary(VMBoxId))/binary>>,
     crossbar_account_request('post', API_String, {[{<<"data">>, NewVMBox}]}, Context).
 
 update_folder1(Message, Folder, MediaId, MediaId) ->
@@ -1298,7 +1298,7 @@ change_credentials(Username, Password, OwnerId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, <<"/">>/binary, (z_convert:to_binary(OwnerId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, "/", (z_convert:to_binary(OwnerId))/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context, 'return_error');
         'true' -> []
     end.
@@ -1340,7 +1340,7 @@ kz_flush_registration_by_username(Username, Context) ->
     kz_flush_registration_by_username(Username, z_context:get_session('kazoo_account_id', Context), Context).
 
 kz_flush_registration_by_username(Username, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?REGISTRATIONS/binary, <<"/">>/binary, (z_convert:to_binary(Username))/binary>>, 
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?REGISTRATIONS/binary, "/", (z_convert:to_binary(Username))/binary>>, 
     crossbar_account_request('delete', API_String, [], Context).
 
 azrates(Context) ->
@@ -1367,7 +1367,7 @@ azrates_refresh(Context) ->
     file:write_file(m_config:get_value('mod_kazoo', 'rates_file', Context), jiffy:encode(CombinedRL)).
 
 rate_number(Number, Context) ->
-    API_String = <<?RATES/binary, ?NUMBER/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>, 
+    API_String = <<?RATES/binary, ?NUMBER/binary, "/", (z_convert:to_binary(Number))/binary>>, 
     case crossbar_admin_request('get', API_String, [], Context) of
         {'ok',"200", _, Body} -> 
             crossbar_admin_request('get', API_String, [], Context),
@@ -1562,7 +1562,7 @@ kz_bt_customer(Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 bt_delete_card(CardId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_context:get_session('kazoo_account_id', Context))/binary, ?BRAINTREE/binary, ?CARDS/binary, <<"/">>/binary, CardId/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_context:get_session('kazoo_account_id', Context))/binary, ?BRAINTREE/binary, ?CARDS/binary, "/", CardId/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
     
 make_payment(Amount, AccountId, Context) ->
@@ -1636,12 +1636,12 @@ rs_add_number(Num, AccountId, Context) ->
     end,
     DataBag = {[{<<"data">>, {[{<<"numbers">>, [Number]}]}},{<<"accept_charges">>, true}]},
     _ = crossbar_account_request('put'
-                                 ,<<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary>>
+                                 ,<<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, "/", Number/binary>>
                                  ,DataBag
                                  ,Context
                                 ),
     _ = crossbar_account_request('put'
-                                 ,<<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, Number/binary, ?ACTIVATE/binary>>
+                                 ,<<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, "/", Number/binary, ?ACTIVATE/binary>>
                                  ,[]
                                  ,Context
                                 ).
@@ -1674,7 +1674,7 @@ deallocate_number(Number, Context) ->
 deallocate_number(<<"+", Number/binary>>, AccountId, Context) ->
     deallocate_number(<<"%2B", Number/binary>>, AccountId, Context);
 deallocate_number(Number, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, <<"/">>/binary, (z_convert:to_binary(Number))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?PHONE_NUMBERS/binary, "/", (z_convert:to_binary(Number))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
 service_plan(PlanId, Context) ->
@@ -1682,7 +1682,7 @@ service_plan(PlanId, Context) ->
     service_plan(PlanId, AccountId, Context).
 
 service_plan(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, "/", (z_convert:to_binary(PlanId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 service_plans(Context) ->
@@ -1714,17 +1714,17 @@ sync_service_plans(AccountId, Context) ->
     crossbar_account_request('post', API_String, [], Context).
 
 add_service_plan(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, "/", (z_convert:to_binary(PlanId))/binary>>,
     DataBag = {[{<<"data">>, {[{<<"id">>, z_convert:to_binary(PlanId)}]}}]},
     crossbar_account_request('post', API_String, DataBag, Context).
 
 admin_add_service_plan(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, "/", (z_convert:to_binary(PlanId))/binary>>,
     DataBag = {[{<<"data">>, {[{<<"id">>, z_convert:to_binary(PlanId)}]}}]},
     crossbar_admin_request('post', API_String, DataBag, Context).
 
 remove_service_plan_from_account(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, <<"/">>/binary, (z_convert:to_binary(PlanId))/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?SERVICE_PLANS/binary, "/", (z_convert:to_binary(PlanId))/binary>>,
 lager:info("IAM remove service plan API_String: ~p",[API_String]),
     crossbar_account_request('delete', API_String, ?MK_DATABAG({[]}), Context).
 
@@ -1798,7 +1798,7 @@ delete_user(UserId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse UserId =:= 'undefined' of
         'false' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, <<"/">>/binary, UserId/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", UserId/binary>>,
             crossbar_account_request('delete', API_String, [], Context);
         'true' -> []
     end.
@@ -1807,7 +1807,7 @@ delete_device(DeviceId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse DeviceId =:= 'undefined' of
         'false' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?DEVICES/binary, <<"/">>/binary, DeviceId/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?DEVICES/binary, "/", DeviceId/binary>>,
             crossbar_account_request('delete', API_String, [], Context);
         'true' -> []
     end.
@@ -1855,7 +1855,7 @@ kz_get_account_callflow(CallflowId, Context) ->
     kz_get_account_callflow(CallflowId, AccountId, Context).
 
 kz_get_account_callflow(CallflowId, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, <<"/">>/binary, (z_convert:to_binary(CallflowId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, "/", (z_convert:to_binary(CallflowId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_children(Context) ->
@@ -1877,7 +1877,7 @@ kz_channel_info(CallId, Context) ->
 kz_channel_info(CallId, 'undefined', Context) ->
     kz_channel_info(CallId, z_context:get_session('kazoo_account_id', Context), Context);
 kz_channel_info(CallId, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, <<"/">>/binary , (z_convert:to_binary(CallId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, "/" , (z_convert:to_binary(CallId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_channel_action(CallId, DataBag, Context) ->
@@ -1886,7 +1886,7 @@ kz_channel_action(CallId, DataBag, Context) ->
 kz_channel_action(CallId, DataBag, 'undefined', Context) ->
     kz_channel_action(CallId, DataBag, z_context:get_session('kazoo_account_id', Context), Context);
 kz_channel_action(CallId, DataBag, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, <<"/">>/binary , (z_convert:to_binary(CallId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CHANNELS/binary, "/", (z_convert:to_binary(CallId))/binary>>,
     crossbar_account_request('post', API_String, DataBag, Context).
 
 kz_channel_hangup(CallId, AccountId, Context) ->
@@ -1938,7 +1938,7 @@ modify_group(GroupId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse GroupId =:= 'undefined' of
         'false' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, <<"/">>/binary, (z_convert:to_binary(GroupId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, "/", (z_convert:to_binary(GroupId))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context);
         'true' -> []
     end.
@@ -1947,7 +1947,7 @@ delete_group(GroupId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse GroupId =:= 'undefined' of
         'false' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, <<"/">>/binary, (z_convert:to_binary(GroupId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, "/", (z_convert:to_binary(GroupId))/binary>>,
             crossbar_account_request('delete', API_String, [], Context);
         'true' -> []
     end.
@@ -1956,7 +1956,7 @@ kz_get_group_doc(GroupId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse GroupId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, <<"/">>/binary, (z_convert:to_binary(GroupId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, "/", (z_convert:to_binary(GroupId))/binary>>,
             crossbar_account_request('get', API_String, [], Context);
         'true' -> []
     end.
@@ -1967,7 +1967,7 @@ kz_set_group_doc(K, V, GroupId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse GroupId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, <<"/">>/binary, (z_convert:to_binary(GroupId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?GROUPS/binary, "/", (z_convert:to_binary(GroupId))/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
         'true' -> []
     end.
@@ -2035,7 +2035,7 @@ cf_save('current_callflow', Context) ->
                     z_render:growl(?__("Callflow saved", Context), Context)
             end;
         Id ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (z_convert:to_binary(Id))/binary>>,
             case crossbar_account_request('post', API_String, ?MK_DATABAG(z_context:get_session('current_callflow', Context)), Context) of
                 <<>> -> z_render:growl_error(?__("Something wrong happened.", Context), Context);
                 _ ->
@@ -2050,7 +2050,7 @@ cf_delete('current_callflow', Context) ->
         'undefined' ->
             z_context:set_session('current_callflow', 'undefined', Context);
         Id ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('delete', API_String, [], Context),
             z_context:set_session('current_callflow', 'undefined', Context)
     end.
@@ -2064,7 +2064,7 @@ kz_get_media_doc(MediaId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse MediaId =:= 'undefined' orelse MediaId =:= 'null' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(MediaId))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?MEDIA/binary, "/", (z_convert:to_binary(MediaId))/binary>>,
             crossbar_account_request('get', API_String, [], Context);
         'true' -> []
     end.
@@ -2121,12 +2121,12 @@ kz_menu(Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MENUS/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MENUS/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MENUS/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
 kz_menu(Verb, MenuId,Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MENUS/binary, <<"/">>/binary, (z_convert:to_binary(MenuId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MENUS/binary, "/", (z_convert:to_binary(MenuId))/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
 kz_list_account_temporal_rules(Context) ->
@@ -2134,7 +2134,7 @@ kz_list_account_temporal_rules(Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_temporal_rule(RuleId,Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary, <<"/">>/binary, (z_convert:to_binary(RuleId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary, "/", (z_convert:to_binary(RuleId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{switch,Switch}],Context) ->
@@ -2535,12 +2535,12 @@ cf_time_of_the_day(Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
 cf_delete_time_of_the_day_rule(RuleId,Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary, <<"/">>/binary, (z_convert:to_binary(RuleId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?TEMPORAL_RULES/binary, "/", (z_convert:to_binary(RuleId))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
 upload_media(Context) ->
@@ -2586,7 +2586,7 @@ set_media_doc(Id, PromptName, Description, Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
   
@@ -2594,20 +2594,20 @@ set_media_attachment(Id, UploadFilename, UploadTmp, Context) ->
     {ok, Data} = file:read_file(UploadTmp),
     {ok, IdnProps} = z_media_identify:identify(UploadTmp, UploadFilename, Context),
     Mime = proplists:get_value(mime, IdnProps),
-    API_String_Raw = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary, ?RAW/binary>>,
+    API_String_Raw = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, "/", (z_convert:to_binary(Id))/binary, ?RAW/binary>>,
     Headers = [{"Content-Type",Mime}],
     crossbar_account_send_raw_request('post', API_String_Raw, Headers, Data, Context).
 
 kz_delete_prompt(PromptId,Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(PromptId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, "/", (z_convert:to_binary(PromptId))/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
 kz_get_account_prompt(PromptId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(PromptId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, "/", (z_convert:to_binary(PromptId))/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_account_prompt_attachment(PromptId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, <<"/">>/binary, (z_convert:to_binary(PromptId))/binary, ?RAW/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary, "/", (z_convert:to_binary(PromptId))/binary, ?RAW/binary>>,
     crossbar_account_attachment_request('get', API_String, [], Context).
 
 kz_list_account_conferences(Context) ->
@@ -2639,12 +2639,12 @@ kz_vmbox(Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
 kz_vmbox(Verb, VmboxId,Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, <<"/">>/binary, (z_convert:to_binary(VmboxId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", (z_convert:to_binary(VmboxId))/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
 kz_conference(Context) ->
@@ -2670,7 +2670,7 @@ kz_conference(Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
@@ -2678,11 +2678,11 @@ kz_conference(Verb, ConferenceId,Context) ->
     kz_conference(Verb, ConferenceId, [], Context).
 
 kz_conference(Verb, ConferenceId, DataBag, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", (z_convert:to_binary(ConferenceId))/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_conference_details(ConferenceId,Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, <<"/">>/binary, (z_convert:to_binary(ConferenceId))/binary, ?DETAILS/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", (z_convert:to_binary(ConferenceId))/binary, ?DETAILS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 dedup_kz_conference_details(ConferenceId,Context) ->
@@ -2750,7 +2750,7 @@ kz_c2call(Context) ->
             API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(Id))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, "/", (z_convert:to_binary(Id))/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
@@ -2758,11 +2758,11 @@ kz_c2call(Verb, C2CallId,Context) ->
     kz_c2call(Verb, C2CallId, [], Context).
 
 kz_c2call(Verb, C2CallId, DataBag, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(C2CallId))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, "/", (z_convert:to_binary(C2CallId))/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_c2call_hyperlink(C2CallId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, <<"/">>/binary, (z_convert:to_binary(C2CallId))/binary, ?CONNECT/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, "/", (z_convert:to_binary(C2CallId))/binary, ?CONNECT/binary>>,
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     <<Crossbar_URL/binary, API_String/binary>>.
 
@@ -2914,7 +2914,7 @@ update_featurecode(FeatureCodeName, Routines, Context) ->
         JObj -> 
             CallflowId = modkazoo_util:get_value(<<"id">>,JObj),
             CurrDoc = kz_get_account_callflow(CallflowId, Context),
-            APIString = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, CallflowId/binary>>,
+            APIString = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", CallflowId/binary>>,
             DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines)),
             crossbar_account_request('post', APIString, DataBag, Context)
     end.
@@ -2923,7 +2923,7 @@ toggle_featurecode_voicemail_check(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=check]">>, Context) of
         [] -> kz_add_featurecode_voicemail_check(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -2931,7 +2931,7 @@ toggle_featurecode_voicemail_direct(Context) ->
     case kz_get_featurecode_by_name(<<"voicemail[action=\"direct\"]">>, Context) of
         [] -> kz_add_featurecode_voicemail_direct(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -2939,7 +2939,7 @@ toggle_featurecode_park_and_retrieve(Context) ->
     case kz_get_featurecode_by_name(<<"park_and_retrieve">>, Context) of
         [] -> kz_add_featurecode_park_and_retrieve(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -2947,7 +2947,7 @@ toggle_featurecode_park_valet(Context) ->
     case kz_get_featurecode_by_name(<<"valet">>, Context) of
         [] -> kz_add_featurecode_park_valet(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -2955,7 +2955,7 @@ toggle_featurecode_park_retrieve(Context) ->
     case kz_get_featurecode_by_name(<<"retrieve">>, Context) of
         [] -> kz_add_featurecode_park_retrieve(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -2963,7 +2963,7 @@ toggle_featurecode_intercom(Context) ->
     case kz_get_featurecode_by_name(<<"intercom">>, Context) of
         [] -> kz_add_featurecode_intercom(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -2971,7 +2971,7 @@ toggle_featurecode_privacy(Context) ->
     case kz_get_featurecode_by_name(<<"privacy[mode=full]">>, Context) of
         [] -> kz_add_featurecode_privacy(Context);
         JObj -> 
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>,JObj))/binary>>,
             crossbar_account_request('delete', API_String, [], Context)
     end.
 
@@ -3439,7 +3439,7 @@ set_account_based_routing(AccountId, Context) ->
 set_no_match_routing(Routines, AccountId, Context) ->
     CurrDoc = kz_callflow_by_number(<<"no_match">>, AccountId, Context),
     DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines)),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, <<"/">>/binary, (modkazoo_util:get_value(<<"id">>, CurrDoc))/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CALLFLOWS/binary, "/", (modkazoo_util:get_value(<<"id">>, CurrDoc))/binary>>,
     crossbar_account_request('post', API_String, DataBag, Context).
 
 kz_list_account_resources(Context) ->
@@ -3455,8 +3455,8 @@ kz_resource_info(ResourceId, Context) ->
 
 kz_resource_info(ResourceId, AccountId, Context) ->
     API_String = case kz_current_context_superadmin(Context) of
-        'true' -> <<?V2/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>; 
-        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, <<"/">>/binary, (z_convert:to_binary(ResourceId, Context))/binary>>
+        'true' -> <<?V2/binary, ?RESOURCES/binary, "/", (z_convert:to_binary(ResourceId, Context))/binary>>; 
+        'false' -> <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?RESOURCES/binary, "/", (z_convert:to_binary(ResourceId, Context))/binary>>
     end,
     crossbar_account_request('get', API_String, [], Context).
     
