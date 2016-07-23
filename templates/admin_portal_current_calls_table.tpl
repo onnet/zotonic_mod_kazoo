@@ -85,43 +85,78 @@
     }
   });
 
-  var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
-  socket.emit("unsubscribe", { auth_token: "{{ m.session.kazoo_auth_token }}" });
-  socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_CREATE.*"});
-  socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_ANSWER.*"});
-  socket.emit("subscribe", { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "call.CHANNEL_DESTROY.*"});
-  socket.on("CHANNEL_CREATE", function (data) {
-    if ( data["Other-Leg-Call-ID"] && data["Call-ID"] && data["Other-Leg-Caller-ID-Number"] && data["Caller-ID-Number"] && data["Caller-ID-Number"] != "context_2" && data["Callee-ID-Number"] != "context_2" ) {
+  var socket = new WebSocket('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
+ 
+  function send(data) {
+      socket.send(JSON.stringify(data));
+  }
+
+  socket.onopen = function() {
+
+    send({ action: 'unsubscribe', auth_token: '{{ m.session.kazoo_auth_token }}' });
+
+    send({
+        action: 'subscribe',
+        account_id: '{{ account_id }}',
+        auth_token: '{{ m.session.kazoo_auth_token }}',
+        bindings: ['call.CHANNEL_CREATE.*', 'call.CHANNEL_ANSWER.*', 'call.CHANNEL_DESTROY.*']
+    });
+
+  }
+
+  socket.onmessage = function(raw_message) {
+    var data = JSON.parse(raw_message.data);
+
+    switch(data.routing_key) {
+      case "CHANNEL_CREATE":
+      if ( data["Other-Leg-Call-ID"] && data["Call-ID"] && data["Other-Leg-Caller-ID-Number"] && data["Caller-ID-Number"]
+           && data["Caller-ID-Number"] != "context_2" && data["Callee-ID-Number"] != "context_2"
+         ) {
         $(".dataTables_empty").remove();
-        console.log(data["Call-ID"].toString());
+   //   console.log(data["Call-ID"].toString());
         row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
-        console.log("Attempt to add row_id: "+row_id);
+   //   console.log("Attempt to add row_id: "+row_id);
         if ($("#"+row_id).length == 0) {
             oTable.api().row.add([row_id, 
-                              data["Caller-ID-Number"], 
-                              data["Callee-ID-Number"], 
-                              '{_ ringing _}', 
-                              '', 
-                              '<i class="dark-1 icon-telicon-hangup pointer" onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>' ]).draw();
+                                  data["Caller-ID-Number"], 
+                                  data["Callee-ID-Number"], 
+                                  '{_ ringing _}', 
+                                  '', 
+                                  '<i class="dark-1 icon-telicon-hangup pointer" \
+                                      onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>'
+                                 ]).draw();
         }
+      }
+      console.log(data);
+      break;
+
+      case "CHANNEL_ANSWER":
+      row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
+      oTable.api().row('#'+row_id).data([row_id,
+                                         data["Caller-ID-Number"], 
+                                         data["Callee-ID-Number"], 
+                                   //    data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" \
+                                   //                                  onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>', 
+                                   //    data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" \
+                                   //                                  onclick="z_event('+"'channel_transfer'"+", \
+                                   //                                                   {channel_id: '"+data["Other-Leg-Call-ID"]+"'"+' } \
+                                   //                                                  );"></i>', 
+                                         '{_ answered _}', 
+                                         '<i class="fa fa-volume-up pointer" \
+                                             onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>',
+                                         '<i class="dark-1 icon-telicon-hangup pointer" \
+                                             onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>'
+                                        ]).draw();
+      console.log(data);
+      break;
+
+      case "CHANNEL_DESTROY":
+      row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
+      oTable.api().row('#'+row_id).remove().draw();
+      console.log(data);
+      break;
     }
-    console.log(data); // data = EventJObj
-  });
-  socket.on("CHANNEL_ANSWER", function (data) {
-        row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
-        oTable.api().row('#'+row_id).data([row_id,
-                          data["Caller-ID-Number"], 
-                          data["Callee-ID-Number"], 
-                    //    data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>', 
-                    //    data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Other-Leg-Call-ID"]+"'"+' });"></i>', 
-                          '{_ answered _}', 
-                          '<i class="fa fa-volume-up pointer" onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>',
-                          '<i class="dark-1 icon-telicon-hangup pointer" onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>' ]).draw();
-    console.log(data);
-  });
-  socket.on("CHANNEL_DESTROY", function (data) {
-        row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
-        oTable.api().row('#'+row_id).remove().draw();
-        console.log(data);
-  });
+
+  };
+
 {% endjavascript %}
