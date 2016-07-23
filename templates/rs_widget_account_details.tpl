@@ -20,7 +20,16 @@
             <th>{_ Account status _}</th>
             <th>{% if account_doc[1]["enabled"] %}<span class="zprimary">{_ Active _}</span>
                             {% else %}<span class="zalarm">{_ Blocked _}{% endif %}</span>
-                <span class="pull-right" style="padding-right: 1em;">
+
+                {# if m.kazoo.kz_current_context_superadmin #}
+                  <i id="account_status_toggler"
+                     class="fa fa-toggle-{% if account_doc[1]["enabled"] %}on{% else%}off{% endif %} pointer"
+                     style="float: right;"
+                     title="{% if account_doc[1]["enabled"] %}{_ Click to disable _}{% else%}{_ Click to enable _}{% endif %}"></i>
+                  {% wire id="account_status_toggler" type="click" action={postback postback={toggle_account_status account_id=account_id} delegate="mod_kazoo"} %}
+                {# endif #}
+
+                <span class="pull-right" style="padding-right: 3em;">
                   {{ m.config.mod_kazoo.local_currency_sign.value }}{{ m.kazoo[{current_account_credit account_id=account_id}]|format_price }}
                 </span>
             </th>

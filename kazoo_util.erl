@@ -309,6 +309,7 @@
     ,list_system_dialplans/1
     ,list_system_dialplans_names/1
     ,kz_toggle_reseller_status/2
+    ,kz_toggle_account_status/2
     ,monthly_rollup/1
     ,per_minute_calls/1
     ,credit_transactions/1
@@ -640,9 +641,13 @@ kz_set_user_doc(K, V, OwnerId, Context) ->
     end.
 
 kz_toggle_account_doc(K, Context) ->
-    case kz_account_doc_field(K, Context) of
-        'true' -> kz_set_acc_doc(K, 'false', Context);
-        _ -> kz_set_acc_doc(K, 'true', Context)
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    kz_toggle_account_doc(K, AccountId, Context).
+
+kz_toggle_account_doc(K, AccountId, Context) ->
+    case kz_account_doc_field(K, AccountId, Context) of
+        'true' -> kz_set_acc_doc(K, 'false', AccountId, Context);
+        _ -> kz_set_acc_doc(K, 'true', AccountId, Context)
     end.
 
 kz_toggle_user_doc(K, Context) ->
@@ -1212,9 +1217,9 @@ kz_kzattachment_link(AccountId, CdrId, MediaName, AuthToken, DocType, Context) -
 
 call_recording_attachment(AccountId, CdrId, MediaName, AuthToken, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary,?RECORDINGS/binary,"/"
-                  ,?TO_BIN(CdrId)/binary,"/",?TO_BIN(MediaName)/binary, ?ATTACHMENT/binary
+                  ,?TO_BIN(CdrId)/binary,"/",?TO_BIN(MediaName)/binary
                  >>,
-    crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [], [], Context).
+    crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [{"Accept", "audio/mpeg"}], [], Context).
 
 kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
     Timezone = z_convert:to_list(kazoo_util:may_be_get_timezone(Context)),
@@ -3782,6 +3787,9 @@ kz_toggle_reseller_status(AccountId, Context) ->
         'true' -> kz_set_reseller_status('delete', AccountId, Context);
         _ -> kz_set_reseller_status('put', AccountId, Context)
     end.
+
+kz_toggle_account_status(AccountId, Context) ->
+    kz_toggle_account_doc(<<"enabled">>, AccountId, Context).
 
 monthly_rollup(Transactions) ->
     Fun = fun(Transaction) -> modkazoo_util:get_value(<<"id">>, Transaction) == <<"monthly_rollup">> end,

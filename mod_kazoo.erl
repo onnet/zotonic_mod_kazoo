@@ -1401,6 +1401,10 @@ event({submit,rs_kz_customer_update,_,_}, Context) ->
     _ = modkazoo_notify:rs_kz_customer_update(Context),
     z_render:dialog_close(Context);
 
+event({postback,{toggle_account_status,[{account_id,AccountId}]},_,_}, Context) ->
+    kazoo_util:kz_toggle_account_status(AccountId, Context),
+    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+
 event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:kz_toggle_reseller_status(AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
