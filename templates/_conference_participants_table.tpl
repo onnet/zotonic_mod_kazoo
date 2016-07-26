@@ -9,9 +9,12 @@
         </tr>
     </thead>
     <tbody>
-        {% for participant in m.kazoo[{kz_conference_details conference_id=conference_id}] %}
+        {% for participant in m.kazoo[{kz_conference_participants conference_id=conference_id}] %}
+{% print participant %}
 	<tr>
-            <td style="text-align: center1;">{{ participant["Custom-Channel-Vars"][1]["Presence-ID"]|split:"@"|first }}</td>
+            <td style="text-align: center1;">
+              {{ participant["channel"][1]["custom_channel_vars"][1]["presence_id"]|split:"@"|first }}
+            </td>
             <td style="text-align: center;">
               {% if not participant["Mute"] %}
                 <i id="mic_{{ participant["Participant-ID"] }}" class="fa fa-check zprimary pointer" title="Enabled"></i>

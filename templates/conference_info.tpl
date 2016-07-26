@@ -1,5 +1,6 @@
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
 
+{% print conference_id %}
 
   <div class="col-xs-2 col-xs-offset-3">
     {% wire id="account_conference_edit_btn" action={ dialog_open title=_"Edit conference " template="_edit_conference_lazy.tpl" conference_id=conference_id width="auto" } %}
@@ -49,6 +50,41 @@
 
 {% javascript %}
 
+  var socket = new WebSocket('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
+
+  function send(data) {
+      socket.send(JSON.stringify(data));
+  }
+
+  socket.onopen = function() {
+
+    send({ action: 'unsubscribe', auth_token: '{{ m.session.kazoo_auth_token }}' });
+
+    send({
+        action: 'subscribe',
+        account_id: '{{ account_id }}',
+        auth_token: '{{ m.session.kazoo_auth_token }}',
+        bindings: ['conference.event.*.*', 'conference.command.*']
+    });
+
+  }
+
+  socket.onmessage = function(raw_message) {
+    var data = JSON.parse(raw_message.data);
+      console.log(data);
+
+    switch(data.routing_key) {
+      case "participant_event":
+      z_event("update_conference_participants");
+      console.log('called z_event: update_conference_participants');
+      break;
+    }
+
+  };
+
+
+
+/*
  var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
   socket.emit("unsubscribe", { auth_token: "{{ m.session.kazoo_auth_token }}" });
 //  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.event.{{ conference_id }}" });
@@ -101,6 +137,7 @@
     console.log(data);
     z_event("update_conference_participants");
   });
+*/
 
 {% endjavascript %}
 

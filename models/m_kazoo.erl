@@ -534,8 +534,9 @@ m_find_value({kz_get_account_list, [{list_id, ListId}]}, _M, Context) ->
 m_find_value({kz_list_account_list_entries, [{list_id, ListId}]}, _M, Context) ->
     kazoo_util:kz_list_account_list_entries(ListId, Context);
 
-m_find_value({kz_conference_details, [{conference_id, ConferenceId}]}, _M, Context) ->
-    kazoo_util:dedup_kz_conference_details(ConferenceId,Context);
+m_find_value({kz_conference_participants, [{conference_id, ConferenceId}]}, _M, Context) ->
+    kazoo_util:kz_conference_participants(ConferenceId,Context);
+ %   kazoo_util:dedup_kz_conference_participants(ConferenceId,Context);
 
 m_find_value(notifications_smtplog, _M, Context) ->
     kazoo_util:notifications_smtplog(Context);

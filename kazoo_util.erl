@@ -203,8 +203,8 @@
     ,kz_vmbox/3
     ,kz_conference/1
     ,kz_conference/3
-    ,kz_conference_details/2
-    ,dedup_kz_conference_details/2
+    ,kz_conference_participants/2
+    ,dedup_kz_conference_participants/2
     ,kz_c2call/1
     ,kz_c2call/3
     ,kz_c2call_hyperlink/2
@@ -238,7 +238,7 @@
     ,toggle_all_calls_recording/1
     ,kz_cccp_creds_list/1
     ,add_cccp_doc/3
-    ,add_cccp_autodial/4
+    ,add_cccp_autodial/5
     ,del_cccp_doc/2
     ,cccp_field_toggler/3
     ,kz_find_account_by_number/2
@@ -375,7 +375,7 @@
 -define(MENUS, <<"/menus">>).
 -define(TEMPORAL_RULES, <<"/temporal_rules">>).
 -define(CONFERENCES, <<"/conferences">>).
--define(DETAILS, <<"/details">>).
+-define(PARTICIPANTS, <<"/participants">>).
 -define(BLACKLISTS, <<"/blacklists">>).
 -define(LISTS, <<"/lists">>).
 -define(ENTRIES, <<"/entries">>).
@@ -2685,12 +2685,12 @@ kz_conference(Verb, ConferenceId, DataBag, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
-kz_conference_details(ConferenceId,Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary, ?DETAILS/binary>>,
+kz_conference_participants(ConferenceId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary, ?PARTICIPANTS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-dedup_kz_conference_details(ConferenceId,Context) ->
-    case kz_conference_details(ConferenceId,Context) of
+dedup_kz_conference_participants(ConferenceId,Context) ->
+    case kz_conference_participants(ConferenceId,Context) of
         <<>> -> <<>>;
         Pts ->
             lists:foldl(fun(X,Acc) ->
@@ -2713,9 +2713,9 @@ start_outbound_conference(_, [], _, Context) ->
 start_outbound_conference(_, _, [], Context) ->
     z_render:growl_error(?__("No callflow chosen.",Context), Context);
 start_outbound_conference(_ConferenceId, ListId, BLegNumber, Context) ->
-    [OutboundCID|_] = kz_account_numbers(Context),
+    UserId = z_context:get_session('kazoo_owner_id', Context),
     NumbersList = [modkazoo_util:get_value([<<"value">>,<<"number">>],JObj) || JObj <- kz_list_account_list_entries(ListId, Context)],
-    [add_cccp_autodial(ParticipantNumber, BLegNumber, OutboundCID, Context) || ParticipantNumber <- NumbersList],
+    [add_cccp_autodial(ParticipantNumber, BLegNumber, UserId, 'undefined', Context) || ParticipantNumber <- NumbersList],
     z_render:growl(?__("Attempt sent.",Context), Context).
 
 add_conf_participant(_ConferenceId, Context) ->
@@ -2732,8 +2732,8 @@ add_conf_participant(_, [], _, Context) ->
 add_conf_participant(_, _, [], Context) ->
     z_render:growl_error(?__("No callflow chosen.",Context), Context);
 add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context) ->
-    [OutboundCID|_] = kz_account_numbers(Context),
-    add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context),
+    UserId = z_context:get_session('kazoo_owner_id', Context),
+    add_cccp_autodial(ALegNumber, BLegNumber, UserId, 'undefined', Context),
     mod_signal:emit({update_conference_participants_tpl, []}, Context),
     z_render:growl(?__("Attempt sent.",Context), Context).
 
@@ -3161,13 +3161,15 @@ add_cccp_doc(Field1, Field2, Context) ->
     DataBag = {[{<<"data">>, {[Field1, Field2, {<<"active">>, true}]}}]},
     crossbar_account_request('put', API_String, DataBag, Context).
 
-add_cccp_autodial(ALegNumber, BLegNumber, OutboundCID, Context) ->
+add_cccp_autodial(ALegNumber, BLegNumber, UserId, MediaId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, ?AUTODIAL/binary>>,
-    DataBag = ?MK_DATABAG({[{<<"a_leg_number">>, ?TO_BIN(ALegNumber)}
-               ,{<<"b_leg_number">>, ?TO_BIN(BLegNumber)}
-               ,{<<"outbound_cid">>, ?TO_BIN(OutboundCID)}
-               ,{<<"callback_delay">>, 1}]}),
-    crossbar_account_request('put', API_String, DataBag, Context).
+    Payload = modkazoo_util:filter_empty([{<<"a_leg_number">>, ?TO_BIN(ALegNumber)}
+                                         ,{<<"b_leg_number">>, ?TO_BIN(BLegNumber)}
+                                         ,{<<"user_id">>, ?TO_BIN(UserId)}
+                                         ,{<<"media_id">>, ?TO_BIN(MediaId)}
+                                         ,{<<"retain_cid">>, 'true'}
+                                         ,{<<"callback_delay">>, 1}]),
+    crossbar_account_request('put', API_String, ?MK_DATABAG({Payload}), Context).
 
 del_cccp_doc(DocId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, "/", ?TO_BIN(DocId)/binary>>,
