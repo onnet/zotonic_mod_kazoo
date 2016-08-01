@@ -1,7 +1,5 @@
 <div class="row" style="padding: 1em; margin-bottom: 1em;">
 
-{% print conference_id %}
-
   <div class="col-xs-2 col-xs-offset-3">
     {% wire id="account_conference_edit_btn" action={ dialog_open title=_"Edit conference " template="_edit_conference_lazy.tpl" conference_id=conference_id width="auto" } %}
     <button id="account_conference_edit_btn" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Settings _}</button>
@@ -64,7 +62,7 @@
         action: 'subscribe',
         account_id: '{{ account_id }}',
         auth_token: '{{ m.session.kazoo_auth_token }}',
-        bindings: ['conference.event.*.*', 'conference.command.*']
+        bindings: ['conference.event.{{ conference_id }}.*', 'conference.command.{{ conference_id }}']
     });
 
   }
@@ -78,6 +76,16 @@
       z_event("update_conference_participants");
       console.log('called z_event: update_conference_participants');
       break;
+
+      case "mute_participant":
+      z_event("update_conference_participants");
+      console.log('called z_event: update_conference_participants, case: mute_participant');
+      break;
+
+      case "unmute_participant":
+      z_event("update_conference_participants");
+      console.log('called z_event: update_conference_participants, case: unmute_participant');
+      break;
     }
 
   };
@@ -85,13 +93,6 @@
 
 
 /*
- var socket = io.connect('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
-  socket.emit("unsubscribe", { auth_token: "{{ m.session.kazoo_auth_token }}" });
-//  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.event.{{ conference_id }}" });
-//  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.command.{{ conference_id }}" });
-  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.event.*" });
-  socket.emit('subscribe', { account_id: "{{ account_id }}", auth_token: "{{ m.session.kazoo_auth_token }}", binding: "conference.command.*" });
-
 
   socket.on('start-talking', function (data) {
     console.log(data);
