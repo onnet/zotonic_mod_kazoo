@@ -137,6 +137,8 @@
     ,get_user_timezone/1
     ,may_be_get_timezone/1
     ,is_service_plan_applied/1
+    ,get_account_name/1
+    ,get_account_name/2
     ,get_account_realm/1
     ,get_account_realm/2
     ,delete_account/2
@@ -1724,6 +1726,18 @@ may_be_get_timezone(Context) ->
         'undefined' -> <<"UTC">>;
         Timezone -> Timezone
     end.
+
+get_account_name(Context) ->
+    case z_context:get_session('kazoo_account_name', Context) of
+        'undefined' ->
+            Name = kz_account_doc_field(<<"name">>, Context),
+            z_context:set_session('kazoo_account_name', Name, Context),
+            Name;
+        Name -> Name
+    end.
+
+get_account_name(AccountId, Context) ->
+    kz_account_doc_field(<<"name">>, AccountId, Context).
 
 get_account_realm(Context) ->
     case z_context:get_session('account_realm', Context) of
