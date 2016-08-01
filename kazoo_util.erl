@@ -3198,17 +3198,25 @@ list_account_trunks(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary, ?CONNECTIVITY/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+check_trunk_name_field(TrunkDoc, Context) ->
+    case modkazoo_util:get_value(<<"name">>, TrunkDoc) of
+        'undefined' -> modkazoo_util:set_value(<<"name">>, <<(get_account_name(Context))/binary, " Trunkstore">>, TrunkDoc);
+        _ -> TrunkDoc
+    end.
+
 kz_trunk_server(Context) ->
     TrunkId = case z_context:get_q("trunk_id",Context) of
              'undefined' ->
                  case list_account_trunks(Context) of
                      [] ->
-                         DataBag = ?MK_DATABAG({[{<<"account">>,
-                                                  {[{<<"credits">>,{[{<<"prepay">>,<<"0.00">>}]}},
-                                                    {<<"trunks">>,<<"0">>},
-                                                    {<<"inbound_trunks">>,<<"0">>},
-                                                    {<<"auth_realm">>,get_account_realm(Context)}]}},
-                                                 {<<"servers">>,[]}]}),
+                         DataBag = ?MK_DATABAG({[{<<"account">>, {[{<<"credits">>,{[{<<"prepay">>,<<"0.00">>}]}}
+                                                                  ,{<<"trunks">>,<<"0">>}
+                                                                  ,{<<"inbound_trunks">>,<<"0">>}
+                                                                  ,{<<"auth_realm">>,get_account_realm(Context)}
+                                                                  ]}}
+                                                ,{<<"name">>, <<(get_account_name(Context))/binary, " Trunkstore">>}
+                                                ,{<<"servers">>, []}
+                                                ]}),
                          _ = kz_trunk('put', <<>>, DataBag, Context),
                          [CreatedTrunkId|_] = list_account_trunks(Context),
                          CreatedTrunkId;
@@ -3225,7 +3233,7 @@ kz_trunk_server(Context) ->
             lists:sublist(Servers, Index-1) ++ [update_trunk_server(lists:nth(Index, Servers), Context)] ++ lists:nthtail(Index, Servers)
     end,
     NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
-    kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context).
+    kz_trunk('post', TrunkId, ?MK_DATABAG(check_trunk_name_field(NewTrunkDoc, Context)), Context).
 
 kz_trunk_server_details('undefined', _, _) ->
     [];
