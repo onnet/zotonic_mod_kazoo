@@ -10,7 +10,7 @@
         {_ Without user _}
       {% endif %}
       {_ at _}
-      {{ m.session.kazoo_account_name }}
+      {{ m.kazoo.get_account_name }}
     </span>
   </p>
   </div>
