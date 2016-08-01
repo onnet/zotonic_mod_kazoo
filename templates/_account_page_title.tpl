@@ -10,7 +10,7 @@
         {_ Without user _}
       {% endif %}
       {_ at _}
-      {{ m.kazoo[{kz_doc_field type="account" doc_id=m.session.kazoo_account_id field="name"}] }}
+      {{ m.session.kazoo_account_name }}
     </span>
   </p>
   </div>
