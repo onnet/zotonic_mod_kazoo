@@ -101,11 +101,13 @@ may_be_set_reseller_data(Context) ->
     z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context),
     case (modkazoo_util:get_value(<<"is_reseller">>,AccountDoc) == 'true' orelse  modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc) == 'true') of
         'true' -> 
-            AccountId = z_context:get_session(kazoo_account_id, Context),
             KazooOwnerId = z_context:get_session(kazoo_owner_id, Context),
+            AccountId = z_context:get_session(kazoo_account_id, Context),
+            AccountName = z_context:get_session(kazoo_account_name, Context),
             modkazoo_util:set_session_jobj('kazoo_reseller_user_tracking', AccountId, KazooOwnerId, ?EMPTY_JSON_OBJECT, Context),
             z_context:set_session(kazoo_reseller_owner_id, KazooOwnerId, Context),
-            z_context:set_session(kazoo_reseller_account_id, AccountId, Context);
+            z_context:set_session(kazoo_reseller_account_id, KazooOwnerId, Context),
+            z_context:set_session(kazoo_reseller_account_name, AccountId, Context);
         'false' -> 'ok'
     end.
 
