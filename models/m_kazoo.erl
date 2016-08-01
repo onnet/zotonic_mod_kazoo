@@ -379,6 +379,9 @@ m_find_value(valid_card_exists, _M, Context) ->
 m_find_value(is_service_plan_applied, _M, Context) ->
     kazoo_util:is_service_plan_applied(Context);
 
+m_find_value(get_account_name, _M, Context) ->
+    kazoo_util:get_account_name(Context);
+
 m_find_value(get_account_realm, _M, Context) ->
     kazoo_util:get_account_realm(Context);
 
