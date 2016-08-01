@@ -3247,7 +3247,7 @@ kz_trunk_server_delete(TrunkId, Index, Context) ->
     Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
     NewServers = lists:sublist(Servers, Index-1) ++ lists:nthtail(Index, Servers),
     NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
-    kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context).
+    kz_trunk('post', TrunkId, ?MK_DATABAG(check_trunk_name_field(NewTrunkDoc, Context)), Context).
 
 kz_trunk_server_numbers(Context) ->
     case z_context:get_q("trunk_id",Context) of
