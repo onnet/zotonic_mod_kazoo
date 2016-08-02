@@ -1,3 +1,4 @@
+{% with m.session.selected_conference_id as conference_id %}
 <div class="row" style="margin-top: 2em; margin-bottom: 1em;">
   <div class="col-xs-2 col-xs-offset-1">
   </div>
@@ -47,6 +48,7 @@
 
 <div id="child_sandbox" class="row">
 {% if conference_id %}
-  {% include "conference_info.tpl" conference_id=conference_id %}
+  {% include "conference_info.tpl" %}
 {% endif %}
 </div>
+{% endwith %}

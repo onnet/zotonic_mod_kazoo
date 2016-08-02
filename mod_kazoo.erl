@@ -1253,7 +1253,9 @@ event({postback,{delete_account_list_entry,[{list_id,ListId},{entry_id,EntryId},
     z_render:update("list_entries_div", z_template:render(TemplateName, [{list_id, ListId}], Context), Context);
 
 event({postback,conference_selected,_,_},Context) ->
-    z_render:update("child_sandbox", z_template:render("conference_info.tpl", [{conference_id, z_context:get_q("triggervalue", Context)}], Context), Context);
+    ConferenceId = z_context:get_q("triggervalue", Context),
+    _ = z_session:set('selected_conference_id', ConferenceId, Context),
+    z_render:update("child_sandbox", z_template:render("conference_info.tpl", [], Context), Context);
 
 event({submit,sendmail_test_notification,_,_}, Context) ->
     Email = z_context:get_q("chosen_email", Context),

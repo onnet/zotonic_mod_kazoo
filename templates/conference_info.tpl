@@ -1,3 +1,4 @@
+{% with m.session.selected_conference_id as conference_id %}
 
 <div class="pl-10 pr-10 col-md-6 col-md-offset-3">
 
@@ -112,3 +113,4 @@
 
 {% endjavascript %}
 
+{% endwith %}
