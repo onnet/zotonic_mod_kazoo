@@ -17,17 +17,23 @@
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" action={emit signal={update_conference_participants_tpl} } %}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
                          action={confirm text=_"Do you really want to add participant"++"?"
-                              action={postback postback={add_conf_participant conference_id=conference_id} qarg="a_leg_number" qarg="callflow_number_selector" delegate="mod_kazoo"}
-                         }
+                                         action={postback postback={add_conf_participant conference_id=conference_id}
+                                                          qarg="a_leg_number"
+                                                          qarg="conference_selector"
+                                                          delegate="mod_kazoo"
+                                                }
+                                }
     %}
-    <input id="a_leg_number" class="input input-number-onnet pull-right" type="text" name="a_leg_number" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
+    <input id="a_leg_number" class="input input-number-onnet pull-right" type="text"
+           name="a_leg_number" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
             
-<div id="conference_participants_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="conference_participants_widget_opened"}] %}display: none;{% endif %}">
+<div id="conference_participants_widget_opened"
+     style="{% if not m.kazoo[{ui_element_opened element="conference_participants_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="conference_participants_widget_opened"
                                                                     template="_conference_participants_table.tpl" conference_id=conference_id}

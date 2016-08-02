@@ -19,7 +19,8 @@
     });
   {% endjavascript %}
   <div class="col-xs-2">
-    <select id="account_list_selector" name="selected_list" class="col-xs-12 form-control margin-bottom-xs selectpicker" title="{_ Participants list _}"  data-live-search="true">
+    <select id="account_list_selector" name="selected_list" class="col-xs-12 form-control margin-bottom-xs selectpicker"
+            title="{_ Participants list _}"  data-live-search="true">
       {% for list in m.kazoo.kz_list_account_lists %}
           <option value="{{ list["id"] }}">{{ list["name"] }}</option>
       {% endfor %}
