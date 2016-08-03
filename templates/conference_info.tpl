@@ -44,35 +44,59 @@
 
     switch(data.routing_key) {
       case "participant_event":
-      z_event("update_conference_participants");
-      console.log('called z_event: update_conference_participants');
+        handle_participant_event(data);
       break;
 
-      case "mute_participant":
-      z_event("update_conference_participants");
-      console.log('called z_event: update_conference_participants, case: mute_participant');
-      break;
+  //    case "mute_participant":
+  //    z_event("update_conference_participants");
+  //    console.log('called z_event: update_conference_participants, case: mute_participant');
+  //    break;
 
-      case "unmute_participant":
-      z_event("update_conference_participants");
-      console.log('called z_event: update_conference_participants, case: unmute_participant');
-      break;
+  //    case "unmute_participant":
+  //    z_event("update_conference_participants");
+  //    console.log('called z_event: update_conference_participants, case: unmute_participant');
+  //    break;
     }
 
   };
 
+  function handle_participant_event(data) {
+    switch(data.event) {
+      case "start-talking":
+        console.log("start-talking" + data.participant_id);
+        document.getElementById("talking_" + data.participant_id).className = "fa fa-check zalarm";
+      break;
 
+      case "stop-talking":
+        console.log("stop-talking" + data.participant_id);
+        document.getElementById("talking_" + data.participant_id).className = "fa fa-remove zprimary";
+      break;
+
+      case "mute-member":
+        console.log("mute-member" + data.participant_id);
+        document.getElementById("mic_" + data.participant_id).className = "fa fa-remove zalarm";
+      break;
+
+      case "unmute-member":
+        console.log("unmute-member" + data.participant_id);
+        document.getElementById("mic_" + data.participant_id).className = "fa fa-check zprimary";
+      break;
+
+    }
+  };
 
 /*
 
   socket.on('start-talking', function (data) {
+    console.log('start-talking');
     console.log(data);
-    z_event("update_conference_participants");
+ //   z_event("update_conference_participants");
   });
 
   socket.on('stop-talking', function (data) {
+    console.log('stop-talking');
     console.log(data);
-    z_event("update_conference_participants");
+ //   z_event("update_conference_participants");
   });
 
   socket.on('kick-member', function (data) {
