@@ -205,6 +205,7 @@
     ,kz_vmbox/3
     ,kz_conference/1
     ,kz_conference/3
+    ,kz_conference_participant/3
     ,kz_conference_participants/2
     ,dedup_kz_conference_participants/2
     ,kz_c2call/1
@@ -2696,6 +2697,9 @@ kz_conference(Verb, ConferenceId,Context) ->
 kz_conference(Verb, ConferenceId, DataBag, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_conference_participant(ParticipantId, ConferenceId, Context) ->
+    kz_conference_participant('get', ParticipantId, ConferenceId, [], Context).
 
 kz_conference_participant(Verb, ParticipantId, ConferenceId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary,

@@ -1316,6 +1316,16 @@ event({postback,{do_conference_participant_action,[{action, Action},{participant
     _ = kazoo_util:do_conference_participant_action(Action, ParticipantId, ConferenceId, Context),
     Context;
 
+event({postback,update_conference_participants_table_line,_,_}, Context) ->
+    ConferenceId = z_context:get_q(conference_id, Context),
+    ParticipantId = z_context:get_q(participant_id, Context),
+    Participant = kazoo_util:kz_conference_participant(ParticipantId,ConferenceId,Context),
+    z_render:update("participants_table_line_id_" ++ z_convert:to_list(ParticipantId)
+                   ,z_template:render("_conference_participants_table_line.tpl"
+                                     ,[{participant_id,ParticipantId},{conference_id,ConferenceId},{participant,Participant}]
+                                     ,Context)
+                   ,Context);
+
 event({postback,{channel_hangup,[{channel_id,ChannelId}]},_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     _ = kazoo_util:kz_channel_hangup(ChannelId, AccountId, Context),

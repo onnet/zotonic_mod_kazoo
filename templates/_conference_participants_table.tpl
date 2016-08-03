@@ -12,11 +12,9 @@
     </thead>
     <tbody>
         {% for participant in m.kazoo[{kz_conference_participants conference_id=conference_id}] %}
-        {% with participant["participant_id"] as participant_id %}
-	<tr id="participants_table_line_id_{{ participant_id }}">
-          {% include "_conference_participants_table_line.tpl" conference_id=conference_id participant_id=participant_id %}
+	<tr id="participants_table_line_id_{{ participant["participant_id"] }}">
+          {% include "_conference_participants_table_line.tpl" conference_id=conference_id participant_id=participant["participant_id"] %}
         </tr>
-        {% endwith %}
         {% endfor %}
     </tbody>
 </table>

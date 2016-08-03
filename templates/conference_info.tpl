@@ -1,4 +1,5 @@
 {% with m.session.selected_conference_id as conference_id %}
+{% wire name="update_conference_participants_table_line" action={postback postback="update_conference_participants_table_line" delegate="mod_kazoo"} %}
 
 <div class="pl-10 pr-10 col-md-6 col-md-offset-3">
 
@@ -47,15 +48,6 @@
         handle_participant_event(data);
       break;
 
-  //    case "mute_participant":
-  //    z_event("update_conference_participants");
-  //    console.log('called z_event: update_conference_participants, case: mute_participant');
-  //    break;
-
-  //    case "unmute_participant":
-  //    z_event("update_conference_participants");
-  //    console.log('called z_event: update_conference_participants, case: unmute_participant');
-  //    break;
     }
 
   };
@@ -63,77 +55,47 @@
   function handle_participant_event(data) {
     switch(data.event) {
       case "start-talking":
-        console.log("start-talking" + data.participant_id);
+        console.log("start-talking-" + data.participant_id);
         document.getElementById("talking_" + data.participant_id).className = "fa fa-check zalarm";
       break;
 
       case "stop-talking":
-        console.log("stop-talking" + data.participant_id);
+        console.log("stop-talking-" + data.participant_id);
         document.getElementById("talking_" + data.participant_id).className = "fa fa-remove zprimary";
       break;
 
       case "mute-member":
-        console.log("mute-member" + data.participant_id);
-        document.getElementById("mic_" + data.participant_id).className = "fa fa-remove zalarm";
+        console.log("mute-member-" + data.participant_id);
+        z_event("update_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
       break;
 
       case "unmute-member":
-        console.log("unmute-member" + data.participant_id);
-        document.getElementById("mic_" + data.participant_id).className = "fa fa-check zprimary";
+        console.log("unmute-member-" + data.participant_id);
+        z_event("update_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+      break;
+
+      case "deaf-member":
+        console.log("deaf-member-" + data.participant_id);
+        z_event("update_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+      break;
+
+      case "undeaf-member":
+        console.log("undeaf-member-" + data.participant_id);
+        z_event("update_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+      break;
+
+      case "add-member":
+        console.log("add-member-" + data.participant_id);
+        z_event("add_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+      break;
+
+      case "del-member":
+        console.log("del-member-" + data.participant_id);
+        document.getElementById("participants_table_line_id_" + data.participant_id).remove();
       break;
 
     }
   };
-
-/*
-
-  socket.on('start-talking', function (data) {
-    console.log('start-talking');
-    console.log(data);
- //   z_event("update_conference_participants");
-  });
-
-  socket.on('stop-talking', function (data) {
-    console.log('stop-talking');
-    console.log(data);
- //   z_event("update_conference_participants");
-  });
-
-  socket.on('kick-member', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('hup-member', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('del-member', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('add-member', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('unmute_participant', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('mute_participant', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-
-  socket.on('participants_event', function (data) {
-    console.log(data);
-    z_event("update_conference_participants");
-  });
-*/
 
 {% endjavascript %}
 
