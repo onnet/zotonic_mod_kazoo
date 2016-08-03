@@ -212,7 +212,8 @@
     ,kz_c2call_hyperlink/2
     ,start_outbound_conference/2
     ,add_conf_participant/2
-    ,do_conference_action/4
+    ,do_conference_action/3
+    ,do_conference_participant_action/4
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
@@ -517,10 +518,7 @@
   {<<"enabled">>, 'true'}
 ]}).
 
--define(CONFERENCE_ACTION(Action, ParticipantId),
-{[{<<"action">>, ?TO_BIN(Action)}
- ,{<<"participant">>, ?TO_BIN(ParticipantId)}
-]}).
+-define(CONFERENCE_ACTION(Action), {[{<<"action">>, ?TO_BIN(Action)}]}).
 
 kz_admin_creds(Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
@@ -2669,7 +2667,7 @@ kz_conference(Context) ->
     Id = z_context:get_q("conference_id",Context),
     Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),",")),
     Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),",")),
-    Props = [{<<"name">>, ?TO_BIN(z_context:get_q("name", Context))}
+    Props = [{<<"name">>, ?TO_BIN(z_context:get_q("conference_name", Context))}
             ,{<<"member">>, {[{<<"numbers">>, case Numbers of [<<>>] -> []; _ -> Numbers end}
                             ,{<<"pins">>, case Pins of [<<>>] -> []; _ -> Pins end}
                             ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
@@ -2697,6 +2695,11 @@ kz_conference(Verb, ConferenceId,Context) ->
 
 kz_conference(Verb, ConferenceId, DataBag, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_conference_participant(Verb, ParticipantId, ConferenceId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary,
+                                                          ?PARTICIPANTS/binary, "/", ?TO_BIN(ParticipantId)/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_conference_participants(ConferenceId, Context) ->
@@ -2737,9 +2740,13 @@ add_conf_participant(_ConferenceId, Context) ->
     BLegNumber = z_context:get_q('b_leg_number', Context),
     add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context).
 
-do_conference_action(ParticipantId, Action, ConferenceId, Context) ->
-    DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action, ParticipantId)),
+do_conference_action(Action, ConferenceId, Context) ->
+    DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action)),
     kz_conference('post', ConferenceId, DataBag, Context).
+
+do_conference_participant_action(Action, ParticipantId, ConferenceId, Context) ->
+    DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action)),
+    kz_conference_participant('put', ParticipantId, ConferenceId, DataBag, Context).
 
 add_conf_participant(_, [], _, Context) ->
     z_render:growl_error(?__("No participant number filled in.",Context), Context);

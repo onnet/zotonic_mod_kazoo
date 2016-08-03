@@ -5,14 +5,18 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Conference name _}
-            <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="{_ Enter conference name here _}" value="{{ conference[1]["name"] }}">
+            <input type="text" class="form-control margin-bottom-xs" id="conference_name" name="conference_name"
+                   placeholder="{_ Enter conference name here _}" value="{{ conference[1]["name"] }}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Conference owner _}
           <select id="sipphone_owner_id" name="owner_id" class="form-control margin-bottom-xs" style="text-align:center;">
             {% for option in m.kazoo.kz_list_account_users_short %}
-                  <option value="{{ option[1] }}" {% if conference[1]["owner_id"] == option[1] or (not option[1] and not conference[1]["owner_id"]) %}selected{% endif %}>{{ option[2] }}</option>
+                  <option value="{{ option[1] }}"
+                          {% if conference[1]["owner_id"] == option[1] or (not option[1] and not conference[1]["owner_id"]) %}selected{% endif %}>
+                    {{ option[2] }}
+                  </option>
             {% endfor %}
           </select>
           </label>

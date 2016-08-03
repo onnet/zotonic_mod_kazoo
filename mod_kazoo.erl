@@ -1307,9 +1307,13 @@ event({postback,{add_conf_participant,[{conference_id,ConferenceId}]},_,_}, Cont
 event({postback,{start_outbound_conference,[{conference_id,ConferenceId}]},_,_}, Context) ->
     kazoo_util:start_outbound_conference(ConferenceId, Context);
 
-event({postback,{do_conference_action,[{conference_id,ConferenceId},{action, Action},{participant_id,ParticipantId}]},_,_}, Context) ->
-    _ = kazoo_util:do_conference_action(ParticipantId, Action, ConferenceId, Context),
+event({postback,{do_conference_action,[{action, Action},{conference_id,ConferenceId}]},_,_}, Context) ->
+    _ = kazoo_util:do_conference_action(Action, ConferenceId, Context),
     mod_signal:emit({update_conference_participants_tpl, []}, Context),
+    Context;
+
+event({postback,{do_conference_participant_action,[{action, Action},{participant_id,ParticipantId},{conference_id,ConferenceId}]},_,_}, Context) ->
+    _ = kazoo_util:do_conference_participant_action(Action, ParticipantId, ConferenceId, Context),
     Context;
 
 event({postback,{channel_hangup,[{channel_id,ChannelId}]},_,_}, Context) ->

@@ -2,13 +2,14 @@
               {{ participant["channel"][1]["custom_channel_vars"][1]["presence_id"]|split:"@"|first }}
             </td>
             <td style="text-align: center;">
-              {% if not participant["Mute"] %}
+              {% if participant["speak"] %}
                 <i id="mic_{{ participant_id }}" class="fa fa-check zprimary pointer" title="Enabled"></i>
                {% wire id="mic_"++participant_id
                        action={confirm text="Do you really want to switch mocrophone off?"
-                                       action={postback postback={do_conference_action conference_id=conference_id 
-                                                                                       action="mute"
-                                                                                       participant_id=participant_id
+                                       action={postback postback={do_conference_participant_action
+                                                                  action="mute"
+                                                                  participant_id=participant_id
+                                                                  conference_id=conference_id 
                                                                  }
                                                         delegate="mod_kazoo"
                                               }
@@ -18,9 +19,10 @@
                 <i id="mic_{{ participant_id }}"  class="fa fa-remove zalarm pointer" title="Disabled"></i>
                {% wire id="mic_"++participant_id
                        action={confirm text="Do you really want to switch mocrophone on?"
-                                       action={postback postback={do_conference_action conference_id=conference_id 
-                                                                                       action="unmute"
-                                                                                       participant_id=participant_id
+                                       action={postback postback={do_conference_participant_action 
+                                                                  action="unmute"
+                                                                  participant_id=participant_id
+                                                                  conference_id=conference_id 
                                                                  }
                                                         delegate="mod_kazoo"
                                               }
@@ -33,9 +35,10 @@
             </td>
             {% wire id="kick_"++participant_id
                     action={confirm text="Do you really want to kick this participant off?"
-                                    action={postback postback={do_conference_action conference_id=conference_id 
-                                                                                    action="kick"
-                                                                                    participant_id=participant_id
+                                    action={postback postback={do_conference_participant_action
+                                                               action="kick"
+                                                               participant_id=participant_id
+                                                               conference_id=conference_id 
                                                               }
                                                      delegate="mod_kazoo"
                                            }
