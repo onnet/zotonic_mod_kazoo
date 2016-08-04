@@ -1,8 +1,6 @@
 {% with m.session.selected_conference_id as conference_id %}
 <div class="row" style="margin-top: 2em; margin-bottom: 1em;">
-  <div class="col-xs-2 col-xs-offset-1">
-  </div>
-  <div class="col-xs-2">
+  <div class="col-xs-2 col-xs-offset-2">
     {% wire id="conference_selector" type="change" action={postback postback="conference_selected" delegate="mod_kazoo"} %}
     <select id="conference_selector" name="b_leg_number" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;"
                                 title=" -- {_ Conferences _} -- " data-live-search="true">
@@ -15,7 +13,7 @@
   </div>
   {% javascript %}
     $('#conference_selector').selectpicker({
-      style: 'btn-zalarm',
+      style: 'btn-zprimary',
       size: 7
     });
   {% endjavascript %}
@@ -33,10 +31,26 @@
       size: 5
     });
   {% endjavascript %}
+  <div class="col-xs-2">
+    <select id="media_selector" name="selected_media" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;"
+                                title=" -- {_ Play media _} -- " data-live-search="true">
+          <option value="">{_ No media _}</option>
+      {% for option in m.kazoo.kz_list_account_media %}
+          <option value="{{ option["id"] }}" {% if option["id"] == kz_element_id %}selected{% endif %}>{{ option["name"] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% javascript %}
+    $('#media_selector').selectpicker({
+      style: 'btn-zprimary',
+      size: 5
+    });
+  {% endjavascript %}
   {% wire id="start_conference_btn" action={confirm text="Do you really want to start conference?"
                                             action={postback postback={start_outbound_conference conference_id=conference_id}
                                                              qarg="account_list_selector"
                                                              qarg="conference_selector"
+                                                             qarg="media_selector"
                                                              delegate="mod_kazoo"
                                                    }
                                            }

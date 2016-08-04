@@ -2,6 +2,7 @@
 <table id="current_participants_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
+            <th style="text-align: center;">{_ Join time _}</th>
             <th style="text-align: center;">{_ Participant _}</th>
             <th style="text-align: center;">{_ Talking _}</th>
             <th style="text-align: center;">{_ Microphone _}</th>

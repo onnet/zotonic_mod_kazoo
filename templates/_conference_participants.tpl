@@ -20,6 +20,7 @@
                                          action={postback postback={add_conf_participant conference_id=conference_id}
                                                           qarg="a_leg_number"
                                                           qarg="conference_selector"
+                                                          qarg="media_selector"
                                                           delegate="mod_kazoo"
                                                 }
                                 }

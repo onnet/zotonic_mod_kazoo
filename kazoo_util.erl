@@ -2724,25 +2724,35 @@ dedup_kz_conference_participants(ConferenceId,Context) ->
                         ,Pts)
     end.
 
-start_outbound_conference(_ConferenceId, Context) ->
-    SelectedList = z_context:get_q('selected_list', Context),
-    BLegNumber = z_context:get_q('b_leg_number', Context),
-    start_outbound_conference(_ConferenceId, SelectedList, BLegNumber, Context).
+start_outbound_conference(ConferenceId, Context) ->
+    SelectedListId = z_context:get_q('selected_list', Context),
+    SelectedMedia = z_context:get_q('selected_media', Context),
+    start_outbound_conference(SelectedListId, ConferenceId, SelectedMedia, Context).
 
-start_outbound_conference(_, [], _, Context) ->
+start_outbound_conference([], _, _, Context) ->
     z_render:growl_error(?__("No participants list chosen.",Context), Context);
-start_outbound_conference(_, _, [], Context) ->
-    z_render:growl_error(?__("No callflow chosen.",Context), Context);
-start_outbound_conference(_ConferenceId, ListId, BLegNumber, Context) ->
+start_outbound_conference(_, 'undefined', _, Context) ->
+    z_render:growl_error(?__("No conference chosen.",Context), Context);
+start_outbound_conference(ListId, ConferenceId, MediaId, Context) ->
     UserId = z_context:get_session('kazoo_owner_id', Context),
     NumbersList = [modkazoo_util:get_value([<<"value">>,<<"number">>],JObj) || JObj <- kz_list_account_list_entries(ListId, Context)],
-    [add_cccp_autodial(ParticipantNumber, BLegNumber, UserId, 'undefined', Context) || ParticipantNumber <- NumbersList],
+    [add_cccp_autodial(ParticipantNumber, ConferenceId, UserId, MediaId, Context) || ParticipantNumber <- NumbersList],
     z_render:growl(?__("Attempt sent.",Context), Context).
 
-add_conf_participant(_ConferenceId, Context) ->
-    ALegNumber = z_context:get_q('a_leg_number', Context),
-    BLegNumber = z_context:get_q('b_leg_number', Context),
-    add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context).
+add_conf_participant(ConferenceId, Context) ->
+    ParticipantNumber = z_context:get_q('a_leg_number', Context),
+    SelectedMedia = z_context:get_q('selected_media', Context),
+lager:info("IAM add_conf_participant SelectedMedia: ~p",[SelectedMedia]),
+    add_conf_participant(ParticipantNumber, ConferenceId, SelectedMedia, Context).
+
+add_conf_participant([], _, _, Context) ->
+    z_render:growl_error(?__("No participant number filled in.",Context), Context);
+add_conf_participant(_, 'undefined', _, Context) ->
+    z_render:growl_error(?__("No conference chosen.",Context), Context);
+add_conf_participant(ParticipantNumber, ConferenceId, MediaId, Context) ->
+    UserId = z_context:get_session('kazoo_owner_id', Context),
+    add_cccp_autodial(ParticipantNumber, ConferenceId, UserId, MediaId, Context),
+    z_render:growl(?__("Attempt sent.",Context), Context).
 
 do_conference_action(Action, ConferenceId, Context) ->
     DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action)),
@@ -2751,16 +2761,6 @@ do_conference_action(Action, ConferenceId, Context) ->
 do_conference_participant_action(Action, ParticipantId, ConferenceId, Context) ->
     DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action)),
     kz_conference_participant('put', ParticipantId, ConferenceId, DataBag, Context).
-
-add_conf_participant(_, [], _, Context) ->
-    z_render:growl_error(?__("No participant number filled in.",Context), Context);
-add_conf_participant(_, _, [], Context) ->
-    z_render:growl_error(?__("No callflow chosen.",Context), Context);
-add_conf_participant(_ConferenceId, ALegNumber, BLegNumber, Context) ->
-    UserId = z_context:get_session('kazoo_owner_id', Context),
-    add_cccp_autodial(ALegNumber, BLegNumber, UserId, 'undefined', Context),
-    mod_signal:emit({update_conference_participants_tpl, []}, Context),
-    z_render:growl(?__("Attempt sent.",Context), Context).
 
 kz_c2call(Context) ->
     Id = z_context:get_q("c2call_id",Context),

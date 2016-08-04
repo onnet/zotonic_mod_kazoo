@@ -1,7 +1,8 @@
 {% with m.session.selected_conference_id as conference_id %}
 {% wire name="update_conference_participants_table_line" action={postback postback="update_conference_participants_table_line" delegate="mod_kazoo"} %}
+{% wire name="add_conference_participants_table_line" action={postback postback="add_conference_participants_table_line" delegate="mod_kazoo"} %}
 
-<div class="pl-10 pr-10 col-md-6 col-md-offset-3">
+<div class="pl-10 pr-10 col-md-8 col-md-offset-2">
 
   {% wire action={connect signal={update_conference_participants_tpl} action={update target="conference_participants_tpl"
                                                                                   template="_conference_participants.tpl"
@@ -13,8 +14,6 @@
         {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}
   </span>
 
-</div>
-<div class="pl-10 pr-10 col-md-6">
 </div>
 
 
@@ -56,12 +55,12 @@
     switch(data.event) {
       case "start-talking":
         console.log("start-talking-" + data.participant_id);
-        document.getElementById("talking_" + data.participant_id).className = "fa fa-check zalarm";
+        document.getElementById("talking_" + data.participant_id).className = "fa fa-volume-control-phone zalarm";
       break;
 
       case "stop-talking":
         console.log("stop-talking-" + data.participant_id);
-        document.getElementById("talking_" + data.participant_id).className = "fa fa-remove zprimary";
+        document.getElementById("talking_" + data.participant_id).className = "fa fa-phone zprimary";
       break;
 
       case "mute-member":
@@ -86,7 +85,7 @@
 
       case "add-member":
         console.log("add-member-" + data.participant_id);
-        z_event("add_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+  //      z_event("add_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
       break;
 
       case "del-member":

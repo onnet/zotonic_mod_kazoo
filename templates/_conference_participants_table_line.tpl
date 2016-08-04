@@ -1,19 +1,23 @@
 {% with m.kazoo[{kz_conference_participant participant_id=participant_id conference_id=conference_id}] as participant %}
             <td style="text-align: center;">
+              {{ participant[1]["join_time"]|inno_timestamp_to_date }}
+            </td>
+
+            <td style="text-align: center;">
               {{ participant[1]["channel"][1]["custom_channel_vars"][1]["presence_id"]|split:"@"|first }}
             </td>
 
             <td style="text-align: center;">
               {% if participant[1]["talking"] %}
-                <i id="talking_{{ participant_id }}" class="fa fa-check zalarm pointer" title="Speaking now"></i>
+                <i id="talking_{{ participant_id }}" class="fa fa-volume-control-phone zalarm pointer" title="Speaking now"></i>
               {% else %}
-                <i id="talking_{{ participant_id }}"  class="fa fa-remove zprimary pointer" title="Keeps silence"></i>
+                <i id="talking_{{ participant_id }}"  class="fa fa-phone zprimary pointer" title="Keeps silence"></i>
               {% endif %}
             </td>
 
             <td style="text-align: center;">
               {% if participant[1]["speak"] %}
-                <i id="mic_{{ participant_id }}" class="fa fa-check zprimary pointer" title="Enabled"></i>
+                <i id="mic_{{ participant_id }}" class="fa fa-microphone zprimary pointer" title="Enabled"></i>
                {% wire id="mic_"++participant_id
                        action={confirm text="Do you really want to switch microphone off?"
                                        action={postback postback={do_conference_participant_action
@@ -26,7 +30,7 @@
                               }
                %} 
               {% else %}
-                <i id="mic_{{ participant_id }}"  class="fa fa-remove zalarm pointer" title="Disabled"></i>
+                <i id="mic_{{ participant_id }}"  class="fa fa-microphone-slash zalarm pointer" title="Disabled"></i>
                {% wire id="mic_"++participant_id
                        action={confirm text="Do you really want to switch microphone on?"
                                        action={postback postback={do_conference_participant_action 
@@ -43,7 +47,7 @@
 
             <td style="text-align: center;">
               {% if participant[1]["hear"] %}
-                <i id="speaker_{{ participant_id }}" class="fa fa-check zprimary pointer" title="Enabled"></i>
+                <i id="speaker_{{ participant_id }}" class="fa fa-volume-up zprimary pointer" title="Enabled"></i>
                {% wire id="speaker_"++participant_id
                        action={confirm text="Do you really want to switch speaker off?"
                                        action={postback postback={do_conference_participant_action
@@ -56,7 +60,7 @@
                               }
                %} 
               {% else %}
-                <i id="speaker_{{ participant_id }}"  class="fa fa-remove zalarm pointer" title="Disabled"></i>
+                <i id="speaker_{{ participant_id }}"  class="fa fa-volume-off zalarm pointer" title="Disabled"></i>
                {% wire id="speaker_"++participant_id
                        action={confirm text="Do you really want to switch speaker on?"
                                        action={postback postback={do_conference_participant_action 
