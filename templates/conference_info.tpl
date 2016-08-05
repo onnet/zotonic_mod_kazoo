@@ -85,7 +85,7 @@
 
       case "add-member":
         console.log("add-member-" + data.participant_id);
-  //      z_event("add_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+        z_event("add_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
       break;
 
       case "del-member":

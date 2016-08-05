@@ -1,4 +1,5 @@
 {% with m.kazoo[{kz_conference_participant participant_id=participant_id conference_id=conference_id}] as participant %}
+        <tr id="participants_table_line_id_{{ participant_id }}">
             <td style="text-align: center;">
               {{ participant[1]["join_time"]|inno_timestamp_to_date }}
             </td>
@@ -100,4 +101,5 @@
                                          width="auto"
                            }
             %}
+        </tr>
 {% endwith %}

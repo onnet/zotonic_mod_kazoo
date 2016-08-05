@@ -1,5 +1,5 @@
 {% if m.kazoo[{ui_element_opened element="conference_participants_widget_opened"}] %}
-<table id="current_participants_table" class="table display table-striped table-condensed">
+<table id="conference_current_participants_table" class="table display table-striped table-condensed">
     <thead>
         <tr>
             <th style="text-align: center;">{_ Join time _}</th>
@@ -11,17 +11,15 @@
             <th style="text-align: center;"></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="conference_current_participants_table_tbody">
         {% for participant in m.kazoo[{kz_conference_participants conference_id=conference_id}] %}
-	<tr id="participants_table_line_id_{{ participant["participant_id"] }}">
           {% include "_conference_participants_table_line.tpl" conference_id=conference_id participant_id=participant["participant_id"] %}
-        </tr>
         {% endfor %}
     </tbody>
 </table>
 
 {% javascript %}
-var oTable = $('#current_participants_table1').dataTable({
+var oTable = $('#conference_current_participants_table1').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
 "aaSorting": [[ 0, "desc" ]],
