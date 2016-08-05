@@ -1731,7 +1731,6 @@ admin_add_service_plan(PlanId, AccountId, Context) ->
 
 remove_service_plan_from_account(PlanId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
-lager:info("IAM remove service plan API_String: ~p",[API_String]),
     crossbar_account_request('delete', API_String, ?MK_DATABAG({[]}), Context).
 
 is_service_plan_applied(Context) ->
@@ -2743,7 +2742,6 @@ start_outbound_conference(ListId, ConferenceId, MediaId, Context) ->
 add_conf_participant(ConferenceId, Context) ->
     ParticipantNumber = z_context:get_q('a_leg_number', Context),
     SelectedMedia = z_context:get_q('selected_media', Context),
-lager:info("IAM add_conf_participant SelectedMedia: ~p",[SelectedMedia]),
     add_conf_participant(ParticipantNumber, ConferenceId, SelectedMedia, Context).
 
 add_conf_participant([], _, _, Context) ->
@@ -2776,10 +2774,10 @@ maybe_update_conference_participants_headline("del-member", ConferenceId, Contex
 
 current_conference_participants_number(ConferenceId, Context) ->
     ConferenceDetails = kz_conference('get', ConferenceId, Context),
-lager:info("IAM ConferenceDetails: ~p",[ConferenceDetails]),
     modkazoo_util:get_value_integer([<<"_read_only">>,<<"moderators">>], ConferenceDetails)
     +
     modkazoo_util:get_value_integer([<<"_read_only">>,<<"members">>], ConferenceDetails).
+
 kz_c2call(Context) ->
     Id = z_context:get_q("c2call_id",Context),
     Props = [{<<"name">>, ?TO_BIN(z_context:get_q("name", Context))}
