@@ -2,7 +2,7 @@
 <div class="row" style="margin-top: 2em; margin-bottom: 1em;">
   <div class="col-xs-2 col-xs-offset-2">
     {% wire id="conference_selector" type="change" action={postback postback="conference_selected" delegate="mod_kazoo"} %}
-    <select id="conference_selector" name="b_leg_number" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;"
+    <select id="conference_selector" name="conference_selector" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;"
                                 title=" -- {_ Conferences _} -- " data-live-search="true">
       {% for option in m.kazoo.kz_list_account_conferences %}
           <option value="{{ option["id"] }}" {% if option["id"] == conference_id %}selected{% endif %}>
@@ -47,7 +47,7 @@
     });
   {% endjavascript %}
   {% wire id="start_conference_btn" action={confirm text="Do you really want to start conference?"
-                                            action={postback postback={start_outbound_conference conference_id=conference_id}
+                                            action={postback postback="start_outbound_conference"
                                                              qarg="account_list_selector"
                                                              qarg="conference_selector"
                                                              qarg="media_selector"

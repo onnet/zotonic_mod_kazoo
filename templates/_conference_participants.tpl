@@ -23,7 +23,7 @@
 
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
                          action={confirm text=_"Do you really want to add participant"++"?"
-                                         action={postback postback={add_conf_participant conference_id=conference_id}
+                                         action={postback postback="add_conf_participant"
                                                           qarg="a_leg_number"
                                                           qarg="conference_selector"
                                                           qarg="media_selector"

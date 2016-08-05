@@ -211,8 +211,8 @@
     ,kz_c2call/1
     ,kz_c2call/3
     ,kz_c2call_hyperlink/2
-    ,start_outbound_conference/2
-    ,add_conf_participant/2
+    ,start_outbound_conference/1
+    ,add_conf_participant/1
     ,do_conference_action/3
     ,do_conference_participant_action/4
     ,maybe_update_conference_participants_headline/3
@@ -2724,14 +2724,15 @@ dedup_kz_conference_participants(ConferenceId,Context) ->
                         ,Pts)
     end.
 
-start_outbound_conference(ConferenceId, Context) ->
+start_outbound_conference(Context) ->
+    ConferenceId = z_context:get_q('conference_selector', Context),
     SelectedListId = z_context:get_q('selected_list', Context),
     SelectedMedia = z_context:get_q('selected_media', Context),
     start_outbound_conference(SelectedListId, ConferenceId, SelectedMedia, Context).
 
 start_outbound_conference([], _, _, Context) ->
     z_render:growl_error(?__("No participants list chosen.",Context), Context);
-start_outbound_conference(_, 'undefined', _, Context) ->
+start_outbound_conference(_, [], _, Context) ->
     z_render:growl_error(?__("No conference chosen.",Context), Context);
 start_outbound_conference(ListId, ConferenceId, MediaId, Context) ->
     UserId = z_context:get_session('kazoo_owner_id', Context),
@@ -2739,14 +2740,15 @@ start_outbound_conference(ListId, ConferenceId, MediaId, Context) ->
     [add_cccp_autodial(ParticipantNumber, ConferenceId, UserId, MediaId, Context) || ParticipantNumber <- NumbersList],
     z_render:growl(?__("Attempt sent.",Context), Context).
 
-add_conf_participant(ConferenceId, Context) ->
+add_conf_participant(Context) ->
+    ConferenceId = z_context:get_q('conference_selector', Context),
     ParticipantNumber = z_context:get_q('a_leg_number', Context),
     SelectedMedia = z_context:get_q('selected_media', Context),
     add_conf_participant(ParticipantNumber, ConferenceId, SelectedMedia, Context).
 
 add_conf_participant([], _, _, Context) ->
     z_render:growl_error(?__("No participant number filled in.",Context), Context);
-add_conf_participant(_, 'undefined', _, Context) ->
+add_conf_participant(_, [], _, Context) ->
     z_render:growl_error(?__("No conference chosen.",Context), Context);
 add_conf_participant(ParticipantNumber, ConferenceId, MediaId, Context) ->
     UserId = z_context:get_session('kazoo_owner_id', Context),

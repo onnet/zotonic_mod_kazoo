@@ -12,7 +12,7 @@
         action={update target="conferences_list_area" template="conferences_list.tpl" }} %}
 
 <span id="conferences_list_area">
-  {% include "conferences_list.tpl" conference_id=conference_id %}
+  {% include "conferences_list.tpl" %}
 </span>
 
 {% endblock %}

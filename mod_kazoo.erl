@@ -1301,11 +1301,11 @@ event({postback,{remove_notification_template,[{notification_id,NotificationId}]
     mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
     Context;
 
-event({postback,{add_conf_participant,[{conference_id,ConferenceId}]},_,_}, Context) ->
-    kazoo_util:add_conf_participant(ConferenceId, Context);
+event({postback,add_conf_participant,_,_}, Context) ->
+    kazoo_util:add_conf_participant(Context);
 
-event({postback,{start_outbound_conference,[{conference_id,ConferenceId}]},_,_}, Context) ->
-    kazoo_util:start_outbound_conference(ConferenceId, Context);
+event({postback,start_outbound_conference,_,_}, Context) ->
+    kazoo_util:start_outbound_conference(Context);
 
 event({postback,{do_conference_action,[{action, Action},{conference_id,ConferenceId}]},_,_}, Context) ->
     _ = kazoo_util:do_conference_action(Action, ConferenceId, Context),
