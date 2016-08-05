@@ -34,5 +34,11 @@
      %}
   {% else %}
     {_ Conference is empty now _}
+    <script>
+      if (typeof conf_timer != 'undefined') {
+        clearInterval(conf_timer);
+        clearTimeout(conf_timer);
+      };
+    </script>
   {% endif %}
 {% endwith %}
