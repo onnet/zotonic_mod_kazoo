@@ -9,8 +9,8 @@
       function pad(val) {
           return val > 9 ? val : "0" + val;
       }
-  //    clearInterval(conf_timer);
-  //    clearTimeout(conf_timer);
+      clearInterval(conf_timer);
+      clearTimeout(conf_timer);
       conf_timer = setInterval(function () {
           document.getElementById("seconds").innerHTML = pad(++conf_duration_sec % 60);
           document.getElementById("minutes").innerHTML = pad(parseInt(conf_duration_sec / 60, 10) - parseInt(conf_duration_sec / 3600, 10)*60);
