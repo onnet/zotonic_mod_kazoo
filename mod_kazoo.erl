@@ -1335,6 +1335,12 @@ event({postback,update_conference_participants_table_line,_,_}, Context) ->
                                      ,Context)
                    ,Context);
 
+event({postback,maybe_update_conference_participants_headline,_,_}, Context) ->
+    ConferenceId = z_context:get_q(conference_id, Context),
+    EventName = z_context:get_q(event_name, Context),
+    kazoo_util:maybe_update_conference_participants_headline(EventName, ConferenceId, Context),
+    Context;
+
 event({postback,{channel_hangup,[{channel_id,ChannelId}]},_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     _ = kazoo_util:kz_channel_hangup(ChannelId, AccountId, Context),

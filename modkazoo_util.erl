@@ -9,6 +9,7 @@
     ,delete_key/2
     ,delete_keys/2
     ,get_value_bin/2
+    ,get_value_integer/2
     ,get_value/2
     ,get_value/3
     ,get_value1/3
@@ -105,6 +106,9 @@ get_json_value(_, _, Default) ->
 
 get_value_bin(Key, JObj) ->
     z_convert:to_binary(get_value(Key, JObj)).
+
+get_value_integer(Key, JObj) ->
+    z_convert:to_integer(get_value(Key, JObj)).
 
 get_value(Key, JObj) ->
     get_value(Key, JObj, 'undefined').

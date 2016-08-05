@@ -1,9 +1,9 @@
 {% with m.session.selected_conference_id as conference_id %}
 {% wire name="update_conference_participants_table_line" action={postback postback="update_conference_participants_table_line" delegate="mod_kazoo"} %}
 {% wire name="add_conference_participants_table_line" action={postback postback="add_conference_participants_table_line" delegate="mod_kazoo"} %}
+{% wire name="maybe_update_conference_participants_headline" action={postback postback="maybe_update_conference_participants_headline" delegate="mod_kazoo"} %}
 
 <div class="pl-10 pr-10 col-md-8 col-md-offset-2">
-
   {% wire action={connect signal={update_conference_participants_tpl} action={update target="conference_participants_tpl"
                                                                                   template="_conference_participants.tpl"
                                                                                   headline=_"Current participants"
@@ -13,7 +13,6 @@
   <span id="conference_participants_tpl">
         {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}
   </span>
-
 </div>
 
 
@@ -86,11 +85,13 @@
       case "add-member":
         console.log("add-member-" + data.participant_id);
         z_event("add_conference_participants_table_line", { conference_id: data.conference_id, participant_id: data.participant_id });
+        z_event("maybe_update_conference_participants_headline", { conference_id: data.conference_id, event_name: data.event});
       break;
 
       case "del-member":
         console.log("del-member-" + data.participant_id);
         document.getElementById("participants_table_line_id_" + data.participant_id).remove();
+        z_event("maybe_update_conference_participants_headline", { conference_id: data.conference_id, event_name: data.event});
       break;
 
     }

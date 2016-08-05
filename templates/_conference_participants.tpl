@@ -13,8 +13,14 @@
     <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="conference_participants_widget_opened"}] %}display: none;{% endif %}"
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
-    {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" action={emit signal={update_conference_participants_tpl} } %}
+  {% wire action={connect signal={update_conference_participants_headline}
+                          action={update target="conference_participants_headline_tpl" template="conference_participants_headline.tpl" conference_id=conference_id}
+                 }
+   %}
+  <span id="conference_participants_headline_tpl">
+        {% include "conference_participants_headline.tpl" conference_id=conference_id %}
+  </span>
+
     {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
                          action={confirm text=_"Do you really want to add participant"++"?"
                                          action={postback postback={add_conf_participant conference_id=conference_id}

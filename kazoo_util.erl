@@ -215,6 +215,7 @@
     ,add_conf_participant/2
     ,do_conference_action/3
     ,do_conference_participant_action/4
+    ,maybe_update_conference_participants_headline/3
     ,kz_get_featurecode_by_name/2
     ,toggle_featurecode_voicemail_check/1
     ,toggle_featurecode_voicemail_direct/1
@@ -2756,12 +2757,29 @@ add_conf_participant(ParticipantNumber, ConferenceId, MediaId, Context) ->
 
 do_conference_action(Action, ConferenceId, Context) ->
     DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action)),
-    kz_conference('post', ConferenceId, DataBag, Context).
+    kz_conference('put', ConferenceId, DataBag, Context).
 
 do_conference_participant_action(Action, ParticipantId, ConferenceId, Context) ->
     DataBag = ?MK_DATABAG(?CONFERENCE_ACTION(Action)),
     kz_conference_participant('put', ParticipantId, ConferenceId, DataBag, Context).
 
+maybe_update_conference_participants_headline("add-member", ConferenceId, Context) ->
+    case current_conference_participants_number(ConferenceId, Context) of
+        1 -> mod_signal:emit({update_conference_participants_headline, []}, Context);
+        _ -> 'ok'
+    end;
+maybe_update_conference_participants_headline("del-member", ConferenceId, Context) ->
+    case current_conference_participants_number(ConferenceId, Context) of
+        0 -> mod_signal:emit({update_conference_participants_headline, []}, Context);
+        _ -> 'ok'
+    end.
+
+current_conference_participants_number(ConferenceId, Context) ->
+    ConferenceDetails = kz_conference('get', ConferenceId, Context),
+lager:info("IAM ConferenceDetails: ~p",[ConferenceDetails]),
+    modkazoo_util:get_value_integer([<<"_read_only">>,<<"moderators">>], ConferenceDetails)
+    +
+    modkazoo_util:get_value_integer([<<"_read_only">>,<<"members">>], ConferenceDetails).
 kz_c2call(Context) ->
     Id = z_context:get_q("c2call_id",Context),
     Props = [{<<"name">>, ?TO_BIN(z_context:get_q("name", Context))}
