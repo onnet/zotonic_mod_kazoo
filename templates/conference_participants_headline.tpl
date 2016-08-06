@@ -17,21 +17,25 @@
           document.getElementById("hours").innerHTML = pad(parseInt(conf_duration_sec / 3600, 10));
       }, 1000);
     </script>
-
-    <i id="refresh_conference_icon" class="fa fa-refresh pointer" style="margin: 0.1em 1em 0 1em"></i>
+    <i id="refresh_conference_icon" class="fa fa-refresh zprimary pointer" style="margin: 0.1em 1em 0 1em" title="Refresh"></i>
     {% wire id="refresh_conference_icon" action={emit signal={update_conference_participants_tpl} } %}
-    <i id="unlock_conference_icon" class="fa fa-lock pointer" style="margin: 0.1em 1em 0 1em"></i>
-    <i id="lock_conference_icon" class="fa fa-unlock pointer" style="margin: 0.1em 1em 0 1em"></i>
-    {% wire id="unlock_conference_icon"
-            action={confirm text=_"Do you really want to unlock conference?"
-                            action={postback postback={do_conference_action action="unlock" conference_id=conference_id} delegate="mod_kazoo"}
-                   }
-     %}
-    {% wire id="lock_conference_icon"
-            action={confirm text=_"Do you really want to lock conference?"
-                            action={postback postback={do_conference_action action="lock" conference_id=conference_id} delegate="mod_kazoo"}
-                   }
-     %}
+    {% if conference_details[1]["_read_only"][1]["is_locked"] %} 
+      <i id="locked_conference_icon" class="fa fa-lock zalarm" style="margin: 0.1em 0 0 8em" title="Locked"></i>
+      <i id="unlock_conference_icon" class="fa fa-toggle-on zalarm pointer" style="margin: 0.1em 0 0 0" title="Unlock"></i>
+      {% wire id="unlock_conference_icon"
+              action={confirm text=_"Do you really want to unlock conference?"
+                              action={postback postback={do_conference_action action="unlock" conference_id=conference_id} delegate="mod_kazoo"}
+                     }
+       %}
+    {% else %}
+      <i id="unlocked_conference_icon" class="fa fa-unlock zprimary" style="margin: 0.1em 0 0 8em" title="Unlocked"></i>
+      <i id="lock_conference_icon" class="fa fa-toggle-off zprimary pointer" style="margin: 0.1em 0 0 0" title="Lock"></i>
+      {% wire id="lock_conference_icon"
+              action={confirm text=_"Do you really want to lock conference?"
+                              action={postback postback={do_conference_action action="lock" conference_id=conference_id} delegate="mod_kazoo"}
+                     }
+       %}
+    {% endif %}
   {% else %}
     {_ Conference is empty now _}
     <script>
