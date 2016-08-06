@@ -1438,15 +1438,23 @@ kz_account_numbers_info(Context) ->
 kz_account_numbers_info(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary>>,
     case crossbar_account_request('get', API_String, [], Context) of
-        <<>> -> [<<"">>];
-        Result -> Result
+        <<>> -> [];
+        Result -> modkazoo_util:to_proplist(<<"numbers">>,Result)
     end.
 
 kz_account_numbers(Context) ->
-    modkazoo_util:get_keys(<<"numbers">>,kz_account_numbers_info(Context)).
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_account_numbers(AccountId, Context).
 
 kz_account_numbers(AccountId, Context) ->
-    modkazoo_util:get_keys(<<"numbers">>,kz_account_numbers_info(AccountId, Context)).
+    proplists:get_keys(kz_account_numbers_info(AccountId, Context)).
+
+kz_spare_numbers(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_spare_numbers(AccountId, Context).
+
+kz_spare_numbers(AccountId, Context) ->
+    [Number || {Number, JObj} <- kz_account_numbers_info(AccountId, Context), modkazoo_util:get_value(<<"used_by">>,JObj) == 'undefined'].
 
 kz_send_fax(Account_Id, FaxTo, FaxFrom, Url, Attempts, FaxHeader, Context) ->
     DataBag = {[{<<"data">>,
@@ -3459,14 +3467,6 @@ kz_callflows_numbers(Context) ->
 
 kz_callflows_numbers(AccountId, Context) ->
     lists:foldl(fun(X,Acc) -> modkazoo_util:get_value([<<"numbers">>],X) ++ Acc end, [], kz_list_account_callflows(AccountId, Context)).
-
-kz_spare_numbers(Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    kz_spare_numbers(AccountId, Context).
-
-kz_spare_numbers(AccountId, Context) ->
-    UsedNumbers = kz_callflows_numbers(AccountId, Context),
-    lists:filter(fun(X) -> 'true' =/= lists:member(X, UsedNumbers) end, kz_account_numbers(AccountId, Context)).
 
 kz_callflow_by_number(Number, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
