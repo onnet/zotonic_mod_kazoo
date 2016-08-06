@@ -16,7 +16,9 @@
         {% with m.kazoo[{kz_get_account_conference conference_id=conference["id"]}] as conference_details %}
 	<tr>
             <td style="text-align: center1;">{{ conference["name"] }}</td>
-            <td style="text-align: center;">{% for number in conference_details[1]["member"][1]["numbers"] %}{{ number }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td style="text-align: center;">
+             {% for number in conference_details[1]["member"][1]["numbers"] %}{{ number }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </td>
             <td style="text-align: center;">
               {% if conference_details[1]["play_name"] %}
                 <i class="fa fa-check zprimary" title="Enabled"></i>
@@ -31,16 +33,34 @@
                 <i class="fa fa-remove zalarm" title="Disabled"></i>
               {% endif %}
             </td>
-            <td style="text-align: center;"><i id="info_{{ conference["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Current information _}"></i></td>
-            {% wire id="info_"++conference["id"] action={ dialog_open title=_"Current status about"++" "++conference["name"] template="_details_conference.tpl"
-                                                                                                                             conference_id=conference["id"] width="auto" }
+            <td style="text-align: center;">
+              <i id="info_{{ conference["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Current information _}"></i>
+            </td>
+            {% wire id="info_"++conference["id"]
+                    action={dialog_open title=conference["name"] ++" "++ _"current status"
+                            template="_details_conference.tpl"
+                            conference_id=conference["id"]
+                            width="auto"
+                           }
             %}
-            <td style="text-align: center;"><i id="edit_{{ conference["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++conference["id"] action={ dialog_open title=_"Edit conference "++conference["name"] template="_edit_conference_lazy.tpl" conference_id=conference["id"] width="auto" } %}
-            <td style="text-align: center;"><i id="delete_{{ conference["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
+            <td style="text-align: center;">
+              <i id="edit_{{ conference["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i>
+            </td>
+            {% wire id="edit_"++conference["id"]
+                    action={dialog_open title=_"Edit conference "++conference["name"]
+                            template="_edit_conference_lazy.tpl"
+                            conference_id=conference["id"]
+                            width="auto"
+                           }
+            %}
+            <td style="text-align: center;">
+              <i id="delete_{{ conference["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i>
+            </td>
             {% wire id="delete_"++conference["id"]
                     action={confirm text=_"Do you really want to delete conference "++conference["name"]++"?"
-                                action={postback postback={delete_conference conference_id=conference["id"]} delegate="mod_kazoo"}
+                                action={postback postback={delete_conference conference_id=conference["id"]}
+                                                 delegate="mod_kazoo"
+                                       }
                            }
             %}
         </tr>
