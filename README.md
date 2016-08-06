@@ -23,6 +23,10 @@ Admin portal:
 
 ![Alt text](/doc/images/account_statistics.png "Account statistics")
 
+![Alt text](/doc/images/callback_panel_v4.png "Callback settings")
+
+![Alt text](/doc/images/conf_manager_v4.png "Conference manager")
+
 User portal:
 
 ![Alt text](/doc/images/user_portal.png "User portal")
