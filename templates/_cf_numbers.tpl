@@ -13,14 +13,20 @@
 <div class="number_row">
   <div class="number_column first" data-number="{{ numbers_pair[1] }}">
     {{ numbers_pair[1] }}
-    {% wire id=numbers_pair[1]|cleanout action={postback postback={cf_delete_number number=numbers_pair[1]} delegate="mod_kazoo"} %}
+    {% wire id=numbers_pair[1]|cleanout
+            action={postback postback={cf_delete_number number=numbers_pair[1]} delegate="mod_kazoo"}
+            action={postback postback={cf_note_number action="remove" number=numbers_pair[1]} delegate="mod_kazoo"}
+    %}
     <span id="{{ numbers_pair[1]|cleanout }}" class="delete">
     </span>
   </div>
   {% if numbers_pair[2] %}
   <div class="number_column second" data-number="{{ numbers_pair[2] }}">
     {{ numbers_pair[2] }}
-    {% wire id=numbers_pair[2]|cleanout action={postback postback={cf_delete_number number=numbers_pair[2]} delegate="mod_kazoo"} %}
+    {% wire id=numbers_pair[2]|cleanout
+            action={postback postback={cf_delete_number number=numbers_pair[2]} delegate="mod_kazoo"}
+            action={postback postback={cf_note_number action="remove" number=numbers_pair[2]} delegate="mod_kazoo"}
+    %}
     <span id="{{ numbers_pair[2]|cleanout }}" class="delete">
     </span>
   </div>

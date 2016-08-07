@@ -173,6 +173,7 @@
     ,cf_set_session/4
     ,cf_save/2
     ,cf_delete/2
+    ,cf_notes_number_action/3
     ,kz_list_account_media/1
     ,kz_get_media_doc/2
     ,cf_build_ring_group_endpoints/1
@@ -2031,7 +2032,6 @@ cf_edit_name(Name, Context) ->
         Callflow -> Callflow
     end,
     z_context:set_session('current_callflow', modkazoo_util:set_value([<<"name">>], ?TO_BIN(Name), CurrentCallflow), Context).
-    
 
 cf_contact_list_exclude(Value, Context) ->
     CurrentCallflow = case z_context:get_session('current_callflow', Context) of
@@ -2080,6 +2080,37 @@ cf_delete('current_callflow', Context) ->
             z_context:set_session('current_callflow', 'undefined', Context)
     end.
 
+cf_notes_number_action("add", Number, Context) ->
+    case cf_notes_remove(Number, 'cf_notes_removed_numbers', Context) of
+        'true' -> 'ok';
+        'false' -> cf_notes_add(Number, 'cf_notes_added_numbers', Context)
+    end;
+
+cf_notes_number_action("remove", Number, Context) ->
+    case cf_notes_remove(Number, 'cf_notes_added_numbers', Context) of
+        'true' -> 'ok';
+        'false' -> cf_notes_add(Number, 'cf_notes_removed_numbers', Context)
+    end.
+
+cf_notes_remove(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
+    Numbers = cf_notes_get(Type, Context),
+    case lists:member(Number, Numbers) of
+        'true' ->
+            NewNumbers = Numbers -- [Number],
+            z_context:set_session(Type, NewNumbers, Context),
+            'true';
+        'false' -> 'false'
+    end.
+
+cf_notes_add(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
+    Numbers = cf_notes_get(Type, Context),
+    z_context:set_session(Type, [Number] ++ Numbers, Context).
+
+cf_notes_get(Type, Context) ->
+    case z_context:get_session(Type, Context) of
+        'undefined' -> [];
+        List -> List
+    end.
 
 kz_list_account_media(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary>>,

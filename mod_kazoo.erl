@@ -658,7 +658,12 @@ event({submit,cf_add_number,_,_},Context) ->
 
 event({postback,{cf_delete_number,[{number,Number}]},_,_}, Context) ->
     _ = kazoo_util:cf_delete_number(Number, Context),
-    mod_signal:emit({update_cf_numbers_div, []}, Context);
+    mod_signal:emit({update_cf_numbers_div, []}, Context),
+    Context;
+
+event({postback,{cf_note_number,[{action,Action},{number,Number}]},_,_},Context) ->
+    kazoo_util:cf_notes_number_action(Action, Number, Context),
+    Context;
 
 event({submit,cf_edit_name,_,_},Context) ->
     _ = kazoo_util:cf_edit_name(z_context:get_q("callflow_name", Context),Context),
