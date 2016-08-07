@@ -819,6 +819,7 @@ event({submit,cf_select_option_temporal_route,_,_},Context) ->
 
 event({postback,{cf_load,_},_,_},Context) ->
     kazoo_util:cf_load_to_session(z_context:get_q("triggervalue", Context),Context),
+    kazoo_util:cf_notes_flush(Context),
     mod_signal:emit({update_cf_builder_area, []}, Context),
     Context;
 
@@ -827,6 +828,7 @@ event({postback,{cf_reload,_},_,_},Context) ->
         'undefined' -> kazoo_util:cf_load_to_session("new", Context);
         CallflowId -> kazoo_util:cf_load_to_session(CallflowId, Context)
     end,
+    kazoo_util:cf_notes_flush(Context),
     mod_signal:emit({update_cf_builder_area, []}, Context),
     Context;
 

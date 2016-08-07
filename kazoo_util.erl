@@ -175,6 +175,7 @@
     ,cf_delete/2
     ,cf_notes_number_action/3
     ,cf_notes_get/2
+    ,cf_notes_flush/1
     ,kz_list_account_media/1
     ,kz_get_media_doc/2
     ,cf_build_ring_group_endpoints/1
@@ -2115,6 +2116,10 @@ cf_notes_get(Type, Context) ->
         'undefined' -> [];
         List -> List
     end.
+
+cf_notes_flush(Context) ->
+    z_context:set_session('cf_notes_removed_numbers', 'undefined', Context),
+    z_context:set_session('cf_notes_added_numbers', 'undefined', Context).
 
 kz_list_account_media(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary>>,
