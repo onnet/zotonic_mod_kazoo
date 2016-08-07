@@ -641,7 +641,10 @@ event({submit,cf_add_number,_,_},Context) ->
             case re:replace(Num, " ", "", [global, {return, binary}]) of
                 <<>> -> 'ok';
                 Number -> 
-                    _ = kazoo_util:cf_add_number(Number,Context)
+                    _ = kazoo_util:cf_add_number(Number,Context),
+                    case z_context:get_q("number_type", Context) of
+                        "number_type_1" -> kazoo_util:cf_notes_number_action("add", Number, Context)
+                    end
             end
     end,
     case z_context:get_q("new_pattern", Context) of

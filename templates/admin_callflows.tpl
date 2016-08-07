@@ -7,12 +7,6 @@
 
 {% block service_description %}
 
-Added
-{% print m.session.cf_notes_added_numbers %}
-
-Removed
-{% print m.session.cf_notes_removed_numbers %}
-
 {% include "cf_app_style.tpl" %}
 {% lib "css/kazoo/cf_tables.css" %}
 {% lib "css/kazoo/cf_mod_kazoo.css" %}

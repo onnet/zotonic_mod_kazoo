@@ -174,6 +174,7 @@
     ,cf_save/2
     ,cf_delete/2
     ,cf_notes_number_action/3
+    ,cf_notes_get/2
     ,kz_list_account_media/1
     ,kz_get_media_doc/2
     ,cf_build_ring_group_endpoints/1
@@ -2104,10 +2105,13 @@ cf_notes_remove(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
 
 cf_notes_add(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
     Numbers = cf_notes_get(Type, Context),
-    z_context:set_session(Type, [Number] ++ Numbers, Context).
+    case lists:member(Number,Numbers) of
+        'true' -> 'ok';
+        'false' -> z_context:set_session(Type, [Number] ++ Numbers, Context)
+    end.
 
 cf_notes_get(Type, Context) ->
-    case z_context:get_session(Type, Context) of
+    case z_context:get_session(z_convert:to_atom(Type), Context) of
         'undefined' -> [];
         List -> List
     end.
