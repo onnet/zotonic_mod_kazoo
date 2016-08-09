@@ -529,6 +529,7 @@
 ]}).
 
 -define(CONFERENCE_ACTION(Action), {[{<<"action">>, ?TO_BIN(Action)}]}).
+-define(MATCH_ACCOUNT_RAW(Account), <<(Account):32/binary>>).
 
 kz_admin_creds(Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
@@ -1803,9 +1804,14 @@ kz_get_user_timezone(Context) ->
     end.
 
 get_account_timezone(Context) ->
-    case kz_account_doc_field(<<"timezone">>, Context) of
-        'undefined' -> m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
-        Timezone -> Timezone
+    case z_context:get_session('kazoo_account_id', Context) of
+        'undefined' ->
+            m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
+        AccountId ->
+            case kz_account_doc_field(<<"timezone">>, AccountId, Context) of
+                'undefined' -> m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
+                Timezone -> Timezone
+            end
     end.
 
 get_user_timezone(Context) ->
@@ -3230,6 +3236,7 @@ check_cid_children_clean(Context) ->
 
 rs_delete_account(AccountId,Context) ->
     _ = delete_account(AccountId,Context),
+    _ = z_context:set_session('rs_selected_account_id', 'undefined', Context),
     z_context:add_script_session([<<"z_reload();">>], Context),
     Context.
 
@@ -3420,8 +3427,9 @@ set_trunk_doc_field(K, V, TrunkId, AccountId, Context) ->
     TrunkDoc = kz_trunk('get', TrunkId, AccountId, [], Context),
     kz_trunk('post', TrunkId, AccountId, ?MK_DATABAG(modkazoo_util:set_value(K, V, TrunkDoc)), Context).
 
-list_trunks_realm(AccountId, Context) ->
-    [get_trunk_doc_field([<<"account">>,<<"auth_realm">>], TrunkId, AccountId, Context) || TrunkId <- list_account_trunks(AccountId, Context)].
+list_trunks_realm(?MATCH_ACCOUNT_RAW(AccountId), Context) ->
+    [get_trunk_doc_field([<<"account">>,<<"auth_realm">>], TrunkId, AccountId, Context) || TrunkId <- list_account_trunks(AccountId, Context)];
+list_trunks_realm(_, _) -> [].
 
 sync_trunkstore_realm(TrunkId, AccountId, Context) ->
     AccountRealm = get_account_realm(AccountId, Context),
