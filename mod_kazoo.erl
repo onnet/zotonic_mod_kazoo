@@ -121,8 +121,11 @@ event({submit,{forgottenpwd,[]},_,_}, Context) ->
         <<"">> -> z_render:growl_error(?__("No account found",Context), Context);
         Answer -> 
             lager:info("Password recovery request answer: ~p",[Answer]),
-            Context1 = z_render:wire([{set_class, [{target, "forgot-pwd-box"},{class,"search-box hidden"}]}], Context),
-            z_render:growl(?__("Please check your mailbox", Context1), Context1)
+            Routines = [fun(Ctx) -> z_render:wire([{set_class, [{target, "forgot-pwd-box"},{class,"search-box hidden"}]}], Ctx) end
+                       ,fun(Ctx) -> z_render:growl(?__("Please check your mailbox", Ctx), Ctx) end
+                       ,fun(Ctx) -> z_render:update("password_change_span_id",z_template:render("password_change_check_email.tpl",[],Ctx),Ctx) end
+                       ],
+            lists:foldl(fun(F, Ctx) -> F(Ctx) end, Context, Routines)
     end;
 
 event({postback,{reset_password,[{username,FormUsername}]},_,_}, Context) ->
@@ -165,13 +168,18 @@ event({postback,{password_reset_submit,[{reset_id,ResetId}]},_,_}, Context) ->
     end;
 
 event({submit,password_recovery_form,_,_}, Context) ->
+    lager:info("password_recovery_form variables: ~p", [z_context:get_q_all(Context)]),
   try
     Password = z_context:get_q("password1", Context),
     OwnerId = z_context:get_q("owner_id", Context),
     AccountId = z_context:get_q("account_id", Context),
     AuthToken = z_context:get_q("auth_token", Context),
+    AccountName = z_context:get_q("account_name", Context),
+    UserName = z_context:get_q("username", Context),
     _ = kazoo_util:kz_set_user_doc(<<"password">>, Password, OwnerId, AccountId, AuthToken, Context),
-    z_render:update("password_change_span_id",z_template:render("password_change_success.tpl",[],Context),Context)
+    z_render:update("password_change_span_id"
+                   ,z_template:render("password_change_success.tpl",[{'account_name', AccountName},{'username', UserName}],Context)
+                   ,Context)
   %  kazoo_util:growl_redirect('undefined', "Password changed, please try sign-in", "home", Context)
   catch
     E1:E2 -> 

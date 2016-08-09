@@ -28,9 +28,11 @@
         {% button id="save_user_creds_btn" class="col-xs-12 btn btn-zprimary mt-1 mb-1" text=_"Save new password" action={script script="mypwdsubmit()"} %}
     </div>
   </div>
-  <input type="hidden" name="account_id" value={{ account_id }}>
-  <input type="hidden" name="owner_id" value={{ owner_id }}>
-  <input type="hidden" name="auth_token" value={{ auth_token }}>
+  <input type="hidden" name="account_id" value="{{ account_id }}">
+  <input type="hidden" name="owner_id" value="{{ owner_id }}">
+  <input type="hidden" name="auth_token" value="{{ auth_token }}">
+  <input type="hidden" name="account_name" value="{{ account_name }}">
+  <input type="hidden" name="username" value="{{ username }}">
 </form>
 
 {% javascript %}
