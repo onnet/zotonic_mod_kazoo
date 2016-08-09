@@ -10,6 +10,7 @@
     ,crossbar_account_request/4
     ,crossbar_account_send_raw_request_body/5
     ,crossbar_account_send_raw_request_body/6
+    ,crossbar_noauth_request_raw/4
     ,crossbar_noauth_request/4
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
@@ -19,6 +20,7 @@
     ,kz_get_user_doc/1
     ,kz_get_user_doc/2
     ,kz_get_user_doc/3
+    ,kz_get_user_doc_by_authtoken/4
     ,kz_user_doc_field/2
     ,kz_user_doc_field/3
     ,kz_device_doc_field/3
@@ -64,6 +66,8 @@
     ,is_kazoo_account_admin/1
     ,set_vm_message_folder/4
     ,password_recovery/3
+    ,password_reset_submit/2
+    ,growl_redirect/4
     ,change_credentials/4
     ,current_account_credit/1
     ,current_account_credit/2
@@ -111,6 +115,7 @@
     ,topup_disable/2
     ,kz_set_user_doc/3
     ,kz_set_user_doc/4
+    ,kz_set_user_doc/6
     ,kz_toggle_account_doc/2
     ,kz_toggle_user_doc/2
     ,kz_toggle_user_doc/3
@@ -621,10 +626,15 @@ kz_get_user_doc(OwnerId, Context) ->
     kz_get_user_doc(OwnerId, AccountId, Context).
 
 kz_get_user_doc(OwnerId, AccountId, Context) ->
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context).
+
+kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
-            crossbar_account_request('get', API_String, [], Context);
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
+            crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>);
         'true' -> []
     end.
 
@@ -635,13 +645,17 @@ kz_set_user_doc(K, V, Context) ->
 kz_set_user_doc(["dial_plan","system"], V, OwnerId, Context) ->
     kz_set_user_doc([<<"dial_plan">>,<<"system">>], [?TO_BIN(V)], OwnerId, Context);
 kz_set_user_doc(K, V, OwnerId, Context) ->
-    CurrDoc = kz_get_user_doc(OwnerId, Context),
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_set_user_doc(K, V, OwnerId, AccountId, AuthToken, Context).
+
+kz_set_user_doc(K, V, OwnerId, AccountId, AuthToken, Context) ->
+    CurrDoc = kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context),
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
-    Account_Id = z_context:get_session('kazoo_account_id', Context),
-    case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of
+    case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, "/", OwnerId/binary>>,
-            crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
+            crossbar_account_authtoken_request('post', API_String, {[{<<"data">>, NewDoc}]}, AuthToken, Context, <<>>);
         'true' -> []
     end.
 
@@ -696,14 +710,17 @@ kz_set_device_doc(K, V, DeviceId, Context) ->
         'true' -> []
     end.
 
-crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
+crossbar_noauth_request_raw(Verb, API_String, DataBag, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
                    _ -> jiffy:encode(DataBag)
               end,
-    case ibrowse:send_req(URL, req_headers('undefined'), Verb, Payload, [{'inactivity_timeout', 10000}]) of
+    ibrowse:send_req(URL, req_headers('undefined'), Verb, Payload, [{'inactivity_timeout', 10000}]).
+
+crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
+    case crossbar_noauth_request_raw(Verb, API_String, DataBag, Context) of
         {'ok', ReturnCode, _, Body} ->
             case ReturnCode of
                 [50,_,_] ->    %  50 = "2"
@@ -712,7 +729,6 @@ crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
                 _ -> <<"">>
             end;
         E -> 
-            lager:info("crossbar_noauth_request URL: ~p", [URL]),
             lager:info("crossbar_noauth_request Error: ~p", [E]),
             <<"">>
     end.
@@ -1290,13 +1306,26 @@ update_folder1(Message, _, _, _) ->
     Message.
 
 password_recovery(Username, AccountName, Context) ->
-    API_String = <<?V1/binary, ?USER_AUTH/binary, ?RECOVERY/binary>>,
+    API_String = <<?V2/binary, ?USER_AUTH/binary, ?RECOVERY/binary>>,
     DataBag = {[{<<"data">>,
                   {[{<<"username">>, ?TO_BIN(Username)}
                     ,{<<"account_name">>, ?TO_BIN(AccountName)}
+                    ,{<<"ui_url">>, <<"https://", ?TO_BIN(z_dispatcher:hostname(Context))/binary, "/password_reset_form">>}
                   ]}
               }]},
     crossbar_noauth_request('put', API_String, DataBag, Context). 
+
+password_reset_submit(ResetId, Context) ->
+    API_String = <<?V2/binary, ?USER_AUTH/binary, ?RECOVERY/binary>>,
+    DataBag = {[{<<"data">>, {[{<<"reset_id">>, ?TO_BIN(ResetId)}]}}]},
+    crossbar_noauth_request_raw('post', API_String, DataBag, Context). 
+
+growl_redirect(Type, Text, Dispatch, Context) ->
+    Routines = [
+                fun(J) -> z_render:wire({'growl', [{text, ?__(Text, J)}, {type, Type}, {stay, true}]}, J) end
+               ,fun(J) -> z_render:wire([{redirect, [{dispatch, Dispatch}]}], J) end
+               ],
+    lists:foldl(fun(F, J) -> F(J) end, Context, Routines).
 
 change_credentials(Username, Password, OwnerId, Context) ->
     CurrDoc = kz_get_user_doc(OwnerId, Context),
@@ -2094,7 +2123,7 @@ cf_notes_number_action("remove", Number, Context) ->
         'false' -> cf_notes_add(Number, 'cf_notes_removed_numbers', Context)
     end.
 
-cf_notes_remove(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
+cf_notes_remove(Number, Type, Context) ->
     Numbers = cf_notes_get(Type, Context),
     case lists:member(Number, Numbers) of
         'true' ->
@@ -2104,7 +2133,7 @@ cf_notes_remove(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
         'false' -> 'false'
     end.
 
-cf_notes_add(Number, Type, Context) ->   %% Type 'cf_notes_added_numbers'
+cf_notes_add(Number, Type, Context) ->
     Numbers = cf_notes_get(Type, Context),
     case lists:member(Number,Numbers) of
         'true' -> 'ok';
@@ -2835,9 +2864,7 @@ kz_c2call(Context) ->
             ,{<<"dial_first">>, ?TO_BIN(z_context:get_q("dial_first", Context))}
             ,{<<"extension">>, ?TO_BIN(z_context:get_q("extension", Context))}
             ,{<<"caller_id_number">>, ?TO_BIN(z_context:get_q("caller_id_number", Context))}
-        %    ,{<<"outbound_callee_id_name">>, ?TO_BIN(z_context:get_q("caller_id_number", Context))}
             ,{<<"outbound_callee_id_number">>, ?TO_BIN(z_context:get_q("caller_id_number", Context))}
-        %    ,{<<"retain_cid">>, 'false'}
             ,{<<"id">>, ?TO_BIN(Id)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
@@ -3290,9 +3317,7 @@ kz_admin_get_account_by_number(Number, Context) ->
     {'ok', {'account_id', AccountId}, {'auth_token', AuthToken}, {'crossbar', CrossbarURL}} = kz_admin_creds(Context),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?PHONE_NUMBERS/binary, "/", ?TO_BIN(Number)/binary, ?IDENTIFY/binary>>,
     URL = z_convert:to_list(<<CrossbarURL/binary, API_String/binary>>),
-    lager:info("Vlad URL: ~p",[URL]),
     {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers(AuthToken), 'get', [], [], 10000),
-    lager:info("action: ~p",[Body]),
     modkazoo_util:get_value([<<"data">>,<<"account_id">>], jiffy:decode(Body)).
 
 list_account_trunks(Context) ->

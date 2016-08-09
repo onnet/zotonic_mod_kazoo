@@ -110,7 +110,7 @@ event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _,
     mod_signal:emit({user_portal_voicemails_tpl, []}, Context),
     Context;
 
-event({submit,{forgottenpwd,[]},"forgottenpwd_form","forgottenpwd_form"}, Context) ->
+event({submit,{forgottenpwd,[]},_,_}, Context) ->
     Username = z_convert:to_binary(z_context:get_q("forgotten_username",Context)),
     NumberOrName = modkazoo_util:normalize_account_name(z_context:get_q("forgotten_account_name",Context)),
     AccountName = case kazoo_util:kz_admin_find_accountname_by_number(NumberOrName, Context) of
@@ -125,14 +125,6 @@ event({submit,{forgottenpwd,[]},"forgottenpwd_form","forgottenpwd_form"}, Contex
             z_render:growl(?__("Please check your mailbox", Context1), Context1)
     end;
 
-event({submit,{forgottenpwd,[]},"password_recovery_page_form","password_recovery_page_form"}, Context) ->
-    Username = z_convert:to_binary(z_context:get_q("forgotten_username_page",Context)),
-    AccountName = z_convert:to_binary(z_context:get_q("forgotten_account_name_page",Context)),
-    case kazoo_util:password_recovery(Username, AccountName, Context) of
-        <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
-        Answer -> z_render:growl(?__(Answer, Context), Context)
-    end;
-
 event({postback,{reset_password,[{username,FormUsername}]},_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     AccountName = kazoo_util:kz_account_doc_field(<<"name">>, AccountId, Context),
@@ -144,6 +136,49 @@ event({postback,{reset_password,[{username,FormUsername}]},_,_}, Context) ->
         <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
         Answer -> z_render:growl(?__(Answer, Context), Context)
     end;
+
+event({postback,{password_reset_submit,[{reset_id,ResetId}]},_,_}, Context) ->
+    case kazoo_util:password_reset_submit(ResetId, Context) of
+        {'ok', [50,_,_], _, Body} ->
+            {JsonData} = jiffy:decode(Body),
+            Data = proplists:get_value(<<"data">>, JsonData),
+            AuthToken = proplists:get_value(<<"auth_token">>, JsonData),
+            AccountId = modkazoo_util:get_value(<<"account_id">>, Data),
+            OwnerId = modkazoo_util:get_value(<<"owner_id">>, Data),
+            AccountName = modkazoo_util:get_value(<<"account_name">>, Data),
+            UserDoc = kazoo_util:kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context),
+            UserName = modkazoo_util:get_value(<<"username">>, UserDoc),
+            z_render:update("password_change_span_id"
+                           ,z_template:render("password_change_form.tpl"
+                                             ,[{'auth_token', AuthToken}
+                                              ,{'account_id', AccountId}
+                                              ,{'owner_id', OwnerId}
+                                              ,{'account_name', AccountName}
+                                              ,{'username', UserName}
+                                              ]
+                                             ,Context)
+                           ,Context);
+        E ->
+            lager:info("password_reset_submit Error: ~p", [E]),
+            z_render:update("password_change_span_id",z_template:render("password_change_error.tpl",[],Context),Context)
+         %   growl_redirect("error", "Something went wrong, please try again", "home", Context)
+    end;
+
+event({submit,password_recovery_form,_,_}, Context) ->
+  try
+    Password = z_context:get_q("password1", Context),
+    OwnerId = z_context:get_q("owner_id", Context),
+    AccountId = z_context:get_q("account_id", Context),
+    AuthToken = z_context:get_q("auth_token", Context),
+    _ = kazoo_util:kz_set_user_doc(<<"password">>, Password, OwnerId, AccountId, AuthToken, Context),
+    z_render:update("password_change_span_id",z_template:render("password_change_success.tpl",[],Context),Context)
+  %  kazoo_util:growl_redirect('undefined', "Password changed, please try sign-in", "home", Context)
+  catch
+    E1:E2 -> 
+        lager:info("Error. E1: ~p E2: ~p", [E1, E2]),
+        z_render:update("password_change_span_id",z_template:render("password_change_error.tpl",[],Context),Context)
+     %   kazoo_util:growl_redirect("error", "Something went wrong, please try again", "home", Context)
+  end;
 
 event({postback,rate_seek,_,_}, Context) ->
     Number = z_convert:to_binary(re:replace(z_context:get_q("rate_seek",Context), "[^0-9]", "", [global, {return, list}])),
@@ -448,11 +483,6 @@ event({submit,passwordForm,_,_}, Context) ->
                 {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
                 _ -> 'ok'
             end, 
-    %         Routines = [fun(J) -> z_render:wire([{hide, [{target, "save_user_creds_btn"}]}], J) end
-    %                    ,fun(J) -> z_render:wire([{hide, [{target, "reset_password_to_tandom_btn"}]}], J) end
-    %                    ,fun(J) -> z_render:wire([{show, [{target, "close_user_creds_window_btn"}]}], J) end
-    %                    ,fun(J) -> z_render:growl(?__("Password changed", J), J) end],
-    %         lists:foldl(fun(F, J) -> F(J) end, Context, Routines)
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
             z_render:dialog_close(z_render:growl(?__("User cedentials changed", Context), Context))
     end
