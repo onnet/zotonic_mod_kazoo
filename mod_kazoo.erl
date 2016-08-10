@@ -1113,12 +1113,13 @@ event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
     spawn(kazoo_util,rs_delete_account,[AccountId,Context]),
     z_render:wire({mask, [{target_id, "child_sandbox"}]}, Context);
 
-event({postback,{rs_account_mask,[{account_id,AccountIdRaw}]},_,_},Context) ->
+event({postback,{'rs_account_mask',[{'account_id',AccountIdRaw}]},_,_},Context) ->
     KazooOwnerId = z_convert:to_binary(z_context:get_q("triggervalue", Context)),
     AccountId = z_convert:to_binary(AccountIdRaw),
-    z_context:set_session(kazoo_owner_id, KazooOwnerId, Context),
+    z_context:set_session('kazoo_owner_id', KazooOwnerId, Context),
     modkazoo_util:set_session_jobj('kazoo_reseller_user_tracking', AccountId, KazooOwnerId, ?EMPTY_JSON_OBJECT, Context),
-    z_context:set_session(kazoo_account_id, AccountId, Context),
+    z_context:set_session('kazoo_account_id', AccountId, Context),
+    z_context:set_session('rs_selected_account_id', 'undefined', Context),
     z_context:set_session('kazoo_account_name','undefined',Context),
     z_context:set_session('account_realm','undefined',Context),
     z_context:set_session('current_callflow','undefined',Context),
@@ -1128,11 +1129,12 @@ event({postback,{rs_account_mask,[{account_id,AccountIdRaw}]},_,_},Context) ->
     modkazoo_auth:choose_page_to_redirect(Context);
 
 event({postback,rs_account_demask,_,_},Context) ->
-    AccountId = z_context:get_session(kazoo_account_id, Context),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
     AccountDoc = kazoo_util:kz_get_acc_doc_by_account_id(AccountId, Context),
     ResellerId = modkazoo_util:get_value(<<"reseller_id">>, AccountDoc),
-    z_context:set_session(kazoo_owner_id, modkazoo_util:get_session_jobj_value('kazoo_reseller_user_tracking', ResellerId, Context), Context),
-    z_context:set_session(kazoo_account_id, ResellerId, Context),
+    z_context:set_session('kazoo_owner_id', modkazoo_util:get_session_jobj_value('kazoo_reseller_user_tracking', ResellerId, Context), Context),
+    z_context:set_session('kazoo_account_id', ResellerId, Context),
+    z_context:set_session('rs_selected_account_id', AccountId, Context),
     z_context:set_session('kazoo_account_name','undefined',Context),
     z_context:set_session('account_realm','undefined',Context),
     z_context:set_session('current_callflow','undefined',Context),
