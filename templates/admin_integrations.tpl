@@ -29,6 +29,12 @@
   <span id="admin_portal_c2call_list_tpl">
         {% include "admin_portal_c2call_list.tpl" headline=_"Click-to-Call" %}
   </span>
+
+  {% wire action={connect signal={update_admin_portal_c2call_history_tpl}
+          action={update target="admin_portal_c2call_history_tpl" template="admin_portal_c2call_history.tpl" headline=_"Click-to-Call History"}} %}
+  <span id="admin_portal_c2call_history_tpl">
+        {% include "admin_portal_c2call_history.tpl" headline=_"Click-to-Call History" %}
+  </span>
 </div>
 
 {% endblock %}

@@ -46,13 +46,14 @@
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ CID Number _}
-            <select id="caller_id_number" name="caller_id_number" class="form-control margin-bottom-xs selectpicker" style="text-align:center;" data-live-search="true">
+            <select id="outbound_callee_id_number" name="outbound_callee_id_number"
+                    class="form-control margin-bottom-xs selectpicker" style="text-align:center;" data-live-search="true">
               {% for number in m.kazoo.get_acc_numbers %}
-                  <option value="{{ number }}" {% if c2call[1]["caller_id_number"] == number %}selected{% endif %}>{{ number }}</option>
+                  <option value="{{ number }}" {% if c2call[1]["outbound_callee_id_number"] == number %}selected{% endif %}>{{ number }}</option>
               {% endfor %}
             </select>
             {% javascript %}
-                $('#caller_id_number').selectpicker({
+                $('#outbound_callee_id_number').selectpicker({
                   size: 7
                 });
             {% endjavascript %}
