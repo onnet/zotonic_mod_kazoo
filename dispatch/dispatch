@@ -1,7 +1,7 @@
 [
  {reseller_portal,["reseller_portal"],         controller_template,  [ {template, "reseller_portal.tpl"} ]},
  {reseller_settings,["reseller_settings"],         controller_template,  [ {template, "reseller_settings.tpl"} ]},
- {reseller_current_state,["reseller_current_state"],         controller_template,  [ {template, "reseller_current_state.tpl"} ]},
+ {reseller_system_monitor,["reseller_system_monitor"],         controller_template,  [ {template, "reseller_system_monitor.tpl"} ]},
  {admin_settings,["admin_settings"],         controller_template,  [ {template, "admin_settings.tpl"} ]},
  {admin_integrations,["admin_integrations"],         controller_template,  [ {template, "admin_integrations.tpl"} ]},
  {admin_current_state,["admin_current_state"],         controller_template,  [ {template, "admin_current_state.tpl"} ]},
