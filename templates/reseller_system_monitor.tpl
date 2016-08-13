@@ -8,12 +8,16 @@
 
 <div class="pl-10 pr-10 col-md-6">
   <span id="admin_portal_current_calls_tpl">
-        {% include "admin_portal_current_calls.tpl" headline=_"Account's Current Calls" %}
+        {% include "admin_portal_current_calls.tpl" headline=_"System-wide current calls" %}
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  <span id="account_registrations_widget_tpl">
-        {% include "account_registrations_widget.tpl" headline=_"Account's current registrations" account_id=account_id %}
+  {% wire action={connect signal={reseller_registrations_widget_tpl}
+                          action={update target="reseller_registrations_widget_tpl" template="reseller_registrations_widget.tpl" headline=_"System-wide registrations"}
+                 }
+  %}
+  <span id="reseller_registrations_widget_tpl">
+        {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
   </span>
 </div>
 

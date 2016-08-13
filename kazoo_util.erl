@@ -258,6 +258,7 @@
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
     ,kz_get_registrations_by_accountid/2
+    ,kz_get_reseller_registrations/2
     ,list_account_trunks/1
     ,list_trunks_realm/2
     ,kz_registration_details_by_username/2
@@ -1357,6 +1358,15 @@ kz_check_device_registration(DeviceId, Context) ->
 
 kz_get_registrations_by_accountid(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary>>, 
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_get_reseller_registrations(AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+                     'true' ->
+                         <<?V2/binary, ?REGISTRATIONS/binary>>;
+                     'false' ->
+                         <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary>> 
+                 end,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_device_registration_details(DeviceId, Context) ->
