@@ -105,6 +105,10 @@ m_find_value(kz_list_account_channels, _M, Context) ->
 m_find_value({kz_list_account_channels, [{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_list_account_channels(AccountId, Context);
 
+m_find_value(get_reseller_channels, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kazoo_util:kz_get_reseller_channels(AccountId, Context);
+
 m_find_value({kz_channel_info, [{uuid, UUId}, {account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_channel_info(UUId, AccountId, Context);
 

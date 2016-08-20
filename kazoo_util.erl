@@ -46,6 +46,7 @@
     ,kz_list_account_children/1
     ,kz_list_account_channels/1
     ,kz_list_account_channels/2
+    ,kz_get_reseller_channels/2
     ,kz_channel_info/2
     ,kz_channel_info/3
     ,kz_channel_action/3
@@ -1942,6 +1943,15 @@ kz_list_account_channels('undefined', Context) ->
     kz_list_account_channels(z_context:get_session('kazoo_account_id', Context), Context);
 kz_list_account_channels(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?CHANNELS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_get_reseller_channels(AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+                     'true' ->
+                         <<?V2/binary, ?CHANNELS/binary>>;
+                     'false' ->
+                         <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?CHANNELS/binary>>
+                 end,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_channel_info(CallId, Context) ->

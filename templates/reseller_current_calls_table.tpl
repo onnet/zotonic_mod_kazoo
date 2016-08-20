@@ -2,20 +2,20 @@
 {% wire name="channel_transfer" action={postback postback="channel_transfer_dialog" delegate="mod_kazoo"} %}
 {% wire name="channel_eavesdrop" action={postback postback="channel_eavesdrop_dialog" delegate="mod_kazoo"} %}
 <table id="admin_portal_current_calls_table" class="table display table-striped table-condensed">
-  <thead>
-    <tr>
-      <th style="text-align: center;">{_ CallId _}</th>
-      <th style="text-align: center;">{_ Caller Number _}</th>
-      <th style="text-align: center;">{_ Callee Number _}</th>
-      <th style="text-align: center;">{_ Status _}</th>
-      <th style="text-align: center;">{_  _}</th>
-      <th style="text-align: center;">{_ Hang Up _}</th>
-    </td>
-  </thead>
-  <tbody id="currentcallstableid">
-    {% for running_call in m.kazoo[{kz_list_account_channels account_id=account_id}] %} 
-      {% if running_call["direction"]=="inbound" %}
-      <tr>
+<thead>
+  <tr>
+    <th style="text-align: center;">{_ CallId _}</th>
+    <th style="text-align: center;">{_ Caller Number _}</th>
+    <th style="text-align: center;">{_ Callee Number _}</th>
+    <th style="text-align: center;">{_ Status _}</th>
+    <th style="text-align: center;">{_  _}</th>
+    <th style="text-align: center;">{_ Hang Up _}</th>
+  </td>
+</thead>
+<tbody id="currentcallstableid">
+  {% for running_call in m.kazoo.get_reseller_channels %} 
+  {% if running_call["direction"]=="inbound" %}
+     <tr>
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
         <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}
                                         {# if running_call["answered"] #}
@@ -37,35 +37,30 @@
         <td style="text-align: center;"><i id="eavesdrop_{{ running_call["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i></td>
         {% wire id="eavesdrop_"++running_call["uuid"]|cleanout
                 action={postback postback={channel_eavesdrop_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"}
-        %}
+         %}
         <td style="text-align: center;"><i id="hangup_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-hangup pointer"></i></td>
         {% wire id="hangup_"++running_call["uuid"]|cleanout
                 action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]} delegate="mod_kazoo"}
         %}
-      </tr>
-      {% endif %}
-    {% endfor %}
-  </tbody>
+     </tr>
+  {# print running_call #}
+  {% endif %}
+  {% endfor %}
+</tbody>
 </table>
 
+  {# for running_call in m.kazoo.kz_list_account_channels #} 
+    {# print forloop.counter #}
+    {# print running_call #}
+    {# print m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}] #}
+  {# endfor #}
+
+{# m.kazoo[{kz_channel_info uuid=running_call["other_leg"] account_id=account_id}][1]["destination"] #}
+
 {% javascript %}
-
   function myreplace(stringtowork){
-    return stringtowork.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
+      stringtowork.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
   };
-
-  function get_calee_id_number(data_obj){
-    var callee_id_number;
-    if (data_obj["callee_id_number"]) {
-        callee_id_number = data_obj["callee_id_number"]
-    } else if (data_obj["to"]) {
-        callee_id_number = data_obj["to"].split("@",1)
-    } else {
-      callee_id_number = "not_found";
-    }
-    return callee_id_number;
-  };
-
   var oTable = $('#admin_portal_current_calls_table').dataTable({
     "pagingType": "simple",
     "bFilter" : true,
@@ -119,48 +114,54 @@
 
   socket.onmessage = function(raw_message) {
     var data = JSON.parse(raw_message.data);
-    console.log(data);
 
     switch(data.routing_key) {
       case "CHANNEL_CREATE":
-      if ( data["call_direction"] == "inbound") {
+      if ( data["Other-Leg-Call-ID"] && data["Call-ID"] && data["Other-Leg-Caller-ID-Number"] && data["Caller-ID-Number"]
+           && data["Caller-ID-Number"] != "context_2" && data["Callee-ID-Number"] != "context_2"
+         ) {
         $(".dataTables_empty").remove();
-        row_id = myreplace(data["call_id"]);
+   //   console.log(data["Call-ID"].toString());
+        row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
+   //   console.log("Attempt to add row_id: "+row_id);
         if ($("#"+row_id).length == 0) {
             oTable.api().row.add([row_id, 
-                                  data["caller_id_number"], 
-                                  get_calee_id_number(data), 
+                                  data["Caller-ID-Number"], 
+                                  data["Callee-ID-Number"], 
                                   '{_ ringing _}', 
                                   '', 
                                   '<i class="dark-1 icon-telicon-hangup pointer" \
-                                      onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>'
+                                      onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>'
                                  ]).draw();
         }
       }
+      console.log(data);
       break;
 
       case "CHANNEL_ANSWER":
-      row_id = myreplace(data["call_id"]);
+      row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
       oTable.api().row('#'+row_id).data([row_id,
-                                         data["caller_id_number"], 
-                                         get_calee_id_number(data), 
-                                   //    data["caller_id_number"]+' <i class="dark-1 icon-telicon-failover pointer" \
-                                   //                                  onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>', 
-                                   //    data["callee_id_number"]+' <i class="dark-1 icon-telicon-failover pointer" \
+                                         data["Caller-ID-Number"], 
+                                         data["Callee-ID-Number"], 
+                                   //    data["Caller-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" \
+                                   //                                  onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>', 
+                                   //    data["Callee-ID-Number"]+' <i class="dark-1 icon-telicon-failover pointer" \
                                    //                                  onclick="z_event('+"'channel_transfer'"+", \
-                                   //                                                   {channel_id: '"+data["Other-Leg-call_id"]+"'"+' } \
+                                   //                                                   {channel_id: '"+data["Other-Leg-Call-ID"]+"'"+' } \
                                    //                                                  );"></i>', 
                                          '{_ answered _}', 
                                          '<i class="fa fa-volume-up pointer" \
-                                             onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>',
+                                             onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>',
                                          '<i class="dark-1 icon-telicon-hangup pointer" \
-                                             onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>'
+                                             onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["Call-ID"]+"'"+' });"></i>'
                                         ]).draw();
+      console.log(data);
       break;
 
       case "CHANNEL_DESTROY":
-      row_id = myreplace(data["call_id"]);
+      row_id = data["Call-ID"].replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
       oTable.api().row('#'+row_id).remove().draw();
+      console.log(data);
       break;
     }
 

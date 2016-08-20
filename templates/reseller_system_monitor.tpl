@@ -7,8 +7,12 @@
 {% block service_description %}
 
 <div class="pl-10 pr-10 col-md-6">
-  <span id="admin_portal_current_calls_tpl">
-        {% include "admin_portal_current_calls.tpl" headline=_"System-wide current calls" %}
+  {% wire action={connect signal={reseller_current_calls_widget_tpl}
+                          action={update target="reseller_current_calls_widget_tpl" template="reseller_current_calls_widget.tpl" headline=_"System-wide current calls"}
+                 }
+  %}
+  <span id="reseller_current_calls_widget_tpl">
+        {% include "reseller_current_calls_widget.tpl" headline=_"System-wide current calls" %}
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
