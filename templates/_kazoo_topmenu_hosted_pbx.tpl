@@ -8,12 +8,12 @@
                 {% if m.kazoo.is_kazoo_account_admin %}
                   <li><a href="/admin_callflows">{_ Callflow Builder _}</a>
                   <li><a href="/admin_settings">{_ Settings _}</a>
-                  <li><a href="/admin_current_state">{_ Current state _}</a>
                   <li><a href="/admin_statistics">{_ Statistics _}</a>
                   <li><a href="/admin_integrations">{_ Integrations _}</a>
                   <li><a href="/admin_feature_codes">{_ Feature Codes _}</a>
                   <li><a href="/callback">{_ Callback _}</a>
                   <li><a href="/conference_manager">{_ Conference manager _}</a>
+                  <li><a href="/admin_system_monitor">{_ System monitor _}</a>
                 {% endif %}
             </ul>
          </li>

@@ -106,7 +106,13 @@
 
   socket.onopen = function() {
 
-    send({ action: 'unsubscribe', auth_token: '{{ m.session.kazoo_auth_token }}' });
+    send({
+        action: 'unsubscribe',
+        account_id: '{{ account_id }}',
+        auth_token: '{{ m.session.kazoo_auth_token }}',
+        binding: 'call.*.*'
+    });
+
 
     send({
         action: 'subscribe',
