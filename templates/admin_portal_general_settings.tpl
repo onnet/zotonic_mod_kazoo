@@ -16,7 +16,7 @@
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right" text=_"call restrictions" id="callrestrictionsbtn"
               action={ dialog_open title=_"Account level call restrictions" template="admin_portal_account_restrictions.tpl" class="iamclass" } %}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"access restrtictions" action={ dialog_open title=_"Web access restrictions setup" template="_add_webaccess_list.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"access restrtictions" action={ dialog_open title=_"Access restrictions setup" template="_edit_account_access_restrictions.tpl" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

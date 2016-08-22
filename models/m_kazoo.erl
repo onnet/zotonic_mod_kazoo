@@ -587,6 +587,9 @@ m_find_value(list_system_dialplans_names, _M, Context) ->
 m_find_value({cf_notes_get, [{type, Type}]}, _M, Context) ->
     kazoo_util:cf_notes_get(Type, Context);
 
+m_find_value(kz_account_access_lists, _M, Context) ->
+    kazoo_util:kz_account_access_lists('get', [], Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

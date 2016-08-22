@@ -329,6 +329,7 @@
     ,per_minute_calls/1
     ,credit_transactions/1
     ,debit_transactions/1
+    ,kz_account_access_lists/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -416,7 +417,7 @@
 -define(INTERACTION, <<"/interaction">>).
 -define(LEGS, <<"/legs">>).
 -define(LEDGERS, <<"/ledgers">>).
--define(TO_BIN(Var), <<(z_convert:to_binary(Var))/binary>>).
+-define(ACCESS_LISTS, <<"/access_lists">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).
@@ -514,7 +515,6 @@
   {<<"flags">>,[<<"fax">>]}
 ]}).
 
--define(MK_DATABAG(JObj), {[{<<"data">>, JObj}]}).
 -define(DEFAULT_RESOURCE_RULES, [<<"^\\+?(\\d*)$">>]).
 -define(DEFAULT_RESOURCE_CIDRULES, []).
 
@@ -3964,3 +3964,6 @@ debit_transactions(Transactions) ->
           end,
     modkazoo_util:filter(Fun, Transactions).
 
+kz_account_access_lists(Verb, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?ACCESS_LISTS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
