@@ -330,6 +330,7 @@
     ,credit_transactions/1
     ,debit_transactions/1
     ,kz_account_access_lists/3
+    ,kz_device_access_lists/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -357,6 +358,7 @@
 -define(AUTODIAL, <<"/autodial">>).
 -define(CALLFLOWS, <<"/callflows">>).
 -define(DEVICES, <<"/devices">>).
+-define(DEVICES(DeviceId), <<"/devices/", (z_convert:to_binary(DeviceId))/binary>>).
 -define(VMBOXES, <<"/vmboxes">>).
 -define(CDRS, <<"/cdrs">>).
 -define(MESSAGES, <<"/messages">>).
@@ -3966,4 +3968,8 @@ debit_transactions(Transactions) ->
 
 kz_account_access_lists(Verb, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?ACCESS_LISTS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_device_access_lists(Verb, DeviceId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?DEVICES(DeviceId)/binary, ?ACCESS_LISTS/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).

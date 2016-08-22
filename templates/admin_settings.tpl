@@ -77,18 +77,4 @@
   </span>
 </div>
 
-<span>
-get_acc_numbers:
-{% print m.kazoo.get_acc_numbers %}
-</span>
-<span>
-get_acc_numbers_info:
-{% print m.kazoo.get_acc_numbers_info %}
-</span>
-<span>
-kz_spare_numbers:
-{% print m.kazoo.kz_spare_numbers %}
-</span>
-
 {% endblock %}
-

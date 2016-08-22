@@ -7,6 +7,7 @@
 <!--  <li><a href="#sipsettings" role="tab" data-toggle="tab">SIP Settings</a></li> -->
 <!--  <li><a href="#audiosettings" role="tab" data-toggle="tab">Audio</a></li> -->
   <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
+  <li><a href="#device_sip_access" role="tab" data-toggle="tab">{_ SIP ACL _}</a></li>
 {% endif %}
 </ul>
 
@@ -33,6 +34,9 @@
   </div>
   <div class="tab-pane fade" id="restrictions">
     {% include "admin_portal_device_restrictions.tpl" %}
+  </div>
+  <div class="tab-pane fade" id="device_sip_access">
+    {% include "_add_device_sipaccess_list.tpl" %}
   </div>
 </div>
 </div>

@@ -1525,6 +1525,19 @@ event({submit,add_account_sip_acl,_,_}, Context) ->
     end,
     z_render:dialog_close(Context);
 
+event({submit,add_device_sip_acl,_,_}, Context) ->
+    DeviceId = z_context:get_q("device_id", Context),
+    case z_context:get_q_all("ip_acl_entry", Context) of
+        [] ->
+            _ = kazoo_util:kz_device_access_lists('delete', DeviceId, [], Context);
+        IP_ACL_Entries ->
+            Props = [{<<"order">>, ?TO_BIN(z_context:get_q("sip_access_lists_order", Context))}
+                    ,{<<"cidrs">>, lists:map(fun(X) -> z_convert:to_binary(X) end, IP_ACL_Entries)}],
+            DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
+            _ = kazoo_util:kz_device_access_lists('post', DeviceId, DataBag, Context)
+    end,
+    z_render:dialog_close(Context);
+
 event({submit,add_credit,_,_}, Context) ->
     lager:info("add_credit event variables: ~p", [z_context:get_q_all(Context)]),
     Amount = z_context:get_q("credit_amount", Context),
