@@ -61,7 +61,7 @@
     {# lib "css/font-awesome.min.css" #}
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     {% lib "css/telicon.css" %}
-    {% lib "css/icons.css" %}
+    {% lib "css/icons-2600hz.css" %}
 
     {% lib "css/dataTables.bootstrap.css" %}
     {% lib "js/jquery.dataTables.min.js" %}

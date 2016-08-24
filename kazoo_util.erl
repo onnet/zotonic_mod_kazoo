@@ -1897,15 +1897,15 @@ kz_list_classifiers(Context) ->
 
 add_device(Context) ->
     Props = modkazoo_util:filter_empty(
-        [{[<<"data">>,<<"sip">>,<<"username">>],z_context:get_q("sipusername",Context)}
-        ,{[<<"data">>,<<"sip">>,<<"password">>],z_context:get_q("sippassword",Context)}
+        [{[<<"data">>,<<"sip">>,<<"username">>],?TO_BIN(z_context:get_q("sipusername",Context))}
+        ,{[<<"data">>,<<"sip">>,<<"password">>],?TO_BIN(z_context:get_q("sippassword",Context))}
         ,{[<<"data">>,<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
-        ,{[<<"data">>,<<"call_forward">>,<<"number">>],z_context:get_q("cellphonenumber",Context)}
-        ,{[<<"data">>,<<"name">>],z_context:get_q("name",Context)}
-        ,{[<<"data">>,<<"owner_id">>],z_context:get_q("device_owner_id",Context)}
-        ,{[<<"data">>,<<"device_type">>],z_context:get_q("device_type",Context)}
+        ,{[<<"data">>,<<"call_forward">>,<<"number">>],?TO_BIN(z_context:get_q("cellphonenumber",Context))}
+        ,{[<<"data">>,<<"name">>],?TO_BIN(z_context:get_q("name",Context))}
+        ,{[<<"data">>,<<"owner_id">>],?TO_BIN(z_context:get_q("device_owner_id",Context))}
+        ,{[<<"data">>,<<"device_type">>],?TO_BIN(z_context:get_q("device_type",Context))}
         ]),
-    DataBag = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,?TO_BIN(V),J) end, ?MK_DEVICE_SIP, Props),
+    DataBag = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_DEVICE_SIP, Props),
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>,
     _ = crossbar_account_request('put', API_String, DataBag, Context),
     Context.

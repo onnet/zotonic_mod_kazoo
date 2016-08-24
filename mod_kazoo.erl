@@ -681,7 +681,8 @@ event({submit,cf_add_number,_,_},Context) ->
                 Number -> 
                     _ = kazoo_util:cf_add_number(Number,Context),
                     case z_context:get_q("number_type", Context) of
-                        "number_type_1" -> kazoo_util:cf_notes_number_action("add", Number, Context)
+                        "number_type_1" -> kazoo_util:cf_notes_number_action("add", Number, Context);
+                        _ -> 'ok'
                     end
             end
     end,
