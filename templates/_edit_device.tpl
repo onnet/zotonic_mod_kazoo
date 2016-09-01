@@ -2,8 +2,10 @@
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
   <li class="active"><a href="#basic" role="tab" data-toggle="tab">{_ Basic _}</a></li>
+{% if device_doc["device_type"]!="sip_uri" %}
   <li><a href="#callerid" role="tab" data-toggle="tab">{_ Caller ID _}</a></li>
-{% if device_doc["device_type"]!="cellphone" %}
+{% endif %}
+{% if device_doc["device_type"]!="cellphone" and device_doc["device_type"]!="sip_uri" %}
 <!--  <li><a href="#sipsettings" role="tab" data-toggle="tab">SIP Settings</a></li> -->
 <!--  <li><a href="#audiosettings" role="tab" data-toggle="tab">Audio</a></li> -->
   <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
@@ -15,6 +17,8 @@
   <div class="active tab-pane fade in" id="basic">
 {% if device_doc["device_type"]=="cellphone" %}
     {% include "admin_portal_device_cellphone.tpl" %}
+{% elseif device_doc["device_type"]=="sip_uri" %}
+    {% include "admin_portal_device_sip_uri.tpl" %}
 {% else %}
     {% include "admin_portal_device_basic.tpl" %}
 {% endif %}

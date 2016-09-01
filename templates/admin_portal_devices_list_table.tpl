@@ -34,6 +34,8 @@
                             icon-telicon-soft-phone icon-device"></i>
                 {% elseif device["device_type"]=="cellphone" %}
                   <i class="registered fa fa-mobile"></i>
+                {% elseif device["device_type"]=="sip_uri" %}
+                  <i class="registered fa fa-mail-forward"></i>
                 {% else %}
                   <i class="registered fa fa-phone"></i>
                 {% endif %}
