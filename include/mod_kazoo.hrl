@@ -1,5 +1,6 @@
 -define(JSON_WRAPPER(Proplist), {Proplist}).
 -define(EMPTY_JSON_OBJECT, ?JSON_WRAPPER([])).
+-define(TO_BIN(Var), <<(z_convert:to_binary(Var))/binary>>).
 -define(TIMEZONES_LIST, [<<"Africa/Abidjan">>,
              <<"Africa/Accra">>,
              <<"Africa/Addis_Ababa">>,
