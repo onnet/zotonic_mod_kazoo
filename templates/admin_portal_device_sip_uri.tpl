@@ -20,7 +20,7 @@
   </div>
 
   <!-- Assign To -->
-  <div class="row">
+<!--  <div class="row">
     <div class="col-xs-5"><label class="edit_user_label">Assign To</label></div>
     <div id="owner_id" class="col-xs-5">
         {% wire id="edit_owner_id"
@@ -35,7 +35,7 @@
             <i id="edit_owner_id" class="fa fa-edit pointer" title="Edit field"></i>
         </span>
     </div>
-  </div>
+  </div> -->
 
   <!-- SIP URI field -->
   <div class="row">
@@ -43,7 +43,13 @@
     <div id="siproute" class="col-xs-5">
         {% wire id="edit_siproute"
                 type="click"
-                action={ update target="siproute" template="_edit_field.tpl" type="device" doc_id=device_id field_name=["sip","route"] }
+                action={update target="siproute"
+                               template="_edit_field.tpl"
+                               type="device"
+                               doc_id=device_id
+                               field_name=["sip","route"]
+                               placeholder="sip:support@company.com"
+                       }
         %}
         <span>
             {{ device_doc["sip"][1]["route"] }}
