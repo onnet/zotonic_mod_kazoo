@@ -12,7 +12,7 @@
             </span>
         </div>
     </div>
-    <!-- User status -->
+    <!-- Device status -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Device status _}</label></div>
         <div id="device_enabled_status" class="col-xs-5">{% if device_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
