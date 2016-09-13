@@ -7,8 +7,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Integrations"
+msgstr "Интеграция"
 
 msgid "- No CID -"
 msgstr "Не выбран"
@@ -251,7 +251,7 @@ msgid "Request example"
 msgstr "Пример запроса"
 
 msgid "Click-to-Call"
-msgstr "Заказ обратного звонока"
+msgstr "Заказ обратного звонка"
 
 msgid "Auth required"
 msgstr "Авторизация"

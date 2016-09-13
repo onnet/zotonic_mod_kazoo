@@ -44,11 +44,14 @@
         {% include "admin_portal_trunk_list.tpl" headline=_"Trunkstore" %}
   </span>
 
+<!--
   {% wire action={connect signal={update_admin_portal_c2call_list_tpl}
           action={update target="admin_portal_c2call_list_tpl" template="admin_portal_c2call_list.tpl" headline=_"Click-to-Call"}} %}
   <span id="admin_portal_c2call_list_tpl">
         {% include "admin_portal_c2call_list.tpl" headline=_"Click-to-Call" %}
   </span>
+-->
+
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_admin_portal_devices_list_tpl} action={update target="admin_portal_devices_list_tpl" template="admin_portal_devices_list.tpl" headline=_"Account's Devices"}} %}
@@ -77,10 +80,12 @@
         {% include "admin_portal_vms_list.tpl" headline=_"Voicemails" %}
   </span>
 
+<!--
   {% wire action={connect signal={update_admin_portal_webhooks_list_tpl} action={update target="admin_portal_webhooks_list_tpl" template="admin_portal_webhooks_list.tpl" headline=_"Webhooks"}} %}
   <span id="admin_portal_webhooks_list_tpl">
         {% include "admin_portal_webhooks_list.tpl" headline=_"Webhooks" %}
   </span>
+-->
 
   {% wire action={connect signal={update_admin_portal_lists_tpl} action={update target="admin_portal_lists_tpl" template="admin_portal_lists.tpl" headline=_"Lists"}} %}
   <span id="admin_portal_lists_tpl">
