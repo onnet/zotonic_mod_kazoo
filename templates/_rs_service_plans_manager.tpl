@@ -56,7 +56,7 @@
            %}
           </td>
         </tr>
-      {% for service_plan in m.kazoo[{kz_current_services account_id=account_id}][1]["plans"][1] %}
+      {% for service_plan in m.kazoo[{kz_current_service_plans account_id=account_id}][1]["plans"][1] %}
         {% with service_plan[1] as service_plan_id %}
         <tr>
           <td colspan="2">

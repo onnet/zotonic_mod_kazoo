@@ -212,10 +212,10 @@ m_find_value(kz_service_plans_available, _M, Context) ->
 m_find_value({kz_service_plans_available, [{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:available_service_plans(AccountId, Context);
 
-m_find_value(kz_current_services, _M, Context) ->
+m_find_value(kz_current_service_plans, _M, Context) ->
     kazoo_util:current_service_plans(Context);
 
-m_find_value({kz_current_services, [{account_id, AccountId}]}, _M, Context) ->
+m_find_value({kz_current_service_plans, [{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:current_service_plans(AccountId, Context);
 
 m_find_value({kz_check_device_registration, [{device_id, DeviceId}]}, _M, Context) ->
