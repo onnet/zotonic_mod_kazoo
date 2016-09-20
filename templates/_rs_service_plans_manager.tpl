@@ -28,6 +28,15 @@
                          action={enable target="add_service_plan_tr_id"}
                          action={disable target="add_serviceplan_btn"}
                %}
+               {% button class="btn btn-xs btn-onnet pull-right"
+                         text=_"show current services"
+                         action={dialog_open title=_"Current services details"
+                                     template="_details.tpl"
+                                     arg=m.kazoo[{kz_current_service_plans account_id=account_id}]
+                                     width="auto"
+                         }
+
+               %}
             </th>
         </tr>
     </tbody>

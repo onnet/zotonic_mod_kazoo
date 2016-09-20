@@ -376,7 +376,6 @@
 -define(NUMBER, <<"/number">>).
 -define(CUSTOMER, <<"/customer">>).
 -define(TRANSACTIONS, <<"/transactions">>).
--define(ONBILL_TRANSACTIONS, <<"/onbill_transactions">>).
 -define(SUBSCRIPTIONS, <<"/subscriptions">>).
 -define(CREDIT, <<"/credit">>).
 -define(DEBIT, <<"/debit">>).
@@ -1565,14 +1564,11 @@ kz_list_transactions(CreatedFrom, CreatedTo, Context) ->
     kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context).
 
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context) ->
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, <<"?">>/binary,
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER(?TO_BIN(CreatedFrom), ?TO_BIN(CreatedTo))/binary>>,
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?BRAINTREE/binary, ?TRANSACTIONS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context) ->
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, <<"?">>/binary,
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER(?TO_BIN(CreatedFrom), ?TO_BIN(CreatedTo))/binary, ?SET_REASON(Reason)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
@@ -1586,18 +1582,15 @@ kz_list_subscriptions(Context) ->
     kz_list_subscriptions(AccountId, Context).
 
 kz_list_subscriptions(AccountId, Context) ->
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, ?SUBSCRIPTIONS/binary>>,
     lager:info("kz_list_subscriptions: ~p", [crossbar_account_request('get', API_String, [], Context)]),
     crossbar_account_request('get', API_String, [], Context).
 
 kz_current_balance(AccountId, Context) ->
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, ?CURRENT_BALANCE/binary>>,
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, ?CURRENT_BALANCE/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, ?CREDIT/binary>>,
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, ?CREDIT/binary>>,
     DataBag = {[{<<"data">>,{[{<<"amount">>, ?TO_BIN(Amount)}
                               ,{<<"reason">>, ?TO_BIN(Reason)}
@@ -1607,7 +1600,6 @@ kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
     crossbar_account_request('put', API_String, DataBag, Context).
 
 kz_transactions_debit(Amount, Reason, Description, AccountId, Context) ->
- %   API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, ?DEBIT/binary>>,
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, ?DEBIT/binary>>,
     DataBag = {[{<<"data">>,{[{<<"amount">>, ?TO_BIN(Amount)}
                               ,{<<"reason">>, ?TO_BIN(Reason)}
