@@ -1569,7 +1569,7 @@ event({postback,{remove_service_plan_from_account,[{account_id,AccountId},{servi
 
 event({postback,{sync_account_services,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:sync_service_plans(AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,[{notify_submit_btn,[{account_id, 'undefined'}]}],_,_}, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

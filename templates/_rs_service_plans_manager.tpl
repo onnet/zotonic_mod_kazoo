@@ -66,10 +66,14 @@
           </td>
         </tr>
       {% for service_plan in m.kazoo[{kz_current_service_plans account_id=account_id}][1]["plans"][1] %}
-        {% with service_plan[1] as service_plan_id %}
+        {% with service_plan[1], m.kazoo[{service_plan plan_id=service_plan[1]}] as service_plan_id, service_plan_doc %}
         <tr>
           <td colspan="2">
-            {{ service_plan_id }}
+            <span style="margin-left: 0.7em">{{ forloop.counter }}.</span>
+            {{ service_plan_doc[1]["name"] }}
+            {% if service_plan_doc[1]["description"] %}
+              - {{ service_plan_doc[1]["description"] }}
+            {% endif %}
             {% wire id="delete_"++service_plan_id
                  action={confirm text=_"Do you really want to remove "++service_plan_id++" service plan?"
                     action={postback postback={remove_service_plan_from_account account_id service_plan_id}

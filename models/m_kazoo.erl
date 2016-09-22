@@ -200,6 +200,12 @@ m_find_value(current_account_credit, _M, Context) ->
 m_find_value({current_account_credit, [{account_id, AccountId}]}, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
 
+m_find_value({service_plan, [{plan_id, PlanId}]}, _M, Context) ->
+    kazoo_util:service_plan(PlanId, Context);
+
+m_find_value({service_plan, [{plan_id, PlanId},{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:service_plan(PlanId, AccountId, Context);
+
 m_find_value(kz_service_plans, _M, Context) ->
     kazoo_util:service_plans(Context);
 

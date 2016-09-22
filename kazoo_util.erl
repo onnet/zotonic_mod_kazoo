@@ -1740,7 +1740,7 @@ service_plan(PlanId, Context) ->
     service_plan(PlanId, AccountId, Context).
 
 service_plan(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 service_plans(Context) ->
