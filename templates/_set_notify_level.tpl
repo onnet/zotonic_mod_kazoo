@@ -1,3 +1,4 @@
+{% with m.session.rs_selected_account_id as account_id %}
 {%  with m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "threshold"] account_id=account_id}]
         ,m.kazoo[{kz_doc_field type="account" doc_id=" " field=["notifications", "low_balance", "enabled"] account_id=account_id}]
     as notify, notify_enabled
@@ -57,4 +58,4 @@
     </tbody>
 </table>
 {% endwith %}
-
+{% endwith %}

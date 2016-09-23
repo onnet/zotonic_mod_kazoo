@@ -1,3 +1,4 @@
+{% with m.session.rs_selected_account_id as account_id %}
 <table class="table table-condensed table-centered">
     <tbody>
         <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="2"></td></tr>
@@ -16,20 +17,27 @@
               </span>
                {_ Service plans _}:
                {% button class="btn btn-xs btn-onnet pull-right"
-                         text=_"sync services"
+                         text=_"reconcile"
+                         id="reconcile_services_btn"
+                         action={confirm text=_"Do you really want to reconcile services?"
+                                         action={postback postback={reconcile_account_services account_id=account_id} delegate="mod_kazoo"}
+                                }
+               %}
+               {% button class="btn btn-xs btn-onnet pull-right"
+                         text=_"sync"
                          id="sync_services_btn"
                          action={confirm text=_"Do you really want to sync services?"
                                          action={postback postback={sync_account_services account_id=account_id} delegate="mod_kazoo"}
                                 }
                %}
                {% button class="btn btn-xs btn-onnet pull-right"
-                         text=_"add service plan"
+                         text=_"add plan"
                          id="add_serviceplan_btn"
                          action={enable target="add_service_plan_tr_id"}
                          action={disable target="add_serviceplan_btn"}
                %}
                {% button class="btn btn-xs btn-onnet pull-right"
-                         text=_"show current services"
+                         text=_"current services"
                          action={dialog_open title=_"Current services details"
                                      template="_details.tpl"
                                      arg=m.kazoo[{kz_current_service_plans account_id=account_id}]
@@ -89,3 +97,4 @@
       {% endfor %}
     </tbody>
 </table>
+{% endwith %}

@@ -2,6 +2,9 @@
 
 {% block widget_headline %}
     {{ headline }}
+    {% wire id="rs_account_details_info" action={dialog_open title=_"Account details" template="_account_details.tpl" account_id=account_id class="iamclass" width="auto"} %}
+    <i id="rs_account_details_info" class="fa fa-info-circle zprimary pointer" style="margin-left: 0.3em;"></i>
+
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" id="child_area_refresh"
               action={update target="reseller_children_area" template="reseller_children.tpl" headline=_"Account details"}
     %}

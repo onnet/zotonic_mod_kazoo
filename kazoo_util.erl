@@ -140,6 +140,7 @@
     ,current_service_plans/1
     ,current_service_plans/2
     ,sync_service_plans/2
+    ,reconcile_service_plans/2
     ,add_service_plan/3
     ,admin_add_service_plan/3
     ,remove_service_plan_from_account/3
@@ -415,6 +416,7 @@
 -define(CURRENT_BALANCE, <<"/current_balance">>).
 -define(AVAILABLE, <<"/available">>).
 -define(SYNCHRONIZATION, <<"/synchronization">>).
+-define(RECONCILIATION, <<"/reconciliation">>).
 -define(INTERACTION, <<"/interaction">>).
 -define(LEGS, <<"/legs">>).
 -define(LEDGERS, <<"/ledgers">>).
@@ -1768,6 +1770,10 @@ current_service_plans(AccountId, Context) ->
 
 sync_service_plans(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, ?SYNCHRONIZATION/binary>>,
+    crossbar_account_request('post', API_String, [], Context).
+
+reconcile_service_plans(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, ?RECONCILIATION/binary>>,
     crossbar_account_request('post', API_String, [], Context).
 
 add_service_plan(PlanId, AccountId, Context) ->
