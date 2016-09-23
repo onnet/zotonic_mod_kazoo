@@ -1550,7 +1550,6 @@ event({submit,add_credit,_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({submit,add_debit,_,_}, Context) ->
-    lager:info("add_debit event variables: ~p", [z_context:get_q_all(Context)]),
     Amount = z_context:get_q("debit_amount", Context),
     AccountId = z_context:get_q("account_id", Context),
     Description = z_context:get_q("debit_description", Context),
@@ -1561,11 +1560,11 @@ event({submit,add_debit,_,_}, Context) ->
 event({postback,{add_chosen_service_plan,[{account_id,AccountId}]},_,_}, Context) ->
     PlanId = z_context:get_q("selected_service_plan", Context),
     _ = kazoo_util:add_service_plan(PlanId, AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{remove_service_plan_from_account,[{account_id,AccountId},{service_plan_id,PlanId}]},_,_}, Context) ->
     kazoo_util:remove_service_plan_from_account(PlanId, AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{sync_account_services,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:sync_service_plans(AccountId, Context),

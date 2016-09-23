@@ -1605,7 +1605,6 @@ kz_transactions_debit(Amount, Reason, Description, AccountId, Context) ->
                               ,{<<"reason">>, ?TO_BIN(Reason)}
                               ,{<<"description">>, ?TO_BIN(Description)}
                              ]}}]},
-    lager:info("kz_transactions_debit DataBag: ~p", [DataBag]),
     crossbar_account_request('delete', API_String, DataBag, Context).
 
 kz_get_subscription(SubscriptionId, [H|T]) ->
