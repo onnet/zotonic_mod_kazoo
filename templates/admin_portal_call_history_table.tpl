@@ -14,7 +14,6 @@
     </thead>
     <tbody>
         {% for call in calls %}
-{% print call %}
             {% include "admin_cdr_table_line.tpl" call=call %}
         {% endfor %}
     </tbody>

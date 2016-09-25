@@ -68,5 +68,3 @@
             <td style="text-align: center;"><i id="{{ #this_call_info }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i></td>
             {% wire id=#this_call_info action={ dialog_open title=_"Call details" template="_call_details.tpl" cdr_id=call["id"] width="auto" } %}
         </tr>
-
-{# print call #}
