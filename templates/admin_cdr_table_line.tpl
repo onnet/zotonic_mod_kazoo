@@ -6,7 +6,7 @@
             <td style="text-align: center;">{{ call["rate"] }}</td>
             <td style="text-align: center;">{{ call["cost"] }}</td>
             <td style="text-align: center;">
-                {% if call["media_name"] and (call["billing_seconds"] > 3) %}
+                {% if call["media_recordings"] and (call["billing_seconds"] > 3) %}
 
                          <audio id="audio_{{ #this_call }}" preload="none">
                              <source src="{{ call["z_recording_download_link"] }}" type="audio/mp3">

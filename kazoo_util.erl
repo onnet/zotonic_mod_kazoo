@@ -73,8 +73,8 @@
     ,current_account_credit/1
     ,current_account_credit/2
     ,kz_check_device_registration/2
-    ,kz_kzattachment_link/6
-    ,call_recording_attachment/5
+    ,kz_kzattachment_link/5
+    ,call_recording_attachment/4
     ,kz_get_device_registration_details/2
     ,azrates/1
     ,azrates_refresh/1
@@ -1227,25 +1227,22 @@ kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
-kz_kzattachment_link(CrdId, MediaName, DocType, Context) ->
+kz_kzattachment_link(RecordingId, DocType, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
-    kz_kzattachment_link(AccountId, CrdId, MediaName, AuthToken, DocType, Context).
+    kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context).
 
-kz_kzattachment_link(AccountId, CdrId, MediaName, AuthToken, DocType, Context) ->
+kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context) ->
     API_String = <<"/kzattachment?"
                    ,"account_id=", ?TO_BIN(AccountId)/binary
-                   ,"&cdr_id=", ?TO_BIN(CdrId)/binary
-                   ,"&media_name=", ?TO_BIN(MediaName)/binary
+                   ,"&recording_id=", ?TO_BIN(RecordingId)/binary
                    ,"&auth_token=", ?TO_BIN(AuthToken)/binary
                    ,"&doc_type=", ?TO_BIN(DocType)/binary
                  >>,
     <<"https://", ?TO_BIN(z_dispatcher:hostname(Context))/binary, API_String/binary>>. 
 
-call_recording_attachment(AccountId, CdrId, MediaName, AuthToken, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary,?RECORDINGS/binary,"/"
-                  ,?TO_BIN(CdrId)/binary,"/",?TO_BIN(MediaName)/binary
-                 >>,
+call_recording_attachment(AccountId, RecordingId, AuthToken, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary,?RECORDINGS/binary,"/", ?TO_BIN(RecordingId)/binary>>,
     crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [{"Accept", "audio/mpeg"}], [], Context).
 
 kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
@@ -1264,7 +1261,7 @@ kz_cdr_element_reduce({CdrElement} = _Element, Timezone, Context) ->
                     ({<<"billing_seconds">>,_}) -> true;
                     ({<<"id">>,_}) -> true;
                     ({<<"call_id">>,_}) -> true;
-                    ({<<"media_name">>,_}) -> true;
+                    ({<<"media_recordings">>,_}) -> true;
                     ({<<"rate_name">>,_}) -> true;
                     ({<<"rate">>,_}) -> true;
                     ({<<"cost">>,_}) -> true;
@@ -1272,8 +1269,7 @@ kz_cdr_element_reduce({CdrElement} = _Element, Timezone, Context) ->
     T = z_convert:to_integer(proplists:get_value(<<"timestamp">>,CdrElement)),
     ?JSON_WRAPPER(lists:filter(FilterFun, CdrElement)
       ++[{<<"full_element">>,  CdrElement}]
-      ++[{<<"z_recording_download_link">>, kz_kzattachment_link(proplists:get_value(<<"id">>, CdrElement)
-                                                                ,proplists:get_value(<<"media_name">>, CdrElement)
+      ++[{<<"z_recording_download_link">>, kz_kzattachment_link(proplists:get_value(<<"media_recordings">>, CdrElement)
                                                                 ,"call_recording"
                                                                 ,Context)
         }]
