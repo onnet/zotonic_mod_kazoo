@@ -4,7 +4,9 @@
             <th class="td-center">{_ Date _}</th>
             <th class="td-center">{_ Description _}</th>
             <th class="td-center">{_ Sum _}</th>
-            <th class="td-center"></th>
+            {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
+              <th class="td-center"></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -24,16 +26,18 @@
                     <td class="td-center">
                       {{ m.config.mod_kazoo.local_currency_sign.value }}{{ transaction["amount"]|format_price:[".",""] }}
                     </td>
-                    <td class="td-center">
-                      <i id="info_{{ transaction["id"] }}" class="fa fa-info-circle zprimary pointer" title="Details"></i>
-                    </td>
-                    {% wire id="info_"++transaction["id"]
-                            action={dialog_open title=_"Daily fee details" ++ " " ++ transaction["id"]
-                                        template="_details.tpl"
-                                        arg=m.onbill[{transaction account_id=account_id transaction_id=transaction["id"]}]
-                                        width="auto"
-                            }
-                    %}
+                    {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
+                      <td class="td-center">
+                        <i id="info_{{ transaction["id"] }}" class="fa fa-info-circle zprimary pointer" title="Details"></i>
+                      </td>
+                      {% wire id="info_"++transaction["id"]
+                              action={dialog_open title=_"Daily fee details" ++ " " ++ transaction["id"]
+                                          template="_details.tpl"
+                                          arg=m.onbill[{transaction account_id=account_id transaction_id=transaction["id"]}]
+                                          width="auto"
+                              }
+                      %}
+                   {% endif %}
                 </tr>
             {% endfor %}
     </tbody>
