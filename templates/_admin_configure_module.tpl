@@ -33,6 +33,14 @@
 
 <div class="form-group">
   <label>
+    {_ Default country _}:
+    <input type="text" name="default_country" id="default_country" value="{{ m.config.mod_kazoo.sdefault_country.value }}" placeholder="RU" />
+  </label>
+  {% wire id="default_country" type="blur" action={config_toggle module="mod_kazoo" key="default_country"} %}
+</div>
+
+<div class="form-group">
+  <label>
     {_ Sender name _}:
     <input type="text" name="sender_name" id="sender_name" value="{{ m.config.mod_kazoo.sender_name.value }}" placeholder="OnNet Innovations Limited" />
   </label>

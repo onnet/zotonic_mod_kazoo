@@ -381,6 +381,7 @@
 -define(CREDIT, <<"/credit">>).
 -define(DEBIT, <<"/debit">>).
 -define(CARDS, <<"/cards">>).
+-define(COUNTRY, <<"country=">>).
 -define(PREFIX, <<"prefix=">>).
 -define(QUANTITY, <<"quantity=">>).
 -define(COLLECTION, <<"/collection">>).
@@ -1681,7 +1682,16 @@ set_accounts_address(Line1, Line2, Line3, Context) ->
     kz_set_acc_doc([<<"account_address">>,<<"line3">>], Line3, Context).
     
 lookup_numbers(AreaCode, Context) ->
-    API_String = <<?V2/binary, ?PHONE_NUMBERS/binary, <<"?">>/binary, ?PREFIX/binary, AreaCode/binary, <<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    lookup_numbers(AreaCode, AccountId, Context).
+
+lookup_numbers(AreaCode, AccountId, Context) ->
+    Country = case m_config:get_value('mod_kazoo', 'default_country', Context) of
+                  'undefined' -> <<"RU">>;
+                  Val -> Val
+              end,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, <<"?">>/binary
+                  ,?COUNTRY/binary, Country/binary, <<"&">>/binary,?PREFIX/binary, AreaCode/binary, <<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 rs_add_number(Num, AccountId, Context) ->

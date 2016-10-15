@@ -484,7 +484,10 @@ is_json_term({'json', IOList}) when is_list(IOList) -> 'true';
 is_json_term(MaybeJObj) ->
     is_json_object(MaybeJObj).
 
+count_activation_charge('undefined') ->
+    0.0;
 count_activation_charge(InitialCharge) ->
+  lager:info("IAM count_activation_charge InitialCharge: ~p",[InitialCharge]),
     (z_convert:to_float(InitialCharge)+5.00)*1.2.
 
 set_session_jobj(SessionKey, K, V, Default_JObj, Context) ->
