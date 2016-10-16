@@ -3,8 +3,6 @@
             <td style="text-align: center;">{{ call["calling_from"] }}</td>
             <td style="text-align: center;">{{ call["dialed_number"] }}</td>
             <td style="text-align: center;">{{ call["duration_seconds"] }}/{{ call["billing_seconds"] }}</td>
-            <td style="text-align: center;">{{ call["rate"] }}</td>
-            <td style="text-align: center;">{{ call["cost"] }}</td>
             <td style="text-align: center;">
                 {% if call["media_recordings"] and (call["billing_seconds"] > 3) %}
 
