@@ -304,10 +304,14 @@ event({postback,{trigger_innoui_widget,[{arg,WidgetId}]},_,_}, Context) ->
 event({postback,invoiceme,TriggerId,_},Context) ->
   try z_convert:to_float(z_context:get_q("invoice_amount",Context)) of
       'undefined' ->
-          Context1 = z_render:update("onnet_widget_make_invoice_tpl", z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context), Context),
+          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
+                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
+                                    ,Context),
           z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1);
       InvoiceAmount when InvoiceAmount =< 0 ->
-          Context1 = z_render:update("onnet_widget_make_invoice_tpl", z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context), Context),
+          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
+                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
+                                    ,Context),
           z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1);
       InvoiceAmount when InvoiceAmount > 0 ->
          case TriggerId of
@@ -317,7 +321,8 @@ event({postback,invoiceme,TriggerId,_},Context) ->
                          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
                                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
                                                    ,Context),
-                         z_render:growl(?__("Invoice successfully sent to ", Context1)++z_convert:to_list(kazoo_util:kz_user_doc_field(<<"email">>, Context1)), Context1);
+                         z_render:growl(?__("Invoice successfully sent to ", Context1)++z_convert:to_list(kazoo_util:kz_user_doc_field(<<"email">>, Context1))
+                                       ,Context1);
                      _ -> 
                          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
                                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
