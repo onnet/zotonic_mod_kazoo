@@ -9,7 +9,7 @@
 <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
 <div class="pl-10 pr-10 col-md-6">
     {# Account status #}
-    {% include "onnet_widget_finance.tpl" headline=_"Account" %}
+    {% include "onbill_widget_finance.tpl" headline=_"Account" %}
 
     {# Make invoce #}
     <span id="onnet_widget_make_invoice_tpl">
