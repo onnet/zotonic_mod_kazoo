@@ -133,6 +133,7 @@
     ,deallocate_number/3
     ,service_plan/2
     ,service_plan/3
+    ,service_plan/5
     ,service_plans/1
     ,service_plans/2
     ,available_service_plans/1
@@ -1747,8 +1748,11 @@ service_plan(PlanId, Context) ->
     service_plan(PlanId, AccountId, Context).
 
 service_plan(PlanId, AccountId, Context) ->
+    service_plan('get', PlanId, AccountId, [], Context).
+
+service_plan(Verb, PlanId, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    crossbar_account_request(Verb, API_String, DataBag, Context).
 
 service_plans(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
