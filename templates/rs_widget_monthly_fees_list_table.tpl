@@ -32,8 +32,9 @@
                       </td>
                       {% wire id="info_"++transaction["id"]
                               action={dialog_open title=_"Daily fee details" ++ " " ++ transaction["id"]
-                                          template="_details.tpl"
-                                          arg=m.onbill[{transaction account_id=account_id transaction_id=transaction["id"]}]
+                                          template="_onbill_transaction_details.tpl"
+                                          transaction_id=transaction["id"]
+                                          account_id=account_id
                                           width="auto"
                               }
                       %}
