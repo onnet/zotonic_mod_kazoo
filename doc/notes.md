@@ -17,6 +17,50 @@ kerl install r18.2 /usr/local/erlang
 vi .bashrc
 . /usr/local/erlang/activate
 ```
+- Braintree
+```
+easy_install pip
+pip install requests[security]
+pip install urllib3
+pip install braintree
+```
+- postgresql-setup initdb
+- vi /var/lib/pgsql/data/pg_hba.conf
+```
+# TYPE DATABASE USER CIDR-ADDRESS METHOD
+(add lines)
+
+local all zotonic trust
+host all zotonic 127.0.0.1/32 trust
+host all zotonic 94.125.1.229/32 trust
+host all zotonic ::1/128 trust
+```
+- service postgresql restart
+- Install inotify-tools
+```
+cd /usr/local/src/
+ls
+wget http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
+tar xvfpz inotify-tools-3.14.tar.gz 
+cd inotify-tools-3.14
+./configure 
+make
+make install
+```
+- Install Zotonic
+```
+useradd zotonic 
+passwd zotonic 
+su zotonic 
+cd /home/zotonic/ 
+
+git clone git://github.com/zotonic/zotonic.git 
+cd zotonic 
+git checkout release-0.13.6 
+make 
+exit
+```
+
 
 
 
