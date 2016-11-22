@@ -64,7 +64,20 @@ vi /home/zotonic/zotonic/src/support/z_utils.erl
 212: _M:_E -> ok
 ===
 make 
+vi .bash_profile:
+======
+PATH=$PATH:$HOME/zotonic/bin
+export PATH
+=====
 exit
+
+echo "sleep 10" >> /etc/rc.local 
+echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
+chmod a+x /etc/rc.local
+
+echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc 
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
 ```
 - echo "HOST_IP_ADDR    SiteName" >> /etc/hosts
 - Postgres Zotonic DB tweaks
@@ -90,22 +103,7 @@ vi /home/zotonic/zotonic/user/sites/yoursite/config
 =====
 Change SiteName, Port (8000 --> 80) and DB PASSWORD 
 ======
-
 make 
-
-echo "sleep 10" >> /etc/rc.local 
-echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
-chmod a+x /etc/rc.local
-
-vi .bash_profile:
-======
-PATH=$PATH:$HOME/zotonic/bin
-export PATH
-=====
-
-echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc 
-setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
-setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
 ```
 - Force SSL (set mod_ssl vars)
 ```
