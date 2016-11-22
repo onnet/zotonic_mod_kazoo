@@ -38,8 +38,8 @@ mod_kazoo       contacts_widget_opened  true
 mod_kazoo       user_settings_widget_opened     true
 mod_kazoo       send_fax_widget_opened  true
 ```
-psql
-zotonic=> \copy config (module,key,value) from '~/mod_kazoo_initial_keys.csv';
+- psql
+- zotonic=> \copy config (module,key,value) from '~/mod_kazoo_initial_keys.csv';
 
 
 ### Update module
