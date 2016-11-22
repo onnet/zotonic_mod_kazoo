@@ -1,3 +1,23 @@
+# CentOS 7 Zotonic + mod_kazoo instalation notes
+
+## Zotonic installation
+
+- yum install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel
+- yum install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
+- Install Erlang
+```
+curl -O https://raw.githubusercontent.com/yrashk/kerl/master/kerl
+chmod a+x kerl
+mv kerl /usr/bin
+kerl list releases
+kerl build 18.2 r18.2
+kerl install r18.2 /usr/local/erlang
+. /usr/local/erlang/activate
+
+vi .bashrc
+. /usr/local/erlang/activate
+```
+
 
 
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
