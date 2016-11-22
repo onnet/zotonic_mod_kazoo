@@ -131,7 +131,7 @@ cd ~/zotonic/user/modules/
 git clone https://github.com/onnet/mod_kazoo.git
 zotonic shell
 > z:m().
-> z_module_manager:activate(mod_modulename, z:c(yoursitename)).
+> z_module_manager:activate(mod_kazoo, z:c(phiz)).
 ```
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
 
