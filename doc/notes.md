@@ -1,4 +1,4 @@
-# CentOS 7 Zotonic + mod_kazoo instalation notes
+# CentOS 7 Zotonic + mod_kazoo installation notes
 
 ## Zotonic installation
 
