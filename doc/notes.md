@@ -119,6 +119,15 @@ cp /etc/letsencrypt/live/tel4biz.cyberphone.su/cert.pem /home/zotonic/zotonic/us
 openssl rsa -in /etc/letsencrypt/live/tel4biz.cyberphone.su/privkey.pem -out /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.pem
 ```
 
+## Install mod_kazoo
+```
+su zotonic
+cd ~/zotonic/user/modules/
+git clone https://github.com/onnet/mod_kazoo.git
+zotonic shell
+> z:m().
+> z_module_manager:activate(mod_modulename, z:c(yoursitename)).
+```
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
 
 vi mod_kazoo_initial_keys.csv
