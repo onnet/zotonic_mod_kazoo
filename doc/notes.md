@@ -57,6 +57,10 @@ cd /home/zotonic/
 git clone git://github.com/zotonic/zotonic.git 
 cd zotonic 
 git checkout release-0.13.6 
+vi /home/zotonic/zotonic/src/support/z_utils.erl
+===
+212: _M:_E -> ok
+===
 make 
 exit
 ```
@@ -101,6 +105,12 @@ systemctl enable postgresql
 echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc 
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
+```
+- Force SSL (set mod_ssl vars)
+```
+mod_ssl    listen_port    443 
+mod_ssl    is_ssl    true 
+mod_ssl    is_secure    true 
 ```
 
 
