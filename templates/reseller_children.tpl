@@ -26,7 +26,7 @@
 
 
 {% if account_id %}
-  <div class="col-xs-2 {% if not m.modules.info.mod_onbill.enabled %}col-xs-offset-3{% endif %}">
+  <div class="col-xs-2">
     {% wire id="user_mask_selector" type="change" action={postback postback={rs_account_mask account_id=account_id} delegate="mod_kazoo"} %}
     <select id="user_mask_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" title="{_ Mask _}"  data-live-search="true">
       <option value="userless_mask">{_ Without user _}</option>
