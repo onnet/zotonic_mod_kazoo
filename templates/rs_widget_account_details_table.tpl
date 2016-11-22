@@ -83,8 +83,8 @@
                                                class="arrowpad fa fa-arrow-circle-down"></i>
               </span>
                {_ Details _}:
-               {% button class="btn btn-xs btn-onnet pull-right" text=_"call restrictions" id="callrestrictionsbtn"
-                         action={ dialog_open title=_"Account level call restrictions" template="admin_portal_account_restrictions.tpl" class="iamclass" account_id=account_id }
+               {% button class="btn btn-xs btn-onnet pull-right" text=_"restrtictions"
+                         action={ dialog_open title=_"Restrictions setup" template="_edit_account_access_restrictions.tpl" account_id=account_id}
                %}
             </th>
         </tr>

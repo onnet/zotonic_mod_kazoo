@@ -599,6 +599,24 @@ m_find_value(kz_account_access_lists, _M, Context) ->
 m_find_value({kz_device_access_lists,[{device_id, DeviceId}]}, _M, Context) ->
     kazoo_util:kz_device_access_lists('get', DeviceId, [], Context);
 
+m_find_value(limits, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({limits,[{account_id, AccountId}]}, _M, Context);
+m_find_value({limits,[{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_limits('get', AccountId, [], Context);
+
+m_find_value(allotments, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({allotments,[{account_id, AccountId}]}, _M, Context);
+m_find_value({allotments,[{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_allotments('get', AccountId, [], Context);
+
+m_find_value(allotments_consumed, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({allotments_consumed,[{account_id, AccountId}]}, _M, Context);
+m_find_value({allotments_consumed,[{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:kz_allotments_consumed('get', AccountId, [], Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

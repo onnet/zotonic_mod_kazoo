@@ -333,6 +333,9 @@
     ,debit_transactions/1
     ,kz_account_access_lists/3
     ,kz_device_access_lists/4
+    ,kz_limits/4
+    ,kz_allotments/4
+    ,kz_allotments_consumed/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -423,6 +426,9 @@
 -define(LEGS, <<"/legs">>).
 -define(LEDGERS, <<"/ledgers">>).
 -define(ACCESS_LISTS, <<"/access_lists">>).
+-define(LIMITS, <<"/limits">>).
+-define(ALLOTMENTS, <<"/allotments">>).
+-define(CONSUMED, <<"/consumed">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).
@@ -1720,14 +1726,26 @@ purchase_number(Number, Context) ->
 process_purchase_number(Number, Context) ->
     case purchase_number(Number, Context) of
         <<>> ->
-            Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
+            Context1 = z_render:update("onnet_allocated_numbers_tpl"
+                                      ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context)
+                                      ,Context),
+            Context2 = z_render:update("onnet_widget_monthly_fees_tpl"
+                                      ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1)
+                                      ,Context1),
             z_render:growl_error(?__("Something wrong happened.", Context2), Context2);
         _ ->
-            may_be_add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context), z_context:get_session('kazoo_account_id', Context), Context),
-            Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
-            Context3 = z_render:update("onnet_widget_order_additional_number_tpl" ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context2),Context2),
+            may_be_add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context)
+                                   ,z_context:get_session('kazoo_account_id', Context)
+                                   ,Context),
+            Context1 = z_render:update("onnet_allocated_numbers_tpl"
+                                      ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context)
+                                      ,Context),
+            Context2 = z_render:update("onnet_widget_monthly_fees_tpl"
+                                      ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1)
+                                      ,Context1),
+            Context3 = z_render:update("onnet_widget_order_additional_number_tpl"
+                                      ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context2)
+                                      ,Context2),
             z_render:growl(?__("Number ", Context3)++z_convert:to_list(Number)++?__(" successfully allocated.", Context3), Context3)
     end.
 
@@ -3987,4 +4005,16 @@ kz_account_access_lists(Verb, DataBag, Context) ->
 
 kz_device_access_lists(Verb, DeviceId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?DEVICES(DeviceId)/binary, ?ACCESS_LISTS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_limits(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?LIMITS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_allotments(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ALLOTMENTS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+kz_allotments_consumed(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ALLOTMENTS/binary, ?CONSUMED/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).

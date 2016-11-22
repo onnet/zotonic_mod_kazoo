@@ -75,6 +75,9 @@
   <span id="admin_portal_lists_tpl">
         {% include "admin_portal_lists.tpl" headline=_"Lists" %}
   </span>
+
+{% print m.kazoo.limits %}
+
 </div>
 
 {% endblock %}
