@@ -1,4 +1,6 @@
-### Upload initial keys to Zotonic DB
+
+
+### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
 
 vi mod_kazoo_initial_keys.csv
 ```
