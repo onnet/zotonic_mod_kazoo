@@ -36,6 +36,7 @@ host all zotonic 94.125.1.229/32 trust
 host all zotonic ::1/128 trust
 ```
 - service postgresql restart
+- systemctl enable postgresql
 - Install inotify-tools
 ```
 cd /usr/local/src/
@@ -102,7 +103,6 @@ PATH=$PATH:$HOME/zotonic/bin
 export PATH
 =====
 
-systemctl enable postgresql 
 echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc 
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
