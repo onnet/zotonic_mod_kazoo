@@ -112,7 +112,13 @@ mod_ssl    listen_port    443
 mod_ssl    is_ssl    true 
 mod_ssl    is_secure    true 
 ```
-
+- Letsencrypt SSL (should be done as root)
+```
+certbot certonly --standalone -d your_domain_name.com (443 port should be opened for check from letsencrypt side)
+cp /etc/letsencrypt/live/tel4biz.cyberphone.su/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
+cp /etc/letsencrypt/live/tel4biz.cyberphone.su/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
+openssl rsa -in /etc/letsencrypt/live/tel4biz.cyberphone.su/privkey.pem -out /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.pem
+```
 
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
 
