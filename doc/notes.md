@@ -60,8 +60,48 @@ git checkout release-0.13.6
 make 
 exit
 ```
+- echo "HOST_IP_ADDR    SiteName" >> /etc/hosts
+- Postgres Zotonic DB tweaks
+```
+su postgres 
+psql 
+CREATE USER zotonic WITH PASSWORD 'zotonic'; 
+ALTER USER zotonic CREATEDB; 
 
+CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8'; 
+GRANT ALL ON DATABASE zotonic TO zotonic; 
+\c zotonic 
+CREATE LANGUAGE "plpgsql"; 
+exit
+\q
+exit
+```
+- Add WebSite
+```
+su zotonic 
+/home/zotonic/zotonic/bin/zotonic addsite -s blog phiz 
+vi /home/zotonic/zotonic/user/sites/yoursite/config 
+=====
+Change SiteName, Port (8000 --> 80) and DB PASSWORD 
+======
 
+make 
+
+echo "sleep 10" >> /etc/rc.local 
+echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
+chmod a+x /etc/rc.local
+
+vi .bash_profile:
+======
+PATH=$PATH:$HOME/zotonic/bin
+export PATH
+=====
+
+systemctl enable postgresql 
+echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc 
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
+```
 
 
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
