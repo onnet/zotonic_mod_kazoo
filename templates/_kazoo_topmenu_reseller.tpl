@@ -5,7 +5,6 @@
               {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) and m.kazoo.is_kazoo_account_admin %}
                 <li><a href="/reseller_portal">{_ Accounts _}</a>
                 <li><a href="/reseller_settings">{_ Reseller settings _}</a>
-                <li><a href="/reseller_system_monitor">{_ System monitor _}</a>
               {% endif %}
             </ul>
          </li>
