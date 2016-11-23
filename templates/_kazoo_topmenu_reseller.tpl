@@ -1,9 +1,9 @@
        <ul class="nav navbar-nav">
          <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ Reseller _} <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ Reseller portal _} <b class="caret"></b></a>
             <ul class="dropdown-menu">
               {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) and m.kazoo.is_kazoo_account_admin %}
-                <li><a href="/reseller_portal">{_ Reseller portal _}</a>
+                <li><a href="/reseller_portal">{_ Accounts _}</a>
                 <li><a href="/reseller_settings">{_ Reseller settings _}</a>
                 <li><a href="/reseller_system_monitor">{_ System monitor _}</a>
               {% endif %}
