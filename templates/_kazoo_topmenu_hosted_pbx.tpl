@@ -1,6 +1,6 @@
        <ul class="nav navbar-nav">
          <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ HOSTED PBX _} <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_ Hosted PBX _} <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 {% if m.session.kazoo_owner_id != "userless_mask" %}
                   <li><a href="/user_portal">{_ User Portal _}</a>
