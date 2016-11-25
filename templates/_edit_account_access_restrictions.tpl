@@ -41,5 +41,4 @@
   <div id="pannel_div" class="1tab-content">
       {% include "_add_webaccess_list.tpl" %}
   </div>
-{% print account_id %}
 </div>

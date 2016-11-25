@@ -1,4 +1,3 @@
-Hi
 
 {% print account_id %}
 {% print m.kazoo.allotments %}
