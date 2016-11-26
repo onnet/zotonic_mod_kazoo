@@ -1240,6 +1240,8 @@ kz_kzattachment_link(RecordingId, DocType, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
     kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context).
 
+kz_kzattachment_link(AccountId, [_|_] = RecordingIds, AuthToken, DocType, Context) ->
+    [kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context) || RecordingId <- RecordingIds];
 kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context) ->
     API_String = <<"/kzattachment?"
                    ,"account_id=", ?TO_BIN(AccountId)/binary

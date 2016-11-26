@@ -7,7 +7,7 @@
                 {% if call["media_recordings"] and (call["billing_seconds"] > 3) %}
 
                          <audio id="audio_{{ #this_call }}" preload="none">
-                             <source src="{{ call["z_recording_download_link"] }}" type="audio/mp3">
+                             <source src="{{ call["z_recording_download_link"][1] }}" type="audio/mp3">
                          </audio>
                          <a id="play_{{ #this_call }}" onclick='$("#audio_{{ #this_call }}").trigger("play");
                                                                  $("#play_{{ #this_call }}").toggle();
