@@ -47,6 +47,8 @@ sup kapps_config set_boolean number_manager unauthorized_numbers_lookup true
 sup kapps_config set_boolean number_manager should_age true
 
 sup kapps_config set_boolean media store_recordings true
+sup kapps_config set_integer media record_min_sec 3
+sup kapps_config set_integer media max_recording_time_limit 7200
 
 sup kapps_config set_boolean fax ensure_valid_caller_id true
 
