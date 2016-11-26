@@ -25,7 +25,7 @@
                                                                           $("#pause_{{ #this_call }}").hide();'>
                             <i class="fa fa-stop" title="{_ Stop _}"></i>
                          </a>
-                         <a href="{{ call["z_recording_download_link"] }}" download>
+                         <a href="{{ call["z_recording_download_link"][1] }}" download>
                             <i style="cursor: pointer;" class="fa fa-download" title="{_ Download _}"></i>
                          </a>
                 {% else %}-{% endif %}
