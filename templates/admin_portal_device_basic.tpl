@@ -5,7 +5,15 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Device Nickname _}</label></div>
         <div id="name" class="col-xs-5">
-            {% wire id="edit_name" type="click" action={ update target="name" template="_edit_field.tpl" type="device" doc_id=device_id field_name=["name"] } %}
+            {% wire id="edit_name"
+                    type="click"
+                    action={update target="name"
+                                   template="_edit_field.tpl"
+                                   type="device"
+                                   doc_id=device_id
+                                   field_name=["name"]
+                           }
+            %}
             <span>
                 {{ device_doc["name"] }}
                 <i id="edit_name" class="fa fa-edit pointer" title="Edit field"></i>
@@ -22,9 +30,16 @@
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Assign To _}</label></div>
         <div id="owner_id" class="col-xs-5">
-            {% wire id="edit_owner_id" type="click" action={ update target="owner_id" 
-                                                                    template="_edit_field_select.tpl" 
-                                                                    type="device" doc_id=device_id field_name="owner_id" options=m.kazoo.kz_list_account_users_short } %}
+            {% wire id="edit_owner_id"
+                    type="click"
+                    action={update target="owner_id" 
+                                   template="_edit_field_select.tpl" 
+                                   type="device"
+                                   doc_id=device_id
+                                   field_name="owner_id"
+                                   options=m.kazoo.kz_list_account_users_short
+                           }
+            %}
             <span>
                 {{ m.kazoo[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="first_name"}] }} {{ m.kazoo[{kz_doc_field type="user" doc_id=device_doc["owner_id"] field="last_name"}] }}
                 <i id="edit_owner_id" class="fa fa-edit pointer" title="Edit field"></i>

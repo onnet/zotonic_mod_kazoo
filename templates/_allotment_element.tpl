@@ -24,27 +24,39 @@
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Amount _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_amount" class="col-xs-5">{{ allotment[2][1]["amount"] }}</div>
+        <div id="allotment_{{ allotment[1] }}_amount" class="col-xs-5">{{ allotment[2][1]["amount"] }}
+        <i id="edit_{{ allotment[1] }}_amount" class="fa fa-edit pointer" title="Edit amount"></i>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Cycle _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_cycle" class="col-xs-5">{{ allotment[2][1]["cycle"] }}</div>
+        <div id="allotment_{{ allotment[1] }}_cycle" class="col-xs-5">{{ allotment[2][1]["cycle"] }}
+        <i id="edit_{{ allotment[1] }}_cycle" class="fa fa-edit pointer" title="Edit cycle"></i>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Increment _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_increment" class="col-xs-5">{{ allotment[2][1]["increment"] }}</div>
+        <div id="allotment_{{ allotment[1] }}_increment" class="col-xs-5">{{ allotment[2][1]["increment"] }}
+        <i id="edit_{{ allotment[1] }}_increment" class="fa fa-edit pointer" title="Edit increment"></i>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Minimum _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_minimum" class="col-xs-5">{{ allotment[2][1]["minimum"] }}</div>
+        <div id="allotment_{{ allotment[1] }}_minimum" class="col-xs-5">{{ allotment[2][1]["minimum"] }}
+        <i id="edit_{{ allotment[1] }}_minimum" class="fa fa-edit pointer" title="Edit minimum"></i>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ No consume time _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_no_consume_time" class="col-xs-5">{{ allotment[2][1]["no_consume_time"] }}</div>
+        <div id="allotment_{{ allotment[1] }}_no_consume_time" class="col-xs-5">{{ allotment[2][1]["no_consume_time"] }}
+        <i id="edit_{{ allotment[1] }}_no_consume_time" class="fa fa-edit pointer" title="Edit no consume time"></i>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Group consume _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_group_consume" class="col-xs-5">{{ allotment[2][1]["group_consume"] }}</div>
+        <div id="allotment_{{ allotment[1] }}_group_consume" class="col-xs-5">{{ allotment[2][1]["group_consume"] }}
+        <i id="edit_{{ allotment[1] }}_group_consume" class="fa fa-edit pointer" title="Edit group consume"></i>
+        </div>
     </div>
   </div>
 </div>
