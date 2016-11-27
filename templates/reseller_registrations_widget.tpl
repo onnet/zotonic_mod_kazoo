@@ -13,7 +13,7 @@
     <i id="arrow_down_{{ #id }}" style="{% if not m.kazoo[{ui_element_opened element="reseller_registrations_widget_opened"}] %}display: none;{% endif %}" 
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
-  {{ headline }}
+  {{ headline }}: {{ m.kazoo.get_reseller_registrations_count }}
   {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh list" action={emit signal={reseller_registrations_widget_tpl} } %}
 
 {% endblock %}

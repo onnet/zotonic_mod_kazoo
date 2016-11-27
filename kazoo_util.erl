@@ -261,7 +261,9 @@
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
     ,kz_get_registrations_by_accountid/2
+    ,kz_get_registrations_count_by_accountid/2
     ,kz_get_reseller_registrations/2
+    ,kz_get_reseller_registrations_count/2
     ,list_account_trunks/1
     ,list_trunks_realm/2
     ,kz_registration_details_by_username/2
@@ -351,6 +353,7 @@
 -define(PHONE_NUMBERS, <<"/phone_numbers">>).
 -define(IDENTIFY, <<"/identify">>).
 -define(REGISTRATIONS, <<"/registrations">>).
+-define(COUNT, <<"/count">>).
 -define(FAXES, <<"/faxes">>).
 -define(FAXES_OUTGOING, <<"/faxes/outgoing/">>).
 -define(FAXES_INCOMING, <<"/faxes/incoming/">>).
@@ -1367,7 +1370,11 @@ kz_check_device_registration(DeviceId, Context) ->
     lists:member({[{<<"device_id">>,?TO_BIN(DeviceId)},{<<"registered">>,true}]}, DevicesStatus).
 
 kz_get_registrations_by_accountid(AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary>>, 
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary>>, 
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_get_registrations_count_by_accountid(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary, ?COUNT/binary>>, 
     crossbar_account_request('get', API_String, [], Context).
 
 kz_get_reseller_registrations(AccountId, Context) ->
@@ -1375,7 +1382,16 @@ kz_get_reseller_registrations(AccountId, Context) ->
                      'true' ->
                          <<?V2/binary, ?REGISTRATIONS/binary>>;
                      'false' ->
-                         <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary>> 
+                         <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary>> 
+                 end,
+    crossbar_account_request('get', API_String, [], Context).
+
+kz_get_reseller_registrations_count(AccountId, Context) ->
+    API_String = case kz_current_context_superadmin(Context) of
+                     'true' ->
+                         <<?V2/binary, ?REGISTRATIONS/binary, ?COUNT/binary>>;
+                     'false' ->
+                         <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?REGISTRATIONS/binary, ?COUNT/binary>> 
                  end,
     crossbar_account_request('get', API_String, [], Context).
 

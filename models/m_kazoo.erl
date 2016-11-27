@@ -476,6 +476,10 @@ m_find_value(get_reseller_registrations, _M, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     kazoo_util:kz_get_reseller_registrations(AccountId, Context);
 
+m_find_value(get_reseller_registrations_count, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    modkazoo_util:get_value(<<"count">>, kazoo_util:kz_get_reseller_registrations_count(AccountId, Context));
+
 m_find_value(kz_list_account_trunks, _M, Context) ->
     kazoo_util:list_account_trunks(Context);
 
