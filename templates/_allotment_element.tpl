@@ -15,7 +15,7 @@
         {% wire id="confirm_delete_allotment_"++allotment[1]
                 action={postback postback={delete_allotment_element account_id=account_id allotment_element_name=allotment[1]} delegate="mod_kazoo"}
         %}
-        <div class="col-xs-4">
+        <div class="col-xs-5">
           <i id="delete_allotment_{{ allotment[1] }}" class="fa fa-remove pointer" title="Remove"></i>
           <i id="cancel_delete_allotment_{{ allotment[1] }}" style="display: none;" class="fa fa-reply pointer" title="Cancel"></i>
           <i id="confirm_delete_allotment_{{ allotment[1] }}" style="display: none;" class="fa fa-trash-o pointer" title="Confirm delete"></i>
