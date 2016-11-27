@@ -13,7 +13,7 @@
     <i id="arrow_down_{{ #id }}" style="{% if not m.kazoo[{ui_element_opened element="rs_account_registrations_widget_opened"}] %}display: none;{% endif %}" 
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
-  {{ headline }}
+  {{ headline }}: {{ m.kazoo[{get_registrations_count_by_accountid account_id=account_id}] }}
   {% button class="btn btn-xs btn-onnet pull-right" text=_"current calls" id="currentcallsbtn"
             action={ dialog_open title=_"Current account calls" template="admin_portal_current_calls_table.tpl" class="iamclass" account_id=account_id width="auto" }
   %}
