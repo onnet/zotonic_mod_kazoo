@@ -338,6 +338,7 @@
     ,kz_limits/4
     ,kz_allotments/4
     ,kz_allotments_consumed/4
+    ,allotment_element_delete/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4036,3 +4037,10 @@ kz_allotments(Verb, AccountId, DataBag, Context) ->
 kz_allotments_consumed(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ALLOTMENTS/binary, ?CONSUMED/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+allotment_element_delete(AllotmentElementName, AccountId, Context) ->
+    CurrAllotments = kz_allotments('get', AccountId, [], Context),
+    NewAllotments = modkazoo_util:delete_key(AllotmentElementName, CurrAllotments),
+    kz_allotments('post', AccountId, ?MK_DATABAG(NewAllotments), Context),
+  lager:info("IAM allotment_element_delete: ~p",[CurrAllotments]),
+  lager:info("IAM allotment_element_delete: ~p",[NewAllotments]).

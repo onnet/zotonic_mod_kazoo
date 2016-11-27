@@ -1616,6 +1616,13 @@ event({postback,{cccp_field_toggler,[{doc_id,DocId},{field_name,FieldName},{sign
     mod_signal:emit({z_convert:to_atom(SignalId), []}, Context),
     Context;
 
+event({postback,{delete_allotment_element,[{account_id,'undefined'},{allotment_element_name,AllotmentElementName}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({postback,{delete_allotment_element,[{account_id,AccountId},{allotment_element_name,AllotmentElementName}]},<<>>,<<>>}, Context);
+event({postback,{delete_allotment_element,[{account_id,AccountId},{allotment_element_name,AllotmentElementName}]},_,_}, Context) ->
+    _ = kazoo_util:allotment_element_delete(AllotmentElementName, AccountId, Context),
+    z_render:update("restrictions_pannel_div",z_template:render("_allotments.tpl",[{account_id,AccountId}],Context),Context);
+
 event({drag,_,_},Context) ->
     Context;
 
