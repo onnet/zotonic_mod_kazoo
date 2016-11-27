@@ -612,13 +612,13 @@ m_find_value(limits, _M, Context) ->
 m_find_value({limits,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_limits('get', AccountId, [], Context);
 
-m_find_value(allotments, _M, Context) ->
+m_find_value({allotments,[{account_id, 'undefined'}]}, _M, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     m_find_value({allotments,[{account_id, AccountId}]}, _M, Context);
 m_find_value({allotments,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_allotments('get', AccountId, [], Context);
 
-m_find_value(allotments_consumed, _M, Context) ->
+m_find_value({allotments_consumed,[{account_id, 'undefined'}]}, _M, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     m_find_value({allotments_consumed,[{account_id, AccountId}]}, _M, Context);
 m_find_value({allotments_consumed,[{account_id, AccountId}]}, _M, Context) ->

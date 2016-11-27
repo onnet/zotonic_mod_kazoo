@@ -558,6 +558,11 @@ div#recaptcha_widget {
   color: {{ m.config.mod_kazoo.color1.value }};
 }
 
+.allotment_label {
+  float: right;
+  color: {{ m.config.mod_kazoo.color2.value }};
+}
+
 label.radio-inline, label.checkbox-inline, label.radio, label.checkbox {
   background-color: {{ m.config.mod_kazoo.color1.value }};
   color: #fff !important;
