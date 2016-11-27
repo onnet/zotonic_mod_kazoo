@@ -24,8 +24,18 @@
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Amount _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_amount" class="col-xs-5">{{ allotment[2][1]["amount"] }}
-        <i id="edit_{{ allotment[1] }}_amount" class="fa fa-edit pointer" title="Edit amount"></i>
+        <div id="allotment_{{ allotment[1] }}_amount" class="col-xs-5">
+          {% wire id="edit_"++allotment[1]++"_amount"
+                  type="click"
+                  action={update target="allotment_"++allotment[1]++"_amount"
+                                 template="_edit_allotment_field.tpl"
+                                 account_id=account_id
+                                 allotment_name=allotment[1]
+                                 field_name="amount"
+                         }
+          %}
+          {{ allotment[2][1]["amount"] }}
+          <i id="edit_{{ allotment[1] }}_amount" class="fa fa-edit pointer" title="Edit amount"></i>
         </div>
     </div>
     <div class="row">
