@@ -1623,6 +1623,14 @@ event({postback,{delete_allotment_element,[{account_id,AccountId},{allotment_ele
     _ = kazoo_util:allotment_element_delete(AllotmentElementName, AccountId, Context),
     z_render:update("restrictions_pannel_div",z_template:render("_allotments.tpl",[{account_id,AccountId}],Context),Context);
 
+event({postback,{add_allotment_element,[{account_id,'undefined'}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({postback,{add_allotment_element,[{account_id,AccountId}]},<<>>,<<>>}, Context);
+event({postback,{add_allotment_element,[{account_id,AccountId}]},_,_}, Context) ->
+    AllotmentElementName = z_context:get_q("new_allotment_element_name",Context),
+    _ = kazoo_util:allotment_element_add(AllotmentElementName, AccountId, Context),
+    z_render:update("restrictions_pannel_div",z_template:render("_allotments.tpl",[{account_id,AccountId}],Context),Context);
+
 event({drag,_,_},Context) ->
     Context;
 

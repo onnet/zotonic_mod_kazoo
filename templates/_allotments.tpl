@@ -10,7 +10,7 @@
           <div class="row">
             <div class="col-sm-9">
               <div class="input-group">
-                <select id="new_allotment_element" class="form-control">
+                <select id="new_allotment_element_name" name="new_allotment_element_name" class="form-control">
                   {% for traffic_type in classifiers[1] %}
                     {% if not (allotments["outbound_"++traffic_type[1]] or traffic_type[1] == "emergency") %}
                       <option value="outbound_{{ traffic_type[1] }}">outbound_{{ traffic_type[1] }}</option>
@@ -24,7 +24,10 @@
                 </select>
                 {% wire id="add_allotment_element"
                         type="click"
-                        action={postback postback="add_allotment_element" delegate="mod_kazoo" qarg="new_allotment_element"}
+                        action={postback postback={add_allotment_element account_id=account_id}
+                                         delegate="mod_kazoo"
+                                         qarg="new_allotment_element_name"
+                        }
                 %}
                 <span id="add_allotment_element" class="input-group-addon bradius-0 pointer">{_ Add entry _}</span>
               </div>

@@ -339,6 +339,7 @@
     ,kz_allotments/4
     ,kz_allotments_consumed/4
     ,allotment_element_delete/3
+    ,allotment_element_add/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -543,6 +544,14 @@
   {<<"html">>, <<>>},
   {<<"plain">>, <<>>},
   {<<"enabled">>, 'true'}
+]}).
+
+-define(DEFAULT_ALLOTMENTS,
+{[{<<"amount">>, 600},
+  {<<"cycle">>, <<"hourly">>},
+  {<<"increment">>, 60},
+  {<<"minimum">>, 60},
+  {<<"no_consume_time">>, 0}
 ]}).
 
 -define(CONFERENCE_ACTION(Action), {[{<<"action">>, ?TO_BIN(Action)}]}).
@@ -4041,6 +4050,9 @@ kz_allotments_consumed(Verb, AccountId, DataBag, Context) ->
 allotment_element_delete(AllotmentElementName, AccountId, Context) ->
     CurrAllotments = kz_allotments('get', AccountId, [], Context),
     NewAllotments = modkazoo_util:delete_key(AllotmentElementName, CurrAllotments),
-    kz_allotments('post', AccountId, ?MK_DATABAG(NewAllotments), Context),
-  lager:info("IAM allotment_element_delete: ~p",[CurrAllotments]),
-  lager:info("IAM allotment_element_delete: ~p",[NewAllotments]).
+    kz_allotments('post', AccountId, ?MK_DATABAG(NewAllotments), Context).
+
+allotment_element_add(AllotmentElementName, AccountId, Context) ->
+    CurrAllotments = kz_allotments('get', AccountId, [], Context),
+    NewAllotments = modkazoo_util:set_value(AllotmentElementName, (?DEFAULT_ALLOTMENTS), CurrAllotments),
+    kz_allotments('post', AccountId, ?MK_DATABAG(NewAllotments), Context).
