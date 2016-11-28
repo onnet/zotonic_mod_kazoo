@@ -4061,7 +4061,7 @@ allotment_element_add(AllotmentElementName, AccountId, Context) ->
 allotment_element_set_field(InputValue, FieldName, AllotmentElementName, AccountId, Context) ->
     FieldValue = case FieldName of
                      "cycle" -> ?TO_BIN(InputValue);
-                     "group_consume" -> ?TO_BIN(InputValue);
+                     "group_consume" -> [?TO_BIN(InputValue)];
                      _ -> ?TO_INT(InputValue)
                  end,
     CurrAllotments = kz_allotments('get', AccountId, [], Context),
