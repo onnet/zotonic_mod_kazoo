@@ -1631,6 +1631,14 @@ event({postback,{add_allotment_element,[{account_id,AccountId}]},_,_}, Context) 
     _ = kazoo_util:allotment_element_add(AllotmentElementName, AccountId, Context),
     z_render:update("restrictions_pannel_div",z_template:render("_allotments.tpl",[{account_id,AccountId}],Context),Context);
 
+event({postback,{save_allotment_field,[{field_name,FieldName},{allotment_name,AllotmentElementName},{account_id,'undefined'}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({postback,{save_allotment_field,[{field_name,FieldName},{allotment_name,AllotmentElementName},{account_id,AccountId}]},<<>>,<<>>}, Context);
+event({postback,{save_allotment_field,[{field_name,FieldName},{allotment_name,AllotmentElementName},{account_id,AccountId}]},_,_}, Context) ->
+    InputValue = z_context:get_q("input_value", Context),
+    _ = kazoo_util:allotment_element_set_field(InputValue, FieldName, AllotmentElementName, AccountId, Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

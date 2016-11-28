@@ -18,9 +18,16 @@
     <i id="{{ allotment_name }}_{{ field_name }}_save" class="fa fa-save pointer" title="{_ Save _}"></i>
     {% wire id=allotment_name++"_"++field_name++"_save"
             type="click"
-            action={postback postback={save_field type doc_id field_name account_id} 
+            action={postback postback={save_allotment_field field_name allotment_name account_id} 
                              delegate="mod_kazoo" 
-                             qarg=field_name++"_input"
-                             inject_args field_name=field_name account_id=account_id
+                             qarg=allotment_name++"_"++field_name++"_input"
+                             inject_args field_name=field_name allotment_name=allotment_name account_id=account_id
+                   }
+            action={update target="allotment_"++allotment_name++"_"++field_name
+                           template="_show_allotment_field.tpl"
+                           allotment_name=allotment_name
+                           field_name=field_name
+                           account_id=account_id
+                           placeholder=placeholder
                    }
     %}

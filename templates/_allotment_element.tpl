@@ -45,7 +45,8 @@
           {% wire id="edit_"++allotment[1]++"_"++field_name
                   type="click"
                   action={update target="allotment_"++allotment[1]++"_"++field_name
-                                 template="_edit_allotment_field.tpl"
+                                 template="_edit_allotment_field_select.tpl"
+                                 options=["monthly","weekly","daily","hourly"]
                                  account_id=account_id
                                  allotment_name=allotment[1]
                                  field_name=field_name
