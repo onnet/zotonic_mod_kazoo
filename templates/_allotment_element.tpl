@@ -40,33 +40,93 @@
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Cycle _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_cycle" class="col-xs-5">{{ allotment[2][1]["cycle"] }}
-        <i id="edit_{{ allotment[1] }}_cycle" class="fa fa-edit pointer" title="Edit cycle"></i>
+        {% with "cycle" as field_name %}
+        <div id="allotment_{{ allotment[1] }}_{{ field_name }}" class="col-xs-5">
+          {% wire id="edit_"++allotment[1]++"_"++field_name
+                  type="click"
+                  action={update target="allotment_"++allotment[1]++"_"++field_name
+                                 template="_edit_allotment_field.tpl"
+                                 account_id=account_id
+                                 allotment_name=allotment[1]
+                                 field_name=field_name
+                         }
+          %}
+          {{ allotment[2][1][field_name] }}
+          <i id="edit_{{ allotment[1] }}_{{ field_name }}" class="fa fa-edit pointer" title="Edit {{ field_name }}"></i>
         </div>
+        {% endwith %}
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Increment _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_increment" class="col-xs-5">{{ allotment[2][1]["increment"] }}
-        <i id="edit_{{ allotment[1] }}_increment" class="fa fa-edit pointer" title="Edit increment"></i>
+        {% with "increment" as field_name %}
+        <div id="allotment_{{ allotment[1] }}_{{ field_name }}" class="col-xs-5">
+          {% wire id="edit_"++allotment[1]++"_"++field_name
+                  type="click"
+                  action={update target="allotment_"++allotment[1]++"_"++field_name
+                                 template="_edit_allotment_field.tpl"
+                                 account_id=account_id
+                                 allotment_name=allotment[1]
+                                 field_name=field_name
+                         }
+          %}
+          {{ allotment[2][1][field_name] }}
+          <i id="edit_{{ allotment[1] }}_{{ field_name }}" class="fa fa-edit pointer" title="Edit {{ field_name }}"></i>
         </div>
+        {% endwith %}
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Minimum _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_minimum" class="col-xs-5">{{ allotment[2][1]["minimum"] }}
-        <i id="edit_{{ allotment[1] }}_minimum" class="fa fa-edit pointer" title="Edit minimum"></i>
+        {% with "minimum" as field_name %}
+        <div id="allotment_{{ allotment[1] }}_{{ field_name }}" class="col-xs-5">
+          {% wire id="edit_"++allotment[1]++"_"++field_name
+                  type="click"
+                  action={update target="allotment_"++allotment[1]++"_"++field_name
+                                 template="_edit_allotment_field.tpl"
+                                 account_id=account_id
+                                 allotment_name=allotment[1]
+                                 field_name=field_name
+                         }
+          %}
+          {{ allotment[2][1][field_name] }}
+          <i id="edit_{{ allotment[1] }}_{{ field_name }}" class="fa fa-edit pointer" title="Edit {{ field_name }}"></i>
         </div>
+        {% endwith %}
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ No consume time _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_no_consume_time" class="col-xs-5">{{ allotment[2][1]["no_consume_time"] }}
-        <i id="edit_{{ allotment[1] }}_no_consume_time" class="fa fa-edit pointer" title="Edit no consume time"></i>
+        {% with "no_consume_time" as field_name %}
+        <div id="allotment_{{ allotment[1] }}_{{ field_name }}" class="col-xs-5">
+          {% wire id="edit_"++allotment[1]++"_"++field_name
+                  type="click"
+                  action={update target="allotment_"++allotment[1]++"_"++field_name
+                                 template="_edit_allotment_field.tpl"
+                                 account_id=account_id
+                                 allotment_name=allotment[1]
+                                 field_name=field_name
+                         }
+          %}
+          {{ allotment[2][1][field_name] }}
+          <i id="edit_{{ allotment[1] }}_{{ field_name }}" class="fa fa-edit pointer" title="Edit {{ field_name }}"></i>
         </div>
+        {% endwith %}
     </div>
     <div class="row">
         <div class="col-xs-6"><label class="edit_user_label">{_ Group consume _}</label></div>
-        <div id="allotment_{{ allotment[1] }}_group_consume" class="col-xs-5">{{ allotment[2][1]["group_consume"] }}
-        <i id="edit_{{ allotment[1] }}_group_consume" class="fa fa-edit pointer" title="Edit group consume"></i>
+        {% with "group_consume" as field_name %}
+        <div id="allotment_{{ allotment[1] }}_{{ field_name }}" class="col-xs-5">
+          {% wire id="edit_"++allotment[1]++"_"++field_name
+                  type="click"
+                  action={update target="allotment_"++allotment[1]++"_"++field_name
+                                 template="_edit_allotment_field.tpl"
+                                 account_id=account_id
+                                 allotment_name=allotment[1]
+                                 field_name=field_name
+                         }
+          %}
+          {{ allotment[2][1][field_name] }}
+          <i id="edit_{{ allotment[1] }}_{{ field_name }}" class="fa fa-edit pointer" title="Edit {{ field_name }}"></i>
         </div>
+        {% endwith %}
     </div>
   </div>
 </div>
