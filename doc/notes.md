@@ -119,9 +119,9 @@ if fails check if all -devel libs are installed (like puthon2-devel)
 and `pip install cryptography --force-reinstall` after that
 
 ```
-cp /etc/letsencrypt/live/tel4biz.cyberphone.su/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
-cp /etc/letsencrypt/live/tel4biz.cyberphone.su/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
-openssl rsa -in /etc/letsencrypt/live/tel4biz.cyberphone.su/privkey.pem -out /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.pem
+cp /etc/letsencrypt/live/`hostname -f`/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
+cp /etc/letsencrypt/live/`hostname -f`/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
+openssl rsa -in /etc/letsencrypt/live/`hostname -f`/privkey.pem -out /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.pem
 ```
 
 ## Install mod_kazoo
