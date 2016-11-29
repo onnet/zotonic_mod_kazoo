@@ -7,7 +7,6 @@
             <th style="text-align: center;">{_ To _}</th>
             <th style="text-align: center;">{_ Duration _}</th>
             <th style="text-align: center;"></th>
-            <th style="text-align: center;"></th>
         </tr>
     </thead>
     <tbody>
