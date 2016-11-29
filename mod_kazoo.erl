@@ -1551,7 +1551,7 @@ event({submit,add_credit,_,_}, Context) ->
     Description = z_context:get_q("credit_description", Context),
     Reason = z_context:get_q("credit_reason", Context),
     [_Day, _Month, _Year] = string:tokens(z_context:get_q("credit_date", Context),"/"),
-    kazoo_util:kz_transactions_credit(Amount, Reason, Description, AccountId, Context),
+    kazoo_util:kz_transactions_credit(<<"free">>, Amount, Reason, Description, AccountId, Context),
     z_render:dialog_close(Context);
 
 event({submit,add_debit,_,_}, Context) ->
