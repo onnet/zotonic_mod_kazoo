@@ -8,6 +8,6 @@
         </tr>
     </thead>
     <tbody>
-        <tr><td>{_ Current balance _}</td><td>{{ m.config.mod_kazoo.local_currency_sign.value }}{{ m.kazoo.current_account_credit|format_price }}</td></tr>
+        <tr><td>{_ Current balance _}</td><td>{{ m.kazoo.current_account_credit|currency_sign }}</td></tr>
     </tbody>
 </table>
