@@ -25,15 +25,16 @@ pip install urllib3
 pip install braintree
 ```
 - postgresql-setup initdb
-- vi /var/lib/pgsql/data/pg_hba.conf
+- vi /var/lib/pgsql/data/pg_hba.conf (edit lines - exmple isn't secure)
 ```
 # TYPE DATABASE USER CIDR-ADDRESS METHOD
 (add lines)
 
-local all zotonic trust
-host all zotonic 127.0.0.1/32 trust
-host all zotonic 94.125.1.229/32 trust
-host all zotonic ::1/128 trust
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            trust
+host    all             all             94.125.5.230/32         trust
+host    all             all             ::1/128                 trust
+
 ```
 - service postgresql restart
 - systemctl enable postgresql
