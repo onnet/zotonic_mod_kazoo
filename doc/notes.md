@@ -25,15 +25,16 @@ pip install urllib3
 pip install braintree
 ```
 - postgresql-setup initdb
-- vi /var/lib/pgsql/data/pg_hba.conf
+- vi /var/lib/pgsql/data/pg_hba.conf (edit lines - exmple isn't secure)
 ```
 # TYPE DATABASE USER CIDR-ADDRESS METHOD
 (add lines)
 
-local all zotonic trust
-host all zotonic 127.0.0.1/32 trust
-host all zotonic 94.125.1.229/32 trust
-host all zotonic ::1/128 trust
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            trust
+host    all             all             94.125.5.230/32         trust
+host    all             all             ::1/128                 trust
+
 ```
 - service postgresql restart
 - systemctl enable postgresql
@@ -119,9 +120,9 @@ if fails check if all -devel libs are installed (like puthon2-devel)
 and `pip install cryptography --force-reinstall` after that
 
 ```
-cp /etc/letsencrypt/live/tel4biz.cyberphone.su/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
-cp /etc/letsencrypt/live/tel4biz.cyberphone.su/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
-openssl rsa -in /etc/letsencrypt/live/tel4biz.cyberphone.su/privkey.pem -out /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.pem
+cp /etc/letsencrypt/live/`hostname -f`/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
+cp /etc/letsencrypt/live/`hostname -f`/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
+openssl rsa -in /etc/letsencrypt/live/`hostname -f`/privkey.pem -out /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.pem
 ```
 
 ## Install mod_kazoo

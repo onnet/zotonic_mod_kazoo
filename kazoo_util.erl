@@ -106,7 +106,7 @@
     ,kz_list_subscriptions/1
     ,kz_list_subscriptions/2
     ,kz_current_balance/2
-    ,kz_transactions_credit/5
+    ,kz_transactions_credit/6
     ,kz_transactions_debit/5
     ,kz_get_subscription/2
     ,kz_bt_customer/1
@@ -1625,11 +1625,12 @@ kz_current_balance(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, ?CURRENT_BALANCE/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-kz_transactions_credit(Amount, Reason, Description, AccountId, Context) ->
+kz_transactions_credit(CreditType, Amount, Reason, Description, AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TRANSACTIONS/binary, ?CREDIT/binary>>,
     DataBag = {[{<<"data">>,{[{<<"amount">>, ?TO_BIN(Amount)}
-                              ,{<<"reason">>, ?TO_BIN(Reason)}
-                              ,{<<"description">>, ?TO_BIN(Description)}
+                             ,{<<"reason">>, ?TO_BIN(Reason)}
+                             ,{<<"description">>, ?TO_BIN(Description)}
+                             ,{<<"credit_type">>, ?TO_BIN(CreditType)}
                              ]}}]},
     lager:info("kz_transactions_credit DataBag: ~p", [DataBag]),
     crossbar_account_request('put', API_String, DataBag, Context).
