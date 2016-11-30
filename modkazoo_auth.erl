@@ -156,7 +156,8 @@ process_signup_form(Context) ->
         'undefined' -> z_render:update("sign_up_div", z_template:render("_registration_completed.tpl", [], Context), Context);
         _ -> 
             Context1 = z_render:dialog_close(Context),
-            z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [{account_id, AccountId}], Context1), Context1)
+            z_context:set_session(rs_selected_account_id, AccountId, Context),
+            z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [], Context1), Context1)
     end.
 
 may_be_add_third_party_billing(Context) ->
