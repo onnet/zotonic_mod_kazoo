@@ -41,7 +41,13 @@
   </div>
   <div class="form-group">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-4">
+        <label for="notify_account_input" class="checkbox-inline checked">
+          <input type="checkbox" value="yes" id="notify_account_input" name="notify_signed_up" checked>
+          {_ Notify created account _}
+        </label>
+      </div>
+      <div class="col-sm-8">
         <input type="file" name="signup_file" class="file">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="{_ Upload document _}">
@@ -71,6 +77,11 @@
 </style>
 
 {% javascript %}
+  $(document).ready(function() {
+          $('.form-group').on('click','input[type=checkbox]',function() {
+                  $(this).closest('.checkbox-inline, .checkbox').toggleClass('checked');
+          });
+  });
   $(document).on('click', '.browse', function(){
     var file = $(this).parent().parent().parent().find('.file');
     file.trigger('click');

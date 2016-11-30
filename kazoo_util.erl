@@ -1114,17 +1114,8 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
 
     Attachments = SignUpload,
 
-    case z_context:get_q("notify_signed_up",Context) of
-        'undefined' -> 
-            E_SignUp = #email{
-                to=kz_user_doc_field(<<"email">>, Context),
-                from=SalesEmail,
-                html_tpl="_email_signup_greeting.tpl",
-                vars=Vars,
-                attachments=Attachments
-            },
-            z_email:send(E_SignUp, Context);
-        _ -> 
+    case modkazoo_util:get_q_bin("notify_signed_up",Context) of
+        <<"yes">> -> 
             E_SignUp = #email{
                 to=Email,
                 from=SalesEmail,
@@ -1132,7 +1123,9 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
                 vars=Vars,
                 attachments=Attachments
             },
-            z_email:send(E_SignUp, Context)
+            z_email:send(E_SignUp, Context);
+        _ ->
+            'ok'
     end,
 
     E_SignUp_Copy = #email{
