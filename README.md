@@ -1,5 +1,5 @@
-# OnNet Kazoo UI
-### Sign Up at https://okui.info for live demo
+# OK UI (OnNet Kazoo UI)
+### Sign Up at [okui.info](https://okui.info) for live demo
 
 This is a Zotonic module.
 It provides user/admin/reseller interface for Kazoo cloud-based VoIP platform (https://github.com/2600hz/kazoo)
