@@ -1099,7 +1099,6 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
             SignUploadFilenameVar = []
     end,
 
-
     Vars = [{email, Email}
             ,{sender_name, SenderName}
             ,{accountname, Accountname}
