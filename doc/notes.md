@@ -173,6 +173,7 @@ mod_kazoo       current_services_widget_opened  true
 mod_kazoo       contacts_widget_opened          true
 mod_kazoo       user_settings_widget_opened     true
 mod_kazoo       send_fax_widget_opened          true
+mod_kazoo       signup_enabled                  false
 ```
 - tab should be used as delimeter, for check use: sed -i 's/ \+ /\t/g'  mod_kazoo_initial_keys.csv    
 - psql
