@@ -4,17 +4,17 @@
     <!-- Username field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Username _}</label></div>
-        <div id="edit_username" class="col-xs-5 zalarm">{{ user_doc["username"] }}</div>
+        <div id="edit_username" class="col-xs-7 zalarm">{{ user_doc["username"] }}</div>
     </div>
     <!-- User status -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ User status _}</label></div>
-        <div id="user_enabled_status" class="col-xs-5">{% if user_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
+        <div id="user_enabled_status" class="col-xs-7">{% if user_doc["enabled"] %}<span class="zprimary">Enabled</span>{% else %}<span class="zalarm">Disabled</span>{% endif %}</div>
     </div>
     <!-- First Name field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ First Name _}</label></div>
-        <div id="first_name" class="col-xs-5">
+        <div id="first_name" class="col-xs-7">
             {% wire id="edit_first_name" type="click" action={ update target="first_name" template="_edit_field.tpl" type="user" doc_id=user_id field_name="first_name" } %}
             <span>
                 {{ user_doc["first_name"] }}
@@ -25,7 +25,7 @@
     <!-- Last Name field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Last Name _}</label></div>
-        <div id="last_name" class="col-xs-5">
+        <div id="last_name" class="col-xs-7">
             {% wire id="edit_last_name" type="click" action={ update target="last_name" template="_edit_field.tpl" type="user" doc_id=user_id field_name="last_name" } %}
             <span>
                 {{ user_doc["last_name"] }}
@@ -36,7 +36,7 @@
     <!-- Email field -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Email _}</label></div>
-        <div id="email" class="col-xs-5">
+        <div id="email" class="col-xs-7">
             {# wire id="edit_email" type="click" action={ update target="email" template="_edit_field.tpl" type="user" doc_id=user_id field_name="email" } #}
             <span>
                 {{ user_doc["email"] }}
@@ -47,7 +47,7 @@
     <!-- User privilege level -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ User privilege level _}</label></div>
-        <div id="priv_level" class="col-xs-5">
+        <div id="priv_level" class="col-xs-7">
             {% wire id="edit_priv_level" type="click" action={ update target="priv_level" template="_edit_field_select.tpl" type="user" doc_id=user_id field_name="priv_level" options=["admin","user"] } %}
             <span>
                 {{ user_doc["priv_level"] }}
@@ -58,7 +58,7 @@
     <!-- Email Notifications -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Email Notifications _}</label></div>
-        <div class="col-xs-5">
+        <div class="col-xs-7">
         <div>
             Voicemail
             <span id="vm_to_email_enabled">
@@ -86,14 +86,14 @@
     <!-- Timezone -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Timezone _}</label></div>
-        <div id="user_timezone" class="col-xs-5">
+        <div id="user_timezone" class="col-xs-7">
             {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name="timezone" options=m.kazoo.tz_list prefix="user_" postfix="_bootsearch" %}
         </div>
     </div>
     <!-- Dialplan -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Dialplan _}</label></div>
-        <div id="user_dial_plansystem" class="col-xs-5">
+        <div id="user_dial_plansystem" class="col-xs-7">
             {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name=["dial_plan","system"]
                                                 options=m.kazoo.list_system_dialplans_names prefix="user_" postfix="_bootsearch" %}
         </div>
@@ -101,7 +101,7 @@
     <!-- MOH -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Music on hold _}</label></div>
-        <div id="user_music_on_holdmedia_id" class="col-xs-5">
+        <div id="user_music_on_holdmedia_id" class="col-xs-7">
             {% include "_show_field_select.tpl" type="user" doc_id=user_id field_name=["music_on_hold","media_id"]
                                                 options=m.kazoo.kz_list_account_media_short prefix="user_" postfix="_bootsearch" %}
         </div>
@@ -109,7 +109,7 @@
     <!-- Record calls -->
     <div class="row">
         <div class="col-xs-5"><label class="edit_user_label">{_ Record calls _}</label></div>
-        <div id="user_record_call" class="col-xs-5">
+        <div id="user_record_call" class="col-xs-7">
           <i id="toggle_user_record_call"
             class="fa fa-toggle-{% if user_doc["record_call"] %}on{% else %}off{% endif %} pointer"></i>
           {% wire id="toggle_user_record_call"
