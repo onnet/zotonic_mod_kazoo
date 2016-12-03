@@ -21,7 +21,9 @@
 "cb_cccps",
 "cb_recordings",
 "cb_periodic_fees",
-"cb_lists"
+"cb_lists",
+"cb_access_lists",
+"cb_dialplans"
 ```
 
 ## Some DB flags to consider
