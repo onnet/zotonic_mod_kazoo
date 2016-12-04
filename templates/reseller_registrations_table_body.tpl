@@ -1,25 +1,27 @@
 <table id="reseller_registrations_table" class="table display table-striped table-condensed">
-    <thead>
-        <tr>
-            <th class="text-center">{_ User _}</th>
-            <th class="text-center">{_ User agent _}</th>
-            <th class="text-center">{_ Contact IP _}</th>
-            <th class="text-center">{_ Details _}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for device in m.kazoo.get_reseller_registrations %}
-          <tr>
-             <td class="text-center">{{ device["username"] }}@{{ device["realm"] }}</td>
-             <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
-             <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
-             <td style="text-align: center;">
-                    <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-                    {% wire id="info_"++device["username"] action={ dialog_open title=_"Registration details" template="_details.tpl" arg=device } %}
-             </td>
-          </tr>
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th class="text-center">{_ User _}</th>
+      <th class="text-center">{_ User agent _}</th>
+      <th class="text-center">{_ Contact IP _}</th>
+      <th class="text-center">{_ Details _}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for device in m.kazoo.get_reseller_registrations %}
+      <tr>
+       <td class="text-center">{{ device["username"] }}@{{ device["realm"] }}</td>
+       <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
+       <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
+       <td style="text-align: center;">
+              <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+              {% wire id="info_"++device["username"]
+                      action={dialog_open title=_"Registration details" template="_details.tpl" arg=device width="auto"}
+              %}
+       </td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% javascript %}

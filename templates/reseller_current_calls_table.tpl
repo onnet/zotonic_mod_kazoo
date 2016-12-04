@@ -7,9 +7,11 @@
       <th style="text-align: center;">{_ CallId _}</th>
       <th style="text-align: center;">{_ Caller Number _}</th>
       <th style="text-align: center;">{_ Callee Number _}</th>
+      <th style="text-align: center;">{_ Realm _}</th>
       <th style="text-align: center;">{_ Status _}</th>
-      <th style="text-align: center;">{_  _}</th>
+      <th style="text-align: center;">{_ Elapsed _}</th>
       <th style="text-align: center;">{_ Hang Up _}</th>
+      <th style="text-align: center;"></th>
     </td>
   </thead>
   <tbody id="currentcallstableid">
@@ -17,31 +19,23 @@
       {% if running_call["direction"]=="inbound" %}
       <tr>
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
-        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}
-                                        {# if running_call["answered"] #}
-                                     <!--     <i id="caller_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i> -->
-                                        {# endif #}
-        </td>
-        {% wire id="caller_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_transfer_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"}
-        %}
-        <td style="text-align: center;">{{ running_call["destination"] }}
-                                        {# if running_call["answered"] #}
-                                     <!--     <i id="callee_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i> -->
-                                        {# endif #}
-        </td>
-        {% wire id="callee_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_transfer_dialog channel_id=running_call["other_leg"]} delegate="mod_kazoo"}
-        %}
+        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}</td>
+        <td style="text-align: center;">{{ running_call["destination"] }}</td>
+        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|last }}</td>
         <td style="text-align: center;">{% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}</td>
-        <td style="text-align: center;"><i id="eavesdrop_{{ running_call["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i></td>
-        {% wire id="eavesdrop_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_eavesdrop_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"}
-        %}
-        <td style="text-align: center;"><i id="hangup_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-hangup pointer"></i></td>
+        <td style="text-align: center;">{{ running_call["elapsed_s"]|inno_seconds_to_time:"hms" }}</td>
+        <td style="text-align: center;">
+          <i id="hangup_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-hangup pointer"></i>
+        </td>
         {% wire id="hangup_"++running_call["uuid"]|cleanout
                 action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]} delegate="mod_kazoo"}
         %}
+        <td style="text-align: center;">
+          <i id="info_{{ running_call["uuid"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+          {% wire id="info_"++running_call["uuid"]|cleanout
+                  action={dialog_open title=_"Call details" template="_details.tpl" arg=running_call}
+          %}
+        </td>
       </tr>
       {% endif %}
     {% endfor %}
@@ -108,28 +102,30 @@
 
     send({
         action: 'unsubscribe',
-        account_id: '*',
-    //    account_id: '{{ account_id }}',
         auth_token: '{{ m.session.kazoo_auth_token }}',
-        bindings: ['call.CHANNEL_CREATE.*', 'call.CHANNEL_ANSWER.*', 'call.CHANNEL_DESTROY.*']
-//        binding: 'call.*.*'
+        data: {
+          account_id: '*',
+          binding: 'call.*.*'
+        }
     });
 
     send({
         action: 'subscribe',
-        account_id: '*',
-    //    account_id: '{{ account_id }}',
         auth_token: '{{ m.session.kazoo_auth_token }}',
-        bindings: ['call.CHANNEL_CREATE.*', 'call.CHANNEL_ANSWER.*', 'call.CHANNEL_DESTROY.*']
+        data: {
+          account_id: '*',
+          binding: 'call.*.*'
+        }
     });
 
   }
 
   socket.onmessage = function(raw_message) {
-    var data = JSON.parse(raw_message.data);
-    console.log(data);
+    var data_obj = JSON.parse(raw_message.data);
+    console.log(data_obj);
+    var data = data_obj.data;
 
-    switch(data.routing_key) {
+    switch(data.event_name) {
       case "CHANNEL_CREATE":
       if ( data["call_direction"] == "inbound") {
         $(".dataTables_empty").remove();

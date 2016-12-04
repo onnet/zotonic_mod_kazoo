@@ -110,8 +110,8 @@
         action: 'unsubscribe',
         auth_token: '{{ m.session.kazoo_auth_token }}',
         data: {
-        account_id: '{{ account_id }}',
-        binding: 'call.*.*'
+          account_id: '{{ account_id }}',
+          binding: 'call.*.*'
         }
     });
 
@@ -120,9 +120,9 @@
         action: 'subscribe',
         auth_token: '{{ m.session.kazoo_auth_token }}',
         data: {
-        account_id: '{{ account_id }}',
-        binding: 'call.*.*'}
-      //  bindings: ['call.CHANNEL_CREATE.*', 'call.CHANNEL_ANSWER.*', 'call.CHANNEL_DESTROY.*']
+          account_id: '{{ account_id }}',
+          binding: 'call.*.*'
+        }
     });
 
   }
