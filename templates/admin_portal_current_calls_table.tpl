@@ -108,26 +108,31 @@
 
     send({
         action: 'unsubscribe',
-        account_id: '{{ account_id }}',
         auth_token: '{{ m.session.kazoo_auth_token }}',
+        data: {
+        account_id: '{{ account_id }}',
         binding: 'call.*.*'
+        }
     });
 
 
     send({
         action: 'subscribe',
-        account_id: '{{ account_id }}',
         auth_token: '{{ m.session.kazoo_auth_token }}',
-        bindings: ['call.CHANNEL_CREATE.*', 'call.CHANNEL_ANSWER.*', 'call.CHANNEL_DESTROY.*']
+        data: {
+        account_id: '{{ account_id }}',
+        binding: 'call.*.*'}
+      //  bindings: ['call.CHANNEL_CREATE.*', 'call.CHANNEL_ANSWER.*', 'call.CHANNEL_DESTROY.*']
     });
 
   }
 
   socket.onmessage = function(raw_message) {
-    var data = JSON.parse(raw_message.data);
-    console.log(data);
+    var data_obj = JSON.parse(raw_message.data);
+    console.log(data_obj);
+    var data = data_obj.data;
 
-    switch(data.routing_key) {
+    switch(data.event_name) {
       case "CHANNEL_CREATE":
       if ( data["call_direction"] == "inbound") {
         $(".dataTables_empty").remove();

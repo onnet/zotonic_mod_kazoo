@@ -15,7 +15,6 @@
   </span>
 </div>
 
-
 {% javascript %}
 
   var socket = new WebSocket('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
@@ -26,23 +25,44 @@
 
   socket.onopen = function() {
 
-    send({ action: 'unsubscribe', auth_token: '{{ m.session.kazoo_auth_token }}' });
+    send({
+        action: 'unsubscribe',
+        auth_token: '{{ m.session.kazoo_auth_token }}',
+        data: {
+          account_id: '{{ account_id }}',
+          binding: 'conference.command.{{ conference_id }}'
+        }
+    });
 
     send({
         action: 'subscribe',
-        account_id: '{{ account_id }}',
         auth_token: '{{ m.session.kazoo_auth_token }}',
-        bindings: ['conference.event.{{ conference_id }}.*', 'conference.command.{{ conference_id }}']
+        data: {
+          account_id: '{{ m.session.kazoo_account_id }}',
+          binding: 'conference.event.{{ conference_id }}.*'
+          // bindings: ['conference.event.{{ conference_id }}.*', 'conference.command.{{ conference_id }}']
+        }
+    });
+
+    send({
+        action: 'subscribe',
+        auth_token: '{{ m.session.kazoo_auth_token }}',
+        data: {
+          account_id: '{{ m.session.kazoo_account_id }}',
+          //  bindings: ['conference.event.{{ conference_id }}.*', 'conference.command.{{ conference_id }}']
+          binding: 'conference.command.{{ conference_id }}'
+        }
     });
 
   }
 
   socket.onmessage = function(raw_message) {
-    var data = JSON.parse(raw_message.data);
-      console.log(data);
+    var data_obj = JSON.parse(raw_message.data);
+    console.log(data_obj);
+    var data = data_obj.data;
 
-    switch(data.routing_key) {
-      case "participant_event":
+    switch(data_obj.action) {
+      case "event":
         handle_participant_event(data);
       break;
 
@@ -94,6 +114,8 @@
         z_event("maybe_update_conference_participants_headline", { conference_id: data.conference_id, event_name: data.event});
       break;
 
+      default:
+        console.log("Not handled event: " + data.event + " " + data.participant_id)
     }
   };
 
