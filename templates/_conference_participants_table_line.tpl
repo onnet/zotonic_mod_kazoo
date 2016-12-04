@@ -4,17 +4,18 @@
         {{ participant[1]["join_time"]|inno_timestamp_to_date }}
       </td>
       <td style="text-align: center;">
-        {{ participant[1]["channel"][1]["custom_channel_vars"][1]["presence_id"]|split:"@"|first }}
+        {{ participant[1]["caller_id_number"] }}
+        {{ participant[1]["caller_id_name"] }}
       </td>
       <td style="text-align: center;">
-        {% if participant[1]["talking"] %}
-          <i id="talking_{{ participant_id }}" class="fa fa-volume-control-phone zalarm pointer" title="Speaking now"></i>
+        {% if participant[1]["conference_channel_vars"][1]["talking"] %}
+          <i id="talking_{{ participant_id }}" class="fa fa-volume-control-phone zalarm" title="Speaking now"></i>
         {% else %}
-          <i id="talking_{{ participant_id }}"  class="fa fa-phone zprimary pointer" title="Keeps silence"></i>
+          <i id="talking_{{ participant_id }}"  class="fa fa-phone zprimary" title="Keeps silence"></i>
         {% endif %}
       </td>
       <td style="text-align: center;">
-        {% if participant[1]["speak"] %}
+        {% if participant[1]["conference_channel_vars"][1]["speak"] %}
           <i id="mic_{{ participant_id }}" class="fa fa-microphone zprimary pointer" title="Enabled"></i>
          {% wire id="mic_"++participant_id
                  action={confirm text="Do you really want to switch microphone off?"
@@ -43,7 +44,7 @@
         {% endif %}
       </td>
       <td style="text-align: center;">
-        {% if participant[1]["hear"] %}
+        {% if participant[1]["conference_channel_vars"][1]["hear"] %}
           <i id="speaker_{{ participant_id }}" class="fa fa-volume-up zprimary pointer" title="Enabled"></i>
          {% wire id="speaker_"++participant_id
                  action={confirm text="Do you really want to switch speaker off?"
