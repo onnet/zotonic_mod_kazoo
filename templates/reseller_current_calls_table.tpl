@@ -21,15 +21,21 @@
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
         <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}</td>
         <td style="text-align: center;">{{ running_call["destination"] }}</td>
-        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|last }}</td>
+        <td style="text-align: center;">
+          <a id="realm_{{ running_call["uuid"]|cleanout }}" href="#">{{ running_call["presence_id"]|split:"@"|last }}</a>
+          {% wire id="realm_"++running_call["uuid"]|cleanout
+                  action={postback postback={redirect_to_reseller_portal realm=running_call["presence_id"]|split:"@"|last}
+                                   delegate="mod_kazoo"}
+          %}
+        </td>
         <td style="text-align: center;">{% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}</td>
         <td style="text-align: center;">{{ running_call["elapsed_s"]|inno_seconds_to_time:"hms" }}</td>
         <td style="text-align: center;">
           <i id="hangup_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-hangup pointer"></i>
+          {% wire id="hangup_"++running_call["uuid"]|cleanout
+                  action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]} delegate="mod_kazoo"}
+          %}
         </td>
-        {% wire id="hangup_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]} delegate="mod_kazoo"}
-        %}
         <td style="text-align: center;">
           <i id="info_{{ running_call["uuid"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
           {% wire id="info_"++running_call["uuid"]|cleanout
