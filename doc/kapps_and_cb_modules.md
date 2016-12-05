@@ -23,7 +23,8 @@
 "cb_periodic_fees",
 "cb_lists",
 "cb_access_lists",
-"cb_dialplans"
+"cb_dialplans",
+"cb_queues"
 ```
 
 ## Some DB flags to consider
