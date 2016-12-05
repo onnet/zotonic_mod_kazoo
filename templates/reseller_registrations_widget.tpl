@@ -14,7 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
   {{ headline }}: {{ m.kazoo.get_reseller_registrations_count }}
-  {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh list" action={emit signal={reseller_registrations_widget_tpl} } %}
+  {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" action={emit signal={reseller_registrations_widget_tpl} } %}
 
 {% endblock %}
 

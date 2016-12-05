@@ -10,7 +10,13 @@
   <tbody>
     {% for device in m.kazoo.get_reseller_registrations %}
       <tr>
-       <td class="text-center">{{ device["username"] }}@{{ device["realm"] }}</td>
+       <td class="text-center">
+         <a id="realm_{{ device["call_id"]|cleanout }}" href="#">{{ device["username"] }}@{{ device["realm"] }}</a>
+         {% wire id="realm_"++device["call_id"]|cleanout
+                 action={postback postback={redirect_to_reseller_portal realm=device["realm"]}
+                                   delegate="mod_kazoo"}
+         %}
+       </td>
        <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
        <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
        <td style="text-align: center;">
