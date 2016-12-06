@@ -126,7 +126,7 @@
     ,trigger_innoui_widget/2
     ,ui_element_state/2
     ,set_accounts_address/4
-    ,lookup_numbers/2
+    ,lookup_numbers/3
     ,rs_add_number/3
     ,purchase_number/2
     ,deallocate_number/2
@@ -1710,17 +1710,22 @@ set_accounts_address(Line1, Line2, Line3, Context) ->
     kz_set_acc_doc([<<"account_address">>,<<"line2">>], Line2, Context),
     kz_set_acc_doc([<<"account_address">>,<<"line3">>], Line3, Context).
     
-lookup_numbers(AreaCode, Context) ->
+lookup_numbers(Country, AreaCode, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    lookup_numbers(AreaCode, AccountId, Context).
+    lookup_numbers(Country, AreaCode, AccountId, Context).
 
-lookup_numbers(AreaCode, AccountId, Context) ->
+lookup_numbers('undefined', AreaCode, AccountId, Context) ->
     Country = case m_config:get_value('mod_kazoo', 'default_country', Context) of
                   'undefined' -> <<"RU">>;
                   Val -> Val
               end,
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, <<"?">>/binary
-                  ,?COUNTRY/binary, Country/binary, <<"&">>/binary,?PREFIX/binary, AreaCode/binary, <<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
+    lookup_numbers(Country, AreaCode, AccountId, Context);
+lookup_numbers(Country, AreaCode, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary
+                   ,<<"?">>/binary, ?COUNTRY/binary, (?TO_BIN(Country))/binary
+                   ,<<"&">>/binary,?PREFIX/binary, AreaCode/binary
+                   ,<<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
+  lager:info("IAM lookup_numbers API_String: ~p",[API_String]),
     crossbar_account_request('get', API_String, [], Context).
 
 rs_add_number(Num, AccountId, Context) ->

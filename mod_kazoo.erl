@@ -352,8 +352,9 @@ event({postback,new_numbers_lookup,_,_}, Context) ->
         <<"0", Number/binary>> -> Number;
         Number -> Number
     end,
-    lager:info("AreaCode lookup attempt: ~p",[AreaCode]),
-    FreeNumbers = kazoo_util:lookup_numbers(AreaCode, Context),
+    Country = z_context:get_q("country",Context),
+    lager:info("Country and AreaCode lookup attempt: ~p:~p",[Country, AreaCode]),
+    FreeNumbers = kazoo_util:lookup_numbers(Country, AreaCode, Context),
     z_render:update("numbers_to_choose",z_template:render("_numbers_lookup.tpl", [{free_numbers, FreeNumbers}], Context),Context);
 
 event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
