@@ -64,6 +64,10 @@ sup kapps_config set_integer crossbar.braintree max_account_credit 700
 sup kapps_config set_boolean crossbar.channels system_wide_channels_list true
 ```
 ```
+sup kapps_config set_boolean services sync_services true
+sup kapps_config set_string services master_account_bookkeeper kz_bookkeeper_braintree
+```
+```
 sup kapps_config set number_manager default_country RU
 sup kapps_config set crossbar.phone_numbers default_country RU
 ```
