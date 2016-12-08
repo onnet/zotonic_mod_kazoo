@@ -17,7 +17,7 @@ kerl install r18.2 /usr/local/erlang
 vi .bashrc
 . /usr/local/erlang/activate
 ```
-- Braintree
+- Braintree (don't forget to create plans; create addons and add them to plans... at Braintree itself (through dashboard)
 ```
 easy_install pip
 pip install requests[security]
