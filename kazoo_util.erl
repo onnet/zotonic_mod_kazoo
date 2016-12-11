@@ -977,7 +977,7 @@ create_kazoo_account(Context) ->
                      }
                     ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
                     ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
-                    ,{<<"billing_id">>,ResellerId}
+          %          ,{<<"billing_id">>,ResellerId}
                   ]}
               }]},
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ResellerId/binary>>,
