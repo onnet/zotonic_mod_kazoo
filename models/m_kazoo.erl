@@ -624,6 +624,12 @@ m_find_value({allotments_consumed,[{account_id, 'undefined'}]}, _M, Context) ->
 m_find_value({allotments_consumed,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:kz_allotments_consumed('get', AccountId, [], Context);
 
+m_find_value(numbers_countries_list, _M, Context) ->
+    case m_config:get_value('mod_kazoo', 'numbers_countries_list', Context) of
+        'undefined' -> [<<"US">>];
+        Countries -> binary:split(Countries, <<",">>, ['global'])
+    end;
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

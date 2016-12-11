@@ -830,17 +830,17 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                         "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
                         _ -> 'ok'
                     end,
-                    lager:info("crossbar_account_request API String: ~p:~p", [Verb,API_String]),
-                    lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
+                    lager:info("crossbar_account_request API String: ~p", [API_String]),
                     lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
                     lager:info("crossbar_account_request Verb: ~p", [Verb]),
+                    lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
                     error_return(ReturnCode, Body, Default)
             end;
         E -> 
-            lager:info("crossbar_account_request Error: ~p", [E]),
             lager:info("crossbar_account_request Error Verb: ~p", [Verb]),
             lager:info("crossbar_account_request Error API_String: ~p", [API_String]),
             lager:info("crossbar_account_request Error DataBag: ~p", [DataBag]),
+            lager:info("crossbar_account_request Error: ~p", [E]),
             Default
     end.
 
