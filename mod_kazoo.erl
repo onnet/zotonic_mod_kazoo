@@ -354,8 +354,25 @@ event({postback,new_numbers_lookup,_,_}, Context) ->
     end,
     Country = z_context:get_q("country",Context),
     lager:info("Country and AreaCode lookup attempt: ~p:~p",[Country, AreaCode]),
-    FreeNumbers = kazoo_util:lookup_numbers(Country, AreaCode, Context),
-    z_render:update("numbers_to_choose",z_template:render("_numbers_lookup.tpl", [{free_numbers, FreeNumbers}], Context),Context);
+    PhoneNumbersServices = modkazoo_util:get_value([<<"items">>,<<"phone_numbers">>], kazoo_util:current_service_plans(Context)),
+    case kazoo_util:lookup_numbers(Country, AreaCode, Context) of
+        [FreeNumber|_] = FNS ->
+            NumberClass = kazoo_util:classify_number(modkazoo_util:get_value(<<"number">>, FreeNumber), Context),
+            NumberFriendlyName = modkazoo_util:get_value(<<"friendly_name">>, NumberClass),
+            NumberName = modkazoo_util:get_value(<<"name">>, NumberClass),
+            Rate = modkazoo_util:get_value([NumberName, <<"rate">>], PhoneNumbersServices),
+            ActivationCharge = modkazoo_util:get_value([NumberName, <<"activation_charge">>], PhoneNumbersServices),
+            FreeNumbers = [modkazoo_util:set_values([{<<"name">>, NumberName}
+                                                    ,{<<"friendly_name">>, NumberFriendlyName}
+                                                    ,{<<"rate">>, Rate}
+                                                    ,{<<"activation_charge">>, ActivationCharge}
+                                                    ]
+                                                   ,FN)
+                           || FN <- FNS],
+            z_render:update("numbers_to_choose",z_template:render("_numbers_lookup.tpl", [{free_numbers, FreeNumbers}], Context),Context);
+        _ ->
+            z_render:update("numbers_to_choose",z_template:render("_numbers_lookup.tpl", [{free_numbers, []}], Context),Context)
+    end;
 
 event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
     case z_context:get_q("new_number_to_add",Context) of

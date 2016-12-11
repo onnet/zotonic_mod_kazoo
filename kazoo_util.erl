@@ -159,6 +159,7 @@
     ,delete_account/2
     ,delete_user/2
     ,delete_device/2
+    ,classify_number/2
     ,kz_list_classifiers/1
     ,add_device/1
     ,add_group/1
@@ -1716,7 +1717,7 @@ lookup_numbers(Country, AreaCode, Context) ->
 
 lookup_numbers('undefined', AreaCode, AccountId, Context) ->
     Country = case m_config:get_value('mod_kazoo', 'default_country', Context) of
-                  'undefined' -> <<"RU">>;
+                  'undefined' -> <<"US">>;
                   Val -> Val
               end,
     lookup_numbers(Country, AreaCode, AccountId, Context);
@@ -1725,7 +1726,6 @@ lookup_numbers(Country, AreaCode, AccountId, Context) ->
                    ,<<"?">>/binary, ?COUNTRY/binary, (?TO_BIN(Country))/binary
                    ,<<"&">>/binary,?PREFIX/binary, AreaCode/binary
                    ,<<"&">>/binary, ?QUANTITY/binary, <<"100">>/binary>>,
-  lager:info("IAM lookup_numbers API_String: ~p",[API_String]),
     crossbar_account_request('get', API_String, [], Context).
 
 rs_add_number(Num, AccountId, Context) ->
@@ -1945,6 +1945,10 @@ delete_device(DeviceId, Context) ->
             crossbar_account_request('delete', API_String, [], Context);
         'true' -> []
     end.
+
+classify_number(PhoneNumber, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?CLASSIFIERS/binary, "/", ?TO_BIN(PhoneNumber)/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
 
 kz_list_classifiers(Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?CLASSIFIERS/binary>>,
