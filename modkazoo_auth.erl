@@ -13,6 +13,7 @@
     ,may_be_set_user_data/1
     ,choose_page_to_redirect/1
     ,may_be_clean_third_party_billing/1
+    ,set_session_currency_sign/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -178,3 +179,15 @@ run_ip_acl([H|T], ClientIP) ->
         _ -> run_ip_acl(T,ClientIP)
     end;
 run_ip_acl(_,_) -> false.
+
+set_session_currency_sign(Context) ->
+    Sign = case z_notifier:first('currency_sign', Context) of
+               undefined ->
+                   case m_config:get_value('mod_kazoo', 'local_currency_sign', Context) of
+                       'undefined' -> <<"£">>;
+                       LocalCurrencySign -> LocalCurrencySign
+                   end;
+               {ok, KazooCurrencySign} -> KazooCurrencySign
+           end,
+    z_context:set_session('currency_sign', Sign, Context).
+
