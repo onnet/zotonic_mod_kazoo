@@ -91,6 +91,7 @@ setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context
     _ = may_be_set_user_data(Context),
     _ = may_be_set_reseller_data(Context),
     _ = may_be_add_third_party_billing(Context),
+    _ = set_session_currency_sign(Context),
     choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context)).
 
 choose_page_to_redirect(Context) ->
@@ -184,7 +185,7 @@ set_session_currency_sign(Context) ->
     Sign = case z_notifier:first('currency_sign', Context) of
                undefined ->
                    case m_config:get_value('mod_kazoo', 'local_currency_sign', Context) of
-                       'undefined' -> <<"£">>;
+                       'undefined' -> <<"£"/utf8>>;
                        LocalCurrencySign -> LocalCurrencySign
                    end;
                {ok, KazooCurrencySign} -> KazooCurrencySign
