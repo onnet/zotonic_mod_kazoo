@@ -48,12 +48,14 @@
             </th>
         </tr>
     </tbody>
-    <tbody id="rs_service_plans_widget_opened" style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}">
+    <tbody id="rs_service_plans_widget_opened"
+           style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}"
+    >
         <tr id="add_service_plan_tr_id" class="disabled">
           <td colspan="2">
            {_ Choose service plan to add _}:
             <select id="selected_service_plan" name="selected_service_plan">
-            {% for service_plan_available in m.kazoo.kz_service_plans_available %}
+            {% for service_plan_available in m.kazoo[{kz_service_plans_available account_id=account_id}] %}
               <option name="service_plan_available" value="{{ service_plan_available["id"] }}">
                 {{ service_plan_available["name"] }}
               </option>
