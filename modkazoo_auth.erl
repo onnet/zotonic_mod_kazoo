@@ -53,10 +53,10 @@ refresh_superadmin_and_reseller_flags(Context) ->
 do_sign_in(Login, Password, Account, Context) ->
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     case kazoo_util:kz_user_creds(Login, Password, Account, Context) of
-        {ok, {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->
+        {'ok', {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
-        {ok, {'owner_id', _}, {account_id, _}, {'auth_token', <<>>}, {'crossbar', _}, {'account_name', _}} ->
+        {'ok', {'owner_id', _}, {account_id, _}, {'auth_token', <<>>}, {'crossbar', _}, {'account_name', _}} ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
         {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', _Crossbar_URL}, {'account_name', Account_Name}} ->
@@ -68,9 +68,22 @@ do_sign_in(Login, Password, Account, Context) ->
                 ACL ->
                     maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context)
             end;
+        {'badauth', Code, Data} ->
+            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p. Data: ~p.", [Login,Account,ClientIP,Data]),
+            lager:info("Failed to authenticate Kazoo user ~p@~p. Code: ~p.", [Login,Account,Code]),
+            lager:info("Failed to authenticate Kazoo user ~p@~p. Data: ~p.", [Login,Account,Data]),
+            growl_login_error(Data, Context);
         _ ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
+    end.
+
+growl_login_error(Data, Context) ->
+    case modkazoo_util:get_value([<<"account">>,<<"disabled">>], Data) of
+        'undefined' ->
+            z_render:growl_error(?__("Auth failed.", Context), Context);
+        _ ->
+            z_render:growl_error(?__("Account disabled.", Context), Context)
     end.
 
 maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context) ->
