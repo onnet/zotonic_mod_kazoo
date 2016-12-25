@@ -182,13 +182,14 @@ run_ip_acl([H|T], ClientIP) ->
 run_ip_acl(_,_) -> false.
 
 set_session_currency_sign(Context) ->
-    Sign = case z_notifier:first('currency_sign', Context) of
-               undefined ->
-                   case m_config:get_value('mod_kazoo', 'local_currency_sign', Context) of
-                       'undefined' -> <<"£"/utf8>>;
-                       LocalCurrencySign -> LocalCurrencySign
-                   end;
-               {ok, KazooCurrencySign} -> KazooCurrencySign
-           end,
+    Sign =
+        case z_notifier:first('currency_sign', Context) of
+            {ok, KazooCurrencySign} -> KazooCurrencySign;
+            _ ->
+                case m_config:get_value('mod_kazoo', 'local_currency_sign', Context) of
+                    'undefined' -> <<"£"/utf8>>;
+                    LocalCurrencySign -> LocalCurrencySign
+                end
+        end,
     z_context:set_session('currency_sign', Sign, Context).
 
