@@ -19,7 +19,12 @@
           </td>
           <td class="td-center">
             {% if transaction["description"] %}
-              {{ transaction["description"] }}
+              {{ transaction["description"] }}.
+              {% if transaction["reason"] == "recurring_prorate" %}
+                {_ Prorated MRC _}.
+              {% elif transaction["reason"] == "monthly_recurring" %}
+                {_ MRC _}.
+              {% endif %}
             {% else %}
               {{ transaction["reason"] }}
             {% endif %}
