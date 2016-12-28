@@ -343,6 +343,11 @@ div.widget {
   vertical-align: middle!important;
 }
 
+.td-right {
+  text-align: right!important;
+  vertical-align: middle!important;
+}
+
 .vcenter {
     display: inline-block;
     vertical-align: middle;
@@ -371,6 +376,10 @@ div.widget {
 
 .pr-1 {
   padding-right: 1em;
+}
+
+.pri-1 {
+  padding-right: 1em!important;
 }
 
 .pt-1 {

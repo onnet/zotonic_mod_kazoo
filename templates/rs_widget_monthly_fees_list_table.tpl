@@ -2,7 +2,7 @@
   <thead>
     <tr>
         <th class="td-center">{_ Date _}</th>
-        <th class="td-center">{_ Description _}</th>
+        <th class="td-center1">{_ Description _}</th>
         <th class="td-center">{_ Sum _}</th>
         {# if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) #}
           <th class="td-center"></th>
@@ -17,7 +17,7 @@
             {{ transaction["created"]|inno_timestamp_to_date }}
             {{ transaction["created"]|inno_timestamp_to_date:"show_tz_name" }}
           </td>
-          <td class="td-center">
+          <td class="td-center1">
             {% if transaction["description"] %}
               {{ transaction["description"] }}.
               {% if transaction["reason"] == "recurring_prorate" %}
@@ -29,8 +29,8 @@
               {{ transaction["reason"] }}
             {% endif %}
           </td>
-          <td class="td-center">
-            {{ m.config.mod_kazoo.local_currency_sign.value }}{{ transaction["amount"]|format_price:[".",""] }}
+          <td class="pri-1 td-right">
+            {{ transaction["amount"]|format_price:[".",""]|currency_sign }}
           </td>
           <td class="td-center">
           {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}

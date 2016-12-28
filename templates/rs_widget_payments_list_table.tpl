@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th class="td-center">{_ Date _}</th>
-            <th class="td-center">{_ Description _}</th>
+            <th class="td-center1">{_ Description _}</th>
             <th class="td-center">{_ Sum _}</th>
         </tr>
     </thead>
@@ -13,14 +13,14 @@
                       {{ transaction["created"]|inno_timestamp_to_date }}
                       {{ transaction["created"]|inno_timestamp_to_date:"show_tz_name" }}
                     </td>
-                    <td class="td-center">
+                    <td class="td-center1">
                       {% if transaction["description"] %}
                         {{ transaction["description"] }}
                       {% else %}
                         {{ transaction["reason"] }}
                       {% endif %}
                     </td>
-                    <td class="td-center">
+                    <td class="pri-1 td-right">
                       {{ transaction["amount"]|format_price:[".",""]|currency_sign }}
                     </td>
                 </tr>
