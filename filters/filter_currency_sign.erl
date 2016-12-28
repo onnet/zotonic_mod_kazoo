@@ -10,17 +10,13 @@
 
 currency_sign('undefined', _Context) ->
     'undefined';
-currency_sign(Amount, Context) when is_integer(Amount) ->
-    build_a_fortune(Amount, Context);
-currency_sign(Amount, Context) when is_float(Amount) ->
-    build_a_fortune(Amount, Context);
 currency_sign(Amount, Context) ->
-    build_a_fortune(z_convert:to_float(Amount), Context).
+    build_a_fortune(?TO_FLT(Amount), Context).
 
 currency_sign('undefined', _Args, _Context) ->
     'undefined';
 currency_sign(Amount, _Args, Context) ->
-    build_a_fortune(z_convert:to_float(Amount), Context).
+    build_a_fortune(?TO_FLT(Amount), Context).
 
 build_a_fortune(Amount, Context) ->
     CurrencySign = case z_context:get_session('currency_sign', Context) of
