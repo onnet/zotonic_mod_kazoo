@@ -594,15 +594,26 @@ kz_api_key_creds(API_Key, Context) ->
 kz_creds(URL, DataBag, Context) ->
     try
         Payload = jiffy:encode(DataBag),
-        {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 10000}]),
-        {JsonData} = jiffy:decode(Body),
-        {AccountData} = proplists:get_value(<<"data">>, JsonData),
-        Owner_Id = proplists:get_value(<<"owner_id">>, AccountData),
-        Account_Id = proplists:get_value(<<"account_id">>, AccountData),
-        Account_Name = proplists:get_value(<<"account_name">>, AccountData),
-        Auth_Token = proplists:get_value(<<"auth_token">>, JsonData),
-        Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-        {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}, {'account_name', Account_Name}}
+        case ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 10000}]) of
+            {'ok', [50,_,_], _, Body} ->
+                JsonBody = jiffy:decode(Body),
+                Owner_Id = modkazoo_util:get_value([<<"data">>, <<"owner_id">>], JsonBody),
+                Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
+                Account_Name = modkazoo_util:get_value([<<"data">>, <<"account_name">>], JsonBody),
+                Auth_Token = modkazoo_util:get_value(<<"auth_token">>, JsonBody),
+                Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+                {'ok' ,{'owner_id', Owner_Id}
+                      ,{'account_id', Account_Id}
+                      ,{'auth_token', Auth_Token}
+                      ,{'crossbar', Crossbar_URL}
+                      ,{'account_name', Account_Name}
+                };
+            {'ok', Code, _, Body} = Resp ->
+                lager:info("IAM  Resp: ~p",[Resp]),
+                Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+                lager:info("IAM Code: ~p, Data: ~p",[Code, Data]),
+                {'badauth', Code, Data}
+        end
     catch
         _:_ -> <<"Auth exception">>
     end.
