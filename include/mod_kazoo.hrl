@@ -4,6 +4,7 @@
 -define(TO_BIN(Var), <<(z_convert:to_binary(Var))/binary>>).
 -define(TO_INT(Var), z_convert:to_integer(Var)).
 -define(TO_FLT(Var), z_convert:to_float(Var)).
+-define(TO_LST(Var), z_convert:to_list(Var)).
 
 -define(TIMEZONES_LIST, [<<"Africa/Abidjan">>,
              <<"Africa/Accra">>,

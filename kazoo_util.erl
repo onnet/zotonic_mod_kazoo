@@ -608,10 +608,8 @@ kz_creds(URL, DataBag, Context) ->
                       ,{'crossbar', Crossbar_URL}
                       ,{'account_name', Account_Name}
                 };
-            {'ok', Code, _, Body} = Resp ->
-                lager:info("IAM  Resp: ~p",[Resp]),
+            {'ok', Code, _, Body} ->
                 Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
-                lager:info("IAM Code: ~p, Data: ~p",[Code, Data]),
                 {'badauth', Code, Data}
         end
     catch
@@ -1759,32 +1757,32 @@ rs_add_number(Num, AccountId, Context) ->
 purchase_number(Number, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
     DataBag = {[{<<"data">>, {[{<<"numbers">>, [Number]}]}},{<<"accept_charges">>, true}]},
-    crossbar_account_request('put', API_String, DataBag, Context).
+    crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
 
 process_purchase_number(Number, Context) ->
+    Routines = [fun(C) -> z_render:update("onnet_allocated_numbers_tpl"
+                                         ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], C)
+                                         ,C)
+                end
+               ,fun(C) -> z_render:update("onnet_widget_monthly_fees_tpl"
+                                         ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], C)
+                                         ,C)
+                end
+               ,fun(C) -> z_render:update("onnet_widget_order_additional_number_tpl"
+                                         ,z_template:render("onnet_widget_order_additional_number.tpl", [], C)
+                                         ,C)
+                end],
     case purchase_number(Number, Context) of
-        <<>> ->
-            Context1 = z_render:update("onnet_allocated_numbers_tpl"
-                                      ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context)
-                                      ,Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl"
-                                      ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1)
-                                      ,Context1),
-            z_render:growl_error(?__("Something wrong happened.", Context2), Context2);
+        {'error', _ReturnCode, Body} ->
+            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+            Message = modkazoo_util:get_value([<<"data">>,<<"error">>, Number,<<"message">>], jiffy:decode(Body)),
+            z_render:growl_error(?TO_LST(Message), Ctx);
         _ ->
             may_be_add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context)
                                    ,z_context:get_session('kazoo_account_id', Context)
                                    ,Context),
-            Context1 = z_render:update("onnet_allocated_numbers_tpl"
-                                      ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context)
-                                      ,Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl"
-                                      ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1)
-                                      ,Context1),
-            Context3 = z_render:update("onnet_widget_order_additional_number_tpl"
-                                      ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context2)
-                                      ,Context2),
-            z_render:growl(?__("Number ", Context3)++z_convert:to_list(Number)++?__(" successfully allocated.", Context3), Context3)
+            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+            z_render:growl(?__("Number ", Ctx)++z_convert:to_list(Number)++?__(" successfully allocated.", Ctx), Ctx)
     end.
 
 deallocate_number(<<"+", Number/binary>>, Context) ->
