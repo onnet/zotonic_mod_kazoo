@@ -23,9 +23,10 @@ build_a_fortune(Amount, Context) ->
                        'undefined' -> <<"£"/utf8>>;
                        Sign -> Sign
                    end,
-    case (Amount >= 0) of
+lager:info("IAM Amount: ~p",[Amount]),
+    case (Amount >= -0.0049) of
         'true' ->
-            <<(?TO_BIN(CurrencySign))/binary, (filter_format_price:format_price(Amount, Context))/binary>>;
+            <<(?TO_BIN(CurrencySign))/binary, (filter_format_price:format_price(abs(Amount), Context))/binary>>;
         'false' ->
             <<"- ", (?TO_BIN(CurrencySign))/binary, (filter_format_price:format_price(abs(Amount), Context))/binary>>
     end.
