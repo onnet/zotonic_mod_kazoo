@@ -428,7 +428,7 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     case kazoo_util:deallocate_number(Number, Context) of
         <<>> ->
             Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
+            Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current services"}], Context1),Context1),
             z_render:growl_error(?__("Something wrong happened.", Context2), Context2);
         _ -> 
             Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
