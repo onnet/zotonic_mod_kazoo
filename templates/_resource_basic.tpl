@@ -2,23 +2,48 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="name" name="name" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter resource name here _}" value="{{ resource["name"] }}">
+          <input id="name"
+                 name="name"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Enter resource name here _}"
+                 value="{{ resource["name"] }}">
         </div>
         <div class="col-sm-4">
-          <input id="server" name="server" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter server address here _}" value="{{ resource["gateways"][1][1]["server"] }}">
+          <input id="server"
+                 name="server"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Enter server address here _}"
+                 value="{{ resource["gateways"][1][1]["server"] }}">
         </div>
         <div class="col-sm-2">
-          <input id="port" name="port" type="text" class="form-control margin-bottom-xs" placeholder="{_ Port _}" value="{{ resource["gateways"][1][1]["port"] }}">
+          <input id="port"
+                 name="port"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Port _}"
+                 value="{{ resource["gateways"][1][1]["port"] }}">
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="rules" name="rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter destination mask here _}:  ^\+?(\d*)$" value="{{ resource["rules"] }}">
+          <input id="rules"
+                 name="rules"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Enter destination mask here _}:  ^\+?(\d*)$"
+                 value="{{ resource["rules"] }}">
         </div>
         <div class="col-sm-6">
-          <input id="cid_rules" name="cid_rules" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter CID mask here _}:  ^(\+?7812\d{7})$" value="{{ resource["cid_rules"] }}">
+          <input id="cid_rules"
+                 name="cid_rules"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Enter CID mask here _}:  ^(\+?7812\d{7})$"
+                 value="{{ resource["cid_rules"] }}">
         </div>
       </div>
     </div>
@@ -52,7 +77,11 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="input time_wrapper">
-            <input id="weight_cost" name="weight_cost" type="slider" style="display: none;" value="{% if resource["weight_cost"] %}{{ resource["weight_cost"] }}{% else %}50{% endif %}">
+            <input id="weight_cost"
+                   name="weight_cost"
+                   type="slider"
+                   style="display: none;"
+                   value="{% if resource["weight_cost"] %}{{ resource["weight_cost"] }}{% else %}50{% endif %}">
           </div>
         </div>
       </div>
