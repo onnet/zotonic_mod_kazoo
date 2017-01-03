@@ -2600,9 +2600,14 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
                 [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
                 AvailableKeys ->
                     z_render:dialog(?__("Choose route option",Context)
-                                         ,"_cf_select_option_cidlistmatch.tpl"
-                                         ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,AvailableKeys}]
-                                         ,Context)
+                                   ,"_cf_select_option_cidlistmatch.tpl"
+                                   ,[{tool_name,ToolName}
+                                    ,{drop_id,DropId}
+                                    ,{drop_parent,DropParent}
+                                    ,{branch_id,BranchId}
+                                    ,{available_keys,AvailableKeys}
+                                    ]
+                                   ,Context)
             end;
         "check_cid" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
@@ -4054,6 +4059,7 @@ kz_limits(Verb, AccountId, DataBag, Context) ->
 
 save_trunks_limits(InputValue, TrunksType, AccountId, Context) ->
     CurrDoc = kz_limits('get', AccountId, [], Context),
+    QtyDiff = ?TO_INT(InputValue) - modkazoo_util:get_value(?TO_BIN(TrunksType), CurrDoc),
     Upd = [{?TO_BIN(TrunksType), ?TO_INT(InputValue)}
           ],
     NewDoc = modkazoo_util:set_values(Upd, CurrDoc),
@@ -4062,8 +4068,21 @@ save_trunks_limits(InputValue, TrunksType, AccountId, Context) ->
                                          ,C)
                 end
                ],
-    case kz_limits('post', AccountId, modkazoo_util:set_value(<<"accept_charges">>, true, ?MK_DATABAG(NewDoc)), Context) of
+  %  case kz_limits('post', AccountId, modkazoo_util:set_value(<<"accept_charges">>, true, ?MK_DATABAG(NewDoc)), Context) of
+    case kz_limits('post', AccountId, ?MK_DATABAG(NewDoc), Context) of
+        {'error', "402", Body} ->
+            Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+            lager:info("IAM 402 Data: ~p",[Data]),
+            z_render:dialog(?__("Charges Confirmation",Context)
+                           ,"_accept_trunks_limits_charges.tpl"
+                           ,[{item, modkazoo_util:get_value([<<"limits">>,?TO_BIN(TrunksType)], Data)}
+                            ,{quantity_diff, QtyDiff}
+                            ,{wide, "auto"}
+                            ]
+                           ,Context);
         {'error', _ReturnCode, Body} ->
+lager:info("IAM _ReturnCode: ~p",[_ReturnCode]),
+lager:info("IAM jiffy:decode(Body): ~p",[jiffy:decode(Body)]),
             Message = modkazoo_util:get_value([<<"data">>,<<"message">>], jiffy:decode(Body)),
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
             z_render:growl_error(?TO_LST(Message), Ctx);
