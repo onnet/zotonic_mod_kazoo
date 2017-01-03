@@ -337,7 +337,7 @@
     ,kz_account_access_lists/3
     ,kz_device_access_lists/4
     ,kz_limits/4
-    ,save_trunks_limits/4
+    ,save_trunks_limits/5
     ,kz_allotments/4
     ,kz_allotments_consumed/4
     ,allotment_element_delete/3
@@ -4057,7 +4057,7 @@ kz_limits(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?LIMITS/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context, 'return_error').
 
-save_trunks_limits(InputValue, TrunksType, AccountId, Context) ->
+save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
     CurrDoc = kz_limits('get', AccountId, [], Context),
     QtyDiff = ?TO_INT(InputValue) - modkazoo_util:get_value(?TO_BIN(TrunksType), CurrDoc),
     Upd = [{?TO_BIN(TrunksType), ?TO_INT(InputValue)}
@@ -4068,8 +4068,8 @@ save_trunks_limits(InputValue, TrunksType, AccountId, Context) ->
                                          ,C)
                 end
                ],
-  %  case kz_limits('post', AccountId, modkazoo_util:set_value(<<"accept_charges">>, true, ?MK_DATABAG(NewDoc)), Context) of
-    case kz_limits('post', AccountId, ?MK_DATABAG(NewDoc), Context) of
+    case kz_limits('post', AccountId, modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, ?MK_DATABAG(NewDoc)), Context) of
+  %  case kz_limits('post', AccountId, ?MK_DATABAG(NewDoc), Context) of
         {'error', "402", Body} ->
             Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
             lager:info("IAM 402 Data: ~p",[Data]),
@@ -4077,6 +4077,8 @@ save_trunks_limits(InputValue, TrunksType, AccountId, Context) ->
                            ,"_accept_trunks_limits_charges.tpl"
                            ,[{item, modkazoo_util:get_value([<<"limits">>,?TO_BIN(TrunksType)], Data)}
                             ,{quantity_diff, QtyDiff}
+                            ,{trunks_type, TrunksType}
+                            ,{account_id, AccountId}
                             ,{wide, "auto"}
                             ]
                            ,Context);
