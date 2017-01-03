@@ -4079,7 +4079,7 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                             ,{quantity_diff, QtyDiff}
                             ,{trunks_type, TrunksType}
                             ,{account_id, AccountId}
-                            ,{wide, "auto"}
+                            ,{width, "auto"}
                             ]
                            ,Context);
         {'error', _ReturnCode, Body} ->
