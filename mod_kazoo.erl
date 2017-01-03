@@ -1666,6 +1666,13 @@ event({postback,{redirect_to_reseller_portal,[{realm, Realm}]},_,_}, Context) ->
     z_context:set_session('rs_selected_account_id', AccountId, Context),
     z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
 
+event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id','undefined'}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},<<>>,<<>>}, Context);
+event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},_,_}, Context) ->
+    InputValue = z_context:get_q("input_value", Context),
+    kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, Context);
+
 event({drag,_,_},Context) ->
     Context;
 

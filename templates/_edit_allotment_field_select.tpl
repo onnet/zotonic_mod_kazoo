@@ -1,4 +1,7 @@
-<select id="{{ allotment_name }}_{{ field_name }}_input" name="input_value" class="btn-xs btn-onnet" style="max-width:140px; height:20px; text-align:center;">
+<select id="{{ allotment_name }}_{{ field_name }}_input"
+        name="input_value"
+        class="btn-xs btn-onnet"
+        style="max-width:140px; height:20px; text-align:center;">
   {% with m.kazoo[{allotments account_id=account_id}][1][allotment_name][1][field_name] as current_value %}
   {% for option in options %}
         <option value="{{ option }}" {% if option == current_value %}selected{% endif %}>{{ option }}</option>

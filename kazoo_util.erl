@@ -337,6 +337,7 @@
     ,kz_account_access_lists/3
     ,kz_device_access_lists/4
     ,kz_limits/4
+    ,save_trunks_limits/4
     ,kz_allotments/4
     ,kz_allotments_consumed/4
     ,allotment_element_delete/3
@@ -4049,7 +4050,28 @@ kz_device_access_lists(Verb, DeviceId, DataBag, Context) ->
 
 kz_limits(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?LIMITS/binary>>,
-    crossbar_account_request(Verb, API_String, DataBag, Context).
+    crossbar_account_request(Verb, API_String, DataBag, Context, 'return_error').
+
+save_trunks_limits(InputValue, TrunksType, AccountId, Context) ->
+    CurrDoc = kz_limits('get', AccountId, [], Context),
+    Upd = [{?TO_BIN(TrunksType), ?TO_INT(InputValue)}
+          ],
+    NewDoc = modkazoo_util:set_values(Upd, CurrDoc),
+    Routines = [fun(C) -> z_render:update("trunks_manager_table"
+                                         ,z_template:render("trunks_manager_table_body.tpl", [], C)
+                                         ,C)
+                end
+               ],
+    case kz_limits('post', AccountId, modkazoo_util:set_value(<<"accept_charges">>, true, ?MK_DATABAG(NewDoc)), Context) of
+        {'error', _ReturnCode, Body} ->
+            Message = modkazoo_util:get_value([<<"data">>,<<"message">>], jiffy:decode(Body)),
+            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+            z_render:growl_error(?TO_LST(Message), Ctx);
+        _ ->
+            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+            z_render:growl(?__("Trunks amount successfully changed.", Ctx), Ctx)
+    end.
+
 
 kz_allotments(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ALLOTMENTS/binary>>,
