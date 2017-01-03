@@ -1672,7 +1672,6 @@ event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_i
 event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},_,_}, Context) ->
     InputValue = z_context:get_q("input_value", Context),
     AcceptCharges = modkazoo_util:get_q_atom("accept_charges", Context),
-    lager:info("save_trunks_limits event variables: ~p", [z_context:get_q_all(Context)]),
     kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
 
 event({drag,_,_},Context) ->
