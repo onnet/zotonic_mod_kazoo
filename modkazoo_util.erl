@@ -52,7 +52,6 @@
     ,no_prune/2
     ,is_json_object/2
     ,is_valid_json_object/1
-    ,count_activation_charge/1
     ,set_session_jobj/5
     ,delete_session_jobj_key/3
     ,get_session_jobj_value/3
@@ -483,12 +482,6 @@ is_json_term(Vs) when is_list(Vs) ->
 is_json_term({'json', IOList}) when is_list(IOList) -> 'true';
 is_json_term(MaybeJObj) ->
     is_json_object(MaybeJObj).
-
-count_activation_charge('undefined') ->
-    0.0;
-count_activation_charge(InitialCharge) ->
-  lager:info("IAM count_activation_charge InitialCharge: ~p",[InitialCharge]),
-    (z_convert:to_float(InitialCharge)+5.00)*1.2.
 
 set_session_jobj(SessionKey, K, V, Default_JObj, Context) ->
     CurrentJObj = case z_context:get_session(SessionKey, Context) of 
