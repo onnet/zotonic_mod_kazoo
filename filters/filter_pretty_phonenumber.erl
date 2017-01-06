@@ -6,6 +6,10 @@
 
 pretty_phonenumber('undefined', _Context) ->
     'undefined';
+pretty_phonenumber(<<"+", Country:1/binary, NPA:3/binary, N1:3/binary, N2:2/binary, N3:2/binary>>, _Context) when Country == <<"1">> ->
+    <<"+", Country/binary, " (", NPA/binary, ") ", N1/binary, "-", N2/binary, "-", N3/binary>>;
+pretty_phonenumber(<<"+", Country:1/binary, NPA:3/binary, N1:3/binary, N2:2/binary, N3:2/binary>>, _Context) when Country == <<"7">> ->
+    <<"+", Country/binary, " (", NPA/binary, ") ", N1/binary, "-", N2/binary, "-", N3/binary>>;
 pretty_phonenumber(Number, _Context) ->
     RegExps = ["7812000000000000", "0000000000000", "^\\d{7}$", "^[7,8]\\d{10}$", "^\\d{10}$", "^8\\d{7}$"],
     multiregexp(RegExps,Number).

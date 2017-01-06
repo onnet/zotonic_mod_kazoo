@@ -59,6 +59,7 @@
     ,format_account_id/2
     ,get_q_bin/2
     ,get_q_atom/2
+    ,get_q_boolean/2
     ,get_q_integer/2
     ,cleanout/1
     ,props_get_values/2
@@ -512,6 +513,12 @@ get_q_bin(Key, Context) ->
 
 get_q_atom(Key, Context) ->
     z_convert:to_atom(z_context:get_q(Key, Context)).
+
+get_q_boolean(Key, Context) ->
+    case z_convert:to_atom(z_context:get_q(Key, Context)) of
+        'true' -> 'true';
+        _ -> 'false'
+    end.
 
 get_q_integer(Key, Context) ->
     z_convert:to_integer(z_context:get_q(Key, Context)).

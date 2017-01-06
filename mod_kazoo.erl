@@ -394,7 +394,7 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
             Context
     end;
 
-event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
+event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
     lager:info("Number purchase attempt: ~p",[Number]),
     {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
     SenderName = kazoo_util:email_sender_name(Context),
@@ -406,13 +406,28 @@ event({postback,{allocate_number,[{number,Number}]},_,_}, Context) ->
            ,{number, Number}],
     case kazoo_util:is_creditable(Context) of
         'true' ->
-            spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
-            kazoo_util:process_purchase_number(Number, Context);
-        'false' -> 
-            spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", [{'not_creditable','true'}|Vars], Context]),
-            Context1 = z_render:update("onnet_widget_order_additional_number_tpl" ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context),Context),
+            spawn('z_email'
+                 ,'send_render'
+                 ,[m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]
+                 ),
+            AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+            kazoo_util:process_purchase_number(Number, AcceptCharges, Context);
+        'false' ->
+            spawn('z_email'
+                 ,'send_render'
+                 ,[m_config:get_value('mod_kazoo', sales_email, Context)
+                  ,"_email_number_purchase.tpl"
+                  ,[{'not_creditable','true'}|Vars]
+                  ,Context
+                  ]
+                 ),
+            Context1 = z_render:update("onnet_widget_order_additional_number_tpl"
+                                      ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context)
+                                      ,Context
+                                      ),
             z_render:growl_error(?__("Please add Credit Card or top-up account balance first.", Context1), Context1)
     end;
+
 
 event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     lager:info("Number deallocation attempt: ~p",[Number]),
@@ -1671,7 +1686,7 @@ event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_i
     event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},<<>>,<<>>}, Context);
 event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},_,_}, Context) ->
     InputValue = z_context:get_q("input_value", Context),
-    AcceptCharges = modkazoo_util:get_q_atom("accept_charges", Context),
+    AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
     kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
 
 event({drag,_,_},Context) ->

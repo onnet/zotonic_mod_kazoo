@@ -128,7 +128,7 @@
     ,set_accounts_address/4
     ,lookup_numbers/3
     ,rs_add_number/3
-    ,purchase_number/2
+    ,purchase_number/3
     ,deallocate_number/2
     ,deallocate_number/3
     ,service_plan/2
@@ -147,7 +147,7 @@
     ,remove_service_plan_from_account/3
     ,valid_card_exists/1
     ,is_creditable/1
-    ,process_purchase_number/2
+    ,process_purchase_number/3
     ,get_account_timezone/1
     ,get_user_timezone/1
     ,may_be_get_timezone/1
@@ -397,6 +397,7 @@
 -define(PREFIX, <<"prefix=">>).
 -define(QUANTITY, <<"quantity=">>).
 -define(COLLECTION, <<"/collection">>).
+-define(RESERVE, <<"/reserve">>).
 -define(ACTIVATE, <<"/activate">>).
 -define(SERVICE_PLANS, <<"/service_plans">>).
 -define(CURRENT, <<"/current">>).
@@ -440,6 +441,7 @@
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).
+-define(SET_ACCEPT_CHARGES(AcceptCharges, Doc), modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, ?MK_DATABAG(Doc))).
 
 -define(MENU_KEYS_LIST, [<<"_">>,<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>]).
 
@@ -1745,24 +1747,28 @@ rs_add_number(Num, AccountId, Context) ->
         <<$+, BNum/binary>> -> BNum;
         BNum -> BNum
     end,
-    DataBag = {[{<<"data">>, {[{<<"numbers">>, [Number]}]}},{<<"accept_charges">>, true}]},
+    DataBag = ?SET_ACCEPT_CHARGES('true', {[{<<"numbers">>, [Number]}]}),
     _ = crossbar_account_request('put'
                                  ,<<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, "/", Number/binary>>
                                  ,DataBag
                                  ,Context
                                 ),
     _ = crossbar_account_request('put'
-                                 ,<<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, "/", Number/binary, ?ACTIVATE/binary>>
+                                 ,<<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary
+                                   ,?PHONE_NUMBERS/binary, "/", Number/binary, ?ACTIVATE/binary>>
                                  ,[]
                                  ,Context
                                 ).
 
-purchase_number(Number, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
-    DataBag = {[{<<"data">>, {[{<<"numbers">>, [Number]}]}},{<<"accept_charges">>, true}]},
+purchase_number(<<"+", Num/binary>> = Number, AcceptCharges, Context) ->
+ %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
+ %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, "/", Number/binary, ?RESERVE/binary>>,
+ %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary>>,
+    DataBag = ?SET_ACCEPT_CHARGES(AcceptCharges, {[{<<"numbers">>, [Number]}]}),
     crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
 
-process_purchase_number(Number, Context) ->
+process_purchase_number(Number, AcceptCharges, Context) ->
     Routines = [fun(C) -> z_render:update("onnet_allocated_numbers_tpl"
                                          ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], C)
                                          ,C)
@@ -1775,7 +1781,7 @@ process_purchase_number(Number, Context) ->
                                          ,z_template:render("onnet_widget_order_additional_number.tpl", [], C)
                                          ,C)
                 end],
-    case purchase_number(Number, Context) of
+    case purchase_number(Number, AcceptCharges, Context) of
         {'error', _ReturnCode, Body} ->
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
             Message = modkazoo_util:get_value([<<"data">>,<<"error">>, Number,<<"message">>], jiffy:decode(Body)),
@@ -4070,7 +4076,7 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                                          ,C)
                 end
                ],
-    case kz_limits('post', AccountId, modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, ?MK_DATABAG(NewDoc)), Context) of
+    case kz_limits('post', AccountId, ?SET_ACCEPT_CHARGES(AcceptCharges, NewDoc), Context) of
         {'error', "402", Body} ->
             Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
             z_render:dialog(?__("Charges Confirmation",Context)
