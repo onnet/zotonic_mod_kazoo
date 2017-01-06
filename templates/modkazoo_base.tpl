@@ -8,7 +8,6 @@
     <link rel="shortcut icon" href="/lib/images/favicon.ico">
     <title>{{ m.config.mod_kazoo.page_header.value }}</title>
 
-
     {% lib "js/jquery-2.1.1.min.js" %}
     {% lib "js/jquery-migrate-1.0.0.js" %}
     {% lib "js/jquery-ui.min.js" %}
@@ -41,6 +40,9 @@
     {% lib "js/modules/z.notice.js" %}
     {% lib "js/z.dialog.bootstrap3.js" %}
     {% lib "js/modules/ubf.js" %}
+    {% lib  "js/qlobber.js" %}
+    {% lib  "js/pubzub.js" %}
+
     {% lib 
           "js/modules/z.tooltip.js"
           "js/modules/z.feedback.js"
