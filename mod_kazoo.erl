@@ -418,56 +418,51 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
 
 event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
     try
+      {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
       'ok' = modkazoo_util:check_field_filled("zipcode",Context),
       'ok' = modkazoo_util:check_field_filled("city",Context),
       'ok' = modkazoo_util:check_field_filled("state",Context),
       'ok' = modkazoo_util:check_field_filled("address_line1",Context),
       'ok' = modkazoo_util:check_field_filled("address_line2",Context),
-      lager:info("IAM z_context:get_q(address_confirmation_file,Context): ~p",[z_context:get_q("address_confirmation_file",Context)]),
-      case z_context:get_q("address_confirmation_file",Context) of
-          {upload, UploadFilename, UploadTmp, _, _} ->
-              lager:info("IAM UploadFilename: ~p",[UploadFilename]),
-              lager:info("IAM UploadTmp: ~p",[UploadTmp]),
-              'ok';
-          _ -> throw({'error', 'no_address_confirmation_file'})
-      end,
-      lager:info("Number purchase attempt: ~p",[Number]),
-      {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+      {upload, UploadFilename, UploadTmp, _, _} = z_context:get_q("address_confirmation_file",Context),
+      false = modkazoo_util2:check_file_size_exceeded('address_confirmation_file', UploadTmp, 15000000),
+      {ok, FileData} = file:read_file(UploadTmp),
+      {ok, FileIdnProps} = z_media_identify:identify(UploadTmp, Context),
+      Attachments =
+          [#upload{tmpfile=UploadTmp
+                  ,data=FileData
+                  ,filename=modkazoo_util2:translit(UploadFilename)
+                  ,mime=proplists:get_value(mime, FileIdnProps)
+                  }
+          ],
       SenderName = kazoo_util:email_sender_name(Context),
+      EmailFrom = m_config:get_value('mod_kazoo', sales_email, Context),
       Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
              ,{login_name, z_context:get_session('kazoo_login_name', Context)}
-             ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
+             ,{email_from, EmailFrom}
              ,{clientip, ClientIP}
              ,{sender_name, SenderName}
+             ,{upload_filenamefile, UploadFilename}
              ,{number, Number}],
-      case kazoo_util:is_creditable(Context) of
-          'true' ->
-              spawn('z_email'
-                   ,'send_render'
-                   ,[m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]
-                   ),
-              AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
-              kazoo_util:process_purchase_number(Number, AcceptCharges, Context);
-          'false' ->
-              spawn('z_email'
-                   ,'send_render'
-                   ,[m_config:get_value('mod_kazoo', sales_email, Context)
-                    ,"_email_number_purchase.tpl"
-                    ,[{'not_creditable','true'}|Vars]
-                    ,Context
-                    ]
-                   ),
-              Context1 = z_render:update("onnet_widget_order_additional_number_tpl"
-                                        ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context)
-                                        ,Context
-                                        ),
-              z_render:growl_error(?__("Please add Credit Card or top-up account balance first.", Context1), Context1)
-      end,
+      AllocateNumberEmail =
+          #email{to = EmailFrom
+                ,from = EmailFrom
+                ,html_tpl = "_email_number_purchase.tpl"
+                ,vars = Vars
+                ,attachments = Attachments
+                },
+      spawn('z_email','send' ,[AllocateNumberEmail, Context]),
+      AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+      kazoo_util:process_purchase_number(Number, AcceptCharges, Context),
       z_render:dialog_close(Context)
     catch
-      error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
-      error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
-      throw:{error, 'no_address_confirmation_file'} -> z_render:growl_error(?__("Please provide proof of address file",Context), Context);
+      error:{badmatch, {true, 'address_confirmation_file'}} ->
+          z_render:growl_error(?__("Maximum file size exceeded",Context), Context);
+      error:{badmatch, []} ->
+          z_render:growl_error(?__("Please provide proof of address file",Context), Context);
+      error:{badmatch, _BM} ->
+        %  lager:debug("badmatch: ~p",[_BM]),
+          z_render:growl_error(?__("All mandatory fields should be filled in",Context), Context);
       E1:E2 ->
           lager:info("Err ~p:~p", [E1, E2]),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
