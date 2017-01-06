@@ -1108,7 +1108,12 @@ send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Co
             SignUploadFilenameVar = [{signup_file, SignUploadFilename}],
             {ok, FileData} = file:read_file(SignUploadTmp),
             {ok, FileIdnProps} = z_media_identify:identify(SignUploadTmp, Context),
-            SignUpload = [#upload{tmpfile=SignUploadTmp, data=FileData, filename=modkazoo_util2:translit(SignUploadFilename), mime=proplists:get_value(mime, FileIdnProps)}];
+            SignUpload = [#upload{tmpfile=SignUploadTmp
+                                 ,data=FileData
+                                 ,filename=modkazoo_util2:translit(SignUploadFilename)
+                                 ,mime=proplists:get_value(mime, FileIdnProps)
+                                 }
+                         ];
         _ ->
             SignUpload = [],
             SignUploadFilenameVar = []
@@ -1760,10 +1765,11 @@ rs_add_number(Num, AccountId, Context) ->
                                  ,Context
                                 ).
 
-purchase_number(<<"+", Num/binary>> = Number, AcceptCharges, Context) ->
+%%purchase_number(<<"+", Num/binary>> = Number, AcceptCharges, Context) ->
+purchase_number(Number, AcceptCharges, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
  %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
- %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, "/", Number/binary, ?RESERVE/binary>>,
+ %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, "/", Number/binary, ?RESERVE/binary>>,
  %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary>>,
     DataBag = ?SET_ACCEPT_CHARGES(AcceptCharges, {[{<<"numbers">>, [Number]}]}),
     crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
@@ -2775,9 +2781,12 @@ upload_media(Context) ->
         mod_signal:emit({update_admin_portal_media_list_tpl, []}, Context),
         z_render:dialog_close(Context)
     catch
-        no_name_entered -> z_render:growl_error(?__("No name entered",Context), Context);
-        no_document_uploaded -> z_render:growl_error(?__("No document chosen",Context), Context);
-        error:{badmatch, {true, promptfile}} -> z_render:growl_error(?__("Maximum file size exceeded. Please try to upload smaller file.",Context), Context);
+        no_name_entered ->
+            z_render:growl_error(?__("No name entered",Context), Context);
+        no_document_uploaded ->
+            z_render:growl_error(?__("No document chosen",Context), Context);
+        error:{badmatch, {true, promptfile}} ->
+            z_render:growl_error(?__("Maximum file size exceeded. Please try to upload smaller file.",Context), Context);
         E1:E2 ->
             lager:info("Error. E1: ~p E2: ~p", [E1, E2]),
             z_render:growl_error(?__("Something wrong happened.",Context), Context)

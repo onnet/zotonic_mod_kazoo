@@ -191,8 +191,10 @@ event({submit,password_recovery_form,_,_}, Context) ->
 event({postback,rate_seek,_,_}, Context) ->
     Number = z_convert:to_binary(re:replace(z_context:get_q("rate_seek",Context), "[^0-9]", "", [global, {return, list}])),
     case kazoo_util:rate_number(Number, Context) of
-        {'ok', PriceInfo} -> z_render:update("single_number_rate", z_template:render("_single_number_rate.tpl", [{priceinfo, PriceInfo}], Context), Context);
-        _ -> z_render:growl_error(?__("Wrong number provided, please try again.",Context), Context)
+        {'ok', PriceInfo} ->
+            z_render:update("single_number_rate", z_template:render("_single_number_rate.tpl", [{priceinfo, PriceInfo}], Context), Context);
+        _ ->
+            z_render:growl_error(?__("Wrong number provided, please try again.",Context), Context)
     end;
 
 event({submit, send_fax, _, _}, Context) ->
@@ -220,8 +222,8 @@ event({submit, send_fax, _, _}, Context) ->
                                         H <- z_convert:to_list(base64:encode(crypto:strong_rand_bytes(8)))]))))/binary>>,
             FileName = z_convert:to_binary(io_lib:format("~s.~s", [DocName, Ext])),
             _ = file:write_file(<<<<"/tmp/">>/binary, FileName/binary>>, FaxData),
-       %     AttachmentUrl = <<<<"https://">>/binary, (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, <<"/getfaxdoc/id/">>/binary, FileName/binary>>,
-            AttachmentUrl = <<<<"http://">>/binary, (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, <<"/getfaxdoc/id/">>/binary, FileName/binary>>,
+       %    AttachmentUrl = <<<<"https://">>/binary,(?TO_BIN(z_dispatcher:hostname(Context)))/binary,<<"/getfaxdoc/id/">>/binary,FileName/binary>>,
+            AttachmentUrl = <<<<"http://">>/binary, (?TO_BIN(z_dispatcher:hostname(Context)))/binary, <<"/getfaxdoc/id/">>/binary, FileName/binary>>,
             FaxHeader = case z_context:get_q("company_name_checkbox", Context) of
                             "checked" -> z_context:get_session('kazoo_account_name', Context);
                             _ -> <<"Fax Service https://onnet.info">>
@@ -232,9 +234,12 @@ event({submit, send_fax, _, _}, Context) ->
             throw(no_document_uploaded)
     end
   catch
-    no_number_entered -> z_render:growl_error(?__("No number entered",Context), Context);
-    no_document_uploaded -> z_render:growl_error(?__("No document chosen",Context), Context);
-    error:{badmatch, {true, faxfile}} -> z_render:growl_error(?__("Maximum file size exceeded. Please try to upload smaller file.",Context), Context);
+    no_number_entered ->
+        z_render:growl_error(?__("No number entered",Context), Context);
+    no_document_uploaded ->
+        z_render:growl_error(?__("No document chosen",Context), Context);
+    error:{badmatch, {true, faxfile}} ->
+        z_render:growl_error(?__("Maximum file size exceeded. Please try to upload smaller file.",Context), Context);
     E1:E2 -> 
         lager:info("Error. E1: ~p E2: ~p", [E1, E2]),
         z_render:growl_error(?__("Something wrong happened.",Context), Context)
@@ -249,7 +254,13 @@ event({postback,kazoo_transaction,_,_}, Context) ->
                 <<"submitted_for_settlement">> ->
                     spawn(fun() -> timer:sleep(1000), mod_signal:emit({update_onnet_widget_finance_tpl, []}, Context) end),
                     spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_onnet_widget_online_payment_tpl, []}, Context) end),
-                    spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_rs_widget_transactions_list_tpl, [{headline,?__("Transactions list", Context)}]}, Context) end),
+                    spawn(fun() ->
+                              timer:sleep(4000),
+                              mod_signal:emit({update_rs_widget_transactions_list_tpl
+                                              ,[{headline,?__("Transactions list", Context)}]
+                                              }
+                                             ,Context)
+                          end),
         %            z_render:growl("£"++z_convert:to_list(Amount)++?__(" successfully added.",Context), Context);
                     z_render:growl(?__(" successfully added.",Context), Context);
                 E ->
@@ -263,11 +274,15 @@ event({postback,kazoo_transaction,_,_}, Context) ->
 
 event({postback,{bt_delete_card,[{card_id,CardId}]},_,_}, Context) ->
     kazoo_util:bt_delete_card(CardId, Context),
-    z_render:update("cards_list_body", z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context), Context);
+    z_render:update("cards_list_body"
+                   ,z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context)
+                   ,Context);
 
 event({postback,{bt_make_default_card,[{card_id,CardId}]},_,_}, Context) ->
     bt_util:bt_make_default_card(CardId, Context),
-    z_render:update("cards_list_body", z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context), Context);
+    z_render:update("cards_list_body"
+                   ,z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context)
+                   ,Context);
 
 event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
     case z_context:get_q("payment_method_nonce", Context) of
@@ -278,11 +293,17 @@ event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
                 "success" -> 
                     Context1 = z_render:growl(?__("Card successfully added.",Context), Context),
                     z_render:update("make_payment_manage_cards_tpl"
-                                     ,z_template:render("_make_payment_manage_cards.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1);
+                                   ,z_template:render("_make_payment_manage_cards.tpl"
+                                                     ,[{bt_customer, kazoo_util:kz_bt_customer(Context1)}]
+                                                     ,Context1)
+                                   ,Context1);
                 E ->
                     Context1 = z_render:growl_error(?__(E, Context), Context),
                     z_render:update("onnet_widget_online_payment_tpl"
-                                     ,z_template:render("onnet_widget_online_payment.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1)
+                                   ,z_template:render("onnet_widget_online_payment.tpl"
+                                                     ,[{bt_customer, kazoo_util:kz_bt_customer(Context1)}]
+                                                     ,Context1)
+                                   ,Context1)
             end
     end;
 
@@ -321,7 +342,8 @@ event({postback,invoiceme,TriggerId,_},Context) ->
                          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
                                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
                                                    ,Context),
-                         z_render:growl(?__("Invoice successfully sent to ", Context1)++z_convert:to_list(kazoo_util:kz_user_doc_field(<<"email">>, Context1))
+                         z_render:growl(?__("Invoice successfully sent to ", Context1)
+                                            ++z_convert:to_list(kazoo_util:kz_user_doc_field(<<"email">>, Context1))
                                        ,Context1);
                      _ -> 
                          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
@@ -395,37 +417,60 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
     end;
 
 event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
-    lager:info("Number purchase attempt: ~p",[Number]),
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
-    SenderName = kazoo_util:email_sender_name(Context),
-    Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
-           ,{login_name, z_context:get_session('kazoo_login_name', Context)}
-           ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
-           ,{clientip, ClientIP}
-           ,{sender_name, SenderName}
-           ,{number, Number}],
-    case kazoo_util:is_creditable(Context) of
-        'true' ->
-            spawn('z_email'
-                 ,'send_render'
-                 ,[m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]
-                 ),
-            AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
-            kazoo_util:process_purchase_number(Number, AcceptCharges, Context);
-        'false' ->
-            spawn('z_email'
-                 ,'send_render'
-                 ,[m_config:get_value('mod_kazoo', sales_email, Context)
-                  ,"_email_number_purchase.tpl"
-                  ,[{'not_creditable','true'}|Vars]
-                  ,Context
-                  ]
-                 ),
-            Context1 = z_render:update("onnet_widget_order_additional_number_tpl"
-                                      ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context)
-                                      ,Context
-                                      ),
-            z_render:growl_error(?__("Please add Credit Card or top-up account balance first.", Context1), Context1)
+    try
+      'ok' = modkazoo_util:check_field_filled("zipcode",Context),
+      'ok' = modkazoo_util:check_field_filled("city",Context),
+      'ok' = modkazoo_util:check_field_filled("state",Context),
+      'ok' = modkazoo_util:check_field_filled("address_line1",Context),
+      'ok' = modkazoo_util:check_field_filled("address_line2",Context),
+      lager:info("IAM z_context:get_q(address_confirmation_file,Context): ~p",[z_context:get_q("address_confirmation_file",Context)]),
+      case z_context:get_q("address_confirmation_file",Context) of
+          {upload, UploadFilename, UploadTmp, _, _} ->
+              lager:info("IAM UploadFilename: ~p",[UploadFilename]),
+              lager:info("IAM UploadTmp: ~p",[UploadTmp]),
+              'ok';
+          _ -> throw({'error', 'no_address_confirmation_file'})
+      end,
+      lager:info("Number purchase attempt: ~p",[Number]),
+      {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+      SenderName = kazoo_util:email_sender_name(Context),
+      Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
+             ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+             ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
+             ,{clientip, ClientIP}
+             ,{sender_name, SenderName}
+             ,{number, Number}],
+      case kazoo_util:is_creditable(Context) of
+          'true' ->
+              spawn('z_email'
+                   ,'send_render'
+                   ,[m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]
+                   ),
+              AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+              kazoo_util:process_purchase_number(Number, AcceptCharges, Context);
+          'false' ->
+              spawn('z_email'
+                   ,'send_render'
+                   ,[m_config:get_value('mod_kazoo', sales_email, Context)
+                    ,"_email_number_purchase.tpl"
+                    ,[{'not_creditable','true'}|Vars]
+                    ,Context
+                    ]
+                   ),
+              Context1 = z_render:update("onnet_widget_order_additional_number_tpl"
+                                        ,z_template:render("onnet_widget_order_additional_number.tpl", [], Context)
+                                        ,Context
+                                        ),
+              z_render:growl_error(?__("Please add Credit Card or top-up account balance first.", Context1), Context1)
+      end,
+      z_render:dialog_close(Context)
+    catch
+      error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
+      error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
+      throw:{error, 'no_address_confirmation_file'} -> z_render:growl_error(?__("Please provide proof of address file",Context), Context);
+      E1:E2 ->
+          lager:info("Err ~p:~p", [E1, E2]),
+          z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
 
@@ -439,15 +484,26 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
            ,{sender_name, SenderName}
            ,{clientip, ClientIP}
            ,{number, Number}],
-    spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
+    spawn('z_email'
+         ,'send_render'
+         ,[m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]
+         ),
     case kazoo_util:deallocate_number(Number, Context) of
         <<>> ->
-            Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current services"}], Context1),Context1),
+            Context1 = z_render:update("onnet_allocated_numbers_tpl"
+                                      ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context)
+                                      ,Context),
+            Context2 = z_render:update("onnet_widget_monthly_fees_tpl"
+                                      ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current services"}], Context1)
+                                      ,Context1),
             z_render:growl_error(?__("Something wrong happened.", Context2), Context2);
         _ -> 
-            Context1 = z_render:update("onnet_allocated_numbers_tpl" ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context),Context),
-            Context2 = z_render:update("onnet_widget_monthly_fees_tpl" ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1),Context1),
+            Context1 = z_render:update("onnet_allocated_numbers_tpl"
+                                      ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], Context)
+                                      ,Context),
+            Context2 = z_render:update("onnet_widget_monthly_fees_tpl"
+                                      ,z_template:render("onnet_widget_monthly_fees.tpl", [{headline,"Current month services"}], Context1)
+                                      ,Context1),
             z_render:growl(?__("Number ", Context2)++z_convert:to_list(Number)++?__(" successfully removed.", Context2), Context2)
     end;
 
@@ -464,10 +520,14 @@ event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,
     spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
     case kazoo_util:deallocate_number(Number, AccountId, Context) of
         <<>> ->
-            Context1 = z_render:update("rs_numbers_list_table" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
+            Context1 = z_render:update("rs_numbers_list_table"
+                                      ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context)
+                                      ,Context),
             z_render:growl_error(?__("Something wrong happened.", Context1), Context1);
         _ -> 
-            Context1 = z_render:update("rs_numbers_list_widget_opened" ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context),Context),
+            Context1 = z_render:update("rs_numbers_list_widget_opened"
+                                      ,z_template:render("rs_numbers_list_table_body.tpl", [{account_id, AccountId}], Context)
+                                      ,Context),
             z_render:growl(?__("Number ", Context1)++z_convert:to_list(Number)++?__(" successfully removed.", Context1), Context1)
     end;
 
@@ -482,7 +542,9 @@ event({submit,{start_webphone_form,[]},_,_}, Context) ->
 
 event({postback,{delete_incoming_fax,[{fax_id, FaxId}]},_,_}, Context) ->
     _ = kazoo_util:kz_incoming_fax_delete(FaxId, Context),
-    z_render:update("user_portal_faxes_incoming", z_template:render("user_portal_faxes_incoming.tpl", [{headline,?__("Incoming faxes", Context)}], Context), Context);
+    z_render:update("user_portal_faxes_incoming"
+                   ,z_template:render("user_portal_faxes_incoming.tpl", [{headline,?__("Incoming faxes", Context)}], Context)
+                   ,Context);
 
 event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
     event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, 'undefined'}]},<<>>,<<>>}, Context);
@@ -496,17 +558,23 @@ event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName
         "account" ->
             _ = kazoo_util:kz_toggle_account_doc(FieldName, Context),
             z_render:update(TargetId
-                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}], Context)
+                           ,z_template:render("_show_field_checkbox.tpl"
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}]
+                                             ,Context)
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_toggle_user_doc(FieldName, DocId, Context),
             z_render:update(TargetId
-                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}], Context)
+                           ,z_template:render("_show_field_checkbox.tpl"
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}]
+                                             ,Context)
                            ,Context);
         "device" ->
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
             z_render:update(TargetId
-                           ,z_template:render("_show_field_checkbox.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}], Context)
+                           ,z_template:render("_show_field_checkbox.tpl"
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}]
+                                             ,Context)
                            ,Context)
     end;
 
@@ -525,7 +593,11 @@ event({submit,passwordForm,_,_}, Context) ->
                 Username -> 'ok';
                 _ -> throw({'error', 'emails_not_equal'})
             end,
-            case kazoo_util:change_credentials(Username, z_context:get_q("password1", Context), z_context:get_q("chpwd_user_id", Context), Context) of
+            case kazoo_util:change_credentials(Username
+                                              ,z_context:get_q("password1", Context)
+                                              ,z_context:get_q("chpwd_user_id", Context)
+                                              ,Context)
+            of
                 {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
                 _ -> 'ok'
             end, 
@@ -556,13 +628,21 @@ event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_
         "user" ->
             _ = kazoo_util:kz_set_user_doc(Field, 'true', DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
-            Context1 = z_render:update("user_enabled_status", z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context), Context),
-            z_render:update("user_enable_control", z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1), Context1);
+            Context1 = z_render:update("user_enabled_status"
+                                      ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
+                                      ,Context),
+            z_render:update("user_enable_control"
+                           ,z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1)
+                           ,Context1);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(Field, 'true', DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
-            Context1 = z_render:update("device_enabled_status", z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context), Context),
-            z_render:update("device_enable_control", z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1), Context1)
+            Context1 = z_render:update("device_enabled_status"
+                                      ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
+                                      ,Context),
+            z_render:update("device_enable_control"
+                           ,z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1)
+                           ,Context1)
     end;
 
 event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_}, Context) ->
@@ -570,13 +650,21 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
         "user" ->
             _ = kazoo_util:kz_set_user_doc(Field, 'false', DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
-            Context1 = z_render:update("user_enabled_status", z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context), Context),
-            z_render:update("user_enable_control", z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1), Context1);
+            Context1 = z_render:update("user_enabled_status"
+                                      ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
+                                      ,Context),
+            z_render:update("user_enable_control"
+                           ,z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1)
+                           ,Context1);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(Field, 'false', DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
-            Context1 = z_render:update("device_enabled_status", z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context), Context),
-            z_render:update("device_enable_control", z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1), Context1)
+            Context1 = z_render:update("device_enabled_status"
+                                      ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
+                                      ,Context),
+            z_render:update("device_enable_control"
+                           ,z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1)
+                           ,Context1)
     end;
 
 event({submit,add_new_user_form,_,_}, Context) ->
@@ -612,16 +700,33 @@ event({submit,add_new_user_form,_,_}, Context) ->
     end;
 
 event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
-    event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+    event({postback
+          ,{save_field,[{type,Type}
+                       ,{doc_id,DocId}
+                       ,{field_name, FieldName}
+                       ,{account_id, z_context:get_session('kazoo_account_id', Context)}
+                       ]
+           },<<>>,<<>>},Context);
 
 event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, 'undefined'}]},_,_}, Context) ->
-    event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+    event({postback
+          ,{save_field,[{type,Type}
+                       ,{doc_id,DocId}
+                       ,{field_name, FieldName}
+                       ,{account_id, z_context:get_session('kazoo_account_id', Context)}
+                       ]
+           },<<>>,<<>>},Context);
 
 event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, AccountId}]},_,_}, Context) ->
     case Type of
         "account" ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
-            z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName},{account_id, AccountId}], Context), Context);
+            z_render:update(FieldName
+                           ,z_template:render("_show_field.tpl"
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{account_id, AccountId}]
+                                             ,Context
+                                             )
+                           ,Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
@@ -633,18 +738,71 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
     end;
 
 event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options}]},_,_}, Context) ->
-    event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,""},{postfix,""}]},"",""}, Context);
+    event({postback
+          ,{save_field_select,[{type,Type}
+                              ,{doc_id,DocId}
+                              ,{field_name, FieldName}
+                              ,{options,Options}
+                              ,{prefix,""}
+                              ,{postfix,""}
+                              ]
+           },<<>>,<<>>},Context);
 
 
-event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix}]},_,_}, Context) ->
-    event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix}
-                                       ,{postfix,RawPostfix},{account_id,z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+event({postback
+      ,{save_field_select,[{type,Type}
+                          ,{doc_id,DocId}
+                          ,{field_name, FieldName}
+                          ,{options,Options}
+                          ,{prefix,RawPrefix}
+                          ,{postfix,RawPostfix}
+                          ]
+       },_,_},Context)
+    ->
+    event({postback
+          ,{save_field_select,[{type,Type}
+                              ,{doc_id,DocId}
+                              ,{field_name, FieldName}
+                              ,{options,Options}
+                              ,{prefix,RawPrefix}
+                              ,{postfix,RawPostfix}
+                              ,{account_id,z_context:get_session('kazoo_account_id', Context)}
+                              ]
+           },<<>>,<<>>}, Context);
 
-event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix},{account_id,'undefined'}]},_,_}, Context) ->
-    event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix}
-                                       ,{postfix,RawPostfix},{account_id,z_context:get_session('kazoo_account_id', Context)}]},'dont_care','dont_care'}, Context);
+event({postback
+      ,{save_field_select,[{type,Type}
+                          ,{doc_id,DocId}
+                          ,{field_name, FieldName}
+                          ,{options,Options}
+                          ,{prefix,RawPrefix}
+                          ,{postfix,RawPostfix}
+                          ,{account_id,'undefined'}
+                          ]
+       },_,_}, Context)
+    ->
+    event({postback
+          ,{save_field_select,[{type,Type}
+                              ,{doc_id,DocId}
+                              ,{field_name, FieldName}
+                              ,{options,Options}
+                              ,{prefix,RawPrefix}
+                              ,{postfix,RawPostfix}
+                              ,{account_id,z_context:get_session('kazoo_account_id', Context)}
+                              ]
+           },<<>>,<<>>}, Context);
 
-event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options},{prefix,RawPrefix},{postfix,RawPostfix},{account_id,AccountId}]},_,_}, Context) ->
+event({postback
+      ,{save_field_select,[{type,Type}
+                          ,{doc_id,DocId}
+                          ,{field_name, FieldName}
+                          ,{options,Options}
+                          ,{prefix,RawPrefix}
+                          ,{postfix,RawPostfix}
+                          ,{account_id,AccountId}
+                          ]
+       },_,_}, Context)
+    ->
     Prefix = case RawPrefix of
         'undefined' -> "";
         Pre -> Pre
@@ -656,13 +814,32 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
     case Type of
         "account" ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
-            z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix},{account_id, AccountId}], Context), Context);
+            z_render:update(Prefix++FieldName
+                           ,z_template:render("_show_field_select.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{options,Options}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ,{account_id, AccountId}
+                                              ]
+                                             ,Context)
+                           ,Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
-            z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix}], Context), Context);
+            z_render:update(Prefix++FieldName
+                           ,z_template:render("_show_field_select.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{options,Options}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ]
+                                             ,Context)
+                           ,Context);
         "device" ->
             InputValue = case z_context:get_q("input_value", Context) of
                 [] -> 'undefined';
@@ -670,8 +847,17 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
-            z_render:update(Prefix++FieldName, z_template:render("_show_field_select.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}
-                                                                                           ,{options,Options},{prefix,Prefix},{postfix,Postfix}], Context), Context)
+            z_render:update(Prefix++FieldName
+                           ,z_template:render("_show_field_select.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{options,Options}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ]
+                                             ,Context)
+                           ,Context)
     end;
 
 event({submit,add_new_device,_,_}, Context) ->
@@ -753,38 +939,62 @@ event({submit,cf_edit_name,_,_},Context) ->
 
 event({submit,cf_select_user,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","timeout"], z_convert:to_binary(z_context:get_q("timeout", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","timeout"]
+                                 ,z_convert:to_binary(z_context:get_q("timeout", Context))
+                                 ,Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_device,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","timeout"], z_convert:to_binary(z_context:get_q("timeout", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","timeout"]
+                                 ,z_convert:to_binary(z_context:get_q("timeout", Context))
+                                 ,Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_play,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_voicemail,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_callflow,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_record_call,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"start">>, Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","url"], <<>>, Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","format"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","format"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","time_limit"], <<"6000">>, Context),
     z_render:dialog_close(Context);
 
@@ -792,14 +1002,26 @@ event({submit,cf_select_group_pickup,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     PickupType = z_context:get_q("pickup_type", Context)++"_id",
     Selected = jiffy:decode(z_context:get_q("selected", Context)),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data",PickupType], modkazoo_util:get_value(<<"id">>,Selected), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","name"], modkazoo_util:get_value(<<"name">>,Selected), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data",PickupType]
+                                 ,modkazoo_util:get_value(<<"id">>,Selected)
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","name"]
+                                 ,modkazoo_util:get_value(<<"name">>,Selected)
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_receive_fax,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","owner_id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","media","fax_option"], modkazoo_util:on_to_true(z_context:get_q("t_38_checkbox", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","owner_id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","media","fax_option"]
+                                 ,modkazoo_util:on_to_true(z_context:get_q("t_38_checkbox", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_save,[{cf,"current_callflow"}]},_,_},Context) ->
@@ -811,55 +1033,99 @@ event({postback,{cf_delete,[{cf,"current_callflow"}]},_,_},Context) ->
 
 event({postback,{cf_ring_group_select,[{element_type,ElementType}]},_,_},Context) ->
     Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
-    Context1 = z_render:insert_bottom("sorter",z_template:render("_cf_select_ring_group_element.tpl",[{selected_value,Selected},{element_type,ElementType}],Context),Context),
+    Context1 = z_render:insert_bottom("sorter"
+                                     ,z_template:render("_cf_select_ring_group_element.tpl"
+                                                       ,[{selected_value,Selected},{element_type,ElementType}]
+                                                       ,Context)
+                                     ,Context),
     z_render:wire([{hide, [{target, "option_"++z_convert:to_list(modkazoo_util:get_value(<<"id">>,Selected))}]}], Context1);
 
 event({submit,cf_select_ring_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","name"], z_convert:to_binary(z_context:get_q("name", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","strategy"], z_convert:to_binary(z_context:get_q("strategy", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","name"]
+                                 ,z_convert:to_binary(z_context:get_q("name", Context))
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","strategy"]
+                                 ,z_convert:to_binary(z_context:get_q("strategy", Context))
+                                 ,Context),
     _ = case z_convert:to_binary(z_context:get_q("ringback", Context)) of
         <<>> -> modkazoo_util:delete_session_jobj_key('current_callflow', z_string:split(ElementId,"-")++["data","ringback"], Context);
         Ringback -> kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","ringback"], Ringback, Context)
     end,
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","endpoints"], kazoo_util:cf_build_ring_group_endpoints(Context), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","timeout"], kazoo_util:cf_calculate_ring_group_timeout(Context), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","endpoints"]
+                                 ,kazoo_util:cf_build_ring_group_endpoints(Context)
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","timeout"]
+                                 ,kazoo_util:cf_calculate_ring_group_timeout(Context)
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_page_group_select,[{element_type,ElementType}]},_,_},Context) ->
     Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
-    Context1 = z_render:insert_bottom("sorter",z_template:render("_cf_select_page_group_element.tpl",[{selected_value,Selected},{element_type,ElementType}],Context),Context),
+    Context1 = z_render:insert_bottom("sorter"
+                                     ,z_template:render("_cf_select_page_group_element.tpl"
+                                                       ,[{selected_value,Selected},{element_type,ElementType}]
+                                                       ,Context)
+                                     ,Context),
     z_render:wire([{hide, [{target, "option_"++z_convert:to_list(modkazoo_util:get_value(<<"id">>,Selected))}]}], Context1);
 
 event({submit,cf_select_page_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","name"], z_convert:to_binary(z_context:get_q("name", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","endpoints"], kazoo_util:cf_build_page_group_endpoints(Context), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","name"]
+                                 ,z_convert:to_binary(z_context:get_q("name", Context))
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","endpoints"]
+                                 ,kazoo_util:cf_build_page_group_endpoints(Context)
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_menu,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_temporal_route,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","timezone"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","timezone"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_cidlistmatch,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(z_context:get_q("selected", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_check_cid,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], z_context:get_session('current_callflow', Context), ?EMPTY_JSON_OBJECT) of
+    _ = case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>]
+                                    ,z_context:get_session('current_callflow', Context)
+                                    ,?EMPTY_JSON_OBJECT)
+        of
             ?EMPTY_JSON_OBJECT -> 'ok';
             _ -> kazoo_util:may_be_check_cid_children_clean(Context)
         end,
-    _ = kazoo_util:cf_set_session('current_callflow', modkazoo_util:split_b(ElementId,"-")++["data","use_absolute_mode"], z_convert:to_atom(z_context:get_q("selected", Context)), Context),
-    _ = kazoo_util:cf_set_session('current_callflow', modkazoo_util:split_b(ElementId,"-")++["data","regex"], z_convert:to_binary(z_context:get_q("regex", Context)), Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,modkazoo_util:split_b(ElementId,"-")++["data","use_absolute_mode"]
+                                 ,z_convert:to_atom(z_context:get_q("selected", Context))
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,modkazoo_util:split_b(ElementId,"-")++["data","regex"]
+                                 ,z_convert:to_binary(z_context:get_q("regex", Context))
+                                 ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_option,_,_},Context) ->
@@ -1011,7 +1277,10 @@ event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eav
     ApprovedType = z_convert:to_binary("approved_"++z_context:get_q("approved_type", Context)++"_id"),
     TargetSelected = modkazoo_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("target_selected", Context))),
     ApprovedSelected = modkazoo_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("approved_selected", Context))),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], {[{TargetType,TargetSelected},{ApprovedType,ApprovedSelected}]}, Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data"]
+                                 ,{[{TargetType,TargetSelected},{ApprovedType,ApprovedSelected}]}
+                                 ,Context),
     _ = kazoo_util:cf_set_session('current_callflow'
                                   ,[<<"metadata">>,TargetSelected]
                                   ,{[{<<"name">>,modkazoo_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("target_selected", Context)))}
@@ -1100,7 +1369,9 @@ event({postback,set_featurecode_dynamic_cid,_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({postback,set_featurecode_eavesdrop,_,_}, Context) ->
-    _ = kazoo_util:set_featurecode_eavesdrop(z_context:get_q("eavesdrop_approved_list_id",Context), z_context:get_q("eavesdrop_target_list_id",Context), Context),
+    _ = kazoo_util:set_featurecode_eavesdrop(z_context:get_q("eavesdrop_approved_list_id",Context)
+                                            ,z_context:get_q("eavesdrop_target_list_id",Context)
+                                            ,Context),
     mod_signal:emit({signal_featurecode_eavesdrop, []}, Context),
     z_render:dialog_close(Context);
 
@@ -1125,15 +1396,23 @@ event({postback,toggle_all_calls_recording,_,_}, Context) ->
 
 event({postback,add_blacklisted_number,_,_},Context) ->
     case z_context:get_q("new_blacklisted_number",Context) of
-        [] -> Context;
-        Number -> z_render:insert_top("blacklisted_numbers_list"
-                                      ,z_template:render("_blacklisted_number.tpl",[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}
-                                                                                    ,{blacklisted_description,modkazoo_util:get_q_bin("new_blacklisted_description", Context)}
-                                                                                   ],Context),Context) 
+        [] ->
+            Context;
+        Number ->
+            z_render:insert_top("blacklisted_numbers_list"
+                               ,z_template:render("_blacklisted_number.tpl"
+                                                 ,[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}
+                                                  ,{blacklisted_description,modkazoo_util:get_q_bin("new_blacklisted_description", Context)}
+                                                  ]
+                                                 ,Context)
+                               ,Context) 
     end;
 
 event({submit,add_new_blacklist,_,_},Context) ->
-    _ = kazoo_util:set_blacklist_doc(z_context:get_q("blacklist_id", Context), z_context:get_q("blacklist_name", Context), z_context:get_q_all("blacklisted_number", Context), Context),
+    _ = kazoo_util:set_blacklist_doc(z_context:get_q("blacklist_id", Context)
+                                    ,z_context:get_q("blacklist_name", Context)
+                                    ,z_context:get_q_all("blacklisted_number", Context)
+                                    ,Context),
     mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
     z_render:dialog_close(Context);
 
@@ -1459,11 +1738,17 @@ event({postback,{channel_eavesdrop,[{channel_id,ChannelId}]},_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({postback,{channel_transfer_dialog,[{channel_id,ChannelId}]},_,_}, Context) ->
-    z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context), "_channel_transfer_dialog.tpl", [{channel_id, ChannelId}], Context);
+    z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context)
+                   ,"_channel_transfer_dialog.tpl"
+                   ,[{channel_id, ChannelId}]
+                   ,Context);
 
 event({postback,channel_transfer_dialog,_,_}, Context) ->
     ChannelId = z_context:get_q("channel_id", Context),
-    z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context), "_channel_transfer_dialog.tpl", [{channel_id, ChannelId}], Context);
+    z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context)
+                   ,"_channel_transfer_dialog.tpl"
+                   ,[{channel_id, ChannelId}]
+                   ,Context);
 
 event({postback,{channel_transfer,[{channel_id,ChannelId}]},_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
@@ -1494,7 +1779,9 @@ event({postback,{delete_c2call,[{c2call_id, C2CallId}]},_,_}, Context) ->
     Context;
 
 event({submit,kz_purge_voicemails,_,_}, Context) ->
-    Count = kazoo_util:kz_purge_voicemails(z_convert:to_binary(z_context:get_q("vmbox_id", Context)), z_convert:to_binary(z_context:get_q("days_to", Context)), Context),
+    Count = kazoo_util:kz_purge_voicemails(z_convert:to_binary(z_context:get_q("vmbox_id", Context))
+                                          ,z_convert:to_binary(z_context:get_q("days_to", Context))
+                                          ,Context),
     case Count > 2 of
         'true' ->
             spawn(fun() -> timer:sleep(Count * ?MILLISECONDS_IN_SECOND), mod_signal:emit({user_portal_voicemails_tpl, []}, Context) end),
