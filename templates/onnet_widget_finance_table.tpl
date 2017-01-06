@@ -8,6 +8,6 @@
         </tr>
     </thead>
     <tbody>
-        <tr><td>{_ Current balance _}</td><td>{{ m.kazoo.current_account_credit|currency_sign }}</td></tr>
+        <tr><td>{_ Current balance _}</td><td>{% include "_current_account_credit.tpl" %}</td></tr>
     </tbody>
 </table>

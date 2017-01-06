@@ -569,7 +569,7 @@ kz_admin_creds(Context) ->
     DataBag = {[{<<"data">>, {[{<<"api_key">>, API_Key}]}}]},
     Payload = jiffy:encode(DataBag),
 
-    {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 10000}]),
+    {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 15000}]),
 
     {JsonData} = jiffy:decode(Body),
     {AccountData} = proplists:get_value(<<"data">>, JsonData),
@@ -597,7 +597,7 @@ kz_api_key_creds(API_Key, Context) ->
 kz_creds(URL, DataBag, Context) ->
     try
         Payload = jiffy:encode(DataBag),
-        case ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 10000}]) of
+        case ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 15000}]) of
             {'ok', [50,_,_], _, Body} ->
                 JsonBody = jiffy:decode(Body),
                 Owner_Id = modkazoo_util:get_value([<<"data">>, <<"owner_id">>], JsonBody),
@@ -758,7 +758,7 @@ crossbar_noauth_request_raw(Verb, API_String, DataBag, Context) ->
                   [] -> [];
                    _ -> jiffy:encode(DataBag)
               end,
-    ibrowse:send_req(URL, req_headers('undefined'), Verb, Payload, [{'inactivity_timeout', 10000}]).
+    ibrowse:send_req(URL, req_headers('undefined'), Verb, Payload, [{'inactivity_timeout', 15000}]).
 
 crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
     case crossbar_noauth_request_raw(Verb, API_String, DataBag, Context) of
@@ -802,7 +802,7 @@ crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken,
                           _ -> DataBag
                       end
               end,
-    ibrowse:send_req(URL, req_headers(ContextType, AuthToken), Verb, Payload, [{'inactivity_timeout', 10000}]).
+    ibrowse:send_req(URL, req_headers(ContextType, AuthToken), Verb, Payload, [{'inactivity_timeout', 15000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
@@ -826,7 +826,7 @@ crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
 crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
-    ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 10000}]).
+    ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 15000}]).
 
 crossbar_account_request(Verb, API_String, DataBag, Context) ->
     crossbar_account_request(Verb, API_String, DataBag, Context, <<>>).
@@ -1768,9 +1768,6 @@ rs_add_number(Num, AccountId, Context) ->
 %%purchase_number(<<"+", Num/binary>> = Number, AcceptCharges, Context) ->
 purchase_number(Number, AcceptCharges, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
- %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
- %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, "/", Number/binary, ?RESERVE/binary>>,
- %%   API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary>>,
     DataBag = ?SET_ACCEPT_CHARGES(AcceptCharges, {[{<<"numbers">>, [Number]}]}),
     crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
 
@@ -1786,7 +1783,8 @@ process_purchase_number(Number, AcceptCharges, Context) ->
                ,fun(C) -> z_render:update("onnet_widget_order_additional_number_tpl"
                                          ,z_template:render("onnet_widget_order_additional_number.tpl", [], C)
                                          ,C)
-                end],
+                end
+               ,fun(C) -> z_render:dialog_close(C) end],
     case purchase_number(Number, AcceptCharges, Context) of
         {'error', _ReturnCode, Body} ->
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
@@ -1797,6 +1795,7 @@ process_purchase_number(Number, AcceptCharges, Context) ->
                                    ,z_context:get_session('kazoo_account_id', Context)
                                    ,Context),
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+            mod_signal:emit({'refresh_current_account_credit_span', []}, Context),
             z_render:growl(?__("Number ", Ctx)++z_convert:to_list(Number)++?__(" successfully allocated.", Ctx), Ctx)
     end.
 

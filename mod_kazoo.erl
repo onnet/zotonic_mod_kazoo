@@ -453,8 +453,7 @@ event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
                 },
       spawn('z_email','send' ,[AllocateNumberEmail, Context]),
       AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
-      kazoo_util:process_purchase_number(Number, AcceptCharges, Context),
-      z_render:dialog_close(Context)
+      kazoo_util:process_purchase_number(Number, AcceptCharges, Context)
     catch
       error:{badmatch, {true, 'address_confirmation_file'}} ->
           z_render:growl_error(?__("Maximum file size exceeded",Context), Context);
