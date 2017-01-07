@@ -47,6 +47,7 @@ cd inotify-tools-3.14
 ./configure 
 make
 make install
+echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
 ```
 - Install Zotonic
 ```
