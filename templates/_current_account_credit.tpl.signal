@@ -3,5 +3,6 @@
                           action={replace target=#current_account_credit template="_current_account_credit.tpl.signal"}
                  }
   %}
-  {{ m.kazoo.current_account_credit|currency_sign }}
+  {# If there is no m.session.rs_selected_account_id it should return current context account_id bakance #}
+  {{ m.kazoo[{current_account_credit account_id=m.session.rs_selected_account_id}]|currency_sign }}
 </span>

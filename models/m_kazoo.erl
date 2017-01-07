@@ -197,6 +197,10 @@ m_find_value({kz_cdr_legs,[{cdr_id,CDR_Id}]}, _M, Context) ->
 m_find_value(current_account_credit, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(Context));
 
+m_find_value({current_account_credit, [{account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
+
 m_find_value({current_account_credit, [{account_id, AccountId}]}, _M, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
 
