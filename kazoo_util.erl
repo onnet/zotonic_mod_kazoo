@@ -1796,6 +1796,8 @@ process_purchase_number(Number, AcceptCharges, Context) ->
                                    ,Context),
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
             mod_signal:emit({'refresh_current_account_credit_span', []}, Context),
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            _ = z_mqtt:publish(<<"site/phiz/public/current_account_credit_", AccountId/binary>>, <<>>, z_acl:sudo(Ctx)),
             z_render:growl(?__("Number ", Ctx)++z_convert:to_list(Number)++?__(" successfully allocated.", Ctx), Ctx)
     end.
 

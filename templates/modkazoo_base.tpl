@@ -34,14 +34,15 @@
 
     {% all include "_mod_style.tpl" %}
  
+    {% lib "js/modules/ubf.js" %}
     {% lib "js/apps/zotonic-1.0.js" %}
     {% lib "js/apps/z.widgetmanager.js" %}
     {% lib "js/modules/z.adminwidget.js" %}
     {% lib "js/modules/z.notice.js" %}
     {% lib "js/z.dialog.bootstrap3.js" %}
-    {% lib "js/modules/ubf.js" %}
-    {% lib  "js/qlobber.js" %}
-    {% lib  "js/pubzub.js" %}
+    {% lib "js/qlobber.js" %}
+    {% lib "js/pubzub.js" %}
+    {% lib "js/modules/z.live.js" %}
 
     {% lib 
           "js/modules/z.tooltip.js"

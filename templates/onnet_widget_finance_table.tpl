@@ -9,5 +9,6 @@
     </thead>
     <tbody>
         <tr><td>{_ Current balance _}</td><td>{% include "_current_account_credit.tpl" %}</td></tr>
+{% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}
     </tbody>
 </table>
