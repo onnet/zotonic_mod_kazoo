@@ -156,7 +156,9 @@ gcapture_check(Context) ->
             CaptSecret = m_config:get_value('mod_kazoo', 'g_capture_secret', Context),
             GCaptureResp = z_context:get_q("g-recaptcha-response",Context),
             {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
-            URL = list_to_binary(["https://www.google.com/recaptcha/api/siteverify?secret=", CaptSecret, "&response=", GCaptureResp, "&remoteip=", ClientIP]),
+            URL = list_to_binary(["https://www.google.com/recaptcha/api/siteverify?secret=", CaptSecret
+                                ,"&response=", GCaptureResp
+                                ,"&remoteip=", ClientIP]),
             {'ok', {{"HTTP/1.1", _ReturnCode, _State}, _Head, Body}} = httpc:request('get', {binary_to_list(URL), []}, [], []),
             {JsonData} = jiffy:decode(Body),
             proplists:get_value(<<"success">>, JsonData);
