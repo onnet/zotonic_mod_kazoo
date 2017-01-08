@@ -416,7 +416,35 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
             Context
     end;
 
-event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
+event({submit,selected_numbers_array_form,_,_}, Context) ->
+    [Number|_] = Numbers = z_context:get_q_all("numbers_about_to_purchase",Context),
+    Quantity = length(Numbers),
+    NumberClass = kazoo_util:classify_number(Number, Context),
+    NumberFriendlyName = modkazoo_util:get_value(<<"friendly_name">>, NumberClass),
+    NumberName = modkazoo_util:get_value(<<"name">>, NumberClass),
+    PhoneNumbersServices = modkazoo_util:get_value([<<"items">>,<<"phone_numbers">>], kazoo_util:current_service_plans(Context)),
+    Rate = modkazoo_util:get_value([NumberName, <<"rate">>], PhoneNumbersServices),
+    ActivationCharge = modkazoo_util:get_value([NumberName, <<"activation_charge">>], PhoneNumbersServices),
+    Total = ActivationCharge * Quantity + Rate * Quantity,
+    case modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(Context)) of
+        Amount when Amount >= Total ->
+            z_render:dialog(?__("Add phone number(s)",Context)
+                           ,"_numbers_add_attempt_lazy.tpl"
+                           ,[{numbers_to_purchase, Numbers}
+                            ,{width, <<"auto">>}
+                            ,{<<"name">>, NumberName}
+                            ,{<<"friendly_name">>, NumberFriendlyName}
+                            ,{<<"rate">>, Rate}
+                            ,{<<"activation_charge">>, ActivationCharge}
+                            ,{<<"quantity">>, Quantity}
+                            ,{<<"total">>, Total}
+                            ]
+                           ,Context);
+        _ ->
+            z_render:growl_error(?__("Sorry, not enough funds.",Context), Context)
+    end;
+
+event({submit,{allocate_numbers,[{numbers,Numbers}]},_,_}, Context) ->
     try
       {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
       'ok' = modkazoo_util:check_field_filled("zipcode",Context),
@@ -443,7 +471,7 @@ event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
              ,{clientip, ClientIP}
              ,{sender_name, SenderName}
              ,{upload_filenamefile, UploadFilename}
-             ,{number, Number}],
+             ,{numbers, Numbers}],
       AllocateNumberEmail =
           #email{to = EmailFrom
                 ,from = EmailFrom
@@ -453,7 +481,7 @@ event({submit,{allocate_number,[{number,Number}]},_,_}, Context) ->
                 },
       spawn('z_email','send' ,[AllocateNumberEmail, Context]),
       AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
-      kazoo_util:process_purchase_number(Number, AcceptCharges, Context)
+      kazoo_util:process_purchase_numbers(Numbers, AcceptCharges, Context)
     catch
       error:{badmatch, {true, 'address_confirmation_file'}} ->
           z_render:growl_error(?__("Maximum file size exceeded",Context), Context);

@@ -128,7 +128,7 @@
     ,set_accounts_address/4
     ,lookup_numbers/3
     ,rs_add_number/3
-    ,purchase_number/3
+    ,purchase_numbers/3
     ,deallocate_number/2
     ,deallocate_number/3
     ,service_plan/2
@@ -147,7 +147,7 @@
     ,remove_service_plan_from_account/3
     ,valid_card_exists/1
     ,is_creditable/1
-    ,process_purchase_number/3
+    ,process_purchase_numbers/3
     ,get_account_timezone/1
     ,get_user_timezone/1
     ,may_be_get_timezone/1
@@ -1765,13 +1765,12 @@ rs_add_number(Num, AccountId, Context) ->
                                  ,Context
                                 ).
 
-%%purchase_number(<<"+", Num/binary>> = Number, AcceptCharges, Context) ->
-purchase_number(Number, AcceptCharges, Context) ->
+purchase_numbers(Numbers, AcceptCharges, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, ?COLLECTION/binary, ?ACTIVATE/binary>>,
-    DataBag = ?SET_ACCEPT_CHARGES(AcceptCharges, {[{<<"numbers">>, [Number]}]}),
+    DataBag = ?SET_ACCEPT_CHARGES(AcceptCharges, {[{<<"numbers">>, [?TO_BIN(Number) || Number <- Numbers]}]}),
     crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
 
-process_purchase_number(Number, AcceptCharges, Context) ->
+process_purchase_numbers([Number|_] = Numbers, AcceptCharges, Context) ->
     Routines = [fun(C) -> z_render:update("onnet_allocated_numbers_tpl"
                                          ,z_template:render("onnet_allocated_numbers.tpl", [{headline, "Allocated numbers"}], C)
                                          ,C)
@@ -1785,10 +1784,10 @@ process_purchase_number(Number, AcceptCharges, Context) ->
                                          ,C)
                 end
                ,fun(C) -> z_render:dialog_close(C) end],
-    case purchase_number(Number, AcceptCharges, Context) of
+    case purchase_numbers(Numbers, AcceptCharges, Context) of
         {'error', _ReturnCode, Body} ->
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
-            Message = modkazoo_util:get_value([<<"data">>,<<"error">>, Number,<<"message">>], jiffy:decode(Body)),
+            Message = modkazoo_util:get_value([<<"data">>,<<"error">>, ?TO_BIN(Number),<<"message">>], jiffy:decode(Body)),
             z_render:growl_error(?TO_LST(Message), Ctx);
         _ ->
             may_be_add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context)
