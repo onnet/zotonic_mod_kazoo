@@ -23,19 +23,34 @@
 <table class="table table-condensed table-hover table-centered">
     <thead>
         <tr>
-            <th>{_ Zip _}</th>
+            <th class="text-center">{_ Zip _}</th>
             <th class="text-center">{_ City _}</th>
             <th class="text-center">{_ State _}</th>
             <th class="text-center">{_ Address _}</th>
+            <th class="text-center">{_ Proven _}</th>
+            <th class="text-center">{_ Doc _}</th>
         </tr>
     </thead>
     <tbody>
       {% for e911_address in m.onbill[{e911_addresses account_id=account_id}] %}
         <tr>
-           <td>{{ e911_address["zip"] }}</td>
-           <td>{{ e911_address["city"] }}</td>
-           <td>{{ e911_address["state"] }}</td>
-           <td>{{ e911_address["address"] }}</td>
+           <td class="text-center">{{ e911_address["zip"] }}</td>
+           <td class="text-center">{{ e911_address["city"] }}</td>
+           <td class="text-center">{{ e911_address["state"] }}</td>
+           <td class="text-center">{{ e911_address["address"] }}</td>
+           <td class="text-center">
+             {% if e911_address["address_confirmed"] %}
+               <i id="set_confirmed_{{ e911_address["id"] }}" class="fa fa-check-square-o pointer"></i>
+             {% else %}
+               <i id="set_not_confirmed_{{ e911_address["id"] }}" class="fa fa-square-o pointer"></i>
+             {% endif %}
+           </td>
+           <td class="text-center">
+             {% if e911_address["uploaded_doc"] %}
+               <i id="download_uploaded_doc_{{ e911_address["id"] }}" class="fa fa-download pointer"></i>
+             {% else %}
+             {% endif %}
+           </td>
         </tr>
       {% endfor %}
     </tbody>
