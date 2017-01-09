@@ -10,10 +10,12 @@
                     action={ postback postback={trigger_innoui_widget arg="rs_service_plans_widget_opened" } delegate="mod_kazoo" }
             %}
               <span id="arrows_{{ #spid }}" style="cursor: pointer; padding-left: 0.7em;">
-                <i id="arrow_right_{{ #spid }}" style="{% if m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}" 
-                                                class="arrowpad fa fa-arrow-circle-right"></i>
-                <i id="arrow_down_{{ #spid }}" style="{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}" 
-                                               class="arrowpad fa fa-arrow-circle-down"></i>
+                <i id="arrow_right_{{ #spid }}"
+                   style="{% if m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}" 
+                   class="arrowpad fa fa-arrow-circle-right"></i>
+                <i id="arrow_down_{{ #spid }}"
+                   style="{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}" 
+                   class="arrowpad fa fa-arrow-circle-down"></i>
               </span>
                {_ Service plans _}:
                {% button class="btn btn-xs btn-onnet pull-right"
