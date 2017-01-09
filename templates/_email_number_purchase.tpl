@@ -7,8 +7,15 @@
 	<body>
 		<h3>{_ Howdy, platform administrators _}</h3>
                 <br />
-		<p>{_ An account _} <strong>{{ account_name }}</strong></p>
-                <p>{_ tries to purchase phone number _} <strong>{{ number }}</strong></p>
+                {% if numbers|length < 2 %}
+		  <p>{_ An account _} <strong>{{ account_name }}</strong></p>
+                  <p>{_ tries to purchase phone number _} <strong>{{ numbers[1] }}</strong></p>
+                {% else %}
+		  <p>{_ An account _} <strong>{{ account_name }}</strong> {_ tries to purchase phone numbers: _}</p>
+                  {% for number in numbers %}
+                    <p><strong>{{ number }}</strong></p>
+                  {% endfor %}
+                {% endif %}
                 <br />
                 {% if not_creditable %}
                 <br />
