@@ -59,14 +59,18 @@ provide_content(ReqData, Context) ->
                end,
     case z_context:get_q("doc_type", Context) of
         "onbill_modb" ->
-                    case onbill_modb_attachment(Context) of
-                        {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
-                        _ ->
-                            api_error(404, 0, "No attachment found", ReqData, Context)
-                    end;
+            case onbill_modb_attachment(Context) of
+                {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
+                _ -> api_error(404, 0, "No attachment found", ReqData, Context)
+            end;
+        "onbill_e911_address_proof" ->
+            case onbill_modb_attachment(Context) of
+                {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
+                _ -> api_error(404, 0, "No attachment found", ReqData, Context)
+            end;
         "call_recording" ->
-                    {'ok', Body} = call_recording_attachment(Context),
-                    {Body, ReqData1, z_context:set(body, Body, Context)};
+            {'ok', Body} = call_recording_attachment(Context),
+            {Body, ReqData1, z_context:set(body, Body, Context)};
         _ ->
             {<<>>, ReqData, Context}
     end.

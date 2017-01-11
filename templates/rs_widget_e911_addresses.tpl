@@ -53,7 +53,9 @@
            </td>
            <td class="text-center">
              {% if e911_address["attachment"] %}
-               <i id="download_uploaded_doc_{{ e911_address["id"] }}" class="fa fa-download pointer"></i>
+               <a href="{{ m.onbill[{attachment_download_link account_id=account_id doc_id=doc["id"] doc_type="onbill_e911_address_proof"}] }}">
+                 <i id="download_uploaded_doc_{{ e911_address["id"] }}" class="fa fa-download"></i>
+               </a>
              {% else %}
              {% endif %}
            </td>
