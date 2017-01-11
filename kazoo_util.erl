@@ -8,6 +8,7 @@
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
     ,crossbar_account_request/4
+    ,crossbar_account_send_raw_request/5
     ,crossbar_account_send_raw_request_body/5
     ,crossbar_account_send_raw_request_body/6
     ,crossbar_noauth_request_raw/4
@@ -2440,7 +2441,9 @@ cf_may_be_add_desc_child(BranchId,DropId,DropParent,Context) ->
         'undefined' -> Context;
         {[]} -> Context;
         Children ->
-            lists:foldl(fun(Switch, ContextAcc) -> cf_add_desc_child(BranchId,DropId,DropParent,Switch,ContextAcc) end, Context, modkazoo_util:get_keys(Children))
+            lists:foldl(fun(Switch, ContextAcc) -> cf_add_desc_child(BranchId,DropId,DropParent,Switch,ContextAcc) end
+                       ,Context
+                       ,modkazoo_util:get_keys(Children))
     end.
 
 cf_add_desc_child(BranchId,DropId,DropParent,Switch,Context) ->
@@ -2473,7 +2476,9 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"user">> 
     case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],z_context:get_session('current_callflow', Context)) of
         'undefined' -> 
             UserDoc = kz_get_user_doc(Id, Context),
-            [Id,<<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary,<<" ">>/binary,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>];
+            [Id,<<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary
+                 ,<<" ">>/binary
+                 ,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>];
         Name -> [Id, Name]
     end;
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"device">> ->
@@ -2530,7 +2535,9 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"receive_
     case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],z_context:get_session('current_callflow', Context)) of
         'undefined' -> 
             UserDoc = kz_get_user_doc(Id, Context),
-            [Id,<<(modkazoo_util:get_value_bin(<<"first_name">>,UserDoc))/binary,<<" ">>/binary,(modkazoo_util:get_value_bin(<<"last_name">>,UserDoc))/binary>>];
+            [Id,<<(modkazoo_util:get_value_bin(<<"first_name">>,UserDoc))/binary
+                 ,<<" ">>/binary
+                 ,(modkazoo_util:get_value_bin(<<"last_name">>,UserDoc))/binary>>];
         Name -> [Id, Name]
     end;
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"ring_group">> ->
@@ -2550,12 +2557,16 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"check_ci
         _ -> ['undefined', undefined]
     end;
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"prepend_cid">> ->
-    CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name_prefix">>],z_context:get_session('current_callflow', Context)),
-    CallerIdNumberPrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_number_prefix">>],z_context:get_session('current_callflow', Context)),
+    CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name_prefix">>]
+                                                ,z_context:get_session('current_callflow', Context)),
+    CallerIdNumberPrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_number_prefix">>]
+                                                  ,z_context:get_session('current_callflow', Context)),
     ['undeined',[CallerIdNamePrefix ,CallerIdNumberPrefix]];
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"set_cid">> ->
-    CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name">>],z_context:get_session('current_callflow', Context)),
-    CallerIdNumberPrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_number">>],z_context:get_session('current_callflow', Context)),
+    CallerIdNamePrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_name">>]
+                                                ,z_context:get_session('current_callflow', Context)),
+    CallerIdNumberPrefix = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"caller_id_number">>]
+                                                  ,z_context:get_session('current_callflow', Context)),
     ['undeined',[CallerIdNamePrefix ,CallerIdNumberPrefix]];
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"conference">> ->
     Id = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
@@ -2568,9 +2579,14 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"conferen
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"eavesdrop">> ->
     Callflow = z_context:get_session('current_callflow', Context),
     case lists:foldl(fun(X,J) ->
-                                     case modkazoo_util:get_value(ModulePath++[<<"data">>,X],Callflow) of 'undefined' -> J++[]; Id -> J++[{Id,X}] end end
-                                ,[]
-                                ,[<<"device_id">>,<<"user_id">>,<<"group_id">>]) of
+                         case modkazoo_util:get_value(ModulePath++[<<"data">>,X],Callflow) of
+                             'undefined' -> J++[];
+                             Id -> J++[{Id,X}]
+                         end
+                     end
+                    ,[]
+                    ,[<<"device_id">>,<<"user_id">>,<<"group_id">>])
+    of
         [] -> ['undefined','undefined'];
         [{Id,Type}|_] -> 
             case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],Callflow) of
@@ -2587,7 +2603,9 @@ kz_get_name(Id, Type, Context) ->
         <<"group_id">> -> modkazoo_util:get_value(<<"name">>,kz_get_device_doc(Id, Context));
         <<"user_id">> -> 
             UserDoc = kz_get_user_doc(Id, Context),
-            <<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary,<<" ">>/binary,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>
+            <<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary
+             ,<<" ">>/binary
+             ,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>
     end.
     
 cf_delete_element(ElementId,Context) ->
@@ -2604,7 +2622,9 @@ cf_element_path(ElementId) ->
 cf_get_element_by_id(ElementId, Context) ->
     modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)). 
 
-cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},mod_kazoo,BranchId}},Context) ->
+cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
+                    ,{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},mod_kazoo,BranchId}}
+              ,Context) ->
     lager:info("Drop DropParent: ~p",[DropParent]),
     case z_convert:to_list(DropParent) of
         "cidlistmatch" ->
@@ -2625,23 +2645,34 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_},{
             end;
         "check_cid" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
-            [KeysList,AddOn] = case modkazoo_util:get_value(cf_element_path(BranchId)++[<<"data">>,<<"use_absolute_mode">>], z_context:get_session('current_callflow', Context)) of
-                           'false' -> [[<<"nomatch">>,<<"match">>],[]];
-                           'true' -> [[<<"nomatch">>],[<<"caller_id">>]] 
-                       end,
+            [KeysList,AddOn] =
+                case modkazoo_util:get_value(cf_element_path(BranchId)++[<<"data">>,<<"use_absolute_mode">>]
+                                            ,z_context:get_session('current_callflow', Context))
+                of
+                    'false' -> [[<<"nomatch">>,<<"match">>],[]];
+                    'true' -> [[<<"nomatch">>],[<<"caller_id">>]] 
+                end,
             case cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context) of
                 [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
                 AvailableKeys ->
                     z_render:dialog(?__("Choose route option",Context)
                                          ,"_cf_select_option_check_cid.tpl"
-                                         ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,AvailableKeys}]
+                                         ,[{tool_name,ToolName}
+                                          ,{drop_id,DropId}
+                                          ,{drop_parent,DropParent}
+                                          ,{branch_id,BranchId}
+                                          ,{available_keys,AvailableKeys}]
                                          ,Context)
             end;
         "menu" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option.tpl"
-                                 ,[{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{available_keys,cf_available_keys(?MENU_KEYS_LIST,cf_element_path(BranchId),Context)}]
+                                 ,[{tool_name,ToolName}
+                                  ,{drop_id,DropId}
+                                  ,{drop_parent,DropParent}
+                                  ,{branch_id,BranchId}
+                                  ,{available_keys,cf_available_keys(?MENU_KEYS_LIST,cf_element_path(BranchId),Context)}]
                                  ,Context);
         "temporal_route" ->
             lager:info("Drop BranchId: ~p",[BranchId]),
@@ -2679,32 +2710,44 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
         "cidlistmatch" ->
             [KeysList,AddOn] = [[<<"match">>,<<"nomatch">>],[]],
             z_render:dialog(?__("Choose route option",Context)
-                                 , "_cf_select_option_cidlistmatch.tpl"
-                                 ,[{existing_element_id,ExistingElementId}
-                                 ,{switch,hd(lists:reverse(cf_element_path(ExistingElementId)))}
-                                 ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),AddOn,Context)}]
-                                 ,Context);
+                               ,"_cf_select_option_cidlistmatch.tpl"
+                               ,[{existing_element_id,ExistingElementId}
+                                ,{switch,hd(lists:reverse(cf_element_path(ExistingElementId)))}
+                                ,{available_keys,cf_available_keys(KeysList
+                                                                  ,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
+                                                                  ,AddOn
+                                                                  ,Context)}
+                                ]
+                               ,Context);
         "check_cid" ->
             lager:info("Drop ExistingElementId: ~p",[ExistingElementId]),
             lager:info("Drop TL: ~p",[lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))]),
             lager:info("Switch: ~p",[hd(lists:reverse(cf_element_path(ExistingElementId)))]),
-            [KeysList,AddOn] = case modkazoo_util:get_value(lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))++[<<"data">>,<<"use_absolute_mode">>]
-                                                   ,z_context:get_session('current_callflow', Context)) of
-                           'false' -> [[<<"nomatch">>,<<"match">>],[]];
-                           'true' -> [[<<"nomatch">>],[<<"caller_id">>]]
-                       end,
+            [KeysList,AddOn] =
+                case modkazoo_util:get_value(lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
+                                               ++[<<"data">>,<<"use_absolute_mode">>]
+                                            ,z_context:get_session('current_callflow', Context))
+                of
+                    'false' -> [[<<"nomatch">>,<<"match">>],[]];
+                    'true' -> [[<<"nomatch">>],[<<"caller_id">>]]
+                end,
             z_render:dialog(?__("Choose route option",Context)
                                  , "_cf_select_option_check_cid.tpl"
                                  ,[{existing_element_id,ExistingElementId}
                                  ,{switch,hd(lists:reverse(cf_element_path(ExistingElementId)))}
-                                 ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),AddOn,Context)}]
+                                 ,{available_keys,cf_available_keys(KeysList
+                                                                   ,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
+                                                                   ,AddOn
+                                                                   ,Context)}]
                                  ,Context);
         "menu" ->
             z_render:dialog(?__("Menu option",Context)
                                , "_cf_select_option.tpl"
                                ,[{existing_element_id,ExistingElementId}
                                 ,{kz_element_id,hd(lists:reverse(modkazoo_util:split_b(ExistingElementId,"-")))}
-                                ,{available_keys,cf_available_keys(?MENU_KEYS_LIST,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),Context)}]
+                                ,{available_keys,cf_available_keys(?MENU_KEYS_LIST
+                                                                  ,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
+                                                                  ,Context)}]
                             ,Context);
         "temporal_route" ->
             KeysList = [<<"_">>]++lists:map(fun(X) -> modkazoo_util:get_value(<<"id">>,X) end, kz_list_account_temporal_rules(Context)),
@@ -2729,7 +2772,10 @@ cf_time_of_the_day(Context) ->
     Wdays = lists:filter(fun(Wd) -> case Wd of [] -> false; _ -> true end end, z_context:get_q_all("wdays",Context)),
     Days = z_context:get_q("days",Context),
     [StartDay,StartMonth,StartYear] = z_string:split(z_context:get_q("start_date",Context),"/"),
-    StartDate = calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(StartYear),z_convert:to_integer(StartMonth),z_convert:to_integer(StartDay)},{0,0,0}}),
+    StartDate = calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(StartYear)
+                                                        ,z_convert:to_integer(StartMonth)
+                                                        ,z_convert:to_integer(StartDay)}
+                                                        ,{0,0,0}}),
     Id = z_context:get_q("id",Context),
     Props = [{<<"time_window_start">>, ?TO_BIN(TimeWindowStart)}
             ,{<<"time_window_stop">>, ?TO_BIN(TimeWindowStop)}
