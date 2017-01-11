@@ -15,6 +15,17 @@
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
+-define(PDF_CONTENT_TYPES, [{"application/pdf", provide_content}
+                           ,{"application/x-pdf", provide_content}
+                           ]).
+
+-define(IMAGE_CONTENT_TYPES, [{"image/jpg", provide_content}
+                             ,{"image/jpeg", provide_content}
+                             ,{"image/png", provide_content}
+                             ,{"image/gif", provide_content}
+                             ]).
+
+
 init(ConfigProps) ->
     {ok, ConfigProps}.
 
@@ -34,6 +45,8 @@ content_types_provided(ReqData, Context) ->
     case z_context:get_q("doc_type", Context) of
         "onbill_modb" ->
             {[{"application/pdf", provide_content}], ReqData, Context};
+        "onbill_e911_address_proof" ->
+            {?PDF_CONTENT_TYPES ++ ?IMAGE_CONTENT_TYPES, ReqData, Context};
         "call_recording" ->
             {[{"audio/mpeg", provide_content}], ReqData, Context}
     end.
@@ -49,26 +62,28 @@ charsets_provided(ReqData, Context) ->
     {no_charset, ReqData, Context}.
 
 provide_content(ReqData, Context) ->
-    ReqData1 = case z_context:get_q("doc_type", Context) of
-                   "onbill_modb" ->
-                       MediaName = z_context:get_q("doc_id", Context),
-                       wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".pdf", ReqData);
-                   "call_recording" ->
-                       MediaName = z_context:get_q("recording_id", Context),
-                       wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".mp3", ReqData)
-               end,
     case z_context:get_q("doc_type", Context) of
         "onbill_modb" ->
+            MediaName = z_context:get_q("doc_id", Context),
+            ReqData1 = wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".pdf", ReqData),
             case onbill_modb_attachment(Context) of
                 {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
                 _ -> api_error(404, 0, "No attachment found", ReqData, Context)
             end;
         "onbill_e911_address_proof" ->
-            case onbill_modb_attachment(Context) of
-                {'ok', Body} -> {Body, ReqData1, z_context:set(body, Body, Context)};
-                _ -> api_error(404, 0, "No attachment found", ReqData, Context)
+            DocId = z_context:get_q("doc_id", Context),
+            AccountId = z_context:get_q("account_id", Context),
+            case onbill_util:get_e911_attachment(DocId, AccountId, Context) of
+                {'ok', [50,_,_], Headers, Body} ->
+                    ReqData1 = wrq:set_resp_header("Content-Disposition", proplists:get_value("content-disposition", Headers), ReqData),
+                    {Body, ReqData1, z_context:set(body, Body, Context)};
+                _E ->
+                    lager:info("IAM provide_content eror: ~p",[_E]),
+                    api_error(404, 0, "No attachment found", ReqData, Context)
             end;
         "call_recording" ->
+            MediaName = z_context:get_q("recording_id", Context),
+            ReqData1 = wrq:set_resp_header("Content-Disposition", "attachment; filename=" ++ MediaName ++ ".mp3", ReqData),
             {'ok', Body} = call_recording_attachment(Context),
             {Body, ReqData1, z_context:set(body, Body, Context)};
         _ ->
