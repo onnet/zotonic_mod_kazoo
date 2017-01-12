@@ -43,21 +43,25 @@
              {% if e911_address["address_confirmed"] %}
                <i id="confirmed_e911_address_{{ e911_address["id"] }}" class="fa fa-toggle-on pointer"></i>
                {% wire id="confirmed_e911_address_"++e911_address["id"]
-                       action={postback postback={set_e911_address_confirmed flag="false"
-                                                                             doc_id=e911_address["id"]
-                                                                             account_id=account_id
-                                                 }
-                                        delegate="mod_onbill"
+                       action={confirm text=_"Do you really want to remove E911 address confirmation?"
+                                       action={postback postback={set_e911_address_confirmed flag="false"
+                                                                                             doc_id=e911_address["id"]
+                                                                                             account_id=account_id
+                                                                 }
+                                                        delegate="mod_onbill"
+                                              }
                               }
                %}
              {% else %}
                <i id="not_confirmed_e911_address_{{ e911_address["id"] }}" class="fa fa-toggle-off pointer"></i>
                {% wire id="not_confirmed_e911_address_"++e911_address["id"]
-                       action={postback postback={set_e911_address_confirmed flag="true"
-                                                                             doc_id=e911_address["id"]
-                                                                             account_id=account_id
-                                                 }
-                                        delegate="mod_onbill"
+                       action={confirm text=_"Do you really want to confirm E911 address?"
+                                       action={postback postback={set_e911_address_confirmed flag="true"
+                                                                                             doc_id=e911_address["id"]
+                                                                                             account_id=account_id
+                                                                 }
+                                                        delegate="mod_onbill"
+                                              }
                               }
                %}
              {% endif %}
