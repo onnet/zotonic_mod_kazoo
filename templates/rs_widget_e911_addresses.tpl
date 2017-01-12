@@ -41,7 +41,25 @@
         <tr>
            <td class="text-center">
              {% if e911_address["address_confirmed"] %}
-               <i id="proven_e911_address_{{ e911_address["id"] }}" class="fa fa-check pointer"></i>
+               <i id="confirmed_e911_address_{{ e911_address["id"] }}" class="fa fa-toggle-on pointer"></i>
+               {% wire id="confirmed_e911_address_"++e911_address["id"]
+                       action={postback postback={set_e911_address_confirmed flag="false"
+                                                                             doc_id=e911_address["id"]
+                                                                             account_id=account_id
+                                                 }
+                                        delegate="mod_onbill"
+                              }
+               %}
+             {% else %}
+               <i id="not_confirmed_e911_address_{{ e911_address["id"] }}" class="fa fa-toggle-off pointer"></i>
+               {% wire id="not_confirmed_e911_address_"++e911_address["id"]
+                       action={postback postback={set_e911_address_confirmed flag="true"
+                                                                             doc_id=e911_address["id"]
+                                                                             account_id=account_id
+                                                 }
+                                        delegate="mod_onbill"
+                              }
+               %}
              {% endif %}
            </td>
            <td class="text-center">{{ e911_address["zip"] }}</td>
