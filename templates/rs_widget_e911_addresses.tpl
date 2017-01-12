@@ -49,7 +49,16 @@
            <td class="text-center">{{ e911_address["state"] }}</td>
            <td class="text-center">{{ e911_address["address"] }}</td>
            <td class="text-center">
-               <i id="edit_e911_address_{{ e911_address["id"] }}" class="fa fa-edit pointer"></i>
+               {% wire id="edit_e911_address_"++e911_address["id"]
+                       action={dialog_open template="_number_edit_e911.tpl"
+                                           title=_"Edit E911 address"
+                                           doc_id=e911_address["id"]
+                                           account_id=account_id
+                                           width="auto"
+                                           edit_existing="true"
+                              }
+               %}
+                 <i id="edit_e911_address_{{ e911_address["id"] }}" class="fa fa-edit pointer"></i>
            </td>
            <td class="text-center">
              {% if e911_address["attachment"] %}
