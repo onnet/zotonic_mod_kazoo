@@ -1944,6 +1944,22 @@ event({submit,{edit_failover_number_service,[{number,Number},{account_id,Account
     kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(NewDoc), Context),
     z_render:growl(?__("Setting saved", Context), Context);
 
+event({submit,{edit_prepend_number_service,[{number,Number},{account_id,undefined}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({submit,{edit_prepend_number_service,[{number,Number},{account_id,AccountId}]},<<>>,<<>>}, Context);
+event({submit,{edit_prepend_number_service,[{number,Number},{account_id,AccountId}]},_,_}, Context) ->
+    NumberDoc = kazoo_util:phone_number('get', Number, AccountId, [], Context),
+    Values =
+        case modkazoo_util:get_q_boolean("enabled", Context) of
+            'true' ->
+                [{[<<"prepend">>,<<"enabled">>], 'true'}
+                ,{[<<"prepend">>,<<"name">>], modkazoo_util:get_q_bin("name", Context)}];
+            'false' ->
+                [{[<<"prepend">>,<<"enabled">>], 'false'}]
+        end,
+    kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(modkazoo_util:set_values(Values, NumberDoc)), Context),
+    z_render:growl(?__("Setting saved", Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 

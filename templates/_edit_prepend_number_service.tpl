@@ -2,7 +2,7 @@
 {# print number_info[1] #}
 {% wire id="edit-prepend-number-service-form"
         type="submit"
-        postback={edit_failover_number_service number=number account_id=account_id}
+        postback={edit_prepend_number_service number=number account_id=account_id}
         delegate="mod_kazoo"
 %}
 <form id="edit-prepend-number-service-form"  method="post" action="postback">
@@ -15,11 +15,11 @@
           </span>
         </div>
         <div class="col-sm-3">
-          {% wire id="failover_type"
+          {% wire id="enabled"
                   type="change"
                   action={slide_down target="button_prepend_number_service"}
           %}
-          <select name="failover_type" id="failover_type" class="form-control margin-bottom-xs">
+          <select name="enabled" id="enabled" class="form-control margin-bottom-xs">
             <option value="true" {% if number_info[1]["prepend"][1]["enabled"] %}selected{% endif %}>
               {_ Enabled _}
             </option>
@@ -30,12 +30,12 @@
 
         </div>
         <div class="col-sm-5">
-          {% wire id="prepend_text_input"
+          {% wire id="name"
                   type="focus"
                   action={slide_down target="button_prepend_number_service"}
           %}
-          <input id="prepend_text_input"
-                 name="prepend_text_input"
+          <input id="name"
+                 name="name"
                  type="text"
                  class="form-control margin-bottom-xs"
                  placeholder="Input text here..."
