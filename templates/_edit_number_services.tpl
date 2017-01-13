@@ -10,6 +10,7 @@
             action={set_class target="li_e911_number_service" class="active"}
             action={remove_class target="li_failover_number_service" class="active"}
             action={remove_class target="li_prepend_number_service" class="active"}
+            action={remove_class target="li_cname_number_service" class="active"}
     %}
     <li id="li_failover_number_service"><a href="#failover_number_service" role="tab" data-toggle="tab">{_ Failover _}</a></li>
     {% wire id="li_failover_number_service"
@@ -21,6 +22,7 @@
             action={remove_class target="li_e911_number_service" class="active"}
             action={set_class target="li_failover_number_service" class="active"}
             action={remove_class target="li_prepend_number_service" class="active"}
+            action={remove_class target="li_cname_number_service" class="active"}
     %}
     <li id="li_prepend_number_service"><a href="#prepend_number_service" role="tab" data-toggle="tab">{_ Prepend _}</a></li>
     {% wire id="li_prepend_number_service"
@@ -32,6 +34,19 @@
             action={remove_class target="li_e911_number_service" class="active"}
             action={remove_class target="li_failover_number_service" class="active"}
             action={set_class target="li_prepend_number_service" class="active"}
+            action={remove_class target="li_cname_number_service" class="active"}
+    %}
+    <li id="li_cname_number_service"><a href="#cname_number_service" role="tab" data-toggle="tab">{_ CNAME _}</a></li>
+    {% wire id="li_cmane_number_service"
+            type="click"
+            action={update target="number_services_div"
+                           template="_edit_cname_number_service.tpl"
+                           number=number
+                           account_id=account_id}
+            action={remove_class target="li_e911_number_service" class="active"}
+            action={remove_class target="li_failover_number_service" class="active"}
+            action={remove_class target="li_prepend_number_service" class="active"}
+            action={set_class target="li_cname_number_service" class="active"}
     %}
   </ul>
 
