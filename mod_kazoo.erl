@@ -1941,7 +1941,8 @@ event({submit,{edit_failover_number_service,[{number,Number},{account_id,Account
                 ,fun(JObj) -> modkazoo_util:set_value(<<"failover">>, {[{<<"e164">>,FailoverDestination}]}, JObj) end]
         end,
     NewDoc = lists:foldl(fun(F, JObj) -> F(JObj) end, NumberDoc, Routines),
-    kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(NewDoc), Context);
+    kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(NewDoc), Context),
+    z_render:growl(?__("Setting saved", Context), Context);
 
 event({drag,_,_},Context) ->
     Context;

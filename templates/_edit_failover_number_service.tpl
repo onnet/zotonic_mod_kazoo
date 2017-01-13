@@ -24,6 +24,7 @@
                                          else
                                              {$('#failover_destination').hide()};"
                          }
+                  action={slide_down target="button_failover_number_service"}
           %}
           <select name="failover_type" id="failover_type" class="form-control margin-bottom-xs">
             <option id="deactivated"
@@ -62,9 +63,15 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">
-      <button id="button_failover_number_service" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
+      {% button id="button_failover_number_service_close" class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" %}
     </div>
   </div>
 </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <button id="button_failover_number_service" class="col-xs-12 btn btn-zalarm margin-bottom-xs display_none">{_ Save _}</button>
+    </div>
+  </div>
 {% wire id="button_failover_number_service" action={submit target="edit-failover-number-service-form"} %}
+{% wire id="button_failover_number_service_close" action={dialog_close} %}
 {% endwith %}
