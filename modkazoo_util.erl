@@ -404,7 +404,7 @@ prune([K|T], JObj) when not is_list(JObj) ->
     end;
 prune(_, []) -> [];
 prune([K|T], [_|_]=JObjs) ->
-    V = lists:nth(wh_util:to_integer(K), JObjs),
+    V = lists:nth(z_convert:to_integer(K), JObjs),
     case prune(T, V) of
         ?EMPTY_JSON_OBJECT -> replace_in_list(K, 'undefined', JObjs, []);
         V -> replace_in_list(K, 'undefined', JObjs, []);
@@ -419,7 +419,7 @@ no_prune([K], JObj) when not is_list(JObj) ->
         L -> from_list(L)
     end;
 no_prune([K|T], Array) when is_list(Array) ->
-    {Less, [V|More]} = lists:split(wh_util:to_integer(K)-1, Array),
+    {Less, [V|More]} = lists:split(z_convert:to_integer(K)-1, Array),
     case {is_json_object(V), T, V} of
         {'true', [_|_]=Keys, JObj} ->
             Less ++ [no_prune(Keys, JObj)] ++ More;
@@ -435,7 +435,7 @@ no_prune([K|T], JObj) ->
     end;
 no_prune(_, []) -> [];
 no_prune([K|T], [_|_]=JObjs) when is_integer(K) ->
-    V = lists:nth(wh_util:to_integer(K), JObjs),
+    V = lists:nth(z_convert:to_integer(K), JObjs),
     V1 = no_prune(T, V),
     case V1 =:= V of
         'true' ->

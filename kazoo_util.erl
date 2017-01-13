@@ -89,8 +89,8 @@
     ,kz_incoming_fax_delete/2
     ,kz_account_numbers/1
     ,kz_account_numbers/2
-    ,number_info/2
-    ,number_info/3
+    ,phone_number/2
+    ,phone_number/5
     ,kz_account_numbers_info/1
     ,kz_account_numbers_info/2
     ,kz_send_fax/7
@@ -1526,13 +1526,17 @@ kz_incoming_fax_attachment_tiff(DocId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?FAXES_INCOMING/binary, ?TO_BIN(DocId)/binary, ?ATTACHMENT/binary>>,
     crossbar_account_attachment_request('get', API_String, [], Context).
 
-number_info(Number, Context) ->
+phone_number(<<"+", Number/binary>>, Context) ->
+    phone_number(<<"%2B", Number/binary>>, Context);
+phone_number(Number, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    number_info(Number, AccountId, Context).
+    phone_number('get', Number, AccountId, [], Context).
 
-number_info(Number, AccountId, Context) ->
+phone_number(Verb, <<"+", Number/binary>>, AccountId, DataBag, Context) ->
+    phone_number(Verb, <<"%2B", Number/binary>>, AccountId, DataBag, Context);
+phone_number(Verb, Number, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, "/", ?TO_BIN(Number)/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_account_numbers_info(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

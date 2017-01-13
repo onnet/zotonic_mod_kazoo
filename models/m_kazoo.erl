@@ -256,10 +256,10 @@ m_find_value({get_acc_numbers_info, [{account_id,AccountId}]}, _M, Context) ->
     kazoo_util:kz_account_numbers_info(AccountId,Context);
 
 m_find_value({number_info, [{number, Number}]}, _M, Context) ->
-    kazoo_util:number_info(Number, Context);
+    kazoo_util:phone_number(Number, Context);
 
 m_find_value({number_info, [{number, Number},{account_id,AccountId}]}, _M, Context) ->
-    kazoo_util:number_info(Number, AccountId, Context);
+    kazoo_util:phone_number('get', Number, AccountId, [], Context);
 
 m_find_value(kz_list_outgoing_faxes, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_outgoing_faxes(Context)));

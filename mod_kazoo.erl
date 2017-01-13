@@ -1918,6 +1918,31 @@ event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_i
     AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
     kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
 
+event({submit,{edit_failover_number_service,[{number,Number},{account_id,undefined}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({submit,{edit_failover_number_service,[{number,Number},{account_id,AccountId}]},<<>>,<<>>}, Context);
+event({submit,{edit_failover_number_service,[{number,Number},{account_id,AccountId}]},_,_}, Context) ->
+    NumberDoc = kazoo_util:phone_number('get', Number, AccountId, [], Context),
+    Features = modkazoo_util:get_value(<<"features">>, NumberDoc, []),
+    FailoverDestination = modkazoo_util:get_q_bin(<<"failover_destination">>, Context),
+    Routines =
+        case z_context:get_q("failover_type", Context) of
+            "deactivated" ->
+                NewFeatures = lists:delete(<<"failover">>, Features),
+                [fun(JObj) -> modkazoo_util:set_value(<<"features">>, NewFeatures, JObj) end
+                ,fun(JObj) -> modkazoo_util:delete_key(<<"failover">>,JObj) end];
+            "sip" ->
+                NewFeatures = lists:usort([<<"failover">>] ++ Features),
+                [fun(JObj) -> modkazoo_util:set_value(<<"features">>, NewFeatures, JObj) end
+                ,fun(JObj) -> modkazoo_util:set_value(<<"failover">>, {[{<<"sip">>,FailoverDestination}]}, JObj) end];
+            "e164" ->
+                NewFeatures = lists:usort([<<"failover">>] ++ Features),
+                [fun(JObj) -> modkazoo_util:set_value(<<"features">>, NewFeatures, JObj) end
+                ,fun(JObj) -> modkazoo_util:set_value(<<"failover">>, {[{<<"e164">>,FailoverDestination}]}, JObj) end]
+        end,
+    NewDoc = lists:foldl(fun(F, JObj) -> F(JObj) end, NumberDoc, Routines),
+    kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(NewDoc), Context);
+
 event({drag,_,_},Context) ->
     Context;
 
