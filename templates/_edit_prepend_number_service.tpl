@@ -15,6 +15,10 @@
           </span>
         </div>
         <div class="col-sm-3">
+          {% wire id="failover_type"
+                  type="change"
+                  action={slide_down target="button_prepend_number_service"}
+          %}
           <select name="failover_type" id="failover_type" class="form-control margin-bottom-xs">
             <option value="true" {% if number_info[1]["prepend"][1]["enabled"] %}selected{% endif %}>
               {_ Enabled _}
@@ -26,6 +30,10 @@
 
         </div>
         <div class="col-sm-5">
+          {% wire id="prepend_text_input"
+                  type="focus"
+                  action={slide_down target="button_prepend_number_service"}
+          %}
           <input id="prepend_text_input"
                  name="prepend_text_input"
                  type="text"
