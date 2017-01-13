@@ -72,7 +72,7 @@
            <td class="text-center">{{ e911_address["address"] }}</td>
            <td class="text-center">
                {% wire id="edit_e911_address_"++e911_address["id"]
-                       action={dialog_open template="_number_edit_e911.tpl"
+                       action={dialog_open template="_edit_e911_number_service.tpl"
                                            title=_"Edit E911 address"
                                            doc_id=e911_address["id"]
                                            account_id=account_id
