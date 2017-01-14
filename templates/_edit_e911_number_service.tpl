@@ -58,18 +58,20 @@
               </label>
             </div>
           {% endfor %}
-          <div class="funkyradio-zalarm">
-            <input id="new_address_radio" type="radio" name="confirmed_address" value="new_address_radio" title="New address">
-            <label for="new_address_radio">
-              {_ Assign new address _}
-              {% wire id="new_address_radio" type="click" action={slide_down target="new_address_span"} %}
-            </label>
-          </div>
+          {% if number_info[1]["e911"] or confirmed_addresses[1] %}
+            <div class="funkyradio-zalarm">
+              <input id="new_address_radio" type="radio" name="confirmed_address" value="new_address_radio" title="New address">
+              <label for="new_address_radio">
+                {_ Assign new address _}
+                {% wire id="new_address_radio" type="click" action={slide_down target="new_address_span"} %}
+              </label>
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
-  <div id="new_address_span" class="display_none">
+  <div id="new_address_span" class="{% if number_info[1]["e911"] or confirmed_addresses[1] %}display_none{% endif %}">
     {% include "_e911_address_fields.tpl" %}
   </div>
   <div class="form-group">
