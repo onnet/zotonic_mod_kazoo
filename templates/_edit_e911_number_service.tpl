@@ -4,7 +4,7 @@
   {% if not doc_id %}
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 zalarm">
           In order to comply to FCC E911 regulations, prior to service activation,
           physical address of this phone number use should be provided and confirmed:
         </div>

@@ -1960,6 +1960,16 @@ event({submit,{edit_prepend_number_service,[{number,Number},{account_id,AccountI
     kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(modkazoo_util:set_values(Values, NumberDoc)), Context),
     z_render:growl(?__("Setting saved", Context), Context);
 
+event({submit,{edit_cname_number_service,[{number,Number},{account_id,undefined}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({submit,{edit_cname_number_service,[{number,Number},{account_id,AccountId}]},<<>>,<<>>}, Context);
+event({submit,{edit_cname_number_service,[{number,Number},{account_id,AccountId}]},_,_}, Context) ->
+    NumberDoc = kazoo_util:phone_number('get', Number, AccountId, [], Context),
+    Values = modkazoo_util:filter_empty([{[<<"cnam">>,<<"display_name">>], modkazoo_util:get_q_bin("cnam", Context)}
+                                        ,{[<<"cnam">>,<<"inbound_lookup">>], modkazoo_util:get_q_boolean("inbound_lookup", Context)}]),
+    kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(modkazoo_util:set_values(Values, NumberDoc)), Context),
+    z_render:growl(?__("Setting saved", Context), Context);
+
 event({drag,_,_},Context) ->
     Context;
 

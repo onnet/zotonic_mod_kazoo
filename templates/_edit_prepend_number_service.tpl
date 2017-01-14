@@ -10,7 +10,7 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-3">
-          <span style="float: right; margin-top: 8px;">
+          <span class="zalarm" style="float: right; margin-top: 8px;">
           {_ Text to prepend: _}
           </span>
         </div>
@@ -43,11 +43,18 @@
         </div>
       </div>
     </div>
-  <br />
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <p class="zprimary">
+             {_ This text will appear before your number when receiving a call. _}
+             <br />
+             {_ This can be used to better identify which number was called when you use more than one. _}
+          </p>
+        </div>
+      </div>
+    </div>
 </form>
-<p>{_ This text will appear before your number when receiving a call. _}
-   {_ This can be used to better identify which number was called when you use more than one. _}
-</p>
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">

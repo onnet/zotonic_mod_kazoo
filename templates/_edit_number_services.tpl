@@ -36,8 +36,8 @@
             action={set_class target="li_prepend_number_service" class="active"}
             action={remove_class target="li_cname_number_service" class="active"}
     %}
-    <li id="li_cname_number_service"><a href="#cname_number_service" role="tab" data-toggle="tab">{_ CNAME _}</a></li>
-    {% wire id="li_cmane_number_service"
+    <li id="li_cname_number_service"><a href="#cname_number_service" role="tab" data-toggle="tab">{_ Caller ID _}</a></li>
+    {% wire id="li_cname_number_service"
             type="click"
             action={update target="number_services_div"
                            template="_edit_cname_number_service.tpl"

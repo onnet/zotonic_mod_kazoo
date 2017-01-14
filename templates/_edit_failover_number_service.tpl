@@ -45,6 +45,10 @@
           </select>
         </div>
         <div class="col-sm-6">
+          {% wire id="failover_destination"
+                  type="focus"
+                  action={slide_down target="button_failover_number_service"}
+          %}
           <input id="failover_destination"
                  name="failover_destination"
                  type="text"
