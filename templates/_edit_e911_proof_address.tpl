@@ -6,17 +6,17 @@
         <div class="col-sm-6">
           <input type="text"
                  class="form-control margin-bottom-xs"
-                 id="zipcode"
-                 name="zipcode"
-                 value="{{ e911_address_doc[1]["zip"] }}"
+                 id="postal_code"
+                 name="postal_code"
+                 value="{{ e911_address_doc[1]["postal_code"] }}"
                  placeholder="{_ Zip Code _} {_ (mandatory) _}">
         </div>
         <div class="col-sm-6">
           <input type="text"
                  class="form-control"
-                 id="address_line1"
-                 name="address_line1"
-                 value="{{ e911_address_doc[1]["address_line1"] }}"
+                 id="street_address"
+                 name="street_address"
+                 value="{{ e911_address_doc[1]["street_address"] }}"
                  placeholder="{_ Address Line 1 _} {_ (mandatory) _}">
         </div>
       </div>
@@ -26,16 +26,17 @@
         <div class="col-sm-6">
           <input type="text"
                  class="form-control margin-bottom-xs"
-                 id="city"
-                 value="{{ e911_address_doc[1]["city"] }}"
-                 name="city" placeholder="{_ City _} {_ (mandatory) _}">
+                 id="locality"
+                 name="locality"
+                 value="{{ e911_address_doc[1]["locality"] }}"
+                 placeholder="{_ City _} {_ (mandatory) _}">
         </div>
         <div class="col-sm-6">
           <input type="text"
                  class="form-control margin-bottom-xs"
-                 id="address_line2"
-                 name="address_line2"
-                 value="{{ e911_address_doc[1]["address_line2"] }}"
+                 id="extended_address"
+                 name="extended_address"
+                 value="{{ e911_address_doc[1]["extended_address"] }}"
                  placeholder="{_ Address Line 2 _} {_ (optional) _}">
         </div>
       </div>
@@ -45,9 +46,9 @@
         <div class="col-sm-6">
           <input type="text"
                  class="form-control"
-                 id="state"
-                 name="state"
-                 value="{{ e911_address_doc[1]["state"] }}"
+                 id="region"
+                 name="region"
+                 value="{{ e911_address_doc[1]["region"] }}"
                  placeholder="{_ State _} {_ (mandatory) _}">
         </div>
       </div>

@@ -69,7 +69,7 @@
            <td class="text-center">{{ e911_address["postal_code"] }}</td>
            <td class="text-center">{{ e911_address["locality"] }}</td>
            <td class="text-center">{{ e911_address["region"] }}</td>
-           <td class="text-center">{{ e911_address["address"] }}</td>
+           <td class="text-center">{{ e911_address["street_address"] }} {{ e911_address["extended_address"] }}</td>
            <td class="text-center">
                {% wire id="edit_e911_address_"++e911_address["id"]
                        action={dialog_open template="_edit_e911_proof_address.tpl"
