@@ -74,11 +74,11 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <input type="file" name="address_confirmation_file" class="file">
+          <input id="{{ #file }}" type="file" name="address_confirmation_file" style="visibility: hidden; position: absolute;">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="{_ Proof of address ( utility bill / government letter ) _}">
+            <input id="{{ #proofinput }}" type="text" class="form-control" placeholder="{_ Proof of address ( utility bill / government letter ) _}">
             <span class="input-group-btn">
-              <button class="browse btn btn-zprimary margin-bottom-xs" type="button"><i class="glyphicon glyphicon-search"></i> {_ Browse _}</button>
+              <button id="{{ #browse }}" class="browse btn btn-zprimary margin-bottom-xs" type="button"><i class="glyphicon glyphicon-search"></i> {_ Browse _}</button>
             </span>
           </div>
         </div>
@@ -94,27 +94,14 @@
       </div>
     </div>
   
-    <style>
-      .file {
-        visibility: hidden;
-        position: absolute;
-      }
-    </style>
-  
-    {% javascript %}
-      $(document).ready(function() {
-              $('.form-group').on('click','input[type=checkbox]',function() {
-                      $(this).closest('.checkbox-inline, .checkbox').toggleClass('checked');
-              });
+    <script type="text/javascript">
+      $(document).on('click', '#{{ #browse }}', function(){
+        $('#{{ #file }}').trigger('click');
       });
-      $(document).on('click', '.browse', function(){
-        var file = $(this).parent().parent().parent().find('.file');
-        file.trigger('click');
-        });
-        $(document).on('change', '.file', function(){
-        $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+      $(document).on('change', '#{{ #file }}', function(){
+        $('#{{ #proofinput }}').val($(this).val().replace(/C:\\fakepath\\/i, ''));
       });
-    {% endjavascript %}
+    </script>
   {% endif %}
 
     <div class="form-group">

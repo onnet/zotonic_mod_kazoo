@@ -50,7 +50,14 @@
     %}
   </ul>
 
-  <div id="number_services_div" class="1tab-content">
-      {% include "_edit_e911_number_service.tpl" %}
+  <div id="number_services_div">
+    <span id="_edit_e911_number_service_initial_load" class="text-center p-3">
+        {% ilazy class="fa fa-spinner fa-spin fa-3x"
+                 action={replace target="_edit_e911_number_service_initial_load"
+                                 template="_edit_e911_number_service.tpl"
+                                 number=number
+                                 account_id=account_id}
+        %}
+    </span>
   </div>
 </div>
