@@ -66,9 +66,9 @@
                %}
              {% endif %}
            </td>
-           <td class="text-center">{{ e911_address["zip"] }}</td>
-           <td class="text-center">{{ e911_address["city"] }}</td>
-           <td class="text-center">{{ e911_address["state"] }}</td>
+           <td class="text-center">{{ e911_address["postal_code"] }}</td>
+           <td class="text-center">{{ e911_address["locality"] }}</td>
+           <td class="text-center">{{ e911_address["region"] }}</td>
            <td class="text-center">{{ e911_address["address"] }}</td>
            <td class="text-center">
                {% wire id="edit_e911_address_"++e911_address["id"]
