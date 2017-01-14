@@ -9,7 +9,7 @@
   <br />
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-5 col-sm-offset-1">
           {% wire id="failover_type"
                   type="change"
                   action={script script="Type = $('#failover_type').val();
@@ -44,7 +44,7 @@
             </option>
           </select>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-5">
           {% wire id="failover_destination"
                   type="focus"
                   action={slide_down target="button_failover_number_service"}
