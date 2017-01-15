@@ -4,7 +4,11 @@
         number_info,
         confirmed_addresses
 %}
-{% wire id="edit_e911_address_form" type="submit" postback={edit_e911_address doc_id=doc_id account_id=account_id} delegate="mod_onbill" %}
+{% wire id="edit_e911_address_form"
+        type="submit"
+        postback={edit_e911_address doc_id=doc_id account_id=account_id}
+        delegate="mod_onbill"
+%}
 <form id="edit_e911_address_form" method="post" action="postback">
   <div class="form-group">
     <div class="row">
@@ -46,7 +50,11 @@
         <div class="funkyradio">
           {% for e911_address in confirmed_addresses %}
             <div class="funkyradio-zalarm">
-              <input id="{{ e911_address['id'] }}" type="radio" name="confirmed_address" value="{{ e911_address['id'] }}" title="Confirmed address">
+              <input id="{{ e911_address['id'] }}"
+                     type="radio"
+                     name="confirmed_address"
+                     value="{{ e911_address['id'] }}"
+                     title="Confirmed address">
               <label for="{{ e911_address['id'] }}">
                 {{ e911_address["street_address"] }}
                 {{ e911_address["extended_address"] }},
@@ -54,16 +62,30 @@
                 {{ e911_address["region"] }}
                 {{ e911_address["postal_code"] }}
                 {# print e911_address #}
-                {% wire id=e911_address['id'] type="click" action={slide_up target="new_address_span"} %}
+                {% wire id=e911_address['id']
+                        type="click"
+                        action={slide_up target="new_address_span"}
+                        action={slide_down target="confirm_and_cancel_btn"}
+                        action={slide_up target="cancel_only_btn"}
+                %}
               </label>
             </div>
           {% endfor %}
           {% if number_info[1]["e911"] or confirmed_addresses[1] %}
             <div class="funkyradio-zalarm">
-              <input id="new_address_radio" type="radio" name="confirmed_address" value="new_address_radio" title="New address">
+              <input id="new_address_radio"
+                     type="radio"
+                     name="confirmed_address"
+                     value="new_address_radio"
+                     title="New address">
               <label for="new_address_radio">
                 {_ Assign new address _}
-                {% wire id="new_address_radio" type="click" action={slide_down target="new_address_span"} %}
+                {% wire id="new_address_radio"
+                        type="click"
+                        action={slide_down target="new_address_span"}
+                        action={slide_down target="confirm_and_cancel_btn"}
+                        action={slide_up target="cancel_only_btn"}
+                %}
               </label>
             </div>
           {% endif %}
@@ -75,7 +97,7 @@
     {% include "_e911_address_fields.tpl" %}
   </div>
   <input type="hidden" name="number" value="{{ number }}">
-  <div class="form-group">
+  <div id="confirm_and_cancel_btn" class="form-group display_none">
     <div class="row">
       <div class="col-sm-6">
         {% button id="confirm_e911_address_edit_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs" text=_"Confirm" %}
@@ -90,6 +112,13 @@
         %}
       </div>
       <div class="col-sm-6">
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Cancel" action={dialog_close} %}
+      </div>
+    </div>
+  </div>
+  <div id="cancel_only_btn" class="form-group">
+    <div class="row">
+      <div class="col-sm-12">
         {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Cancel" action={dialog_close} %}
       </div>
     </div>
