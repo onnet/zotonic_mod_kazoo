@@ -74,6 +74,7 @@
   <div id="new_address_span" class="{% if number_info[1]["e911"] or confirmed_addresses[1] %}display_none{% endif %}">
     {% include "_e911_address_fields.tpl" %}
   </div>
+  <input type="hidden" name="number" value="{{ number }}">
   <div class="form-group">
     <div class="row">
       <div class="col-sm-6">
