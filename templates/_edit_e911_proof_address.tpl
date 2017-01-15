@@ -1,6 +1,10 @@
 {% with m.onbill[{get_e911_address_doc doc_id=doc_id account_id=account_id}] as e911_address_doc %}
-{% wire id="edit_e911_address_form" type="submit" postback={edit_e911_address doc_id=doc_id account_id=account_id} delegate="mod_onbill" %}
-<form id="edit_e911_address_form" method="post" action="postback">
+{% wire id="edit_e911_proof_address_form"
+        type="submit"
+        postback={edit_e911_proof_address doc_id=doc_id account_id=account_id}
+        delegate="mod_onbill"
+%}
+<form id="edit_e911_proof_address_form" method="post" action="postback">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">

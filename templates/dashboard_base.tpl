@@ -21,6 +21,7 @@
       {# include "services_row.tpl" #}
     </div>
   </div>
+  {% wire action={connect signal={emit_growl_signal} action={update template="_z_growl_add.tpl"}} %}
 {% else %}
 {% javascript %}
   z_notify("no_auth");

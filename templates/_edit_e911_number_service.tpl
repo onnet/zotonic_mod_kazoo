@@ -4,12 +4,12 @@
         number_info,
         confirmed_addresses
 %}
-{% wire id="edit_e911_address_form"
+{% wire id="set_e911_address_form"
         type="submit"
-        postback={edit_e911_address doc_id=doc_id account_id=account_id}
+        postback={set_e911_address account_id=account_id}
         delegate="mod_onbill"
 %}
-<form id="edit_e911_address_form" method="post" action="postback">
+<form id="set_e911_address_form" method="post" action="postback">
   <div class="form-group">
     <div class="row">
       <div class="col-sm-12 text-center zalarm">
@@ -24,7 +24,7 @@
           <span class="zprimary">
             Configured address:
           </span>
-          <span class="zalarm">
+          <span id="configured_address_span" class="zalarm">
             <strong>
               {{ number_info[1]["e911"][1]["street_address"] }}
               {{ number_info[1]["e911"][1]["extended_address"] }},
@@ -104,11 +104,6 @@
         {% wire id="confirm_e911_address_edit_btn"
                 type="click"
                 action={submit}
-                action={update target="number_services_div"
-                               template="_edit_e911_number_service.tpl"
-                               number=number
-                               account_id=account_id}
-
         %}
       </div>
       <div class="col-sm-6">
@@ -119,7 +114,7 @@
   <div id="cancel_only_btn" class="form-group">
     <div class="row">
       <div class="col-sm-12">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Cancel" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" action={dialog_close} %}
       </div>
     </div>
   </div>

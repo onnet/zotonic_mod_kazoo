@@ -17,7 +17,12 @@
     </span>
 
     {# Online payments #}
-    {% wire action={connect signal={update_onnet_widget_online_payment_tpl} action={update target="onnet_widget_online_payment_tpl" template="onnet_widget_online_payment_lazy.tpl"}} %}
+    {% wire action={connect signal={update_onnet_widget_online_payment_tpl}
+                            action={update target="onnet_widget_online_payment_tpl"
+                                           template="onnet_widget_online_payment_lazy.tpl"
+                                   }
+                   }
+    %}
     <span id="onnet_widget_online_payment_tpl">
       {% include "onnet_widget_online_payment.tpl" headline=_"Online payments" %}
     </span>

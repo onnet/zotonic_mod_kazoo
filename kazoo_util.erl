@@ -346,6 +346,7 @@
     ,allotment_element_delete/3
     ,allotment_element_add/3
     ,allotment_element_set_field/5
+    ,set_e911_number_service/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4194,3 +4195,14 @@ allotment_element_set_field(InputValue, FieldName, AllotmentElementName, Account
     CurrAllotments = kz_allotments('get', AccountId, [], Context),
     NewAllotments = modkazoo_util:set_value([?TO_BIN(AllotmentElementName), ?TO_BIN(FieldName)], FieldValue, CurrAllotments),
     kz_allotments('post', AccountId, ?MK_DATABAG(NewAllotments), Context).
+
+set_e911_number_service(AddressValues, Number, AccountId, Context) ->
+    NumberDoc = kazoo_util:phone_number('get', Number, AccountId, [], Context),
+    Features = modkazoo_util:get_value(<<"features">>, NumberDoc, []),
+    NewFeatures = lists:usort([<<"e911">>] ++ Features),
+    E911AddrJObj = modkazoo_util:set_values(AddressValues, modkazoo_util:new()),
+    Routines =
+        [fun(JObj) -> modkazoo_util:set_value(<<"features">>, NewFeatures, JObj) end
+        ,fun(JObj) -> modkazoo_util:set_value(<<"e911">>, E911AddrJObj, JObj) end],
+    NewDoc = lists:foldl(fun(F, JObj) -> F(JObj) end, NumberDoc, Routines),
+    kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(NewDoc), Context).
