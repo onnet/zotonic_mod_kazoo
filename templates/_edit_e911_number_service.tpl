@@ -81,6 +81,11 @@
         {% wire id="confirm_e911_address_edit_btn"
                 type="click"
                 action={submit}
+                action={update target="number_services_div"
+                               template="_edit_e911_number_service.tpl"
+                               number=number
+                               account_id=account_id}
+
         %}
       </div>
       <div class="col-sm-6">

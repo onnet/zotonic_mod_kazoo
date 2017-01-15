@@ -760,7 +760,7 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
 
 .funkyradio label {
   width: 100%;
-  border-radius: 3px;
+/*  border-radius: 3px; */
   border: 1px solid #D1D3D4;
   font-weight: normal;
 }
@@ -793,7 +793,7 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   content: '';
   width: 2.5em;
   background: {{ m.config.mod_kazoo.color1.value }};
-  border-radius: 3px 0 0 3px;
+/*  border-radius: 3px 0 0 3px; */
 }
 
 .funkyradio input[type="radio"]:hover:not(:checked) ~ label,
