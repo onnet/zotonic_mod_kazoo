@@ -114,7 +114,8 @@
     {% include "_e911_address_fields.tpl" %}
   </div>
   <input type="hidden" name="number" value="{{ number }}">
-  <div id="confirm_and_cancel_btn" class="form-group display_none">
+  <div id="confirm_and_cancel_btn"
+       class="form-group {% if number_info[1]["e911"] or confirmed_addresses[1] %}display_none{% endif %}">
     <div class="row">
       <div class="col-sm-6">
         {% button id="confirm_e911_address_edit_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs" text=_"Confirm" %}
@@ -128,7 +129,8 @@
       </div>
     </div>
   </div>
-  <div id="cancel_only_btn" class="form-group">
+  <div id="cancel_only_btn"
+       class="form-group {% if not (number_info[1]["e911"] or confirmed_addresses[1]) %}display_none{% endif %}">
     <div class="row">
       <div class="col-sm-12">
         {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" action={dialog_close} %}

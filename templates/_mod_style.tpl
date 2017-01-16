@@ -850,4 +850,8 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   background-color: #d9534f;
 }
 
+.reminder911 {
+  padding-left: 6em;
+  color: {{ m.config.mod_kazoo.color2.value }};
+}
 </style>
