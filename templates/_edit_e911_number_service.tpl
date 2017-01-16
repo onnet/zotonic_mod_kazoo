@@ -48,6 +48,23 @@
     <div class="row">
       <div class="col-sm-10 col-sm-offset-1">
         <div class="funkyradio">
+          {% if number_info[1]["e911"] %}
+            <div class="funkyradio-zalarm">
+              <input id="remove_address_radio"
+                     type="radio"
+                     name="confirmed_address"
+                     value="remove_address_radio"
+                     title="Remove configured address">
+              <label for="remove_address_radio">
+                {_ Remove configured address _}
+                {% wire id="remove_address_radio"
+                        type="click"
+                        action={slide_down target="confirm_and_cancel_btn"}
+                        action={slide_up target="cancel_only_btn"}
+                %}
+              </label>
+            </div>
+          {% endif %}
           {% for e911_address in confirmed_addresses %}
             <div class="funkyradio-zalarm">
               <input id="{{ e911_address['id'] }}"
