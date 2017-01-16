@@ -93,6 +93,8 @@
     ,phone_number/5
     ,kz_account_numbers_info/1
     ,kz_account_numbers_info/2
+    ,account_numbers_fix/2
+    ,account_numbers_fix_plus/2
     ,kz_send_fax/7
     ,kz_list_outgoing_faxes/1
     ,kz_list_ledgers/2
@@ -361,6 +363,7 @@
 -define(ACCOUNTS, <<"/accounts/">>).
 -define(ACCOUNTS(Context), <<"/accounts/", (z_context:get_session('kazoo_account_id', Context))/binary>>).
 -define(PHONE_NUMBERS, <<"/phone_numbers">>).
+-define(FIX, <<"/fix">>).
 -define(IDENTIFY, <<"/identify">>).
 -define(REGISTRATIONS, <<"/registrations">>).
 -define(COUNT, <<"/count">>).
@@ -1550,6 +1553,15 @@ kz_account_numbers_info(AccountId, Context) ->
         <<>> -> [];
         Result -> modkazoo_util:to_proplist(<<"numbers">>,Result)
     end.
+
+account_numbers_fix_plus(AccountId, Context) ->
+    _ = account_numbers_fix(AccountId, Context),
+    mod_signal:emit({onnet_allocated_numbers_tpl ,[]} ,Context),
+    mod_signal:emit({emit_growl_signal ,[{'text',?__("Numbers refresh finished", Context)},{'type', 'notice'}]} ,Context).
+
+account_numbers_fix(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, ?FIX/binary>>,
+    crossbar_account_request('post', API_String, [], Context).
 
 kz_account_numbers(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

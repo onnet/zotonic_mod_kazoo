@@ -473,6 +473,14 @@ event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,
             z_render:growl(?__("Number ", Context1)++z_convert:to_list(Number)++?__(" successfully removed.", Context1), Context1)
     end;
 
+event({postback,{fix_allocated_numbers,[{account_id, 'undefined'}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({postback,{fix_allocated_numbers,[{account_id, AccountId}]},<<>>,<<>>}, Context);
+event({postback,{fix_allocated_numbers,[{account_id, AccountId}]},_,_}, Context) ->
+    mod_signal:emit({emit_growl_signal ,[{'text',?__("Numbers refresh request sent. This could take a while", Context)},{'type', 'notice'}]} ,Context),
+    spawn(kazoo_util,account_numbers_fix_plus,[AccountId,Context]),
+    Context;
+
 event({submit,{start_webphone_form,[]},_,_}, Context) ->
     DeviceId = z_context:get_q("webrtc_device",Context),
     DeviceDoc = kazoo_util:kz_get_device_doc(DeviceId, Context),
