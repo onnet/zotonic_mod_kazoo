@@ -40,8 +40,11 @@
 
 
     {# Transactions list #}
-    {% wire action={connect signal={update_rs_widget_transactions_list_tpl} 
-                    action={update target="rs_widget_transactions_list_tpl" template="rs_widget_transactions_list.tpl" headline=_"Transactions list"}
+    {% wire action={connect signal={update_fin_info_signal} 
+                            action={update target="rs_widget_transactions_list_tpl"
+                                           template="rs_widget_transactions_list.tpl"
+                                           headline=_"Transactions list"
+                                   }
                    }
     %}
     <span id="rs_widget_transactions_list_tpl">

@@ -63,6 +63,7 @@
     ,get_q_integer/2
     ,cleanout/1
     ,props_get_values/2
+    ,delay_signal/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -535,4 +536,7 @@ cleanout(String) ->
 props_get_values(K,L) ->
     lists:map(fun(X) -> modkazoo_util:get_value(K, X) end, L).
 
-
+delay_signal(Seconds, Signal, Vars, Context) ->
+    spawn(fun() -> timer:sleep(Seconds * ?MILLISECONDS_IN_SECOND),
+                   mod_signal:emit({Signal, Vars}, Context)
+          end).

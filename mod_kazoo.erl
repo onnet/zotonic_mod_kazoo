@@ -252,24 +252,25 @@ event({postback,kazoo_transaction,_,_}, Context) ->
             JObj = kazoo_util:make_payment(Amount, z_context:get_session('kazoo_account_id', Context), Context),
             case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
                 <<"submitted_for_settlement">> ->
-                    spawn(fun() -> timer:sleep(1000), mod_signal:emit({update_onnet_widget_finance_tpl, []}, Context) end),
-                    spawn(fun() -> timer:sleep(4000), mod_signal:emit({update_onnet_widget_online_payment_tpl, []}, Context) end),
-                    spawn(fun() ->
-                              timer:sleep(4000),
-                              mod_signal:emit({update_rs_widget_transactions_list_tpl
-                                              ,[{headline,?__("Transactions list", Context)}]
-                                              }
-                                             ,Context)
-                          end),
+                    modkazoo_util:delay_signal(1, 'update_onnet_widget_finance_tpl', [], Context),
+                    modkazoo_util:delay_signal(4, 'update_onnet_widget_online_payment_tpl', [], Context),
+                %    modkazoo_util:delay_signal(4 ,'update_fin_info_signal' ,[{headline,?__("Transactions list", Context)}] ,Context),
+                    modkazoo_util:delay_signal(4 ,'update_fin_info_signal' ,[] ,Context),
         %            z_render:growl("£"++z_convert:to_list(Amount)++?__(" successfully added.",Context), Context);
-                    z_render:growl(?__(" successfully added.",Context), Context);
+                    z_render:growl(?__("Funds successfully added.",Context), Context);
                 E ->
                     z_render:growl_error(?__("Something went wrong Response code: ", Context)++z_convert:to_list(E), Context)
             end;
         _ -> 
             Context1 = z_render:growl_error(?__("Payment failed!<br />Please input correct amount.", Context), Context),
-            z_render:update("onnet_widget_online_payment_tpl" ,z_template:render("onnet_widget_online_payment.tpl", [{cat, "text"}, 
-                             {headline, "Online payments"}, {bt_customer, kazoo_util:kz_bt_customer(Context1)}], Context1), Context1)
+            z_render:update("onnet_widget_online_payment_tpl"
+                           ,z_template:render("onnet_widget_online_payment.tpl"
+                                             ,[{cat, "text"} 
+                                              ,{headline, "Online payments"}
+                                              ,{bt_customer, kazoo_util:kz_bt_customer(Context1)}
+                                              ]
+                                             ,Context1)
+                           ,Context1)
     end;
 
 event({postback,{bt_delete_card,[{card_id,CardId}]},_,_}, Context) ->
@@ -1734,7 +1735,7 @@ event({submit,kz_purge_voicemails,_,_}, Context) ->
                                           ,Context),
     case Count > 2 of
         'true' ->
-            spawn(fun() -> timer:sleep(Count * ?MILLISECONDS_IN_SECOND), mod_signal:emit({user_portal_voicemails_tpl, []}, Context) end),
+            modkazoo_util:delay_signal(Count, 'user_portal_voicemails_tpl', [], Context),
             Context1 = z_render:growl(?__("Messages removal started", Context), Context);
         'false' ->
             Context1 = z_render:growl(?__("No messages to remove", Context), Context)
@@ -1824,6 +1825,7 @@ event({submit,add_credit,_,_}, Context) ->
     Reason = z_context:get_q("credit_reason", Context),
     [_Day, _Month, _Year] = string:tokens(z_context:get_q("credit_date", Context),"/"),
     kazoo_util:kz_transactions_credit(<<"free">>, Amount, Reason, Description, AccountId, Context),
+    modkazoo_util:delay_signal(3 ,'update_fin_info_signal' ,[] ,Context),
     z_render:dialog_close(Context);
 
 event({submit,add_debit,_,_}, Context) ->
@@ -1832,6 +1834,7 @@ event({submit,add_debit,_,_}, Context) ->
     Description = z_context:get_q("debit_description", Context),
     Reason = z_context:get_q("debit_reason", Context),
     kazoo_util:kz_transactions_debit(Amount, Reason, Description, AccountId, Context),
+    modkazoo_util:delay_signal(3 ,'update_fin_info_signal' ,[] ,Context),
     z_render:dialog_close(Context);
 
 event({postback,{add_chosen_service_plan,[{account_id,AccountId}]},_,_}, Context) ->
@@ -1924,6 +1927,7 @@ event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_i
 event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},_,_}, Context) ->
     InputValue = z_context:get_q("input_value", Context),
     AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+    modkazoo_util:delay_signal(3, 'update_fin_info_signal', [], Context),
     kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
 
 event({submit,{edit_failover_number_service,[{number,Number},{account_id,undefined}]},_,_}, Context) ->

@@ -41,16 +41,19 @@
       <th colspan="3">
         {% if payments_month_chosen == now|date: 'm/Y' or not payments_month_chosen %} 
           {_ Current balance _}
+          <span style="float:right; padding-right:2em;">
+            {% include "_current_account_credit.tpl" %}
+          </span>
         {% else %}
           {_ Closing balance _}
+          <span style="float:right; padding-right:2em;">
+            {{ m.kazoo[{kz_list_transactions account_id=account_id
+                                             payments_month_chosen=payments_month_chosen
+                                             type="next_month_rollup"
+                      }]|currency_sign
+            }}
+          </span>
         {% endif %}
-        <span style="float:right; padding-right:2em;">
-          {{ m.kazoo[{kz_list_transactions account_id=account_id
-                                           payments_month_chosen=payments_month_chosen
-                                           type="next_month_rollup"
-                    }]|currency_sign
-          }}
-        </span>
       </th>
     </tr>
   </thead>
