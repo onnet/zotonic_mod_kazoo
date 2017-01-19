@@ -108,6 +108,15 @@
           {% endif %}
         </div>
       </div>
+      <div class="col-sm-10 col-sm-offset-1" style="font-size: 1.1em;">
+        <span class="zalarm">
+          Monthly fee for 
+          {{ m.kazoo.kz_current_service_plans[1]["items"][1]["number_services"][1]["e911"][1]["name"] }}
+          amounts to
+          {{ m.kazoo.kz_current_service_plans[1]["items"][1]["number_services"][1]["e911"][1]["rate"]|currency_sign }}
+          per number.
+        </span>
+      </div>
     </div>
   </div>
   <div id="new_address_span" class="{% if number_info[1]["e911"] or confirmed_addresses[1] %}display_none{% endif %}">
