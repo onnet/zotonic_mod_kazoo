@@ -1,6 +1,6 @@
-    <div class="row">
-    <br />
-    <div class="col-xs-12">
+<div class="row">
+  <br />
+  <div class="col-xs-12">
 
     <div class="row">
         <div class="col-xs-4 col-xs-offset-1"><h4>{_ In-House Calls _}</h4></div>
@@ -10,7 +10,15 @@
         <div id="caller_idinternalname" class="col-xs-6" >
             <span>{{ user_doc["caller_id"][1]["internal"][1]["name"] }}</span>
             <i id="edit_caller_idinternalname" class="fa fa-edit pointer" title="Edit field"></i>
-            {% wire id="edit_caller_idinternalname" type="click" action={ update target="caller_idinternalname" template="_edit_field.tpl" type="user" doc_id=user_id field_name=["caller_id","internal","name"] } %}
+            {% wire id="edit_caller_idinternalname"
+                    type="click"
+                    action={update target="caller_idinternalname"
+                                   template="_edit_field.tpl"
+                                   type="user"
+                                   doc_id=user_id
+                                   field_name=["caller_id","internal","name"]
+                           }
+            %}
         </div>
     </div>
     <div class="row">
@@ -18,7 +26,15 @@
         <div id="caller_idinternalnumber" class="col-xs-6" >
             <span>{{ user_doc["caller_id"][1]["internal"][1]["number"] }}</span>
             <i id="edit_caller_idinternalnumber" class="fa fa-edit pointer" title="Edit field"></i>
-            {% wire id="edit_caller_idinternalnumber" type="click" action={ update target="caller_idinternalnumber" template="_edit_field.tpl" type="user" doc_id=user_id field_name=["caller_id","internal","number"] } %}
+            {% wire id="edit_caller_idinternalnumber"
+                    type="click"
+                    action={update target="caller_idinternalnumber"
+                                   template="_edit_field.tpl"
+                                   type="user"
+                                   doc_id=user_id
+                                   field_name=["caller_id","internal","number"]
+                           }
+            %}
         </div>
     </div>
 
@@ -30,7 +46,15 @@
         <div id="caller_idexternalname" class="col-xs-6" >
             <span>{{ user_doc["caller_id"][1]["external"][1]["name"] }}</span>
             <i id="edit_caller_idexternalname" class="fa fa-edit pointer" title="Edit field"></i>
-            {% wire id="edit_caller_idexternalname" type="click" action={ update target="caller_idexternalname" template="_edit_field.tpl" type="user" doc_id=user_id field_name=["caller_id","external","name"] } %}
+            {% wire id="edit_caller_idexternalname"
+                    type="click"
+                    action={update target="caller_idexternalname"
+                                   template="_edit_field.tpl"
+                                   type="user"
+                                   doc_id=user_id
+                                   field_name=["caller_id","external","name"]
+                           }
+            %}
         </div>
     </div>
     <div class="row">
@@ -38,10 +62,21 @@
         <div id="user_caller_idexternalnumber" class="col-xs-6" >
             <span>{{ user_doc["caller_id"][1]["external"][1]["number"] }}</span>
             <i id="edit_caller_idexternalnumber" class="fa fa-edit pointer" title="Edit field"></i>
-            {% wire id="edit_caller_idexternalnumber" type="click" action={ update target="user_caller_idexternalnumber" template="_edit_field_select_bootsearch.tpl" type="user" doc_id=user_id field_name=["caller_id","external","number"] options=[["", _"- No CID -"]]++m.kazoo.get_acc_numbers|cleanout prefix="user_" postfix="_bootsearch" } %}
+            {% wire id="edit_caller_idexternalnumber"
+                    type="click"
+                    action={update target="user_caller_idexternalnumber"
+                                   template="_edit_field_select_bootsearch.tpl"
+                                   type="user"
+                                   doc_id=user_id
+                                   field_name=["caller_id","external","number"]
+                                   options=[["", _"- No CID -"]]++m.kazoo.get_acc_numbers|cleanout
+                                   prefix="user_"
+                                   postfix="_bootsearch"
+                           }
+            %}
         </div>
     </div>
 
     <br />
-    </div>
-    </div>
+  </div>
+</div>
