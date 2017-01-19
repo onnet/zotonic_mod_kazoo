@@ -69,7 +69,46 @@
                                    type="user"
                                    doc_id=user_id
                                    field_name=["caller_id","external","number"]
-                                   options=[["", _"- No CID -"]]++m.kazoo.get_acc_numbers|cleanout
+                                   options=[["", _"- No CID -"]]++m.kazoo.get_acc_numbers
+                                   prefix="user_"
+                                   postfix="_bootsearch"
+                           }
+            %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4 col-xs-offset-1"><h4>{_ Emergency Calls _}</h4></div>
+    </div>
+    <div class="row">
+        <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Name _}</label></div>
+        <div id="caller_idemergencyname" class="col-xs-6" >
+            <span>{{ user_doc["caller_id"][1]["emergency"][1]["name"] }}</span>
+            <i id="edit_caller_idemergencyname" class="fa fa-edit pointer" title="Edit field"></i>
+            {% wire id="edit_caller_idemergencyname"
+                    type="click"
+                    action={update target="caller_idemergencyname"
+                                   template="_edit_field.tpl"
+                                   type="user"
+                                   doc_id=user_id
+                                   field_name=["caller_id","emergency","name"]
+                           }
+            %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-5"><label class="edit_user_label">{_ Caller ID Number _}</label></div>
+        <div id="user_caller_idemergencynumber" class="col-xs-6" >
+            <span>{{ user_doc["caller_id"][1]["emergency"][1]["number"] }}</span>
+            <i id="edit_caller_idemergencynumber" class="fa fa-edit pointer" title="Edit field"></i>
+            {% wire id="edit_caller_idemergencynumber"
+                    type="click"
+                    action={update target="user_caller_idemergencynumber"
+                                   template="_edit_field_select_bootsearch.tpl"
+                                   type="user"
+                                   doc_id=user_id
+                                   field_name=["caller_id","emergency","number"]
+                                   options=[["", _"- No CID -"]]++m.kazoo.get_acc_numbers
                                    prefix="user_"
                                    postfix="_bootsearch"
                            }
