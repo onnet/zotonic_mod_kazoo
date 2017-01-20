@@ -221,11 +221,11 @@ set_session_currency_sign(Context) ->
 
 maybe_trial_account(Context) ->
  % lager:info("IAM maybe_trial_account
-    case kazoo_util:kz_account_doc_field(<<"trial_time_left">>, Context) of
-        'undefined' ->
+    case kazoo_util:is_trial_account(Context) of
+        'false' ->
             z_context:set_session('kazoo_account_trial', 'false', Context),
             z_context:set_session('kazoo_account_trial_time_left', 'undefined', Context);
-        TimeLeft ->
+        {'true', TimeLeft} ->
             z_context:set_session('kazoo_account_trial', 'true', Context),
             z_context:set_session('kazoo_account_trial_time_left', TimeLeft, Context)
     end.

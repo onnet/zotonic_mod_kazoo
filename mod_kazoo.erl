@@ -1927,10 +1927,18 @@ event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_i
     AccountId = z_context:get_session('kazoo_account_id', Context),
     event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},<<>>,<<>>}, Context);
 event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id',AccountId}]},_,_}, Context) ->
-    InputValue = z_context:get_q("input_value", Context),
-    AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
-    modkazoo_util:delay_signal(3, 'update_fin_info_signal', [], Context),
-    kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
+    case kazoo_util:is_trial_account(Context) of
+        'false' ->
+            InputValue = z_context:get_q("input_value", Context),
+            AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+            modkazoo_util:delay_signal(3, 'update_fin_info_signal', [], Context),
+            kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
+        {'true', TimeLeft} ->
+            z_render:dialog("<span class='zprimary'>"++?__("Trial mode restriction",Context)++"</span>"
+                           ,"_trial_mode_restrictions.tpl"
+                           ,[{arg, TimeLeft}]
+                           ,Context)
+    end;
 
 event({submit,{edit_failover_number_service,[{number,Number},{account_id,undefined}]},_,_}, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

@@ -362,6 +362,10 @@ div.widget {
   margin-bottom: 1em;
 }
 
+.mb-2 {
+  margin-bottom: 2em;
+}
+
 .ml-1 {
   margin-right: 1em;
 }

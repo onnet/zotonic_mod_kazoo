@@ -350,6 +350,8 @@
     ,allotment_element_set_field/5
     ,set_e911_number_service/4
     ,remove_e911_number_service/3
+    ,is_trial_account/1
+    ,is_trial_account/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4237,3 +4239,14 @@ remove_e911_number_service(Number, AccountId, Context) ->
         ,fun(JObj) -> modkazoo_util:delete_key(<<"e911">>, JObj) end],
     NewDoc = lists:foldl(fun(F, JObj) -> F(JObj) end, NumberDoc, Routines),
     kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(NewDoc), Context).
+
+is_trial_account(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    is_trial_account(AccountId, Context).
+
+is_trial_account(AccountId, Context) ->
+    case kz_account_doc_field(<<"trial_time_left">>, AccountId, Context) of
+        'undefined' -> 'false';
+        TimeLeft -> {'true', TimeLeft}
+    end.
+
