@@ -999,6 +999,7 @@ create_kazoo_account(Context) ->
                      }
                     ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
                     ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
+                    ,{<<"is_trial_account">>, 'true'}
           %          ,{<<"billing_id">>,ResellerId}
                   ]}
               }]},
@@ -4151,7 +4152,7 @@ kz_limits(Verb, AccountId, DataBag, Context) ->
 
 save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
     CurrDoc = kz_limits('get', AccountId, [], Context),
-    QtyDiff = ?TO_INT(InputValue) - modkazoo_util:get_value(?TO_BIN(TrunksType), CurrDoc),
+    QtyDiff = ?TO_INT(InputValue) - modkazoo_util:get_value(?TO_BIN(TrunksType), CurrDoc, 0),
     Upd = [{?TO_BIN(TrunksType), ?TO_INT(InputValue)}
           ],
     NewDoc = modkazoo_util:set_values(Upd, CurrDoc),
@@ -4163,15 +4164,21 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
     case kz_limits('post', AccountId, ?SET_ACCEPT_CHARGES(AcceptCharges, NewDoc), Context) of
         {'error', "402", Body} ->
             Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
-            z_render:dialog(?__("Charges Confirmation",Context)
-                           ,"_accept_trunks_limits_charges.tpl"
-                           ,[{item, modkazoo_util:get_value([<<"limits">>,?TO_BIN(TrunksType)], Data)}
-                            ,{quantity_diff, QtyDiff}
-                            ,{trunks_type, TrunksType}
-                            ,{account_id, AccountId}
-                            ,{width, "auto"}
-                            ]
-                           ,Context);
+            case modkazoo_util:get_value([<<"limits">>,?TO_BIN(TrunksType)], Data) of
+                'undefined' ->
+                    Message = modkazoo_util:get_value(<<"message">>, Data),
+                    z_render:growl_error(?TO_LST(Message), Context);
+                LimitsItem ->
+                    z_render:dialog(?__("Charges Confirmation",Context)
+                                   ,"_accept_trunks_limits_charges.tpl"
+                                   ,[{item, LimitsItem}
+                                    ,{quantity_diff, QtyDiff}
+                                    ,{trunks_type, TrunksType}
+                                    ,{account_id, AccountId}
+                                    ,{width, "auto"}
+                                    ]
+                                   ,Context)
+            end;
         {'error', _ReturnCode, Body} ->
             Message = modkazoo_util:get_value([<<"data">>,<<"message">>], jiffy:decode(Body)),
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),

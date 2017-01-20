@@ -14,6 +14,7 @@
     ,choose_page_to_redirect/1
     ,may_be_clean_third_party_billing/1
     ,set_session_currency_sign/1
+    ,maybe_trial_account/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -32,15 +33,19 @@ is_superadmin_or_reseller(Context) ->
     case z_context:get_session('kazoo_is_reseller', Context) of
         'undefined' ->
             _ = set_superadmin_and_reseller_flags(Context),
-            z_context:get_session('kazoo_superduper_admin', Context, 'false') orelse z_context:get_session('kazoo_is_reseller', Context, 'false');
+            z_context:get_session('kazoo_superduper_admin', Context, 'false')
+                orelse z_context:get_session('kazoo_is_reseller', Context, 'false');
         _ ->
-            z_context:get_session('kazoo_superduper_admin', Context, 'false') orelse z_context:get_session('kazoo_is_reseller', Context, 'false')
+            z_context:get_session('kazoo_superduper_admin', Context, 'false')
+                orelse z_context:get_session('kazoo_is_reseller', Context, 'false')
     end.
 
 set_superadmin_and_reseller_flags(Context) ->
     AccountDoc = kazoo_util:kz_get_acc_doc(Context),
     z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
-    z_context:set_session('kazoo_superduper_admin', modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false'), Context).
+    z_context:set_session('kazoo_superduper_admin'
+                         ,modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false')
+                         ,Context).
 
 clean_superadmin_and_reseller_flags(Context) ->
     z_context:set_session('kazoo_is_reseller', 'undefined', Context),
@@ -59,7 +64,12 @@ do_sign_in(Login, Password, Account, Context) ->
         {'ok', {'owner_id', _}, {account_id, _}, {'auth_token', <<>>}, {'crossbar', _}, {'account_name', _}} ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
-        {'ok', {'owner_id', Owner_Id}, {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', _Crossbar_URL}, {'account_name', Account_Name}} ->
+        {'ok',{'owner_id', Owner_Id}
+             ,{'account_id', Account_Id}
+             ,{'auth_token', Auth_Token}
+             ,{'crossbar', _Crossbar_URL}
+             ,{'account_name', Account_Name}
+        } ->
             lager:info("Succesfull authentication of Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             AccountDoc = kazoo_util:kz_get_acc_doc_by_account_id_and_authtoken(Account_Id, Auth_Token, Context),
             case modkazoo_util:get_value(<<"crossbar_ip_acl">>, AccountDoc) of
@@ -105,6 +115,7 @@ setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context
     _ = may_be_set_reseller_data(Context),
     _ = may_be_add_third_party_billing(Context),
     _ = set_session_currency_sign(Context),
+    _ = maybe_trial_account(Context),
     choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context)).
 
 choose_page_to_redirect(Context) ->
@@ -125,12 +136,12 @@ choose_page_to_redirect(Context) ->
 
 may_be_set_user_data(Context) ->
     case kazoo_util:kz_user_doc_field(<<"priv_level">>, Context) of
-                <<"admin">> ->
-                    z_context:set_session('kazoo_account_admin', 'true', Context);
-                'undefined' ->
-                    z_context:set_session('kazoo_account_admin', 'true', Context);
-                _ ->
-                    z_context:set_session('kazoo_account_admin', 'false', Context)
+        <<"admin">> ->
+            z_context:set_session('kazoo_account_admin', 'true', Context);
+        'undefined' ->
+            z_context:set_session('kazoo_account_admin', 'true', Context);
+        _ ->
+            z_context:set_session('kazoo_account_admin', 'false', Context)
     end.
 
 may_be_set_reseller_data(Context) ->
@@ -208,3 +219,13 @@ set_session_currency_sign(Context) ->
         end,
     z_context:set_session('currency_sign', Sign, Context).
 
+maybe_trial_account(Context) ->
+ % lager:info("IAM maybe_trial_account
+    case kazoo_util:kz_account_doc_field(<<"trial_time_left">>, Context) of
+        'undefined' ->
+            z_context:set_session('kazoo_account_trial', 'false', Context),
+            z_context:set_session('kazoo_account_trial_time_left', 'undefined', Context);
+        TimeLeft ->
+            z_context:set_session('kazoo_account_trial', 'true', Context),
+            z_context:set_session('kazoo_account_trial_time_left', TimeLeft, Context)
+    end.

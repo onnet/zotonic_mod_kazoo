@@ -11,6 +11,9 @@
       {% endif %}
       {_ at _}
       {{ m.kazoo.get_account_name }}
+      {% if m.session.kazoo_account_trial %}
+        (Trial)
+      {% endif %}
     </span>
   </p>
   </div>
