@@ -51,8 +51,7 @@
         </tr>
     </tbody>
     <tbody id="rs_service_plans_widget_opened"
-           style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}"
-    >
+           style="border-top: 0px;{% if not m.kazoo[{ui_element_opened element="rs_service_plans_widget_opened"}] %}display: none;{% endif %}">
         <tr id="add_service_plan_tr_id" class="disabled">
           <td colspan="2">
            {_ Choose service plan to add _}:
@@ -94,7 +93,7 @@
                            }
                          }
             %}
-            <i id="delete_{{ service_plan_id }}" class="fa fa-trash-o pointer pull-right" title="{_ Delete _}"></i>
+            <i id="delete_{{ service_plan_id }}" class="fa fa-trash-o pointer pull-right pr-1" title="{_ Delete _}"></i>
           </td>
         </tr>
         {% endwith %}

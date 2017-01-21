@@ -26,8 +26,11 @@
            title="{% if account_doc[1]["enabled"] %}{_ Click to disable _}{% else%}{_ Click to enable _}{% endif %}"></i>
         {% wire id="account_status_toggler"
                 type="click"
-                action={postback postback={toggle_account_status account_id=account_id}
-                delegate="mod_kazoo"}
+                action={confirm text=_"Do you really want to toggle status account?"
+                                action={postback postback={toggle_account_status account_id=account_id}
+                                                 delegate="mod_kazoo"
+                                       }
+                       }
         %}
         <span class="pull-right" style="padding-right: 3em;">
           {% include "_current_account_credit.tpl" %}
@@ -76,7 +79,11 @@
       {% if m.kazoo.kz_current_context_superadmin %}
         {% wire id="reseller_status_toggler"
                 type="click"
-                action={postback postback={toggle_reseller_status account_id=account_id} delegate="mod_kazoo"}
+                action={confirm text=_"Do you really want to toggle reseller status?"
+                                action={postback postback={toggle_reseller_status account_id=account_id}
+                                                 delegate="mod_kazoo"
+                                       }
+                       }
         %}
       {% endif %}
     </tr>
