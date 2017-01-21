@@ -21,7 +21,7 @@
           <small> ({_ Trial _})</small>
         {% endif %}
         <i id="account_status_toggler"
-           class="fa fa-toggle-{% if account_doc[1]["enabled"] %}on{% else%}off{% endif %} pointer"
+           class="fa fa-toggle-{% if account_doc[1]["enabled"] %}on{% else%}off{% endif %} pointer pr-1"
            style="float: right;"
            title="{% if account_doc[1]["enabled"] %}{_ Click to disable _}{% else%}{_ Click to enable _}{% endif %}"></i>
         {% wire id="account_status_toggler"
@@ -59,7 +59,7 @@
           <span class="zprimary">{_ Activated _}</span>
           {% if m.kazoo.kz_current_context_superadmin %}
             <i id="reseller_status_toggler"
-               class="fa fa-toggle-on pointer"
+               class="fa fa-toggle-on pointer pr-1"
                style="float: right;"
                title="{_ Click to demote _}"></i>
           {% endif %}
@@ -67,7 +67,7 @@
           <span class="zalarm">{_ Not provided _}</span>
           {% if m.kazoo.kz_current_context_superadmin %}
             <i id="reseller_status_toggler"
-               class="fa fa-toggle-off pointer"
+               class="fa fa-toggle-off pointer pr-1"
                style="float: right;"
                title="{_ Click to promote _}"></i>
           {% endif %}

@@ -34,7 +34,7 @@
                 action={ toggle target="arrow_right_"++#topup }
                 action={ toggle target="arrow_down_"++#topup }
         %}
-        <span id="topup_toggle_off" class="pull-right" style="padding-right: 2em; cursor: pointer;"><i class="fa fa-toggle-off"></i></span>
+        <span id="topup_toggle_off" class="pull-right pr-1 pointer"><i class="fa fa-toggle-off"></i></span>
       </th>
       {% endif %}
     </tr>

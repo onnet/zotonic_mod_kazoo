@@ -228,6 +228,16 @@ m_find_value(kz_current_service_plans, _M, Context) ->
 m_find_value({kz_current_service_plans, [{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:current_service_plans(AccountId, Context);
 
+m_find_value(services_status, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({services_status, [{account_id, AccountId}]}, _M, Context);
+
+m_find_value({services_status, [{account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({services_status, [{account_id, AccountId}]}, _M, Context);
+m_find_value({services_status, [{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:services_status('get', AccountId, [], Context);
+
 m_find_value({kz_check_device_registration, [{device_id, DeviceId}]}, _M, Context) ->
     kazoo_util:kz_check_device_registration(DeviceId, Context);
 
