@@ -1775,6 +1775,11 @@ event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context)
     kazoo_util:kz_toggle_reseller_status(AccountId, Context),
     z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
+event({postback,{toggle_services_status,[{account_id,AccountId}]},_,_}, Context) ->
+    kazoo_util:toggle_services_status(AccountId, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    Context;
+
 event({postback,add_account_ip_acl_entry,_,_}, Context) ->
     case z_context:get_q("new_ip_entry",Context) of
         [] -> Context;

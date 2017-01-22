@@ -353,6 +353,7 @@
     ,is_trial_account/1
     ,is_trial_account/2
     ,services_status/4
+    ,toggle_services_status/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1824,11 +1825,7 @@ process_purchase_numbers([Number|_] = Numbers, AcceptCharges, Context) ->
             Message = modkazoo_util:get_value([<<"data">>,<<"error">>, ?TO_BIN(Number),<<"message">>], jiffy:decode(Body)),
             z_render:growl_error(?TO_LST(Message), Ctx);
         _ ->
-            may_be_add_service_plan(m_config:get_value('mod_kazoo', 'signup_service_plan', Context)
-                                   ,z_context:get_session('kazoo_account_id', Context)
-                                   ,Context),
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
-       %     mod_signal:emit({'update_fin_info_signal', []}, Context),
             modkazoo_util:delay_signal(2, 'update_fin_info_signal', [], Context),
             AccountId = z_context:get_session('kazoo_account_id', Context),
             _ = z_mqtt:publish(<<"site/phiz/public/current_account_credit_", AccountId/binary>>, <<>>, z_acl:sudo(Ctx)),
@@ -1909,12 +1906,6 @@ is_service_plan_applied(Context) ->
         'undefined' -> 'false';
         {[]} -> 'false';
         _ -> 'true'
-    end.
-
-may_be_add_service_plan(PlanId, AccountId, Context) ->
-    case is_service_plan_applied(Context) of
-        'false' -> admin_add_service_plan(PlanId, AccountId, Context);
-        'true' -> 'ok'
     end.
 
 valid_card_exists(Context) ->
@@ -4256,3 +4247,14 @@ services_status(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICES/binary, ?STATUS/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
+toggle_services_status(AccountId, Context) ->
+    StatusData = services_status('get', AccountId, [], Context),
+  lager:info("IAM AuthToken: ~p",[z_context:get_session(kazoo_auth_token, Context)]),
+    case modkazoo_util:get_value(<<"in_good_standing">>, StatusData) of
+        'false' ->
+            DataBag = ?MK_DATABAG({[{<<"in_good_standing">>, 'true'},{<<"reason">>,<<"administratively_justified">>}]}),
+            services_status('post', AccountId, DataBag, Context);
+        'true' ->
+            DataBag = ?MK_DATABAG({[{<<"in_good_standing">>, 'false'},{<<"reason">>,<<"administratively_convicted">>}]}),
+            services_status('post', AccountId, DataBag, Context)
+    end.
