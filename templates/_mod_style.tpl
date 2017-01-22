@@ -394,6 +394,10 @@ div.widget {
   padding-bottom: 1em;
 }
 
+.pb-2 {
+  padding-bottom: 2em;
+}
+
 .p-3 {
   padding: 3em;
 }
@@ -858,4 +862,13 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   padding-left: 6em;
   color: {{ m.config.mod_kazoo.color2.value }};
 }
+
+.datepicker table tr td.active.active {
+  background-color: {{ m.config.mod_kazoo.color2.value }}!important;
+}
+
+.datepicker table tr td {
+  border-radius: 0!important;
+}
+
 </style>

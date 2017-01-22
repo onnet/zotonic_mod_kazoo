@@ -33,6 +33,7 @@
               {{ number_info[1]["e911"][1]["postal_code"] }}
             </strong>
           </span>
+        </div>
       {% else %}
         <div class="col-sm-10 col-sm-offset-1" style="font-size: 1.1em;">
           <span class="zalarm">
@@ -41,7 +42,6 @@
           </span>
         </div>
       {% endif %}
-      </div>
     </div>
   </div>
   <div class="form-group">
