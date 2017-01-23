@@ -33,7 +33,7 @@
                        }
         %}
         <span class="pull-right" style="padding-right: 3em;">
-          {% include "_current_account_credit.tpl" %}
+          {% include "_current_child_account_credit.tpl" %}
         </span>
       </th>
     </tr>

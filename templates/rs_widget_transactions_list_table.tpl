@@ -42,7 +42,7 @@
         {% if payments_month_chosen == now|date: 'm/Y' or not payments_month_chosen %} 
           {_ Current balance _}
           <span style="float:right; padding-right:2em;">
-            {% include "_current_account_credit.tpl" %}
+            {% include "_current_child_account_credit.tpl" %}
           </span>
         {% else %}
           {_ Closing balance _}

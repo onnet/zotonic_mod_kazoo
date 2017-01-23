@@ -1,4 +1,3 @@
 {% live template="_current_account_credit.tpl.signal"
         topic="~site/public/current_account_credit_" ++ m.session.kazoo_account_id
 %}
-{% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}
