@@ -861,7 +861,9 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                     lager:info("crossbar_account_request API String: ~p", [API_String]),
                     lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
                     lager:info("crossbar_account_request Verb: ~p", [Verb]),
-                    lager:info("crossbar_account_request RC: ~p:~p", [ReturnCode,Body]),
+                    lager:info("crossbar_account_request RC: ~p", [ReturnCode]),
+                    lager:info("crossbar_account_request Body: ~p", [Body]),
+                    lager:info("crossbar_account_request decoded Body: ~p", [jiffy:decode(Body)]),
                     error_return(ReturnCode, Body, Default)
             end;
         E -> 
