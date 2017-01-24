@@ -14,7 +14,6 @@
     ,choose_page_to_redirect/1
     ,may_be_clean_third_party_billing/1
     ,set_session_currency_sign/1
-    ,maybe_trial_account/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -115,7 +114,6 @@ setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context
     _ = may_be_set_reseller_data(Context),
     _ = may_be_add_third_party_billing(Context),
     _ = set_session_currency_sign(Context),
-    _ = maybe_trial_account(Context),
     choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context)).
 
 choose_page_to_redirect(Context) ->
@@ -218,14 +216,3 @@ set_session_currency_sign(Context) ->
                 end
         end,
     z_context:set_session('currency_sign', Sign, Context).
-
-maybe_trial_account(Context) ->
- % lager:info("IAM maybe_trial_account
-    case kazoo_util:is_trial_account(Context) of
-        'false' ->
-            z_context:set_session('kazoo_account_trial', 'false', Context),
-            z_context:set_session('kazoo_account_trial_time_left', 'undefined', Context);
-        {'true', TimeLeft} ->
-            z_context:set_session('kazoo_account_trial', 'true', Context),
-            z_context:set_session('kazoo_account_trial_time_left', TimeLeft, Context)
-    end.

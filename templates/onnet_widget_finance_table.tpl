@@ -1,14 +1,15 @@
+{% with m.kazoo.kz_get_acc_doc as account_doc %}
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
-      <th>{_ Account status _}</th>
+      <th width="55%">{_ Account status _}</th>
       <th>
-        {% if m.kazoo[{kz_account_doc_field field1="enabled"}] %}
+        {% if account_doc[1]["enabled"] %}
           <span class="zprimary">
-            {% if m.session.kazoo_account_trial %}
+            {% if account_doc[1]["trial_time_left"] %}
               {_ Trial _}
               <small>
-                ({{ (m.session.kazoo_account_trial_time_left/60/60/24)|to_integer }} {_ days left _})
+                ({{ (account_doc[1]["trial_time_left"]/60/60/24)|to_integer }} {_ days left _})
               </small>
                 <i id="info_trial_open_dialog"
                    class="fa fa-info-circle pointer pull-right pr-1"
@@ -38,3 +39,4 @@
     {% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}
   </tbody>
 </table>
+{% endwith %}
