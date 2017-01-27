@@ -28,16 +28,22 @@
                   width="auto"
                  }
   %}
-  {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
-                       action={confirm text=_"Do you really want to add participant"++"?"
-                                       action={postback postback="add_conf_participant"
-                                                        qarg="a_leg_number"
-                                                        qarg="conference_selector"
-                                                        qarg="media_selector"
-                                                        delegate="mod_kazoo"
-                                              }
-                              }
-  %}
+  {% if m.session.kazoo_reseller_account_id and (m.session.kazoo_account_id != m.session.kazoo_reseller_account_id) %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
+                         action={growl text=_"For direct use by account holder only"}
+    %}
+  {% else %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add participant" id="addconfparticipantbtn"
+                         action={confirm text=_"Do you really want to add participant"++"?"
+                                         action={postback postback="add_conf_participant"
+                                                          qarg="a_leg_number"
+                                                          qarg="conference_selector"
+                                                          qarg="media_selector"
+                                                          delegate="mod_kazoo"
+                                                }
+                                }
+    %}
+  {% endif %}
   <input id="a_leg_number" class="input input-number-onnet pull-right" type="text"
          name="a_leg_number" placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}" maxlength="12">
 {% endblock %}
