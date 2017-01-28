@@ -1711,7 +1711,7 @@ make_payment(Amount, AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?BRAINTREE/binary, ?CREDITS/binary>>, 
     DataBag = {[{<<"data">>,{[{<<"amount">>, ?TO_BIN(Amount)}]}}]},
     lager:info("Make payment attempt. AccountId: ~p. Amount: ~p.",[AccountId, Amount]),
-    crossbar_account_request('put', API_String, DataBag, Context).
+    crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
 
 topup_submit(Threshold, Amount, AccountId, Context) ->
     CurrDoc = kz_get_acc_doc_by_account_id(AccountId, Context),

@@ -249,17 +249,24 @@ event({submit, send_fax, _, _}, Context) ->
 event({postback,kazoo_transaction,_,_}, Context) ->
     case z_convert:to_float(z_context:get_q("kazoo_transaction", Context)) of
         Amount when Amount >= 10, Amount =< 200 ->
-            JObj = kazoo_util:make_payment(Amount, z_context:get_session('kazoo_account_id', Context), Context),
-            case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
-                <<"submitted_for_settlement">> ->
-                    modkazoo_util:delay_signal(1, 'update_onnet_widget_finance_tpl', [], Context),
-                    modkazoo_util:delay_signal(4, 'update_onnet_widget_online_payment_tpl', [], Context),
-                %    modkazoo_util:delay_signal(4 ,'update_fin_info_signal' ,[{headline,?__("Transactions list", Context)}] ,Context),
-                    modkazoo_util:delay_signal(4 ,'update_fin_info_signal' ,[] ,Context),
-        %            z_render:growl("£"++z_convert:to_list(Amount)++?__(" successfully added.",Context), Context);
-                    z_render:growl(?__("Funds successfully added.",Context), Context);
-                E ->
-                    z_render:growl_error(?__("Something went wrong Response code: ", Context)++z_convert:to_list(E), Context)
+            case kazoo_util:make_payment(Amount, z_context:get_session('kazoo_account_id', Context), Context) of
+                {'error', _ReturnCode, Body} ->
+                    Message = modkazoo_util:get_first_defined([[<<"data">>,<<"amount">>,<<"maximum">>]
+                                                              ,[<<"data">>,<<"api_error">>,<<"message">>]
+                                                              ]
+                                                             ,jiffy:decode(Body)
+                                                             ,<<"Something went wrong">>),
+                    z_render:growl_error(?__(z_convert:to_list(Message), Context), Context);
+                JObj ->
+                    case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
+                        <<"submitted_for_settlement">> ->
+                            modkazoo_util:delay_signal(1, 'update_onnet_widget_finance_tpl', [], Context),
+                            modkazoo_util:delay_signal(4, 'update_onnet_widget_online_payment_tpl', [], Context),
+                            modkazoo_util:delay_signal(4 ,'update_fin_info_signal' ,[] ,Context),
+                            z_render:growl(?__("Funds successfully added.",Context), Context);
+                        E ->
+                            z_render:growl_error(?__("Something went wrong: ", Context)++z_convert:to_list(E), Context)
+                    end
             end;
         _ -> 
             Context1 = z_render:growl_error(?__("Payment failed!<br />Please input correct amount.", Context), Context),

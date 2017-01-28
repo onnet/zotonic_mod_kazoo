@@ -15,6 +15,8 @@
     ,get_value1/3
     ,get_values/1
     ,get_values/2
+    ,get_first_defined/2
+    ,get_first_defined/3
     ,set_value/3
     ,set_values/2
     ,get_json_value/2
@@ -105,6 +107,15 @@ get_json_value(Key, ?JSON_WRAPPER(_)=JObj, Default) ->
     end;
 get_json_value(_, _, Default) ->
     Default.
+
+get_first_defined(Keys, JObj) ->
+    get_first_defined(Keys, JObj, 'undefined').
+get_first_defined([], _JObj, Default) -> Default;
+get_first_defined([H|T], JObj, Default) ->
+    case get_value(H, JObj) of
+        'undefined' -> get_first_defined(T, JObj, Default);
+        V -> V
+    end.
 
 get_value_bin(Key, JObj) ->
     z_convert:to_binary(get_value(Key, JObj)).
