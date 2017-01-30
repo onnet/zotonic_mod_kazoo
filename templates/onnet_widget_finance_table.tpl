@@ -1,4 +1,4 @@
-{% with m.kazoo[{services_status account_id=account_id}][1]["in_good_standing"],
+{% with m.kazoo[{services_status account_id=account_id}],
         m.kazoo.kz_get_acc_doc
         as
         billing_status,
@@ -28,10 +28,14 @@
             %}
           </span>
         {% else %}
-          {% if billing_status %}
+          {% if billing_status[1]["in_good_standing"] %}
             <span class="zprimary">{_ Good standing _}</span>
           {% else %}
-            <span class="zalarm">{_ Insufficient Funds _}</span>
+            {% if billing_status[1]["reason"] == "administratively_convicted" %}
+              <span class="zalarm">{_ Administratively disabled _}</span>
+            {% else %}
+              <span class="zalarm">{_ Insufficient Funds _}</span>
+            {% endif %}
           {% endif %}
         {% endif %}
       </th>
@@ -40,7 +44,7 @@
       <th>
         {_ Current balance _}
       </th>
-      <th class="bold {% if billing_status %}zprimary{% else %}zalarm{% endif %}">
+      <th class="bold {% if billing_status[1]["in_good_standing"] %}zprimary{% else %}zalarm{% endif %}">
         {% include "_current_account_credit.tpl" %}
       </th>
     </tr>
