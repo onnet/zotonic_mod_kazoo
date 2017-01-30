@@ -1,42 +1,50 @@
-{% with m.kazoo.kz_get_acc_doc as account_doc %}
-<table class="table table-condensed table-hover table-centered">
-  <thead>
+{% with m.kazoo[{services_status account_id=account_id}][1]["in_good_standing"],
+        m.kazoo.kz_get_acc_doc
+        as
+        billing_status,
+        account_doc
+%}
+<table class="table table-condensed table-centered">
+  <tbody>
     <tr>
-      <th width="55%">{_ Account status _}</th>
+      <th width="50%">
+        {_ Account status _}
+      </th>
       <th>
-        {% if account_doc[1]["enabled"] %}
+        {% if account_doc[1]["trial_time_left"] %}
           <span class="zprimary">
-            {% if account_doc[1]["trial_time_left"] %}
-              {_ Trial _}
-              <small>
-                ({{ (account_doc[1]["trial_time_left"]/60/60/24)|to_integer }} {_ days left _})
-              </small>
-                <i id="info_trial_open_dialog"
-                   class="fa fa-info-circle pointer pull-right pr-1"
-                   style="padding-top: 0.2em;"
-                   title="Trial conditions info"></i>
-                {% wire id="info_trial_open_dialog"
-                        action={dialog_open title=_"Trial subscription terms and conditions"
-                                            template="_trial_mode_restrictions.tpl"
-                                            one_button_only="true"
-                               }
-                %}
-            {% else %}
-              {_ Active _}
-            {% endif %}
+            {_ Trial _}
+            <small>
+              ({{ (account_doc[1]["trial_time_left"]/60/60/24)|to_integer }} {_ days left _})
+            </small>
+            <i id="info_trial_open_dialog"
+               class="fa fa-info-circle pointer pull-right pr-1"
+               style="padding-top: 0.2em;"
+               title="Trial conditions info"></i>
+            {% wire id="info_trial_open_dialog"
+                    action={dialog_open title=_"Trial subscription terms and conditions"
+                                        template="_trial_mode_restrictions.tpl"
+                           }
+            %}
           </span>
         {% else %}
-          <span class="zalarm">{_ Blocked _}</span>
+          {% if billing_status %}
+            <span class="zprimary">{_ Good standing _}</span>
+          {% else %}
+            <span class="zalarm">{_ Insufficient Funds _}</span>
+          {% endif %}
         {% endif %}
       </th>
     </tr>
-  </thead>
-  <tbody>
     <tr>
-      <td>{_ Current balance _}</td>
-      <td>{% include "_current_account_credit.tpl" %}</td>
+      <th>
+        {_ Current balance _}
+      </th>
+      <th class="bold {% if billing_status %}zprimary{% else %}zalarm{% endif %}">
+        {% include "_current_account_credit.tpl" %}
+      </th>
     </tr>
-    {% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}
   </tbody>
 </table>
 {% endwith %}
+
