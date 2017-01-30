@@ -299,12 +299,12 @@ event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
         _ -> 
             case bt_util:bt_card_add(Context) of
                 "success" -> 
-                    Context1 = z_render:growl(?__("Card successfully added.",Context), Context),
+                    mod_signal:emit({emit_growl_signal ,[{'text',?__("Card successfully added.", Context)},{'type', 'notice'}]} ,Context),
                     z_render:update("make_payment_manage_cards_tpl"
                                    ,z_template:render("_make_payment_manage_cards.tpl"
-                                                     ,[{bt_customer, kazoo_util:kz_bt_customer(Context1)}]
-                                                     ,Context1)
-                                   ,Context1);
+                                                     ,[{bt_customer, kazoo_util:kz_bt_customer(Context)}]
+                                                     ,Context)
+                                   ,Context);
                 E ->
                     Context1 = z_render:growl_error(?__(E, Context), Context),
                     z_render:update("onnet_widget_online_payment_tpl"
