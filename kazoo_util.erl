@@ -4174,8 +4174,7 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
                             z_render:growl_error(?__("Not enough funds.",Ctx), Ctx);
                         'false' ->
-                            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
-                            z_render:dialog(?__("Charges Confirmation",Ctx)
+                            z_render:dialog(?__("Charges Confirmation",Context)
                                            ,"_accept_trunks_limits_charges.tpl"
                                            ,[{item, LimitsItem}
                                             ,{quantity_diff, QtyDiff}
@@ -4183,7 +4182,7 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                                             ,{account_id, AccountId}
                                             ,{width, "auto"}
                                             ]
-                                           ,Ctx)
+                                           ,Context)
                     end
             end;
         {'error', _ReturnCode, Body} ->
