@@ -4166,15 +4166,25 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                     Message = modkazoo_util:get_value(<<"message">>, Data),
                     z_render:growl_error(?TO_LST(Message), Context);
                 LimitsItem ->
-                    z_render:dialog(?__("Charges Confirmation",Context)
-                                   ,"_accept_trunks_limits_charges.tpl"
-                                   ,[{item, LimitsItem}
-                                    ,{quantity_diff, QtyDiff}
-                                    ,{trunks_type, TrunksType}
-                                    ,{account_id, AccountId}
-                                    ,{width, "auto"}
-                                    ]
-                                   ,Context)
+                    Expences = QtyDiff * modkazoo_util:get_value(<<"activation_charge">>, LimitsItem)
+                               + QtyDiff * modkazoo_util:get_value(<<"rate">>, LimitsItem),
+                    CurrentAccountCredit = modkazoo_util:get_value(<<"amount">>, current_account_credit(AccountId, Context)),
+                    case Expences > CurrentAccountCredit of
+                        'true' ->
+                            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+                            z_render:growl_error(?__("Not enough funds.",Ctx), Ctx);
+                        'false' ->
+                            Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
+                            z_render:dialog(?__("Charges Confirmation",Ctx)
+                                           ,"_accept_trunks_limits_charges.tpl"
+                                           ,[{item, LimitsItem}
+                                            ,{quantity_diff, QtyDiff}
+                                            ,{trunks_type, TrunksType}
+                                            ,{account_id, AccountId}
+                                            ,{width, "auto"}
+                                            ]
+                                           ,Ctx)
+                    end
             end;
         {'error', _ReturnCode, Body} ->
             Message = modkazoo_util:get_value([<<"data">>,<<"message">>], jiffy:decode(Body)),
@@ -4184,7 +4194,6 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
             z_render:growl(?__("Trunks amount successfully changed.", Ctx), Ctx)
     end.
-
 
 kz_allotments(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ALLOTMENTS/binary>>,
