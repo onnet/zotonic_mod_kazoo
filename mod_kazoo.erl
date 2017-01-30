@@ -300,11 +300,16 @@ event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
             case bt_util:bt_card_add(Context) of
                 "success" -> 
                     mod_signal:emit({emit_growl_signal ,[{'text',?__("Card successfully added.", Context)},{'type', 'notice'}]} ,Context),
-                    z_render:update("make_payment_manage_cards_tpl"
-                                   ,z_template:render("_make_payment_manage_cards.tpl"
-                                                     ,[{bt_customer, kazoo_util:kz_bt_customer(Context)}]
-                                                     ,Context)
-                                   ,Context);
+                    Routines = [fun(J) -> z_render:update("make_payment_manage_cards_tpl"
+                                                         ,z_template:render("_make_payment_manage_cards.tpl"
+                                                                           ,[{bt_customer, kazoo_util:kz_bt_customer(J)}]
+                                                                           ,J)
+                                                         ,J)
+                                end
+                               ,fun(J) -> z_render:wire([{hide, [{target, "arrow_right_saved_cards"}]}], J) end
+                               ,fun(J) -> z_render:wire([{show, [{target, "arrow_down_saved_cards"}]}], J) end
+                               ,fun(J) -> z_render:wire([{show, [{target, "cards_list_body"}]}], J) end],
+                    lists:foldl(fun(F, J) -> F(J) end, Context, Routines);
                 E ->
                     Context1 = z_render:growl_error(?__(E, Context), Context),
                     z_render:update("onnet_widget_online_payment_tpl"
