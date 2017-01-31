@@ -1787,7 +1787,7 @@ event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context)
 
 event({postback,{toggle_services_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:toggle_services_status(AccountId, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_onbill_account_details, []}, Context),
     Context;
 
 event({postback,add_account_ip_acl_entry,_,_}, Context) ->
