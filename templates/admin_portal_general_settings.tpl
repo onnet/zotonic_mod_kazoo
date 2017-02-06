@@ -8,23 +8,32 @@
         action={ postback postback={trigger_innoui_widget arg="ap_general_settings_widget_opened" } delegate="mod_kazoo" }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
-    <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}"
-                                    class="arrowpad fa fa-arrow-circle-right"></i>
-    <i id="arrow_down_{{ #dtid }}" style="{% if not m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}"
-                                   class="arrowpad fa fa-arrow-circle-down"></i>
+    <i id="arrow_right_{{ #dtid }}"
+       style="{% if m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}"
+       class="arrowpad fa fa-arrow-circle-right"></i>
+    <i id="arrow_down_{{ #dtid }}"
+       style="{% if not m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}"
+       class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"restrtictions" action={ dialog_open title=_"Restrictions setup" template="_edit_account_access_restrictions.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right"
+              text=_"restrtictions"
+              action={dialog_open title=_"Restrictions setup"
+                                  template="_edit_account_access_restrictions.tpl"
+                     }
+    %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
             
-<div id="ap_general_settings_widget_opened" style="{% if not m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}">
+<div id="ap_general_settings_widget_opened"
+     style="{% if not m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}display: none;{% endif %}">
     <div class="text-center p-3">
-        {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_general_settings_widget_opened"
-                                                                    template="admin_portal_general_settings_list_table.tpl"}
+        {% ilazy class="fa fa-spinner fa-spin fa-3x"
+                 action={update target="ap_general_settings_widget_opened"
+                                template="admin_portal_general_settings_list_table.tpl"}
         %}
     </div>
 </div>

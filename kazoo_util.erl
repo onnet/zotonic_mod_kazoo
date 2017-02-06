@@ -4169,7 +4169,14 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                     Expences = QtyDiff * modkazoo_util:get_value(<<"activation_charge">>, LimitsItem)
                                + QtyDiff * modkazoo_util:get_value(<<"rate">>, LimitsItem),
                     CurrentAccountCredit = modkazoo_util:get_value(<<"amount">>, current_account_credit(AccountId, Context)),
-                    case Expences > CurrentAccountCredit of
+                    PVT_Limits = onbill_util:onbill_pvt_limits('get', AccountId, [], Context),
+                    MaybePostpayCredit =
+                        case modkazoo_util:get_value(<<"allow_postpay">>, PVT_Limits) of
+                            'true' ->
+                                modkazoo_util:get_value(<<"max_postpay_amount">>, PVT_Limits, 0);
+                            'false' -> 0
+                        end,
+                    case Expences > (CurrentAccountCredit + MaybePostpayCredit) of
                         'true' ->
                             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
                             z_render:growl_error(?__("Not enough funds.",Ctx), Ctx);

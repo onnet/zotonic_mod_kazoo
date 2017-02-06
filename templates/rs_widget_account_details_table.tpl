@@ -126,9 +126,10 @@
           </span>
            {_ Details _}:
            {% button class="btn btn-xs btn-onnet pull-right" text=_"restrtictions"
-                     action={ dialog_open title=_"Restrictions setup"
-                                          template="_edit_account_access_restrictions.tpl"
-                                          account_id=account_id
+                     action={dialog_open title=_"Restrictions setup"
+                                         template="_edit_account_access_restrictions.tpl"
+                                         account_id=account_id
+                                         show_pvt_limits_li="true"
                             }
            %}
       </th>
