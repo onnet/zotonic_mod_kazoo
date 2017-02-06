@@ -39,6 +39,7 @@ sup kapps_config set_boolean ecallmgr outbound_rate_required true
 sup kapps_config set_boolean ecallmgr inbound_rate_required false
 sup kapps_config set_boolean ecallmgr should_detect_inband_dtmf false
 sup kapps_config set_boolean ecallmgr use_kazoo_dptools true
+sup kapps_config set_boolean ecallmgr restrict_channel_state_publisher true
 
 sup kapps_config set_boolean kazoo_endpoint should_add_diversion_header true
 
