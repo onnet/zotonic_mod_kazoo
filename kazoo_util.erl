@@ -1193,23 +1193,26 @@ kz_list_user_devices(Owner_Id, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_vmboxes(Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_vmboxes(Context) ->
     Owner_Id = z_context:get_session('kazoo_owner_id', Context),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "?", ?FILTER_OWNER/binary, Owner_Id/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "?", ?FILTER_OWNER/binary, Owner_Id/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_vmbox_details(VMBoxId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
     Candidates = modkazoo_util:get_value(<<"messages">>, kz_list_user_vmbox_details(VMBoxId, Context)),
     FilterTS = calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - (z_convert:to_integer(DaysTo) * 86400),
-    MediaIds = [modkazoo_util:get_value(<<"media_id">>, X) || X <- Candidates,
-                (FilterTS > (z_convert:to_integer(modkazoo_util:get_value(<<"timestamp">>, X)))) andalso (modkazoo_util:get_value(<<"folder">>, X) =/= <<"deleted">>)],
+    MediaIds = [modkazoo_util:get_value(<<"media_id">>, X)
+                || X <- Candidates
+                   ,(FilterTS > (z_convert:to_integer(modkazoo_util:get_value(<<"timestamp">>, X))))
+                    andalso (modkazoo_util:get_value(<<"folder">>, X) =/= <<"deleted">>)
+               ],
     lists:foldl(fun(MediaId, Delay) -> spawn(?MODULE, kz_purge_voicemail, [VMBoxId, MediaId, Delay, Context]), Delay + 1 end, 0, MediaIds),
     length(MediaIds) + 2.
 
