@@ -62,6 +62,7 @@
     ,kz_list_account_vmboxes/1
     ,kz_list_user_vmboxes/1
     ,kz_list_user_vmbox_details/2
+    ,kz_list_user_vmbox_messages/2
     ,kz_purge_voicemails/3
     ,kz_purge_voicemail/4
     ,kz_vmessage_download_link/3
@@ -1205,6 +1206,10 @@ kz_list_user_vmbox_details(VMBoxId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
+kz_list_user_vmbox_messages(VMBoxId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary, ?MESSAGES/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
 kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
     Candidates = modkazoo_util:get_value(<<"messages">>, kz_list_user_vmbox_details(VMBoxId, Context)),
     FilterTS = calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - (z_convert:to_integer(DaysTo) * 86400),
@@ -1275,7 +1280,7 @@ cdr_jobj_add_localtime(CdrElement, Timezone) ->
                            ,CdrElement).
 
 kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary,
                    ?MESSAGES/binary, "/", ?TO_BIN(MediaId)/binary, ?RAW/binary, <<"?">>/binary,
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
@@ -1354,7 +1359,7 @@ set_vm_message_folder(Folder, VMBoxId, MediaId, Context) ->
     Messages = [update_folder1(Message, Folder, MediaId, modkazoo_util:get_value(<<"media_id">>, Message))
                 || Message <- modkazoo_util:get_value(<<"messages">>, CurrVMBox, [])],
     NewVMBox = modkazoo_util:set_value(<<"messages">>, Messages, CurrVMBox),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
     crossbar_account_request('post', API_String, {[{<<"data">>, NewVMBox}]}, Context).
 
 update_folder1(Message, Folder, MediaId, MediaId) ->
@@ -2918,7 +2923,11 @@ kz_vmbox(Context) ->
             ,{<<"mailbox">>, ?TO_BIN(z_context:get_q("mailbox", Context))}
             ,{<<"pin">>, ?TO_BIN(z_context:get_q("pin", Context))}
             ,{<<"owner_id">>, ?TO_BIN(z_context:get_q("owner_id", Context))}
-            ,{<<"media">>, case z_context:get_q("unavailable_message_id", Context) of [] -> 'undefined'; MessageId -> {[{<<"unavailable">>, ?TO_BIN(MessageId)}]} end}
+            ,{<<"media">>, case z_context:get_q("unavailable_message_id", Context) of
+                               [] -> 'undefined';
+                               MessageId -> {[{<<"unavailable">>, ?TO_BIN(MessageId)}]}
+                           end
+             }
             ,{<<"timezone">>, ?TO_BIN(z_context:get_q("vmbox_timezone", Context))}
             ,{<<"is_setup">>, modkazoo_util:on_to_true(z_context:get_q("is_setup", Context))}
             ,{<<"require_pin">>, modkazoo_util:on_to_true(z_context:get_q("require_pin", Context))}
@@ -2930,21 +2939,23 @@ kz_vmbox(Context) ->
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
         'undefined'->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary>>,
             crossbar_account_request('put', API_String, DataBag, Context);
         _ ->
-            API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(Id)/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(Id)/binary>>,
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
 kz_vmbox(Verb, VmboxId,Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VmboxId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VmboxId)/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
 kz_conference(Context) ->
     Id = z_context:get_q("conference_id",Context),
-    Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("numbers", Context),",")),
-    Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end, z_string:split(z_context:get_q("pins", Context),",")),
+    Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end
+                       ,z_string:split(z_context:get_q("numbers", Context),",")),
+    Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end
+                    ,z_string:split(z_context:get_q("pins", Context),",")),
     Props = [{<<"name">>, ?TO_BIN(z_context:get_q("conference_name", Context))}
             ,{<<"member">>, {[{<<"numbers">>, case Numbers of [<<>>] -> []; _ -> Numbers end}
                             ,{<<"pins">>, case Pins of [<<>>] -> []; _ -> Pins end}

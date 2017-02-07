@@ -152,6 +152,9 @@ m_find_value(kz_list_user_vmboxes, _M, Context) ->
 m_find_value({kz_list_user_vmbox_details, [{vmbox_id, VMBoxId}]}, _M, Context) ->
     kazoo_util:kz_list_user_vmbox_details(VMBoxId, Context);
 
+m_find_value({kz_list_user_vmbox_messages, [{vmbox_id, VMBoxId}]}, _M, Context) ->
+    kazoo_util:kz_list_user_vmbox_messages(VMBoxId, Context);
+
 m_find_value({kz_vmessage_download_link, [{vmbox_id, VMBoxId}, {media_id, MediaId}]}, _M, Context) ->
     kazoo_util:kz_vmessage_download_link(VMBoxId, MediaId, Context);
 
