@@ -1456,7 +1456,7 @@ event({submit,rs_account_lookup,_,_},Context) ->
             z_render:growl_error(?__("Nothing found", Context1), Context1); 
         _ ->
             Context1 = z_render:dialog_close(Context),
-            z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context1), Context1)
+            z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context1), Context1)
     end;
 
 event({submit,kz_trunk_server,_,_},Context) ->
@@ -1721,7 +1721,7 @@ event({postback,{channel_transfer,[{channel_id,ChannelId}]},_,_}, Context) ->
 
 event({postback,{sync_trunkstore_realms,[{account_id, AccountId}]},_,_}, Context) ->
     _ = kazoo_util:sync_trunkstore_realms(AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{ts_trunk_disable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     _ = kazoo_util:ts_trunk_disable(Index, TrunkId, Context),
@@ -1779,11 +1779,11 @@ event({submit,rs_kz_customer_update,_,_}, Context) ->
 
 event({postback,{toggle_account_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:kz_toggle_account_status(AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:kz_toggle_reseller_status(AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("reseller_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{toggle_services_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:toggle_services_status(AccountId, Context),
@@ -1857,19 +1857,19 @@ event({submit,add_debit,_,_}, Context) ->
 event({postback,{add_chosen_service_plan,[{account_id,AccountId}]},_,_}, Context) ->
     PlanId = z_context:get_q("selected_service_plan", Context),
     _ = kazoo_util:add_service_plan(PlanId, AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{remove_service_plan_from_account,[{account_id,AccountId},{service_plan_id,PlanId}]},_,_}, Context) ->
     kazoo_util:remove_service_plan_from_account(PlanId, AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{sync_account_services,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:sync_service_plans(AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,{reconcile_account_services,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:reconcile_service_plans(AccountId, Context),
-    z_render:update("child_sandbox", z_template:render("billing_child_info.tpl", [{account_id, AccountId}], Context), Context);
+    z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context), Context);
 
 event({postback,[{notify_submit_btn,[{account_id, 'undefined'}]}],_,_}, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

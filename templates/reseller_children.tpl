@@ -65,7 +65,7 @@
 
 <div id="child_sandbox" class="row">
 {% if account_id %}
-  {% include "reseller_child_info.tpl" %}
+  {% include "_child_info.tpl" %}
 {% endif %}
 </div>
 {% endwith %}

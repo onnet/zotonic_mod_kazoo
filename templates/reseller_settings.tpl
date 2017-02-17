@@ -63,6 +63,11 @@
   <span id="account_allocated_numbers_tpl">
         {% include "account_allocated_numbers.tpl" headline=_"Allocated numbers" %}
   </span>
+  {% include "onbill_service_plans.tpl" headline=_"Service plans" %}
+  {% include "onbill_variables.tpl" headline=_"Reseller settings" account_id=m.session.kazoo_account_id %}
+  {% for carrier_id in m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id}][1]["carriers"] %}
+    {% include "onbill_carrier.tpl" carrier_id=carrier_id headline=_"Carrier"++" "++carrier_id %}
+  {% endfor %}
 </div>
 
 {% endblock %}
