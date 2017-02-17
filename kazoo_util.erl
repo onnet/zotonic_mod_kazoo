@@ -4160,6 +4160,8 @@ debit_transactions(Transactions) ->
               (modkazoo_util:get_value(<<"type">>, Transaction) == <<"debit">>)
               and
               (modkazoo_util:get_value(<<"reason">>, Transaction) =/= <<"per_minute_call">>)
+              and
+              (modkazoo_util:get_value(<<"reason">>, Transaction) =/= <<"database_rollup">>)
           end,
     modkazoo_util:filter(Fun, Transactions).
 

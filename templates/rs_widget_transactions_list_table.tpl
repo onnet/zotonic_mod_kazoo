@@ -4,11 +4,18 @@
       <th colspan="3">
         {_ Opening balance _}
         <span style="float:right; padding-right:2em;">
-          {{ m.kazoo[{kz_list_transactions account_id=account_id
-                                           payments_month_chosen=payments_month_chosen
-                                           type="monthly_rollup"
-                    }][1]["amount"]|currency_sign
-          }}
+          {% with m.kazoo[{kz_list_transactions account_id=account_id
+                                                payments_month_chosen=payments_month_chosen
+                                                type="monthly_rollup"
+                         }]
+             as rollup_doc
+          %}
+            {% if rollup_doc[1]["type"] == "debit" %}
+              {{ (rollup_doc[1]["amount"] * (-1))|currency_sign }}
+            {% else %}
+              {{ rollup_doc[1]["amount"]|currency_sign }}
+            {% endif %}
+          {% endwith %}
         </span>
       </th>
     </tr>

@@ -320,12 +320,18 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chose
     CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
     Transactions = kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, 'undefined', Context),
     case Type of
-        "debit" -> kazoo_util:debit_transactions(Transactions);
-        "debit_summ" -> lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:debit_transactions(Transactions));
-        "credit" -> kazoo_util:credit_transactions(Transactions);
-        "credit_summ" -> lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:credit_transactions(Transactions));
-        "per_minute_calls_summ" -> lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:per_minute_calls(Transactions));
-        "monthly_rollup" -> kazoo_util:monthly_rollup(Transactions);
+        "debit" ->
+            kazoo_util:debit_transactions(Transactions);
+        "debit_summ" ->
+            lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:debit_transactions(Transactions));
+        "credit" ->
+            kazoo_util:credit_transactions(Transactions);
+        "credit_summ" ->
+            lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:credit_transactions(Transactions));
+        "per_minute_calls_summ" ->
+            lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:per_minute_calls(Transactions));
+        "monthly_rollup" ->
+            kazoo_util:monthly_rollup(Transactions);
         "next_month_rollup" ->
             case date() of
                 {Year, Month, _} ->
@@ -333,7 +339,14 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chose
                 {_,_,_} ->
                     {NextCreatedFrom, NextCreatedTo} = modkazoo_util:next_month_range(Month, Year),
                     NextTransactions = kazoo_util:kz_list_transactions(AccountId, NextCreatedFrom, NextCreatedTo, 'undefined', Context),
-                    modkazoo_util:get_value(<<"amount">>, kazoo_util:monthly_rollup(NextTransactions))
+                    RollupDoc = kazoo_util:monthly_rollup(NextTransactions),
+lager:info("IAM RollupDoc: ~p", [RollupDoc]),
+                    case modkazoo_util:get_value(<<"type">>, RollupDoc) of 
+                        <<"debit">> ->
+                            modkazoo_util:get_value(<<"amount">>, RollupDoc) * (-1);
+                        _ ->
+                            modkazoo_util:get_value(<<"amount">>, RollupDoc)
+                    end
             end
     end;
 
