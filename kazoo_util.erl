@@ -857,6 +857,13 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                 _ -> 
                     case ReturnCode of
                         "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
+                        "429" ->
+                            mod_signal:emit({emit_growl_signal
+                                            ,[{'text',?__("Too many requests, please wait and refresh page.", Context)}
+                                             ,{'type', 'notice'}
+                                             ]
+                                            }
+                                           ,Context);
                         _ -> 'ok'
                     end,
                     lager:info("crossbar_account_request API String: ~p", [API_String]),
@@ -885,6 +892,13 @@ crossbar_account_authtoken_request(Verb, API_String, DataBag, AuthToken, Context
                 _ -> 
                     case ReturnCode of
                         "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
+                        "429" ->
+                            mod_signal:emit({emit_growl_signal
+                                            ,[{'text',?__("Too many requests, please wait and refresh page.", Context)}
+                                             ,{'type', 'notice'}
+                                             ]
+                                            }
+                                           ,Context);
                         _ -> 'ok'
                     end,
                     error_return(ReturnCode, Body, Default)
