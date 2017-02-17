@@ -12,12 +12,12 @@
 
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-             {% if m.session.lb_user_id and m.kazoo.is_kazoo_account_admin %}
-               {% include "_lb_topmenu.tpl" %}
-             {% endif %}
-           <li class="divider visible-xs"></li>
-           <li><a id="xs_sign_out" class="visible-xs" href="#">{_ Sign out _}</a></li>
-           {% wire id="xs_sign_out" postback={signout} delegate="mod_kazoo" %}
+            {% if m.session.lb_user_id and m.kazoo.is_kazoo_account_admin %}
+              {% include "_lb_topmenu.tpl" %}
+            {% endif %}
+            <li class="divider visible-xs"></li>
+            <li><a id="xs_sign_out" class="visible-xs" href="#">{_ Sign out _}</a></li>
+            {% wire id="xs_sign_out" postback={signout} delegate="mod_kazoo" %}
           </ul>
 
           <ul class="nav navbar-nav navbar-right hidden-xs">
