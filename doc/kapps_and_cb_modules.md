@@ -63,7 +63,7 @@ sup kapps_config set_boolean callflow ensure_valid_caller_id true
 sup kapps_config set_integer crossbar token_auth_expiry 21600
 sup kapps_config set_integer crossbar.braintree max_account_credit 700
 sup kapps_config set_boolean crossbar.channels system_wide_channels_list true
-sup kapps_config set_json token_buckets crossbar {\"max_bucket_tokens\":500\,\"tokens_fill_rate\":10\,\"tokens_fill_time\":\"second\"}
+sup kapps_config set_json token_buckets crossbar {\"max_bucket_tokens\":2000\,\"tokens_fill_rate\":10\,\"tokens_fill_time\":\"second\"}
 ```
 ```
 sup kapps_config set_boolean services sync_services true
