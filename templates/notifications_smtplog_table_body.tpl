@@ -1,4 +1,4 @@
-<table id="rs_account_registrations_table" class="table display table-striped table-condensed">
+<table id="rs_notifications_smtplog_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
       <th class="text-center">{_ Date _}</th>
@@ -29,7 +29,7 @@
 </table>
 
 {% javascript %}
-var oTable = $('#rs_account_registrations_table').dataTable({
+var oTable = $('#rs_notifications_smtplog_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
 "aaSorting": [[ 0, "desc" ]],
