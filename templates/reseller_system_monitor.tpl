@@ -14,6 +14,9 @@
   <span id="reseller_current_calls_widget_tpl">
         {% include "reseller_current_calls_widget.tpl" headline=_"System-wide current calls" %}
   </span>
+  <span id="notifications_smtplog_widget_tpl">
+    {% include "notifications_smtplog_widget.tpl" headline=_"Notifications" account_id=account_id %}
+  </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={reseller_registrations_widget_tpl}
