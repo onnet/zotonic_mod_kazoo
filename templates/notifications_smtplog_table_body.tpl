@@ -4,7 +4,7 @@
       <th class="text-center">{_ Date _}</th>
       <th class="text-center">{_ To _}</th>
       <th class="text-center">{_ Type _}</th>
-      <th class="text-center"></th>
+      <th class="text-center">{_ Details _}</th>
     </tr>
   </thead>
   <tbody>
