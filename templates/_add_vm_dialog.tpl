@@ -5,16 +5,26 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Voicemail name _}
-            <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="{_ Enter vmbox name here _}" value="{{ vmbox[1]["name"] }}">
+            <input type="text"
+                   class="form-control margin-bottom-xs"
+                   id="name"
+                   name="name"
+                   placeholder="{_ Enter vmbox name here _}"
+                   value="{{ vmbox[1]["name"] }}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Voicemail owner _}
-          <select id="owner_id" name="owner_id" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
+          <select id="owner_id"
+                  name="owner_id"
+                  class="form-control margin-bottom-xs"
+                  style="text-align:center;"
+                  data-live-search="true">
             {% for option in m.kazoo.kz_list_account_users_short %}
-                  <option value="{{ option[1] }}" {% if vmbox[1]["owner_id"] == option[1] or (not option[1] and not vmbox[1]["owner_id"]) %}
-                                                    selected
-                                                  {% endif %}>
+                  <option value="{{ option[1] }}"
+                          {% if vmbox[1]["owner_id"] == option[1] or (not option[1] and not vmbox[1]["owner_id"]) %}
+                            selected
+                          {% endif %}>
                     {{ option[2] }}
                   </option>
             {% endfor %}
@@ -27,13 +37,21 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Voicemail number _}
-            <input type="text" class="form-control margin-bottom-xs" id="mailbox" name="mailbox" placeholder="{_ Number _}" 
+            <input type="text"
+                   class="form-control margin-bottom-xs"
+                   id="mailbox"
+                   name="mailbox"
+                   placeholder="{_ Number _}" 
                    value="{{ vmbox[1]["mailbox"] }}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ PIN number _}
-            <input type="text" class="form-control margin-bottom-xs" id="pin" name="pin" placeholder="{_ PIN _}"
+            <input type="text"
+                   class="form-control margin-bottom-xs"
+                   id="pin"
+                   name="pin"
+                   placeholder="{_ PIN _}"
                    value="{{ vmbox[1]["pin"] }}">
           </label>
         </div>
@@ -43,19 +61,35 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Unavailable message _}
-            <select id="unavailable_message_id" name="unavailable_message_id" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
+            <select id="unavailable_message_id"
+                    name="unavailable_message_id"
+                    class="form-control margin-bottom-xs"
+                    style="text-align:center;"
+                    data-live-search="true">
                 <option value="">-- {_ No custom prompt _} --</option>
               {% for option in m.kazoo.kz_list_account_media %}
-                <option value="{{ option["id"] }}" {% if option["id"] == vmbox[1]["media"][1]["unavailable"] %}selected{% endif %}>{{ option["name"] }}</option>
+                <option value="{{ option["id"] }}"
+                        {% if option["id"] == vmbox[1]["media"][1]["unavailable"] %}
+                          selected
+                        {% endif %}>
+                  {{ option["name"] }}
+                </option>
               {% endfor %}
             </select>
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Timezone _}
-          <select id="vmbox_timezone" name="vmbox_timezone" class="form-control margin-bottom-xs" style="text-align:center;" data-live-search="true">
+          <select id="vmbox_timezone"
+                  name="vmbox_timezone"
+                  class="form-control margin-bottom-xs"
+                  style="text-align:center;"
+                  data-live-search="true">
             {% for zone in m.kazoo.tz_list %}
-              <option value="{{ zone }}" {% if zone == vmbox[1]["timezone"] or (not vmbox[1]["timezone"] and zone == m.config.mod_kazoo.default_kazoo_timezone.value) %}selected{% endif %}>
+              <option value="{{ zone }}"
+                      {% if zone == vmbox[1]["timezone"] or (not vmbox[1]["timezone"] and zone == m.config.mod_kazoo.default_kazoo_timezone.value) %}
+                        selected
+                      {% endif %}>
                {{ zone }}
               </option>
             {% endfor %}

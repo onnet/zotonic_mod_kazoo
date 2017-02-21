@@ -603,6 +603,9 @@ m_find_value({kz_conference_participant, [{participant_id, ParticipantId}, {conf
 m_find_value(notifications_smtplog, _M, Context) ->
     kazoo_util:notifications_smtplog(Context);
 
+m_find_value({notifications_smtplog_by_id, [{notifications_smtplog_id, LogId}]}, _M, Context) ->
+    kazoo_util:notifications_smtplog_by_id(LogId, Context);
+
 m_find_value(rs_customer_update_subject, _M, Context) ->
     Filename = "/tmp/" ++ z_convert:to_list(z_context:get_session(kazoo_account_id, Context)) ++ "_subject.tpl",
     case file:read_file(Filename) of

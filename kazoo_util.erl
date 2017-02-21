@@ -328,6 +328,7 @@
     ,email_sender_name/1
     ,sendmail_test_notification/4
     ,notifications_smtplog/1
+    ,notifications_smtplog_by_id/2
     ,kz_notifications/1
     ,kz_notification_toggle/3
     ,rs_kz_customer_update/3
@@ -4053,6 +4054,10 @@ notifications_smtplog(Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?NOTIFICATIONS/binary, ?SMTPLOG/binary>>,
     {'ok', _, _, Body} = crossbar_account_send_request('get', API_String, "text/plain", [], Context),
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)). 
+
+notifications_smtplog_by_id(LogId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?NOTIFICATIONS/binary, ?SMTPLOG/binary, "/", (?TO_BIN(LogId))/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
 
 kz_notifications(Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),

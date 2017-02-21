@@ -1,21 +1,27 @@
 <table id="rs_account_registrations_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
-      <th class="text-center">{_ Username _}</th>
-      <th class="text-center">{_ User agent _}</th>
-      <th class="text-center">{_ Contact IP _}</th>
-      <th class="text-center">{_ Details _}</th>
+      <th class="text-center">{_ Date _}</th>
+      <th class="text-center">{_ To _}</th>
+      <th class="text-center">{_ Type _}</th>
+      <th class="text-center"></th>
     </tr>
   </thead>
   <tbody>
-    {% for device in m.kazoo.get_account_registrations %}
+    {% for notification in m.kazoo.notifications_smtplog %}
       <tr>
-        <td class="text-center">{{ device["username"] }}</td>
-        <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
-        <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
+        <td class="text-center">{{ notification["created"]|inno_timestamp_to_date }}</td>
+        <td class="text-center">{{ notification["to"] }}</td>
+        <td class="text-center">{{ notification["template_id"] }}</td>
         <td style="text-align: center;">
-          <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-          {% wire id="info_"++device["username"] action={ dialog_open title=_"Registration details" template="_details.tpl" arg=device } %}
+          <i id="info_{{ notification["id"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+          {% wire id="info_"++notification["id"]|cleanout
+                  action={dialog_open title=_"Notification details"
+                                      template="_notifications_smtp_log_details.tpl"
+                                      notification_id=notification["id"]
+                                      width="auto"
+                         }
+          %}
         </td>
       </tr>
     {% endfor %}
