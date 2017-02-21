@@ -3,7 +3,7 @@
     <tr>
       <th class="text-center">{_ Date _}</th>
       <th class="text-center">{_ To _}</th>
-      <th class="text-center">{_ Type _}</th>
+      <th class="text-center">{_ Subject _}</th>
       <th class="text-center">{_ Details _}</th>
     </tr>
   </thead>
@@ -12,7 +12,9 @@
       <tr>
         <td class="text-center">{{ notification["created"]|inno_timestamp_to_date }}</td>
         <td class="text-center">{{ notification["to"] }}</td>
-        <td class="text-center">{{ notification["template_id"] }}</td>
+        <td class="text-center">
+          {{ notification["subject"]|truncate:19 }}
+        </td>
         <td style="text-align: center;">
           <i id="info_{{ notification["id"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
           {% wire id="info_"++notification["id"]|cleanout
