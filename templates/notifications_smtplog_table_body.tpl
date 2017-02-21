@@ -21,6 +21,7 @@
                   action={dialog_open title=_"Notification details"
                                       template="_notifications_smtp_log_details.tpl"
                                       notification_id=notification["id"]
+                                      notification_created=notification["created"]
                                       width="auto"
                          }
           %}

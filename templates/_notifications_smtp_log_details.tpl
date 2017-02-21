@@ -5,6 +5,12 @@
       <div class="col-sm-12">
         <div style="border-radius: 0" class="panel panel-info">
           <div class="panel-heading">
+            <strong>{_ Date _}:</strong>
+            {{ notification_created|inno_timestamp_to_date }}
+            <br />
+            <strong>{_ From _}:</strong>
+            {{ log_message[1]["emails"][1]["from"] }}
+            <br />
             <strong>{_ To _}:</strong>
             {% for email_address in log_message[1]["emails"][1]["to"] %}
               {{ email_address }}{% if not forloop.last %}, {% endif %}
@@ -15,6 +21,10 @@
           </div>
           <div class="panel-body">
             {{ log_message[1]["rendered_templates"][1]["text/html"] }}
+          </div>
+          <div class="panel-heading">
+            <strong>{_ Receipt _}:</strong>
+            {{ log_message[1]["receipt"] }}
           </div>
         </div>
       </div>
@@ -27,5 +37,4 @@
       </div>
     </div>
   </div>
-  {# print log_message #}
 {% endwith %}
