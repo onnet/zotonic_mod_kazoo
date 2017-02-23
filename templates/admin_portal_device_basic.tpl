@@ -157,6 +157,24 @@
           %}
       </div>
     </div>
+    <!-- Encrypt rtp -->
+    <div class="row">
+      <div class="col-xs-5"><label class="edit_user_label">{_ Encrypt rtp _}</label></div>
+      <div id="device_mediaencryptionenforce_security" class="col-xs-5">
+        <i id="toggle_device_mediaencryptionenforce_security"
+           class="fa fa-toggle-{% if device_doc["media"][1]["encryption"][1]["enforce_security"] %}on{% else %}off{% endif %} pointer"></i>
+          {% wire id="toggle_device_mediaencryptionenforce_security"
+                  type="click"
+                  action={postback postback={toggle_field type doc_id field_name prefix}
+                                   delegate="mod_kazoo"
+                                   inject_args type="device"
+                                               doc_id=device_id
+                                               field_name=["media","encryption","enforce_security"]
+                                               prefix="device_"
+                         }
+          %}
+      </div>
+    </div>
     <br />
   </div>
   <div class="col-xs-2" id="device_enable_control">

@@ -26,6 +26,12 @@
   <span id="reseller_registrations_widget_tpl">
         {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
   </span>
-</div>
+  <span id="tasks_widget_tpl">
+    {% include "tasks_widget.tpl" headline=_"Backgroud jobs" %}
+  </span>
 
+{# print m.kazoo.all_tasks #}
+{# print m.kazoo.account_tasks #}
+
+</div>
 {% endblock %}

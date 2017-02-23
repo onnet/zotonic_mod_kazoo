@@ -23,7 +23,6 @@ build_a_fortune(Amount, Context) ->
                        'undefined' -> <<"£"/utf8>>;
                        Sign -> Sign
                    end,
-    %% 0.0049 is used in order to avoid negative zero balance ( -£0.00 )
     case (Amount >= -0.0049) of
         'true' ->
             <<(?TO_BIN(CurrencySign))/binary, (filter_format_price:format_price(abs(Amount), Context))/binary>>;

@@ -356,6 +356,9 @@
     ,is_trial_account/2
     ,services_status/4
     ,toggle_services_status/2
+    ,all_tasks/1
+    ,account_tasks/4
+    ,account_tasks/5
 ]).
 
 -include_lib("zotonic.hrl").
@@ -453,6 +456,7 @@
 -define(ALLOTMENTS, <<"/allotments">>).
 -define(CONSUMED, <<"/consumed">>).
 -define(SERVICES, <<"/services">>).
+-define(TASKS, <<"/tasks">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).
@@ -466,6 +470,9 @@
      {<<"media">>,
       {[{<<"peer_to_peer">>,<<"auto">>},
         {<<"audio">>,{[{<<"codecs">>,[<<"PCMU">>,<<"PCMA">>]}]}},
+   %     {<<"encryption">>,{[{<<"methods">>,[<<"srtp">>,<<"zrtp">>]}
+        {<<"encryption">>,{[{<<"methods">>,[]}
+                           ,{<<"enforce_security">>, 'false'}]}},
         {<<"video">>,{[{<<"codecs">>,[]}]}},
         {<<"fax">>,{[{<<"option">>,<<"true">>}]}},
         {<<"fax_option">>,true}]}},
@@ -4310,3 +4317,17 @@ toggle_services_status(AccountId, Context) ->
             DataBag = ?MK_DATABAG({[{<<"in_good_standing">>, 'false'},{<<"reason">>,<<"administratively_convicted">>}]}),
             services_status('post', AccountId, DataBag, Context)
     end.
+
+all_tasks(Context) ->
+  lager:info("IAM AuthToken: ~p",[z_context:get_session(kazoo_auth_token, Context)]),
+    API_String = <<?V2/binary, ?TASKS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
+
+account_tasks(Verb, AccountId, DataBag, Context) ->
+    account_tasks(Verb, AccountId, "application/json", DataBag, Context).
+
+account_tasks(Verb, AccountId, ContentType, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary>>,
+    {'ok', _, _, Body} = crossbar_account_send_request('get', API_String, "text/plain", [], Context),
+    modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)).
+
