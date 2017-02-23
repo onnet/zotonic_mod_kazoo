@@ -4328,6 +4328,6 @@ account_tasks(Verb, AccountId, DataBag, Context) ->
 
 account_tasks(Verb, AccountId, ContentType, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary>>,
-    {'ok', _, _, Body} = crossbar_account_send_request('get', API_String, "text/plain", [], Context),
+    {'ok', _, _, Body} = crossbar_account_send_request(Verb, API_String, ContentType, DataBag, Context),
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)).
 
