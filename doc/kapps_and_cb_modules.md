@@ -24,7 +24,8 @@
 "cb_lists",
 "cb_access_lists",
 "cb_dialplans",
-"cb_queues"
+"cb_queues",
+"cb_tasks"
 ```
 
 ## Some DB flags to consider
