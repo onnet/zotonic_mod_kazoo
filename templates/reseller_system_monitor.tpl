@@ -44,7 +44,7 @@
   </span>
 </div>
 
-{% print m.kazoo.all_tasks %}
-{% print m.kazoo.account_tasks %}
+{# print m.kazoo.all_tasks #}
+{# print m.kazoo.account_tasks #}
 
 {% endblock %}

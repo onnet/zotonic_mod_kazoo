@@ -19,6 +19,10 @@
             text=_"refresh"
             action={emit signal={refresh_tasks_widget_signal}}
   %}
+  {% button class="btn btn-xs btn-onnet pull-right"
+            text=_"add task"
+            action={dialog_open title=_"Add background job" template="_add_task_dialog.tpl" width="auto"}
+  %}
   {{ headline }}
 
 {% endblock %}
@@ -31,7 +35,8 @@
   <div class="text-center p-3">
     {% ilazy class="fa fa-spinner fa-spin fa-3x"
              action={update target="tasks_widget_opened"
-                            template="tasks_table_body.tpl"}
+                            template="tasks_table_body.tpl"
+                    }
     %}
   </div>
 </div>
