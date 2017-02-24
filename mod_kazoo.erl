@@ -2007,6 +2007,14 @@ event({submit,{edit_cname_number_service,[{number,Number},{account_id,AccountId}
     kazoo_util:phone_number('post', Number, AccountId, ?MK_DATABAG(modkazoo_util:set_values(Values, NumberDoc)), Context),
     z_render:growl(?__("Setting saved", Context), Context);
 
+event({postback,{start_task_processing,[{account_id,'undefined'},{task_id,TaskId}]},_,_}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({postback,{start_task_processing,[{account_id,AccountId},{task_id,TaskId}]},<<>>,<<>>}, Context);
+event({postback,{start_task_processing,[{account_id,AccountId},{task_id,TaskId}]},_,_}, Context) ->
+    kazoo_util:account_task('patch', TaskId, AccountId, [], Context),
+    modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', [], Context),
+    Context;
+
 event({drag,_,_},Context) ->
     Context;
 

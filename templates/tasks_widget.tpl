@@ -15,6 +15,10 @@
        style="{% if not m.kazoo[{ui_element_opened element="tasks_widget_opened"}] %}display: none;{% endif %}" 
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
+  {% button class="btn btn-xs btn-onnet pull-right"
+            text=_"refresh"
+            action={emit signal={refresh_tasks_widget_signal}}
+  %}
   {{ headline }}
 
 {% endblock %}

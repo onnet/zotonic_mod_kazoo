@@ -32,6 +32,13 @@
   <span id="reseller_registrations_widget_tpl">
     {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
   </span>
+  {% wire action={connect signal={refresh_tasks_widget_signal}
+                          action={update target="tasks_widget_tpl"
+                                         template="tasks_widget.tpl"
+                                         headline=_"Background jobs"
+                                 }
+                 }
+  %}
   <span id="tasks_widget_tpl">
     {% include "tasks_widget.tpl" headline=_"Background jobs" %}
   </span>

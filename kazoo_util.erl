@@ -360,6 +360,7 @@
     ,account_tasks/4
     ,account_tasks/5
     ,get_tasks_csv/4
+    ,account_task/5
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4335,3 +4336,7 @@ account_tasks(Verb, AccountId, ContentType, DataBag, Context) ->
 get_tasks_csv(AttName, TaskId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary, "/", ?TO_BIN(TaskId)/binary, "?csv_name=", ?TO_BIN(AttName)/binary>>,
     crossbar_account_send_raw_request('get', API_String, [{"Accept", "text/csv"}], [], Context).
+
+account_task(Verb, TaskId, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary, "/", ?TO_BIN(TaskId)/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).

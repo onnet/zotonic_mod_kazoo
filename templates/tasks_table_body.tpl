@@ -17,7 +17,16 @@
         <td class="text-center">{{ task["status"] }}</td>
         <td style="text-align: center;">
           {% if task["status"] == "pending" %}
-            <i class="fa fa-play zprimary pointer" title="{_ Play _}"></i>
+            <i id="process_task_{{ task["id"]|cleanout }}" class="fa fa-play zprimary pointer" title="{_ Play _}"></i>
+            {% wire id="process_task_"++task["id"]|cleanout
+                     action={confirm text=_"Do you really want to start this job?"
+                                     action={postback postback={start_task_processing account_id=account_id
+                                                                                      task_id=task["id"]
+                                                               }
+                                                      delegate="mod_kazoo"
+                                            } 
+                            } 
+            %}
           {% endif %}
           {% if task["csvs"] %}
             {% for task_filename in task["csvs"] %}
@@ -68,4 +77,3 @@ var oTable = $('#rs_tasks_table').dataTable({
 
 });
 {% endjavascript %}
-
