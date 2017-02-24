@@ -17,15 +17,21 @@
         <td class="text-center">{{ task["status"] }}</td>
         <td style="text-align: center;">
           {% if task["csvs"] %}
-            <i class="fa fa-download zprimary pointer" title="{_ Download _}"></i>
+            {% for task_filename in task["csvs"] %}
+            <a href="{{ m.onbill[{attachment_download_link account_id=account_id
+                                                           doc_id=task["id"]
+                                                           attachment_name=task_filename
+                                                           doc_type="tasks_csv"}] }}">
+              <i id="download_uploaded_doc_{{ task["id"]|cleanout }}_{{ task_filename|cleanout }}" class="fa fa-download"></i>
+            </a>
+            {% endfor %}
+          {% else %}
           {% endif %}
-          <i id="info_{{ notification["id"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-          {% wire id="info_"++notification["id"]|cleanout
-                  action={dialog_open title=_"Notification details"
-                                      template="_notifications_smtp_log_details.tpl"
-                                      notification_id=notification["id"]
-                                      notification_created=notification["created"]
-                                      width="auto"
+          <i id="info_{{ task["id"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+          {% wire id="info_"++task["id"]|cleanout
+                  action={dialog_open title=_"Task details"
+                                      template="_details.tpl"
+                                      arg=task
                          }
           %}
         </td>

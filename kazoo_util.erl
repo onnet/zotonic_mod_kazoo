@@ -359,6 +359,7 @@
     ,all_tasks/1
     ,account_tasks/4
     ,account_tasks/5
+    ,get_tasks_csv/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4331,3 +4332,6 @@ account_tasks(Verb, AccountId, ContentType, DataBag, Context) ->
     {'ok', _, _, Body} = crossbar_account_send_request(Verb, API_String, ContentType, DataBag, Context),
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)).
 
+get_tasks_csv(AttName, TaskId, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary, "/", ?TO_BIN(TaskId)/binary, "?csv_name=", ?TO_BIN(AttName)/binary>>,
+    crossbar_account_send_raw_request('get', API_String, [{"Accept", "text/csv"}], [], Context).

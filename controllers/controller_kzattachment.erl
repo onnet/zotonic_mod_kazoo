@@ -15,6 +15,9 @@
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
+-define(CSV_CONTENT_TYPES, [{"text/csv", provide_content}
+                           ]).
+
 -define(PDF_CONTENT_TYPES, [{"application/pdf", provide_content}
                            ,{"application/x-pdf", provide_content}
                            ]).
@@ -47,6 +50,8 @@ content_types_provided(ReqData, Context) ->
             {[{"application/pdf", provide_content}], ReqData, Context};
         "onbill_e911_address_proof" ->
             {?PDF_CONTENT_TYPES ++ ?IMAGE_CONTENT_TYPES, ReqData, Context};
+        "tasks_csv" ->
+            {?CSV_CONTENT_TYPES, ReqData, Context};
         "call_recording" ->
             {[{"audio/mpeg", provide_content}], ReqData, Context}
     end.
@@ -74,6 +79,18 @@ provide_content(ReqData, Context) ->
             DocId = z_context:get_q("doc_id", Context),
             AccountId = z_context:get_q("account_id", Context),
             case onbill_util:get_e911_attachment(DocId, AccountId, Context) of
+                {'ok', [50,_,_], Headers, Body} ->
+                    ReqData1 = wrq:set_resp_header("Content-Disposition", proplists:get_value("content-disposition", Headers), ReqData),
+                    {Body, ReqData1, z_context:set(body, Body, Context)};
+                _E ->
+                    lager:info("IAM provide_content eror: ~p",[_E]),
+                    api_error(404, 0, "No attachment found", ReqData, Context)
+            end;
+        "tasks_csv" ->
+            AttName = z_context:get_q("att_name", Context),
+            TaskId = z_context:get_q("doc_id", Context),
+            AccountId = z_context:get_q("account_id", Context),
+            case kazoo_util:get_tasks_csv(AttName, TaskId, AccountId, Context) of
                 {'ok', [50,_,_], Headers, Body} ->
                     ReqData1 = wrq:set_resp_header("Content-Disposition", proplists:get_value("content-disposition", Headers), ReqData),
                     {Body, ReqData1, z_context:set(body, Body, Context)};
