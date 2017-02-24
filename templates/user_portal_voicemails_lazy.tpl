@@ -59,7 +59,7 @@
                                $("#play_{{ message["media_id"] }}").toggle();
                                $("#pause_{{ message["media_id"] }}").toggle();
                                z_event("event_{{ message["media_id"] }}");'>
-                      <i style="cursor: pointer;" class="fa fa-play" title="{_ Play _}"></i>
+                      <i class="fa fa-play pointer" title="{_ Play _}"></i>
                    </a>
                    {% wire name="event_"++message["media_id"] 
                       action={postback postback={set_vm_message_folder folder="saved"
@@ -74,15 +74,14 @@
                       onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
                                $("#play_{{ message["media_id"] }}").toggle();
                                $("#pause_{{ message["media_id"] }}").toggle();'>
-                      <i style="cursor: pointer;" class="fa fa-pause" title="{_ Pause _}"></i>
+                      <i class="fa fa-pause pointer" title="{_ Pause _}"></i>
                    </a>
-                   <a style="cursor: pointer;"
-                      id="stop_{{ message["media_id"] }}"
+                   <a id="stop_{{ message["media_id"] }}"
                       onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
                                $("#audio_{{ message["media_id"] }}").prop("currentTime",0);
                                $("#play_{{ message["media_id"] }}").show();
                                $("#pause_{{ message["media_id"] }}").hide();'>
-                      <i class="fa fa-stop" title="{_ Stop _}"></i>
+                      <i class="fa fa-stop pointer" title="{_ Stop _}"></i>
                    </a>
                  </td>
                  <td style="text-align: center;">
@@ -92,8 +91,7 @@
                  </td>
                  <td style="text-align: center;">
                      <a><i id="delete_{{ message["media_id"] }}"
-                           style="cursor: pointer;"
-                           class="fa fa-trash-o"
+                           class="fa fa-trash-o pointer"
                            title="Delete"></i></a>
                  </td>
                  {% wire id="delete_"++message["media_id"] 

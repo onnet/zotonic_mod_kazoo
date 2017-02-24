@@ -16,6 +16,9 @@
         <td class="text-center">{{ task["action"]|truncate:13 }}</td>
         <td class="text-center">{{ task["status"] }}</td>
         <td style="text-align: center;">
+          {% if task["status"] == "pending" %}
+            <i class="fa fa-play zprimary pointer" title="{_ Play _}"></i>
+          {% endif %}
           {% if task["csvs"] %}
             {% for task_filename in task["csvs"] %}
             <a href="{{ m.onbill[{attachment_download_link account_id=account_id

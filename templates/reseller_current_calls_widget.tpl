@@ -23,11 +23,12 @@
 
 {% block widget_content %}
 <div id="ap_current_calls_widget_opened"
-     style="{% if not m.kazoo[{ui_element_opened element="ap_current_calls_widget_opened"}] %}display: none;{% endif %}"
->
+     style="{% if not m.kazoo[{ui_element_opened element="ap_current_calls_widget_opened"}] %}display: none;{% endif %}">
   <div class="text-center p-3">
-    {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="ap_current_calls_widget_opened"
-                                                                template="reseller_current_calls_table.tpl"}
+    {% ilazy class="fa fa-spinner fa-spin fa-3x"
+             action={update target="ap_current_calls_widget_opened"
+                            template="reseller_current_calls_table.tpl"
+                    }
     %}
   </div>
 </div>

@@ -8,11 +8,14 @@
 
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={reseller_current_calls_widget_tpl}
-                          action={update target="reseller_current_calls_widget_tpl" template="reseller_current_calls_widget.tpl" headline=_"System-wide current calls"}
+                          action={update target="reseller_current_calls_widget_tpl"
+                                         template="reseller_current_calls_widget.tpl"
+                                         headline=_"System-wide current calls"
+                                 }
                  }
   %}
   <span id="reseller_current_calls_widget_tpl">
-        {% include "reseller_current_calls_widget.tpl" headline=_"System-wide current calls" %}
+    {% include "reseller_current_calls_widget.tpl" headline=_"System-wide current calls" %}
   </span>
   <span id="notifications_smtplog_widget_tpl">
     {% include "notifications_smtplog_widget.tpl" headline=_"Notifications" account_id=account_id %}
@@ -20,18 +23,21 @@
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={reseller_registrations_widget_tpl}
-                          action={update target="reseller_registrations_widget_tpl" template="reseller_registrations_widget.tpl" headline=_"System-wide registrations"}
+                          action={update target="reseller_registrations_widget_tpl"
+                                         template="reseller_registrations_widget.tpl"
+                                         headline=_"System-wide registrations"
+                                 }
                  }
   %}
   <span id="reseller_registrations_widget_tpl">
-        {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
+    {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
   </span>
   <span id="tasks_widget_tpl">
     {% include "tasks_widget.tpl" headline=_"Background jobs" %}
   </span>
-
-{# print m.kazoo.all_tasks #}
-{# print m.kazoo.account_tasks #}
-
 </div>
+
+{% print m.kazoo.all_tasks %}
+{% print m.kazoo.account_tasks %}
+
 {% endblock %}
