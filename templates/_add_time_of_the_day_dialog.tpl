@@ -5,7 +5,12 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="name" name="name" type="text" class="form-control margin-bottom-xs" placeholder="{_ Enter rule name here _}" value="{{ rule[1]["name"] }}">
+          <input id="name"
+                 name="name"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Enter rule name here _}"
+                 value="{{ rule[1]["name"] }}">
         </div>
         <div class="col-sm-6">
           <select name="enabled" id="enabled" class="form-control margin-bottom-xs">
@@ -30,8 +35,16 @@
          <div class="date" id="startDay" data-date="{{ now|sub_day|date: 'd/m/Y' }}" data-date-format="dd/mm/yyyy"
               data-date-autoclose="true" data-date-language={{ z_language }} data-date-start-date="-6m"
               data-date-end-date="+6m">
-                  <input id="startDayInput" type="text" class="form-control margin-bottom-xs" name="start_date"
-                                       style="background-color: white;"             value="{% if rule[1]["start_date"] %}{{ rule[1]["start_date"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|sub_day|date: 'd/m/Y' }}{% endif %}" readonly/>
+                  <input id="startDayInput" type="text"
+                         class="form-control margin-bottom-xs"
+                         name="start_date"
+                         style="background-color: white;"
+                         value="{% if rule[1]["start_date"] %}
+                                  {{ rule[1]["start_date"]|inno_timestamp_to_date|date: 'd/m/Y' }}
+                                {% else %}
+                                  {{ now|sub_day|date: 'd/m/Y' }}
+                                {% endif %}"
+                         readonly/>
                   <span class="add-on hidden" style="padding-left: 1em;"><i class="fa fa-calendar"></i></span>
          </div>
         </div>
@@ -46,8 +59,13 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="input time_wrapper">
-            <input id="time" name="time" type="slider" style="display: none;"
-                             value="{% if rule[1]["time_window_start"] %}{{ rule[1]["time_window_start"] }};{{ rule[1]["time_window_stop"]  }}{% else %}32400;61200{% endif %}">
+            <input id="time"
+                   name="time"
+                   type="slider"
+                   style="display: none;"
+                   value="{% if rule[1]["time_window_start"] %}
+                            {{ rule[1]["time_window_start"] }};{{ rule[1]["time_window_stop"]  }}
+                          {% else %}32400;61200{% endif %}">
           </div>
         </div>
       </div>
