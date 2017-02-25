@@ -7,6 +7,11 @@
                            available_tasks=available_tasks
                            category=q.triggervalue
                    }
+            action={update target="task_input_upload_field_span"
+                           template="_add_task_dialog_input_upload_field.tpl"
+                           available_tasks=available_tasks
+                           category=q.triggervalue
+                   }
     %}
     <select id="task_action"
             name="task_action"

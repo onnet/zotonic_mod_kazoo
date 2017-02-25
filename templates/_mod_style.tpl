@@ -367,7 +367,7 @@ div.widget {
 }
 
 .ml-1 {
-  margin-right: 1em;
+  margin-left: 1em;
 }
 
 .mr-1 {

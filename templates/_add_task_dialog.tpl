@@ -38,13 +38,9 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
-      <div class="row">
-            <span id="task_description_span">
-              {% include "_add_task_dialog_description_span.tpl" %}
-            </span>
-      </div>
-    </div>
+    <span id="task_description_span">
+      {% include "_add_task_dialog_description_span.tpl" %}
+    </span>
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
