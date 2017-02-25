@@ -32,14 +32,9 @@
             </span>
         </div>
         <div class="col-sm-4">
-          <label class="form-control-onnet margin-bottom-xs">{_ Select file _}
-            <input id="tasktfile"
-                   type="file"
-                   name="taskfile"
-                   accept="text/csv,application/csv" 
-                   class="form-control margin-bottom-xs"
-                   onchange="this.style.width = '100%';">
-          </label>
+            <span id="task_input_upload_field_span">
+              {% include "_add_task_dialog_input_upload_field.tpl" %}
+            </span>
         </div>
       </div>
     </div>
