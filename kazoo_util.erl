@@ -361,6 +361,8 @@
     ,account_tasks/5
     ,get_tasks_csv/4
     ,account_task/5
+    ,add_new_task/1
+    ,add_new_task_file/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -811,22 +813,22 @@ req_headers(ContentType, Token) ->
 crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
     crossbar_account_send_request(Verb, API_String, "application/json", DataBag, Context).
 
-crossbar_account_send_request(Verb, API_String, ContextType, DataBag, Context) ->
+crossbar_account_send_request(Verb, API_String, ContentType, DataBag, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
-    crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken, Context).
+    crossbar_account_send_request(Verb, API_String, ContentType, DataBag, AuthToken, Context).
 
-crossbar_account_send_request(Verb, API_String, ContextType, DataBag, AuthToken, Context) ->
+crossbar_account_send_request(Verb, API_String, ContentType, DataBag, AuthToken, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
                   _ ->
-                      case ContextType of
+                      case ContentType of
                           "application/json" -> jiffy:encode(DataBag);
                           _ -> DataBag
                       end
               end,
-    ibrowse:send_req(URL, req_headers(ContextType, AuthToken), Verb, Payload, [{'inactivity_timeout', 15000}]).
+    ibrowse:send_req(URL, req_headers(ContentType, AuthToken), Verb, Payload, [{'inactivity_timeout', 15000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
@@ -3926,17 +3928,17 @@ kz_delete_notification_template(NotificationId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
-kz_notification_template(ContextType, NotificationId, Context) ->
+kz_notification_template(ContentType, NotificationId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    kz_notification_template(ContextType, NotificationId, AccountId, Context).
+    kz_notification_template(ContentType, NotificationId, AccountId, Context).
 
-kz_notification_template(ContextType, NotificationId, AccountId, Context) ->
+kz_notification_template(ContentType, NotificationId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
-    crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContextType}], [], Context).
+    crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContentType}], [], Context).
 
-kz_save_notification_template(ContextType, NotificationId, AccountId, MessageBody, Context) ->
+kz_save_notification_template(ContentType, NotificationId, AccountId, MessageBody, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
-    crossbar_account_send_request('post', API_String, ContextType, MessageBody, Context).
+    crossbar_account_send_request('post', API_String, ContentType, MessageBody, Context).
 
 rs_kz_all_customers_update(AccountId, Context) ->
     rs_kz_customer_update('undefined', AccountId, Context).
@@ -4334,9 +4336,33 @@ account_tasks(Verb, AccountId, ContentType, DataBag, Context) ->
     modkazoo_util:get_value(<<"data">>,jiffy:decode(Body)).
 
 get_tasks_csv(AttName, TaskId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary, "/", ?TO_BIN(TaskId)/binary, "?csv_name=", ?TO_BIN(AttName)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary
+                  ,"/", ?TO_BIN(TaskId)/binary, "?csv_name=", ?TO_BIN(AttName)/binary>>,
     crossbar_account_send_raw_request('get', API_String, [{"Accept", "text/csv"}], [], Context).
 
 account_task(Verb, TaskId, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?TASKS/binary, "/", ?TO_BIN(TaskId)/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+add_new_task(Context) ->
+    case z_context:get_q("taskfile", Context) of
+        {upload, UploadFilename, UploadTmp, _, _} ->
+            add_new_task_file(UploadFilename, UploadTmp, Context);
+        _ ->
+            Category = modkazoo_util:get_q_bin(<<"task_category">>, Context),
+            Action = modkazoo_util:get_q_bin(<<"task_action">>, Context),
+            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?TASKS/binary
+                          ,"?category=", Category/binary, "&action=", Action/binary>>,
+            crossbar_account_request('put', API_String, [], Context)
+    end.
+
+add_new_task_file(UploadFilename, UploadTmp, Context) ->
+    Category = modkazoo_util:get_q_bin(<<"task_category">>, Context),
+    Action = modkazoo_util:get_q_bin(<<"task_action">>, Context),
+    {ok, Data} = file:read_file(UploadTmp),
+    {ok, IdnProps} = z_media_identify:identify(UploadTmp, Context),
+    Mime = proplists:get_value(mime, IdnProps),
+    Headers = [{"Content-Type",Mime}],
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?TASKS/binary, "?category=", Category/binary
+                  ,"&action=", Action/binary, "&file_name=", ?TO_BIN(UploadFilename)/binary>>,
+    crossbar_account_send_raw_request('post', API_String, Headers, Data, Context).

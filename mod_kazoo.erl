@@ -2015,6 +2015,11 @@ event({postback,{start_task_processing,[{account_id,AccountId},{task_id,TaskId}]
     modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', [], Context),
     Context;
 
+event({submit,add_new_task,_,_}, Context) ->
+    kazoo_util:add_new_task(Context),
+    modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', [], Context),
+    z_render:dialog_close(z_render:growl(?__("Job pending. Don't forget to start.", Context), Context));
+
 event({drag,_,_},Context) ->
     Context;
 
