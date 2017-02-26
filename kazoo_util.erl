@@ -4323,7 +4323,6 @@ toggle_services_status(AccountId, Context) ->
     end.
 
 all_tasks(Context) ->
-  lager:info("IAM AuthToken: ~p",[z_context:get_session(kazoo_auth_token, Context)]),
     API_String = <<?V2/binary, ?TASKS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
@@ -4360,9 +4359,14 @@ add_new_task_file(UploadFilename, UploadTmp, Context) ->
     Category = modkazoo_util:get_q_bin(<<"task_category">>, Context),
     Action = modkazoo_util:get_q_bin(<<"task_action">>, Context),
     {ok, Data} = file:read_file(UploadTmp),
-    {ok, IdnProps} = z_media_identify:identify(UploadTmp, Context),
-    Mime = proplists:get_value(mime, IdnProps),
+    Mime =
+        case binary:split(?TO_BIN(UploadFilename), <<".csv">>) of
+            [_,_] -> "text/csv";
+            _ ->
+                {ok, IdnProps} = z_media_identify:identify(UploadTmp, UploadFilename, Context),
+                proplists:get_value(mime, IdnProps)
+        end,
     Headers = [{"Content-Type",Mime}],
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?TASKS/binary, "?category=", Category/binary
                   ,"&action=", Action/binary, "&file_name=", ?TO_BIN(UploadFilename)/binary>>,
-    crossbar_account_send_raw_request('post', API_String, Headers, Data, Context).
+    crossbar_account_send_raw_request('put', API_String, Headers, Data, Context).

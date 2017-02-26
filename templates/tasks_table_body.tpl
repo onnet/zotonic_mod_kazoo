@@ -34,7 +34,9 @@
                                                            doc_id=task["id"]
                                                            attachment_name=task_filename
                                                            doc_type="tasks_csv"}] }}">
-              <i id="download_uploaded_doc_{{ task["id"]|cleanout }}_{{ task_filename|cleanout }}" class="fa fa-download"></i>
+              <i id="download_uploaded_doc_{{ task["id"]|cleanout }}_{{ task_filename|cleanout }}"
+                 class="fa fa-download"
+                 title="{{ task_filename }}"></i>
             </a>
             {% endfor %}
           {% else %}
