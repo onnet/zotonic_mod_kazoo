@@ -474,9 +474,6 @@
      {<<"media">>,
       {[{<<"peer_to_peer">>,<<"auto">>},
         {<<"audio">>,{[{<<"codecs">>,[<<"PCMU">>,<<"PCMA">>]}]}},
-   %     {<<"encryption">>,{[{<<"methods">>,[<<"srtp">>,<<"zrtp">>]}
-        {<<"encryption">>,{[{<<"methods">>,[]}
-                           ,{<<"enforce_security">>, 'false'}]}},
         {<<"video">>,{[{<<"codecs">>,[]}]}},
         {<<"fax">>,{[{<<"option">>,<<"true">>}]}},
         {<<"fax_option">>,true}]}},
