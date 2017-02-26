@@ -110,9 +110,9 @@
            class="fa fa-toggle-{% if device_doc["media"][1]["fax_option"] %}on{% else %}off{% endif %} pointer"></i>
         {% wire id="toggle_mediafax_option"
                 type="click"
-                action={ postback postback={toggle_field type doc_id field_name}
-                                  delegate="mod_kazoo"
-                                  inject_args type="device" doc_id=device_id field_name=["media","fax_option"]
+                action={postback postback={toggle_field type doc_id field_name}
+                                 delegate="mod_kazoo"
+                                 inject_args type="device" doc_id=device_id field_name=["media","fax_option"]
                        }
         %}
       </div>
@@ -157,9 +157,22 @@
           %}
       </div>
     </div>
-    <!-- Encrypt rtp -->
+    <!-- Encryption methods -->
     <div class="row">
-      <div class="col-xs-5"><label class="edit_user_label">{_ Encrypt rtp _}</label></div>
+      <div class="col-xs-5"><label class="edit_user_label">{_ Encryption methods _}</label></div>
+      <div id="device_mediaencryptionmethods" class="col-xs-5">
+          {% include "_show_field_select.tpl" type="device"
+                                              doc_id=device_id
+                                              field_name=["media","encryption","methods"]
+                                              options=["srtp","zrtp","srtp,zrtp","No encryption"]
+                                              prefix="device_"
+                                              postfix="_bootsearch"
+          %}
+      </div>
+    </div>
+    <!-- Enforce rtp encryption -->
+    <div class="row">
+      <div class="col-xs-5"><label class="edit_user_label">{_ Enforce rtp encryption  _}</label></div>
       <div id="device_mediaencryptionenforce_security" class="col-xs-5">
         <i id="toggle_device_mediaencryptionenforce_security"
            class="fa fa-toggle-{% if device_doc["media"][1]["encryption"][1]["enforce_security"] %}on{% else %}off{% endif %} pointer"></i>
