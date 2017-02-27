@@ -35,7 +35,12 @@
     {% endwith %}
 
   {% else %}
-    {{ m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name account_id=account_id}]|vartrans }} 
+    {{ m.kazoo[{kz_doc_field type=type
+                             doc_id=doc_id
+                             field=field_name
+                             account_id=account_id}]
+       |vartrans
+    }} 
   {% endif %}
   <i id="edit_{{ prefix }}{{ field_name }}" class="fa fa-edit pointer" title="Edit field"></i>
 </span>
