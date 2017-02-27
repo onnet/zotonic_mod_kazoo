@@ -1,12 +1,19 @@
-<select id="{{ field_name }}_input" name="input_value" class="btn-xs btn-onnet" style="max-width:140px; height:20px; text-align:center;">
+<select id="{{ field_name }}_input"
+        name="input_value"
+        class="btn-xs btn-onnet"
+        style="max-width:140px; height:20px; text-align:center;">
   {% with m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name account_id=account_id}] as current_value %}
-  {% for option in options %}
-    {% if option[1]|is_list %}
-        <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>{{ option[2]|vartrans }}</option>
-    {% else %}
-        <option value="{{ option }}" {% if option == current_value %}selected{% endif %}>{{ option|vartrans }}</option>
-    {% endif %}
-  {% endfor %}
+    {% for option in options %}
+      {% if option[1]|is_list %}
+        <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>
+          {{ option[2]|vartrans }}
+        </option>
+      {% else %}
+        <option value="{{ option }}" {% if option == current_value %}selected{% endif %}>
+          {{ option|vartrans }}
+        </option>
+      {% endif %}
+    {% endfor %}
   {% endwith %}
 </select>
 

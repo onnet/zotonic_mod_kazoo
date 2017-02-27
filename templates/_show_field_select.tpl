@@ -4,12 +4,16 @@
     {{ m.kazoo[{kz_doc_field type="user"
                              doc_id=m.kazoo[{kz_doc_field type=type
                                                           doc_id=doc_id
+                                                          account_id=account_id
                                                           field=field_name}]
+                             account_id=account_id
                              field="first_name"}] }}
     {{ m.kazoo[{kz_doc_field type="user"
                              doc_id=m.kazoo[{kz_doc_field type=type
                                                           doc_id=doc_id
+                                                          account_id=account_id
                                                           field=field_name}]
+                             account_id=account_id
                              field="last_name"}] }}
 
   {% elseif field_name==["music_on_hold","media_id"] %}
@@ -17,7 +21,9 @@
     {% with m.kazoo[{kz_doc_field type="media"
                                   doc_id=m.kazoo[{kz_doc_field type=type
                                                                doc_id=doc_id
+                                                               account_id=account_id
                                                                field=field_name}]
+                                  account_id=account_id
                                   field="name"}]
        as media_name
     %}

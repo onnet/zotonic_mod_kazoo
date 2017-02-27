@@ -64,7 +64,8 @@ m_find_value({kz_device_doc_field, [{device_id, DeviceId}, {field, Field}]}, _M,
     kazoo_util:kz_device_doc_field(Field, DeviceId, Context);
 
 m_find_value({kz_doc_field, [{type,Type}, {doc_id, _DocId}, {field, Field}, {account_id, 'undefined'}]}, _M, Context) ->
-    m_find_value({kz_doc_field, [{type,Type}, {doc_id, _DocId}, {field, Field}, {account_id, z_context:get_session(kazoo_account_id, Context)}]}, _M, Context);
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({kz_doc_field, [{type,Type}, {doc_id, _DocId}, {field, Field}, {account_id, AccountId}]}, _M, Context);
 
 m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}, {account_id, AccountId}]}, _M, Context) ->
     case Type of
