@@ -4,27 +4,27 @@
     {{ m.kazoo[{kz_doc_field type="user"
                              doc_id=m.kazoo[{kz_doc_field type=type
                                                           doc_id=doc_id
-                                                          account_id=account_id
-                                                          field=field_name}]
-                             account_id=account_id
-                             field="first_name"}] }}
+                                                          field=field_name
+                                                          account_id=account_id}]
+                             field="first_name"
+                             account_id=account_id}] }}
     {{ m.kazoo[{kz_doc_field type="user"
                              doc_id=m.kazoo[{kz_doc_field type=type
                                                           doc_id=doc_id
-                                                          account_id=account_id
-                                                          field=field_name}]
-                             account_id=account_id
-                             field="last_name"}] }}
+                                                          field=field_name
+                                                          account_id=account_id}]
+                             field="last_name"
+                             account_id=account_id}] }}
 
   {% elseif field_name==["music_on_hold","media_id"] %}
 
     {% with m.kazoo[{kz_doc_field type="media"
                                   doc_id=m.kazoo[{kz_doc_field type=type
                                                                doc_id=doc_id
-                                                               account_id=account_id
-                                                               field=field_name}]
-                                  account_id=account_id
-                                  field="name"}]
+                                                               field=field_name
+                                                               account_id=account_id}]
+                                  field="name"
+                                  account_id=account_id}]
        as media_name
     %}
       {% if media_name %}
