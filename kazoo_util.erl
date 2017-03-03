@@ -221,6 +221,8 @@
     ,kz_list_account_c2calls/1
     ,kz_vmbox/1
     ,kz_vmbox/3
+    ,vmbox_messages/3
+    ,vmbox_message/4
     ,kz_conference/1
     ,kz_conference/3
     ,kz_conference_participant/3
@@ -1239,7 +1241,7 @@ kz_list_user_vmbox_messages(VMBoxId, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
-    Candidates = modkazoo_util:get_value(<<"messages">>, kz_list_user_vmbox_details(VMBoxId, Context)),
+    Candidates = vmbox_messages('get', VMBoxId, Context),
     FilterTS = calendar:datetime_to_gregorian_seconds(calendar:universal_time()) - (z_convert:to_integer(DaysTo) * 86400),
     MediaIds = [modkazoo_util:get_value(<<"media_id">>, X)
                 || X <- Candidates
@@ -1251,7 +1253,7 @@ kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
 
 kz_purge_voicemail(VMBoxId, MediaId, Delay, Context) ->
     timer:sleep(Delay * ?MILLISECONDS_IN_SECOND),
-    set_vm_message_folder(<<"deleted">>, VMBoxId, MediaId, Context).
+    vmbox_message('delete', MediaId, VMBoxId, Context).
 
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -2974,8 +2976,17 @@ kz_vmbox(Context) ->
             crossbar_account_request('post', API_String, DataBag, Context)
     end.
 
-kz_vmbox(Verb, VmboxId,Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VmboxId)/binary>>,
+kz_vmbox(Verb, VMBoxId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
+    crossbar_account_request(Verb, API_String, [], Context).
+
+vmbox_messages(Verb, VMBoxId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary, ?MESSAGES/binary>>,
+    crossbar_account_request(Verb, API_String, [], Context).
+
+vmbox_message(Verb, MessageId, VMBoxId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary
+                  ,?MESSAGES/binary, "/", ?TO_BIN(MessageId)/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
 kz_conference(Context) ->
@@ -4196,6 +4207,8 @@ kz_limits(Verb, AccountId, DataBag, Context) ->
     crossbar_account_request(Verb, API_String, DataBag, Context, 'return_error').
 
 save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
+  AuthToken = z_context:get_session(kazoo_auth_token, Context),
+  lager:info("IAM AuthToken: ~p",[AuthToken]),
     CurrDoc = kz_limits('get', AccountId, [], Context),
     QtyDiff = ?TO_INT(InputValue) - modkazoo_util:get_value(?TO_BIN(TrunksType), CurrDoc, 0),
     Upd = [{?TO_BIN(TrunksType), ?TO_INT(InputValue)}

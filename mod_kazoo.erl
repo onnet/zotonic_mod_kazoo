@@ -106,7 +106,7 @@ event({postback,{set_vm_message_folder,[{folder, Folder}, {vmbox_id,VMBoxId}, {m
     Context;
 
 event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _, _}, Context) ->
-    kazoo_util:set_vm_message_folder(<<"deleted">>, VMBoxId, MediaId, Context),
+    kazoo_util:vmbox_message('delete', MediaId, VMBoxId, Context),
     mod_signal:emit({user_portal_voicemails_tpl, []}, Context),
     Context;
 
