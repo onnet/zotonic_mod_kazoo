@@ -335,14 +335,31 @@ event({postback,{trigger_innoui_widget,[{arg,WidgetId}]},_,_}, Context) ->
     kazoo_util:trigger_innoui_widget(WidgetId, Context),
     Context;
 
+event({postback,invoiceme_new,_,_},Context) ->
+    try z_convert:to_float(z_context:get_q("invoice_amount",Context)) of
+        Amount when Amount == 'undefined' orelse Amount =< 0 ->
+            Context1 = z_render:update("onnet_widget_make_invoice_tpl"
+                                      ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
+                                      ,Context),
+            z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1);
+        Amount when Amount > 0 ->
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            Res = onbill_util:create_proforma_invoice(Amount, AccountId, Context),
+            lager:info("IAM Res: ~p",[Res]),
+            z_render:update("onnet_widget_make_invoice_tpl"
+                           ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"},{result, Res}], Context)
+                           ,Context)
+    catch
+        _:_ ->
+            Context1 = z_render:update("onnet_widget_make_invoice_tpl"
+                                      ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
+                                      ,Context),
+            z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1)
+    end;
+
 event({postback,invoiceme,TriggerId,_},Context) ->
   try z_convert:to_float(z_context:get_q("invoice_amount",Context)) of
-      'undefined' ->
-          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
-                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
-                                    ,Context),
-          z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1);
-      InvoiceAmount when InvoiceAmount =< 0 ->
+      InvoiceAmount when InvoiceAmount == 'undefined' orelse InvoiceAmount =< 0 ->
           Context1 = z_render:update("onnet_widget_make_invoice_tpl"
                                     ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
                                     ,Context),
