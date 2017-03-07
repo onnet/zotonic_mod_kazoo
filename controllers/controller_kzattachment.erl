@@ -114,9 +114,7 @@ onbill_modb_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),
     DocId = z_context:get_q("doc_id", Context),
     AuthToken = z_context:get_q("auth_token", Context),
-    Year = z_context:get_q("year", Context),
-    Month = z_context:get_q("month", Context),
-    case onbill_util:onbill_modb_attachment(AccountId, DocId, AuthToken, Year, Month, Context) of
+    case onbill_util:onbill_modb_attachment(AccountId, DocId, AuthToken, Context) of
         <<>> -> {error, <<>>};
         Body -> {ok, Body}
     end.
