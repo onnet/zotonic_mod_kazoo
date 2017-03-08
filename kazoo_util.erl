@@ -131,7 +131,6 @@
     ,kz_set_acc_doc/4
     ,trigger_innoui_widget/2
     ,ui_element_state/2
-    ,set_accounts_address/4
     ,lookup_numbers/3
     ,rs_add_number/3
     ,purchase_numbers/3
@@ -1800,11 +1799,6 @@ trigger_innoui_widget(ElementName, Context) ->
             kz_set_user_doc([<<"inno_ui">>,?TO_BIN(ElementName)], 'true', Context)
     end. 
 
-set_accounts_address(Line1, Line2, Line3, Context) ->
-    kz_set_acc_doc([<<"account_address">>,<<"line1">>], Line1, Context),
-    kz_set_acc_doc([<<"account_address">>,<<"line2">>], Line2, Context),
-    kz_set_acc_doc([<<"account_address">>,<<"line3">>], Line3, Context).
-    
 lookup_numbers(Country, AreaCode, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     lookup_numbers(Country, AreaCode, AccountId, Context).

@@ -335,7 +335,7 @@ event({postback,{trigger_innoui_widget,[{arg,WidgetId}]},_,_}, Context) ->
     kazoo_util:trigger_innoui_widget(WidgetId, Context),
     Context;
 
-event({postback,invoiceme_new,_,_},Context) ->
+event({postback,issue_proforma_invoice,_,_},Context) ->
     try z_convert:to_float(z_context:get_q("invoice_amount",Context)) of
         Amount when Amount == 'undefined' orelse Amount =< 0 ->
             Context1 = z_render:update("onnet_widget_make_invoice_tpl"
@@ -345,7 +345,6 @@ event({postback,invoiceme_new,_,_},Context) ->
         Amount when Amount > 0 ->
             AccountId = z_context:get_session('kazoo_account_id', Context),
             Res = onbill_util:create_proforma_invoice(Amount, AccountId, Context),
-            lager:info("IAM Res: ~p",[Res]),
             z_render:update("onnet_widget_make_invoice_tpl"
                            ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"},{result, Res}], Context)
                            ,Context)
@@ -356,48 +355,6 @@ event({postback,invoiceme_new,_,_},Context) ->
                                       ,Context),
             z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1)
     end;
-
-event({postback,invoiceme,TriggerId,_},Context) ->
-  try z_convert:to_float(z_context:get_q("invoice_amount",Context)) of
-      InvoiceAmount when InvoiceAmount == 'undefined' orelse InvoiceAmount =< 0 ->
-          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
-                                    ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
-                                    ,Context),
-          z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1);
-      InvoiceAmount when InvoiceAmount > 0 ->
-         case TriggerId of
-             "email_invoice" -> 
-                 case modkazoo_notify:send_invoice(InvoiceAmount,Context) of
-                     {'ok',_} ->
-                         Context1 = z_render:update("onnet_widget_make_invoice_tpl"
-                                                   ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
-                                                   ,Context),
-                         z_render:growl(?__("Invoice successfully sent to ", Context1)
-                                            ++z_convert:to_list(kazoo_util:kz_user_doc_field(<<"email">>, Context1))
-                                       ,Context1);
-                     _ -> 
-                         Context1 = z_render:update("onnet_widget_make_invoice_tpl"
-                                                   ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
-                                                   ,Context),
-                         z_render:growl_error(?__("Please input integer number.", Context1), Context1)
-                 end;
-             "download_invoice" -> 
-                 Context
-         end
-  catch
-      _:_ ->
-          Context1 = z_render:update("onnet_widget_make_invoice_tpl"
-                                     ,z_template:render("onnet_widget_make_invoice.tpl", [{headline,"Wire transfer"}], Context)
-                                     ,Context),
-          z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1)
-  end;
-
-event({submit,set_accounts_address,_,_}, Context) ->
-    Line1 = z_convert:to_binary(z_context:get_q("line1",Context)),
-    Line2 = z_convert:to_binary(z_context:get_q("line2",Context)),
-    Line3 = z_convert:to_binary(z_context:get_q("line3",Context)),
-    kazoo_util:set_accounts_address(Line1, Line2, Line3, Context),
-    z_render:growl(?__("Address successfully updated.", Context), Context);
 
 event({postback,new_numbers_lookup,_,_}, Context) ->
     AreaCode = case z_convert:to_binary(z_context:get_q("areacode",Context)) of
