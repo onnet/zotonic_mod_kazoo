@@ -1120,6 +1120,7 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
                     {<<"username">>, Username},
                     {<<"first_name">>, Firstname},
                     {<<"last_name">>, Surname},
+                    {<<"enabled">>, 'true'},
                     {<<"email">>, Email},
                     {<<"contact_phonenumber">>, Phonenumber},
                     {<<"password">>, UserPassword},
