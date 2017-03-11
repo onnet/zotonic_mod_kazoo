@@ -81,4 +81,59 @@
     </tr>
   </tbody>
 </table>
+<table class="table table-condensed table-centered">
+  <tbody>
+    <tr style="height: 10px; color: white!important; background-color: white!important;">
+      <td colspan="5"></td>
+    </tr>
+    <tr>
+      <th colspan="5">
+        {% wire id="arrows_"++#currservid type="click"
+                action={ toggle target="rs_account_current_services_widget_opened" }
+                action={ toggle target="arrow_right_"++#currservid }
+                action={ toggle target="arrow_down_"++#currservid }
+                action={ postback postback={trigger_innoui_widget arg="rs_account_current_services_widget_opened" } delegate="mod_kazoo" }
+        %}
+          <span id="arrows_{{ #currservid }}" style="cursor: pointer; padding-left: 0.7em;">
+            <i id="arrow_right_{{ #currservid }}"
+               style="{% if m.kazoo[{ui_element_opened element="rs_account_current_services_widget_opened"}] %}display: none;{% endif %}" 
+               class="arrowpad fa fa-arrow-circle-right"></i>
+            <i id="arrow_down_{{ #currservid }}"
+               style="{% if not m.kazoo[{ui_element_opened element="rs_account_current_services_widget_opened"}] %}display: none;{% endif %}" 
+               class="arrowpad fa fa-arrow-circle-down"></i>
+          </span>
+           {_ Current services _}:
+           <span style="float:right; margin-right1: 0.5em">
+             {_ Estimated total monthly cost _}:
+             <span style="font-weight:bold; margin-left: 0.5em; margin-right: 1em">
+               {{ m.onbill[{kz_current_services account_id=account_id}][1]["total_amount"]|currency_sign }}
+             </span>
+           </span>
+      </th>
+    </tr>
+  </tbody>
+  <tbody id="rs_account_current_services_widget_opened"
+         style="border-top: 0px;
+                {% if not m.kazoo[{ui_element_opened element="rs_account_current_services_widget_opened"}] %}
+                  display: none;
+                {% endif %}">
+
+      <tr>
+        <th>{_ Fee name _}</th>
+        <th class="text-center">{_ Rate _}</th>
+        <th class="text-center">{_ Quantity _}</th>
+        <th class="text-center">{_ Discount _}</th>
+        <th class="text-center">{_ Cost _}</th>
+      </tr>
+      {% for service_item in m.onbill[{kz_current_services account_id=account_id}][1]["services_list"] %}
+        <tr>
+          <td>{{ service_item["name"] }}</td>
+          <td class="text-center">{{ service_item["rate"]|currency_sign }}</td>
+          <td class="text-center">{{ service_item["quantity"] }}</td>
+          <td class="text-center">{{ service_item["total_discount"]|currency_sign }}</td>
+          <td class="text-center">{{ service_item["discounted_item_cost"]|currency_sign }}</td>
+        </tr>
+      {% endfor %}
+  </tbody>
+</table>
 {% endwith %}

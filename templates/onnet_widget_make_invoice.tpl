@@ -9,7 +9,7 @@
                            template="_proforma_invoices_list.tpl"
                    }
   %}
-  {% button id="cancel_proforma_invoice_list_btn" class="btn btn-xs btn-onnet pull-right display_none" text=_"cancel"
+  {% button id="cancel_proforma_invoice_list_btn" class="btn btn-xs btn-onnet pull-right display_none" text=_"issue proforma invoice"
             action={update target="onnet_widget_make_invoice_tpl"
                            template="onnet_widget_make_invoice.tpl"
                            headline=_"Wire transfer"

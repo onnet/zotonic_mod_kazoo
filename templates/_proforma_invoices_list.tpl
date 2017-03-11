@@ -9,6 +9,7 @@
       <th class="td-center">{_ VAT _}</th>
       <th class="td-center">{_ Total _}</th>
       <th class="td-center"></th>
+      <th class="td-center"></th>
     </tr>
   </thead>
   <tbody>
@@ -41,6 +42,16 @@
             <i id="{{ proforma_invoice["id"]|cleanout }}"
                class="fa fa-download zprimary"
                title="{_ Download _}"></i></a>
+        </td>
+        <td class="text-center">
+          <i id="delete_proforma_invoice_{{ proforma_invoice["id"]|cleanout }}" class="fa fa-trash-o pointer"></i>
+          {% wire id="delete_proforma_invoice_"++proforma_invoice["id"]|cleanout
+                  action={confirm text=_"Do you really want to delete this proforma invoice?"++" <br />"
+                                  action={postback postback={mark_proforma_invoice_deleted doc_id=proforma_invoice["id"]}
+                                                   delegate="mod_onbill"
+                                         }
+                         }
+          %}
         </td>
       </tr>
     {% endfor %}
