@@ -21,6 +21,9 @@ m_find_value(is_operators_session, _M, _Context) ->
 m_find_value(is_auth, _M, Context) ->
     modkazoo_auth:is_auth(Context);
 
+m_find_value(signal_filter, _M, Context) ->
+    z_session_manager:get_session_id(Context);
+
 m_find_value(is_kazoo_account_admin, _M, Context) ->
     kazoo_util:is_kazoo_account_admin(Context);
 

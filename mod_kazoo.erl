@@ -107,8 +107,7 @@ event({postback,{set_vm_message_folder,[{folder, Folder}, {vmbox_id,VMBoxId}, {m
 
 event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _, _}, Context) ->
     kazoo_util:vmbox_message('delete', MediaId, VMBoxId, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({user_portal_voicemails_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({user_portal_voicemails_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,{forgottenpwd,[]},_,_}, Context) ->
@@ -300,10 +299,9 @@ event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
         _ -> 
             case bt_util:bt_card_add(Context) of
                 "success" -> 
-                    SessionId = z_session_manager:get_session_id(Context),
                     mod_signal:emit({emit_growl_signal
-                                    ,[{'session_id', SessionId}
-                                     ,{'text',?__("Card successfully added.", Context)}
+                                    ,?SIGNAL_FILTER(Context) ++
+                                     [{'text',?__("Card successfully added.", Context)}
                                      ,{'type', 'notice'}
                                      ]}
                                     ,Context),
@@ -471,10 +469,9 @@ event({postback,{fix_allocated_numbers,[{account_id, 'undefined'}]},_,_}, Contex
     AccountId = z_context:get_session('kazoo_account_id', Context),
     event({postback,{fix_allocated_numbers,[{account_id, AccountId}]},<<>>,<<>>}, Context);
 event({postback,{fix_allocated_numbers,[{account_id, AccountId}]},_,_}, Context) ->
-    SessionId = z_session_manager:get_session_id(Context),
     mod_signal:emit({emit_growl_signal
-                    ,[{'session_id', SessionId}
-                     ,{'text',?__("Numbers refresh request sent. This could take a while", Context)}
+                    ,?SIGNAL_FILTER(Context) ++
+                     [{'text',?__("Numbers refresh request sent. This could take a while", Context)}
                      ,{'type', 'notice'}
                      ]}
                    ,Context),
@@ -551,8 +548,7 @@ event({submit,passwordForm,_,_}, Context) ->
                 {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
                 _ -> 'ok'
             end, 
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(z_render:growl(?__("User cedentials changed", Context), Context))
     end
   catch
@@ -567,21 +563,18 @@ event({submit,passwordForm,_,_}, Context) ->
 
 event({postback,{delete_user,[{user_id,UserId}]},_,_}, Context) ->
     _ = kazoo_util:delete_user(UserId, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 event({postback,{delete_device,[{device_id,DeviceId}]},_,_}, Context) ->
     _ = kazoo_util:delete_device(DeviceId, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_}, Context) ->
     case Type of
         "user" ->
             _ = kazoo_util:kz_set_user_doc(Field, 'true', DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("user_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -590,8 +583,7 @@ event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_
                            ,Context1);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(Field, 'true', DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("device_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -604,8 +596,7 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
     case Type of
         "user" ->
             _ = kazoo_util:kz_set_user_doc(Field, 'false', DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("user_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -614,8 +605,7 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
                            ,Context1);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(Field, 'false', DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("device_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -645,8 +635,7 @@ event({submit,add_new_user_form,_,_}, Context) ->
                        ,<<"user">>
                        ,z_context:get_session('kazoo_account_id', Context)
                        ,Context),
-      SessionId = z_session_manager:get_session_id(Context),
-      mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+      mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
       z_render:dialog_close(Context)
     catch
       error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
@@ -687,13 +676,11 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
     end;
 
@@ -788,8 +775,7 @@ event({postback
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
@@ -807,8 +793,7 @@ event({postback
                 Val -> z_convert:to_binary(Val)
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
@@ -824,8 +809,7 @@ event({postback
 
 event({submit,add_new_device,_,_}, Context) ->
     _ = kazoo_util:add_device(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,add_new_group,_,_}, Context) ->
@@ -833,8 +817,7 @@ event({submit,add_new_group,_,_}, Context) ->
         [] -> z_render:growl_error(?__("Please input group name.", Context), Context);
         _ ->
             _ = kazoo_util:add_group(Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_groups_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_groups_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
 
@@ -843,15 +826,13 @@ event({submit,edit_group,_,_}, Context) ->
         [] -> z_render:growl_error(?__("Please input group name.", Context), Context);
         _ ->
             _ = kazoo_util:modify_group(Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_admin_portal_groups_list_tpl, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_admin_portal_groups_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
 
 event({postback,{delete_group,[{group_id,GroupId}]},_,_}, Context) ->
     _ = kazoo_util:delete_group(GroupId, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_groups_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_groups_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({drop,_,_}=A,Context) ->
@@ -885,14 +866,12 @@ event({submit,cf_add_number,_,_},Context) ->
                     _ = kazoo_util:cf_add_pattern(Pattern,Context)
             end
     end,
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_cf_numbers_div, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_cf_numbers_div, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_delete_number,[{number,Number}]},_,_}, Context) ->
     _ = kazoo_util:cf_delete_number(Number, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_cf_numbers_div, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_cf_numbers_div, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{cf_note_number,[{action,Action},{number,Number}]},_,_},Context) ->
@@ -902,8 +881,7 @@ event({postback,{cf_note_number,[{action,Action},{number,Number}]},_,_},Context)
 event({submit,cf_edit_name,_,_},Context) ->
     _ = kazoo_util:cf_edit_name(z_context:get_q("callflow_name", Context),Context),
     _ = kazoo_util:cf_contact_list_exclude(z_context:get_q("callflow_exclude", Context),Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_cf_edit_name, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_cf_edit_name, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_user,_,_},Context) ->
@@ -998,8 +976,7 @@ event({postback,{cf_save,[{cf,"current_callflow"}]},_,_},Context) ->
 
 event({postback,{cf_delete,[{cf,"current_callflow"}]},_,_},Context) ->
     kazoo_util:cf_delete('current_callflow', Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_cf_builder_area, [{'session_id', SessionId}]}, Context);
+    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context);
 
 event({postback,{cf_ring_group_select,[{element_type,ElementType}]},_,_},Context) ->
     Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
@@ -1110,8 +1087,7 @@ event({submit,cf_select_option,_,_},Context) ->
                                ,Context);
         ExistingElementId -> 
             kazoo_util:cf_set_new_switch(ExistingElementId,z_context:get_q("switch", Context),Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_cf_builder_area, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
 
@@ -1127,16 +1103,14 @@ event({submit,cf_select_option_temporal_route,_,_},Context) ->
                                ,Context);
         ExistingElementId -> 
             kazoo_util:cf_set_new_switch(ExistingElementId,z_context:get_q("switch", Context),Context),
-            SessionId = z_session_manager:get_session_id(Context),
-            mod_signal:emit({update_cf_builder_area, [{'session_id', SessionId}]}, Context),
+            mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
 
 event({postback,{cf_load,_},_,_},Context) ->
     kazoo_util:cf_load_to_session(z_context:get_q("triggervalue", Context),Context),
     kazoo_util:cf_notes_flush(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_cf_builder_area, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{cf_reload,_},_,_},Context) ->
@@ -1145,8 +1119,7 @@ event({postback,{cf_reload,_},_,_},Context) ->
         CallflowId -> kazoo_util:cf_load_to_session(CallflowId, Context)
     end,
     kazoo_util:cf_notes_flush(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_cf_builder_area, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{check_children,[{id,BranchId},{drop_id,DropId},{drop_parent,DropParent}]},_,_},Context) ->
@@ -1163,26 +1136,22 @@ event({postback,{cf_choose_new_switch,[{element_id,ExistingElementId},{drop_pare
 
 event({submit,cf_time_of_the_day,_,_},Context) ->
     _ = kazoo_util:cf_time_of_the_day(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_time_of_the_day_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_time_of_the_day_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_time_of_the_day_rule,[{rule_id,RuleId}]},_,_},Context) ->
     _ = kazoo_util:cf_delete_time_of_the_day_rule(RuleId,Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_time_of_the_day_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_time_of_the_day_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{delete_prompt,[{prompt_id,PromptId}]},_,_},Context) ->
     _ = kazoo_util:kz_delete_prompt(PromptId,Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_media_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_media_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{delete_menu,[{menu_id,MenuId}]},_,_},Context) ->
     _ = kazoo_util:kz_menu('delete',MenuId,Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_menus_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_menus_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit, add_new_media, _, _}, Context) ->
@@ -1191,8 +1160,7 @@ event({submit, add_new_media, _, _}, Context) ->
 event({submit,kz_menu,_,_},Context) ->
     lager:info("kz_menu event variables: ~p", [z_context:get_q_all(Context)]),
     _ = kazoo_util:kz_menu(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_menus_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_menus_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_prepend_cid,_,_},Context) ->
@@ -1222,26 +1190,22 @@ event({submit,cf_select_set_cid,_,_},Context) ->
 
 event({submit,kz_vmbox,_,_},Context) ->
     _ = kazoo_util:kz_vmbox(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_vms_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_vms_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_vmbox,[{vmbox_id,VmboxId}]},_,_},Context) ->
     _ = kazoo_util:kz_vmbox('delete',VmboxId,Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_vms_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_vms_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,kz_conference,_,_},Context) ->
     _ = kazoo_util:kz_conference(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_conferences_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_conferences_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_conference,[{conference_id,ConferenceId}]},_,_},Context) ->
     _ = kazoo_util:kz_conference('delete',ConferenceId,Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_conferences_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_conferences_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,cf_select_conference,_,_},Context) ->
@@ -1481,14 +1445,12 @@ event({submit,rs_account_lookup,_,_},Context) ->
 
 event({submit,kz_trunk_server,_,_},Context) ->
     _ = kazoo_util:kz_trunk_server(Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_trunk,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     kazoo_util:kz_trunk_server_delete(TrunkId, Index, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,manage_trunk_numbers,_,_}, Context) ->
@@ -1497,14 +1459,12 @@ event({submit,manage_trunk_numbers,_,_}, Context) ->
 
 event({postback,{flush_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->
     _ = kazoo_util:kz_flush_registration_by_username(Username, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{flush_pbx_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->
     _ = kazoo_util:kz_flush_registration_by_username(Username, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,kz_webhook,_,_},Context) ->
@@ -1523,9 +1483,8 @@ event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
     Context;
 
 event({postback,refresh_user_callstats,_,_}, Context) ->
-    SessionId = z_session_manager:get_session_id(Context),
     SelectedDay = z_context:get_q("callstatsdayInput",Context),
-    mod_signal:emit({update_user_portal_call_history_tpl, [{'session_id', SessionId},{selected_day, SelectedDay}]}, Context),
+    mod_signal:emit({update_user_portal_call_history_tpl, ?SIGNAL_FILTER(Context) ++ [{selected_day, SelectedDay}]}, Context),
     Context;
 
 event({postback,refresh_admin_callstats,_,_}, Context) ->
@@ -1750,13 +1709,11 @@ event({postback,{sync_trunkstore_realms,[{account_id, AccountId}]},_,_}, Context
 
 event({postback,{ts_trunk_disable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     _ = kazoo_util:ts_trunk_disable(Index, TrunkId, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context);
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context);
 
 event({postback,{ts_trunk_enable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     _ = kazoo_util:ts_trunk_enable(Index, TrunkId, Context),
-    SessionId = z_session_manager:get_session_id(Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context);
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context);
 
 event({submit,kz_c2call,_,_},Context) ->
     _ = kazoo_util:kz_c2call(Context),
@@ -1774,8 +1731,7 @@ event({submit,kz_purge_voicemails,_,_}, Context) ->
                                           ,Context),
     case Count > 2 of
         'true' ->
-            SessionId = z_session_manager:get_session_id(Context),
-            modkazoo_util:delay_signal(Count, 'user_portal_voicemails_tpl', [{'session_id', SessionId}], Context),
+            modkazoo_util:delay_signal(Count, 'user_portal_voicemails_tpl', ?SIGNAL_FILTER(Context), Context),
             Context1 = z_render:growl(?__("Messages removal started", Context), Context);
         'false' ->
             Context1 = z_render:growl(?__("No messages to remove", Context), Context)

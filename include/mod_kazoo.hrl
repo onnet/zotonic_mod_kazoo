@@ -5,6 +5,7 @@
 -define(TO_INT(Var), z_convert:to_integer(Var)).
 -define(TO_FLT(Var), z_convert:to_float(Var)).
 -define(TO_LST(Var), z_convert:to_list(Var)).
+-define(SIGNAL_FILTER(Context), [{'signal_filter', z_session_manager:get_session_id(Context)}]).
 
 -define(TIMEZONES_LIST, [<<"Africa/Abidjan">>,
              <<"Africa/Accra">>,
