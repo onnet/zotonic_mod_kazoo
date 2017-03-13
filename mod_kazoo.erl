@@ -538,7 +538,8 @@ event({submit,passwordForm,_,_}, Context) ->
                 {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
                 _ -> 'ok'
             end, 
-            mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
             z_render:dialog_close(z_render:growl(?__("User cedentials changed", Context), Context))
     end
   catch
@@ -553,18 +554,21 @@ event({submit,passwordForm,_,_}, Context) ->
 
 event({postback,{delete_user,[{user_id,UserId}]},_,_}, Context) ->
     _ = kazoo_util:delete_user(UserId, Context),
-    mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
     Context;
 event({postback,{delete_device,[{device_id,DeviceId}]},_,_}, Context) ->
     _ = kazoo_util:delete_device(DeviceId, Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
     Context;
 
 event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_}, Context) ->
     case Type of
         "user" ->
             _ = kazoo_util:kz_set_user_doc(Field, 'true', DocId, Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
             Context1 = z_render:update("user_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -573,7 +577,8 @@ event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_
                            ,Context1);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(Field, 'true', DocId, Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
             Context1 = z_render:update("device_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -586,7 +591,8 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
     case Type of
         "user" ->
             _ = kazoo_util:kz_set_user_doc(Field, 'false', DocId, Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
             Context1 = z_render:update("user_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -595,7 +601,8 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
                            ,Context1);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(Field, 'false', DocId, Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
             Context1 = z_render:update("device_enabled_status"
                                       ,z_template:render("_enabled_status.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context)
                                       ,Context),
@@ -625,7 +632,8 @@ event({submit,add_new_user_form,_,_}, Context) ->
                        ,<<"user">>
                        ,z_context:get_session('kazoo_account_id', Context)
                        ,Context),
-      mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+      SessionId = z_session_manager:get_session_id(Context),
+      mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
       z_render:dialog_close(Context)
     catch
       error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
@@ -666,11 +674,13 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
         "device" ->
             _ = kazoo_util:kz_set_device_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
     end;
 
@@ -765,7 +775,8 @@ event({postback
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
-            mod_signal:emit({update_admin_portal_users_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_users_list_tpl, [{'session_id', SessionId}]}, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
@@ -783,7 +794,8 @@ event({postback
                 Val -> z_convert:to_binary(Val)
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
-            mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+            SessionId = z_session_manager:get_session_id(Context),
+            mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
@@ -799,7 +811,8 @@ event({postback
 
 event({submit,add_new_device,_,_}, Context) ->
     _ = kazoo_util:add_device(Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
     z_render:dialog_close(Context);
 
 event({submit,add_new_group,_,_}, Context) ->
@@ -1449,7 +1462,8 @@ event({submit,manage_trunk_numbers,_,_}, Context) ->
 
 event({postback,{flush_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->
     _ = kazoo_util:kz_flush_registration_by_username(Username, Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_devices_list_tpl, [{'session_id', SessionId}]}, Context),
     Context;
 
 event({postback,{flush_pbx_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->

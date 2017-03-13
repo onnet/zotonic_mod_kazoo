@@ -28,7 +28,7 @@
             {% include "admin_portal_resources.tpl" %}
   </span>
 
-  {% wire action={connect signal={update_admin_portal_users_list_tpl}
+  {% wire action={connect signal={update_admin_portal_users_list_tpl session_id=m.session.session_id}
                           action={update target="admin_portal_users_list_tpl"
                                          template="admin_portal_users_list.tpl"
                                          headline=_"Account's Users"
@@ -84,7 +84,7 @@
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_admin_portal_devices_list_tpl}
+  {% wire action={connect signal={update_admin_portal_devices_list_tpl session_id=m.session.session_id}
                           action={update target="admin_portal_devices_list_tpl"
                                          template="admin_portal_devices_list.tpl"
                                          headline=_"Account's Devices"

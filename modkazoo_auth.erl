@@ -104,7 +104,11 @@ maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, A
             z_render:growl_error(?__("ACL violation.", Context), Context)
     end.
 
-setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context) ->
+setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context1) ->
+    {ok, Context2} = z_session_manager:ensure_session(Context1),
+    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+    z_context:set_session(auth_user_id, Owner_Id, Context2),
+    Context = z_session:ensure_page_session(Context2),
     z_context:set_session(kazoo_owner_id, Owner_Id, Context),
     z_context:set_session(kazoo_auth_token, Auth_Token, Context),
     z_context:set_session(kazoo_account_id, Account_Id, Context),

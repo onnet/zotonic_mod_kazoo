@@ -18,7 +18,7 @@
         {% include "reseller_portal_general_settings.tpl" headline=_"General settings" %}
   </span>
 
-  {% wire action={connect signal={update_admin_portal_users_list_tpl}
+  {% wire action={connect signal={update_admin_portal_users_list_tpl session_id=m.session.session_id}
                           action={update target="admin_portal_users_list_tpl"
                                          template="admin_portal_users_list.tpl"
                                          headline=_"Account's Users"
