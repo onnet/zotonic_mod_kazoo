@@ -39,7 +39,7 @@
         <div class="col-sm-12">
           {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Credit acccount"
                     action={submit target="form_add_credit"}
-                    action={update target="billing_children_area" template="billing_children.tpl" headline=_"Account details"}
+                    action={update target="billing_children_area" template="billing_children.tpl"}
           %}
         </div>
       </div>
