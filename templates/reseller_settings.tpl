@@ -5,9 +5,8 @@
 {% endblock %}
 
 {% block service_description %}
-
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_reseller_portal_general_settings_tpl}
+  {% wire action={connect signal={update_reseller_portal_general_settings_tpl session_id=m.session.session_id}
                           action={update target="reseller_portal_general_settings_tpl"
                                          template="reseller_portal_general_settings.tpl"
                                          headline=_"General settings"
@@ -29,7 +28,7 @@
         {% include "admin_portal_users_list.tpl" headline=_"Account's Users" %}
   </span>
 
-  {% wire action={connect signal={update_reseller_portal_notifications_tpl}
+  {% wire action={connect signal={update_reseller_portal_notifications_tpl session_id=m.session.session_id}
                           action={update target="reseller_portal_notifications_tpl"
                                          template="reseller_portal_notifications.tpl"
                                          headline=_"Notifications"
@@ -41,7 +40,7 @@
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_reseller_portal_resources_tpl}
+  {% wire action={connect signal={update_reseller_portal_resources_tpl session_id=m.session.session_id}
                           action={update target="reseller_portal_resources_tpl"
                                          template="reseller_portal_resources.tpl"
                                          headline=_"Outbound routing"
@@ -52,7 +51,7 @@
         {% include "reseller_portal_resources.tpl" headline=_"Outbound routing" %}
   </span>
 
-  {% wire action={connect signal={update_rs_allocated_numbers_tpl}
+  {% wire action={connect signal={update_rs_allocated_numbers_tpl session_id=m.session.session_id}
                           action={update target="rs_allocated_numbers_tpl"
                                          template="rs_allocated_numbers.tpl"
                                          headline=_"Account's allocated numbers"
@@ -69,6 +68,5 @@
     {% include "onbill_carrier.tpl" carrier_id=carrier_id headline=_"Carrier"++" "++carrier_id %}
   {% endfor %}
 </div>
-
 {% endblock %}
 

@@ -17,7 +17,7 @@
     </span>
 
     {# Online payments #}
-    {% wire action={connect signal={update_onnet_widget_online_payment_tpl}
+    {% wire action={connect signal={update_onnet_widget_online_payment_tpl session_id=m.session.session_id}
                             action={update target="onnet_widget_online_payment_tpl"
                                            template="onnet_widget_online_payment_lazy.tpl"
                                    }
@@ -30,8 +30,9 @@
 
 <div id="paytab" class="pl-10 pr-10 col-md-6">
 
-    {% wire action={connect signal={update_rs_widget_related_documents_tpl}
-                    action={update target="rs_widget_related_documents_tpl" template="update_rs_widget_related_documents.tpl"}
+    {% wire action={connect signal={update_rs_widget_related_documents_tpl session_id=m.session.session_id}
+                            action={update target="rs_widget_related_documents_tpl"
+                                           template="update_rs_widget_related_documents.tpl"}
                    }
     %}
     <span id="rs_widget_related_documents_tpl">
@@ -40,7 +41,7 @@
 
 
     {# Transactions list #}
-    {% wire action={connect signal={update_fin_info_signal} 
+    {% wire action={connect signal={update_fin_info_signal session_id=m.session.session_id}
                             action={update target="rs_widget_transactions_list_tpl"
                                            template="rs_widget_transactions_list.tpl"
                                            headline=_"Transactions list"
@@ -53,5 +54,4 @@
 
 
 </div>
-
 {% endblock %}

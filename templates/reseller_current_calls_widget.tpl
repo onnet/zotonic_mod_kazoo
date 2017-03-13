@@ -16,7 +16,10 @@
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh" action={emit signal={reseller_current_calls_widget_tpl} } %}
+    {% button class="btn btn-xs btn-onnet pull-right"
+              text=_"refresh"
+              action={emit signal={reseller_current_calls_widget_tpl session_id=m.session.session_id}}
+    %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

@@ -1,17 +1,26 @@
 {% with m.session.selected_conference_id as conference_id %}
-{% wire name="update_conference_participants_table_line" action={postback postback="update_conference_participants_table_line" delegate="mod_kazoo"} %}
-{% wire name="add_conference_participants_table_line" action={postback postback="add_conference_participants_table_line" delegate="mod_kazoo"} %}
-{% wire name="maybe_update_conference_participants_headline" action={postback postback="maybe_update_conference_participants_headline" delegate="mod_kazoo"} %}
-
+{% wire name="update_conference_participants_table_line"
+        action={postback postback="update_conference_participants_table_line" delegate="mod_kazoo"}
+%}
+{% wire name="add_conference_participants_table_line"
+        action={postback postback="add_conference_participants_table_line" delegate="mod_kazoo"}
+%}
+{% wire name="maybe_update_conference_participants_headline"
+        action={postback postback="maybe_update_conference_participants_headline" delegate="mod_kazoo"}
+%}
 <div class="pl-10 pr-10 col-md-8 col-md-offset-2">
-  {% wire action={connect signal={update_conference_participants_tpl} action={update target="conference_participants_tpl"
-                                                                                  template="_conference_participants.tpl"
-                                                                                  headline=_"Current participants"
-                                                                                  conference_id=conference_id}}
+  {% wire action={connect signal={update_conference_participants_tpl session_id=m.session.session_id}
+                          action={update target="conference_participants_tpl"
+                                         template="_conference_participants.tpl"
+                                         headline=_"Current participants"
+                                         conference_id=conference_id}
+                 }
   %}
-  {% wire name="update_conference_participants" action={emit signal={update_conference_participants_tpl}} %}
+  {% wire name="update_conference_participants"
+          action={emit signal={update_conference_participants_tpl session_id=m.session.session_id}}
+  %}
   <span id="conference_participants_tpl">
-        {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}
+    {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}
   </span>
 </div>
 

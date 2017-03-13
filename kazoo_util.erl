@@ -873,8 +873,10 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                     case ReturnCode of
                         "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
                         "429" ->
+                            SessionId = z_session_manager:get_session_id(Context),
                             mod_signal:emit({emit_growl_signal
-                                            ,[{'text',?__("Too many requests, please wait and refresh page.", Context)}
+                                            ,[{'session_id', SessionId}
+                                             ,{'text',?__("Too many requests, please wait and refresh page.", Context)}
                                              ,{'type', 'notice'}
                                              ]
                                             }
@@ -908,8 +910,10 @@ crossbar_account_authtoken_request(Verb, API_String, DataBag, AuthToken, Context
                     case ReturnCode of
                         "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
                         "429" ->
+                            SessionId = z_session_manager:get_session_id(Context),
                             mod_signal:emit({emit_growl_signal
-                                            ,[{'text',?__("Too many requests, please wait and refresh page.", Context)}
+                                            ,[{'session_id', SessionId}
+                                             ,{'text',?__("Too many requests, please wait and refresh page.", Context)}
                                              ,{'type', 'notice'}
                                              ]
                                             }
@@ -1603,7 +1607,13 @@ kz_account_numbers_info(AccountId, Context) ->
 account_numbers_fix_plus(AccountId, Context) ->
     _ = account_numbers_fix(AccountId, Context),
     mod_signal:emit({onnet_allocated_numbers_tpl ,[]} ,Context),
-    mod_signal:emit({emit_growl_signal ,[{'text',?__("Numbers refresh finished", Context)},{'type', 'notice'}]} ,Context).
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({emit_growl_signal
+                    ,[{'session_id', SessionId}
+                     ,{'text',?__("Numbers refresh finished", Context)}
+                     ,{'type', 'notice'}
+                     ]}
+                   ,Context).
 
 account_numbers_fix(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?PHONE_NUMBERS/binary, ?FIX/binary>>,

@@ -16,8 +16,13 @@
           document.getElementById("hours").innerHTML = pad(parseInt(conf_duration_sec / 3600, 10));
       }, 1000);
     </script>
-    <i id="refresh_conference_icon" class="fa fa-refresh zprimary pointer" style="margin: 0.1em 1em 0 1em" title="Refresh"></i>
-    {% wire id="refresh_conference_icon" action={emit signal={update_conference_participants_tpl} } %}
+    <i id="refresh_conference_icon"
+       class="fa fa-refresh zprimary pointer"
+       style="margin: 0.1em 1em 0 1em"
+       title="Refresh"></i>
+    {% wire id="refresh_conference_icon"
+            action={emit signal={update_conference_participants_tpl session_id=m.session.session_id}}
+    %}
     {% include "_conference_header_lock_sign.tpl" conference_id=conference_id %}
   {% else %}
     {_ Conference is empty now _}

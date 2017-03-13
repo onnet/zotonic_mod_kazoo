@@ -63,7 +63,9 @@
                       <div name="root" class="node">
                         <div class="root">
                           <div class="top_bar">
-                            {% wire action={connect signal={update_cf_edit_name} action={update target="cf_edit_name" template="_cf_name.tpl"}} %}
+                            {% wire action={connect signal={update_cf_edit_name session_id=m.session.session_id}
+                                    action={update target="cf_edit_name" template="_cf_name.tpl"}}
+                            %}
                             <span id="cf_edit_name" class="name">
                               {% include "_cf_name.tpl" %}
                             </span>
@@ -73,7 +75,9 @@
                             <div class="tooltip">
                             </div>
                           </div>
-                          {% wire action={connect signal={update_cf_numbers_div} action={update target="cf_numbers_div" template="_cf_numbers.tpl"}} %}
+                          {% wire action={connect signal={update_cf_numbers_div session_id=m.session.session_id}
+                                                  action={update target="cf_numbers_div" template="_cf_numbers.tpl"}}
+                          %}
                           <div id="cf_numbers_div" class="content">
                               {% include "_cf_numbers.tpl" %}
                           </div>

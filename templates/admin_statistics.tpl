@@ -7,23 +7,24 @@
 {% block service_description %}
 
 <div class="pl-10 pr-10 col-md-12">
-  {% wire action={connect signal={update_admin_portal_call_details_tpl} action={update target="admin_portal_call_details_tpl" 
-                                                                                       template="admin_portal_call_details.tpl"
-                                                                                       headline=_"Call details"}}
+  {% wire action={connect signal={update_admin_portal_call_details_tpl session_id=m.session.session_id}
+                          action={update target="admin_portal_call_details_tpl" 
+                                         template="admin_portal_call_details.tpl"
+                                         headline=_"Call details"}
+                 }
   %}
   <span id="admin_portal_call_details_tpl" {% if m.session.show_cdr_legs %}class="display_none"{% endif %}>
-        {% include "admin_portal_call_details.tpl" headline=_"Call details" %}
+    {% include "admin_portal_call_details.tpl" headline=_"Call details" %}
   </span>
 
-  {% wire action={connect signal={update_admin_portal_call_history_tpl} action={update target="admin_portal_call_history_tpl" 
-                                                                                       template="admin_portal_call_history.tpl"
-                                                                                       headline=_"Account's Call History"}}
+  {% wire action={connect signal={update_admin_portal_call_history_tpl session_id=m.session.session_id}
+                          action={update target="admin_portal_call_history_tpl" 
+                                         template="admin_portal_call_history.tpl"
+                                         headline=_"Account's Call History"}
+                 }
   %}
   <span id="admin_portal_call_history_tpl">
-        {% include "admin_portal_call_history.tpl" headline=_"Account's Call History" %}
+    {% include "admin_portal_call_history.tpl" headline=_"Account's Call History" %}
   </span>
 </div>
-<!-- <div class="pl-10 pr-10 col-md-6">
-</div> -->
-
 {% endblock %}

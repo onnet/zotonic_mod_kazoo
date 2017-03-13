@@ -5,9 +5,8 @@
 {% endblock %}
 
 {% block service_description %}
-
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={reseller_current_calls_widget_tpl}
+  {% wire action={connect signal={reseller_current_calls_widget_tpl session_id=m.session.session_id}
                           action={update target="reseller_current_calls_widget_tpl"
                                          template="reseller_current_calls_widget.tpl"
                                          headline=_"System-wide current calls"
@@ -22,7 +21,7 @@
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={reseller_registrations_widget_tpl}
+  {% wire action={connect signal={reseller_registrations_widget_tpl session_id=m.session.session_id}
                           action={update target="reseller_registrations_widget_tpl"
                                          template="reseller_registrations_widget.tpl"
                                          headline=_"System-wide registrations"
@@ -32,7 +31,7 @@
   <span id="reseller_registrations_widget_tpl">
     {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
   </span>
-  {% wire action={connect signal={refresh_tasks_widget_signal}
+  {% wire action={connect signal={refresh_tasks_widget_signal session_id=m.session.session_id}
                           action={update target="tasks_widget_tpl"
                                          template="tasks_widget.tpl"
                                          headline=_"Background jobs"
@@ -43,8 +42,4 @@
     {% include "tasks_widget.tpl" headline=_"Background jobs" %}
   </span>
 </div>
-
-{# print m.kazoo.all_tasks #}
-{# print m.kazoo.account_tasks #}
-
 {% endblock %}
