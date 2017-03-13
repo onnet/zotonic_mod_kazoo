@@ -4227,7 +4227,7 @@ save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
                     CurrentAccountCredit = modkazoo_util:get_value(<<"amount">>, current_account_credit(AccountId, Context)),
                     PVT_Limits = onbill_util:onbill_pvt_limits('get', AccountId, [], Context),
                     MaybePostpayCredit =
-                        case modkazoo_util:get_value(<<"allow_postpay">>, PVT_Limits) of
+                        case modkazoo_util:get_value(<<"allow_postpay">>, PVT_Limits, 'false') of
                             'true' ->
                                 modkazoo_util:get_value(<<"max_postpay_amount">>, PVT_Limits, 0);
                             'false' -> 0
