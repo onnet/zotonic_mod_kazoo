@@ -9,7 +9,7 @@
         action={postback postback="maybe_update_conference_participants_headline" delegate="mod_kazoo"}
 %}
 <div class="pl-10 pr-10 col-md-8 col-md-offset-2">
-  {% wire action={connect signal={update_conference_participants_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_conference_participants_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="conference_participants_tpl"
                                          template="_conference_participants.tpl"
                                          headline=_"Current participants"
@@ -17,7 +17,7 @@
                  }
   %}
   {% wire name="update_conference_participants"
-          action={emit signal={update_conference_participants_tpl session_id=m.session.session_id}}
+          action={emit signal={update_conference_participants_tpl signal_filter=m.kazoo.signal_filter}}
   %}
   <span id="conference_participants_tpl">
     {% include "_conference_participants.tpl" headline=_"Current participants" conference_id=conference_id %}

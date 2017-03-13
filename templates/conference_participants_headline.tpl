@@ -21,7 +21,7 @@
        style="margin: 0.1em 1em 0 1em"
        title="Refresh"></i>
     {% wire id="refresh_conference_icon"
-            action={emit signal={update_conference_participants_tpl session_id=m.session.session_id}}
+            action={emit signal={update_conference_participants_tpl signal_filter=m.kazoo.signal_filter}}
     %}
     {% include "_conference_header_lock_sign.tpl" conference_id=conference_id %}
   {% else %}

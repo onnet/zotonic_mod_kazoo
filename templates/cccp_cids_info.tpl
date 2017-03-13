@@ -27,7 +27,7 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-{% wire action={connect signal={update_authorized_cid_table_tpl session_id=m.session.session_id}
+{% wire action={connect signal={update_authorized_cid_table_tpl signal_filter=m.kazoo.signal_filter}
                         action={update target="auth_cid_table" template="_authorized_cid_table.tpl"}
                }
 %}

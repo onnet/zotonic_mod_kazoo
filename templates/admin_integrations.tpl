@@ -7,7 +7,7 @@
 {% block service_description %}
 
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_admin_portal_webhooks_list_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_admin_portal_webhooks_list_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="admin_portal_webhooks_list_tpl"
                                          template="admin_portal_webhooks_list.tpl"
                                          headline=_"Webhooks"}
@@ -17,7 +17,7 @@
         {% include "admin_portal_webhooks_list.tpl" headline=_"Webhooks" %}
   </span>
 
-  {% wire action={connect signal={update_admin_portal_crmintegra_list_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_admin_portal_crmintegra_list_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="admin_portal_crmintegra_list_tpl"
                                          template="admin_portal_crmintegra_list.tpl"
                                          headline=_"CRM Integrations"}
@@ -28,7 +28,7 @@
   </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% wire action={connect signal={update_admin_portal_c2call_list_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_admin_portal_c2call_list_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="admin_portal_c2call_list_tpl"
                                          template="admin_portal_c2call_list.tpl"
                                          headline=_"Click-to-Call"}
@@ -37,7 +37,7 @@
   <span id="admin_portal_c2call_list_tpl">
         {% include "admin_portal_c2call_list.tpl" headline=_"Click-to-Call" %}
   </span>
-  {% wire action={connect signal={update_admin_portal_c2call_history_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_admin_portal_c2call_history_tpl signal_filter=m.kazoo.signal_filter}
                          action={update target="admin_portal_c2call_history_tpl"
                                         template="admin_portal_c2call_history.tpl"
                                         headline=_"Click-to-Call History"}

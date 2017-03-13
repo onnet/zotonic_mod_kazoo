@@ -18,7 +18,7 @@
   {{ headline }}: {{ m.kazoo.get_reseller_registrations_count }}
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"refresh"
-            action={emit signal={reseller_registrations_widget_tpl session_id=m.session.session_id}}
+            action={emit signal={reseller_registrations_widget_tpl signal_filter=m.kazoo.signal_filter}}
   %}
 {% endblock %}
 

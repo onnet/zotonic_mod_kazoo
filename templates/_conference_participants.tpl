@@ -15,7 +15,7 @@
        style="{% if not m.kazoo[{ui_element_opened element="conference_participants_widget_opened"}] %}display: none;{% endif %}"
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
-  {% wire action={connect signal={update_conference_participants_headline session_id=m.session.session_id}
+  {% wire action={connect signal={update_conference_participants_headline signal_filter=m.kazoo.signal_filter}
                           action={update target="conference_participants_headline_tpl"
                                          template="conference_participants_headline.tpl"
                                          conference_id=conference_id}

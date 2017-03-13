@@ -18,7 +18,7 @@
   {{ headline }}
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"refresh list"
-            action={emit signal={update_user_portal_devices_tpl session_id=m.session.session_id}}
+            action={emit signal={update_user_portal_devices_tpl signal_filter=m.kazoo.signal_filter}}
   %}
 {% endblock %}
 

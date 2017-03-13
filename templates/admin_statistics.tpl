@@ -7,7 +7,7 @@
 {% block service_description %}
 
 <div class="pl-10 pr-10 col-md-12">
-  {% wire action={connect signal={update_admin_portal_call_details_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_admin_portal_call_details_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="admin_portal_call_details_tpl" 
                                          template="admin_portal_call_details.tpl"
                                          headline=_"Call details"}
@@ -17,7 +17,7 @@
     {% include "admin_portal_call_details.tpl" headline=_"Call details" %}
   </span>
 
-  {% wire action={connect signal={update_admin_portal_call_history_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_admin_portal_call_history_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="admin_portal_call_history_tpl" 
                                          template="admin_portal_call_history.tpl"
                                          headline=_"Account's Call History"}

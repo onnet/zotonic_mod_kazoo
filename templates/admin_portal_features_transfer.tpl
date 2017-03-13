@@ -26,7 +26,7 @@
   <div class="text-center p-3">
     <div id="featurecode_form">
       <form>
-        {% wire action={connect signal={signal_featurecode_call_forward_activate session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_call_forward_activate signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_call_forward_activate_id"
                                                template="_featurecode_call_forward_activate.tpl"}
                        }
@@ -34,7 +34,7 @@
         <div id="featurecode_call_forward_activate_id" class="featurecode_line">
           {% include "_featurecode_call_forward_activate.tpl" %}
         </div>
-        {% wire action={connect signal={signal_featurecode_call_forward_deactivate session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_call_forward_deactivate signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_call_forward_deactivate_id"
                                                template="_featurecode_call_forward_deactivate.tpl"}
                        }
@@ -42,7 +42,7 @@
         <div id="featurecode_call_forward_deactivate_id" class="featurecode_line">
           {% include "_featurecode_call_forward_deactivate.tpl" %}
         </div>
-        {% wire action={connect signal={signal_featurecode_call_forward_toggle session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_call_forward_toggle signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_call_forward_toggle_id"
                                                template="_featurecode_call_forward_toggle.tpl"}
                        }
@@ -50,7 +50,7 @@
         <div id="featurecode_call_forward_toggle_id" class="featurecode_line">
           {% include "_featurecode_call_forward_toggle.tpl" %}
         </div>
-        {% wire action={connect signal={signal_featurecode_call_forward_update session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_call_forward_update signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_call_forward_update_id"
                                                template="_featurecode_call_forward_update.tpl"}
                        }

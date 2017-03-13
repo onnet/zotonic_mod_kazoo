@@ -26,13 +26,13 @@
   <div class="text-center p-3">
     <div id="featurecode_form">
       <form>
-        {% wire action={connect signal={signal_featurecode_hotdesk_enable session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_hotdesk_enable signal_filter=m.kazoo.signal_filter}
                 action={update target="featurecode_hotdesk_enable_id" template="_featurecode_hotdesk_enable.tpl"}}
         %}
 	<div id="featurecode_hotdesk_enable_id" class="featurecode_line">
           {% include "_featurecode_hotdesk_enable.tpl" %}
         </div>	
-        {% wire action={connect signal={signal_featurecode_hotdesk_disable session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_hotdesk_disable signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_hotdesk_disable_id"
                                 template="_featurecode_hotdesk_disable.tpl"}
                        }
@@ -40,7 +40,7 @@
         <div id="featurecode_hotdesk_disable_id" class="featurecode_line">
           {% include "_featurecode_hotdesk_disable.tpl" %}
         </div>	
-        {% wire action={connect signal={signal_featurecode_hotdesk_toggle session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_hotdesk_toggle signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_hotdesk_toggle_id"
                                                template="_featurecode_hotdesk_toggle.tpl"}
                        }

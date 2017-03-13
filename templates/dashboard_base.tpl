@@ -21,7 +21,7 @@
       {# include "services_row.tpl" #}
     </div>
   </div>
-  {% wire action={connect signal={emit_growl_signal session_id=m.session.session_id}
+  {% wire action={connect signal={emit_growl_signal signal_filter=m.kazoo.signal_filter}
                           action={update template="_z_growl_add.tpl"}
                  }
   %}

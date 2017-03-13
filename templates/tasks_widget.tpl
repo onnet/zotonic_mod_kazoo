@@ -17,7 +17,7 @@
   </span>
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"refresh"
-            action={emit signal={refresh_tasks_widget_signal session_id=m.session.session_id}}
+            action={emit signal={refresh_tasks_widget_signal signal_filter=m.kazoo.signal_filter}}
   %}
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"add task"

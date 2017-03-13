@@ -26,7 +26,7 @@
   <div class="text-center p-3">
     <div id="featurecode_form">
       <form>
-        {% wire action={connect signal={signal_featurecode_park_and_retrieve session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_park_and_retrieve signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_park_and_retrieve_id"
                                                template="_featurecode_park_and_retrieve.tpl"}
                        }
@@ -34,7 +34,7 @@
         <div id="featurecode_park_and_retrieve_id" class="featurecode_line">
           {% include "_featurecode_park_and_retrieve.tpl" %}
         </div>
-        {% wire action={connect signal={signal_featurecode_park_valet session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_park_valet signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_park_valet_id"
                                                template="_featurecode_park_valet.tpl"}
                        }
@@ -42,7 +42,7 @@
         <div id="featurecode_park_valet_id" class="featurecode_line">
           {% include "_featurecode_park_valet.tpl" %}
         </div>
-        {% wire action={connect signal={signal_featurecode_park_retrieve session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_park_retrieve signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_park_retrieve_id"
                                                template="_featurecode_park_retrieve.tpl"}
                        }

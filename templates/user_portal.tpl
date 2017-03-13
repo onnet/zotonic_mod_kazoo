@@ -13,7 +13,7 @@
 
 <div class="pl-10 pr-10 col-md-6">
 
-  {% wire action={connect signal={user_portal_voicemails_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={user_portal_voicemails_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="user_portal_voicemails_tpl"
                                          template="user_portal_voicemails.tpl"
                                          headline=_"Voicemails"}
@@ -33,7 +33,7 @@
       </div>
   </span>
 
-  {% wire action={connect signal={user_portal_faxes_incoming_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={user_portal_faxes_incoming_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="user_portal_faxes_incoming_tpl"
                                          template="user_portal_faxes_incoming.tpl"
                                          headline=_"Incoming faxes"}
@@ -55,7 +55,7 @@
       </div>
   </span>
 
-     {% wire action={connect signal={update_user_portal_call_history_tpl session_id=m.session.session_id}
+     {% wire action={connect signal={update_user_portal_call_history_tpl signal_filter=m.kazoo.signal_filter}
                              action={update target="user_portal_call_history_tpl"
                                             template="user_portal_call_history.tpl"
                                             headline=_"Call History"}
@@ -69,7 +69,7 @@
      
   </span>
   
-  {% wire action={connect signal={update_user_portal_settings_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_user_portal_settings_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="user_portal_settings_tpl"
                                          template="user_portal_settings.tpl"
                                          headline=_"Settings"}
@@ -79,7 +79,7 @@
         {% include "user_portal_settings.tpl" headline=_"Settings" %}
   </span>
 
-  {% wire action={connect signal={update_user_portal_devices_tpl session_id=m.session.session_id}
+  {% wire action={connect signal={update_user_portal_devices_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="user_portal_devices_tpl"
                                          template="user_portal_devices.tpl"
                                          headline=_"Devices"}

@@ -21,7 +21,7 @@
               action={dialog_open title=_"Add device" template="_add_device_dialog.tpl" } %}
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"refresh list"
-              action={emit signal={update_admin_portal_devices_list_tpl session_id=m.session.session_id} } %}
+              action={emit signal={update_admin_portal_devices_list_tpl signal_filter=m.kazoo.signal_filter} } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

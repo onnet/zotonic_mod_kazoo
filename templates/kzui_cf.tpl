@@ -63,7 +63,7 @@
                       <div name="root" class="node">
                         <div class="root">
                           <div class="top_bar">
-                            {% wire action={connect signal={update_cf_edit_name session_id=m.session.session_id}
+                            {% wire action={connect signal={update_cf_edit_name signal_filter=m.kazoo.signal_filter}
                                     action={update target="cf_edit_name" template="_cf_name.tpl"}}
                             %}
                             <span id="cf_edit_name" class="name">
@@ -75,7 +75,7 @@
                             <div class="tooltip">
                             </div>
                           </div>
-                          {% wire action={connect signal={update_cf_numbers_div session_id=m.session.session_id}
+                          {% wire action={connect signal={update_cf_numbers_div signal_filter=m.kazoo.signal_filter}
                                                   action={update target="cf_numbers_div" template="_cf_numbers.tpl"}}
                           %}
                           <div id="cf_numbers_div" class="content">

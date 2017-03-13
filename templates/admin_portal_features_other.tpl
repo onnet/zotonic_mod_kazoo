@@ -26,7 +26,7 @@
   <div class="text-center p-3">
     <div id="featurecode_form">
       <form>
-        {% wire action={connect signal={signal_featurecode_voicemail_check session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_voicemail_check signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_voicemail_check_id"
                                                template="_featurecode_voicemail_check.tpl"}
                        }
@@ -34,7 +34,7 @@
         <div id="featurecode_voicemail_check_id" class="featurecode_line">
           {% include "_featurecode_voicemail_check.tpl" %}
 	</div>	
-        {% wire action={connect signal={signal_featurecode_voicemail_direct session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_voicemail_direct signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_voicemail_direct_id"
                                                template="_featurecode_voicemail_direct.tpl"}
                        }
@@ -42,7 +42,7 @@
         <div id="featurecode_voicemail_direct_id" class="featurecode_line">
           {% include "_featurecode_voicemail_direct.tpl" %}
         </div>	
-        {% wire action={connect signal={signal_featurecode_intercom session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_intercom signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_intercom_id"
                                                template="_featurecode_intercom.tpl"}
                        }
@@ -50,7 +50,7 @@
         <div id="featurecode_intercom_id" class="featurecode_line">
           {% include "_featurecode_intercom.tpl" %}
         </div>	
-        {% wire action={connect signal={signal_featurecode_privacy session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_privacy signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_privacy_id"
                                                template="_featurecode_privacy.tpl"}
                        }
@@ -58,7 +58,7 @@
         <div id="featurecode_privacy_id" class="featurecode_line">
           {% include "_featurecode_privacy.tpl" %}
         </div>	
-        {% wire action={connect signal={signal_featurecode_eavesdrop session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_eavesdrop signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_eavesdrop_id"
                                                template="_featurecode_eavesdrop.tpl"}
                        }
@@ -66,7 +66,7 @@
         <div id="featurecode_eavesdrop_id" class="featurecode_line">
           {% include "_featurecode_eavesdrop.tpl" %}
         </div>	
-        {% wire action={connect signal={signal_featurecode_dynamic_cid session_id=m.session.session_id}
+        {% wire action={connect signal={signal_featurecode_dynamic_cid signal_filter=m.kazoo.signal_filter}
                                 action={update target="featurecode_dynamic_cid_id"
                                                template="_featurecode_dynamic_cid.tpl"}
                        }
