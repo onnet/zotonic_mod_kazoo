@@ -1868,7 +1868,7 @@ process_purchase_numbers([Number|_] = Numbers, AcceptCharges, Context) ->
             z_render:growl_error(?TO_LST(Message), Ctx);
         _ ->
             Ctx = lists:foldl(fun(F, J) -> F(J) end, Context, Routines),
-            modkazoo_util:delay_signal(2, 'update_fin_info_signal', [], Context),
+            modkazoo_util:delay_signal(2, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
             AccountId = z_context:get_session('kazoo_account_id', Context),
             _ = z_mqtt:publish(<<"site/phiz/public/current_account_credit_", AccountId/binary>>, <<>>, z_acl:sudo(Ctx)),
             z_render:growl(?__("Number ", Ctx)++z_convert:to_list(Number)++?__(" successfully allocated.", Ctx), Ctx)

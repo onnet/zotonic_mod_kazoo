@@ -260,9 +260,9 @@ event({postback,kazoo_transaction,_,_}, Context) ->
                 JObj ->
                     case modkazoo_util:get_value([<<"bookkeeper_info">>,<<"status">>], JObj) of
                         <<"submitted_for_settlement">> ->
-                            modkazoo_util:delay_signal(1, 'update_onnet_widget_finance_tpl', [], Context),
-                            modkazoo_util:delay_signal(4, 'update_onnet_widget_online_payment_tpl', [], Context),
-                            modkazoo_util:delay_signal(4 ,'update_fin_info_signal' ,[] ,Context),
+                            modkazoo_util:delay_signal(1, 'update_onnet_widget_online_payment_tpl', ?SIGNAL_FILTER(Context), Context),
+                            modkazoo_util:delay_signal(2, 'update_onnet_widget_finance_tpl', ?SIGNAL_FILTER(Context), Context),
+                            modkazoo_util:delay_signal(2 ,'update_fin_info_signal' , ?SIGNAL_FILTER(Context), Context),
                             z_render:growl(?__("Funds successfully added.",Context), Context);
                         E ->
                             z_render:growl_error(?__("Something went wrong: ", Context)++z_convert:to_list(E), Context)
@@ -1826,7 +1826,7 @@ event({submit,add_credit,_,_}, Context) ->
     Reason = z_context:get_q("credit_reason", Context),
     [_Day, _Month, _Year] = string:tokens(z_context:get_q("credit_date", Context),"/"),
     kazoo_util:kz_transactions_credit(<<"free">>, Amount, Reason, Description, AccountId, Context),
-    modkazoo_util:delay_signal(3 ,'update_fin_info_signal' ,[] ,Context),
+    modkazoo_util:delay_signal(3 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     z_render:dialog_close(Context);
 
 event({submit,add_debit,_,_}, Context) ->
@@ -1835,7 +1835,7 @@ event({submit,add_debit,_,_}, Context) ->
     Description = z_context:get_q("debit_description", Context),
     Reason = z_context:get_q("debit_reason", Context),
     kazoo_util:kz_transactions_debit(Amount, Reason, Description, AccountId, Context),
-    modkazoo_util:delay_signal(3 ,'update_fin_info_signal' ,[] ,Context),
+    modkazoo_util:delay_signal(3 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     z_render:dialog_close(Context);
 
 event({postback,{add_chosen_service_plan,[{account_id,AccountId}]},_,_}, Context) ->
@@ -1930,7 +1930,7 @@ event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_i
         'false' ->
             InputValue = z_context:get_q("input_value", Context),
             AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
-            modkazoo_util:delay_signal(3, 'update_fin_info_signal', [], Context),
+            modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
             kazoo_util:save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context);
         {'true', TimeLeft} ->
             z_render:dialog("<span class='zprimary'>"++?__("Trial mode restriction",Context)++"</span>"
@@ -1996,12 +1996,12 @@ event({postback,{start_task_processing,[{account_id,'undefined'},{task_id,TaskId
     event({postback,{start_task_processing,[{account_id,AccountId},{task_id,TaskId}]},<<>>,<<>>}, Context);
 event({postback,{start_task_processing,[{account_id,AccountId},{task_id,TaskId}]},_,_}, Context) ->
     kazoo_util:account_task('patch', TaskId, AccountId, [], Context),
-    modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', [], Context),
+    modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', ?SIGNAL_FILTER(Context), Context),
     Context;
 
 event({submit,add_new_task,_,_}, Context) ->
     kazoo_util:add_new_task(Context),
-    modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', [], Context),
+    modkazoo_util:delay_signal(2, 'refresh_tasks_widget_signal', ?SIGNAL_FILTER(Context), Context),
     z_render:dialog_close(z_render:growl(?__("Job pending. Don't forget to start.", Context), Context));
 
 event({drag,_,_},Context) ->
