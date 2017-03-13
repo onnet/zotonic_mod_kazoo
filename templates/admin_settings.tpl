@@ -72,7 +72,7 @@
         {% include "admin_portal_conferences_list.tpl" headline=_"Conferences" %}
   </span>
 
-  {% wire action={connect signal={update_admin_portal_trunk_list_tpl}
+  {% wire action={connect signal={update_admin_portal_trunk_list_tpl session_id=m.session.session_id}
                           action={update target="admin_portal_trunk_list_tpl"
                                          template="admin_portal_trunk_list.tpl"
                                          headline=_"Trunkstore"

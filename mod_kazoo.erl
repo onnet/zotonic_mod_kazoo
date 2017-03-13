@@ -1448,12 +1448,14 @@ event({submit,rs_account_lookup,_,_},Context) ->
 
 event({submit,kz_trunk_server,_,_},Context) ->
     _ = kazoo_util:kz_trunk_server(Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_trunk,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     kazoo_util:kz_trunk_server_delete(TrunkId, Index, Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context),
     Context;
 
 event({submit,manage_trunk_numbers,_,_}, Context) ->
@@ -1468,7 +1470,8 @@ event({postback,{flush_registration_by_username,[{sip_username, Username}]},_,_}
 
 event({postback,{flush_pbx_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->
     _ = kazoo_util:kz_flush_registration_by_username(Username, Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context),
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context),
     Context;
 
 event({submit,kz_webhook,_,_},Context) ->
@@ -1713,11 +1716,13 @@ event({postback,{sync_trunkstore_realms,[{account_id, AccountId}]},_,_}, Context
 
 event({postback,{ts_trunk_disable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     _ = kazoo_util:ts_trunk_disable(Index, TrunkId, Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context);
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context);
 
 event({postback,{ts_trunk_enable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     _ = kazoo_util:ts_trunk_enable(Index, TrunkId, Context),
-    mod_signal:emit({update_admin_portal_trunk_list_tpl, []}, Context);
+    SessionId = z_session_manager:get_session_id(Context),
+    mod_signal:emit({update_admin_portal_trunk_list_tpl, [{'session_id', SessionId}]}, Context);
 
 event({submit,kz_c2call,_,_},Context) ->
     _ = kazoo_util:kz_c2call(Context),
