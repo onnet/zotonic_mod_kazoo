@@ -404,7 +404,7 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
                    ,{number, NumberToAdd}],
             spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
             lager:info("Number add attempt AccountId: ~p",[ AccountId]),
-            mod_signal:emit({update_rs_allocated_numbers_tpl, [{account_id, AccountId}]}, Context),
+            mod_signal:emit({update_rs_allocated_numbers_tpl, ?SIGNAL_FILTER(Context) ++ [{account_id, AccountId}]}, Context),
             Context
     end;
 
@@ -1242,99 +1242,99 @@ event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eav
 
 event({postback,toggle_featurecode_voicemail_check,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_voicemail_check(Context),
-    mod_signal:emit({signal_featurecode_voicemail_check, []}, Context),
+    mod_signal:emit({signal_featurecode_voicemail_check, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_voicemail_direct,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_voicemail_direct(Context),
-    mod_signal:emit({signal_featurecode_voicemail_direct, []}, Context),
+    mod_signal:emit({signal_featurecode_voicemail_direct, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_park_and_retrieve,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_park_and_retrieve(Context),
-    mod_signal:emit({signal_featurecode_park_and_retrieve, []}, Context),
+    mod_signal:emit({signal_featurecode_park_and_retrieve, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_park_valet,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_park_valet(Context),
-    mod_signal:emit({signal_featurecode_park_valet, []}, Context),
+    mod_signal:emit({signal_featurecode_park_valet, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_park_retrieve,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_park_retrieve(Context),
-    mod_signal:emit({signal_featurecode_park_retrieve, []}, Context),
+    mod_signal:emit({signal_featurecode_park_retrieve, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_intercom,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_intercom(Context),
-    mod_signal:emit({signal_featurecode_intercom, []}, Context),
+    mod_signal:emit({signal_featurecode_intercom, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_privacy,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_privacy(Context),
-    mod_signal:emit({signal_featurecode_privacy, []}, Context),
+    mod_signal:emit({signal_featurecode_privacy, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_hotdesk_enable,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_enable(Context),
-    mod_signal:emit({signal_featurecode_hotdesk_enable, []}, Context),
+    mod_signal:emit({signal_featurecode_hotdesk_enable, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_hotdesk_disable,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_disable(Context),
-    mod_signal:emit({signal_featurecode_hotdesk_disable, []}, Context),
+    mod_signal:emit({signal_featurecode_hotdesk_disable, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_hotdesk_toggle,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_toggle(Context),
-    mod_signal:emit({signal_featurecode_hotdesk_toggle, []}, Context),
+    mod_signal:emit({signal_featurecode_hotdesk_toggle, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_call_forward_activate,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_activate(Context),
-    mod_signal:emit({signal_featurecode_call_forward_activate, []}, Context),
+    mod_signal:emit({signal_featurecode_call_forward_activate, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_call_forward_deactivate,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_deactivate(Context),
-    mod_signal:emit({signal_featurecode_call_forward_deactivate, []}, Context),
+    mod_signal:emit({signal_featurecode_call_forward_deactivate, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_call_forward_toggle,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_toggle(Context),
-    mod_signal:emit({signal_featurecode_call_forward_toggle, []}, Context),
+    mod_signal:emit({signal_featurecode_call_forward_toggle, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_featurecode_call_forward_update,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_update(Context),
-    mod_signal:emit({signal_featurecode_call_forward_update, []}, Context),
+    mod_signal:emit({signal_featurecode_call_forward_update, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,set_featurecode_dynamic_cid,_,_}, Context) ->
     _ = kazoo_util:set_featurecode_dynamic_cid(z_context:get_q("dynamic_cid_list_id",Context), Context),
-    mod_signal:emit({signal_featurecode_dynamic_cid, []}, Context),
+    mod_signal:emit({signal_featurecode_dynamic_cid, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,set_featurecode_eavesdrop,_,_}, Context) ->
     _ = kazoo_util:set_featurecode_eavesdrop(z_context:get_q("eavesdrop_approved_list_id",Context)
                                             ,z_context:get_q("eavesdrop_target_list_id",Context)
                                             ,Context),
-    mod_signal:emit({signal_featurecode_eavesdrop, []}, Context),
+    mod_signal:emit({signal_featurecode_eavesdrop, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,delete_featurecode_dynamic_cid,_,_}, Context) ->
     _ = kazoo_util:delete_featurecode(<<"dynamic_cid">>, Context),
-    mod_signal:emit({signal_featurecode_dynamic_cid, []}, Context),
+    mod_signal:emit({signal_featurecode_dynamic_cid, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,delete_featurecode_eavesdrop,_,_}, Context) ->
     _ = kazoo_util:delete_featurecode(<<"eavesdrop_feature">>, Context),
-    mod_signal:emit({signal_featurecode_eavesdrop, []}, Context),
+    mod_signal:emit({signal_featurecode_eavesdrop, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Context) ->
     _ = kazoo_util:toggle_blacklist_member(BlacklistId,Context),
-    mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_blacklists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,toggle_all_calls_recording,_,_}, Context) ->
@@ -1360,12 +1360,12 @@ event({submit,add_new_blacklist,_,_},Context) ->
                                     ,z_context:get_q("blacklist_name", Context)
                                     ,z_context:get_q_all("blacklisted_number", Context)
                                     ,Context),
-    mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_blacklists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
     _ = kazoo_util:kz_delete_blacklist(BlacklistId,Context),
-    mod_signal:emit({update_admin_portal_blacklists_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_blacklists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,rs_child_selected,_,_},Context) ->
@@ -1469,17 +1469,17 @@ event({postback,{flush_pbx_registration_by_username,[{sip_username, Username}]},
 
 event({submit,kz_webhook,_,_},Context) ->
     _ = kazoo_util:kz_webhook(Context),
-    mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_webhooks_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_webhook,[{webhook_id, WebhookId}]},_,_},Context) ->
     _ = kazoo_util:kz_webhook_delete(WebhookId, Context),
-    mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_webhooks_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
     _ = kazoo_util:kz_webhook_toggle(WebhookId, Context),
-    mod_signal:emit({update_admin_portal_webhooks_list_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_webhooks_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,refresh_user_callstats,_,_}, Context) ->
@@ -1489,7 +1489,7 @@ event({postback,refresh_user_callstats,_,_}, Context) ->
 
 event({postback,refresh_admin_callstats,_,_}, Context) ->
     SelectedDay = z_context:get_q("callstatsdayInput",Context),
-    mod_signal:emit({update_admin_portal_call_history_tpl, [{selected_day, SelectedDay}]}, Context),
+    mod_signal:emit({update_admin_portal_call_history_tpl, ?SIGNAL_FILTER(Context) ++ [{selected_day, SelectedDay}]}, Context),
     Context;
 
 event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context) ->
@@ -1508,7 +1508,7 @@ event({postback,reseller_based_routing,_,_}, Context) ->
         'false' ->
             _ = kazoo_util:set_reseller_based_routing(ResellerId, AccountId, Context)
     end,
-    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:update("account_outbound_routing_selection", z_template:render("_account_outbound_routing_selection.tpl", [], Context), Context);
 
 event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
@@ -1527,7 +1527,7 @@ event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context)
 event({postback,account_based_routing,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     _ = kazoo_util:set_account_based_routing(AccountId, Context),
-    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:update("account_outbound_routing_selection", z_template:render("_account_outbound_routing_selection.tpl", [], Context), Context);
 
 event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) ->
@@ -1536,27 +1536,27 @@ event({postback,{account_based_routing,[{account_id,AccountId}]},_,_}, Context) 
 
 event({postback,{delete_resource,[{resource_id,ResourceId}]},_,_}, Context) ->
     _ = kazoo_util:kz_resource_delete(ResourceId, Context),
-    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{toggle_resource,[{resource_id,ResourceId}]},_,_},Context) ->
     _ = kazoo_util:toggle_resource(ResourceId, Context),
-    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,resource_form,_,_}, Context) ->
     _ = kazoo_util:resource(Context),
-    mod_signal:emit({update_reseller_portal_resources_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_resources_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,add_new_list,_,_}, Context) ->
     _ = kazoo_util:account_list(Context),
-    mod_signal:emit({update_admin_portal_lists_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_lists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_list,[{list_id, ListId}]},_,_}, Context) ->
     _ = kazoo_util:delete_account_list(ListId, Context),
-    mod_signal:emit({update_admin_portal_lists_tpl, []}, Context);
+    mod_signal:emit({update_admin_portal_lists_tpl, ?SIGNAL_FILTER(Context)}, Context);
 
 event({submit,account_list_entries,_,_}, Context) ->
     ListId = z_context:get_q("list_id", Context),
@@ -1579,7 +1579,7 @@ event({submit,sendmail_test_notification,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     NotificationId = z_context:get_q("notification_id", Context),
     _ = kazoo_util:sendmail_test_notification(Email, AccountId, NotificationId, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,edit_notification_html,_,_}, Context) ->
@@ -1594,7 +1594,7 @@ event({submit,edit_notification_html,_,_}, Context) ->
     end,
     MessageBody = z_context:get_q("html_body", Context),
     _ = kazoo_util:kz_save_notification_template("text/html", NotificationId, AccountId, MessageBody, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,edit_notification_text,_,_}, Context) ->
@@ -1609,13 +1609,13 @@ event({submit,edit_notification_text,_,_}, Context) ->
     end,
     MessageBody = z_context:get_q("text_body", Context),
     _ = kazoo_util:kz_save_notification_template("text/plain", NotificationId, AccountId, MessageBody, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{remove_notification_template,[{notification_id,NotificationId}]},_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     _ = kazoo_util:kz_delete_notification_template(NotificationId, AccountId, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,add_conf_participant,_,_}, Context) ->
@@ -1717,12 +1717,12 @@ event({postback,{ts_trunk_enable,[{trunk_id,TrunkId},{server_index,Index}]},_,_}
 
 event({submit,kz_c2call,_,_},Context) ->
     _ = kazoo_util:kz_c2call(Context),
-    mod_signal:emit({update_admin_portal_c2call_list_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_c2call_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_c2call,[{c2call_id, C2CallId}]},_,_}, Context) ->
     _ = kazoo_util:kz_c2call('delete',C2CallId,Context),
-    mod_signal:emit({update_admin_portal_c2call_list_tpl, []}, Context),
+    mod_signal:emit({update_admin_portal_c2call_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,kz_purge_voicemails,_,_}, Context) ->
@@ -1740,17 +1740,17 @@ event({submit,kz_purge_voicemails,_,_}, Context) ->
 
 event({submit,kz_notifications,_,_}, Context) ->
     _ = kazoo_util:kz_notifications(Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{enable_notification,[{notification_id,NotificationId}]},_,_}, Context) ->
     _ = kazoo_util:kz_notification_toggle('true', NotificationId, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{disable_notification,[{notification_id,NotificationId}]},_,_}, Context) ->
     _ = kazoo_util:kz_notification_toggle('false', NotificationId, Context),
-    mod_signal:emit({update_reseller_portal_notifications_tpl, []}, Context),
+    mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({submit,rs_send_message,_,_}, Context) ->
@@ -1771,7 +1771,7 @@ event({postback,{toggle_reseller_status,[{account_id,AccountId}]},_,_}, Context)
 
 event({postback,{toggle_services_status,[{account_id,AccountId}]},_,_}, Context) ->
     kazoo_util:toggle_services_status(AccountId, Context),
-    mod_signal:emit({update_onbill_account_details, []}, Context),
+    mod_signal:emit({update_onbill_account_details, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,add_account_ip_acl_entry,_,_}, Context) ->
@@ -1875,13 +1875,13 @@ event({postback,toggle_show_legs_status,_,_}, Context) ->
     case z_context:get_session('show_cdr_legs', Context) of
         'true' ->
             z_context:set_session('show_cdr_legs', 'false', Context),
-            mod_signal:emit({update_admin_portal_call_details_tpl, []}, Context),
+            mod_signal:emit({update_admin_portal_call_details_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Routines = [fun(J) -> z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-off pointer pull-right"}]}], J) end
                        ,fun(J) -> z_render:wire([{fade_in, [{target, "admin_portal_call_details_tpl"}]}], J) end],
             lists:foldl(fun(F, J) -> F(J) end, Context, Routines);
         _ ->
             z_context:set_session('show_cdr_legs', 'true', Context),
-            mod_signal:emit({update_admin_portal_call_details_tpl, []}, Context),
+            mod_signal:emit({update_admin_portal_call_details_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Routines = [fun(J) -> z_render:wire([{set_class, [{target, "show_legs_toggler"},{class,"fa fa-toggle-on pointer pull-right"}]}], J) end
                        ,fun(J) -> z_render:wire([{fade_out, [{target, "admin_portal_call_details_tpl"}]}], J) end],
             lists:foldl(fun(F, J) -> F(J) end, Context, Routines)
@@ -1889,7 +1889,7 @@ event({postback,toggle_show_legs_status,_,_}, Context) ->
 
 event({postback,{cccp_field_toggler,[{doc_id,DocId},{field_name,FieldName},{signal_id,SignalId}]},_,_}, Context) ->
     _ = kazoo_util:cccp_field_toggler(DocId, FieldName, Context),
-    mod_signal:emit({z_convert:to_atom(SignalId), []}, Context),
+    mod_signal:emit({z_convert:to_atom(SignalId), ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{delete_allotment_element,[{account_id,'undefined'},{allotment_element_name,AllotmentElementName}]},_,_}, Context) ->

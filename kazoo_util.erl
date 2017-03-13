@@ -1604,7 +1604,7 @@ kz_account_numbers_info(AccountId, Context) ->
 
 account_numbers_fix_plus(AccountId, Context) ->
     _ = account_numbers_fix(AccountId, Context),
-    mod_signal:emit({onnet_allocated_numbers_tpl ,[]} ,Context),
+    mod_signal:emit({onnet_allocated_numbers_tpl, ?SIGNAL_FILTER(Context)} ,Context),
     mod_signal:emit({emit_growl_signal
                     ,?SIGNAL_FILTER(Context) ++
                      [{'text',?__("Numbers refresh finished", Context)}
@@ -2271,7 +2271,7 @@ cf_save('current_callflow', Context) ->
                 <<>> -> z_render:growl_error(?__("Something wrong happened.", Context), Context); 
                 Result ->
                     cf_set_session('current_callflow', <<"id">>, modkazoo_util:get_value(<<"id">>,Result), Context),
-                    mod_signal:emit({update_cf_builder_area, []}, Context),
+                    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
                     z_render:growl(?__("Callflow saved", Context), Context)
             end;
         Id ->
@@ -2279,7 +2279,7 @@ cf_save('current_callflow', Context) ->
             case crossbar_account_request('post', API_String, ?MK_DATABAG(z_context:get_session('current_callflow', Context)), Context) of
                 <<>> -> z_render:growl_error(?__("Something wrong happened.", Context), Context);
                 _ ->
-                    mod_signal:emit({update_cf_builder_area, []}, Context),
+                    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
                     z_render:growl(?__("Callflow saved", Context), Context)
             end
     end.
@@ -2438,7 +2438,7 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                     z_render:growl(?__("No saved brunch", Context2), Context2);
                 ParkedBranch ->
                     _ = cf_set_session('current_callflow', z_string:split(ElementId,"-"), ParkedBranch, Context),
-                    mod_signal:emit({update_cf_builder_area, []}, Context),
+                    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
                     z_render:dialog_close(Context)
             end;
         "dead_air" ->
@@ -2891,7 +2891,7 @@ upload_media(Context) ->
                         set_media_doc(z_context:get_q("prompt_id", Context), PromptName, ExistingDescr, Context)
                 end
         end,
-        mod_signal:emit({update_admin_portal_media_list_tpl, []}, Context),
+        mod_signal:emit({update_admin_portal_media_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
         z_render:dialog_close(Context)
     catch
         no_name_entered ->
@@ -3094,12 +3094,12 @@ do_conference_participant_action(Action, ParticipantId, ConferenceId, Context) -
 
 maybe_update_conference_participants_headline("add-member", ConferenceId, Context) ->
     case current_conference_participants_number(ConferenceId, Context) of
-        1 -> mod_signal:emit({update_conference_participants_headline, []}, Context);
+        1 -> mod_signal:emit({update_conference_participants_headline, ?SIGNAL_FILTER(Context)}, Context);
         _ -> 'ok'
     end;
 maybe_update_conference_participants_headline("del-member", ConferenceId, Context) ->
     case current_conference_participants_number(ConferenceId, Context) of
-        0 -> mod_signal:emit({update_conference_participants_headline, []}, Context);
+        0 -> mod_signal:emit({update_conference_participants_headline, ?SIGNAL_FILTER(Context)}, Context);
         _ -> 'ok'
     end.
 
@@ -3466,17 +3466,17 @@ check_cid_children_clean(Context) ->
             case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"match">>], z_context:get_session('current_callflow', Context)) of
                 'undefined' -> 'ok';
                 _ -> z_context:set_session('current_callflow', modkazoo_util:delete_key(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"match">>], CurrentCallflow), Context),
-                     mod_signal:emit({update_cf_builder_area, []}, Context)
+                     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context)
             end;
         "false" ->
             case modkazoo_util:get_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"nomatch">>], z_context:get_session('current_callflow', Context)) of
                 'undefined' -> 
                     z_context:set_session('current_callflow', modkazoo_util:set_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], ?EMPTY_JSON_OBJECT, CurrentCallflow), Context),
-                    mod_signal:emit({update_cf_builder_area, []}, Context);
+                    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context);
                 NoMatch -> 
                     Childless = modkazoo_util:set_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>], ?EMPTY_JSON_OBJECT, CurrentCallflow),
                     z_context:set_session('current_callflow', modkazoo_util:set_value(modkazoo_util:split_b(ElementId,"-")++[<<"children">>,<<"nomatch">>], NoMatch, Childless), Context),
-                    mod_signal:emit({update_cf_builder_area, []}, Context)
+                    mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context)
             end
     end.
 
