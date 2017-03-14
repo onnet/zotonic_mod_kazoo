@@ -77,7 +77,8 @@ echo "sleep 10" >> /etc/rc.local
 echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
 chmod a+x /etc/rc.local
 
-echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc 
+echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc
+echo "export ZOTONIC_SSL_PORT=443" >> /home/zotonic/.bashrc
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
 ```
