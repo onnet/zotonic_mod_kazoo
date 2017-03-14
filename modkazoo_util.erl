@@ -327,12 +327,17 @@ month_ago_tstamp(Context) ->
 back_to_gmt(DateTime, Context) ->
     localtime:local_to_local(DateTime, z_convert:to_list(kazoo_util:may_be_get_timezone(Context)), "GMT").
 
+datepick_to_tstamp('undefined') ->
+    'undefined';
 datepick_to_tstamp(DayMonthYear) when is_binary(DayMonthYear) ->
     [Day, Month, Year] = binary:split(DayMonthYear, <<"/">>, [global]),
     calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(Year),z_convert:to_integer(Month),z_convert:to_integer(Day)},{0,0,0}});
 datepick_to_tstamp(DayMonthYear) ->
+  lager:info("IAM DayMonthYear: ~p",[DayMonthYear]),
     datepick_to_tstamp(z_convert:to_binary(DayMonthYear)).
 
+datepick_to_tstamp_end_day('undefined') ->
+    'undefined';
 datepick_to_tstamp_end_day(DayMonthYear) when is_binary(DayMonthYear) ->
     [Day, Month, Year] = binary:split(DayMonthYear, <<"/">>, [global]),
     calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(Year),z_convert:to_integer(Month),z_convert:to_integer(Day)},{23,59,59}});
