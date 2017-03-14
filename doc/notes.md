@@ -59,7 +59,7 @@ cd /home/zotonic/
 
 git clone git://github.com/zotonic/zotonic.git 
 cd zotonic 
-git checkout release-0.13.6 
+git checkout 0.x 
 add ibrowse app to rebar.comfig or manually download to deps, make and add to ebin/zotonic.app
 vi /home/zotonic/zotonic/src/support/z_utils.erl
 ===
