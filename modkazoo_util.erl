@@ -46,6 +46,7 @@
     ,curr_month_range/0
     ,next_month_range/2
     ,datepick_to_tstamp/1
+    ,datepick_to_tstamp_end_day/1
     ,filter/2
     ,filter_undefined/1
     ,filter_empty/1
@@ -331,6 +332,12 @@ datepick_to_tstamp(DayMonthYear) when is_binary(DayMonthYear) ->
     calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(Year),z_convert:to_integer(Month),z_convert:to_integer(Day)},{0,0,0}});
 datepick_to_tstamp(DayMonthYear) ->
     datepick_to_tstamp(z_convert:to_binary(DayMonthYear)).
+
+datepick_to_tstamp_end_day(DayMonthYear) when is_binary(DayMonthYear) ->
+    [Day, Month, Year] = binary:split(DayMonthYear, <<"/">>, [global]),
+    calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(Year),z_convert:to_integer(Month),z_convert:to_integer(Day)},{23,59,59}});
+datepick_to_tstamp_end_day(DayMonthYear) ->
+    datepick_to_tstamp_end_day(z_convert:to_binary(DayMonthYear)).
 
 next_month_range(Month, Year) when Month > 0, Month < 12 ->
     month_range(Month+1, Year);
