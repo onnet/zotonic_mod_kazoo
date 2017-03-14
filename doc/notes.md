@@ -113,6 +113,9 @@ mod_ssl    listen_port    443
 mod_ssl    is_ssl    true 
 mod_ssl    is_secure    true 
 ```
+```
+zotonic modules -s phiz activate mod_ssl_self_signed
+```
 - Letsencrypt SSL (should be done as root, 443 port should be opened for check from letsencrypt side)
 
 `certbot certonly --standalone -d your_domain_name.com`
