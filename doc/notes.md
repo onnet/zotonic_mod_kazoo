@@ -60,7 +60,13 @@ cd /home/zotonic/
 git clone git://github.com/zotonic/zotonic.git 
 cd zotonic 
 git checkout 0.x 
-add ibrowse app to rebar.comfig or manually download to deps, make and add to ebin/zotonic.app
+add ibrowse
+vi /home/zotonic/.zotonic/0/zotonic.config
+    {deps,
+     [
+      {ibrowse, ".*", {git, "git://github.com/cmullaparthi/ibrowse.git", {branch, "master"}}}
+     ]}
+
 vi /home/zotonic/zotonic/src/support/z_utils.erl
 ===
 212: _M:_E -> ok
