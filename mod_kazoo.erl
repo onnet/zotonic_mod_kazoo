@@ -5,6 +5,8 @@
 -mod_description("Zotonic Kazoo user interface module").
 -mod_prio(11).
 
+-export([init/1]).
+
 -export([
      observe_search_query/2
     ,observe_postback_notify/2
@@ -16,6 +18,10 @@
 
 -include_lib("zotonic.hrl").
 -include_lib("include/mod_kazoo.hrl").
+
+init(_Context) ->
+    application:start('ibrowse'),
+    'ok'.
 
 observe_search_query(_, _) ->
     'undefined'.
