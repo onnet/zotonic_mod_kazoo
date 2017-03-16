@@ -1039,10 +1039,9 @@ create_kazoo_account(Context) ->
                     ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
                     ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
                     ,{<<"is_trial_account">>, 'true'}
-          %          ,{<<"billing_id">>,ResellerId}
                   ]}
               }]},
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ResellerId/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ResellerId/binary>>,
     case z_context:get_session(kazoo_auth_token, Context) of
         'undefined' -> {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context);
         _ -> {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, [], jiffy:encode(DataBag), Context)
@@ -1135,7 +1134,12 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
                    ]}
                }]},
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
-    crossbar_admin_request('put', API_String, DataBag, Context).
+    {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context),
+    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+    Doc = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+    UserId = modkazoo_util:get_value(<<"id">>, Doc),
+    API_String2 = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(UserId)/binary>>,
+    crossbar_admin_request('post', API_String2, ?MK_DATABAG(modkazoo_util:set_value(<<"enabled">>,'true', Doc)), Context).
 
 email_sender_name(Context) ->
     case z_context:get_session('kazoo_account_id', Context) of

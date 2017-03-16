@@ -288,9 +288,8 @@ event({postback,kazoo_transaction,_,_}, Context) ->
 
 event({postback,{bt_delete_card,[{card_id,CardId}]},_,_}, Context) ->
     kazoo_util:bt_delete_card(CardId, Context),
-    z_render:update("cards_list_body"
-                   ,z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context)
-                   ,Context);
+    mod_signal:emit({update_onnet_widget_online_payment_tpl, ?SIGNAL_FILTER(Context)}, Context),
+    Context;
 
 event({postback,{bt_make_default_card,[{card_id,CardId}]},_,_}, Context) ->
     bt_util:bt_make_default_card(CardId, Context),
@@ -310,25 +309,17 @@ event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
                                      [{'text',?__("Card successfully added.", Context)}
                                      ,{'type', 'notice'}
                                      ]}
-                                    ,Context),
-                    Routines = [fun(J) -> z_render:update("make_payment_manage_cards_tpl"
-                                                         ,z_template:render("_make_payment_manage_cards.tpl"
-                                                                           ,[{bt_customer, kazoo_util:kz_bt_customer(J)}]
-                                                                           ,J)
-                                                         ,J)
-                                end
-                               ,fun(J) -> z_render:wire([{hide, [{target, "arrow_right_saved_cards"}]}], J) end
-                               ,fun(J) -> z_render:wire([{show, [{target, "arrow_down_saved_cards"}]}], J) end
-                               ,fun(J) -> z_render:wire([{show, [{target, "cards_list_body"}]}], J) end],
-                    lists:foldl(fun(F, J) -> F(J) end, Context, Routines);
+                                    ,Context);
                 E ->
-                    Context1 = z_render:growl_error(?__(E, Context), Context),
-                    z_render:update("onnet_widget_online_payment_tpl"
-                                   ,z_template:render("onnet_widget_online_payment.tpl"
-                                                     ,[{bt_customer, kazoo_util:kz_bt_customer(Context1)}]
-                                                     ,Context1)
-                                   ,Context1)
-            end
+                    mod_signal:emit({emit_growl_signal
+                                    ,?SIGNAL_FILTER(Context) ++
+                                     [{'text',?__(E, Context)}
+                                     ,{'type', 'error'}
+                                     ]}
+                                    ,Context)
+            end,
+            mod_signal:emit({update_onnet_widget_online_payment_tpl, ?SIGNAL_FILTER(Context)}, Context),
+            Context
     end;
 
 event({postback,topup_submit_btn,_,_},Context) ->
