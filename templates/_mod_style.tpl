@@ -871,4 +871,8 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   border-radius: 0!important;
 }
 
+.width-auto-important {
+  width: auto;
+}
+
 </style>

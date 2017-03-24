@@ -5,8 +5,8 @@
         {_ Opening balance _}
         <span style="float:right; padding-right:2em;">
           {% with m.kazoo[{kz_list_transactions account_id=account_id
-                                                payments_month_chosen=payments_month_chosen
-                                                type="monthly_rollup"
+                                                selected_billing_period=selected_billing_period
+                                                type="monthly_recurring"
                          }]
              as rollup_doc
           %}
@@ -46,19 +46,20 @@
     <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="3"></td></tr>
     <tr>
       <th colspan="3">
-        {% if payments_month_chosen == now|date: 'm/Y' or not payments_month_chosen %} 
-          {_ Current balance _}
-          <span style="float:right; padding-right:2em;">
-            {% include "_current_child_account_credit.tpl" %}
-          </span>
-        {% else %}
+        {% print selected_billing_period|split:","|last|inno_timestamp_expired %} 
+        {% if selected_billing_period|split:","|last|inno_timestamp_expired == "expired" %} 
           {_ Closing balance _}
           <span style="float:right; padding-right:2em;">
             {{ m.kazoo[{kz_list_transactions account_id=account_id
-                                             payments_month_chosen=payments_month_chosen
-                                             type="next_month_rollup"
+                                             selected_billing_period=selected_billing_period
+                                             type="next_monthly_recurring"
                       }]|currency_sign
             }}
+          </span>
+        {% else %}
+          {_ Current balance _}
+          <span style="float:right; padding-right:2em;">
+            {% include "_current_child_account_credit.tpl" %}
           </span>
         {% endif %}
       </th>
