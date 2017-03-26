@@ -307,15 +307,14 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chose
     CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
     lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context)));
 
+m_find_value({kz_list_transactions,[{account_id, 'undefined'},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context);
 m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,'undefined'},{type,Type}]}, _M, Context) ->
     CurrBillingPeriod = onbill_util:current_billing_period(AccountId, Context),
     StartPeriodTS = modkazoo_util:get_value([<<"period_start">>, <<"day_begins_ts">>], CurrBillingPeriod),
     EndPeriodTS = modkazoo_util:get_value([<<"period_end">>, <<"day_ends_ts">>], CurrBillingPeriod),
     SelectedBillingPeriod = z_convert:to_list(StartPeriodTS) ++ "," ++ z_convert:to_list(EndPeriodTS),
-    m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context);
-
-m_find_value({kz_list_transactions,[{account_id, 'undefined'},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
     m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context);
 
 m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context) ->
@@ -357,6 +356,9 @@ lager:info("IAM RollupDoc: ~p", [RollupDoc]),
         "next_monthly_recurring" -> 0
     end;
 
+m_find_value({period_balance,[{account_id,'undefined'},{selected_billing_period,SelectedBillingPeriod}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({period_balance,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod}]}, _M, Context);
 m_find_value({period_balance,[{account_id,AccountId},{selected_billing_period,'undefined'}]}, _M, Context) ->
     onbill_util:period_balance(AccountId, modkazoo_util:current_tstamp(Context), Context);
 m_find_value({period_balance,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod}]}, _M, Context) ->

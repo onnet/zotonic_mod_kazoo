@@ -34,6 +34,19 @@
 <table class="table table-condensed table-centered">
   <thead>
     <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="3"></td></tr>
+  </thead>
+</table>
+
+{% include  "rs_widget_related_documents_lazy.tpl" transactions=transactions %}
+
+<table class="table table-condensed table-centered">
+  <thead>
+    <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="3"></td></tr>
+  </thead>
+</table>
+
+<table class="table table-condensed table-centered">
+  <thead>
     <tr>
       <th colspan="3">
         {% if selected_billing_period|split:","|last|inno_timestamp_expired == "expired" %} 
@@ -51,4 +64,5 @@
     </tr>
   </thead>
 </table>
+
 {% endwith %}
