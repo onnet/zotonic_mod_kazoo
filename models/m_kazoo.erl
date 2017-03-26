@@ -344,7 +344,6 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_per
                     {NextCreatedFrom, NextCreatedTo} = modkazoo_util:next_month_range(Month, Year),
                     NextTransactions = kazoo_util:kz_list_transactions(AccountId, NextCreatedFrom, NextCreatedTo, 'undefined', Context),
                     RollupDoc = kazoo_util:monthly_rollup(NextTransactions),
-lager:info("IAM RollupDoc: ~p", [RollupDoc]),
                     case modkazoo_util:get_value(<<"type">>, RollupDoc) of 
                         <<"debit">> ->
                             modkazoo_util:get_value(<<"amount">>, RollupDoc) * (-1);
