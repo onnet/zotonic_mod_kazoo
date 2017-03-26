@@ -1,21 +1,11 @@
+{% with m.kazoo[{period_balance account_id=account_id selected_billing_period=selected_billing_period}] as period_balance %}
 <table class="table table-condensed table-centered">
   <thead>
     <tr>
       <th colspan="3">
         {_ Opening balance _}
         <span style="float:right; padding-right:2em;">
-          {% with m.kazoo[{kz_list_transactions account_id=account_id
-                                                selected_billing_period=selected_billing_period
-                                                type="monthly_recurring"
-                         }]
-             as rollup_doc
-          %}
-            {% if rollup_doc[1]["type"] == "debit" %}
-              {{ (rollup_doc[1]["amount"] * (-1))|currency_sign }}
-            {% else %}
-              {{ rollup_doc[1]["amount"]|currency_sign }}
-            {% endif %}
-          {% endwith %}
+          {{ period_balance[1]["opening_balance"]|currency_sign }}
         </span>
       </th>
     </tr>
@@ -46,15 +36,10 @@
     <tr style="height: 10px; color: white!important; background-color: white!important;"><td colspan="3"></td></tr>
     <tr>
       <th colspan="3">
-        {% print selected_billing_period|split:","|last|inno_timestamp_expired %} 
         {% if selected_billing_period|split:","|last|inno_timestamp_expired == "expired" %} 
           {_ Closing balance _}
           <span style="float:right; padding-right:2em;">
-            {{ m.kazoo[{kz_list_transactions account_id=account_id
-                                             selected_billing_period=selected_billing_period
-                                             type="next_monthly_recurring"
-                      }]|currency_sign
-            }}
+            {{ period_balance[1]["closing_balance"]|currency_sign }}
           </span>
         {% else %}
           {_ Current balance _}
@@ -66,3 +51,4 @@
     </tr>
   </thead>
 </table>
+{% endwith %}

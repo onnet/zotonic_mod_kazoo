@@ -24,7 +24,7 @@
         <span style="float:right; padding-right:2em;">
           {{
             m.kazoo[{kz_list_transactions account_id=account_id
-                                          payments_month_chosen=payments_month_chosen
+                                          selected_billing_period=selected_billing_period
                                           type="debit_summ"}]
             |format_price:[".",""]
             |currency_sign
@@ -57,7 +57,7 @@
              action={update target="rs_monthly_fees_lists_table_opened"
                             template="rs_widget_monthly_fees_list_table.tpl"
                             account_id=account_id
-                            payments_month_chosen=payments_month_chosen}
+                            selected_billing_period=selected_billing_period}
     %}
   </div>
 </span>

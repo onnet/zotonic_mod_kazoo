@@ -17,7 +17,7 @@
          {_ Monthly payments _}
          <span style="float:right; padding-right:2em;">
            {{
-              m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="credit_summ"}]
+              m.kazoo[{kz_list_transactions account_id=account_id selected_billing_period=selected_billing_period type="credit_summ"}]
               |format_price:[".",""]
               |currency_sign
            }}
@@ -44,7 +44,7 @@
              action={update target="rs_payments_lists_table_opened"
                             template="rs_widget_payments_list_table.tpl"
                             account_id=account_id
-                            payments_month_chosen=payments_month_chosen}
+                            selected_billing_period=selected_billing_period}
     %}
   </div>
 </span>

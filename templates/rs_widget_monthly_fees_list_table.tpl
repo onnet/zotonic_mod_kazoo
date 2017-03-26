@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for transaction in m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="debit"}] %}
+    {% for transaction in m.kazoo[{kz_list_transactions account_id=account_id selected_billing_period=selected_billing_period type="debit"}] %}
       {% if transaction["amount"] != 0 %}
         <tr id={{ transaction["id"] }} {% if transaction["subscription_id"] %}style="cursor: pointer;"{% endif %}>
           <td class="td-center">

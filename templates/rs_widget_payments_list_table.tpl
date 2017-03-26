@@ -1,31 +1,34 @@
 <table id="rs_payments_lists_table" class="table display table-striped table-condensed">
-    <thead>
-        <tr>
-            <th class="td-center">{_ Date _}</th>
-            <th class="td-center1">{_ Description _}</th>
-            <th class="td-center">{_ Sum _}</th>
-        </tr>
-    </thead>
-    <tbody>
-            {% for transaction in m.kazoo[{kz_list_transactions account_id=account_id payments_month_chosen=payments_month_chosen type="credit"}] %}
-                <tr id={{ transaction["id"] }} {% if transaction["subscription_id"] %}style="cursor: pointer;"{% endif %}>
-                    <td class="td-center">
-                      {{ transaction["created"]|inno_timestamp_to_date }}
-                      {{ transaction["created"]|inno_timestamp_to_date:"show_tz_name" }}
-                    </td>
-                    <td class="td-center1">
-                      {% if transaction["description"] %}
-                        {{ transaction["description"] }}
-                      {% else %}
-                        {{ transaction["reason"] }}
-                      {% endif %}
-                    </td>
-                    <td class="pri-1 td-right">
-                      {{ transaction["amount"]|format_price:[".",""]|currency_sign }}
-                    </td>
-                </tr>
-            {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th class="td-center">{_ Date _}</th>
+      <th class="td-center1">{_ Description _}</th>
+      <th class="td-center">{_ Sum _}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for transaction in m.kazoo[{kz_list_transactions account_id=account_id
+                                                        selected_billing_period=selected_billing_period
+                                                        type="credit"}]
+    %}
+      <tr id={{ transaction["id"] }} {% if transaction["subscription_id"] %}style="cursor: pointer;"{% endif %}>
+        <td class="td-center">
+          {{ transaction["created"]|inno_timestamp_to_date }}
+          {{ transaction["created"]|inno_timestamp_to_date:"show_tz_name" }}
+        </td>
+        <td class="td-center1">
+          {% if transaction["description"] %}
+            {{ transaction["description"] }}
+          {% else %}
+            {{ transaction["reason"] }}
+          {% endif %}
+        </td>
+        <td class="pri-1 td-right">
+          {{ transaction["amount"]|format_price:[".",""]|currency_sign }}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% javascript %}

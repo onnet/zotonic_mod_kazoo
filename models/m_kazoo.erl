@@ -311,7 +311,7 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_per
     CurrBillingPeriod = onbill_util:current_billing_period(AccountId, Context),
     StartPeriodTS = modkazoo_util:get_value([<<"period_start">>, <<"day_begins_ts">>], CurrBillingPeriod),
     EndPeriodTS = modkazoo_util:get_value([<<"period_end">>, <<"day_ends_ts">>], CurrBillingPeriod),
-    PaymentsMonthChosen = z_convert:to_list(StartPeriodTS) ++ "," ++ z_convert:to_list(EndPeriodTS),
+    SelectedBillingPeriod = z_convert:to_list(StartPeriodTS) ++ "," ++ z_convert:to_list(EndPeriodTS),
     m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context);
 
 m_find_value({kz_list_transactions,[{account_id, 'undefined'},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context) ->
@@ -352,8 +352,17 @@ lager:info("IAM RollupDoc: ~p", [RollupDoc]),
                         _ ->
                             modkazoo_util:get_value(<<"amount">>, RollupDoc)
                     end
-            end
+            end;
+        "monthly_recurring" -> {[]};
+        "next_monthly_recurring" -> 0
     end;
+
+m_find_value({period_balance,[{account_id,AccountId},{selected_billing_period,'undefined'}]}, _M, Context) ->
+    onbill_util:period_balance(AccountId, modkazoo_util:current_tstamp(Context), Context);
+m_find_value({period_balance,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod}]}, _M, Context) ->
+    [Ts,_] = z_string:split(SelectedBillingPeriod, ","),
+    Timestamp = z_convert:to_integer(Ts),
+    onbill_util:period_balance(AccountId, Timestamp, Context);
 
 m_find_value({kz_list_ledgers,[{account_id,AccountId},{payments_month_chosen,'undefined'},{ledger_id,LedgerId}]}, _M, Context) ->
     {Year, Month, _} = erlang:date(),
