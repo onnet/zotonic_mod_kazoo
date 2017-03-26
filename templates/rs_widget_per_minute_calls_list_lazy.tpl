@@ -19,7 +19,7 @@
          {_ Per minute calls _}
          <span style="float:right; padding-right:2em;">
            {{ m.kazoo[{kz_ledgers_summ account_id=account_id
-                                       payments_month_chosen=payments_month_chosen
+                                       selected_billing_period=selected_billing_period
                                        ledger_id="per-minute-voip"}]|currency_sign
            }}
          </span>
@@ -37,7 +37,7 @@
     {% ilazy class="fa fa-spinner fa-spin fa-3x" action={update target="rs_per_minute_calls_lists_table_opened"
                                                                 template="rs_widget_per_minute_calls_list_table.tpl"
                                                                 account_id=account_id
-                                                                payments_month_chosen=payments_month_chosen}
+                                                                selected_billing_period=selected_billing_period}
     %}
   </div>
 </span>

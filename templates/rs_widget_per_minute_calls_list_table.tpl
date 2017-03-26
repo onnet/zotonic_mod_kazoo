@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for ledger in m.kazoo[{kz_list_ledgers account_id=account_id payments_month_chosen=payments_month_chosen ledger_id="per-minute-voip"}] %}
+    {% for ledger in m.kazoo[{kz_list_ledgers account_id=account_id selected_billing_period=selected_billing_period ledger_id="per-minute-voip"}] %}
       <tr id={{ ledger["id"] }} {% if ledger["subscription_id"] %}style="cursor: pointer;"{% endif %}>
         <td class="td-center">
           {{ ledger["period"][1]["start"]|inno_timestamp_to_date }}
