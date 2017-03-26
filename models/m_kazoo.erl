@@ -290,23 +290,6 @@ m_find_value(kz_list_transactions, _M, Context) ->
 m_find_value({kz_list_transactions,[{account_id,AccountId}]}, _M, Context) ->
     lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId,Context)));
 
-m_find_value({kz_list_transactions,[{account_id,'undefined'},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context);
-
-m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,'undefined'},{reason,Reason}]}, _M, Context) ->
-    {Year, Month, _} = erlang:date(),
-    PaymentsMonthChosen = z_convert:to_list(Month) ++ "/" ++ z_convert:to_list(Year),
-    m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context);
-
-m_find_value({kz_list_transactions,[{account_id,AccountId},{payments_month_chosen,PaymentsMonthChosen},{reason,Reason}]}, _M, Context) ->
-    [MonthS,YearS] = z_string:split(PaymentsMonthChosen, "/"),
-    Month = z_convert:to_integer(MonthS),
-    Year = z_convert:to_integer(YearS),
-    CreatedFrom = calendar:datetime_to_gregorian_seconds({{Year,Month,1},{0,0,0}}),
-    CreatedTo = calendar:datetime_to_gregorian_seconds({{Year,Month,calendar:last_day_of_the_month(Year, Month)},{23,59,59}}),
-    lists:sort(z_convert:to_list(kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context)));
-
 m_find_value({kz_list_transactions,[{account_id, 'undefined'},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{type,Type}]}, _M, Context);
@@ -332,27 +315,7 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_per
         "credit_summ" ->
             lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:credit_transactions(Transactions));
         "per_minute_calls_summ" ->
-            lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:per_minute_calls(Transactions));
-        "monthly_rollup" ->
-            kazoo_util:monthly_rollup(Transactions);
-        "next_month_rollup" ->
- {Year, Month, _} = erlang:date(),
-            case date() of
-                {Year, Month, _} ->
-                    modkazoo_util:get_value(<<"balance">>, kazoo_util:kz_current_balance(AccountId, Context));
-                {_,_,_} ->
-                    {NextCreatedFrom, NextCreatedTo} = modkazoo_util:next_month_range(Month, Year),
-                    NextTransactions = kazoo_util:kz_list_transactions(AccountId, NextCreatedFrom, NextCreatedTo, 'undefined', Context),
-                    RollupDoc = kazoo_util:monthly_rollup(NextTransactions),
-                    case modkazoo_util:get_value(<<"type">>, RollupDoc) of 
-                        <<"debit">> ->
-                            modkazoo_util:get_value(<<"amount">>, RollupDoc) * (-1);
-                        _ ->
-                            modkazoo_util:get_value(<<"amount">>, RollupDoc)
-                    end
-            end;
-        "monthly_recurring" -> {[]};
-        "next_monthly_recurring" -> 0
+            lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:per_minute_calls(Transactions))
     end;
 
 m_find_value({period_balance,[{account_id,'undefined'},{selected_billing_period,SelectedBillingPeriod}]}, _M, Context) ->

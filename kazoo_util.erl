@@ -338,7 +338,6 @@
     ,list_system_dialplans_names/1
     ,kz_toggle_reseller_status/2
     ,kz_toggle_account_status/2
-    ,monthly_rollup/1
     ,per_minute_calls/1
     ,credit_transactions/1
     ,debit_transactions/1
@@ -4170,13 +4169,6 @@ kz_toggle_reseller_status(AccountId, Context) ->
 
 kz_toggle_account_status(AccountId, Context) ->
     kz_toggle_account_doc(<<"enabled">>, AccountId, Context).
-
-monthly_rollup(Transactions) ->
-    Fun = fun(Transaction) -> modkazoo_util:get_value(<<"id">>, Transaction) == <<"monthly_rollup">> end,
-    case modkazoo_util:filter(Fun, Transactions) of
-        [] -> {[]};
-        [H|_] -> H
-    end.
 
 per_minute_calls(Transactions) ->
     Fun = fun(Transaction) -> modkazoo_util:get_value(<<"reason">>, Transaction) == <<"per_minute_call">> end,
