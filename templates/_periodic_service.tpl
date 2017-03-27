@@ -35,7 +35,21 @@
   </div>
   <div class="form-group">
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-3">
+        <select id="quantity" name="quantity" class="form-control margin-bottom-xs" style="padding: 0 0 0 40px;">
+          {% for option in 1|range:15 %}
+            <option value="{{ option }}"
+                    {% if not fee_id and option == 1 %}
+                      selected
+                    {% elseif option == fee_data[1]["quantity"] %}
+                      selected
+                    {% endif %}>
+              {{ option }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-sm-3">
         <input id="service_starts"
                type="text"
                class="form-control margin-bottom-xs bg_color_white"
@@ -54,7 +68,7 @@
            $('#service_starts').datepicker();
        {% endjavascript %}
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <label for="enddate_defined"
                class="checkbox-inline {% if fee_data[1]["service_ends"] %}checked{% endif %}"
                style="width: 100%">
@@ -69,7 +83,7 @@
           {_ End date _}
         </label>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <input id="service_ends"
                type="text"
                class="form-control margin-bottom-xs bg_color_white {% if not fee_data[1]["service_ends"] %}hidden{% endif %}"

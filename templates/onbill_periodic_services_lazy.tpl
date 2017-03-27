@@ -5,6 +5,7 @@
       <th class="td-center">{_ Comment _}</th>
       <th class="td-center">{_ Start date _}</th>
       <th class="td-center">{_ End date _}</th>
+      <th class="td-center">{_ Qty _}</th>
       <th class="td-center"></th>
       <th class="td-center"></th>
     </tr>
@@ -24,6 +25,13 @@
           {{ fee["service_ends"]|inno_timestamp_to_date|date:"d M Y" }}
         {% else %}
           Neverending Dream...
+        {% endif %}
+      </td>
+      <td class="td-center">
+        {% if not fee["quantity"] %}
+          1
+        {% else %}
+          {{ fee["quantity"] }}
         {% endif %}
       </td>
       <td class="td-center">

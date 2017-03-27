@@ -2095,10 +2095,16 @@ event({submit,edit_carrier_template,_,_}, Context) ->
 event({submit,periodic_fee,_,_}, Context) ->
     AccountId = ?TO_BIN(z_context:get_q("account_id", Context)),
     ServiceStarts = modkazoo_util:datepick_to_tstamp(z_context:get_q("service_starts", Context)),
-    ServiceEnds = modkazoo_util:datepick_to_tstamp_end_day(z_context:get_q("service_ends", Context)),
+    ServiceEnds =
+       case ?TO_BIN(z_context:get_q("enddate_defined", Context)) of
+          <<>> -> 'undefined';
+          _ ->
+              modkazoo_util:datepick_to_tstamp_end_day(z_context:get_q("service_ends", Context))
+       end,
     Props = modkazoo_util:filter_empty([{<<"account_id">>, ?TO_BIN(z_context:get_q("account_id", Context))}
                                        ,{<<"service_id">>, ?TO_BIN(z_context:get_q("service_id", Context))}
                                        ,{<<"comment">>, ?TO_BIN(z_context:get_q("comment", Context))}
+                                       ,{<<"quantity">>, ?TO_INT(z_context:get_q("quantity", Context))}
                                        ,{<<"service_starts">>, ServiceStarts}
                                        ,{<<"service_ends">>, ServiceEnds}
                                        ]),
