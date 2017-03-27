@@ -1,24 +1,27 @@
-
 <table id="rs_periodic_services_table" class="table display table-striped table-condensed">
   <thead>
-        <tr>
-            <th>{_ Service ID _}</th>
-            <th class="td-center">{_ Start date _}</th>
-            <th class="td-center">{_ End date _}</th>
-            <th class="td-center"></th>
-            <th class="td-center"></th>
-        </tr>
+    <tr>
+      <th>{_ Service ID _}</th>
+      <th class="td-center">{_ Comment _}</th>
+      <th class="td-center">{_ Start date _}</th>
+      <th class="td-center">{_ End date _}</th>
+      <th class="td-center"></th>
+      <th class="td-center"></th>
+    </tr>
   </thead>
   <tbody>
     {% for fee in m.onbill[{periodic_fees account_id=account_id fees_type=m.session.show_periodic_fees}] %}
     <tr>
-      <td>{{ fee["service_id"] }}</td>
+      <td>{{ fee["service_id"]|truncate:15 }}</td>
       <td class="td-center">
-        {{ fee["service_starts"]|inno_timestamp_to_date }} {{ fee["service_starts"]|inno_timestamp_to_date:"show_tz_name" }}
+        {{ fee["comment"]|truncate:20 }}
+      </td>
+      <td class="td-center">
+        {{ fee["service_starts"]|inno_timestamp_to_date|date:"d M Y" }}
       </td>
       <td class="td-center">
         {% if fee["service_ends"] %}
-          {{ fee["service_ends"]|inno_timestamp_to_date }} {{ fee["service_ends"]|inno_timestamp_to_date:"show_tz_name" }}
+          {{ fee["service_ends"]|inno_timestamp_to_date|date:"d M Y" }}
         {% else %}
           Neverending Dream...
         {% endif %}
@@ -38,17 +41,16 @@
                        }
         %}
       </td>
-           <td class="text-center">
-               <i id="delete_{{ fee["id"] }}" class="fa fa-trash-o pointer"></i>
-               {% wire id="delete_"++fee["id"]
-                       action={confirm text=_"Do you really want to delete this service?"++" <br />"
-                                       action={postback postback={mark_periodic_service_deleted fee_id=fee["id"] account_id=account_id}
-                                                        delegate="mod_kazoo"
-                                              }
-                              }
-               %}
-           </td>
-
+      <td class="text-center">
+        <i id="delete_{{ fee["id"] }}" class="fa fa-trash-o pointer"></i>
+        {% wire id="delete_"++fee["id"]
+                action={confirm text=_"Do you really want to delete this service?"++" <br />"
+                                action={postback postback={mark_periodic_service_deleted fee_id=fee["id"] account_id=account_id}
+                                                 delegate="mod_kazoo"
+                                       }
+                       }
+        %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -77,6 +79,4 @@ var oTable = $('#rs_periodic_services_table').dataTable({
 },
 
 });
-
 {% endjavascript %}
-
