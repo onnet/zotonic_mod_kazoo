@@ -28,6 +28,21 @@
 "cb_tasks"
 ```
 
+## Onbill Crossbar modules
+
+```
+"cb_onbills",
+"cb_onbill_carriers",
+"cb_onbill_variables",
+"cb_onbill_transactions",
+"cb_onbill_service_plans",
+"cb_promised_payment",
+"cb_onbill_e911",
+"cb_onbill_pvt_limits",
+"cb_onbill_trial",
+"cb_onbill_proforma",
+```
+
 ## Some DB flags to consider
 
 ```
