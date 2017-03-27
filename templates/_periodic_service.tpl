@@ -144,6 +144,8 @@
        class="form-group
               {% if fee_id and fee_data[1]["service_ends"]|inno_timestamp_expired == "active" %}
                 display_none
+              {% elseif fee_id and not fee_data[1]["service_ends"] %}
+                display_none
               {% endif %}">
     <div class="row">
       <div class="col-sm-12">
