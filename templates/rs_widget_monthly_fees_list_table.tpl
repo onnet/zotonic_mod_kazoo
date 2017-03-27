@@ -37,7 +37,7 @@
             <i id="info_{{ transaction["id"] }}" class="fa fa-info-circle zprimary pointer" title="Details"></i>
             {% wire id="info_"++transaction["id"]
                     action={postback postback={onbill_transaction_details account_id=account_id transaction_id=transaction["id"]}
-                                     delegate="mod_onbill"
+                                     delegate="mod_kazoo"
                            }
             %}
           {% endif %}

@@ -43,7 +43,7 @@
                {% wire id="delete_"++fee["id"]
                        action={confirm text=_"Do you really want to delete this service?"++" <br />"
                                        action={postback postback={mark_periodic_service_deleted fee_id=fee["id"] account_id=account_id}
-                                                        delegate="mod_onbill"
+                                                        delegate="mod_kazoo"
                                               }
                               }
                %}

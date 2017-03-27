@@ -5,7 +5,7 @@
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"refresh results"
               action={postback postback="refresh_onbill_docs"
-                               delegate="mod_onbill"
+                               delegate="mod_kazoo"
                                qarg="docsmonthInput"
                      }
     %}

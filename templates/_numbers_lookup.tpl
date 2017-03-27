@@ -46,7 +46,7 @@
   </tbody>
 </table>
 
-{% wire id="numbers_to_purchase_array_form" type="submit" postback="selected_numbers_array_form" delegate="mod_onbill" %}
+{% wire id="numbers_to_purchase_array_form" type="submit" postback="selected_numbers_array_form" delegate="mod_kazoo" %}
 <form id="numbers_to_purchase_array_form" method="post" action="postback">
   <span id="selected_numbers_array"></span>
 </form>

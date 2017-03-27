@@ -20,7 +20,7 @@
     {% wire id="pvt_limits_"++field_name++"_save"
             type="click"
             action={postback postback={save_pvt_limits_field field_name account_id} 
-                             delegate="mod_onbill" 
+                             delegate="mod_kazoo" 
                              qarg="pvt_limits_"++field_name++"_input"
                              inject_args field_name=field_name account_id=account_id
                    }

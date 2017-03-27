@@ -1,4 +1,4 @@
-{% wire id="allocate_number_form" type="submit" postback={allocate_numbers numbers=numbers_to_purchase} delegate="mod_onbill" %}
+{% wire id="allocate_number_form" type="submit" postback={allocate_numbers numbers=numbers_to_purchase} delegate="mod_kazoo" %}
 <form id="allocate_number_form" method="post" action="postback">
 <div class="form-group">
   <div class="row" style="font-size: 1.15em;">

@@ -19,7 +19,7 @@
     {% wire id="selected_billing_period"
             type="change"
             action={postback postback={refresh_rs_payments_list account_id}
-                             delegate="mod_onbill"
+                             delegate="mod_kazoo"
                              qarg="selected_billing_period"
                              inject_args account_id=account_id
                    }

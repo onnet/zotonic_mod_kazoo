@@ -1,4 +1,4 @@
-{% wire id="form_periodic_fee" type="submit" postback="periodic_fee" delegate="mod_onbill" %}
+{% wire id="form_periodic_fee" type="submit" postback="periodic_fee" delegate="mod_kazoo" %}
 {% with m.onbill[{periodic_fees account_id=account_id fee_id=fee_id}] as fee_data %}
 <form id="form_periodic_fee" method="post" action="postback">
   <div class="form-group">

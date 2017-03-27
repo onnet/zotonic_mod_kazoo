@@ -9,7 +9,7 @@
           pr_pt[1]["armed"]
     %}
         {% button id="disarm_credit_btn" class="btn btn-xs btn-onnet pull-right" text=_"cancel credit"%}
-        {% wire id="disarm_credit_btn" action={postback postback="disarm_credit" delegate="mod_onbill"} %}
+        {% wire id="disarm_credit_btn" action={postback postback="disarm_credit" delegate="mod_kazoo"} %}
     {% endif %}
 {% endblock %}
 

@@ -48,7 +48,7 @@
                                                                                              doc_id=e911_address["id"]
                                                                                              account_id=account_id
                                                                  }
-                                                        delegate="mod_onbill"
+                                                        delegate="mod_kazoo"
                                               }
                               }
                %}
@@ -60,7 +60,7 @@
                                                                                              doc_id=e911_address["id"]
                                                                                              account_id=account_id
                                                                  }
-                                                        delegate="mod_onbill"
+                                                        delegate="mod_kazoo"
                                               }
                               }
                %}
@@ -97,7 +97,7 @@
                {% wire id="delete_e911_address_"++e911_address["id"]
                        action={confirm text=_"Do you really want to delete this address?"++" <br />"
                                        action={postback postback={mark_e911_address_deleted doc_id=e911_address["id"] account_id=account_id}
-                                                        delegate="mod_onbill"
+                                                        delegate="mod_kazoo"
                                               }
                               }
                %}

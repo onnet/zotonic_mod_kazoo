@@ -1,7 +1,7 @@
 {% wire id="manage_trial_form"
         type="submit"
         postback={manage_trial_status account_id=account_id}
-        delegate="mod_onbill"
+        delegate="mod_kazoo"
 %}
 <form id="manage_trial_form" method="post" action="postback">
   <div class="form-group">

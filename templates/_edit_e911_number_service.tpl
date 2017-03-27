@@ -7,7 +7,7 @@
 {% wire id="set_e911_address_form"
         type="submit"
         postback={set_e911_address account_id=account_id}
-        delegate="mod_onbill"
+        delegate="mod_kazoo"
 %}
 <form id="set_e911_address_form" method="post" action="postback">
   <div class="form-group">

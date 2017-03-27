@@ -14,7 +14,7 @@
                 });
 </script-->
 
-{% wire id="edit-carrier-template-form" type="submit" postback="edit_carrier_template" delegate="mod_onbill" %}
+{% wire id="edit-carrier-template-form" type="submit" postback="edit_carrier_template" delegate="mod_kazoo" %}
 <form id="edit-carrier-template-form" method="post" action="postback">
   <div class="form-group">
     <textarea id="html_body" name="html_body" style="height: 300px; width: 100%">{{ m.onbill[{carrier_template carrier_id=q.carrier_id template_id=q.template_id}] }}</textarea>

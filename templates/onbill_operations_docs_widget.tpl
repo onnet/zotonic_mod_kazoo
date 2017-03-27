@@ -41,7 +41,7 @@
             {_ Generate documents _}
             {% button class="btn btn-xs btn-onnet pull-right" text=_"generate"
                       action={postback postback="generate_children_docs"
-                                       delegate="mod_onbill"
+                                       delegate="mod_kazoo"
                                        qarg="docs_month_chosen"
                              }
             %}
@@ -57,7 +57,7 @@
             {_ Email documents _}
             {% button class="btn btn-xs btn-onnet pull-right" text=_"send"
                       action={postback postback="send_children_docs"
-                                       delegate="mod_onbill"
+                                       delegate="mod_kazoo"
                                        qarg="docs_month_chosen"
                              }
             %}

@@ -16,7 +16,7 @@
     {% button class="btn btn-xs btn-onnet pull-right display_none" text=_"save" id="save_json_"++account_id
               action={postback postback={onbill_set_variables_json account_id=account_id}
                                qarg="json_storage_"++account_id
-                               delegate="mod_onbill"
+                               delegate="mod_kazoo"
                      }
      %}
     {% button class="btn btn-xs btn-onnet pull-right display_none" text=_"restore" id="restore_json_"++account_id %}

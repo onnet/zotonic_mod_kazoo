@@ -1,5 +1,5 @@
-{% wire type="submit" id="arm_credit_form" postback="arm_credit" delegate="mod_onbill" %}
-<form id="arm_credit_form" method="post" action="postback" delegate="mod_onbill">
+{% wire type="submit" id="arm_credit_form" postback="arm_credit" delegate="mod_kazoo" %}
+<form id="arm_credit_form" method="post" action="postback" delegate="mod_kazoo">
 <table id="dashboard_credit_table" class="table table-hover table-centered table-condensed">
   <thead>
     <tr>

@@ -48,7 +48,7 @@
           {% wire id="delete_proforma_invoice_"++proforma_invoice["id"]|cleanout
                   action={confirm text=_"Do you really want to delete this proforma invoice?"++" <br />"
                                   action={postback postback={mark_proforma_invoice_deleted doc_id=proforma_invoice["id"]}
-                                                   delegate="mod_onbill"
+                                                   delegate="mod_kazoo"
                                          }
                          }
           %}

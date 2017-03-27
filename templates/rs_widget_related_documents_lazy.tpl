@@ -22,7 +22,7 @@
           {% button class="btn btn-xs btn-onnet" text=_"create docs"
                     action={mask target="rs_related_documents_table_opened"}
                     action={postback postback={generate_rs_related_documents account_id doc_type}
-                                     delegate="mod_onbill"
+                                     delegate="mod_kazoo"
                                      qarg="selected_billing_period"
                                      inject_args account_id=account_id doc_type="just_an_empty_field_yet"
                            }
@@ -31,7 +31,7 @@
         {% button class="btn btn-xs btn-onnet" text=_"create reports"
                   action={mask target="rs_related_documents_table_opened"}
                   action={postback postback={generate_rs_related_documents account_id doc_type}
-                                   delegate="mod_onbill"
+                                   delegate="mod_kazoo"
                                    qarg="selected_billing_period"
                                    inject_args account_id=account_id doc_type="calls_reports"
                          }
