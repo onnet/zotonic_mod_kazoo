@@ -29,6 +29,12 @@
            {% all include "language_choice.tpl" %}
           </ul>
 
+          {% for topmenu_item in m.notifier.map.onbill_topmenu_element %}
+            {% if topmenu_item %}
+              {% include topmenu_item %}
+            {% endif %}
+          {% endfor %}
+
           {% for topmenu_item in m.notifier.map.topmenu_element %}
             {% if topmenu_item %}
               {% include topmenu_item %}
