@@ -19,6 +19,15 @@
 
  {kzattachment, ["kzattachment"], controller_kzattachment, [{use_cache, false},{content_disposition, attachment},{ssl, any}]},
 
- {signup,["signup"],         controller_template,  [ {template, "sign_up.tpl"} ]}
+ {signup,["signup"],         controller_template,  [ {template, "sign_up.tpl"} ]},
+
+
+ {billing_accounts,["billing_accounts"],         controller_template,  [ {template, "account_select_base.tpl"} ]},
+ {billing_operations,["billing_operations"],         controller_template,  [ {template, "billing_operations.tpl"} ]},
+ {dashboard,["dashboard"],         controller_template,  [ {template, "dashboard.tpl"} ]},
+ {onbill_dashboard,["onbill_dashboard"],         controller_template,  [ {template, "dashboard.tpl"} ]},
+ {onbill_finance_details,["onbill_finance_details"],         controller_template,  [ {template, "finance_details.tpl"} ]},
+ {finance_details,["finance_details"],         controller_template,  [ {template, "finance_details.tpl"} ]}
+
 
 ].
