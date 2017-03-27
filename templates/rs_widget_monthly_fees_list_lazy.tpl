@@ -14,10 +14,9 @@
         <span id="arrows_{{ #rsmfeesid }}"
               style="cursor: pointer; padding-left: 0.7em;">
           <i id="arrow_right_{{ #rsmfeesid }}"
-             style="{% if m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}" 
              class="arrowpad fa fa-arrow-circle-right"></i>
           <i id="arrow_down_{{ #rsmfeesid }}"
-             style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}" 
+             style="display: none;" 
              class="arrowpad fa fa-arrow-circle-down"></i>
         </span>
         {_ Monthly fees _}
@@ -44,14 +43,12 @@
         {% endif %}
       </th>
     </tr>
-    <tr id="{{ #mytr }}"
-        style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}">
+    <tr id="{{ #mytr }}" style="display: none;">
       <th colspan="3"></th>
     </tr>
   </thead>
 </table>
-<span id="rs_monthly_fees_lists_table_opened"
-      style="{% if not m.kazoo[{ui_element_opened element="rs_monthly_fees_lists_table_opened"}] %}display: none;{% endif %}">
+<span id="rs_monthly_fees_lists_table_opened" style="display: none;">
    <div class="text-center p-3">
     {% ilazy class="fa fa-spinner fa-spin fa-3x"
              action={update target="rs_monthly_fees_lists_table_opened"
