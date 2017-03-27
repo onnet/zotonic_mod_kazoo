@@ -12,6 +12,8 @@
     ,observe_postback_notify/2
     ,observe_kazoo_notify/2
     ,observe_topmenu_element/2
+    ,observe_onbill_topmenu_element/2
+    ,observe_currency_sign/2
     ,event/2
 ]).
 
@@ -55,6 +57,19 @@ choose_topmenu(Context) ->
     case modkazoo_auth:is_superadmin_or_reseller(Context) of
         'true' -> <<"_kazoo_topmenu_reseller.tpl">>;
         'false' -> <<"_kazoo_topmenu_hosted_pbx.tpl">>
+    end.
+
+observe_currency_sign(_A, Context) ->
+    case onbill_util:currency_sign(Context) of
+        <<"undefined">> -> 'undefined';
+        'undefined' -> 'undefined';
+        CurrencySign -> {'ok', CurrencySign}
+    end.
+
+observe_onbill_topmenu_element(_, Context) ->
+    case modkazoo_auth:is_auth(Context) of
+        'false' -> 'undefined';
+        'true' -> <<"_onbill_topmenu.tpl">>
     end.
 
 event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->
@@ -2007,8 +2022,319 @@ event({drag,_,_},Context) ->
 event({sort,_,_},Context) ->
     Context;
 
+event({postback,refresh_onbill_docs,_,_}, Context) ->
+    DocsMonthInput = z_context:get_q("docsmonthInput",Context),
+    [Month,Year] = z_string:split(DocsMonthInput,"/"),
+    mod_signal:emit({update_onbill_widget_invoices_tpl, ?SIGNAL_FILTER(Context) ++ [{'year',Year},{'month',Month}]}, Context),
+    mod_signal:emit({update_onbill_widget_vatinvoices_tpl, ?SIGNAL_FILTER(Context) ++ [{'year',Year},{'month',Month}]}, Context),
+    mod_signal:emit({update_onbill_widget_acts_tpl, ?SIGNAL_FILTER(Context) ++ [{'year',Year},{'month',Month}]}, Context),
+    mod_signal:emit({update_onbill_widget_calls_reports_tpl, ?SIGNAL_FILTER(Context) ++ [{'year',Year},{'month',Month}]}, Context),
+    Context;
+
+event({postback,{refresh_rs_payments_list,[{account_id, AccountId}]},_,_}, Context) ->
+    SelectedBillingPeriod  = z_context:get_q("selected_billing_period", Context),
+    z_render:update("rs_widget_transactions_list_tpl"
+                   ,z_template:render("rs_widget_transactions_list.tpl"
+                                     ,[{headline, ?__("Transactions list", Context)}
+                                      ,{account_id, AccountId}
+                                      ,{selected_billing_period, SelectedBillingPeriod}]
+                                     ,Context)
+                   ,Context);
+
+event({postback,{generate_rs_related_documents,[{account_id,'undefined'}, {doc_type, DocType}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    event({postback,{generate_rs_related_documents,[{account_id,AccountId}, {doc_type, DocType}]},<<>>,<<>>}, Context);
+event({postback,{generate_rs_related_documents,[{account_id,AccountId}, {doc_type, DocType}]},_,_}, Context) ->
+    SelectedBillingPeriod  = z_context:get_q("selected_billing_period", Context),
+    [Ts,_] = z_string:split(SelectedBillingPeriod, ","),
+    Timestamp = z_convert:to_integer(Ts),
+    _ = onbill_util:generate_monthly_docs(DocType, AccountId, Timestamp, Context),
+    z_render:update("rs_widget_transactions_list_tpl"
+                   ,z_template:render("rs_widget_transactions_list.tpl"
+                                     ,[{headline, ?__("Transactions list", Context)}
+                                      ,{account_id, AccountId}
+                                      ,{selected_billing_period, SelectedBillingPeriod}]
+                                     ,Context)
+                   ,Context);
+
+event({postback,generate_children_docs,_,_}, Context) ->
+    SelectedBillingPeriod  = z_context:get_q("selected_billing_period", Context),
+    [Ts,_] = z_string:split(SelectedBillingPeriod, ","),
+    Timestamp = z_convert:to_integer(Ts),
+    _ = onbill_util:generate_monthly_docs('who_cares', <<"all_children">>, Timestamp, Context),
+    z_render:growl(?__("Process started and could take a while.",Context), Context);
+
+event({postback,onbill_set_variables_json,_A,_B}, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    event({postback,{onbill_set_variables_json,[{account_id, AccountId}]},_A,_B}, Context);
+event({postback,{onbill_set_variables_json,[{account_id, AccountId}]},_,_}, Context) ->
+    JsString = z_context:get_q("json_storage_"++z_convert:to_list(AccountId), Context),
+    DataBag = {[{<<"data">>, jiffy:decode(JsString)}]},
+    growl_bad_result(onbill_util:variables(post, AccountId, DataBag, Context), Context);
+
+event({postback,{onbill_set_doc_json,[{doc_id,DocId},{doc_type, DocType}]},_,_}, Context) ->
+    JsString = z_context:get_q("json_storage_"++z_convert:to_list(DocId), Context),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    DataBag = {[{<<"data">>, jiffy:decode(JsString)}]},
+    growl_bad_result(onbill_util:(z_convert:to_atom(DocType))(post, AccountId, DocId, DataBag, Context), Context);
+
+event({submit,edit_carrier_template,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    CarrierId = z_context:get_q("carrier_id", Context),
+    TemplateId = z_context:get_q("template_id", Context),
+    MessageBody = z_context:get_q("html_body", Context),
+    _ = onbill_util:carrier_template('post'
+                                    ,[{"Content-Type", "text/html;charset=utf-8"}]
+                                    ,AccountId
+                                    ,CarrierId
+                                    ,TemplateId
+                                    ,MessageBody
+                                    ,Context),
+    z_render:dialog_close(Context);
+
+event({submit,periodic_fee,_,_}, Context) ->
+    AccountId = ?TO_BIN(z_context:get_q("account_id", Context)),
+    ServiceStarts = modkazoo_util:datepick_to_tstamp(z_context:get_q("service_starts", Context)),
+    ServiceEnds = modkazoo_util:datepick_to_tstamp_end_day(z_context:get_q("service_ends", Context)),
+    Props = modkazoo_util:filter_empty([{<<"account_id">>, ?TO_BIN(z_context:get_q("account_id", Context))}
+                                       ,{<<"service_id">>, ?TO_BIN(z_context:get_q("service_id", Context))}
+                                       ,{<<"comment">>, ?TO_BIN(z_context:get_q("comment", Context))}
+                                       ,{<<"service_starts">>, ServiceStarts}
+                                       ,{<<"service_ends">>, ServiceEnds}
+                                       ]),
+    case ?TO_BIN(z_context:get_q("fee_id", Context)) of
+        <<>> ->
+            DataBag = ?MK_DATABAG(modkazoo_util:set_values(Props, modkazoo_util:new())),
+            onbill_util:periodic_fees('put', AccountId, DataBag, Context);
+        FeeId ->
+            CurrDoc = onbill_util:periodic_fees('get', AccountId, FeeId, [], Context),
+            case ?TO_BIN(z_context:get_q("enddate_defined", Context)) of
+                <<>> ->
+                    NewDoc = modkazoo_util:delete_key(<<"service_ends">>, modkazoo_util:set_values(Props, CurrDoc)),
+                    onbill_util:periodic_fees('post', AccountId, FeeId, ?MK_DATABAG(NewDoc), Context);
+                _ ->
+                    NewDoc = modkazoo_util:set_values(Props, CurrDoc),
+                    onbill_util:periodic_fees('post', AccountId, FeeId, ?MK_DATABAG(NewDoc), Context)
+            end
+    end,
+    z_render:dialog_close(Context);
+
+event({postback,disarm_credit,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    DataBag = ?MK_DATABAG({[{<<"armed">>,false}]}),
+    PrPt = onbill_util:promised_payment('patch', AccountId, DataBag, Context),
+    z_render:update("update_widget_dashboard_credit"
+                   ,z_template:render("onbill_widget_dashboard_credit.tpl"
+                                     ,[{headline,"Credit"},{pr_pt, PrPt}]
+                                     ,Context)
+                   ,Context);
+
+event({submit,arm_credit,_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    Credit_amount = z_context:get_q("creditme",Context),
+    try z_convert:to_integer(Credit_amount) of
+        Amount ->
+            DataBag = ?MK_DATABAG({[{<<"armed">>, true}
+                                   ,{<<"amount">>, Amount}
+                                   ]}
+                                 ),
+            PrPt = onbill_util:promised_payment('patch', AccountId, DataBag, Context),
+            z_render:update("update_widget_dashboard_credit"
+                           ,z_template:render("onbill_widget_dashboard_credit.tpl"
+                                             ,[{headline,"Credit"},{pr_pt, PrPt}]
+                                             ,Context)
+                           ,Context)
+    catch
+        error:_ ->
+            z_render:growl_error(?__("Something went wrong.", Context), Context)
+    end;
+
+event({postback,{onbill_transaction_details,[{account_id,AccountId},{transaction_id, TransactionId}]},_,_}, Context) ->
+    z_render:dialog(?__("Transaction details. ID:",Context) ++ " " ++ z_convert:to_list(TransactionId)
+                   ,"_onbill_transaction_details.tpl"
+                   ,[{account_id,AccountId}
+                    ,{transaction_id, TransactionId}
+                    ,{width, "auto"}
+                    ]
+                   ,Context);
+
+event({submit,selected_numbers_array_form,_,_}, Context) ->
+    case kazoo_util:is_trial_account(Context) of
+        'false' ->
+            onbill_util:confirm_number_purchase_dialog(Context);
+        {'true', TimeLeft} -> 
+            z_render:dialog("<span class='zprimary'>"++?__("Trial mode restriction",Context)++"</span>"
+                           ,"_trial_mode_restrictions.tpl"
+                           ,[{arg, TimeLeft}]
+                           ,Context)
+    end;
+
+event({submit,{allocate_numbers,[{numbers,Numbers}]},_,_}, Context) ->
+    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    SenderName = kazoo_util:email_sender_name(Context),
+    EmailFrom = m_config:get_value('mod_kazoo', sales_email, Context),
+    Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
+           ,{login_name, z_context:get_session('kazoo_login_name', Context)}
+           ,{email_from, EmailFrom}
+           ,{clientip, ClientIP}
+           ,{sender_name, SenderName}
+           ,{numbers, Numbers}],
+    AllocateNumberEmail =
+        #email{to = EmailFrom
+              ,from = EmailFrom
+              ,html_tpl = "_email_number_purchase.tpl"
+              ,vars = Vars
+              },
+    spawn('z_email','send' ,[AllocateNumberEmail, Context]),
+    AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+    kazoo_util:process_purchase_numbers(Numbers, AcceptCharges, Context);
+
+event({submit,{set_e911_address,[{account_id,'undefined'}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    event({submit,{set_e911_address,[{account_id,AccountId}]},<<>>,<<>>}, Context);
+event({submit,{set_e911_address,[{account_id,AccountId}]},_,_}, Context) ->
+    try
+      Number = modkazoo_util:get_q_bin("number", Context),
+      case modkazoo_util:get_q_bin("confirmed_address", Context) of
+          <<"remove_address_radio">> ->
+              _ = kazoo_util:remove_e911_number_service(Number, AccountId, Context),
+              _ = mod_signal:emit({emit_growl_signal
+                                  ,?SIGNAL_FILTER(Context)
+                                   ++ [{'text',?__("Address removed", Context)},{'type', 'notice'}]}
+                                 ,Context);
+          <<AddrDocId:32/binary>> ->
+              _ = onbill_util:set_e911_address(AddrDocId, Number, AccountId, Context),
+              _ = mod_signal:emit({emit_growl_signal
+                                  ,?SIGNAL_FILTER(Context)
+                                   ++ [{'text',?__("Address configured", Context)},{'type', 'notice'}]}
+                                 ,Context);
+          _ ->
+              'ok' = modkazoo_util:check_field_filled("postal_code",Context),
+              'ok' = modkazoo_util:check_field_filled("locality",Context),
+              'ok' = modkazoo_util:check_field_filled("region",Context),
+              'ok' = modkazoo_util:check_field_filled("street_address",Context),
+              {upload, _UploadFilename, UploadTmp, _, _} = z_context:get_q("address_confirmation_file",Context),
+              false = modkazoo_util2:check_file_size_exceeded('address_confirmation_file', UploadTmp, 15000000),
+              _ = onbill_util:set_e911_address(Number, AccountId, Context),
+              _ = mod_signal:emit({emit_growl_signal
+                                  ,?SIGNAL_FILTER(Context)
+                                   ++ [{'text',?__("Address configured", Context)},{'type', 'notice'}]}
+                                 ,Context)
+      end,
+      _ = mod_signal:emit({onnet_allocated_numbers_tpl, ?SIGNAL_FILTER(Context)} ,Context),
+      modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+      z_render:update("number_services_div"
+                     ,z_template:render("_edit_e911_number_service.tpl"
+                                       ,[{number, Number},{account_id, AccountId}]
+                                       ,Context)
+                     ,Context)
+    catch
+      error:{badmatch, {true, 'address_confirmation_file'}} ->
+          z_render:growl_error(?__("Maximum file size exceeded",Context), Context);
+      error:{badmatch, []} ->
+          z_render:growl_error(?__("Please provide proof of address file",Context), Context);
+      error:{badmatch, _} ->
+          z_render:growl_error(?__("All mandatory fields should be filled in",Context), Context);
+      E1:E2 ->
+          lager:info("Err ~p:~p", [E1, E2]),
+          z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
+    end;
+
+event({submit,{edit_e911_proof_address,[{doc_id,DocId},{account_id,AccountId}]},_,_}, Context) ->
+    try
+      'ok' = modkazoo_util:check_field_filled("postal_code",Context),
+      'ok' = modkazoo_util:check_field_filled("locality",Context),
+      'ok' = modkazoo_util:check_field_filled("region",Context),
+      'ok' = modkazoo_util:check_field_filled("street_address",Context),
+      onbill_util:update_e911_doc(DocId, AccountId, Context),
+      mod_signal:emit({rs_widget_e911_addresses_tpl
+                      ,?SIGNAL_FILTER(Context)
+                       ++ [{'account_id',AccountId},{'headline',?__("E911 addresses", Context)}]
+                      }
+                     ,Context),
+      Context
+    catch
+      error:{badmatch, _} ->
+          z_render:growl_error(?__("All mandatory fields should be filled in",Context), Context);
+      E1:E2 ->
+          lager:info("Err ~p:~p", [E1, E2]),
+          z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
+    end;
+
+event({postback,{mark_e911_address_deleted,[{doc_id,DocId},{account_id,AccountId}]},_,_}, Context) ->
+    onbill_util:e911_address('delete', DocId, AccountId, [], Context),
+    mod_signal:emit({rs_widget_e911_addresses_tpl
+                    ,?SIGNAL_FILTER(Context)
+                     ++ [{'account_id',AccountId},{'headline',?__("E911 addresses", Context)}]
+                    }
+                   ,Context),
+    Context;
+
+event({postback,{mark_proforma_invoice_deleted,[{doc_id,DocId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    onbill_util:onbill_proforma_doc('delete', DocId, AccountId, [], Context),
+    z_render:update("proforma_invoice_span",z_template:render("_proforma_invoices_list.tpl",[],Context),Context);
+
+event({postback,{mark_periodic_service_deleted,[{fee_id,FeeId},{account_id,AccountId}]},_,_}, Context) ->
+    onbill_util:periodic_fees('delete', AccountId, FeeId, [], Context),
+    mod_signal:emit({update_onbill_periodic_services_lazy_tpl, ?SIGNAL_FILTER(Context)}, Context),
+    Context;
+
+event({postback,{set_e911_address_confirmed,[{flag, Flag},{doc_id,DocId},{account_id,AccountId}]},_,_}, Context) ->
+    onbill_util:confirm_e911_address(z_convert:to_bool(Flag), DocId, AccountId, Context),
+    mod_signal:emit({rs_widget_e911_addresses_tpl
+                    ,?SIGNAL_FILTER(Context)
+                     ++ [{'account_id',AccountId},{'headline',?__("E911 addresses", Context)}]
+                    }
+                   ,Context),
+    Context;
+
+event({submit,{manage_trial_status,[{account_id,AccountId}]},_,_}, Context) ->
+    case modkazoo_util:get_q_bin("manage_trial_status", Context) of
+        <<"remove_trial_status">> ->
+            onbill_util:onbill_trial('delete', AccountId, [], Context),
+            modkazoo_util:delay_signal(1, 'update_onbill_account_details', ?SIGNAL_FILTER(Context), Context),
+            modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+            z_render:dialog_close(Context);
+        <<"set_account_type">> ->
+            case modkazoo_util:get_q_bin("account_type", Context) of
+                <<"postpaid">> ->
+                    Amount = modkazoo_util:get_q_bin("max_postpay_amount", Context),
+                    List = [{<<"allow_postpay">>, 'true'}
+                           ,{<<"max_postpay_amount">>, Amount}
+                           ],
+                    onbill_util:onbill_pvt_limits('post', AccountId, ?MK_DATABAG(?JSON_WRAPPER(List)), Context);
+                _ ->
+                    onbill_util:save_pvt_limits_field('false', <<"allow_postpay">>, AccountId, Context)
+            end,
+            z_render:dialog(?__("Trial status manager", Context)
+                           ,"_rs_trial_status_manager.tpl"
+                           ,[{account_id,AccountId}
+                            ,{trial_time_left, kazoo_util:kz_account_doc_field(<<"trial_time_left">>, AccountId, Context)}
+                            ]
+                           ,Context);
+        <<"new_expiration_date">> ->
+            ExpirationString = modkazoo_util:get_q_bin("new_expiration_date", Context),
+            [Month, Day, Year] = binary:split(ExpirationString, <<"/">>, [global]),
+            TS = calendar:datetime_to_gregorian_seconds({{?TO_INT(Year),?TO_INT(Month),?TO_INT(Day)},{23,59,59}}),
+            DataBag = ?MK_DATABAG({[{<<"new_expiration_timestamp">>,TS}]}),
+            onbill_util:onbill_trial('post', AccountId, DataBag, Context),
+            modkazoo_util:delay_signal(1, 'update_onbill_account_details', ?SIGNAL_FILTER(Context), Context),
+            z_render:dialog_close(Context)
+    end;
+
+event({postback,{save_pvt_limits_field,[{field_name,FieldName},{account_id, AccountId}]},_,_}, Context) ->
+    InputValue = modkazoo_util:get_q_bin("input_value", Context),
+    onbill_util:save_pvt_limits_field(InputValue, FieldName, AccountId, Context);
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
     lager:info("Unknown event Context: ~p", [Context]),
     Context.
+
+growl_bad_result(<<>>, Context) -> 
+    z_render:growl_error(?__("Something went wrong.", Context), Context);
+growl_bad_result(_, Context) -> 
+    z_render:growl(?__("Operation succeeded.",Context), Context).
+
