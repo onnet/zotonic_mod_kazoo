@@ -8,6 +8,7 @@
     ,to_hex/1
     ,check_file_size_exceeded/3
     ,if_substring_in_json/2
+    ,to_integer/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -77,4 +78,10 @@ if_substring_in_json(Substring, JObj) ->
     case re:run(jiffy:encode(JObj), Substring, []) of
         {match,_} -> 'true';
         _ -> 'false'
+    end.
+
+to_integer(Var, Default) ->
+    case (catch z_convert:to_integer(Var)) of
+        Num when is_integer(Num) -> Num;
+        _ -> Default
     end.

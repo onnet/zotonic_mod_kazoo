@@ -3,6 +3,7 @@
 -define(MK_DATABAG(JObj), {[{<<"data">>, JObj}]}).
 -define(TO_BIN(Var), <<(z_convert:to_binary(Var))/binary>>).
 -define(TO_INT(Var), z_convert:to_integer(Var)).
+-define(TO_INT(Var, Default), modkazoo_util2:to_integer(Var, Default)).
 -define(TO_FLT(Var), z_convert:to_float(Var)).
 -define(TO_LST(Var), z_convert:to_list(Var)).
 -define(TO_ATM(Var), z_convert:to_atom(Var)).

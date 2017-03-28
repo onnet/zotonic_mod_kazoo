@@ -36,26 +36,23 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-3">
-        <select id="quantity" name="quantity" class="form-control margin-bottom-xs" style="padding: 0 0 0 40px;">
-          {% for option in 1|range:15 %}
-            <option value="{{ option }}"
-                    {% if not fee_id and option == 1 %}
-                      selected
-                    {% elseif option == fee_data[1]["quantity"] %}
-                      selected
-                    {% endif %}>
-              {{ option }}
-            </option>
-          {% endfor %}
-        </select>
+        <input id="quantity"
+               name="quantity"
+               class="form-control margin-bottom-xs"
+               placeholder="{_ Quantity _}"
+               value="{{ fee_data[1]["quantity"] }}"
+               style="padding: 0 0 0 40px;"
+               {% if fee_data[1]["service_ends"]|inno_timestamp_expired == "expired" %}
+                 disabled
+               {% endif %} />
       </div>
       <div class="col-sm-3">
         <input id="service_starts"
                type="text"
                class="form-control margin-bottom-xs bg_color_white"
                name="service_starts"
-               value="{{ fee_data[1]["service_starts"]|inno_timestamp_to_date|date: 'd/m/Y' }}"
-               data-date="{{ fee_data[1]["service_starts"]|inno_timestamp_to_date|date: 'd/m/Y' }}"
+               value="{% if fee_id %}{{ fee_data[1]["service_starts"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
+               data-date="{% if fee_id %}{{ fee_data[1]["service_starts"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
                data-date-format="dd/mm/yyyy"
                data-date-autoclose="true"
                data-date-language={{ z_language }}
@@ -88,8 +85,8 @@
                type="text"
                class="form-control margin-bottom-xs bg_color_white {% if not fee_data[1]["service_ends"] %}hidden{% endif %}"
                name="service_ends"
-               value="{{ fee_data[1]["service_ends"]|inno_timestamp_to_date|date: 'd/m/Y' }}"
-               data-date="{{ fee_data[1]["service_ends"]|inno_timestamp_to_date|date: 'd/m/Y' }}"
+               value="{% if fee_id %}{{ fee_data[1]["service_ends"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
+               data-date="{% if fee_id %}{{ fee_data[1]["service_ends"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
                data-date-format="dd/mm/yyyy"
                data-date-autoclose="true"
                data-date-language={{ z_language }}

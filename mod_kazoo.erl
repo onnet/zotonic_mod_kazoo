@@ -2104,10 +2104,13 @@ event({submit,periodic_fee,_,_}, Context) ->
     Props = modkazoo_util:filter_empty([{<<"account_id">>, ?TO_BIN(z_context:get_q("account_id", Context))}
                                        ,{<<"service_id">>, ?TO_BIN(z_context:get_q("service_id", Context))}
                                        ,{<<"comment">>, ?TO_BIN(z_context:get_q("comment", Context))}
-                                       ,{<<"quantity">>, ?TO_INT(z_context:get_q("quantity", Context))}
+                                       ,{<<"quantity">>, ?TO_INT(z_context:get_q("quantity", Context), 1)}
                                        ,{<<"service_starts">>, ServiceStarts}
                                        ,{<<"service_ends">>, ServiceEnds}
                                        ]),
+lager:info("IAM Qty: ~p",[z_context:get_q("quantity", Context, 1)]),
+lager:info("IAM TO_INT: ~p",[?TO_INT(z_context:get_q("quantity", Context), 1)]),
+lager:info("IAM Props: ~p",[Props]),
     case ?TO_BIN(z_context:get_q("fee_id", Context)) of
         <<>> ->
             DataBag = ?MK_DATABAG(modkazoo_util:set_values(Props, modkazoo_util:new())),
