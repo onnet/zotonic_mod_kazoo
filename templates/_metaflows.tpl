@@ -32,8 +32,8 @@
   </div>
   <div class="col-sm-6">
     <div class="row">
-      <div class="col-xs-7"><label class="edit_user_label">Digit timeout, ms</label></div>
-      <div id="metaflowsdigit_timeout_ms" class="col-xs-5">
+      <div class="col-xs-6"><label class="edit_user_label">Digit timeout, ms</label></div>
+      <div id="metaflowsdigit_timeout_ms" class="col-xs-6">
         {% include "_show_field.tpl" type="account"
                                      doc_id="_no_need_"
                                      field_name=["metaflows","digit_timeout_ms"]
@@ -41,8 +41,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-7"><label class="edit_user_label">Binding digit</label></div>
-      <div id="metaflowsbinding_digit" class="col-xs-5">
+      <div class="col-xs-6"><label class="edit_user_label">Binding digit</label></div>
+      <div id="metaflowsbinding_digit" class="col-xs-6">
         {% include "_show_field.tpl" type="account"
                                      doc_id="_no_need_"
                                      field_name=["metaflows","binding_digit"]
@@ -53,4 +53,53 @@
 </div>
 {% endwith %}
 
-{% print m.kazoo[{metaflows account_id=account_id}] %}
+
+
+
+
+  <form id="form_add_task" method="post" action="postback">
+        <br />
+    <div id="add_captures_button_div" class="form-group">
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+          {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                    text=_"Add capture"
+                    action={slide_down target="add_captures_div"}
+                    action={slide_up target="add_captures_button_div"}
+          %}
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div id="add_captures_div" class="row display_none">
+        <div class="col-sm-4 col-sm-offset-2">
+            {% wire id="capture_type"
+                    type="change"
+                    action={update target="metaflows_capture_type_span"
+                                   template="_metaflows_capture_type.tpl"
+                           }
+                    action={update target="metaflows_select_module_span"
+                                   template="_metaflows_select_module.tpl"
+                           }
+            %}
+            <select id="capture_type"
+                    name="capture_type"
+                    class="form-control margin-bottom-xs"
+                    style="text-align:center;">
+                <option value="">-- {_ Chose type _} --</option>
+                <option value="numbers">{_ Number _}</option>
+                <option value="patterns">{_ Pattern _}</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span id="metaflows_capture_type_span">
+              {% include "_metaflows_capture_type.tpl" %}
+            </span>
+        </div>
+      </div>
+    </div>
+    <span id="metaflows_select_module_span">
+    </span>
+  </form>
+
+{# print m.kazoo[{metaflows account_id=account_id}] #}
