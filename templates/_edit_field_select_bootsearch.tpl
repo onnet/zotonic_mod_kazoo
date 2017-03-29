@@ -4,7 +4,10 @@
         style="max-width:140px; height:20px; text-align:center;"
         data-live-search="true"
         data-width="auto">
-  {% with m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name account_id=account_id}] as current_value %}
+  {% with m.kazoo[{kz_doc_field type=type doc_id=doc_id field=field_name account_id=account_id}]
+     as
+     current_value
+  %}
     {% for option in options %}
       {% if option[1]|is_list %}
         <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>

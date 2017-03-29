@@ -9,9 +9,13 @@
            class="fa fa-toggle-{% if metaflows[1]["default_metaflow"] %}on{% else %}off{% endif %} pointer"></i>
         {% wire id="toggle_account_metaflowsdefault_metaflow"
                 type="click"
-                action={ postback postback={toggle_field type doc_id field_name prefix}
-                delegate="mod_kazoo"
-                inject_args type="account" doc_id="_no_need_" field_name=["metaflows","default_metaflow"] prefix="account_"}
+                action={postback postback={toggle_field type doc_id field_name prefix}
+                                 delegate="mod_kazoo"
+                                 inject_args type="account"
+                                             doc_id="_no_need_"
+                                             field_name=["metaflows","default_metaflow"]
+                                             prefix="account_"
+                       }
         %}
       </div>
     </div>
@@ -50,5 +54,3 @@
 {% endwith %}
 
 {% print m.kazoo[{metaflows account_id=account_id}] %}
-
-
