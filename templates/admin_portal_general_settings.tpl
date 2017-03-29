@@ -17,8 +17,8 @@
   </span>
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right"
-              text=_"restrtictions"
-              action={dialog_open title=_"Restrictions setup"
+              text=_"controls"
+              action={dialog_open title=_"Access/features controls"
                                   template="_edit_account_access_restrictions.tpl"
                      }
     %}

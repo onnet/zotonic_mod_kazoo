@@ -21,7 +21,7 @@
                class="arrowpad fa fa-arrow-circle-down"></i>
           </span>
            {_ Details _}:
-           {% button class="btn btn-xs btn-onnet pull-right" text=_"restrtictions"
+           {% button class="btn btn-xs btn-onnet pull-right" text=_"controls"
                      action={dialog_open title=_"Restrictions setup"
                                          template="_edit_account_access_restrictions.tpl"
                                          account_id=account_id

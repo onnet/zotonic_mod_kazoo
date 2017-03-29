@@ -645,6 +645,12 @@ m_find_value({account_tasks,[{account_id, 'undefined'}]}, _M, Context) ->
 m_find_value({account_tasks,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:account_tasks('get', AccountId, [], Context);
 
+m_find_value({metaflows,[{account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({metaflows,[{account_id, AccountId}]}, _M, Context);
+m_find_value({metaflows,[{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:metaflows('get', AccountId, [], Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

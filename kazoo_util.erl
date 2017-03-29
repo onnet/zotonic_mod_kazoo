@@ -360,6 +360,7 @@
     ,account_task/5
     ,add_new_task/1
     ,add_new_task_file/3
+    ,metaflows/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -458,6 +459,7 @@
 -define(CONSUMED, <<"/consumed">>).
 -define(SERVICES, <<"/services">>).
 -define(TASKS, <<"/tasks">>).
+-define(METAFLOWS, <<"/metaflows">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).
@@ -4366,3 +4368,7 @@ add_new_task_file(UploadFilename, UploadTmp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?TASKS/binary, "?category=", Category/binary
                   ,"&action=", Action/binary, "&file_name=", ?TO_BIN(UploadFilename)/binary>>,
     crossbar_account_send_raw_request('put', API_String, Headers, Data, Context).
+
+metaflows(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?METAFLOWS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
