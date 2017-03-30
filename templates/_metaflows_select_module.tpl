@@ -35,19 +35,9 @@
       <div class="col-sm-4">
         {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
                   text=_"Cancel"
-                  action={slide_up target="add_captures_div"}
-                  action={slide_up target="cancel_captures_button_div"}
-                  action={slide_down target="add_captures_button_div"}
-
-                    action={update target="metaflows_capture_type_span"
-                                   template="_metaflows_capture_input.tpl"
-                           }
-                    action={update target="metaflows_select_module_span"
-                                   template="_metaflows_select_module.tpl"
-                           }
-
-
-
+                  action={update target="metaflows_capture_add_span"
+                                 template="_metaflows_capture_add.tpl"
+                         }
         %}
       </div>
     </div>
@@ -57,20 +47,9 @@
       <div class="col-sm-8 col-sm-offset-2">
         {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
                   text=_"Cancel"
-                  action={slide_up target="add_captures_div"}
-                  action={slide_up target="cancel_captures_button_div"}
-                  action={slide_down target="add_captures_button_div"}
-
-                    action={update target="metaflows_capture_type_span"
-                                   template="_metaflows_capture_input.tpl"
-                           }
-                    action={update target="metaflows_select_module_span"
-                                   template="_metaflows_select_module.tpl"
-                           }
-
-
-
-
+                  action={update target="metaflows_capture_add_span"
+                                 template="_metaflows_capture_add.tpl"
+                         }
         %}
       </div>
     </div>

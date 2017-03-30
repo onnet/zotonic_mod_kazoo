@@ -11,8 +11,8 @@
 {% else %}
   {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
             text=_"Cancel"
-            action={slide_up target="add_captures_div"}
-            action={slide_up target="cancel_captures_button_div"}
-            action={slide_down target="add_captures_button_div"}
+            action={update target="metaflows_capture_add_span"
+                           template="_metaflows_capture_add.tpl"
+                   }
   %}
 {% endif %}
