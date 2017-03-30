@@ -55,4 +55,6 @@
   {% include "_metaflows_capture_add.tpl" %}
 </span>
 {% endwith %}
-{# print m.kazoo[{metaflows account_id=account_id}] #}
+<br />
+{% print m.kazoo[{metaflows account_id=account_id}] %}
+<br />

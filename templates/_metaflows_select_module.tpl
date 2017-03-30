@@ -2,13 +2,13 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-4 col-sm-offset-2">
-        {% wire id="task_action"
+        {% wire id="metaflows_module"
                 type="change"
                 action={slide_down target="commit_cancel_captures_button_div"}
                 action={slide_up target="cancel_captures_button_div"}
         %}
-        <select id="task_action"
-                name="task_action"
+        <select id="metaflows_module"
+                name="metaflows_module"
                 class="form-control margin-bottom-xs"
                 style="text-align:center;"
                 data-live-search="true">
@@ -28,8 +28,7 @@
       <div class="col-sm-4 col-sm-offset-2">
         {% button class="col-xs-12 btn btn-zalarm margin-bottom-xs"
                   text=_"Commit capture"
-                  action={slide_down target="add_captures_div"}
-                  action={slide_up target="add_captures_button_div"}
+                  type="submit"
         %}
       </div>
       <div class="col-sm-4">

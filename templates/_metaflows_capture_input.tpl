@@ -1,13 +1,13 @@
 {% if q.triggervalue %}
   <input type="text"
-         id="metaflows_capture_type_input"
+         id="capture_number_or_pattern"
          {% if q.triggervalue == "numbers" %}
-           placeholder="{_ Input number _}"
+           placeholder="{_ Input Number _}"
          {% elseif q.triggervalue == "patterns" %}
-           placeholder="{_ Input regex _}"
+           placeholder="{_ Regex _}: ^2(\d{2,7})?#$"
          {% endif %}
          class="form-control margin-bottom-xs"
-         name="metaflows_capture_type_input" />
+         name="capture_number_or_pattern" />
 {% else %}
   {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
             text=_"Cancel"

@@ -1,4 +1,5 @@
-<form id="form_add_task" method="post" action="postback">
+{% wire id="metaflows_capture_add_form" type="submit" postback={metaflows_capture_add account_id=account_id} delegate="mod_kazoo" %}
+<form id="metaflows_capture_add_form" method="post" action="postback">
   <br />
   <div id="add_captures_button_div" class="form-group">
     <div class="row">
