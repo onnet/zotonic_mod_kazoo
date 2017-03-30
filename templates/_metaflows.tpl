@@ -53,10 +53,6 @@
 </div>
 {% endwith %}
 
-
-
-
-
   <form id="form_add_task" method="post" action="postback">
         <br />
     <div id="add_captures_button_div" class="form-group">
@@ -73,27 +69,11 @@
     <div class="form-group">
       <div id="add_captures_div" class="row display_none">
         <div class="col-sm-4 col-sm-offset-2">
-            {% wire id="capture_type"
-                    type="change"
-                    action={update target="metaflows_capture_type_span"
-                                   template="_metaflows_capture_type.tpl"
-                           }
-                    action={update target="metaflows_select_module_span"
-                                   template="_metaflows_select_module.tpl"
-                           }
-            %}
-            <select id="capture_type"
-                    name="capture_type"
-                    class="form-control margin-bottom-xs"
-                    style="text-align:center;">
-                <option value="">-- {_ Chose type _} --</option>
-                <option value="numbers">{_ Number _}</option>
-                <option value="patterns">{_ Pattern _}</option>
-            </select>
+              {% include "_metaflows_capture_select_type.tpl" %}
         </div>
         <div class="col-sm-4">
-            <span id="metaflows_capture_type_span">
-              {% include "_metaflows_capture_type.tpl" %}
+            <span id="metaflows_capture_input_span">
+              {% include "_metaflows_capture_input.tpl" %}
             </span>
         </div>
       </div>
