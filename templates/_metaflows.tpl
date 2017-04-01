@@ -51,6 +51,20 @@
     </div>
   </div>
 </div>
+{% for number in metaflows[1]["numbers"][1] %} 
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="row">
+    {% include "_metaflows_capture_element.tpl" type="number" capture=number %}
+    </div>
+  </div>
+{% endfor %}
+{% for pattern in metaflows[1]["patterns"][1] %} 
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="row">
+    {% include "_metaflows_capture_element.tpl" type="pattern" capture=pattern %}
+    </div>
+  </div>
+{% endfor %}
 <span id="metaflows_capture_add_span">
   {% include "_metaflows_capture_add.tpl" %}
 </span>

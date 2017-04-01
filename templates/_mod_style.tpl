@@ -386,6 +386,10 @@ div.widget {
   padding-right: 1em!important;
 }
 
+.pri-15 {
+  padding-right: 1.5em!important;
+}
+
 .pt-1 {
   padding-top: 1em;
 }

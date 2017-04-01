@@ -3,6 +3,7 @@
     <tr>
         <th class="td-center">{_ Date _}</th>
         <th class="td-center1">{_ Description _}</th>
+        <th class="td-center">{_ Qty _}</th>
         <th class="td-center">{_ Sum _}</th>
         {# if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) #}
           <th class="td-center"></th>
@@ -28,6 +29,9 @@
             {% else %}
               {{ transaction["reason"] }}
             {% endif %}
+          </td>
+          <td class="pri-15 td-right">
+            {{ transaction["metadata"][1]["quantity"] }}
           </td>
           <td class="pri-1 td-right">
             {{ transaction["amount"]|format_price:[".",""]|currency_sign }}

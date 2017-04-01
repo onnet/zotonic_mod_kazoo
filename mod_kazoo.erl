@@ -2345,9 +2345,16 @@ event({submit,{metaflows_capture_add,[{account_id,AccountId}]},_,_}, Context) ->
     CaptureNP = modkazoo_util:get_q_bin("capture_number_or_pattern", Context),
     Module = modkazoo_util:get_q_bin("metaflows_module", Context),
     CurrDoc = kazoo_util:metaflows('get', AccountId, [], Context),
+    ModuleData =
+        case Module of
+            <<"transfer">> ->
+                modkazoo_util:set_value(<<"takeback_dtmf">>,<<"1">>, {[]});
+            _ ->
+                {[]}
+        end,
     Routines =
         [fun(JObj) -> modkazoo_util:set_value([CaptureType, CaptureNP, <<"module">>], Module, JObj) end
-        ,fun(JObj) -> modkazoo_util:set_value([CaptureType, CaptureNP, <<"data">>], {[]}, JObj) end],
+        ,fun(JObj) -> modkazoo_util:set_value([CaptureType, CaptureNP, <<"data">>], ModuleData, JObj) end],
     NewDoc = lists:foldl(fun(F, JObj) -> F(JObj) end, CurrDoc, Routines),
     Res = kazoo_util:metaflows('post', AccountId, ?MK_DATABAG(NewDoc), Context),
 lager:info("IAM Res: ~p",[Res]),
