@@ -1,6 +1,5 @@
 {% with m.kazoo[{metaflows account_id=account_id}] as metaflows %}
-<div class="row">
-  <br />
+<div class="row pb-1">
   <div class="col-sm-6">
     <div class="row">
       <div class="col-xs-7"><label class="edit_user_label">Default metaflow</label></div>
@@ -52,15 +51,15 @@
   </div>
 </div>
 {% for number in metaflows[1]["numbers"][1] %} 
-  <div class="col-sm-6 col-sm-offset-3">
-    <div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <div class="row pb-1" style="border-bottom: 1px solid #e5e5e5">
     {% include "_metaflows_capture_element.tpl" type="number" capture=number %}
     </div>
   </div>
 {% endfor %}
 {% for pattern in metaflows[1]["patterns"][1] %} 
-  <div class="col-sm-6 col-sm-offset-3">
-    <div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <div class="row pb-1" style="border-bottom: 1px solid #e5e5e5">
     {% include "_metaflows_capture_element.tpl" type="pattern" capture=pattern %}
     </div>
   </div>
