@@ -1,4 +1,3 @@
-{% with m.kazoo[{metaflows account_id=account_id}] as metaflows %}
 <div class="row pb-1 pt-1">
   <div class="col-sm-6">
     <div class="row">
@@ -19,6 +18,7 @@
                                             doc_id="_no_need_"
                                             field_name=["metaflows","listen_on"]
                                             options=["self","peer","both"]
+                                            account_id=account_id
         %}
       </div>
     </div>
@@ -30,6 +30,7 @@
         {% include "_show_field.tpl" type="account"
                                      doc_id="_no_need_"
                                      field_name=["metaflows","digit_timeout_ms"]
+                                     account_id=account_id
         %}
       </div>
     </div>
@@ -39,11 +40,13 @@
         {% include "_show_field.tpl" type="account"
                                      doc_id="_no_need_"
                                      field_name=["metaflows","binding_digit"]
+                                     account_id=account_id
         %}
       </div>
     </div>
   </div>
 </div>
+{% with m.kazoo[{metaflows account_id=account_id}] as metaflows %}
 <div class="col-sm-8 col-sm-offset-2 mb-1" style="padding: 1.5em">
   {% for number in metaflows[1]["numbers"][1] %} 
     <div class="row pb-1 pt-1"
@@ -63,8 +66,8 @@
     </div>
   {% endfor %}
 </div>
+{% endwith %}
 <span id="metaflows_capture_add_span">
   {% include "_metaflows_capture_add.tpl" %}
 </span>
-{% endwith %}
 {# print m.kazoo[{metaflows account_id=account_id}] #}
