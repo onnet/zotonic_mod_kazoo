@@ -505,10 +505,10 @@ event({postback,{delete_incoming_fax,[{fax_id, FaxId}]},_,_}, Context) ->
                    ,z_template:render("user_portal_faxes_incoming.tpl", [{headline,?__("Incoming faxes", Context)}], Context)
                    ,Context);
 
-event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
-    event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, 'undefined'}]},<<>>,<<>>}, Context);
+event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, AccountId}]},_,_}, Context) ->
+    event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, 'undefined'},{account_id, AccountId}]},<<>>,<<>>}, Context);
 
-event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, Prefix}]},_,_}, Context) ->
+event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{prefix, Prefix},{account_id, AccountId}]},_,_}, Context) ->
     TargetId = case Prefix of
                    'undefined' -> FieldName;
                    L -> L ++ FieldName
@@ -518,21 +518,21 @@ event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName
             _ = kazoo_util:kz_toggle_account_doc(FieldName, Context),
             z_render:update(TargetId
                            ,z_template:render("_show_field_checkbox.tpl"
-                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}]
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix},{account_id, AccountId}]
                                              ,Context)
                            ,Context);
         "user" ->
             _ = kazoo_util:kz_toggle_user_doc(FieldName, DocId, Context),
             z_render:update(TargetId
                            ,z_template:render("_show_field_checkbox.tpl"
-                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}]
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix},{account_id, AccountId}]
                                              ,Context)
                            ,Context);
         "device" ->
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
             z_render:update(TargetId
                            ,z_template:render("_show_field_checkbox.tpl"
-                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix}]
+                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix},{account_id, AccountId}]
                                              ,Context)
                            ,Context)
     end;

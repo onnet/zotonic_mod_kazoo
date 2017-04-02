@@ -30,12 +30,12 @@
          style="display: none;"
          class="fa fa-trash-o pointer"
          title="Confirm delete"></i>
-      <label class="capture_label">{{ capture[1] }}</label>
+      <label class="capture_label zalarm">{{ capture[1] }}</label>
     </div>
     <div class="col-xs-4">
-      <label class="edit_user_label">{_ Module _}</label>
+      <label class="edit_user_label">{_ Module _}:</label>
     </div>
-    <div class="col-xs-3">
+    <div class="col-xs-3 zalarm">
       <strong>{{ capture[2][1]["module"] }}</strong>
     </div>
   </div>
@@ -47,7 +47,7 @@
       {# print capture_data #}
     </div>
     <div class="col-xs-4 text-right">
-      {{ capture_data[1] }}
+      {{ capture_data[1] }}:
     </div>
     <div class="col-xs-3">
       {{ capture_data[2] }}

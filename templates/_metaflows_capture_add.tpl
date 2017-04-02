@@ -6,8 +6,8 @@
       <div class="col-sm-8 col-sm-offset-2">
         {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
                   text=_"Add capture"
-                  action={slide_down target="add_captures_div"}
-                  action={slide_up target="add_captures_button_div"}
+                  action={hide target="add_captures_button_div"}
+                  action={show target="add_captures_div"}
         %}
       </div>
     </div>

@@ -110,9 +110,12 @@
            class="fa fa-toggle-{% if device_doc["media"][1]["fax_option"] %}on{% else %}off{% endif %} pointer"></i>
         {% wire id="toggle_mediafax_option"
                 type="click"
-                action={postback postback={toggle_field type doc_id field_name}
+                action={postback postback={toggle_field type doc_id field_name account_id}
                                  delegate="mod_kazoo"
-                                 inject_args type="device" doc_id=device_id field_name=["media","fax_option"]
+                                 inject_args type="device"
+                                             doc_id=device_id
+                                             field_name=["media","fax_option"]
+                                             account_id=account_id
                        }
         %}
       </div>
@@ -151,9 +154,14 @@
            class="fa fa-toggle-{% if device_doc["record_call"] %}on{% else %}off{% endif %} pointer"></i>
           {% wire id="toggle_device_record_call"
                   type="click"
-                  action={postback postback={toggle_field type doc_id field_name prefix}
+                  action={postback postback={toggle_field type doc_id field_name prefix account_id}
                                    delegate="mod_kazoo"
-                                   inject_args type="device" doc_id=device_id field_name="record_call" prefix="device_"}
+                                   inject_args type="device"
+                                               doc_id=device_id
+                                               field_name="record_call"
+                                               prefix="device_"
+                                               account_id=account_id
+                         }
           %}
       </div>
     </div>
@@ -178,12 +186,13 @@
            class="fa fa-toggle-{% if device_doc["media"][1]["encryption"][1]["enforce_security"] %}on{% else %}off{% endif %} pointer"></i>
           {% wire id="toggle_device_mediaencryptionenforce_security"
                   type="click"
-                  action={postback postback={toggle_field type doc_id field_name prefix}
+                  action={postback postback={toggle_field type doc_id field_name prefix account_id}
                                    delegate="mod_kazoo"
                                    inject_args type="device"
                                                doc_id=device_id
                                                field_name=["media","encryption","enforce_security"]
                                                prefix="device_"
+                                               account_id=account_id
                          }
           %}
       </div>
