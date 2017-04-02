@@ -1,4 +1,4 @@
-<div class="row pb-1 pt-1">
+<div class="row pb-15 pt-15">
   <div class="col-sm-6">
     <div class="row">
       <div class="col-xs-7"><label class="edit_user_label">Default metaflow</label></div>
@@ -47,34 +47,40 @@
   </div>
 </div>
 {% with m.kazoo[{metaflows account_id=account_id}] as metaflows %}
-<div class="col-sm-8 col-sm-offset-2" style="padding-left: 1.5em; padding-right: 1.5em;">
-  {% for number in metaflows[1]["numbers"][1] %} 
-    {% if forloop.first %}
-      <p class="zprimary"><strong>{_ Numbers _}:</strong></p>
-    {% endif %}
-    <div class="row pb-1 pt-1"
-         style="{% if forloop.first %}border-top: 1px solid #e5e5e5;{% endif %}
-                border-bottom: 1px solid #e5e5e5;
-                border-left: 1px solid #e5e5e5;
-                border-right: 1px solid #e5e5e5;">
-    {% include "_metaflows_capture_element.tpl" type="numbers" capture=number %}
-    </div>
-  {% endfor %}
-</div>
-<div class="col-sm-8 col-sm-offset-2 mb-1 mt-1" style="padding-left: 1.5em; padding-right: 1.5em;">
-  {% for pattern in metaflows[1]["patterns"][1] %} 
-    {% if forloop.first %}
-      <p class="zprimary"><strong>{_ Patterns _}:</strong></p>
-    {% endif %}
-    <div class="row pb-1 pt-1"
-         style="{% if forloop.first %}border-top: 1px solid #e5e5e5;{% endif %}
-                border-bottom: 1px solid #e5e5e5;
-                border-left: 1px solid #e5e5e5;
-                border-right: 1px solid #e5e5e5;">
-    {% include "_metaflows_capture_element.tpl" type="patterns" capture=pattern %}
-    </div>
-  {% endfor %}
-</div>
+{% if metaflows[1]["numbers"][1] %}
+  <div class="col-sm-8 col-sm-offset-2 mb-2"
+       style="padding-left: 1.5em; padding-right: 1.5em;">
+    {% for number in metaflows[1]["numbers"][1] %} 
+      {% if forloop.first %}
+        <p class="zprimary"><strong>{_ Numbers _}:</strong></p>
+      {% endif %}
+      <div class="row pb-1 pt-1"
+           style="{% if forloop.first %}border-top: 1px solid #e5e5e5;{% endif %}
+                  border-bottom: 1px solid #e5e5e5;
+                  border-left: 1px solid #e5e5e5;
+                  border-right: 1px solid #e5e5e5;">
+      {% include "_metaflows_capture_element.tpl" type="numbers" capture=number %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% if metaflows[1]["patterns"][1] %}
+  <div class="col-sm-8 col-sm-offset-2 mb-2"
+       style="padding-left: 1.5em; padding-right: 1.5em;">
+    {% for pattern in metaflows[1]["patterns"][1] %} 
+      {% if forloop.first %}
+        <p class="zprimary"><strong>{_ Patterns _}:</strong></p>
+      {% endif %}
+      <div class="row pb-1 pt-1"
+           style="{% if forloop.first %}border-top: 1px solid #e5e5e5;{% endif %}
+                  border-bottom: 1px solid #e5e5e5;
+                  border-left: 1px solid #e5e5e5;
+                  border-right: 1px solid #e5e5e5;">
+      {% include "_metaflows_capture_element.tpl" type="patterns" capture=pattern %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
 {% endwith %}
 <span id="metaflows_capture_add_span">
   {% include "_metaflows_capture_add.tpl" %}

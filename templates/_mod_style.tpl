@@ -394,8 +394,20 @@ div.widget {
   padding-top: 1em;
 }
 
+.pt-15 {
+  padding-top: 1.5em;
+}
+
+.pt-2 {
+  padding-top: 2em;
+}
+
 .pb-1 {
   padding-bottom: 1em;
+}
+
+.pb-15 {
+  padding-bottom: 1.5em;
 }
 
 .pb-2 {
