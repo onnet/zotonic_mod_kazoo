@@ -515,7 +515,7 @@ event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName
                end,
     case Type of
         "account" ->
-            _ = kazoo_util:kz_toggle_account_doc(FieldName, Context),
+            _ = kazoo_util:kz_toggle_account_doc(FieldName, AccountId, Context),
             z_render:update(TargetId
                            ,z_template:render("_show_field_checkbox.tpl"
                                              ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{prefix, Prefix},{account_id, AccountId}]

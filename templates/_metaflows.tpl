@@ -4,18 +4,11 @@
     <div class="row">
       <div class="col-xs-7"><label class="edit_user_label">Default metaflow</label></div>
       <div id="account_metaflowsdefault_metaflow" class="col-xs-5">
-        <i id="toggle_account_metaflowsdefault_metaflow"
-           class="fa fa-toggle-{% if m.kazoo[{metaflows account_id=account_id}][1]["default_metaflow"] %}on{% else %}off{% endif %} pointer"></i>
-        {% wire id="toggle_account_metaflowsdefault_metaflow"
-                type="click"
-                action={postback postback={toggle_field type doc_id field_name prefix account_id}
-                                 inject_args type="account"
-                                             doc_id="_no_need_"
-                                             field_name=["metaflows","default_metaflow"]
-                                             prefix="account_"
-                                             account_id=account_id
-                                 delegate="mod_kazoo"
-                       }
+        {% include "_show_field_checkbox.tpl" type="account"
+                                              doc_id="_no_need_"
+                                              field_name=["metaflows","default_metaflow"]
+                                              prefix="account_"
+                                              account_id=account_id
         %}
       </div>
     </div>

@@ -121,6 +121,7 @@
     ,kz_set_user_doc/4
     ,kz_set_user_doc/6
     ,kz_toggle_account_doc/2
+    ,kz_toggle_account_doc/3
     ,kz_toggle_user_doc/2
     ,kz_toggle_user_doc/3
     ,kz_toggle_device_doc/3
@@ -726,6 +727,9 @@ kz_toggle_account_doc(K, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     kz_toggle_account_doc(K, AccountId, Context).
 
+kz_toggle_account_doc(K, 'undefined', Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    kz_toggle_account_doc(K, AccountId, Context);
 kz_toggle_account_doc(K, AccountId, Context) ->
     case kz_account_doc_field(K, AccountId, Context) of
         'true' -> kz_set_acc_doc(K, 'false', AccountId, Context);
