@@ -54,7 +54,7 @@
                 border-bottom: 1px solid #e5e5e5;
                 border-left: 1px solid #e5e5e5;
                 border-right: 1px solid #e5e5e5;">
-    {% include "_metaflows_capture_element.tpl" type="number" capture=number %}
+    {% include "_metaflows_capture_element.tpl" type="numbers" capture=number %}
     </div>
   {% endfor %}
   {% for pattern in metaflows[1]["patterns"][1] %} 
@@ -62,7 +62,7 @@
          style="border-bottom: 1px solid #e5e5e5;
                 border-left: 1px solid #e5e5e5;
                 border-right: 1px solid #e5e5e5;">
-    {% include "_metaflows_capture_element.tpl" type="pattern" capture=pattern %}
+    {% include "_metaflows_capture_element.tpl" type="patterns" capture=pattern %}
     </div>
   {% endfor %}
 </div>

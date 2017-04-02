@@ -13,7 +13,8 @@
     {% wire id="confirm_delete_metaflow_capture_"++type++"_"++capture[1]|cleanout
             action={postback postback={delete_metaflow_capture_element
                                        account_id=account_id
-                                       capture_element_name=capture[1]
+                                       capture_type=type
+                                       capture_number_or_pattern=capture[1]
                                       }
                              delegate="mod_kazoo"
                    }

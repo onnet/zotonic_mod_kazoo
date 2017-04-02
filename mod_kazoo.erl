@@ -2356,8 +2356,36 @@ event({submit,{metaflows_capture_add,[{account_id,AccountId}]},_,_}, Context) ->
         [fun(JObj) -> modkazoo_util:set_value([CaptureType, CaptureNP, <<"module">>], Module, JObj) end
         ,fun(JObj) -> modkazoo_util:set_value([CaptureType, CaptureNP, <<"data">>], ModuleData, JObj) end],
     NewDoc = lists:foldl(fun(F, JObj) -> F(JObj) end, CurrDoc, Routines),
-    Res = kazoo_util:metaflows('post', AccountId, ?MK_DATABAG(NewDoc), Context),
-lager:info("IAM Res: ~p",[Res]),
+    _ = kazoo_util:metaflows('post', AccountId, ?MK_DATABAG(NewDoc), Context),
+    z_render:update("restrictions_pannel_div",z_template:render("_metaflows.tpl",[{account_id,AccountId}],Context),Context);
+
+event({postback,{delete_metaflow_capture_element,[{account_id,undefined}
+                                                 ,{capture_type,CaptureType}
+                                                 ,{capture_number_or_pattern,CaptureNP}]}
+                ,_
+                ,_
+      }
+     ,Context)
+    ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    event({postback,{delete_metaflow_capture_element,[{account_id,AccountId}
+                                                     ,{capture_type,CaptureType}
+                                                     ,{capture_number_or_pattern,CaptureNP}]}
+                    ,<<>>
+                    ,<<>>
+          }
+         ,Context);
+event({postback,{delete_metaflow_capture_element,[{account_id,AccountId}
+                                                 ,{capture_type,CaptureType}
+                                                 ,{capture_number_or_pattern,CaptureNP}]}
+                ,_
+                ,_
+      }
+     ,Context)
+    ->
+    CurrDoc = kazoo_util:metaflows('get', AccountId, [], Context),
+    NewDoc = modkazoo_util:delete_key([?TO_BIN(CaptureType), ?TO_BIN(CaptureNP)], CurrDoc), 
+    _ = kazoo_util:metaflows('post', AccountId, ?MK_DATABAG(NewDoc), Context),
     z_render:update("restrictions_pannel_div",z_template:render("_metaflows.tpl",[{account_id,AccountId}],Context),Context);
 
 event(A, Context) ->
