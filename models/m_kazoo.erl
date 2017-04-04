@@ -178,6 +178,14 @@ m_find_value({kz_list_user_cdr,[{selected_day, SelectedDay}]}, _M, Context) ->
     Date = {z_convert:to_integer(Year), z_convert:to_integer(Month), z_convert:to_integer(Day)},
     kazoo_util:kz_list_user_cdr_reduced(modkazoo_util:day_begins_tstamp(Date, Context), modkazoo_util:day_ends_tstamp(Date, Context), Context);
 
+m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', AccountId}]}, _M, Context);
+m_find_value({list_account_cdr,[{created_from, 'undefined'},{'created_to', 'undefined'},{'account_id', AccountId}]}, _M, Context) ->
+    kazoo_util:kz_list_account_cdr_reduced(modkazoo_util:today_begins_tstamp(Context), modkazoo_util:today_ends_tstamp(Context), Context);
+m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', AccountId}]}, _M, Context) ->
+    kazoo_util:kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context);
+
 m_find_value({kz_list_account_cdr,[{selected_day, 'undefined'}]}, _M, Context) ->
 %    kazoo_util:kz_cdr_list_reduce(kazoo_util:kz_list_account_cdr_page(0, 100, Context), Context);
     kazoo_util:kz_list_account_cdr_reduced(modkazoo_util:today_begins_tstamp(Context), modkazoo_util:today_ends_tstamp(Context), Context);

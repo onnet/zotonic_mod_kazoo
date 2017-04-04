@@ -1500,9 +1500,33 @@ event({postback,refresh_user_callstats,_,_}, Context) ->
     Context;
 
 event({postback,refresh_admin_callstats,_,_}, Context) ->
-    SelectedDay = z_context:get_q("callstatsdayInput",Context),
-    mod_signal:emit({update_admin_portal_call_history_tpl, ?SIGNAL_FILTER(Context) ++ [{selected_day, SelectedDay}]}, Context),
+    lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
+    {CreatedFrom, CreatedTo} =
+        case modkazoo_util:get_q_bin(<<"selected_billing_period">>, Context) of
+            <<"today">> -> {modkazoo_util:today_begins_tstamp(Context)
+                           ,modkazoo_util:today_ends_tstamp(Context)};
+            <<"7_days">> ->
+                {modkazoo_util:week_ago_tstamp(Context)
+                ,modkazoo_util:current_tstamp(Context)};
+            <<"this_month">> ->
+                modkazoo_util:curr_month_range();
+            <<"range">> ->
+                {modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayFrom",Context))
+                ,modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayTo",Context))}
+        end,
+    SelectedBillingPeriod = z_context:get_q("selected_billing_period",Context),
+    mod_signal:emit({update_admin_portal_call_history_tpl
+                    ,?SIGNAL_FILTER(Context)
+                     ++ [{created_from, CreatedFrom}
+                        ,{created_to, CreatedTo}
+                        ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
+                        ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
+                        ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
+                        ]
+                    }
+                   ,Context),
     Context;
+
 
 event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:set_global_carrier_routing(AccountId, Context),
