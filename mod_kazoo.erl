@@ -1514,7 +1514,6 @@ event({postback,refresh_admin_callstats,_,_}, Context) ->
                 {modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayFrom",Context))
                 ,modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayTo",Context))}
         end,
-    SelectedBillingPeriod = z_context:get_q("selected_billing_period",Context),
     mod_signal:emit({update_admin_portal_call_history_tpl
                     ,?SIGNAL_FILTER(Context)
                      ++ [{created_from, CreatedFrom}
