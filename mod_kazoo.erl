@@ -1511,8 +1511,17 @@ event({postback,refresh_admin_callstats,_,_}, Context) ->
             <<"this_month">> ->
                 modkazoo_util:curr_month_range();
             <<"range">> ->
-                {modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayFrom",Context))
-                ,modkazoo_util:datepick_to_tstamp_end_day(modkazoo_util:get_q_bin("callstatsdayTo",Context))}
+                CrFr = modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayFrom",Context)),
+                CrTo = modkazoo_util:datepick_to_tstamp_end_day(modkazoo_util:get_q_bin("callstatsdayTo",Context)),
+                case (CrTo - CrFr) > (?SECONDS_IN_DAY * 30) of
+                    'false' -> {CrFr, CrTo};
+                    'true' ->
+                        mod_signal:emit({emit_growl_signal
+                                        ,?SIGNAL_FILTER(Context)
+                                         ++ [{'text',?__("30 days range max...", Context)},{'type', 'error'}]}
+                                       ,Context),
+                        {CrFr, CrFr + (?SECONDS_IN_DAY * 30) - 1}
+                end
         end,
     mod_signal:emit({update_admin_portal_call_history_tpl
                     ,?SIGNAL_FILTER(Context)
