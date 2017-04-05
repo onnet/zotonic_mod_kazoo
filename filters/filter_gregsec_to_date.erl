@@ -3,7 +3,7 @@
      %   ,gregsec_to_date/3
 ]).
 
-gregsec_to_date(Seconds, Context) ->
+gregsec_to_date(Seconds, _Context) ->
     case Seconds of
         'undefined' -> {{0000,0,00},{00,00,0}};
         _ -> 
