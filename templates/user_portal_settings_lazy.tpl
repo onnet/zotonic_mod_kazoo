@@ -1,10 +1,12 @@
 {% if m.kazoo[{ui_element_opened element="user_settings_widget_opened"}] %}
-{% with m.kazoo.kz_get_acc_doc as account_doc %}
-
-{% wire id="user_settings_form_form" type="submit" postback={kazoo_user_settings} delegate="mod_kazoo" %}
-<form  id="user_settings_form_form" method="post" action="postback">
+  {% wire id="user_settings_form_form"
+          type="submit"
+          postback={kazoo_user_settings}
+          delegate="mod_kazoo"
+  %}
+  <form  id="user_settings_form_form" method="post" action="postback">
     <div style="padding-top: 1.5em; padding-left: 1em;">
-      {% with m.kazoo.get_user_timezone as user_timezone %}
+      {% with m.kazoo[{kz_user_doc_field field1="timezone"}] as user_timezone %}
       <label for="user_timezone">{_ User's timezone _}</label>
       <select class="selectpicker" id="user_timezone" name="user_timezone" data-live-search="true">
       {% for zone in m.kazoo.tz_list %}
@@ -62,16 +64,11 @@
         <span class="zalarm">{{ m.kazoo[{kz_user_doc_field field1="email"}] }}</span>
         <i class="fa fa-info-circle pointer zprimary" title="{_ In order to replace email address change username _}"></i>
     </div>
-</form>
-
-{% endwith %}
- 
-{% javascript %}
-  $('#user_timezone').selectpicker({
-    style: 'btn-xs btn-onnet',
-    size: 7
-  });
-{% endjavascript %}
-
-{% else %}
+  </form>
+  {% javascript %}
+    $('#user_timezone').selectpicker({
+      style: 'btn-xs btn-onnet',
+      size: 7
+    });
+  {% endjavascript %}
 {% endif %}

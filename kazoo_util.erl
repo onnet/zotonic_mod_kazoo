@@ -1085,7 +1085,6 @@ update_kazoo_user(Context) ->
     RingVoip = not modkazoo_util:on_to_true(z_context:get_q("ring-device-checkbox", Context)),
     KeepCallerID = modkazoo_util:on_to_true(z_context:get_q("call_forward_keep_caller_id", Context)),
     VmToEmail = modkazoo_util:on_to_true(z_context:get_q("vm-to-email-checkbox", Context)),
-    ToEmail = ?TO_BIN(z_context:get_q("vm-to-email-txt", Context)),
     Timezone = ?TO_BIN(z_context:get_q("user_timezone", Context)),
     z_context:set_session('user_timezone', Timezone, Context),
     CurrentDoc = kz_get_user_doc(Context),
@@ -1094,7 +1093,6 @@ update_kazoo_user(Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"call_forward">>, <<"substitute">>], RingVoip, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"call_forward">>, <<"keep_caller_id">>], KeepCallerID, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"vm_to_email_enabled">>], VmToEmail, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"email">>], ToEmail, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"timezone">>], Timezone, J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrentDoc, Routines),
