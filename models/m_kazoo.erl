@@ -178,9 +178,9 @@ m_find_value({list_user_cdr,[{created_from, CreatedFrom},{'created_to', CreatedT
 m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', 'undefined'}]}, _M, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', AccountId}]}, _M, Context);
-m_find_value({list_account_cdr,[{created_from, 'undefined'},{'created_to', 'undefined'},{'account_id', AccountId}]}, _M, Context) ->
+m_find_value({list_account_cdr,[{created_from, 'undefined'},{'created_to', 'undefined'},{'account_id', _AccountId}]}, _M, Context) ->
     kazoo_util:kz_list_account_cdr_reduced(modkazoo_util:today_begins_tstamp(Context), modkazoo_util:today_ends_tstamp(Context), Context);
-m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', AccountId}]}, _M, Context) ->
+m_find_value({list_account_cdr,[{'created_from', CreatedFrom},{'created_to', CreatedTo},{'account_id', _AccountId}]}, _M, Context) ->
     kazoo_util:kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context);
 
 m_find_value({kz_fetch_cdr_details, [{cdr_id, CDR_Id}]}, _M, Context) ->
