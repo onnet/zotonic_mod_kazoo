@@ -1,7 +1,7 @@
 {% with m.kazoo[{kz_conference_participant participant_id=participant_id conference_id=conference_id}] as participant %}
   <tr id="participants_table_line_id_{{ participant_id }}">
       <td style="text-align: center;">
-        {{ participant[1]["join_time"]|inno_timestamp_to_date }}
+        {{ participant[1]["join_time"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
       </td>
       <td style="text-align: center;">
         {{ participant[1]["caller_id_number"] }}

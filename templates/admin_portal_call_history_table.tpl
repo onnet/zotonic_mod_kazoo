@@ -11,9 +11,11 @@
         </tr>
     </thead>
     <tbody>
+      {% with m.kazoo.get_user_timezone as user_timezone %}
         {% for call in calls %}
-            {% include "admin_cdr_table_line.tpl" call=call %}
+            {% include "admin_cdr_table_line.tpl" call=call timezone=user_timezone %}
         {% endfor %}
+      {% endwith %}
     </tbody>
 </table>
 

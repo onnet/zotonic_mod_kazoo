@@ -49,7 +49,9 @@
              action={update target="rs_payments_lists_table_opened"
                             template="rs_widget_payments_list_table.tpl"
                             account_id=account_id
-                            selected_billing_period=selected_billing_period}
+                            selected_billing_period=selected_billing_period
+                            timezone=m.kazoo.get_user_timezone
+                    }
     %}
   </div>
 </span>

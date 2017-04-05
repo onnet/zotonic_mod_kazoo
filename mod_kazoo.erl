@@ -1512,7 +1512,7 @@ event({postback,refresh_admin_callstats,_,_}, Context) ->
                 modkazoo_util:curr_month_range();
             <<"range">> ->
                 {modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayFrom",Context))
-                ,modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayTo",Context))}
+                ,modkazoo_util:datepick_to_tstamp_end_day(modkazoo_util:get_q_bin("callstatsdayTo",Context))}
         end,
     mod_signal:emit({update_admin_portal_call_history_tpl
                     ,?SIGNAL_FILTER(Context)
@@ -2134,6 +2134,8 @@ event({submit,periodic_fee,_,_}, Context) ->
 lager:info("IAM Qty: ~p",[z_context:get_q("quantity", Context, 1)]),
 lager:info("IAM TO_INT: ~p",[?TO_INT(z_context:get_q("quantity", Context), 1)]),
 lager:info("IAM Props: ~p",[Props]),
+lager:info("IAM service_starts: ~p",[z_context:get_q("service_starts", Context)]),
+lager:info("IAM service_ends: ~p",[z_context:get_q("service_ends", Context)]),
     case ?TO_BIN(z_context:get_q("fee_id", Context)) of
         <<>> ->
             DataBag = ?MK_DATABAG(modkazoo_util:set_values(Props, modkazoo_util:new())),

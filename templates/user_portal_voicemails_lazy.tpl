@@ -46,63 +46,66 @@
           {% for message in m.kazoo[{kz_list_user_vmbox_messages vmbox_id=vmbox["id"]}] %}
             {% if not (message["folder"]=="deleted") %}
               <tr>
-                 <td style="text-align: center;">{{ message["timestamp"]|inno_timestamp_to_date }}</td>
-                 <td style="text-align: center;">{{ message["caller_id_number"] }}</td>
-                 <td style="text-align: center;">{{ message["folder"] }}</td>
-                 <td style="text-align: center;">
-                   <audio id="audio_{{ message["media_id"] }}">
-                       <source src="{{ m.kazoo[{kz_vmessage_download_link vmbox_id=vmbox["id"] media_id=message["media_id"]}] }}"
-                               type="audio/mp3">
-                   </audio>
-                   <a id="play_{{ message["media_id"] }}"
-                      onclick='$("#audio_{{ message["media_id"] }}").trigger("play");
-                               $("#play_{{ message["media_id"] }}").toggle();
-                               $("#pause_{{ message["media_id"] }}").toggle();
-                               z_event("event_{{ message["media_id"] }}");'>
-                      <i class="fa fa-play pointer" title="{_ Play _}"></i>
-                   </a>
-                   {% wire name="event_"++message["media_id"] 
-                      action={postback postback={set_vm_message_folder folder="saved"
-                                                                       vmbox_id=vmbox["id"]
-                                                                       media_id=message["media_id"]
-                                                }
-                                       delegate="mod_kazoo"
-                             }
-                   %}
-                   <a id="pause_{{ message["media_id"] }}"
-                      style="display: none;"
-                      onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
-                               $("#play_{{ message["media_id"] }}").toggle();
-                               $("#pause_{{ message["media_id"] }}").toggle();'>
-                      <i class="fa fa-pause pointer" title="{_ Pause _}"></i>
-                   </a>
-                   <a id="stop_{{ message["media_id"] }}"
-                      onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
-                               $("#audio_{{ message["media_id"] }}").prop("currentTime",0);
-                               $("#play_{{ message["media_id"] }}").show();
-                               $("#pause_{{ message["media_id"] }}").hide();'>
-                      <i class="fa fa-stop pointer" title="{_ Stop _}"></i>
-                   </a>
-                 </td>
-                 <td style="text-align: center;">
-                   <a href="{{ m.kazoo[{kz_vmessage_download_link vmbox_id=vmbox["id"]
-                                                                  media_id=message["media_id"]}] }}">
-                     <i class="fa fa-download" title="{_ Download _}"></i></a>
-                 </td>
-                 <td style="text-align: center;">
-                     <a><i id="delete_{{ message["media_id"] }}"
-                           class="fa fa-trash-o pointer"
-                           title="Delete"></i></a>
-                 </td>
-                 {% wire id="delete_"++message["media_id"] 
-                         action={confirm text=_"Do you really want to delete message from "++message["caller_id_number"]++"?"
-                                         action={postback postback={delete_vm_message vmbox_id=vmbox["id"]
-                                                                                      media_id=message["media_id"]
-                                                                   }
-                                                          delegate="mod_kazoo"
-                                                }
-                                }
-                 %}
+                <td style="text-align: center;">
+                  {{ message["timestamp"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
+                </td>
+                <td style="text-align: center;">{{ message["caller_id_number"] }}</td>
+                <td style="text-align: center;">{{ message["folder"] }}</td>
+                <td style="text-align: center;">
+                  <audio id="audio_{{ message["media_id"] }}">
+                      <source src="{{ m.kazoo[{kz_vmessage_download_link vmbox_id=vmbox["id"]
+                                                                         media_id=message["media_id"]}] }}"
+                              type="audio/mp3">
+                  </audio>
+                  <a id="play_{{ message["media_id"] }}"
+                     onclick='$("#audio_{{ message["media_id"] }}").trigger("play");
+                              $("#play_{{ message["media_id"] }}").toggle();
+                              $("#pause_{{ message["media_id"] }}").toggle();
+                              z_event("event_{{ message["media_id"] }}");'>
+                     <i class="fa fa-play pointer" title="{_ Play _}"></i>
+                  </a>
+                  {% wire name="event_"++message["media_id"] 
+                     action={postback postback={set_vm_message_folder folder="saved"
+                                                                      vmbox_id=vmbox["id"]
+                                                                      media_id=message["media_id"]
+                                               }
+                                      delegate="mod_kazoo"
+                            }
+                  %}
+                  <a id="pause_{{ message["media_id"] }}"
+                     style="display: none;"
+                     onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
+                              $("#play_{{ message["media_id"] }}").toggle();
+                              $("#pause_{{ message["media_id"] }}").toggle();'>
+                     <i class="fa fa-pause pointer" title="{_ Pause _}"></i>
+                  </a>
+                  <a id="stop_{{ message["media_id"] }}"
+                     onclick='$("#audio_{{ message["media_id"] }}").trigger("pause");
+                              $("#audio_{{ message["media_id"] }}").prop("currentTime",0);
+                              $("#play_{{ message["media_id"] }}").show();
+                              $("#pause_{{ message["media_id"] }}").hide();'>
+                     <i class="fa fa-stop pointer" title="{_ Stop _}"></i>
+                  </a>
+                </td>
+                <td style="text-align: center;">
+                  <a href="{{ m.kazoo[{kz_vmessage_download_link vmbox_id=vmbox["id"]
+                                                                 media_id=message["media_id"]}] }}">
+                    <i class="fa fa-download" title="{_ Download _}"></i></a>
+                </td>
+                <td style="text-align: center;">
+                  <a><i id="delete_{{ message["media_id"] }}"
+                        class="fa fa-trash-o pointer"
+                        title="Delete"></i></a>
+                </td>
+                {% wire id="delete_"++message["media_id"] 
+                        action={confirm text=_"Do you really want to delete message from "++message["caller_id_number"]++"?"
+                                        action={postback postback={delete_vm_message vmbox_id=vmbox["id"]
+                                                                                     media_id=message["media_id"]
+                                                                  }
+                                                         delegate="mod_kazoo"
+                                               }
+                               }
+                %}
               </tr>
             {% endif %}
           {% endfor %}

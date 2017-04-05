@@ -7,14 +7,19 @@
     </tr>
   </thead>
   <tbody>
-    {% for transaction in m.kazoo[{kz_list_transactions account_id=account_id
-                                                        selected_billing_period=selected_billing_period
-                                                        type="credit"}]
+    {% for
+         transaction
+       in
+         m.kazoo[{kz_list_transactions account_id=account_id
+                                       selected_billing_period=selected_billing_period
+                                       type="credit"}]
     %}
-      <tr id={{ transaction["id"] }} {% if transaction["subscription_id"] %}style="cursor: pointer;"{% endif %}>
+      <tr id={{ transaction["id"] }}
+          {% if transaction["subscription_id"] %}
+            style="cursor: pointer;"
+          {% endif %}>
         <td class="td-center">
-          {{ transaction["created"]|inno_timestamp_to_date }}
-          {{ transaction["created"]|inno_timestamp_to_date:"show_tz_name" }}
+          {{ transaction["created"]|gregsec_to_date|date:"Y-m-d H:i T":timezone }}
         </td>
         <td class="td-center1">
           {% if transaction["description"] %}
@@ -54,6 +59,4 @@ var oTable = $('#rs_payments_lists_table').dataTable({
 },
 
 });
-
 {% endjavascript %}
-

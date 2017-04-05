@@ -18,11 +18,11 @@
         {{ fee["comment"]|truncate:20 }}
       </td>
       <td class="td-center">
-        {{ fee["service_starts"]|inno_timestamp_to_date|date:"d M Y" }}
+        {{ fee["service_starts"]|gregsec_to_date|date:"Y-m-d H:i T":"UTC" }}
       </td>
       <td class="td-center">
         {% if fee["service_ends"] %}
-          {{ fee["service_ends"]|inno_timestamp_to_date|date:"d M Y" }}
+          {{ fee["service_ends"]|gregsec_to_date|date:"Y-m-d H:i":"UTC" }}
         {% else %}
           Neverending Dream...
         {% endif %}

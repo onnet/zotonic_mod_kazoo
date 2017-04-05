@@ -1,4 +1,5 @@
-<table id="rs_notifications_smtplog_table" class="table display table-striped table-condensed">
+<table id="rs_notifications_smtplog_table"
+       class="table display table-striped table-condensed">
   <thead>
     <tr>
       <th class="text-center">{_ Date _}</th>
@@ -10,13 +11,19 @@
   <tbody>
     {% for notification in m.kazoo.notifications_smtplog %}
       <tr>
-        <td class="text-center">{{ notification["created"]|inno_timestamp_to_date }}</td>
+        <td class="text-center">
+          {{
+            notification["created"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone
+          }}
+        </td>
         <td class="text-center">{{ notification["to"] }}</td>
         <td class="text-center">
           {{ notification["subject"]|truncate:19 }}
         </td>
         <td style="text-align: center;">
-          <i id="info_{{ notification["id"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+          <i id="info_{{ notification["id"]|cleanout }}"
+             class="fa fa-info-circle zprimary pointer"
+             title="{_ Details _}"></i>
           {% wire id="info_"++notification["id"]|cleanout
                   action={dialog_open title=_"Notification details"
                                       template="_notifications_smtp_log_details.tpl"
@@ -56,4 +63,3 @@ var oTable = $('#rs_notifications_smtplog_table').dataTable({
 
 });
 {% endjavascript %}
-

@@ -389,7 +389,8 @@
              <<"Pacific/Truk">>,
              <<"Pacific/Wake">>,
              <<"Pacific/Wallis">>,
-             <<"Pacific/Yap">>]).
+             <<"Pacific/Yap">>,
+             <<"Universal">>]).
 
 -define(MICROSECONDS_IN_SECOND, 1000000).
 

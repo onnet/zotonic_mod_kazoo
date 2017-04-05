@@ -40,9 +40,9 @@
                          name="start_date"
                          style="background-color: white;"
                          value="{% if rule[1]["start_date"] %}
-                                  {{ rule[1]["start_date"]|inno_timestamp_to_date|date: 'd/m/Y' }}
+                                  {{ rule[1]["start_date"]|gregsec_to_date|date:"d/m/Y":m.kazoo.get_user_timezone }}
                                 {% else %}
-                                  {{ now|sub_day|date: 'd/m/Y' }}
+                                  {{ now|sub_day|date:"d/m/Y":m.kazoo.get_user_timezone }}
                                 {% endif %}"
                          readonly/>
                   <span class="add-on hidden" style="padding-left: 1em;"><i class="fa fa-calendar"></i></span>

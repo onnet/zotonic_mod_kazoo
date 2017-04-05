@@ -12,8 +12,7 @@
     {% for ledger in m.kazoo[{kz_list_ledgers account_id=account_id selected_billing_period=selected_billing_period ledger_id="per-minute-voip"}] %}
       <tr id={{ ledger["id"] }} {% if ledger["subscription_id"] %}style="cursor: pointer;"{% endif %}>
         <td class="td-center">
-          {{ ledger["period"][1]["start"]|inno_timestamp_to_date }}
-          {{ ledger["period"][1]["start"]|inno_timestamp_to_date:"show_tz_name" }}
+          {{ ledger["period"][1]["start"]|gregsec_to_date|date:"Y-m-d H:i T":timezone }}
         </td>
         <td class="td-center">{{ ledger["metadata"][1]["caller_id_number"] }}</td>
         <td class="td-center">{{ ledger["metadata"][1]["callee_id_number"] }}</td>

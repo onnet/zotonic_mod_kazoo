@@ -11,15 +11,19 @@
   <tbody>
     {% for task in m.kazoo.account_tasks %}
       <tr>
-        <td class="text-center">{{ task["created"]|inno_timestamp_to_date }}</td>
+        <td class="text-center">
+          {{ task["created"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
+        </td>
         <td class="text-center">{{ task["category"]|truncate:13 }}</td>
         <td class="text-center">{{ task["action"]|truncate:13 }}</td>
         <td class="text-center">{{ task["status"] }}</td>
         <td style="text-align: center;">
           {% if task["status"] == "pending" %}
-            <i id="process_task_{{ task["id"]|cleanout }}" class="fa fa-play zprimary pointer" title="{_ Play _}"></i>
+            <i id="process_task_{{ task["id"]|cleanout }}"
+               class="fa fa-play zprimary pointer"
+               title="{_ Play _}"></i>
             {% wire id="process_task_"++task["id"]|cleanout
-                     action={confirm text=_"Do you really want to start this job?"
+                    action={confirm text=_"Do you really want to start this job?"
                                      action={postback postback={start_task_processing account_id=account_id
                                                                                       task_id=task["id"]
                                                                }
@@ -41,7 +45,9 @@
             {% endfor %}
           {% else %}
           {% endif %}
-          <i id="info_{{ task["id"]|cleanout }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+          <i id="info_{{ task["id"]|cleanout }}"
+             class="fa fa-info-circle zprimary pointer"
+             title="{_ Details _}"></i>
           {% wire id="info_"++task["id"]|cleanout
                   action={dialog_open title=_"Task details"
                                       template="_details.tpl"

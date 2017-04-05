@@ -16,7 +16,24 @@
     </tr>
   </thead>
   <tbody>
-    <tr><td>{_ Credit amount _}</td><td>{{ m.config.mod_kazoo.local_currency_sign.value }}{{ pr_pt[1]["amount"]|onnet_format_price }}</td></tr>
-    <tr><td>{_ Maturity date _}</td><td>{{ (pr_pt[1]["start"] + pr_pt[1]["duration"])|inno_timestamp_to_date }}</td></tr>
+    <tr>
+      <td>
+        {_ Credit amount _}
+      </td>
+      <td>
+        {{ m.config.mod_kazoo.local_currency_sign.value }}{{ pr_pt[1]["amount"]|onnet_format_price }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        {_ Maturity date _}
+      </td>
+      <td>
+        {{
+          (pr_pt[1]["start"] + pr_pt[1]["duration"])
+          |gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone
+        }}
+      </td>
+    </tr>
   </tbody>
 </table>

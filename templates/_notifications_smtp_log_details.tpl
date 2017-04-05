@@ -6,7 +6,7 @@
         <div style="border-radius: 0" class="panel panel-info">
           <div class="panel-heading">
             <strong>{_ Date _}:</strong>
-            {{ notification_created|inno_timestamp_to_date }}
+            {{ notification_created|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
             <br />
             <strong>{_ From _}:</strong>
             {{ log_message[1]["emails"][1]["from"] }}

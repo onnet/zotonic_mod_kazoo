@@ -54,7 +54,9 @@
              action={update target="rs_monthly_fees_lists_table_opened"
                             template="rs_widget_monthly_fees_list_table.tpl"
                             account_id=account_id
-                            selected_billing_period=selected_billing_period}
+                            selected_billing_period=selected_billing_period
+                            timezone=m.kazoo.get_user_timezone
+                    }
     %}
   </div>
 </span>

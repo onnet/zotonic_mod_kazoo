@@ -67,13 +67,21 @@
     <div class="row">
       <div class="col-sm-12" style="font-size: 1.1em; width:100%">
         <div id="datepicker"
-             data-date="{{ trial_time_left|inno_timestamp_seconds_from_now|inno_timestamp_to_date|date: 'm/d/Y' }}"
+             data-date="{{ trial_time_left
+                           |inno_timestamp_seconds_from_now
+                           |gregsec_to_date
+                           |date:"m/d/Y":m.kazoo.get_user_timezone
+                        }}"
              style="margin: 0 auto; display: table;">
         </div>
         <input type="hidden"
                name="new_expiration_date"
                id="my_hidden_input"
-               value="{{ trial_time_left|inno_timestamp_seconds_from_now|inno_timestamp_to_date|date: 'm/d/Y' }}">
+               value="{{ trial_time_left
+                         |inno_timestamp_seconds_from_now
+                         |gregsec_to_date
+                         |date:"m/d/Y":m.kazoo.get_user_timezone
+                      }}">
         <script>
           $('#datepicker').datepicker();
           $('#datepicker').on('changeDate', function() {
@@ -91,13 +99,14 @@
       <div class="col-sm-4 col-sm-offset-2">
         {% wire id="account_type"
                 type="change"
-                action={script script="Type = $('#account_type').val();
-                                       if (Type == 'postpaid')
-                                           {$('#max_postpay_amount').prop('placeholder', 'input max credit');
-                                            $('#max_postpay_amount').val('"++ onbill_pvt_limits[1]["max_postpay_amount"] ++"');
-                                            $('#max_postpay_amount').show()}
-                                       else
-                                           {$('#max_postpay_amount').hide()};"
+                action={script
+                        script="Type = $('#account_type').val();
+                                if (Type == 'postpaid')
+                                    {$('#max_postpay_amount').prop('placeholder', 'input max credit');
+                                     $('#max_postpay_amount').val('"++ onbill_pvt_limits[1]["max_postpay_amount"] ++"');
+                                     $('#max_postpay_amount').show()}
+                                else
+                                    {$('#max_postpay_amount').hide()};"
                        }
                 action={slide_down target="button_failover_number_service"}
         %}
@@ -118,7 +127,10 @@
         <input id="max_postpay_amount"
                name="max_postpay_amount"
                type="text"
-               class="form-control margin-bottom-xs text-center {% if not onbill_pvt_limits[1]["allow_postpay"] %}display_none{% endif %}"
+               class="form-control margin-bottom-xs text-center
+                      {% if not onbill_pvt_limits[1]["allow_postpay"] %}
+                        display_none
+                      {% endif %}"
                placeholder="max prostpay amount"
                value="{{ onbill_pvt_limits[1]["max_postpay_amount"] }}">
       </div>
@@ -128,21 +140,30 @@
   <div id="confirm_and_cancel_btn" class="form-group display_none">
     <div class="row">
       <div class="col-sm-6">
-        {% button id="confirm_trial_status_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs" text=_"Confirm" %}
+        {% button id="confirm_trial_status_btn"
+                  class="col-xs-12 btn btn-zalarm margin-bottom-xs"
+                  text=_"Confirm"
+        %}
         {% wire id="confirm_trial_status_btn"
                 type="click"
                 action={submit}
         %}
       </div>
       <div class="col-sm-6">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Close"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>
   <div id="cancel_only_btn" class="form-group">
     <div class="row">
       <div class="col-sm-12">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Close"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>

@@ -51,8 +51,16 @@
                type="text"
                class="form-control margin-bottom-xs bg_color_white"
                name="service_starts"
-               value="{% if fee_id %}{{ fee_data[1]["service_starts"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
-               data-date="{% if fee_id %}{{ fee_data[1]["service_starts"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
+               value="{% if fee_id
+                      %}{{ fee_data[1]["service_starts"]
+                           |gregsec_to_date
+                           |date:"d/m/Y":"UTC"
+                        }}{% else %}{{ now|date:"d/m/Y":"UTC" }}{% endif %}"
+               data-date="{% if fee_id
+                          %}{{ fee_data[1]["service_starts"]
+                               |gregsec_to_date
+                               |date:"d/m/Y":"UTC"
+                            }}{% else %}{{ now|date:"d/m/Y":"UTC" }}{% endif %}"
                data-date-format="dd/mm/yyyy"
                data-date-autoclose="true"
                data-date-language={{ z_language }}
@@ -83,10 +91,21 @@
       <div class="col-sm-3">
         <input id="service_ends"
                type="text"
-               class="form-control margin-bottom-xs bg_color_white {% if not fee_data[1]["service_ends"] %}hidden{% endif %}"
+               class="form-control margin-bottom-xs bg_color_white
+                      {% if not fee_data[1]["service_ends"] %}
+                        hidden
+                      {% endif %}"
                name="service_ends"
-               value="{% if fee_id %}{{ fee_data[1]["service_ends"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
-               data-date="{% if fee_id %}{{ fee_data[1]["service_ends"]|inno_timestamp_to_date|date: 'd/m/Y' }}{% else %}{{ now|date:"d/m/Y" }}{% endif %}"
+               value="{% if fee_id
+                      %}{{ fee_data[1]["service_ends"]
+                           |gregsec_to_date
+                           |date:"d/m/Y":"UTC"
+                        }}{% else %}{{ now|date:"d/m/Y":"UTC" }}{% endif %}"
+               data-date="{% if fee_id
+                          %}{{ fee_data[1]["service_ends"]
+                               |gregsec_to_date
+                               |date:"d/m/Y":"UTC"
+                            }}{% else %}{{ now|date:"d/m/Y":"UTC" }}{% endif %}"
                data-date-format="dd/mm/yyyy"
                data-date-autoclose="true"
                data-date-language={{ z_language }}
@@ -133,7 +152,10 @@
         %}
       </div>
       <div class="col-sm-6">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Cancel" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Cancel"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>
@@ -146,7 +168,10 @@
               {% endif %}">
     <div class="row">
       <div class="col-sm-12">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Close"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>
