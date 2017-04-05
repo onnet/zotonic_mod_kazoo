@@ -1495,12 +1495,42 @@ event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
     Context;
 
 event({postback,refresh_user_callstats,_,_}, Context) ->
-    SelectedDay = z_context:get_q("callstatsdayInput",Context),
-    mod_signal:emit({update_user_portal_call_history_tpl, ?SIGNAL_FILTER(Context) ++ [{selected_day, SelectedDay}]}, Context),
+    lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
+    {CreatedFrom, CreatedTo} =
+        case modkazoo_util:get_q_bin(<<"selected_billing_period">>, Context) of
+            <<"today">> -> {modkazoo_util:today_begins_tstamp(Context)
+                           ,modkazoo_util:today_ends_tstamp(Context)};
+            <<"7_days">> ->
+                {modkazoo_util:week_ago_tstamp(Context)
+                ,modkazoo_util:current_tstamp(Context)};
+            <<"this_month">> ->
+                modkazoo_util:curr_month_range();
+            <<"range">> ->
+                CrFr = modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("callstatsdayFrom",Context)),
+                CrTo = modkazoo_util:datepick_to_tstamp_end_day(modkazoo_util:get_q_bin("callstatsdayTo",Context)),
+                case (CrTo - CrFr) > (?SECONDS_IN_DAY * 30) of
+                    'false' -> {CrFr, CrTo};
+                    'true' ->
+                        mod_signal:emit({emit_growl_signal
+                                        ,?SIGNAL_FILTER(Context)
+                                         ++ [{'text',?__("30 days range max...", Context)},{'type', 'error'}]}
+                                       ,Context),
+                        {CrFr, CrFr + (?SECONDS_IN_DAY * 30) - 1}
+                end
+        end,
+    mod_signal:emit({update_user_portal_call_history_tpl
+                    ,?SIGNAL_FILTER(Context)
+                     ++ [{created_from, CreatedFrom}
+                        ,{created_to, CreatedTo}
+                        ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
+                        ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
+                        ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
+                        ]
+                    }
+                   ,Context),
     Context;
 
 event({postback,refresh_admin_callstats,_,_}, Context) ->
-    lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
     {CreatedFrom, CreatedTo} =
         case modkazoo_util:get_q_bin(<<"selected_billing_period">>, Context) of
             <<"today">> -> {modkazoo_util:today_begins_tstamp(Context)
