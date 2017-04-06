@@ -63,7 +63,7 @@
             <td style="text-align: center;">
                 {% if device_registered %}
                     <i id="info_{{ device["id"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-                    {% wire id="info_"++device["id"] action={ dialog_open title=_"Registration details" template="_device_registration_details.tpl" device_id=device["id"] } %}
+                    {% wire id="info_"++device["id"] action={dialog_open title=_"Registration details" template="_device_registration_details.tpl" device_id=device["id"] width="auto"} %}
                 {% else %}
                     -
                 {% endif %}
