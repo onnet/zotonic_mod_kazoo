@@ -2,10 +2,10 @@
 <table id="admin_portal_trunk_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
+      <th style="text-align: center;"></th>
       <th style="text-align: center1;">{_ Trunk Name _}</th>
       <th style="text-align: center;">{_ Auth method _}</th>
       <th style="text-align: center;">{_ Registration _}</th>
-      <th style="text-align: center;">{_ Active _}</th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
@@ -22,6 +22,38 @@
                reg_details
           %}
             <tr>
+              <td style="text-align: center;">
+                {% if server_details["options"][1]["enabled"] %}
+                  <i id="ts_servers_options_enabled"
+                     class="fa fa-toggle-on pointer"
+                     title="Enabled"></i>
+                  {% wire id="ts_servers_options_enabled"
+                          action={confirm text=_"Do you really want to disable this trunk"++"?"
+                                          action={postback postback={ts_trunk_disable
+                                                                     trunk_id=trunk_id
+                                                                     server_index=forloop.counter
+                                                                    }
+                                                           delegate="mod_kazoo"
+                                                 }
+                                                                 
+                                 }
+                  %}
+                {% else %}
+                  <i id="ts_servers_options_disabled"
+                     class="fa fa-toggle-off pointer"
+                     title="Disabled"></i>
+                  {% wire id="ts_servers_options_disabled"
+                          action={confirm text=_"Do you really want to enable this trunk"++"?"
+                                          action={postback postback={ts_trunk_enable
+                                                                     trunk_id=trunk_id
+                                                                     server_index=forloop.counter
+                                                                    }
+                                                           delegate="mod_kazoo"
+                                                 }
+                                 }
+                  %}
+                {% endif %}
+              </td>
               <td style="text-align: center1;">
                 {{ server_details["server_name"] }}
               </td>
@@ -42,38 +74,6 @@
                      title="Enabled"></i>
                 {% else %}
                   <i class="fa fa-remove zalarm" title="Disabled"></i>
-                {% endif %}
-              </td>
-              <td style="text-align: center;">
-                {% if server_details["options"][1]["enabled"] %}
-                  <i id="ts_servers_options_enabled"
-                     class="fa fa-check zprimary pointer"
-                     title="Enabled"></i>
-                  {% wire id="ts_servers_options_enabled"
-                          action={confirm text=_"Do you really want to disable this trunk"++"?"
-                                          action={postback postback={ts_trunk_disable
-                                                                     trunk_id=trunk_id
-                                                                     server_index=forloop.counter
-                                                                    }
-                                                           delegate="mod_kazoo"
-                                                 }
-                                                                 
-                                 }
-                  %}
-                {% else %}
-                  <i id="ts_servers_options_disabled"
-                     class="fa fa-remove zalarm pointer"
-                     title="Disabled"></i>
-                  {% wire id="ts_servers_options_disabled"
-                          action={confirm text=_"Do you really want to enable this trunk"++"?"
-                                          action={postback postback={ts_trunk_enable
-                                                                     trunk_id=trunk_id
-                                                                     server_index=forloop.counter
-                                                                    }
-                                                           delegate="mod_kazoo"
-                                                 }
-                                 }
-                  %}
                 {% endif %}
               </td>
               <td style="text-align: center;">
