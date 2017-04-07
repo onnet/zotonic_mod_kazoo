@@ -891,4 +891,9 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   width: auto;
 }
 
+.modal-body pre {
+  white-space: pre-wrap;
+  max-height: 400px;
+}
+
 </style>
