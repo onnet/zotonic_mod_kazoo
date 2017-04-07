@@ -30,26 +30,30 @@
         <tr>
           <td style="text-align: center;">
             {% if device["enabled"] %}
-              <i id="toggle_mediafax_option_{{ device["id"] }}"
+              <i id="toggle_device_enabled_{{ device["id"] }}"
                  class="fa fa-toggle-on pointer"></i>
-              {% wire id="toggle_mediafax_option_"++device["id"]
-                  action={postback postback={disable_doc type doc_id field_name}
-                                   inject_args type="device"
-                                               doc_id=device["id"]
-                                               field_name="enabled"
-                                   delegate="mod_kazoo"
-                         }
+              {% wire id="toggle_device_enabled_"++device["id"]
+                      action={confirm text=_"Do you really want to enable this device"++"?"
+                                      action={postback postback={disable_doc type doc_id field_name}
+                                                       inject_args type="device"
+                                                                   doc_id=device["id"]
+                                                                   field_name="enabled"
+                                                       delegate="mod_kazoo"
+                                             }
+                             }
               %}
             {% else %}
-              <i id="toggle_mediafax_option_{{ device["id"] }}"
+              <i id="toggle_device_enabled_{{ device["id"] }}"
                  class="fa fa-toggle-off pointer"></i>
-              {% wire id="toggle_mediafax_option_"++device["id"]
-                  action={postback postback={enable_doc type doc_id field_name}
-                                   inject_args type="device"
-                                               doc_id=device["id"]
-                                               field_name="enabled"
-                                   delegate="mod_kazoo"
-                         }
+              {% wire id="toggle_device_enabled_"++device["id"]
+                      action={confirm text=_"Do you really want to disable this device"++"?"
+                                      action={postback postback={enable_doc type doc_id field_name}
+                                                       inject_args type="device"
+                                                                   doc_id=device["id"]
+                                                                   field_name="enabled"
+                                                       delegate="mod_kazoo"
+                                             }
+                             }
               %}
             {% endif %}
           </td>
