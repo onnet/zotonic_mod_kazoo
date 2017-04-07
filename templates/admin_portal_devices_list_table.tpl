@@ -2,6 +2,7 @@
 <table id="admin_portal_devices_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
+      <th style="text-align: center;"></th>
       <th style="text-align: center;">{_ Type _}</th>
       <th style="text-align: center;">{_ Name _}</th>
       <th style="text-align: center;">{_ Owner _}</th>
@@ -27,6 +28,31 @@
            external_cid
       %}
         <tr>
+          <td style="text-align: center;">
+            {% if device["enabled"] %}
+              <i id="toggle_mediafax_option_{{ device["id"] }}"
+                 class="fa fa-toggle-on pointer"></i>
+              {% wire id="toggle_mediafax_option_"++device["id"]
+                  action={postback postback={disable_doc type doc_id field_name}
+                                   inject_args type="device"
+                                               doc_id=device["id"]
+                                               field_name="enabled"
+                                   delegate="mod_kazoo"
+                         }
+              %}
+            {% else %}
+              <i id="toggle_mediafax_option_{{ device["id"] }}"
+                 class="fa fa-toggle-off pointer"></i>
+              {% wire id="toggle_mediafax_option_"++device["id"]
+                  action={postback postback={enable_doc type doc_id field_name}
+                                   inject_args type="device"
+                                               doc_id=device["id"]
+                                               field_name="enabled"
+                                   delegate="mod_kazoo"
+                         }
+              %}
+            {% endif %}
+          </td>
           <td style="text-align: center;">
             {% if device["device_type"]=="sip_device" %}
               <i class="{% if device["enabled"] %}

@@ -82,7 +82,7 @@
     <div class="row">
       <div class="col-xs-5"><label class="edit_user_label">{_ Password _}</label></div>
       <div class="col-xs-5">
-        {% wire id="eye_sippassword" action={ toggle target="sippassword"} action={ toggle target="hiddensippassword"} %}
+        {% wire id="eye_sippassword" action={toggle target="sippassword"} action={ toggle target="hiddensippassword"} %}
         <i id="eye_sippassword" class="fa fa-eye pointer" title="Display pasword"></i>
         <span id="hiddensippassword">**********</span>
         <span id="sippassword" style="display:none;">
