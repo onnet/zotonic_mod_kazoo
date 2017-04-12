@@ -18,8 +18,15 @@
         <label class="form-control-onnet margin-bottom-xs">
           Retries
           <select id="selected_type_target" name="target_type" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="user" {% if user_id %}selected{% endif %}>User</option>
-          <option value="device" {% if device_id %}selected{% endif %}>Device</option>
+            <option value="default" {% if not fee_id %}selected{% endif %}>Default</option>
+            {% for option in 1|range:10 %}
+              <option value="{{ option }}"
+                      {% if option == fee_data[1]["quantity"] %}
+                        selected
+                      {% endif %}>
+                {{ option }}
+              </option>
+            {% endfor %}
           </select>
         </label>
       </div>
@@ -38,45 +45,45 @@
       <div class="col-sm-4">
         <label class="form-control-onnet margin-bottom-xs">
           Max digits
-          <select id="selected_type_target" name="target_type" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="user" {% if user_id %}selected{% endif %}>User</option>
-          <option value="device" {% if device_id %}selected{% endif %}>Device</option>
+          <select id="selected_max_digits" name="max_digits" class="form-control margin-bottom-xs" style="text-align:center;">
+            <option {% if not fee_id %}selected{% endif %}>Default</option>
+            {% for option in 1|range:10 %}
+              <option value="{{ option }}"
+                      {% if option == fee_data[1]["quantity"] %}
+                        selected
+                      {% endif %}>
+                {{ option }}
+              </option>
+            {% endfor %}
           </select>
         </label>
       </div>
       <div class="col-sm-4">
         <label class="form-control-onnet margin-bottom-xs">
           Interdigit
-          <select id="selected_type_target" name="target_type" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="user" {% if user_id %}selected{% endif %}>User</option>
-          <option value="device" {% if device_id %}selected{% endif %}>Device</option>
+          <select id="selected_interdigit" name="interdigit" class="form-control margin-bottom-xs" style="text-align:center;">
+            <option {% if not fee_id %}selected{% endif %}>Default</option>
+            {% for option in 1|range:10 %}
+              <option value="{{ option * 1000 }}"
+                      {% if (option * 1000) == fee_data[1]["quantity"] %}
+                        selected
+                      {% endif %}>
+                {{ option }}
+              </option>
+            {% endfor %}
           </select>
         </label>
       </div> 
       <div class="col-sm-4">
         <label class="form-control-onnet margin-bottom-xs">
           Media
-          <select id="selected_type_target" name="target_type" class="form-control margin-bottom-xs" style="text-align:center;">
-            <option value="user" {% if user_id %}selected{% endif %}>User</option>
-          <option value="device" {% if device_id %}selected{% endif %}>Device</option>
+          <select id="selected_preconnect_audio" name="preconnect_audio" class="form-control margin-bottom-xs" style="text-align:center;">
+            <option value="dialtone" {% if user_id %}selected{% endif %}>Dialtone</option>
+            <option value="ringing" {% if device_id %}selected{% endif %}>Ringing</option>
           </select>
         </label>
       </div> 
     </div>
-  </div>
-  <div class="form-group">
-      <label class="form-control-onnet margin-bottom-xs">Approved
-      <div class="row">
-        <div class="col-sm-6">
-            {% wire id="selected_type_approved" type="change" action={ update target="choice_input_div_approved" template="_group_user_device_selector.tpl" selector_name="approved_selected"} %}
-            <select id="selected_type_approved" name="approved_type" class="form-control margin-bottom-xs" style="text-align:center;">
-                    <option value="group" {% if element_data[1]["data"][1]["approved_group_id"] %}selected{% endif %}>Group</option>
-                    <option value="user" {% if element_data[1]["data"][1]["approved_user_id"] %}selected{% endif %}>User</option>
-                    <option value="device" {% if element_data[1]["data"][1]["approved_device_id"] %}selected{% endif %}>Device</option>
-            </select>
-        </div>
-      </div>
-    </label>
   </div>
   <input type="hidden" name="element_id" value="{{ element_id }}">
 </form>
@@ -96,3 +103,10 @@
 {% javascript %}
     $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
 {% endjavascript %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.form-group').on('click','input[type=checkbox]',function() {
+      $(this).closest('.checkbox-inline, .checkbox').toggleClass('checked');
+    });
+});
+</script>
