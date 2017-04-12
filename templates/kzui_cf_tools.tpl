@@ -11,17 +11,54 @@
           Basic
         </div>
         <div class="content">
-          {% include "_cf_tool_element.tpl" tool_id="user" tool_name="user" tool_descr="User" icon="user" help="Direct a caller to a specific user" %}
-          {% include "_cf_tool_element.tpl" tool_id="device" tool_name="device" tool_descr="Device" icon="phone" help=_"Ring a VoIP or cell phone or other device" %}
-          {% include "_cf_tool_element.tpl" tool_id="play" tool_name="play" tool_descr="Play Media" icon="play" help="Play an audio file such as a greeting" %}
-          {% include "_cf_tool_element.tpl" tool_id="receive_fax" tool_name="receive_fax" tool_descr="Receive Fax" icon="sip" help="Directs a fax to a specific user" %}
-          {% include "_cf_tool_element.tpl" tool_id="ring_group" tool_name="ring_group" tool_descr="Ring Group" icon="ring_group" 
-                                                                                          help="Ring several VoIP or cell phones in order or at the same time" %}
-          {% include "_cf_tool_element.tpl" tool_id="menu" tool_name="menu" tool_descr="Menu" icon="menu1"
-               help="Ask a caller to push a menu option or dial an extension number"
+          {% include "_cf_tool_element.tpl" tool_id="user"
+                                            tool_name="user"
+                                            tool_descr="User"
+                                            icon="user"
+                                            help="Direct a caller to a specific user"
           %}
-          {% include "_cf_tool_element.tpl" tool_id="temporal_route" tool_name="temporal_route" tool_descr="Time of Day" icon="temporal_route" help="" %}
-          {% include "_cf_tool_element.tpl" tool_id="branch_recovery" tool_name="branch_recovery" tool_descr="Branch recovery" icon="trash" help="" %}
+          {% include "_cf_tool_element.tpl" tool_id="device"
+                                            tool_name="device"
+                                            tool_descr="Device"
+                                            icon="phone"
+                                            help=_"Ring a VoIP or cell phone or other device"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="play"
+                                            tool_name="play"
+                                            tool_descr="Play Media"
+                                            icon="play"
+                                            help="Play an audio file such as a greeting"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="receive_fax"
+                                            tool_name="receive_fax"
+                                            tool_descr="Receive Fax"
+                                            icon="sip"
+                                            help="Directs a fax to a specific user"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="ring_group"
+                                            tool_name="ring_group"
+                                            tool_descr="Ring Group"
+                                            icon="ring_group" 
+                                            help="Ring several VoIP or cell phones in order or at the same time"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="menu"
+                                            tool_name="menu"
+                                            tool_descr="Menu"
+                                            icon="menu1"
+                                            help="Ask a caller to push a menu option or dial an extension number"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="temporal_route"
+                                            tool_name="temporal_route"
+                                            tool_descr="Time of Day"
+                                            icon="temporal_route"
+                                            help=""
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="branch_recovery"
+                                            tool_name="branch_recovery"
+                                            tool_descr="Branch recovery"
+                                            icon="trash"
+                                            help=""
+          %}
           <div class="clear">
           </div>
           <div class="app_list_nav">
