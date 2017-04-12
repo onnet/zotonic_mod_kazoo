@@ -70,27 +70,84 @@
           Advanced
         </div>
         <div class="content">
-          {% include "_cf_tool_element.tpl" tool_id="callflow" tool_name="callflow" tool_descr="Callflow" icon="callflow" help=_"Transfer the call to another call flow" %}
-          {% include "_cf_tool_element.tpl" tool_id="voicemail" tool_name="voicemail" tool_descr="Voicemail" icon="voicemail"
-                   help="Direct a caller to leave a voicemail message"
+          {% include "_cf_tool_element.tpl" tool_id="callflow"
+                                            tool_name="callflow"
+                                            tool_descr="Callflow"
+                                            icon="callflow"
+                                            help=_"Transfer the call to another call flow"
           %}
-          {% include "_cf_tool_element.tpl" tool_id="check_cid" tool_name="check_cid" tool_descr="CID Check" icon="circle_graph"
-               help="Route incoming call based on Caller ID."
+          {% include "_cf_tool_element.tpl" tool_id="voicemail"
+                                            tool_name="voicemail"
+                                            tool_descr="Voicemail"
+                                            icon="voicemail"
+                                            help="Direct a caller to leave a voicemail message"
           %}
-          {% include "_cf_tool_element.tpl" tool_id="cidlistmatch" tool_name="cidlistmatch" tool_descr="CID Match" icon="circle_graph"
-                 help="Route incoming call based on Caller ID."
+          {% include "_cf_tool_element.tpl" tool_id="check_cid"
+                                            tool_name="check_cid"
+                                            tool_descr="CID Check"
+                                            icon="circle_graph"
+                                            help="Route incoming call based on Caller ID."
           %}
-          {% include "_cf_tool_element.tpl" tool_id="prepend_cid" tool_name="prepend_cid" tool_descr="CID Prepend" icon="plus_circle" help="Prepend Caller ID with a text." %}
-          {% include "_cf_tool_element.tpl" tool_id="set_cid" tool_name="set_cid" tool_descr="Set CID" icon="plus_circle" help="Set Caller ID." %}
-          {% include "_cf_tool_element.tpl" tool_id="group_pickup" tool_name="group_pickup" tool_descr="Group Pickup" icon="sip" 
-                                                                help="Setup the group pickup feature for a user, device or a group." %}
-          {% include "_cf_tool_element.tpl" tool_id="page_group" tool_name="page_group" tool_descr="Page Group" icon="ring_group" help="Make announcement to the group" %}
-          {% include "_cf_tool_element.tpl" tool_id="record_call" tool_name="record_call" tool_descr="Record Call" icon="conference" help="" %}
-          {% include "_cf_tool_element.tpl" tool_id="eavesdrop" tool_name="eavesdrop" tool_descr="Eavesdrop" icon="scale1" help="" %}
-          {% include "_cf_tool_element.tpl" tool_id="conference" tool_name="conference" tool_descr="Conference" icon="conference"
-               help="Connect a caller to a Meet-Me conference bridge"
+          {% include "_cf_tool_element.tpl" tool_id="cidlistmatch"
+                                            tool_name="cidlistmatch"
+                                            tool_descr="CID Match"
+                                            icon="circle_graph"
+                                            help="Route incoming call based on Caller ID."
           %}
-          {% include "_cf_tool_element.tpl" tool_id="dead_air" tool_name="dead_air" tool_descr="Dead air" icon="skull2" help="Answer and keep silence" %}
+          {% include "_cf_tool_element.tpl" tool_id="prepend_cid"
+                                            tool_name="prepend_cid"
+                                            tool_descr="CID Prepend"
+                                            icon="plus_circle"
+                                            help="Prepend Caller ID with a text."
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="set_cid"
+                                            tool_name="set_cid"
+                                            tool_descr="Set CID"
+                                            icon="plus_circle"
+                                            help="Set Caller ID."
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="group_pickup"
+                                            tool_name="group_pickup"
+                                            tool_descr="Group Pickup"
+                                            icon="sip" 
+                                            help="Setup the group pickup feature for a user, device or a group."
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="page_group"
+                                            tool_name="page_group"
+                                            tool_descr="Page Group"
+                                            icon="ring_group"
+                                            help="Make announcement to the group"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="record_call"
+                                            tool_name="record_call"
+                                            tool_descr="Record Call"
+                                            icon="conference"
+                                            help=""
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="eavesdrop"
+                                            tool_name="eavesdrop"
+                                            tool_descr="Eavesdrop"
+                                            icon="scale1"
+                                            help=""
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="conference"
+                                            tool_name="conference"
+                                            tool_descr="Conference"
+                                            icon="conference"
+                                            help="Connect a caller to a Meet-Me conference bridge"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="dead_air"
+                                            tool_name="dead_air"
+                                            tool_descr="Dead air"
+                                            icon="skull2"
+                                            help="Answer and keep silence"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="disa"
+                                            tool_name="disa"
+                                            tool_descr="DISA"
+                                            icon="conference"
+                                            help="DISA allows external callers to make outbound calls as though they originated from the system"
+          %}
           <div class="clear">
           </div>
           <div class="app_list_nav">

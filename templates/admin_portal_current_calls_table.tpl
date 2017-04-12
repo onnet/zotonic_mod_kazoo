@@ -19,28 +19,45 @@
         <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
         <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}
                                         {# if running_call["answered"] #}
-                                     <!--     <i id="caller_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i> -->
+                                     <!--     <i id="caller_{{ running_call["uuid"]|cleanout }}"
+                                                 class="dark-1 icon-telicon-failover"></i> -->
                                         {# endif #}
         </td>
         {% wire id="caller_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_transfer_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"}
+                action={postback postback={channel_transfer_dialog channel_id=running_call["uuid"]}
+                                 delegate="mod_kazoo"
+                       }
         %}
         <td style="text-align: center;">{{ running_call["destination"] }}
                                         {# if running_call["answered"] #}
-                                     <!--     <i id="callee_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-failover"></i> -->
+                                     <!--     <i id="callee_{{ running_call["uuid"]|cleanout }}"
+                                                 class="dark-1 icon-telicon-failover"></i> -->
                                         {# endif #}
         </td>
         {% wire id="callee_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_transfer_dialog channel_id=running_call["other_leg"]} delegate="mod_kazoo"}
+                action={postback postback={channel_transfer_dialog channel_id=running_call["other_leg"]}
+                                 delegate="mod_kazoo"
+                       }
         %}
-        <td style="text-align: center;">{% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}</td>
-        <td style="text-align: center;"><i id="eavesdrop_{{ running_call["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i></td>
+        <td style="text-align: center;">
+          {% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}
+        </td>
+        <td style="text-align: center;">
+          <i id="eavesdrop_{{ running_call["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i>
+        </td>
         {% wire id="eavesdrop_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_eavesdrop_dialog channel_id=running_call["uuid"]} delegate="mod_kazoo"}
+                action={postback postback={channel_eavesdrop_dialog channel_id=running_call["uuid"]}
+                                 delegate="mod_kazoo"
+                       }
         %}
-        <td style="text-align: center;"><i id="hangup_{{ running_call["uuid"]|cleanout }}" class="dark-1 icon-telicon-hangup pointer"></i></td>
+        <td style="text-align: center;">
+          <i id="hangup_{{ running_call["uuid"]|cleanout }}"
+             class="dark-1 icon-telicon-hangup pointer"></i>
+        </td>
         {% wire id="hangup_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]} delegate="mod_kazoo"}
+                action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]}
+                                 delegate="mod_kazoo"
+                       }
         %}
       </tr>
       {% endif %}
