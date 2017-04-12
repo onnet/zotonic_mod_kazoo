@@ -2450,9 +2450,16 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                                                                         ,{switch,Switch}]
                                                         ,Context)
                                      ,Context),
+            ModalHeader =
+                case ToolName of
+                    "disa" -> "Configure";
+                    _ -> "Select"
+                end,
             cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], ?TO_BIN(ToolName), Context),
             cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
-            z_render:dialog(?__("Select ",Context1), "_cf_select_"++ToolName++".tpl", [{element_id, ElementId},{tool_name,ToolName}], Context1)
+            z_render:dialog(?__(ModalHeader, Context1) ++ " "
+                           ,"_cf_select_"++ToolName++".tpl"
+                           ,[{element_id, ElementId},{tool_name,ToolName}], Context1)
     end.
 
 cf_child_not_exists(ElementId, Context) ->
