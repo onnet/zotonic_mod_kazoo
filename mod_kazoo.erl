@@ -1119,6 +1119,23 @@ event({submit,cf_select_option_temporal_route,_,_},Context) ->
             z_render:dialog_close(Context)
     end;
 
+event({submit,cf_select_disa,_,_},Context) ->
+    lager:info("Disa event variables: ~p", [z_context:get_q_all(Context)]),
+    ElementId = z_context:get_q("element_id", Context),
+    DataValues = modkazoo_util:filter_undefined(
+        [{<<"pin">>, modkazoo_util:get_q_bin("pin", Context)}
+        ,{<<"use_account_caller_id">>, modkazoo_util:on_to_true(z_context:get_q("use_account_caller_id", Context))}
+        ,{<<"preconnect_audio">>, modkazoo_util:get_q_bin("preconnect_audio", Context)}
+        ,{<<"max_digits">>, modkazoo_util:get_q_bin("max_digits", Context)}
+        ,{<<"retries">>, modkazoo_util:get_q_bin("retries", Context)}
+        ,{<<"interdigit">>, modkazoo_util:get_q_bin("interdigit", Context)}
+        ]),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data"]
+                                 ,modkazoo_util:set_values(DataValues, modkazoo_util:new())
+                                 ,Context),
+    z_render:dialog_close(Context);
+
 event({postback,{cf_load,_},_,_},Context) ->
     kazoo_util:cf_load_to_session(z_context:get_q("triggervalue", Context),Context),
     kazoo_util:cf_notes_flush(Context),
