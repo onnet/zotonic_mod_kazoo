@@ -1119,8 +1119,21 @@ event({submit,cf_select_option_temporal_route,_,_},Context) ->
             z_render:dialog_close(Context)
     end;
 
+event({submit,cf_select_response,_,_},Context) ->
+    lager:info("Response event variables: ~p", [z_context:get_q_all(Context)]),
+    ElementId = z_context:get_q("element_id", Context),
+    DataValues = modkazoo_util:filter_empty(
+        [{<<"code">>, modkazoo_util:get_q_bin("code", Context)}
+        ,{<<"message">>, modkazoo_util:get_q_bin("message", Context)}
+        ,{<<"media">>, modkazoo_util:get_q_bin("selected", Context)}
+        ]),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data"]
+                                 ,modkazoo_util:set_values(DataValues, modkazoo_util:new())
+                                 ,Context),
+    z_render:dialog_close(Context);
+
 event({submit,cf_select_disa,_,_},Context) ->
-    lager:info("Disa event variables: ~p", [z_context:get_q_all(Context)]),
     ElementId = z_context:get_q("element_id", Context),
     DataValues = modkazoo_util:filter_empty(
         [{<<"pin">>, modkazoo_util:get_q_bin("pin", Context)}

@@ -2453,6 +2453,7 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
             ModalHeader =
                 case ToolName of
                     "disa" -> "Configure";
+                    "response" -> "Configure";
                     _ -> "Select"
                 end,
             cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], ?TO_BIN(ToolName), Context),
