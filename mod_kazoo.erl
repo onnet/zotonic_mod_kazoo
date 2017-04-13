@@ -1122,7 +1122,7 @@ event({submit,cf_select_option_temporal_route,_,_},Context) ->
 event({submit,cf_select_disa,_,_},Context) ->
     lager:info("Disa event variables: ~p", [z_context:get_q_all(Context)]),
     ElementId = z_context:get_q("element_id", Context),
-    DataValues = modkazoo_util:filter_undefined(
+    DataValues = modkazoo_util:filter_empty(
         [{<<"pin">>, modkazoo_util:get_q_bin("pin", Context)}
         ,{<<"use_account_caller_id">>, modkazoo_util:on_to_true(z_context:get_q("use_account_caller_id", Context))}
         ,{<<"preconnect_audio">>, modkazoo_util:get_q_bin("preconnect_audio", Context)}
