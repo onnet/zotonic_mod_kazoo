@@ -148,6 +148,12 @@
                                             icon="conference"
                                             help="DISA allows external callers to make outbound calls as though they originated from the system"
           %}
+          {% include "_cf_tool_element.tpl" tool_id="response"
+                                            tool_name="response"
+                                            tool_descr="Response"
+                                            icon="rightarrow"
+                                            help="Return a custom SIP error code"
+          %}
           <div class="clear">
           </div>
           <div class="app_list_nav">

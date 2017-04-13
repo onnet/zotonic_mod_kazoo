@@ -896,4 +896,12 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   max-height: 400px;
 }
 
+div#ws_cf_tools .popover {
+  color: black;
+  background-color: white;
+/*  border: 1px solid #CCCCCC; */
+  border-radius: 0!important;
+  padding: 0px;
+}
+
 </style>

@@ -18,5 +18,11 @@
   {% include "kzui_cf.tpl" %}
 </span>
 
+{% javascript %}
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  });
+{% endjavascript %}
+
 {% endblock %}
 
