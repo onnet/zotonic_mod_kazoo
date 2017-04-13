@@ -53,7 +53,7 @@
   </div>
 </div>
 {% wire id="button_cf_select_response"
-        action={script script="$('#"++element_id++"_details').text(($('#response_selector option:selected').text()))"}
+        action={script script="$('#"++element_id++"_details').text('SIP Code: ' + ($('#sip_code').val()))"}
         action={submit target="form_cf_select_response"}
 %}
 {% javascript %}

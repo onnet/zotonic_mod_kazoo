@@ -2659,6 +2659,9 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"eavesdro
                 Name -> [Id,Name]
             end
     end;
+cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"response">> ->
+    Code = modkazoo_util:get_value_bin(ModulePath++[<<"data">>,<<"code">>],z_context:get_session('current_callflow', Context)), 
+    ['undefined', <<"SIP Code: ", Code/binary>>];
 cf_get_module_info(_ModuleName,_ModulePath,_Context) ->
     ['undefined','undefined'].
 
