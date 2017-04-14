@@ -1,5 +1,5 @@
-# CentOS 7 Zotonic + mod_kazoo installation notes
-
+# CentOS 7 Zotonic + mod_kazoo = OKUI installation notes
+### Note: In order OKUI functions properly [Onbill Kazoo app](https://github.com/onnet/onbill "onbill") should be installed in your Kazoo environment
 ## Zotonic installation
 
 - yum install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool
