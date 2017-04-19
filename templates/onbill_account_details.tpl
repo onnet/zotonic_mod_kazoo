@@ -149,7 +149,14 @@
       {% endwith %}
     {% endif %}
     <tr>
-      <th>{_ Billing status _}</th>
+      <th>
+        {_ Billing status _}
+        {% if m.kazoo[{kz_current_service_plans account_id=account_id}][1]["billing_id"] != account_id %}
+          <small class="zalarm">
+            ({_ billing_id mismatch _})
+          </small>
+        {% endif %}
+      </th>
       <th>
         {% if m.kazoo[{services_status account_id=account_id}][1]["in_good_standing"] %}
           <span class="zprimary">{_ Good standing _}</span>
