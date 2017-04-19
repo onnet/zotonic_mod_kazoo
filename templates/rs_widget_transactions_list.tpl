@@ -36,7 +36,7 @@
                 {% if selected_billing_period|split:","|first == billing_period["period_start"][1]["day_begins_ts"] %}
                   selected
                 {% endif %}>
-          {% if billing_period["period_start"][1]["month_short"] == billing_period["period_end"][1]["month_short"] %}
+          {% if billing_period["period_start"][1]["billing_day"] == 1 %}
             {{ billing_period["period_start"][1]["month_short"] }}
             {{ billing_period["period_start"][1]["year"] }}
           {% else %}
