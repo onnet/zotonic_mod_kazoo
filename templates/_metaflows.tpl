@@ -83,6 +83,6 @@
 {% endif %}
 {% endwith %}
 <span id="metaflows_capture_add_span">
-  {% include "_metaflows_capture_add.tpl" %}
+  {% include "_metaflows_capture_add.tpl" account_id=account_id %}
 </span>
 {# print m.kazoo[{metaflows account_id=account_id}] #}

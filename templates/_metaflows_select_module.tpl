@@ -18,6 +18,7 @@
               <option value="transfer">{_ Transfer _}</option>
             {% elseif q.triggervalue == "numbers" %}
               <option value="hold">{_ Hold _}</option>
+              <option value="move">{_ Move _}</option>
             {% endif %}
         </select>
       </div>
