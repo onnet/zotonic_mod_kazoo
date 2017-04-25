@@ -3034,7 +3034,15 @@ kz_conference_participant(ParticipantId, ConferenceId, Context) ->
 kz_conference_participant(Verb, ParticipantId, ConferenceId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary,
                                                           ?PARTICIPANTS/binary, "/", ?TO_BIN(ParticipantId)/binary>>,
-    crossbar_account_request(Verb, API_String, DataBag, Context).
+%%
+%% It seems cluster has problems with delivery action to the node where conference resides...
+%% We'll send request several times it order at least one could reach needed node 
+%%
+    _ = crossbar_account_request(Verb, API_String, DataBag, Context),
+    _ = crossbar_account_request(Verb, API_String, DataBag, Context),
+    _ = crossbar_account_request(Verb, API_String, DataBag, Context),
+    _ = crossbar_account_request(Verb, API_String, DataBag, Context),
+    _ = crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_conference_participants(ConferenceId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CONFERENCES/binary, "/", ?TO_BIN(ConferenceId)/binary, ?PARTICIPANTS/binary>>,
