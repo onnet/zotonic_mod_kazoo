@@ -4,6 +4,7 @@
       <th class="td-center">{_ Date _}</th>
       <th class="td-center1">{_ Description _}</th>
       <th class="td-center">{_ Sum _}</th>
+      <th class="td-center"></th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,7 @@
                                        selected_billing_period=selected_billing_period
                                        type="credit"}]
     %}
+{% print transaction %}
       <tr id={{ transaction["id"] }}
           {% if transaction["subscription_id"] %}
             style="cursor: pointer;"
@@ -30,6 +32,27 @@
         </td>
         <td class="pri-1 td-right">
           {{ transaction["amount"]|format_price:[".",""]|currency_sign }}
+        </td>
+        <td class="td-center1">
+          {% if transaction["invoice_number"] %}
+            <i class="fa fa-money" aria-hidden="true"></i>
+          {% else %}
+            <i id="invoice_me_{{ transaction["id"]|cleanout }}" class="fa fa-paper-plane pointer" aria-hidden="true" title="Issue an invoice"></i>
+            {% wire id="invoice_me_"++transaction["id"]|cleanout
+                    action={dialog_open template="_details.tpl"
+                                        title="Issue an invoice for"
+                                                ++
+                                              " "
+                                                ++
+                                              transaction["description"]
+                                                ++
+                                              " "
+                                                ++
+                                              transaction["amount"]|format_price:[".",""]|currency_sign
+                                        arg=transaction["id"]
+                           }
+            %}
+          {% endif %}
         </td>
       </tr>
     {% endfor %}
