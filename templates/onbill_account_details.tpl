@@ -132,7 +132,7 @@
             </span>
           {% else %}
             <span class="zprimary">
-            {_ Prepaid _}
+            {_ Prepaid _} <small>({_ billing day _}: {{ current_billing_period[1]["billing_day"] }})</small>
             </span>
             <span class="pull-right" style="padding-right: 1em;">
             {{ current_billing_period[1]["period_start"][1]["day"] }}

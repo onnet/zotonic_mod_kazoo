@@ -2,7 +2,7 @@
   {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) and m.kazoo.is_kazoo_account_admin %}
     <li><a href="/reseller_portal">{_ Accounts _}</a></li>
     <li><a href="/reseller_settings">{_ Settings _}</a>
-    <li><a href="/billing_operations">{_ Operations _}</a></li>
+<!--    <li><a href="/billing_operations">{_ Operations _}</a></li> -->
     <li><a href="/reseller_system_monitor">{_ Monitor _}</a></li>
   {% endif %}
 </ul>

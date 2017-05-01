@@ -2484,6 +2484,8 @@ event({postback,{delete_metaflow_capture_element,[{account_id,AccountId}
     _ = kazoo_util:metaflows('post', AccountId, ?MK_DATABAG(NewDoc), Context),
     z_render:update("restrictions_pannel_div",z_template:render("_metaflows.tpl",[{account_id,AccountId}],Context),Context);
 
+event({submit,issue_invoice_for_credit,_,_}, Context) ->
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
