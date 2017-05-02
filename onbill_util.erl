@@ -6,7 +6,7 @@
          ,onbill_attachment_link/4
          ,onbill_attachment_name_link/5
          ,generate_monthly_docs/4
-         ,generate_transaction_based_invoice/4
+         ,generate_transaction_based_invoice/5
          ,variables/2
          ,variables/4
          ,onbill_service_plan/2
@@ -153,9 +153,14 @@ generate_monthly_docs(DocType, AccountId, Timestamp, Context) ->
     DataBag = ?MK_DATABAG({[{<<"period_timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
     kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
 
-generate_transaction_based_invoice(DocType, AccountId, Timestamp, Context) ->
+generate_transaction_based_invoice(TransactionId, TransactionDescription, AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
-    DataBag = ?MK_DATABAG({[{<<"period_timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
+    Values = modkazoo_util:filter_undefined([{<<"invoice_timestamp">>, Timestamp}
+                                            ,{<<"transaction_description">>, TransactionDescription}
+                                            ,{<<"transaction_id">>, TransactionId}
+                                            ,{<<"doc_type">>, <<"transaction_invoice">>}
+                                            ]),
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(Values, modkazoo_util:new())),
     kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
 
 doc_field(Field, DocId, Context) when is_binary(Field) ->
