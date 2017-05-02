@@ -82,8 +82,8 @@ do_sign_in(Login, Password, Account, Context) ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. Code: ~p.", [Login,Account,Code]),
             lager:info("Failed to authenticate Kazoo user ~p@~p. Data: ~p.", [Login,Account,Data]),
             growl_login_error(Data, Context);
-        _ ->
-            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
+        _E ->
+            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p. Error: ~p", [Login,Account,ClientIP, _E]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
     end.
 

@@ -639,7 +639,9 @@ kz_creds(URL, DataBag, Context) ->
                 {'badauth', Code, Data}
         end
     catch
-        _:_ -> <<"Auth exception">>
+        _E ->
+            lager:info("kz_kreds Auth exception: ~p",[_E]),
+            <<"Auth exception">>
     end.
 
 kz_get_acc_doc(Context) ->

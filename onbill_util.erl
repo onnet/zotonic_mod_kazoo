@@ -6,6 +6,7 @@
          ,onbill_attachment_link/4
          ,onbill_attachment_name_link/5
          ,generate_monthly_docs/4
+         ,generate_transaction_based_invoice/4
          ,variables/2
          ,variables/4
          ,onbill_service_plan/2
@@ -147,14 +148,15 @@ onbill_attachment_name_link(AccountId, DocId, AttName, DocType, Context) ->
                  >>,
     <<"https://", (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, API_String/binary>>.
 
-generate_monthly_docs(DocType, DocsAccountId, Timestamp, Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary, "/", ?TO_BIN(DocsAccountId)/binary>>,
+generate_monthly_docs(DocType, AccountId, Timestamp, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
     DataBag = ?MK_DATABAG({[{<<"period_timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
     kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
 
-generate_transaction_based_invoice(DocType, DocsAccountId, Timestamp, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary, "/", ?TO_BIN(DocsAccountId)/binary>>,
+generate_transaction_based_invoice(DocType, AccountId, Timestamp, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
+    DataBag = ?MK_DATABAG({[{<<"period_timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
+    kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
 
 doc_field(Field, DocId, Context) when is_binary(Field) ->
     modkazoo_util:get_value(Field, doc(DocId, Context));
