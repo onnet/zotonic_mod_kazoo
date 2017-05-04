@@ -43,6 +43,14 @@
     </tr>
   </thead>
 </table>
+{% wire action={connect signal={rs_payments_lists_table_opened signal_filter=m.kazoo.signal_filter}
+                        action={update target="rs_payments_lists_table_opened"
+                                       template="rs_widget_payments_list_table.tpl"
+                                       account_id=account_id
+                                       selected_billing_period=selected_billing_period
+                               }
+               }
+%}
 <span id="rs_payments_lists_table_opened" style="display: none;">
   <div class="text-center p-3">
     {% ilazy class="fa fa-spinner fa-spin fa-3x"
@@ -50,7 +58,6 @@
                             template="rs_widget_payments_list_table.tpl"
                             account_id=account_id
                             selected_billing_period=selected_billing_period
-                            timezone=m.kazoo.get_user_timezone
                     }
     %}
   </div>

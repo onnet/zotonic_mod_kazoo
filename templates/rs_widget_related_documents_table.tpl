@@ -14,7 +14,7 @@
   <tbody>
     {% for doc in m.onbill[{docs_listing account_id=account_id selected_billing_period=selected_billing_period}] %}
     <tr>
-      <td>{{ doc["type"]|truncate:10 }}</td>
+      <td>{{ doc["type"]|truncate:11 }}</td>
       <td class="td-center">{{ doc["oper_name_short"]|truncate:15 }}</td>
       <td class="td-center">{{ doc["doc_number"]|truncate:15 }}</td>
       <td class="td-center">{{ doc["doc_date"] }}</td>

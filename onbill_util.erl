@@ -80,7 +80,7 @@
 -define(ONBILL_PROFORMA, <<"/onbill_proforma">>).
 
 docs_listing(AccountId, Timestamp, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary,"?period_timestamp=", ?TO_BIN(Timestamp)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary,"?timestamp=", ?TO_BIN(Timestamp)/binary>>,
     kazoo_util:crossbar_account_request('get', API_String, [], Context).
 
 doc(DocId, Context) ->
@@ -150,18 +150,18 @@ onbill_attachment_name_link(AccountId, DocId, AttName, DocType, Context) ->
 
 generate_monthly_docs(DocType, AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
-    DataBag = ?MK_DATABAG({[{<<"period_timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
+    DataBag = ?MK_DATABAG({[{<<"timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
     kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
 
 generate_transaction_based_invoice(TransactionId, TransactionDescription, AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
-    Values = modkazoo_util:filter_undefined([{<<"invoice_timestamp">>, Timestamp}
+    Values = modkazoo_util:filter_undefined([{<<"timestamp">>, Timestamp}
                                             ,{<<"transaction_description">>, TransactionDescription}
                                             ,{<<"transaction_id">>, TransactionId}
                                             ,{<<"doc_type">>, <<"transaction_invoice">>}
                                             ]),
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(Values, modkazoo_util:new())),
-    kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
+    kazoo_util:crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
 
 doc_field(Field, DocId, Context) when is_binary(Field) ->
     modkazoo_util:get_value(Field, doc(DocId, Context));
@@ -218,7 +218,7 @@ billing_periods(AccountId, Context) ->
 
 period_balance(AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?PERIOD_BALANCE/binary
-                  ,"?period_timestamp=", ?TO_BIN(Timestamp)/binary>>,
+                  ,"?timestamp=", ?TO_BIN(Timestamp)/binary>>,
     kazoo_util:crossbar_account_request('get', API_String, [], Context).
 
 currency_sign(Context) ->

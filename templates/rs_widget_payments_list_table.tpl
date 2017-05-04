@@ -1,3 +1,4 @@
+{% with m.kazoo.get_user_timezone as timezone %}
 <table id="rs_payments_lists_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
@@ -33,8 +34,12 @@
           {{ transaction["amount"]|format_price:[".",""]|currency_sign }}
         </td>
         <td class="td-center1">
-          {% if transaction["invoice_number"] %}
-            <i class="fa fa-money" aria-hidden="true"></i>
+          {% if transaction["metadata"][1]["invoice_id"] %}
+           <a target="_blank"
+              href="{{ m.onbill[{attachment_download_link account_id=account_id
+                                                          doc_id=transaction["metadata"][1]["invoice_id"]
+                                                          doc_type="onbill_modb"}] }}">
+            <i class="fa fa-money pointer" aria-hidden="true"></i></a>
           {% else %}
             <i id="invoice_me_{{ transaction["id"]|cleanout }}"
                class="fa fa-paper-plane pointer"
@@ -54,6 +59,7 @@
                                                 |currency_sign
                                         transaction=transaction
                                         account_id=account_id
+                                        selected_billing_period=selected_billing_period
                            }
             %}
           {% endif %}
@@ -62,6 +68,7 @@
     {% endfor %}
   </tbody>
 </table>
+{% endwith %}
 
 {% javascript %}
 //var initSearchParam = $.getURLParam("filter");

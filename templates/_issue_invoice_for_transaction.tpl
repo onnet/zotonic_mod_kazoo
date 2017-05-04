@@ -2,7 +2,7 @@
 <form id="form_issue_invoice_for_transaction" method="post" action="postback">
   <div class="form-group">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-8">
         <select id="credit_reason"
                 name="credit_reason"
                 class="form-control margin-bottom-xs"
@@ -22,6 +22,23 @@
                                        }"
                        }
         %}
+      </div>
+      <div class="col-sm-4">
+        <input id="invoice_date"
+               type="text"
+               class="form-control margin-bottom-xs bg_color_white"
+               name="invoice_date"
+               value="{{ now|date: 'd/m/Y' }}"
+               data-date="{{ now|date: 'd/m/Y' }}"
+               data-date-format="dd/mm/yyyy"
+               data-date-autoclose="true"
+               data-date-language={{ z_language }}
+               data-date-start-date="-6m"
+               data-date-end-date="+0d"
+               readonly/>
+       {% javascript %}
+           $('#invoice_date').datepicker();
+       {% endjavascript %}
       </div>
     </div>
   </div>
@@ -52,5 +69,7 @@
   </div>
   <input type="hidden" name="account_id" value="{{ account_id }}">
   <input type="hidden" name="transaction_id" value="{{ transaction["id"] }}">
+  <input type="hidden" name="selected_billing_period" value="{{ selected_billing_period }}">
 </form>
 {% print transaction %}
+{% print selected_billing_period %}

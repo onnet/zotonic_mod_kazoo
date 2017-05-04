@@ -2489,8 +2489,20 @@ event({submit,issue_invoice_for_transaction,_,_}, Context) ->
     AccountId = modkazoo_util:get_q_bin("account_id", Context),
     TransactionDescription = modkazoo_util:get_q_bin("transaction_description", Context),
     TransactionId = modkazoo_util:get_q_bin("transaction_id", Context),
-    InvoiceTimestamp = modkazoo_util:get_q_bin("invoice_timestamp", Context),
-    onbill_util:generate_transaction_based_invoice(TransactionId, TransactionDescription, AccountId, InvoiceTimestamp, Context);
+    Timestamp = modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("invoice_date", Context)),
+    case onbill_util:generate_transaction_based_invoice(TransactionId, TransactionDescription, AccountId, Timestamp, Context) of
+        {'error', _ReturnCode, Body} ->
+            Message = modkazoo_util:get_first_defined([[<<"data">>,<<"message">>]
+                                                      ,[<<"data">>,<<"api_error">>,<<"message">>]
+                                                      ]
+                                                     ,jiffy:decode(Body)
+                                                     ,<<"Something went wrong">>),
+            Context1 = z_render:growl_error(?__(z_convert:to_list(Message), Context), Context),
+            z_render:dialog_close(Context1);
+        _ ->
+            mod_signal:emit({rs_payments_lists_table_opened, ?SIGNAL_FILTER(Context)}, Context),
+            z_render:dialog_close(z_render:growl(?__("Invoice created", Context), Context))
+    end;
 
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),

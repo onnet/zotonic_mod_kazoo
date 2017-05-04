@@ -8,6 +8,7 @@
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
     ,crossbar_account_request/4
+    ,crossbar_account_request/5
     ,crossbar_account_send_raw_request/5
     ,crossbar_account_send_raw_request_body/5
     ,crossbar_account_send_raw_request_body/6
@@ -866,7 +867,7 @@ crossbar_account_request(Verb, API_String, DataBag, Context) ->
 
 crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
     case crossbar_account_send_request(Verb, API_String, DataBag, Context) of
-        {'ok', ReturnCode, _, Body} ->
+        {'ok', ReturnCode, Headers, Body} ->
             case ReturnCode of
                 [50,_,_] ->
                     {JsonData} = jiffy:decode(Body),
@@ -890,8 +891,9 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                     lager:info("crossbar_account_request DataBag: ~p", [DataBag]),
                     lager:info("crossbar_account_request Verb: ~p", [Verb]),
                     lager:info("crossbar_account_request RC: ~p", [ReturnCode]),
+                    lager:info("crossbar_account_request Headers: ~p", [Headers]),
                     lager:info("crossbar_account_request Body: ~p", [Body]),
-                    lager:info("crossbar_account_request decoded Body: ~p", [jiffy:decode(Body)]),
+                  %  lager:info("crossbar_account_request decoded Body: ~p", [jiffy:decode(Body)]),
                     error_return(ReturnCode, Body, Default)
             end;
         E -> 
