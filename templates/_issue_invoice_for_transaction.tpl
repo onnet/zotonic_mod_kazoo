@@ -28,13 +28,19 @@
                type="text"
                class="form-control margin-bottom-xs bg_color_white"
                name="invoice_date"
-               value="{{ now|date: 'd/m/Y' }}"
-               data-date="{{ now|date: 'd/m/Y' }}"
+               value="{{ transaction["created"]|gregsec_to_date|date: 'd/m/Y' }}"
+               data-date="{{ transaction["created"]|gregsec_to_date|date: 'd/m/Y' }}"
                data-date-format="dd/mm/yyyy"
                data-date-autoclose="true"
                data-date-language={{ z_language }}
-               data-date-start-date="-6m"
-               data-date-end-date="+0d"
+               data-date-start-date="{% if selected_billing_period
+                                      %}{{ selected_billing_period|split:","|first
+                                           |gregsec_to_date|date: 'd/m/Y' }}{%
+                                        else %}-2m{% endif %}"
+               data-date-end-date="{% if selected_billing_period
+                                    %}{{ selected_billing_period|split:","|last
+                                         |gregsec_to_date|date: 'd/m/Y' }}{%
+                                      else %}+0d{% endif %}"
                readonly/>
        {% javascript %}
            $('#invoice_date').datepicker();
@@ -73,3 +79,5 @@
 </form>
 {% print transaction %}
 {% print selected_billing_period %}
+{% print selected_billing_period|split:","|first|gregsec_to_date %}
+{% print selected_billing_period|split:","|last|gregsec_to_date %}
