@@ -40,7 +40,7 @@
                                                           doc_id=transaction["metadata"][1]["invoice_id"]
                                                           doc_type="onbill_modb"}] }}">
             <i class="fa fa-money pointer" aria-hidden="true"></i></a>
-          {% else %}
+          {% elseif (not selected_billing_period) or (now|date: 'Ym' == selected_billing_period|split:","|last|gregsec_to_date|date: 'Ym') %}
             <i id="invoice_me_{{ transaction["id"]|cleanout }}"
                class="fa fa-paper-plane pointer"
                aria-hidden="true"

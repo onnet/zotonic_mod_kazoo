@@ -80,4 +80,5 @@
 {% print transaction %}
 {% print selected_billing_period %}
 {% print selected_billing_period|split:","|first|gregsec_to_date %}
-{% print selected_billing_period|split:","|last|gregsec_to_date %}
+{% print selected_billing_period|split:","|last|gregsec_to_date|date: 'Ym' %}
+{% print now|date: 'Ym' == selected_billing_period|split:","|last|gregsec_to_date|date: 'Ym' %}
