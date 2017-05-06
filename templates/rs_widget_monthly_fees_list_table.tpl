@@ -41,7 +41,11 @@
             {% endif %}
           </td>
           <td class="pri-15 td-right">
-            {{ transaction["metadata"][1]["quantity"] }}
+            {% if transaction["metadata"][1]["quantity"] %}
+              {{ transaction["metadata"][1]["quantity"] }}
+            {% else %}
+              1
+            {% endif %}
           </td>
           <td class="pri-1 td-right">
             {{ transaction["amount"]|format_price:[".",""]|currency_sign }}

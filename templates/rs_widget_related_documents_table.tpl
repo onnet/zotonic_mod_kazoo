@@ -16,8 +16,18 @@
     <tr>
       <td>{{ doc["type"]|truncate:11 }}</td>
       <td class="td-center">{{ doc["oper_name_short"]|truncate:15 }}</td>
-      <td class="td-center">{{ doc["doc_number"]|truncate:15 }}</td>
-      <td class="td-center">{{ doc["doc_date"] }}</td>
+      <td class="td-center">
+        {{ doc["doc_number"] }}
+      </td>
+      <td class="td-center">
+        {% if doc["doc_date_json"][1]["day"] %}
+          {{ doc["doc_date_json"][1]["day"] }}
+          {{ doc["doc_date_json"][1]["month_short"] }}
+          {{ doc["doc_date_json"][1]["year"] }}
+        {% else %}
+          {{ doc["doc_date"] }}
+        {% endif %}
+      </td>
       <td class="td-center">{{ doc["total_netto"]|currency_sign }}</td>
       <td class="td-center">{{ doc["total_vat"]|currency_sign }}</td>
       <td class="td-center">{{ doc["total_brutto"]|currency_sign }}</td>
