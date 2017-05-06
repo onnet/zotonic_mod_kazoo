@@ -2487,10 +2487,10 @@ event({postback,{delete_metaflow_capture_element,[{account_id,AccountId}
 event({submit,issue_invoice_for_transaction,_,_}, Context) ->
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
     AccountId = modkazoo_util:get_q_bin("account_id", Context),
-    TransactionDescription = modkazoo_util:get_q_bin("transaction_description", Context),
+    InvoiceDescription = modkazoo_util:get_q_bin("invoice_description", Context),
     TransactionId = modkazoo_util:get_q_bin("transaction_id", Context),
     Timestamp = modkazoo_util:datepick_to_tstamp(modkazoo_util:get_q_bin("invoice_date", Context)),
-    case onbill_util:generate_transaction_based_invoice(TransactionId, TransactionDescription, AccountId, Timestamp, Context) of
+    case onbill_util:generate_transaction_based_invoice(TransactionId, InvoiceDescription, AccountId, Timestamp, Context) of
         {'error', _ReturnCode, Body} ->
             Message = modkazoo_util:get_first_defined([[<<"data">>,<<"message">>]
                                                       ,[<<"data">>,<<"api_error">>,<<"message">>]

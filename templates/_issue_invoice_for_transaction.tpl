@@ -14,11 +14,11 @@
                 type="change"
                 action={script script="CreditReason = $('#credit_reason option:selected').val();
                                        if (CreditReason == 'other_description') {
-                                            $('#transaction_description').val('');
-                                            $('#transaction_description_form_group').show();
+                                            $('#invoice_description').val('');
+                                            $('#invoice_description_form_group').show();
                                        } else {
-                                            $('#transaction_description_form_group').hide();
-                                            $('#transaction_description').val($('#credit_reason option:selected').text());
+                                            $('#invoice_description_form_group').hide();
+                                            $('#invoice_description').val($('#credit_reason option:selected').text());
                                        }"
                        }
         %}
@@ -48,13 +48,13 @@
       </div>
     </div>
   </div>
-  <div id="transaction_description_form_group" class="form-group display_none">
+  <div id="invoice_description_form_group" class="form-group display_none">
     <div class="row">
       <div class="col-sm-12">
         <input type="text"
                class="form-control margin-bottom-xs"
-               id="transaction_description"
-               name="transaction_description"
+               id="invoice_description"
+               name="invoice_description"
                value="{_ Switched minutes / rental prepayment _}"
                placeholder="{_ Enter transaction description here _}">
       </div>

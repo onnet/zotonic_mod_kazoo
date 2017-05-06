@@ -153,10 +153,10 @@ generate_monthly_docs(DocType, AccountId, Timestamp, Context) ->
     DataBag = ?MK_DATABAG({[{<<"timestamp">>, Timestamp},{<<"doc_type">>, DocType}]}),
     kazoo_util:crossbar_account_request('put', API_String, DataBag, Context).
 
-generate_transaction_based_invoice(TransactionId, TransactionDescription, AccountId, Timestamp, Context) ->
+generate_transaction_based_invoice(TransactionId, InvoiceDescription, AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
     Values = modkazoo_util:filter_undefined([{<<"timestamp">>, Timestamp}
-                                            ,{<<"transaction_description">>, TransactionDescription}
+                                            ,{<<"invoice_description">>, InvoiceDescription}
                                             ,{<<"transaction_id">>, TransactionId}
                                             ,{<<"doc_type">>, <<"transaction_invoice">>}
                                             ]),
