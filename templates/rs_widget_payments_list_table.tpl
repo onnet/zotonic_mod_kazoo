@@ -8,6 +8,7 @@
       {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
         <th class="td-center"></th>
         <th class="td-center"></th>
+        <th class="td-center"></th>
       {% endif %}
     </tr>
   </thead>
@@ -43,14 +44,13 @@
                 href="{{ m.onbill[{attachment_download_link account_id=account_id
                                                             doc_id=transaction["metadata"][1]["invoice_id"]
                                                             doc_type="onbill_modb"}] }}">
-              <i class="fa fa-money pointer" aria-hidden="true"></i></a>
+              <i class="fa fa-money pointer"></i></a>
             {% elseif (not selected_billing_period)
                         or
                       (now|date: 'Ym' == selected_billing_period|split:","|last|gregsec_to_date|date: 'Ym')
             %}
               <i id="invoice_me_{{ transaction["id"]|cleanout }}"
                  class="fa fa-paper-plane pointer"
-                 aria-hidden="true"
                  title="Issue an invoice"></i>
               {% wire id="invoice_me_"++transaction["id"]|cleanout
                       action={dialog_open template="_issue_invoice_for_transaction.tpl"
@@ -70,6 +70,11 @@
                              }
               %}
             {% endif %}
+          </td>
+          <td class="td-center">
+            {# if transaction["metadata"][1]["invoice_id"] #}
+              <i class="fa fa-trash zalarm pointer"></i>
+            {# endif #}
           </td>
           <td class="td-center">
             <i id="info_{{ transaction["id"] }}"
