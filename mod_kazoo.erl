@@ -2504,6 +2504,9 @@ event({submit,issue_invoice_for_transaction,_,_}, Context) ->
             z_render:dialog_close(z_render:growl(?__("Invoice created", Context), Context))
     end;
 
+event({postback,{onbill_transaction_delete,[{account_id, AccountId},{transaction_id, TransactionId}]},_,_}, Context) ->
+    onbill_util:onbill_transaction('delete', TransactionId, AccountId, [], Context);
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),

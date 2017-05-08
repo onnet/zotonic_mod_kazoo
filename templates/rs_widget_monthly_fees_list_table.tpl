@@ -91,19 +91,17 @@
             {% else %}
               <i id="delete_fee_{{ transaction["id"] }}" class="fa fa-trash zalarm pointer"></i>
               {% wire id="delete_fee_"++transaction["id"]
-                      action={confirm text=_"Do you really want to delete"
+                      action={confirm text=_"Do you really want to delete record"
                                              ++
-                                           " "
+                                           ": "
                                              ++
-                                           "<strong>"
+                                           "<strong class='zalarm'>"
                                              ++
                                            transaction["description"]
                                              ++
                                            " - "
                                              ++
                                            transaction["amount"]|format_price:[".",""]|currency_sign
-                                             ++
-                                           " "
                                              ++
                                            "</strong>"
                                              ++ "?"

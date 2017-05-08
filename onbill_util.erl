@@ -21,6 +21,7 @@
          ,periodic_fees/4
          ,periodic_fees/5
          ,onbill_transaction/3
+         ,onbill_transaction/5
          ,promised_payment/1
          ,promised_payment/4
          ,current_services/1
@@ -189,8 +190,11 @@ periodic_fees(Verb, AccountId, FeeId, DataBag, Context) ->
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 onbill_transaction(TransactionId, AccountId, Context) ->
+    onbill_transaction('get', TransactionId, AccountId, [], Context).
+
+onbill_transaction(Verb, TransactionId, AccountId, DataBag, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, "/", ?TO_BIN(TransactionId)/binary>>,
-    kazoo_util:crossbar_account_request('get', API_String, [], Context).
+    kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 promised_payment(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
