@@ -2505,7 +2505,14 @@ event({submit,issue_invoice_for_transaction,_,_}, Context) ->
     end;
 
 event({postback,{onbill_transaction_delete,[{account_id, AccountId},{transaction_id, TransactionId}]},_,_}, Context) ->
-    onbill_util:onbill_transaction('delete', TransactionId, AccountId, [], Context);
+    onbill_util:onbill_transaction('delete', TransactionId, AccountId, [], Context),
+    modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+    Context;
+
+event({postback,{onbill_generated_doc_delete,[{account_id,AccountId},{doc_id,DocId}]},_,_}, Context) ->
+    onbill_util:doc('delete', AccountId, DocId, [], Context),
+    modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+    Context;
 
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),

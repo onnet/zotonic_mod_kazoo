@@ -73,7 +73,31 @@
           </td>
           <td class="td-center">
             {# if transaction["metadata"][1]["invoice_id"] #}
-              <i class="fa fa-trash zalarm pointer"></i>
+              <i id="delete_payment_{{ transaction["id"] }}" class="fa fa-trash zalarm pointer"></i>
+              {% wire id="delete_payment_"++transaction["id"]
+                      action={confirm text=_"Do you really want to delete record"
+                                             ++
+                                           ": "
+                                             ++
+                                           "<strong class='zalarm'>"
+                                             ++
+                                           transaction["description"]
+                                             ++
+                                           " - "
+                                             ++
+                                           transaction["amount"]|format_price:[".",""]|currency_sign
+                                             ++
+                                           "</strong>"
+                                             ++ "?"
+                                      action={postback
+                                              postback={onbill_transaction_delete
+                                                        account_id=account_id
+                                                        transaction_id=transaction["id"]
+                                                       }
+                                              delegate="mod_kazoo"
+                                             }
+                             }
+              %}
             {# endif #}
           </td>
           <td class="td-center">

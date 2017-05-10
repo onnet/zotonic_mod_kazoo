@@ -9,6 +9,7 @@
             <th class="td-center">{_ VAT _}</th>
             <th class="td-center">{_ Total _}</th>
             <th class="td-center"></th>
+            <th class="td-center"></th>
         </tr>
   </thead>
   <tbody>
@@ -36,6 +37,31 @@
            href="{{ m.onbill[{attachment_download_link account_id=account_id doc_id=doc["id"] doc_type="onbill_modb"}] }}">
          <i class="fa fa-download zprimary" title="{_ Download _}"></i></a>
         </a>
+      </td>
+      <td>
+        {% if doc["type"] == "transaction_based_invoice" %}
+          <i id="delete_doc_{{ doc["id"] }}" class="fa fa-trash zalarm pointer"></i>
+          {% wire id="delete_doc_"++doc["id"]
+                  action={confirm text=_"Do you really want to delete document"
+                                         ++
+                                       ": "
+                                         ++
+                                       "<strong class='zalarm'> #"
+                                         ++
+                                       doc["doc_number"]
+                                         ++
+                                       "</strong>"
+                                         ++ "?"
+                                  action={postback
+                                          postback={onbill_generated_doc_delete
+                                                    account_id=account_id
+                                                    doc_id=doc["id"]
+                                                   }
+                                          delegate="mod_kazoo"
+                                         }
+                         }
+          %}
+        {% endif %}
       </td>
     </tr>
     {% endfor %}
