@@ -40,7 +40,6 @@ host    all             all             ::1/128                 trust
 - Install inotify-tools
 ```
 cd /usr/local/src/
-ls
 wget http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
 tar xvfpz inotify-tools-3.14.tar.gz 
 cd inotify-tools-3.14
