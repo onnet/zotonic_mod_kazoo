@@ -117,7 +117,7 @@ exit
 su zotonic 
 zotonic start
 /home/zotonic/zotonic/bin/zotonic addsite -s blog phiz 
-vi /home/zotonic/zotonic/user/sites/yoursite/config 
+vi /home/zotonic/zotonic/user/sites/phiz/config 
 =====
 Change SiteName, Port (8000 --> 80) and DB PASSWORD 
 ======
