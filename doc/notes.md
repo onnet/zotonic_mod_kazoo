@@ -76,7 +76,8 @@ vi .bash_profile:
 PATH=$PATH:$HOME/zotonic/bin
 export PATH
 =====
-exit
+
+exit  #(back to root env) 
 
 echo "sleep 10" >> /etc/rc.local 
 echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
