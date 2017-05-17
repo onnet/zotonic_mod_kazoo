@@ -69,7 +69,7 @@ vi /home/zotonic/zotonic/src/support/z_utils.erl
 make 
 
 vi /home/zotonic/.zotonic/0/zotonic.config
-    {deps,
+    ,{deps,
      [
       {ibrowse, ".*", {git, "git://github.com/cmullaparthi/ibrowse.git", {branch, "master"}}}
      ]}
