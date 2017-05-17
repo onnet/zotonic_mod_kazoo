@@ -59,23 +59,31 @@ cd /home/zotonic/
 git clone git://github.com/zotonic/zotonic.git 
 cd zotonic 
 git checkout 0.x 
-add ibrowse
+
+vi /home/zotonic/zotonic/src/support/z_utils.erl
+===
+212: _M:_E -> ok
+===
+. /usr/local/erlang/activate
+
+make 
+
 vi /home/zotonic/.zotonic/0/zotonic.config
     {deps,
      [
       {ibrowse, ".*", {git, "git://github.com/cmullaparthi/ibrowse.git", {branch, "master"}}}
      ]}
 
-vi /home/zotonic/zotonic/src/support/z_utils.erl
-===
-212: _M:_E -> ok
-===
 make 
+
 vi .bash_profile:
 ======
 PATH=$PATH:$HOME/zotonic/bin
 export PATH
 =====
+
+vi .bashrc
+. /usr/local/erlang/activate
 
 exit  #(back to root env) 
 
