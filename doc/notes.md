@@ -115,6 +115,7 @@ exit
 - Add WebSite
 ```
 su zotonic 
+zotonic start
 /home/zotonic/zotonic/bin/zotonic addsite -s blog phiz 
 vi /home/zotonic/zotonic/user/sites/yoursite/config 
 =====
