@@ -131,9 +131,12 @@ zotonic modules -s phiz activate mod_ssl_self_signed
 
 `certbot certonly --standalone -d your_domain_name.com`
 
-if fails check if all -devel libs are installed (like puthon2-devel)
-and `pip install cryptography --force-reinstall` after that
-
+- if fails check if all -devel libs are installed (like puthon2-devel) and `pip install cryptography --force-reinstall` after that
+- if asks to upgrade pyOpenSSL:
+```
+wget ftp://ftp.pbone.net/mirror/ftp.centos.org/7.3.1611/cloud/x86_64/openstack-mitaka/common/pyOpenSSL-0.15.1-1.el7.noarch.rpm
+rpm -Uvh pyOpenSSL-0.15.1-1.el7.noarch.rpm 
+```
 ```
 cp /etc/letsencrypt/live/`hostname -f`/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
 cp /etc/letsencrypt/live/`hostname -f`/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
