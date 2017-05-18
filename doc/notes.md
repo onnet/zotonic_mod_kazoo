@@ -156,6 +156,9 @@ zotonic shell
 ```
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
 
+To get keys from another Zotonic:
+psql -c "COPY ( select module,key,value from config where module='mod_kazoo' ) TO STDOUT" > mod_kazoo_initial_keys.csv
+
 vi mod_kazoo_initial_keys.csv
 ```
 mod_kazoo       page_header     OnNet Innovations Limited
