@@ -124,6 +124,7 @@ mod_ssl    is_ssl    true
 mod_ssl    is_secure    true 
 ```
 ```
+zotonic modules -s phiz activate mod_ssl
 zotonic modules -s phiz activate mod_ssl_self_signed
 ```
 - Letsencrypt SSL (should be done as root, 443 port should be opened for check from letsencrypt side)
