@@ -42,17 +42,6 @@ host    all             all             ::1/128                 trust
 ```
 - service postgresql restart
 - systemctl enable postgresql
-- Install inotify-tools
-```
-cd /usr/local/src/
-wget http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
-tar xvfpz inotify-tools-3.14.tar.gz 
-cd inotify-tools-3.14
-./configure 
-make
-make install
-echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
-```
 - ln -s /usr/bin/exiftool /usr/bin/exif
 - Install Zotonic
 ```
