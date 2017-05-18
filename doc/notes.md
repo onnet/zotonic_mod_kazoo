@@ -2,8 +2,13 @@
 ### Note: In order OKUI functions properly [Onbill Kazoo app](https://github.com/onnet/onbill "onbill") should be installed in your Kazoo environment
 ## Zotonic installation
 
-- yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool
-- yum -y install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
+```
+yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool
+
+yum -y install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
+
+echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
+```
 - Install Erlang
 ```
 curl -O https://raw.githubusercontent.com/yrashk/kerl/master/kerl
