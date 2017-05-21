@@ -15,7 +15,6 @@
     <span id="onnet_widget_make_invoice_tpl">
         {% include "onnet_widget_make_invoice.tpl" headline=_"Wire transfer" %}
     </span>
-
     {# Online payments #}
     {% wire action={connect signal={update_onnet_widget_online_payment_tpl signal_filter=m.kazoo.signal_filter}
                             action={update target="onnet_widget_online_payment_tpl"
@@ -29,7 +28,6 @@
 </div>
 
 <div id="paytab" class="pl-10 pr-10 col-md-6">
-
     {# Transactions list #}
     {% wire action={connect signal={update_fin_info_signal signal_filter=m.kazoo.signal_filter}
                             action={update target="rs_widget_transactions_list_tpl"
@@ -41,7 +39,5 @@
     <span id="rs_widget_transactions_list_tpl">
         {% include "rs_widget_transactions_list.tpl" headline=_"Transactions list" %}
     </span>
-
-
 </div>
 {% endblock %}
