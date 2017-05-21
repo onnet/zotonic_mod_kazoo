@@ -417,3 +417,106 @@
 %% %% datetime_to_gregorian_seconds({date(),time()}) - ?UNIX_EPOCH_IN_GREGORIAN.
 %%
 -define(UNIX_EPOCH_IN_GREGORIAN, 62167219200).
+
+%% Kazo API tokens
+-define(V1, <<"/v1">>).
+-define(V2, <<"/v2">>).
+-define(API_AUTH, <<"/api_auth">>).
+-define(USER_AUTH, <<"/user_auth">>).
+-define(ACCOUNTS, <<"/accounts/">>).
+-define(ACCOUNTS(Context), <<"/accounts/", (z_context:get_session('kazoo_account_id', Context))/binary>>).
+-define(PHONE_NUMBERS, <<"/phone_numbers">>).
+-define(FIX, <<"/fix">>).
+-define(IDENTIFY, <<"/identify">>).
+-define(REGISTRATIONS, <<"/registrations">>).
+-define(COUNT, <<"/count">>).
+-define(FAXES, <<"/faxes">>).
+-define(FAXES_OUTGOING, <<"/faxes/outgoing/">>).
+-define(FAXES_INCOMING, <<"/faxes/incoming/">>).
+-define(ATTACHMENT, <<"/attachment">>).
+-define(CONNECT, <<"/connect">>).
+-define(CONNECTIVITY, <<"/connectivity">>).
+-define(CLASSIFIERS, <<"/classifiers">>).
+-define(USERS, <<"/users">>).
+-define(CCCPS, <<"/cccps">>).
+-define(AUTODIAL, <<"/autodial">>).
+-define(CALLFLOWS, <<"/callflows">>).
+-define(DEVICES, <<"/devices">>).
+-define(DEVICES(DeviceId), <<"/devices/", (z_convert:to_binary(DeviceId))/binary>>).
+-define(VMBOXES, <<"/vmboxes">>).
+-define(CDRS, <<"/cdrs">>).
+-define(MESSAGES, <<"/messages">>).
+-define(RAW, <<"/raw">>).
+-define(FILTER_OWNER, <<"filter_owner_id=">>).
+-define(CREATED_FROM, <<"created_from=">>).
+-define(CREATED_TO, <<"created_to=">>).
+-define(AUTH_TOKEN, <<"auth_token=">>).
+-define(RECOVERY, <<"/recovery">>).
+-define(BRAINTREE, <<"/braintree">>).
+-define(CREDITS, <<"/credits">>).
+-define(STATUS, <<"/status">>).
+-define(RATES, <<"/v1/rates">>).
+-define(RECORDINGS, <<"/recordings">>).
+-define(NUMBER, <<"/number">>).
+-define(CUSTOMER, <<"/customer">>).
+-define(TRANSACTIONS, <<"/transactions">>).
+-define(SUBSCRIPTIONS, <<"/subscriptions">>).
+-define(CREDIT, <<"/credit">>).
+-define(DEBIT, <<"/debit">>).
+-define(CARDS, <<"/cards">>).
+-define(COUNTRY, <<"country=">>).
+-define(PREFIX, <<"prefix=">>).
+-define(QUANTITY, <<"quantity=">>).
+-define(COLLECTION, <<"/collection">>).
+-define(RESERVE, <<"/reserve">>).
+-define(ACTIVATE, <<"/activate">>).
+-define(SERVICE_PLANS, <<"/service_plans">>).
+-define(CURRENT, <<"/current">>).
+-define(GROUPS, <<"/groups">>).
+-define(CHANNELS, <<"/channels">>).
+-define(MEDIA, <<"/media">>).
+-define(MENUS, <<"/menus">>).
+-define(TEMPORAL_RULES, <<"/temporal_rules">>).
+-define(CONFERENCES, <<"/conferences">>).
+-define(PARTICIPANTS, <<"/participants">>).
+-define(BLACKLISTS, <<"/blacklists">>).
+-define(LISTS, <<"/lists">>).
+-define(ENTRIES, <<"/entries">>).
+-define(CHILDREN, <<"/children">>).
+-define(PAGE_SIZE, <<"page_size=">>).
+-define(START_KEY, <<"start_key=">>).
+-define(WEBHOOKS, <<"/webhooks">>).
+-define(NO_PAGINATION, <<"&paginate=false">>).
+-define(RESOURCES, <<"/resources">>).
+-define(NOTIFICATIONS, <<"/notifications">>).
+-define(CUSTOMER_UPDATE, <<"/customer_update">>).
+-define(PREVIEW, <<"/preview">>).
+-define(SMTPLOG, <<"/smtplog">>).
+-define(QUEUES, <<"/queues">>).
+-define(EAVESDROP, <<"/eavesdrop">>).
+-define(CLICKTOCALL, <<"/clicktocall">>).
+-define(DIALPLANS, <<"/dialplans">>).
+-define(MESSAGE, <<"/message">>).
+-define(RESELLER, <<"/reseller">>).
+-define(CURRENT_BALANCE, <<"/current_balance">>).
+-define(AVAILABLE, <<"/available">>).
+-define(SYNCHRONIZATION, <<"/synchronization">>).
+-define(RECONCILIATION, <<"/reconciliation">>).
+-define(INTERACTION, <<"/interaction">>).
+-define(LEGS, <<"/legs">>).
+-define(LEDGERS, <<"/ledgers">>).
+-define(ACCESS_LISTS, <<"/access_lists">>).
+-define(LIMITS, <<"/limits">>).
+-define(ALLOTMENTS, <<"/allotments">>).
+-define(CONSUMED, <<"/consumed">>).
+-define(SERVICES, <<"/services">>).
+-define(TASKS, <<"/tasks">>).
+-define(METAFLOWS, <<"/metaflows">>).
+-define(CONFIGS, <<"/configs">>).
+
+-define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
+-define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).
+-define(SET_ACCEPT_CHARGES(AcceptCharges, Doc), modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, ?MK_DATABAG(Doc))).
+-define(MATCH_ACCOUNT_RAW(Account), <<(Account):32/binary>>).
+-define(ACTION_TUPLE(Action), {[{<<"action">>, ?TO_BIN(Action)}]}).
+

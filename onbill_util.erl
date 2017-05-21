@@ -51,20 +51,14 @@
 -include_lib("include/mod_kazoo.hrl").
 
 
--define(V1, <<"/v1">>).
--define(V2, <<"/v2">>).
--define(ACCOUNTS, <<"/accounts/">>).
--define(ACCOUNTS(Context), <<"/accounts/", (z_context:get_session('kazoo_account_id', Context))/binary>>).
 -define(ONBILLS, <<"/onbills">>).
 -define(INVOICE, <<"/invoice">>).
--define(ATTACHMENT, <<"/attachment">>).
 -define(GENERATE, <<"/generate">>).
 -define(MODB, <<"/onbills_modb">>).
 -define(CUSTOMERS, <<"/onbill_customers">>).
 -define(RESELLERS, <<"/onbill_resellers">>).
 -define(CARRIERS, <<"/onbill_carriers">>).
 -define(VARIABLES, <<"/onbill_variables">>).
--define(SERVICE_PLANS, <<"/onbill_service_plans">>).
 -define(PERIODIC_FEES, <<"/periodic_fees">>).
 -define(ONBILL_TRANSACTIONS, <<"/onbill_transactions">>).
 -define(PROMISED_PAYMENT, <<"/promised_payment">>).
@@ -74,7 +68,6 @@
 -define(PERIOD_BALANCE, <<"/period_balance">>).
 -define(CURRENCY_SIGN, <<"/currency_sign">>).
 -define(ONBILL_E911, <<"/onbill_e911">>).
--define(RAW, <<"/raw">>).
 -define(CONFIRM_ADDRESS, <<"/confirm">>).
 -define(ONBILL_TRIAL, <<"/onbill_trial">>).
 -define(ONBILL_PVT_LIMITS, <<"/onbill_pvt_limits">>).
