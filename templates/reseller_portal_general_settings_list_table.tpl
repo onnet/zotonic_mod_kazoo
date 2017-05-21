@@ -1,5 +1,4 @@
 {% if m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}
-{% with m.kazoo.kz_get_acc_doc as account_doc %}
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
@@ -49,5 +48,4 @@
     </tr>
   </thead>
 </table>
-{% endwith %}
 {% endif %}

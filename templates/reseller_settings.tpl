@@ -38,6 +38,9 @@
   <span id="reseller_portal_notifications_tpl">
         {% include "reseller_portal_notifications.tpl" headline=_"Notifications" %}
   </span>
+  <span id="reseller_portal_paypal_config_tpl">
+        {% include "reseller_portal_paypal_config.tpl" headline=_"PayPal merchant config" %}
+  </span>
 </div>
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_reseller_portal_resources_tpl signal_filter=m.kazoo.signal_filter}
