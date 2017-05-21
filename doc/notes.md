@@ -2,8 +2,13 @@
 ### Note: In order OKUI functions properly [Onbill Kazoo app](https://github.com/onnet/onbill "onbill") should be installed in your Kazoo environment
 ## Zotonic installation
 
-- yum install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool
-- yum install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
+```
+yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool
+
+yum -y install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
+
+echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
+```
 - Install Erlang
 ```
 curl -O https://raw.githubusercontent.com/yrashk/kerl/master/kerl
@@ -37,18 +42,6 @@ host    all             all             ::1/128                 trust
 ```
 - service postgresql restart
 - systemctl enable postgresql
-- Install inotify-tools
-```
-cd /usr/local/src/
-ls
-wget http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
-tar xvfpz inotify-tools-3.14.tar.gz 
-cd inotify-tools-3.14
-./configure 
-make
-make install
-echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
-```
 - ln -s /usr/bin/exiftool /usr/bin/exif
 - Install Zotonic
 ```
@@ -60,24 +53,33 @@ cd /home/zotonic/
 git clone git://github.com/zotonic/zotonic.git 
 cd zotonic 
 git checkout 0.x 
-add ibrowse
-vi /home/zotonic/.zotonic/0/zotonic.config
-    {deps,
-     [
-      {ibrowse, ".*", {git, "git://github.com/cmullaparthi/ibrowse.git", {branch, "master"}}}
-     ]}
 
 vi /home/zotonic/zotonic/src/support/z_utils.erl
 ===
 212: _M:_E -> ok
 ===
+. /usr/local/erlang/activate
+
 make 
+
+vi /home/zotonic/.zotonic/0/zotonic.config
+    ,{deps,
+     [
+      {ibrowse, ".*", {git, "git://github.com/cmullaparthi/ibrowse.git", {branch, "master"}}}
+     ]}
+
+make 
+
 vi .bash_profile:
 ======
 PATH=$PATH:$HOME/zotonic/bin
 export PATH
 =====
-exit
+
+vi .bashrc
+. /usr/local/erlang/activate
+
+exit  #(back to root env) 
 
 echo "sleep 10" >> /etc/rc.local 
 echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
@@ -107,8 +109,9 @@ exit
 - Add WebSite
 ```
 su zotonic 
+zotonic start
 /home/zotonic/zotonic/bin/zotonic addsite -s blog phiz 
-vi /home/zotonic/zotonic/user/sites/yoursite/config 
+vi /home/zotonic/zotonic/user/sites/phiz/config 
 =====
 Change SiteName, Port (8000 --> 80) and DB PASSWORD 
 ======
@@ -121,15 +124,19 @@ mod_ssl    is_ssl    true
 mod_ssl    is_secure    true 
 ```
 ```
+zotonic modules -s phiz activate mod_ssl
 zotonic modules -s phiz activate mod_ssl_self_signed
 ```
 - Letsencrypt SSL (should be done as root, 443 port should be opened for check from letsencrypt side)
 
 `certbot certonly --standalone -d your_domain_name.com`
 
-if fails check if all -devel libs are installed (like puthon2-devel)
-and `pip install cryptography --force-reinstall` after that
-
+- if fails check if all -devel libs are installed (like puthon2-devel) and `pip install cryptography --force-reinstall` after that
+- if asks to upgrade pyOpenSSL:
+```
+wget ftp://ftp.pbone.net/mirror/ftp.centos.org/7.3.1611/cloud/x86_64/openstack-mitaka/common/pyOpenSSL-0.15.1-1.el7.noarch.rpm
+rpm -Uvh pyOpenSSL-0.15.1-1.el7.noarch.rpm 
+```
 ```
 cp /etc/letsencrypt/live/`hostname -f`/fullchain.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.ca.crt
 cp /etc/letsencrypt/live/`hostname -f`/cert.pem /home/zotonic/zotonic/user/sites/phiz/ssl/phiz.crt
@@ -146,6 +153,11 @@ zotonic shell
 > z_module_manager:activate(mod_kazoo, z:c(phiz)).
 ```
 ### Upload initial keys to Zotonic DB (could be also configured through Zotonic admin portal)
+
+To get keys from another Zotonic (if exists):
+```
+psql -c "COPY ( select module,key,value from config where module='mod_kazoo' ) TO STDOUT" > mod_kazoo_initial_keys.csv
+```
 
 vi mod_kazoo_initial_keys.csv
 ```
