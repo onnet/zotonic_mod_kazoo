@@ -76,6 +76,8 @@ m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}, {acco
         "user" -> kazoo_util:kz_user_doc_field(Field, DocId, Context);
         "device" -> kazoo_util:kz_device_doc_field(Field, DocId, Context);
         "media" -> kazoo_util:kz_media_doc_field(Field, DocId, Context);
+        "config" ->
+             modkazoo_util:get_value(?TO_BIN(Field), kazoo_util:config('get', ?TO_BIN(DocId), AccountId, [], Context));
         E -> lager:info("kz_doc_field Error: ~p",[E])
     end;
 

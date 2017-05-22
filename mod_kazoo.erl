@@ -518,6 +518,20 @@ event({postback,{toggle_field,[{type,Type}
                               ,{doc_id,DocId}
                               ,{field_name, FieldName}
                               ,{prefix, Prefix}
+                              ,{account_id, 'undefined'}
+                              ]}
+                             ,_,_}, Context) ->
+    event({postback,{toggle_field,[{type,Type}
+                                  ,{doc_id,DocId}
+                                  ,{field_name, FieldName}
+                                  ,{prefix, Prefix}
+                                  ,{account_id, z_context:get_session('kazoo_account_id', Context)}
+                                  ]}
+                                 ,<<>>,<<>>}, Context);
+event({postback,{toggle_field,[{type,Type}
+                              ,{doc_id,DocId}
+                              ,{field_name, FieldName}
+                              ,{prefix, Prefix}
                               ,{account_id, AccountId}
                               ]}
                              ,_,_}, Context) ->
@@ -534,6 +548,9 @@ event({postback,{toggle_field,[{type,Type}
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
         "device" ->
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
+            maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
+        "config" ->
+            _ = kazoo_util:config_toggle(?TO_BIN(FieldName), ?TO_BIN(DocId), AccountId, Context),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context)
     end;
 
@@ -693,6 +710,10 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
         "device" ->
             _ = kazoo_util:kz_set_device_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
+            z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
+        "config" ->
+            ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
+            _ = kazoo_util:set_config_field(?TO_BIN(FieldName), ConfValue, ?TO_BIN(DocId), AccountId, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
     end;
 
@@ -786,7 +807,7 @@ event({postback
                                              ,Context)
                            ,Context);
         "user" ->
-            _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
+            _ = kazoo_util:kz_set_user_doc(FieldName, ?TO_BIN(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
@@ -806,6 +827,20 @@ event({postback
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
+            z_render:update(Prefix++FieldName
+                           ,z_template:render("_show_field_select.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{options,Options}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ]
+                                             ,Context)
+                           ,Context);
+        "config" ->
+            ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
+            kazoo_util:set_config_field(?TO_BIN(FieldName), ConfValue, ?TO_BIN(DocId), AccountId, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}

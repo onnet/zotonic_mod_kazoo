@@ -363,6 +363,9 @@
     ,add_new_task/1
     ,add_new_task_file/3
     ,metaflows/4
+    ,config/5
+    ,set_config_field/5
+    ,config_toggle/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4295,3 +4298,46 @@ add_new_task_file(UploadFilename, UploadTmp, Context) ->
 metaflows(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?METAFLOWS/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+%system_config(Verb, Category, DataBag, Context) ->
+%    API_String = <<?V2/binary, ?SYSTEM_CONFIGS/binary, "/", Category/binary>>,
+%    crossbar_account_request(Verb, API_String, DataBag, Context).
+%
+config(Verb, Category, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?CONFIGS/binary, "/", Category/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+%
+%get_config(Category, AccountId, Context) ->
+%    case kz_current_context_superadmin(Context) of
+%        'true' ->
+%            modkazoo_util:get_value(<<"default">>, system_config('get', Category, [], Context));
+%        'false' ->
+%            config('get', Category, AccountId, [], Context)
+%    end.
+%
+%set_config_field(K, V, Category, AccountId, Context) ->
+%    KVJObj = modkazoo_util:set_value(K, V, modkazoo_util:new()),
+%    case kz_current_context_superadmin(Context) of
+%        'true' ->
+%            DefaultJObj = modkazoo_util:set_value(<<"default">>, KVJObj, modkazoo_util:new()),
+%            system_config('patch', Category, ?MK_DATABAG(DefaultJObj), Context);
+%        'false' ->
+%            config('patch', Category, AccountId, ?MK_DATABAG(KVJObj), Context)
+%    end.
+%set_config_field(K, V, Category, AccountId, Context) ->
+%    KVJObj = modkazoo_util:set_value(K, V, modkazoo_util:new()),
+%    config('patch', Category, AccountId, ?MK_DATABAG(KVJObj), Context).
+set_config_field(K, V, Category, AccountId, Context) ->
+    CurrDoc = config('get', Category, AccountId, [], Context),
+    NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
+lager:info("IAM CurrDoc: ~p",[CurrDoc]),
+lager:info("IAM NewDoc: ~p",[NewDoc]),
+    config('post', Category, AccountId, ?MK_DATABAG(NewDoc), Context).
+
+config_toggle(K, Category, AccountId, Context) ->
+    CurrDoc = config('get', Category, AccountId, [], Context),
+lager:info("IAM CurrDoc: ~p",[CurrDoc]),
+    case modkazoo_util:get_value(K, CurrDoc) of
+        'true' -> set_config_field(K, 'false', Category, AccountId, Context);
+        _ -> set_config_field(K, 'true', Category, AccountId, Context)
+    end.
