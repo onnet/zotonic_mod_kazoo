@@ -550,7 +550,8 @@ event({postback,{toggle_field,[{type,Type}
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
         "config" ->
-            _ = kazoo_util:config_toggle(?TO_BIN(FieldName), ?TO_BIN(DocId), AccountId, Context),
+            z_notifier:notify1({'doc_field', 'toggle', ?TO_BIN(DocId), ?TO_BIN(FieldName), AccountId}, Context),
+            timer:sleep(500),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context)
     end;
 
@@ -713,7 +714,8 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
         "config" ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
-            _ = kazoo_util:set_config_field(?TO_BIN(FieldName), ConfValue, ?TO_BIN(DocId), AccountId, Context),
+            z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
+            timer:sleep(500),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
     end;
 
@@ -840,7 +842,8 @@ event({postback
                            ,Context);
         "config" ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
-            kazoo_util:set_config_field(?TO_BIN(FieldName), ConfValue, ?TO_BIN(DocId), AccountId, Context),
+            z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
+            timer:sleep(500),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
