@@ -551,7 +551,7 @@ event({postback,{toggle_field,[{type,Type}
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
         "config" ->
             z_notifier:notify1({'doc_field', 'toggle', ?TO_BIN(DocId), ?TO_BIN(FieldName), AccountId}, Context),
-            timer:sleep(500),
+            timer:sleep(1000),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context)
     end;
 
@@ -715,7 +715,7 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
         "config" ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
             z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
-            timer:sleep(500),
+            timer:sleep(1000),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
     end;
 
@@ -843,7 +843,7 @@ event({postback
         "config" ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
             z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
-            timer:sleep(500),
+            timer:sleep(1000),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
