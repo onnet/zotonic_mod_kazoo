@@ -3,7 +3,8 @@
 ## Zotonic installation
 
 ```
-yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool mlocate
+yum -y install epel-release
+yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall ntp inotify-tools libtiff-tools patch wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool mlocate
 
 yum -y install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
 
@@ -163,7 +164,7 @@ mod_kazoo       sales_email     iam@onnet.info
 mod_kazoo       crm_email       iam@onnet.info
 mod_kazoo       default_country         RU
 mod_kazoo       default_kazoo_language  en-us
-mod_kazoo       local_currency_sign     Â£
+mod_kazoo       local_currency_sign     £
 mod_kazoo       placeholder_phone       10123456789
 mod_kazoo       callingcards_number     (xxx) xxx-xx-0xx
 mod_kazoo       callback_number         (xxx) xxx-xx-xx
