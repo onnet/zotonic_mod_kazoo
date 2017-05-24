@@ -72,13 +72,13 @@ observe_onbill_topmenu_element(_, Context) ->
         'true' -> <<"_onbill_topmenu.tpl">>
     end.
 
-event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->
+event({submit,{innoauth,[]},<<"sign_in_form">>,<<"sign_in_form">>}, Context) ->
     Login = z_convert:to_binary(z_context:get_q("username",Context)),
     Password = z_convert:to_binary(z_context:get_q("password",Context)),
     Account = z_convert:to_binary(z_context:get_q("account",Context)),
     modkazoo_auth:do_sign_in(Login, Password, Account, Context);
 
-event({submit,{innoauth,[]},"sign_in_page_form","sign_in_page_form"}, Context) ->
+event({submit,{innoauth,[]},<<"sign_in_page_form">>,<<"sign_in_page_form">>}, Context) ->
     Login = z_convert:to_binary(z_context:get_q("username_page",Context)),
     Password = z_convert:to_binary(z_context:get_q("password_page",Context)),
     Account = z_convert:to_binary(z_context:get_q("account_page",Context)),
@@ -87,7 +87,7 @@ event({submit,{innoauth,[]},"sign_in_page_form","sign_in_page_form"}, Context) -
 event({postback,{signout,[]}, _, _}, Context) ->
     modkazoo_auth:signout(Context);
 
-event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
+event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) ->
     lager:info("innosignup event variables: ~p", [z_context:get_q_all(Context)]),
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
@@ -119,7 +119,7 @@ event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
-event({submit,{kazoo_user_settings,[]},"user_settings_form_form","user_settings_form_form"}, Context) ->
+event({submit,{kazoo_user_settings,[]},<<"user_settings_form_form">>,<<"user_settings_form_form">>}, Context) ->
     kazoo_util:update_kazoo_user(Context);
 
 event({postback,{set_vm_message_folder,[{folder, Folder}, {vmbox_id,VMBoxId}, {media_id,MediaId}]}, _, _}, Context) ->
@@ -1448,7 +1448,7 @@ event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
     mod_signal:emit({update_admin_portal_blacklists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,rs_child_selected,_,_},Context) ->
+event({postback,<<"rs_child_selected">>,_,_},Context) ->
     AccountId =  z_context:get_q("triggervalue", Context),
     _ = z_session:set('rs_selected_account_id', AccountId, Context),
     z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context),

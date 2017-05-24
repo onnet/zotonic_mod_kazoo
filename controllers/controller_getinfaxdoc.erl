@@ -16,7 +16,6 @@
     finish_request/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 init(ConfigProps) ->
@@ -29,12 +28,12 @@ service_available(ReqData, ConfigProps) ->
     DocId = z_context:get_q("id", Context1),
     ContextMime = z_context:set(mime, "application/pdf", Context1),
     case byte_size(z_convert:to_binary(kazoo_util:kz_incoming_fax_attachment_pdf(DocId, Context1))) of
-        0 -> ?WM_REPLY(false, Context1);
+        0 -> {false, Context1};
         N when is_integer(N) ->
             ContextSize = z_context:set([{file_size, N}], ContextMime), 
-            ?WM_REPLY(true, ContextSize);
+            {true, ContextSize};
         _ ->
-            ?WM_REPLY(false, Context1)
+            {false, Context1}
     end.
 
 allowed_methods(ReqData, Context) ->
