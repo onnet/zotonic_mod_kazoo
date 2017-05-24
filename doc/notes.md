@@ -3,7 +3,7 @@
 ## Zotonic installation
 
 ```
-yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool
+yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall inotify-tools libtiff-tools patch epel-release wxGTK python-setuptools libffi-devel openssl-devel python-devel certbot libxslt-devel zip unzip expat zlib-devel curl ncurses-devel git-core htmldoc gcc gcc-c++ openssl-devel expat-devel perl-Image-ExifTool mlocate
 
 yum -y install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
 
@@ -75,9 +75,6 @@ vi .bash_profile:
 PATH=$PATH:$HOME/zotonic/bin
 export PATH
 =====
-
-vi .bashrc
-. /usr/local/erlang/activate
 
 exit  #(back to root env) 
 
