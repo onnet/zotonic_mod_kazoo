@@ -84,8 +84,8 @@ chmod a+x /etc/rc.local
 
 echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc
 echo "export ZOTONIC_SSL_PORT=443" >> /home/zotonic/.bashrc
-setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam
-setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-7.2/bin/beam.smp
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam.smp
 ```
 - echo "HOST_IP_ADDR    SiteName" >> /etc/hosts
 - Postgres Zotonic DB tweaks
