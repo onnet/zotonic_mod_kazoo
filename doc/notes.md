@@ -108,11 +108,7 @@ exit
 su zotonic 
 zotonic start
 /home/zotonic/zotonic/bin/zotonic addsite -s blog phiz 
-vi /home/zotonic/zotonic/user/sites/phiz/config 
-=====
-Change SiteName, Port (8000 --> 80) and DB PASSWORD 
-======
-make 
+vi /home/zotonic/zotonic/user/sites/phiz/config and set hostname
 ```
 - Force SSL (set mod_ssl vars)
 ```
