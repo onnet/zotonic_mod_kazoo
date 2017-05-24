@@ -15,12 +15,8 @@ curl -O https://raw.githubusercontent.com/yrashk/kerl/master/kerl
 chmod a+x kerl
 mv kerl /usr/bin
 kerl list releases
-kerl build 18.2 r18.2
-kerl install r18.2 /usr/local/erlang
-. /usr/local/erlang/activate
-
-vi .bashrc
-. /usr/local/erlang/activate
+kerl build 19.3 r19.3
+kerl install r19.3 /usr/local/erlang
 ```
 - Braintree (don't forget to create plans; create addons and add them to plans... at Braintree itself (through dashboard)
 ```
@@ -49,6 +45,10 @@ useradd zotonic
 passwd zotonic 
 su zotonic 
 cd /home/zotonic/ 
+. /usr/local/erlang/activate
+
+vi .bashrc
+. /usr/local/erlang/activate
 
 git clone git://github.com/zotonic/zotonic.git 
 cd zotonic 
