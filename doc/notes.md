@@ -9,6 +9,8 @@ yum -y install ImageMagick postgresql-server make git gcc gcc-c++ shorewall ntp 
 yum -y install  http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm
 
 echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
+ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+timedatectl set-ntp true
 ```
 - Install Erlang
 ```
@@ -164,7 +166,7 @@ mod_kazoo       sales_email     iam@onnet.info
 mod_kazoo       crm_email       iam@onnet.info
 mod_kazoo       default_country         RU
 mod_kazoo       default_kazoo_language  en-us
-mod_kazoo       local_currency_sign     £
+mod_kazoo       local_currency_sign     ï¿½
 mod_kazoo       placeholder_phone       10123456789
 mod_kazoo       callingcards_number     (xxx) xxx-xx-0xx
 mod_kazoo       callback_number         (xxx) xxx-xx-xx
