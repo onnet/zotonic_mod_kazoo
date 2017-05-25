@@ -18,7 +18,6 @@
     finish_request/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 -define(FILE_DIR, <<"/tmp/">>).
@@ -36,15 +35,15 @@ service_available(ReqData, ConfigProps) ->
         {ok, FileBody} ->
             case byte_size(z_convert:to_binary(FileBody)) of
                 0 -> 
-                    ?WM_REPLY(false, Context1);
+                    {false, Context1};
                 N when is_integer(N) ->
                     ContextSize = z_context:set([{file_size, N}], ContextMime), 
-                    ?WM_REPLY(true, ContextSize);
+                    {true, ContextSize};
                 _ ->
-                    ?WM_REPLY(false, Context1)
+                    {false, Context1}
             end;
         _ ->
-            ?WM_REPLY(false, Context1)
+            {false, Context1}
     end.
 
 allowed_methods(ReqData, Context) ->

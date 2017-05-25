@@ -16,7 +16,6 @@
     finish_request/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 init(ConfigProps) ->
@@ -28,15 +27,15 @@ service_available(ReqData, ConfigProps) ->
     Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
     DocId = z_context:get_q("id", Context1),
     case byte_size(z_convert:to_binary(kazoo_util:kz_get_account_prompt_attachment(DocId, Context1))) of
-        0 -> ?WM_REPLY(false, Context1);
+        0 -> {false, Context1};
         N when is_integer(N) ->
             PromptDoc = kazoo_util:kz_get_account_prompt(DocId, Context1),
             Mime = z_media_identify:guess_mime(modkazoo_util:get_value(<<"description">>,PromptDoc)),
             ContextMime = z_context:set(mime, Mime, Context1),
             ContextSize = z_context:set([{file_size, N}], ContextMime), 
-            ?WM_REPLY(true, ContextSize);
+            {true, ContextSize};
         _ ->
-            ?WM_REPLY(false, Context1)
+            {false, Context1}
     end.
 
 allowed_methods(ReqData, Context) ->

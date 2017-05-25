@@ -12,7 +12,6 @@
     finish_request/2
 ]).
 
--include_lib("controller_webmachine_helper.hrl").
 -include_lib("zotonic.hrl").
 
 -define(CSV_CONTENT_TYPES, [{"text/csv", provide_content}
@@ -36,7 +35,7 @@ service_available(ReqData, DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:ensure_all(Context1),
-    ?WM_REPLY(true, Context2).
+    {true, Context2}.
 
 allowed_methods(ReqData, Context) ->
     {['HEAD', 'GET'], ReqData, Context}.

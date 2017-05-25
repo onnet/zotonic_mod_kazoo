@@ -28,7 +28,7 @@ init(_Context) ->
 observe_search_query(_, _) ->
     'undefined'.
 
-observe_postback_notify({postback_notify, "no_auth",_,_,_}, Context) ->
+observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched postback notify: no_auth"),
     {ok, Context1} = z_session_manager:stop_session(Context),
     z_render:wire({redirect, [{dispatch, "home"}]}, Context1);
@@ -37,7 +37,7 @@ observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
     undefined.
 
-observe_kazoo_notify({kazoo_notify, "no_auth",_,_,_}, Context) ->
+observe_kazoo_notify({kazoo_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched kazoo notify: no_auth"),
     z_session:add_script(<<"z_notify('no_auth');">>, Context#context.session_pid);
  %   {ok, Context1} = z_session_manager:stop_session(Context),
@@ -72,13 +72,13 @@ observe_onbill_topmenu_element(_, Context) ->
         'true' -> <<"_onbill_topmenu.tpl">>
     end.
 
-event({submit,{innoauth,[]},"sign_in_form","sign_in_form"}, Context) ->
+event({submit,{innoauth,[]},<<"sign_in_form">>,<<"sign_in_form">>}, Context) ->
     Login = z_convert:to_binary(z_context:get_q("username",Context)),
     Password = z_convert:to_binary(z_context:get_q("password",Context)),
     Account = z_convert:to_binary(z_context:get_q("account",Context)),
     modkazoo_auth:do_sign_in(Login, Password, Account, Context);
 
-event({submit,{innoauth,[]},"sign_in_page_form","sign_in_page_form"}, Context) ->
+event({submit,{innoauth,[]},<<"sign_in_page_form">>,<<"sign_in_page_form">>}, Context) ->
     Login = z_convert:to_binary(z_context:get_q("username_page",Context)),
     Password = z_convert:to_binary(z_context:get_q("password_page",Context)),
     Account = z_convert:to_binary(z_context:get_q("account_page",Context)),
@@ -87,7 +87,7 @@ event({submit,{innoauth,[]},"sign_in_page_form","sign_in_page_form"}, Context) -
 event({postback,{signout,[]}, _, _}, Context) ->
     modkazoo_auth:signout(Context);
 
-event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
+event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) ->
     lager:info("innosignup event variables: ~p", [z_context:get_q_all(Context)]),
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
@@ -119,7 +119,7 @@ event({submit,{innosignup,[]},"sign_up_form","sign_up_form"}, Context) ->
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
-event({submit,{kazoo_user_settings,[]},"user_settings_form_form","user_settings_form_form"}, Context) ->
+event({submit,{kazoo_user_settings,[]},<<"user_settings_form_form">>,<<"user_settings_form_form">>}, Context) ->
     kazoo_util:update_kazoo_user(Context);
 
 event({postback,{set_vm_message_folder,[{folder, Folder}, {vmbox_id,VMBoxId}, {media_id,MediaId}]}, _, _}, Context) ->
@@ -312,7 +312,7 @@ event({postback,{bt_make_default_card,[{card_id,CardId}]},_,_}, Context) ->
                    ,z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context)
                    ,Context);
 
-event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
+event({submit,add_card,<<"add_card_form">>,<<"add_card_form">>}, Context) ->
     case z_context:get_q("payment_method_nonce", Context) of
         'undefined' -> Context;
         [] -> Context;
@@ -1021,10 +1021,10 @@ event({submit,cf_select_receive_fax,_,_},Context) ->
                                  ,Context),
     z_render:dialog_close(Context);
 
-event({postback,{cf_save,[{cf,"current_callflow"}]},_,_},Context) ->
+event({postback,{cf_save,[{cf,<<"current_callflow">>}]},_,_},Context) ->
     kazoo_util:cf_save('current_callflow', Context);
 
-event({postback,{cf_delete,[{cf,"current_callflow"}]},_,_},Context) ->
+event({postback,{cf_delete,[{cf,<<"current_callflow">>}]},_,_},Context) ->
     kazoo_util:cf_delete('current_callflow', Context),
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context);
 
@@ -1298,7 +1298,7 @@ event({submit,cf_select_conference,_,_},Context) ->
     end,
     z_render:dialog_close(Context);
 
-event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eavesdrop"},Context) ->
+event({submit,cf_select_eavesdrop,<<"form_cf_select_eavesdrop">>,<<"form_cf_select_eavesdrop">>},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     TargetType = z_convert:to_binary(z_context:get_q("target_type", Context)++"_id"),
     ApprovedType = z_convert:to_binary("approved_"++z_context:get_q("approved_type", Context)++"_id"),
@@ -1448,7 +1448,7 @@ event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
     mod_signal:emit({update_admin_portal_blacklists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,rs_child_selected,_,_},Context) ->
+event({postback,<<"rs_child_selected">>,_,_},Context) ->
     AccountId =  z_context:get_q("triggervalue", Context),
     _ = z_session:set('rs_selected_account_id', AccountId, Context),
     z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context),

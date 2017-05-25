@@ -11,8 +11,8 @@
     <select id="child_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" style="text-align:center;display: none;"
                                 title=" -- {_ Select account to edit _} -- " data-live-search="true">
       {% for option in m.kazoo.kz_list_account_children %}
-          <option value="{{ option["id"] }}" {% if option["id"] == account_id %}selected{% endif %}>
-            {{ option["name"] }} - {{ option["realm"] }}
+          <option value="{{ option[1]["id"] }}" {% if option[1]["id"] == account_id %}selected{% endif %}>
+            {{ option[1]["name"] }} - {{ option[1]["realm"] }}
           </option>
       {% endfor %}
     </select>
@@ -31,7 +31,7 @@
     <select id="user_mask_selector" name="selected" class="col-xs-12 form-control margin-bottom-xs selectpicker" title="{_ Mask _}"  data-live-search="true">
       <option value="userless_mask">{_ Without user _}</option>
       {% for option in m.kazoo[{kz_list_account_users account_id=account_id}] %}
-          <option value="{{ option["id"] }}">{{ option["username"] }}</option>
+          <option value="{{ option[1]["id"] }}">{{ option[1]["username"] }}</option>
       {% endfor %}
     </select>
   </div>

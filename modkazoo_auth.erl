@@ -55,7 +55,8 @@ refresh_superadmin_and_reseller_flags(Context) ->
     _ = set_superadmin_and_reseller_flags(Context).
 
 do_sign_in(Login, Password, Account, Context) ->
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+lager:info("IAM IP: ~p",[cowmachine_req:peer(z_context:get_reqdata(Context))]),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     case kazoo_util:kz_user_creds(Login, Password, Account, Context) of
         {'ok', {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
@@ -167,11 +168,14 @@ gcapture_check(Context) ->
     case z_context:get_session(kazoo_reseller_account_id, Context) of
         'undefined' ->
             CaptSecret = m_config:get_value('mod_kazoo', 'g_capture_secret', Context),
-            GCaptureResp = z_context:get_q("g-recaptcha-response",Context),
-            {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
-            URL = list_to_binary(["https://www.google.com/recaptcha/api/siteverify?secret=", CaptSecret
-                                ,"&response=", GCaptureResp
-                                ,"&remoteip=", ClientIP]),
+            GCaptureResp = z_context:get_q(<<"g-recaptcha-response">>,Context),
+            ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
+            URL = <<"https://www.google.com/recaptcha/api/siteverify?secret="
+                   ,CaptSecret/binary
+                   ,"&response="
+                   ,GCaptureResp/binary
+                   ,"&remoteip="
+                   ,ClientIP/binary>>,
             {'ok', {{"HTTP/1.1", _ReturnCode, _State}, _Head, Body}} = httpc:request('get', {binary_to_list(URL), []}, [], []),
             {JsonData} = jiffy:decode(Body),
             proplists:get_value(<<"success">>, JsonData);
