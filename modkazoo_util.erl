@@ -53,6 +53,7 @@
     ,check_file_size_exceeded/3
     ,prune/2
     ,no_prune/2
+    ,is_json_object/1
     ,is_json_object/2
     ,is_valid_json_object/1
     ,set_session_jobj/5
@@ -511,6 +512,7 @@ is_json_term(MaybeJObj) ->
 set_session_jobj(SessionKey, K, V, Default_JObj, Context) ->
     CurrentJObj = case z_context:get_session(SessionKey, Context) of 
         'undefined' -> Default_JObj;
+        <<>> -> Default_JObj;
         JObj -> JObj
     end,
     z_context:set_session(SessionKey,set_value(K,V,CurrentJObj), Context).

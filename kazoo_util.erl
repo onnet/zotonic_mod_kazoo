@@ -493,13 +493,10 @@ kz_admin_creds(Context) ->
     API_Key = m_config:get_value('mod_kazoo', 'kazoo_super_duper_api_key', Context),
     DataBag = {[{<<"data">>, {[{<<"api_key">>, API_Key}]}}]},
     Payload = jiffy:encode(DataBag),
-
     {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 15000}]),
-
-    {JsonData} = jiffy:decode(Body),
-    {AccountData} = proplists:get_value(<<"data">>, JsonData),
-    Account_Id = proplists:get_value(<<"account_id">>, AccountData),
-    Auth_Token = proplists:get_value(<<"auth_token">>, JsonData),
+    JsonBody = jiffy:decode(Body),
+    Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
+    Auth_Token = modkazoo_util:get_value(<<"auth_token">>, JsonBody),
     {'ok', {'account_id', Account_Id}, {'auth_token', Auth_Token}, {'crossbar', Crossbar_URL}}. 
 
 kz_user_creds(Login, Password, AccountName, Context) ->
@@ -700,8 +697,7 @@ crossbar_noauth_request(Verb, API_String, DataBag, Context) ->
         {'ok', ReturnCode, _, Body} ->
             case ReturnCode of
                 [50,_,_] ->    %  50 = "2"
-                    {JsonData} = jiffy:decode(Body),
-                    proplists:get_value(<<"data">>, JsonData);
+                    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body));
                 _ -> <<"">>
             end;
         E -> 
@@ -771,8 +767,7 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
         {'ok', ReturnCode, Headers, Body} ->
             case ReturnCode of
                 [50,_,_] ->
-                    {JsonData} = jiffy:decode(Body),
-                    proplists:get_value(<<"data">>, JsonData);
+                    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body));
                 "402" -> 
                     error_return(ReturnCode, Body, Default);
                 _ -> 
@@ -794,7 +789,6 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                     lager:info("crossbar_account_request RC: ~p", [ReturnCode]),
                     lager:info("crossbar_account_request Headers: ~p", [Headers]),
                     lager:info("crossbar_account_request Body: ~p", [Body]),
-                  %  lager:info("crossbar_account_request decoded Body: ~p", [jiffy:decode(Body)]),
                     error_return(ReturnCode, Body, Default)
             end;
         E -> 
@@ -810,8 +804,7 @@ crossbar_account_authtoken_request(Verb, API_String, DataBag, AuthToken, Context
         {'ok', ReturnCode, _, Body} ->
             case ReturnCode of
                 [50,_,_] ->
-                    {JsonData} = jiffy:decode(Body),
-                    proplists:get_value(<<"data">>, JsonData);
+                    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body));
                 _ -> 
                     case ReturnCode of
                         "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
@@ -1040,7 +1033,6 @@ create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber
                }]},
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
     {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context),
-    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
     Doc = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
     UserId = modkazoo_util:get_value(<<"id">>, Doc),
     API_String2 = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(UserId)/binary>>,
@@ -1434,8 +1426,7 @@ rate_number(Number, Context) ->
     case crossbar_admin_request('get', API_String, [], Context) of
         {'ok',"200", _, Body} -> 
             crossbar_admin_request('get', API_String, [], Context),
-            {JsonData} = jiffy:decode(Body),
-            {'ok', proplists:get_value(<<"data">>, JsonData)};
+            {'ok', modkazoo_util:get_value(<<"data">>, jiffy:decode(Body))};
         E -> E
     end.
 
@@ -2146,6 +2137,7 @@ cf_edit_name(Name, Context) ->
 cf_contact_list_exclude(Value, Context) ->
     CurrentCallflow = case z_context:get_session('current_callflow', Context) of
         'undefined' -> ?EMPTY_CALLFLOW;
+        <<>> -> ?EMPTY_CALLFLOW;
         Callflow -> Callflow
     end,
     case Value of
@@ -2312,34 +2304,35 @@ kz_get_temporal_rule(RuleId,Context) ->
 
 cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{switch,Switch}],Context) ->
     PathToChildren = case BranchId of
-        "flow0" -> "flow-root";
-        _ -> DropId++"-children"
+        <<"flow0">> -> <<"flow-root">>;
+        _ -> <<DropId/binary, "-children">>
     end,
     ElementId = case BranchId of
-        "flow0" -> DropId;
-        _ -> DropId++"-children-"++Switch
+        <<"flow0">> -> DropId;
+        _ -> <<DropId/binary, "-children-", Switch/binary>>
     end,
     lager:info("Drop Switch: ~p",[Switch]),
     lager:info("Drop PathToChildren: ~p",[PathToChildren]),
     lager:info("Drop ElementId: ~p",[ElementId]),
     lager:info("Drop DropParent: ~p",[DropParent]),
+    lager:info("Drop ToolName: ~p",[ToolName]),
     lager:info("Element doesn't exist: ~p",[cf_child_not_exists(ElementId, Context)]),
     'true' = cf_child_not_exists(ElementId, Context),
     case ToolName of
-        "branch_recovery" ->
+        <<"branch_recovery">> ->
             case z_context:get_session('cf_park_slot1', Context) of
                 'undefined' -> 
                     Context2 = z_render:dialog_close(Context),
                     z_render:growl(?__("No saved brunch", Context2), Context2);
                 ParkedBranch ->
-                    _ = cf_set_session('current_callflow', z_string:split(ElementId,"-"), ParkedBranch, Context),
+                    _ = cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global]), ParkedBranch, Context),
                     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
                     z_render:dialog_close(Context)
             end;
-        "dead_air" ->
-            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], ?TO_BIN(ToolName), Context),
-            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
-            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], {[]}, Context),
+        <<"dead_air">> ->
+            cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"module">>], ToolName, Context),
+            cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"children">>], {[]}, Context),
+            cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"data">>], {[]}, Context),
             z_render:insert_bottom(PathToChildren
                           ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
                                                              ,{element_id, ElementId}
@@ -2348,6 +2341,7 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                                              ,Context)
                           ,Context);
         _ ->
+    lager:info("1"),
             Context1 = z_render:insert_bottom(PathToChildren
                                      ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
                                                                         ,{element_id, ElementId}
@@ -2355,21 +2349,26 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                                                                         ,{switch,Switch}]
                                                         ,Context)
                                      ,Context),
+    lager:info("2"),
             ModalHeader =
                 case ToolName of
-                    "disa" -> "Configure";
-                    "response" -> "Configure";
-                    _ -> "Select"
+                    <<"disa">> -> <<"Configure">>;
+                    <<"response">> -> <<"Configure">>;
+                    _ -> <<"Select">>
                 end,
-            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["module"], ?TO_BIN(ToolName), Context),
-            cf_set_session('current_callflow', z_string:split(ElementId,"-")++["children"], {[]}, Context),
-            z_render:dialog(?__(ModalHeader, Context1) ++ " "
-                           ,"_cf_select_"++ToolName++".tpl"
+    lager:info("3"),
+            cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"module">>], ToolName, Context),
+            cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"children">>], {[]}, Context),
+        %    z_render:dialog(<<(?__(ModalHeader, Context1))/binary, " ">>
+    lager:info("4"),
+            z_render:dialog("Change me "
+                           ,<<"_cf_select_", ToolName/binary, ".tpl">>
                            ,[{element_id, ElementId},{tool_name,ToolName}], Context1)
     end.
 
 cf_child_not_exists(ElementId, Context) ->
-    'undefined' == modkazoo_util:get_value(cf_element_path(ElementId++"-module"), z_context:get_session('current_callflow', Context)).
+    'undefined' == modkazoo_util:get_value(cf_element_path(<<ElementId/binary, "-module">>)
+                                          ,z_context:get_session('current_callflow', Context)).
 
 cf_load_to_session(CallflowId,Context) ->
     lager:info("CallflowId: ~p",[CallflowId]),
@@ -2382,7 +2381,7 @@ cf_load_to_session(CallflowId,Context) ->
 
 cf_may_be_add_child(BranchId,DropId,DropParent,Context) ->
     case BranchId of
-        "flow0" -> cf_may_be_add_root_child(Context);
+        <<"flow0">> -> cf_may_be_add_root_child(Context);
         _ -> cf_may_be_add_desc_child(BranchId,DropId,DropParent,Context)
     end.
 
@@ -2405,12 +2404,14 @@ cf_may_be_add_desc_child(BranchId,DropId,DropParent,Context) ->
     lager:info("cf_may_be_add_desc_child BranchId: ~p",[BranchId]),
     lager:info("cf_may_be_add_desc_child DropId: ~p",[DropId]),
     lager:info("cf_may_be_add_desc_child DropParent: ~p",[DropParent]),
-    ElementPath = lists:map(fun (K) -> ?TO_BIN(K) end, z_string:split(BranchId,"-")),
+    ElementPath = binary:split(BranchId, <<"-">>, [global]),
     lager:info("cf_may_be_add_desc_child ElementPath: ~p",[ElementPath]),
+    lager:info("cf_may_be_add_desc_child current_callflow: ~p",[z_context:get_session('current_callflow', Context)]),
     case modkazoo_util:get_value(ElementPath++[<<"children">>],z_context:get_session('current_callflow', Context)) of
         'undefined' -> Context;
         {[]} -> Context;
         Children ->
+            lager:info("cf_may_be_add_desc_child Children: ~p",[Children]),
             lists:foldl(fun(Switch, ContextAcc) -> cf_add_desc_child(BranchId,DropId,DropParent,Switch,ContextAcc) end
                        ,Context
                        ,modkazoo_util:get_keys(Children))
@@ -2426,7 +2427,7 @@ cf_add_desc_child(BranchId,DropId,DropParent,Switch,Context) ->
     lager:info("cf_add_desc_child PathToChildren: ~p",[PathToChildren]),
     ElementId = PathToChildren++"-"++z_convert:to_list(Switch),
     lager:info("cf_add_desc_child ElementId: ~p",[ElementId]),
-    ElementPath = lists:map(fun (K) -> ?TO_BIN(K) end, z_string:split(BranchId,"-")),
+    ElementPath = binary:split(BranchId,<<"-">>,[global]),
     ParentModuleName = modkazoo_util:get_value(ElementPath++[<<"module">>],z_context:get_session('current_callflow', Context)),
     lager:info("cf_add_desc_child ParentModuleName: ~p",[ParentModuleName]),
     ModulePath = ElementPath++[<<"children">>,Switch],
@@ -2590,7 +2591,7 @@ cf_park_element(ElementId,Context) ->
     z_render:growl(?__("Branch saved", Context), Context).
 
 cf_element_path(ElementId) ->
-    lists:map(fun (K) -> ?TO_BIN(K) end, z_string:split(ElementId,"-")).
+    binary:split(ElementId, <<"-">>, [global]).
 
 cf_get_element_by_id(ElementId, Context) ->
     modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)). 
@@ -2599,9 +2600,9 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                     ,{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},mod_kazoo,BranchId}}
               ,Context) ->
     lager:info("Drop DropParent: ~p",[DropParent]),
-    case z_convert:to_list(DropParent) of
-        "cidlistmatch" ->
-            lager:info("Drop BranchId: ~p",[BranchId]),
+    lager:info("Drop BranchId: ~p",[BranchId]),
+    case DropParent of
+        <<"cidlistmatch">> ->
             [KeysList,AddOn] = [[<<"match">>,<<"nomatch">>],[]],
             case cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context) of
                 [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
@@ -2616,8 +2617,7 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                                     ]
                                    ,Context)
             end;
-        "check_cid" ->
-            lager:info("Drop BranchId: ~p",[BranchId]),
+        <<"check_cid">> ->
             [KeysList,AddOn] =
                 case modkazoo_util:get_value(cf_element_path(BranchId)++[<<"data">>,<<"use_absolute_mode">>]
                                             ,z_context:get_session('current_callflow', Context))
@@ -2637,8 +2637,7 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                                           ,{available_keys,AvailableKeys}]
                                          ,Context)
             end;
-        "menu" ->
-            lager:info("Drop BranchId: ~p",[BranchId]),
+        <<"menu">> ->
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option.tpl"
                                  ,[{tool_name,ToolName}
@@ -2647,8 +2646,7 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                                   ,{branch_id,BranchId}
                                   ,{available_keys,cf_available_keys(?MENU_KEYS_LIST,cf_element_path(BranchId),Context)}]
                                  ,Context);
-        "temporal_route" ->
-            lager:info("Drop BranchId: ~p",[BranchId]),
+        <<"temporal_route">> ->
             KeysList = [<<"_">>]++lists:map(fun(X) -> modkazoo_util:get_value(<<"id">>,X) end, kz_list_account_temporal_rules(Context)),
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option_temporal_route.tpl"
@@ -2660,8 +2658,8 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                                  ,Context);
         _ ->
             Switch = case BranchId of
-                "flow0" -> "";
-                _ -> "_"
+                <<"flow0">> -> <<"">>;
+                _ -> <<"_">>
             end,
             cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch_id,BranchId},{switch,Switch}],Context)
     end.

@@ -8,6 +8,10 @@
 -define(TO_LST(Var), z_convert:to_list(Var)).
 -define(TO_ATM(Var), z_convert:to_atom(Var)).
 -define(SIGNAL_FILTER(Context), [{'signal_filter', z_session_manager:get_session_id(Context)}]).
+-define(IS_JSON_GUARD(Obj), is_tuple(Obj)
+        andalso is_list(element(1, Obj))
+       ).
+
 
 -define(TIMEZONES_LIST, [<<"Africa/Abidjan">>,
              <<"Africa/Accra">>,

@@ -30,8 +30,8 @@ observe_search_query(_, _) ->
 
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched postback notify: no_auth"),
-    {ok, Context1} = z_session_manager:stop_session(Context),
-    z_render:wire({redirect, [{dispatch, "home"}]}, Context1);
+ %   {ok, Context1} = z_session_manager:stop_session(Context),
+    z_render:wire({redirect, [{dispatch, home}]}, Context);
 
 observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
@@ -540,16 +540,16 @@ event({postback,{toggle_field,[{type,Type}
                    L -> L ++ FieldName
                end,
     case Type of
-        "account" ->
+        <<"account">> ->
             _ = kazoo_util:kz_toggle_account_doc(FieldName, AccountId, Context),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
-        "user" ->
+        <<"user">> ->
             _ = kazoo_util:kz_toggle_user_doc(FieldName, DocId, Context),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
-        "device" ->
+        <<"device">> ->
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
-        "config" ->
+        <<"config">> ->
             z_notifier:notify1({'doc_field', 'toggle', ?TO_BIN(DocId), ?TO_BIN(FieldName), AccountId}, Context),
             timer:sleep(1000),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context)
@@ -696,7 +696,7 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
 
 event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, AccountId}]},_,_}, Context) ->
     case Type of
-        "account" ->
+        <<"account">> ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
             z_render:update(FieldName
                            ,z_template:render("_show_field.tpl"
@@ -704,15 +704,15 @@ event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},
                                              ,Context
                                              )
                            ,Context);
-        "user" ->
+        <<"user">> ->
             _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
-        "device" ->
+        <<"device">> ->
             _ = kazoo_util:kz_set_device_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
-        "config" ->
+        <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
             z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
             timer:sleep(1000),
@@ -794,7 +794,7 @@ event({postback
         Post -> Post
     end,
     case Type of
-        "account" ->
+        <<"account">> ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
             z_render:update(Prefix++FieldName
                            ,z_template:render("_show_field_select.tpl"
@@ -808,7 +808,7 @@ event({postback
                                               ]
                                              ,Context)
                            ,Context);
-        "user" ->
+        <<"user">> ->
             _ = kazoo_util:kz_set_user_doc(FieldName, ?TO_BIN(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(Prefix++FieldName
@@ -822,7 +822,7 @@ event({postback
                                               ]
                                              ,Context)
                            ,Context);
-        "device" ->
+        <<"device">> ->
             InputValue = case z_context:get_q("input_value", Context) of
                 [] -> 'undefined';
                 Val -> z_convert:to_binary(Val)
@@ -840,7 +840,7 @@ event({postback
                                               ]
                                              ,Context)
                            ,Context);
-        "config" ->
+        <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
             z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
             timer:sleep(1000),
