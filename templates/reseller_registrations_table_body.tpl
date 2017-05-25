@@ -11,17 +11,17 @@
     {% for device in m.kazoo.get_reseller_registrations %}
       <tr>
        <td class="text-center">
-         <a id="realm_{{ device["call_id"]|cleanout }}" href="#">{{ device["username"] }}@{{ device["realm"] }}</a>
-         {% wire id="realm_"++device["call_id"]|cleanout
-                 action={postback postback={redirect_to_reseller_portal realm=device["realm"]}
+         <a id="realm_{{ device[1]["call_id"]|cleanout }}" href="#">{{ device[1]["username"] }}@{{ device[1]["realm"] }}</a>
+         {% wire id="realm_"++device[1]["call_id"]|cleanout
+                 action={postback postback={redirect_to_reseller_portal realm=device[1]["realm"]}
                                    delegate="mod_kazoo"}
          %}
        </td>
-       <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
-       <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
+       <td class="text-center">{{ device[1]["user_agent"]|truncate:19 }}</td>
+       <td class="text-center"><a target="_blank" href='https://{{ device[1]["contact_ip"] }}'>{{ device[1]["contact_ip"] }}</a></td>
        <td style="text-align: center;">
-              <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-              {% wire id="info_"++device["username"]
+              <i id="info_{{ device[1]["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
+              {% wire id="info_"++device[1]["username"]
                       action={dialog_open title=_"Registration details" template="_details.tpl" arg=device width="auto"}
               %}
        </td>
