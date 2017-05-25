@@ -28,7 +28,7 @@ init(_Context) ->
 observe_search_query(_, _) ->
     'undefined'.
 
-observe_postback_notify({postback_notify, "no_auth",_,_,_}, Context) ->
+observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched postback notify: no_auth"),
     {ok, Context1} = z_session_manager:stop_session(Context),
     z_render:wire({redirect, [{dispatch, "home"}]}, Context1);
@@ -37,7 +37,7 @@ observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
     undefined.
 
-observe_kazoo_notify({kazoo_notify, "no_auth",_,_,_}, Context) ->
+observe_kazoo_notify({kazoo_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched kazoo notify: no_auth"),
     z_session:add_script(<<"z_notify('no_auth');">>, Context#context.session_pid);
  %   {ok, Context1} = z_session_manager:stop_session(Context),
@@ -312,7 +312,7 @@ event({postback,{bt_make_default_card,[{card_id,CardId}]},_,_}, Context) ->
                    ,z_template:render("_make_payment_cards_list.tpl", [{bt_customer, kazoo_util:kz_bt_customer(Context)}], Context)
                    ,Context);
 
-event({submit,add_card,"add_card_form","add_card_form"}, Context) ->
+event({submit,add_card,<<"add_card_form">>,<<"add_card_form">>}, Context) ->
     case z_context:get_q("payment_method_nonce", Context) of
         'undefined' -> Context;
         [] -> Context;
@@ -1021,10 +1021,10 @@ event({submit,cf_select_receive_fax,_,_},Context) ->
                                  ,Context),
     z_render:dialog_close(Context);
 
-event({postback,{cf_save,[{cf,"current_callflow"}]},_,_},Context) ->
+event({postback,{cf_save,[{cf,<<"current_callflow">>}]},_,_},Context) ->
     kazoo_util:cf_save('current_callflow', Context);
 
-event({postback,{cf_delete,[{cf,"current_callflow"}]},_,_},Context) ->
+event({postback,{cf_delete,[{cf,<<"current_callflow">>}]},_,_},Context) ->
     kazoo_util:cf_delete('current_callflow', Context),
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context);
 
@@ -1298,7 +1298,7 @@ event({submit,cf_select_conference,_,_},Context) ->
     end,
     z_render:dialog_close(Context);
 
-event({submit,cf_select_eavesdrop,"form_cf_select_eavesdrop","form_cf_select_eavesdrop"},Context) ->
+event({submit,cf_select_eavesdrop,<<"form_cf_select_eavesdrop">>,<<"form_cf_select_eavesdrop">>},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     TargetType = z_convert:to_binary(z_context:get_q("target_type", Context)++"_id"),
     ApprovedType = z_convert:to_binary("approved_"++z_context:get_q("approved_type", Context)++"_id"),

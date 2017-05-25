@@ -297,13 +297,13 @@ m_find_value({kz_list_transactions,[{account_id,AccountId},{selected_billing_per
     CreatedTo = z_convert:to_integer(CT),
     Transactions = kazoo_util:kz_list_transactions(AccountId, CreatedFrom, CreatedTo, 'undefined', Context),
     case Type of
-        "debit" ->
+        <<"debit">> ->
             kazoo_util:debit_transactions(Transactions);
-        "debit_summ" ->
+        <<"debit_summ">> ->
             lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:debit_transactions(Transactions));
-        "credit" ->
+        <<"credit">> ->
             kazoo_util:credit_transactions(Transactions);
-        "credit_summ" ->
+        <<"credit_summ">> ->
             lists:foldl(fun(X,Acc) -> modkazoo_util:get_value(<<"amount">>, X) + Acc end, 0, kazoo_util:credit_transactions(Transactions))
     end;
 
