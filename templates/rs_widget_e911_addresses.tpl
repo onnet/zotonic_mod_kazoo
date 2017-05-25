@@ -40,12 +40,12 @@
       {% for e911_address in m.onbill[{e911_addresses account_id=account_id}] %}
         <tr>
            <td class="text-center">
-             {% if e911_address["address_confirmed"] %}
-               <i id="confirmed_e911_address_{{ e911_address["id"] }}" class="fa fa-toggle-on pointer"></i>
-               {% wire id="confirmed_e911_address_"++e911_address["id"]
+             {% if e911_address[1]["address_confirmed"] %}
+               <i id="confirmed_e911_address_{{ e911_address[1]["id"] }}" class="fa fa-toggle-on pointer"></i>
+               {% wire id="confirmed_e911_address_"++e911_address[1]["id"]
                        action={confirm text=_"Do you really want to remove E911 address confirmation?"
                                        action={postback postback={set_e911_address_confirmed flag="false"
-                                                                                             doc_id=e911_address["id"]
+                                                                                             doc_id=e911_address[1]["id"]
                                                                                              account_id=account_id
                                                                  }
                                                         delegate="mod_kazoo"
@@ -53,11 +53,11 @@
                               }
                %}
              {% else %}
-               <i id="not_confirmed_e911_address_{{ e911_address["id"] }}" class="fa fa-toggle-off pointer"></i>
-               {% wire id="not_confirmed_e911_address_"++e911_address["id"]
+               <i id="not_confirmed_e911_address_{{ e911_address[1]["id"] }}" class="fa fa-toggle-off pointer"></i>
+               {% wire id="not_confirmed_e911_address_"++e911_address[1]["id"]
                        action={confirm text=_"Do you really want to confirm E911 address?"
                                        action={postback postback={set_e911_address_confirmed flag="true"
-                                                                                             doc_id=e911_address["id"]
+                                                                                             doc_id=e911_address[1]["id"]
                                                                                              account_id=account_id
                                                                  }
                                                         delegate="mod_kazoo"
@@ -66,37 +66,37 @@
                %}
              {% endif %}
            </td>
-           <td class="text-center">{{ e911_address["postal_code"] }}</td>
-           <td class="text-center">{{ e911_address["locality"] }}</td>
-           <td class="text-center">{{ e911_address["region"] }}</td>
-           <td class="text-center">{{ e911_address["street_address"] }} {{ e911_address["extended_address"] }}</td>
+           <td class="text-center">{{ e911_address[1]["postal_code"] }}</td>
+           <td class="text-center">{{ e911_address[1]["locality"] }}</td>
+           <td class="text-center">{{ e911_address[1]["region"] }}</td>
+           <td class="text-center">{{ e911_address[1]["street_address"] }} {{ e911_address[1]["extended_address"] }}</td>
            <td class="text-center">
-               {% wire id="edit_e911_address_"++e911_address["id"]
+               {% wire id="edit_e911_address_"++e911_address[1]["id"]
                        action={dialog_open template="_edit_e911_proof_address.tpl"
                                            title=_"Edit E911 address"
-                                           doc_id=e911_address["id"]
+                                           doc_id=e911_address[1]["id"]
                                            account_id=account_id
                                            width="auto"
                                            edit_existing="true"
                               }
                %}
-                 <i id="edit_e911_address_{{ e911_address["id"] }}" class="fa fa-edit pointer"></i>
+                 <i id="edit_e911_address_{{ e911_address[1]["id"] }}" class="fa fa-edit pointer"></i>
            </td>
            <td class="text-center">
-             {% if e911_address["attachment"] %}
+             {% if e911_address[1]["attachment"] %}
                <a href="{{ m.onbill[{attachment_download_link account_id=account_id
-                                                              doc_id=e911_address["id"]
+                                                              doc_id=e911_address[1]["id"]
                                                               doc_type="onbill_e911_address_proof"}] }}">
-                 <i id="download_uploaded_doc_{{ e911_address["id"] }}" class="fa fa-download"></i>
+                 <i id="download_uploaded_doc_{{ e911_address[1]["id"] }}" class="fa fa-download"></i>
                </a>
              {% else %}
              {% endif %}
            </td>
            <td class="text-center">
-               <i id="delete_e911_address_{{ e911_address["id"] }}" class="fa fa-trash-o pointer"></i>
-               {% wire id="delete_e911_address_"++e911_address["id"]
+               <i id="delete_e911_address_{{ e911_address[1]["id"] }}" class="fa fa-trash-o pointer"></i>
+               {% wire id="delete_e911_address_"++e911_address[1]["id"]
                        action={confirm text=_"Do you really want to delete this address?"++" <br />"
-                                       action={postback postback={mark_e911_address_deleted doc_id=e911_address["id"] account_id=account_id}
+                                       action={postback postback={mark_e911_address_deleted doc_id=e911_address[1]["id"] account_id=account_id}
                                                         delegate="mod_kazoo"
                                               }
                               }

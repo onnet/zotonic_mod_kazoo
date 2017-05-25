@@ -6,7 +6,9 @@
               action={toggle target=#mytr}
               action={toggle target="arrow_right_"++#rspmid}
               action={toggle target="arrow_down_"++#rspmid}
-              action={postback postback={trigger_innoui_widget arg="rs_payments_lists_table_opened"} delegate="mod_kazoo"}
+              action={postback postback={trigger_innoui_widget arg="rs_payments_lists_table_opened"}
+                               delegate="mod_kazoo"
+                     }
       %}
         <span id="arrows_{{ #rspmid }}" style="cursor: pointer; padding-left: 0.7em;">
           <i id="arrow_right_{{ #rspmid }}"

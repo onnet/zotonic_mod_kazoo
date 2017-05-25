@@ -2,17 +2,23 @@
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
-        action={ toggle target="rs_payments_list_widget_opened" }
-        action={ toggle target="arrow_right_"++#dtid }
-        action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="rs_payments_list_widget_opened" } delegate="mod_kazoo" }
+        action={toggle target="rs_payments_list_widget_opened"}
+        action={toggle target="arrow_right_"++#dtid}
+        action={toggle target="arrow_down_"++#dtid}
+        action={postback postback={trigger_innoui_widget arg="rs_payments_list_widget_opened"}
+                         delegate="mod_kazoo"
+               }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
     <i id="arrow_right_{{ #dtid }}"
-       style="{% if m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}display: none;{% endif %}" 
+       style="{% if m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}
+                display: none;
+              {% endif %}" 
        class="arrowpad fa fa-arrow-circle-right"></i>
     <i id="arrow_down_{{ #dtid }}"
-       style="{% if not m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}display: none;{% endif %}" 
+       style="{% if not m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}
+                display: none;
+              {% endif %}" 
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
@@ -30,27 +36,27 @@
             data-live-search="true"
             class="pull-right">
       {% for billing_period in m.onbill[{billing_periods account_id=account_id}] %}
-        <option value="{{ billing_period["period_start"][1]["day_begins_ts"]
+        <option value="{{ billing_period[1]["period_start"][1]["day_begins_ts"]
                         }},{{
-                          billing_period["period_end"][1]["day_ends_ts"] }}"
-                {% if selected_billing_period|split:","|first == billing_period["period_start"][1]["day_begins_ts"] %}
+                          billing_period[1]["period_end"][1]["day_ends_ts"] }}"
+                {% if selected_billing_period|split:","|first == billing_period[1]["period_start"][1]["day_begins_ts"] %}
                   selected
                 {% endif %}>
-          {% if billing_period["period_start"][1]["billing_day"] == 1 %}
-            {{ billing_period["period_start"][1]["month_short"] }}
-            {{ billing_period["period_start"][1]["year"] }}
+          {% if billing_period[1]["period_start"][1]["billing_day"] == 1 %}
+            {{ billing_period[1]["period_start"][1]["month_short"] }}
+            {{ billing_period[1]["period_start"][1]["year"] }}
           {% else %}
-            {{ billing_period["period_start"][1]["day"]
+            {{ billing_period[1]["period_start"][1]["day"]
              }} {{
-               billing_period["period_start"][1]["month_short"]
+               billing_period[1]["period_start"][1]["month_short"]
              }} {{
-               billing_period["period_start"][1]["year"]
+               billing_period[1]["period_start"][1]["year"]
              }} - {{
-               billing_period["period_end"][1]["day"]
+               billing_period[1]["period_end"][1]["day"]
              }} {{
-               billing_period["period_end"][1]["month_short"]
+               billing_period[1]["period_end"][1]["month_short"]
              }} {{
-               billing_period["period_end"][1]["year"] }}
+               billing_period[1]["period_end"][1]["year"] }}
           {% endif %}
         </option>
       {% endfor %}
@@ -68,7 +74,9 @@
 
 {% block widget_content %}
 <div id="rs_payments_list_widget_opened"
-     style="{% if not m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}display: none;{% endif %}">
+     style="{% if not m.kazoo[{ui_element_opened element="rs_payments_list_widget_opened"}] %}
+              display: none;
+            {% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x"
                  action={update target="rs_payments_list_widget_opened"

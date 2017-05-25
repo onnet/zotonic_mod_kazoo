@@ -7,7 +7,9 @@
                 action={toggle target=#mytr}
                 action={toggle target="arrow_right_"++#rdid}
                 action={toggle target="arrow_down_"++#rdid}
-                action={postback postback={trigger_innoui_widget arg="rs_related_documents_table_opened"} delegate="mod_kazoo"}
+                action={postback postback={trigger_innoui_widget arg="rs_related_documents_table_opened"}
+                                 delegate="mod_kazoo"
+                       }
         %}
         <span id="arrows_{{ #rdid }}" style="cursor: pointer; padding-left: 0.7em;">
           <i id="arrow_right_{{ #rdid }}"
@@ -18,7 +20,9 @@
         </span>
         {_ Related documents _}
         <span style="float:right; padding-right:2em;">
-        {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) and m.kazoo.is_kazoo_account_admin %}
+        {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status)
+              and m.kazoo.is_kazoo_account_admin
+        %}
           {% button class="btn btn-xs btn-onnet" text=_"create docs"
                     action={mask target="rs_related_documents_table_opened"}
                     action={postback postback={generate_rs_related_documents account_id doc_type}

@@ -15,47 +15,47 @@
   <tbody>
     {% for doc in m.onbill[{docs_listing account_id=account_id selected_billing_period=selected_billing_period}] %}
     <tr>
-      <td>{{ doc["type"]|truncate:11 }}</td>
-      <td class="td-center">{{ doc["oper_name_short"]|truncate:15 }}</td>
+      <td>{{ doc[1]["type"]|truncate:11 }}</td>
+      <td class="td-center">{{ doc[1]["oper_name_short"]|truncate:15 }}</td>
       <td class="td-center">
-        {{ doc["doc_number"] }}
+        {{ doc[1]["doc_number"] }}
       </td>
       <td class="td-center">
-        {% if doc["doc_date_json"][1]["day"] %}
-          {{ doc["doc_date_json"][1]["day"] }}
-          {{ doc["doc_date_json"][1]["month_short"] }}
-          {{ doc["doc_date_json"][1]["year"] }}
+        {% if doc[1]["doc_date_json"][1]["day"] %}
+          {{ doc[1]["doc_date_json"][1]["day"] }}
+          {{ doc[1]["doc_date_json"][1]["month_short"] }}
+          {{ doc[1]["doc_date_json"][1]["year"] }}
         {% else %}
-          {{ doc["doc_date"] }}
+          {{ doc[1]["doc_date"] }}
         {% endif %}
       </td>
-      <td class="td-center">{{ doc["total_netto"]|currency_sign }}</td>
-      <td class="td-center">{{ doc["total_vat"]|currency_sign }}</td>
-      <td class="td-center">{{ doc["total_brutto"]|currency_sign }}</td>
+      <td class="td-center">{{ doc[1]["total_netto"]|currency_sign }}</td>
+      <td class="td-center">{{ doc[1]["total_vat"]|currency_sign }}</td>
+      <td class="td-center">{{ doc[1]["total_brutto"]|currency_sign }}</td>
       <td>
         <a target="_blank"
-           href="{{ m.onbill[{attachment_download_link account_id=account_id doc_id=doc["id"] doc_type="onbill_modb"}] }}">
+           href="{{ m.onbill[{attachment_download_link account_id=account_id doc_id=doc[1]["id"] doc_type="onbill_modb"}] }}">
          <i class="fa fa-download zprimary" title="{_ Download _}"></i></a>
         </a>
       </td>
       <td>
-        {% if doc["type"] == "transaction_based_invoice" %}
-          <i id="delete_doc_{{ doc["id"] }}" class="fa fa-trash zalarm pointer"></i>
-          {% wire id="delete_doc_"++doc["id"]
+        {% if doc[1]["type"] == "transaction_based_invoice" %}
+          <i id="delete_doc_{{ doc[1]["id"] }}" class="fa fa-trash zalarm pointer"></i>
+          {% wire id="delete_doc_"++doc[1]["id"]
                   action={confirm text=_"Do you really want to delete document"
                                          ++
                                        ": "
                                          ++
                                        "<strong class='zalarm'> #"
                                          ++
-                                       doc["doc_number"]
+                                       doc[1]["doc_number"]
                                          ++
                                        "</strong>"
                                          ++ "?"
                                   action={postback
                                           postback={onbill_generated_doc_delete
                                                     account_id=account_id
-                                                    doc_id=doc["id"]
+                                                    doc_id=doc[1]["id"]
                                                    }
                                           delegate="mod_kazoo"
                                          }

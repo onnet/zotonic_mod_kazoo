@@ -149,11 +149,11 @@
       </tr>
       {% for service_item in m.onbill[{kz_current_services account_id=account_id}][1]["services_list"] %}
         <tr>
-          <td>{{ service_item["name"] }}</td>
-          <td class="text-center">{{ service_item["rate"]|currency_sign }}</td>
-          <td class="text-center">{{ service_item["quantity"] }}</td>
-          <td class="text-center">{{ service_item["total_discount"]|currency_sign }}</td>
-          <td class="text-center">{{ service_item["discounted_item_cost"]|currency_sign }}</td>
+          <td>{{ service_item[1]["name"] }}</td>
+          <td class="text-center">{{ service_item[1]["rate"]|currency_sign }}</td>
+          <td class="text-center">{{ service_item[1]["quantity"] }}</td>
+          <td class="text-center">{{ service_item[1]["total_discount"]|currency_sign }}</td>
+          <td class="text-center">{{ service_item[1]["discounted_item_cost"]|currency_sign }}</td>
         </tr>
       {% endfor %}
   </tbody>
