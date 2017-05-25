@@ -1475,7 +1475,7 @@ event({postback,{'rs_account_mask',[{'account_id',AccountIdRaw}]},_,_},Context) 
     _ = modkazoo_auth:set_session_currency_sign(Context),
     modkazoo_auth:choose_page_to_redirect(Context);
 
-event({postback,rs_account_demask,_,_},Context) ->
+event({postback,<<"rs_account_demask">>,_,_},Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     AccountDoc = kazoo_util:kz_get_acc_doc_by_account_id(AccountId, Context),
     ResellerId = modkazoo_util:get_value(<<"reseller_id">>, AccountDoc),

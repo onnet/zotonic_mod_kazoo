@@ -2,17 +2,23 @@
 
 {% block widget_headline %}
 {% wire id="arrows_"++#id type="click"
-        action={ toggle target="current_services_widget_opened" }
-        action={ toggle target="arrow_right_"++#id }
-        action={ toggle target="arrow_down_"++#id }
-        action={ postback postback={trigger_innoui_widget arg="current_services_widget_opened" } delegate="mod_kazoo" }
+        action={toggle target="current_services_widget_opened"}
+        action={toggle target="arrow_right_"++#id}
+        action={toggle target="arrow_down_"++#id}
+        action={postback postback={trigger_innoui_widget arg="current_services_widget_opened"}
+                         delegate="mod_kazoo"
+               }
 %}
   <span id="arrows_{{ #id }}" style="cursor: pointer;">
     <i id="arrow_right_{{ #id }}"
-       style="{% if m.kazoo[{ui_element_opened element="current_services_widget_opened"}] %}display: none;{% endif %}" 
+       style="{% if m.kazoo[{ui_element_opened element="current_services_widget_opened"}] %}
+                display: none;
+              {% endif %}" 
        class="arrowpad fa fa-arrow-circle-right"></i>
     <i id="arrow_down_{{ #id }}"
-       style="{% if not m.kazoo[{ui_element_opened element="current_services_widget_opened"}] %}display: none;{% endif %}" 
+       style="{% if not m.kazoo[{ui_element_opened element="current_services_widget_opened"}] %}
+                display: none;
+              {% endif %}" 
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
@@ -28,7 +34,9 @@
 
 {% block widget_content %}
 <div id="current_services_widget_opened"
-     style="{% if not m.kazoo[{ui_element_opened element="current_services_widget_opened"}] %}display: none;{% endif %}">
+     style="{% if not m.kazoo[{ui_element_opened element="current_services_widget_opened"}] %}
+              display: none;
+            {% endif %}">
   <table class="table table-condensed table-hover table-centered">
     <thead>
       <tr>
@@ -42,11 +50,11 @@
     <tbody>
       {% for service_item in m.onbill.kz_current_services[1]["services_list"] %}
         <tr>
-          <td>{{ service_item["name"] }}</td>
-          <td class="text-center">{{ service_item["rate"]|currency_sign }}</td>
-          <td class="text-center">{{ service_item["quantity"] }}</td>
-          <td class="text-center">{{ service_item["total_discount"]|currency_sign }}</td>
-          <td class="text-center">{{ service_item["discounted_item_cost"]|currency_sign }}</td>
+          <td>{{ service_item[1]["name"] }}</td>
+          <td class="text-center">{{ service_item[1]["rate"]|currency_sign }}</td>
+          <td class="text-center">{{ service_item[1]["quantity"] }}</td>
+          <td class="text-center">{{ service_item[1]["total_discount"]|currency_sign }}</td>
+          <td class="text-center">{{ service_item[1]["discounted_item_cost"]|currency_sign }}</td>
         </tr>
       {% endfor %}
     </tbody>

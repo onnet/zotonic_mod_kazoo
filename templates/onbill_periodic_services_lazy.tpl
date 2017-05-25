@@ -13,47 +13,49 @@
   <tbody>
     {% for fee in m.onbill[{periodic_fees account_id=account_id fees_type=m.session.show_periodic_fees}] %}
     <tr>
-      <td>{{ fee["service_id"]|truncate:15 }}</td>
+      <td>{{ fee[1]["service_id"]|truncate:15 }}</td>
       <td class="td-center">
-        {{ fee["comment"]|truncate:20 }}
+        {{ fee[1]["comment"]|truncate:20 }}
       </td>
       <td class="td-center">
-        {{ fee["service_starts"]|gregsec_to_date|date:"Y-m-d H:i T":"UTC" }}
+        {{ fee[1]["service_starts"]|gregsec_to_date|date:"Y-m-d H:i T":"UTC" }}
       </td>
       <td class="td-center">
-        {% if fee["service_ends"] %}
-          {{ fee["service_ends"]|gregsec_to_date|date:"Y-m-d H:i":"UTC" }}
+        {% if fee[1]["service_ends"] %}
+          {{ fee[1]["service_ends"]|gregsec_to_date|date:"Y-m-d H:i":"UTC" }}
         {% else %}
           Neverending Dream...
         {% endif %}
       </td>
       <td class="td-center">
-        {% if not fee["quantity"] %}
+        {% if not fee[1]["quantity"] %}
           1
         {% else %}
-          {{ fee["quantity"] }}
+          {{ fee[1]["quantity"] }}
         {% endif %}
       </td>
       <td class="td-center">
-        {% if fee["service_ends"]|inno_timestamp_expired == "expired" %}
-          <i id="info_{{ fee["id"] }}" class="fa fa-info-circle zprimary pointer" title="Details"></i>
+        {% if fee[1]["service_ends"]|inno_timestamp_expired == "expired" %}
+          <i id="info_{{ fee[1]["id"] }}" class="fa fa-info-circle zprimary pointer" title="Details"></i>
         {% else %}
-          <i id="info_{{ fee["id"] }}" class="fa fa-edit zprimary pointer" title="Details"></i>
+          <i id="info_{{ fee[1]["id"] }}" class="fa fa-edit zprimary pointer" title="Details"></i>
         {% endif %}
-        {% wire id="info_"++fee["id"]
-                action={dialog_open title=_"Manage periodic service" ++ " " ++ fee["service_id"]
+        {% wire id="info_"++fee[1]["id"]
+                action={dialog_open title=_"Manage periodic service" ++ " " ++ fee[1]["service_id"]
                                     template="_periodic_service.tpl"
                                     account_id=account_id
-                                    fee_id=fee["id"]
+                                    fee_id=fee[1]["id"]
                                     class="iamclass"
                        }
         %}
       </td>
       <td class="text-center">
-        <i id="delete_{{ fee["id"] }}" class="fa fa-trash-o pointer"></i>
-        {% wire id="delete_"++fee["id"]
+        <i id="delete_{{ fee[1]["id"] }}" class="fa fa-trash-o pointer"></i>
+        {% wire id="delete_"++fee[1]["id"]
                 action={confirm text=_"Do you really want to delete this service?"++" <br />"
-                                action={postback postback={mark_periodic_service_deleted fee_id=fee["id"] account_id=account_id}
+                                action={postback postback={mark_periodic_service_deleted fee_id=fee[1]["id"]
+                                                                                         account_id=account_id
+                                                          }
                                                  delegate="mod_kazoo"
                                        }
                        }
