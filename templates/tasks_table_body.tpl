@@ -12,43 +12,43 @@
     {% for task in m.kazoo.account_tasks %}
       <tr>
         <td class="text-center">
-          {{ task["created"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
+          {{ task[1]["created"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
         </td>
-        <td class="text-center">{{ task["category"]|truncate:13 }}</td>
-        <td class="text-center">{{ task["action"]|truncate:13 }}</td>
-        <td class="text-center">{{ task["status"] }}</td>
+        <td class="text-center">{{ task[1]["category"]|truncate:13 }}</td>
+        <td class="text-center">{{ task[1]["action"]|truncate:13 }}</td>
+        <td class="text-center">{{ task[1]["status"] }}</td>
         <td style="text-align: center;">
-          {% if task["status"] == "pending" %}
-            <i id="process_task_{{ task["id"]|cleanout }}"
+          {% if task[1]["status"] == "pending" %}
+            <i id="process_task_{{ task[1]["id"]|cleanout }}"
                class="fa fa-play zprimary pointer"
                title="{_ Play _}"></i>
-            {% wire id="process_task_"++task["id"]|cleanout
+            {% wire id="process_task_"++task[1]["id"]|cleanout
                     action={confirm text=_"Do you really want to start this job?"
                                      action={postback postback={start_task_processing account_id=account_id
-                                                                                      task_id=task["id"]
+                                                                                      task_id=task[1]["id"]
                                                                }
                                                       delegate="mod_kazoo"
                                             } 
                             } 
             %}
           {% endif %}
-          {% if task["csvs"] %}
-            {% for task_filename in task["csvs"] %}
+          {% if task[1]["csvs"] %}
+            {% for task_filename in task[1]["csvs"] %}
             <a href="{{ m.onbill[{attachment_download_link account_id=account_id
-                                                           doc_id=task["id"]
+                                                           doc_id=task[1]["id"]
                                                            attachment_name=task_filename
                                                            doc_type="tasks_csv"}] }}">
-              <i id="download_uploaded_doc_{{ task["id"]|cleanout }}_{{ task_filename|cleanout }}"
+              <i id="download_uploaded_doc_{{ task[1]["id"]|cleanout }}_{{ task_filename|cleanout }}"
                  class="fa fa-download"
                  title="{{ task_filename }}"></i>
             </a>
             {% endfor %}
           {% else %}
           {% endif %}
-          <i id="info_{{ task["id"]|cleanout }}"
+          <i id="info_{{ task[1]["id"]|cleanout }}"
              class="fa fa-info-circle zprimary pointer"
              title="{_ Details _}"></i>
-          {% wire id="info_"++task["id"]|cleanout
+          {% wire id="info_"++task[1]["id"]|cleanout
                   action={dialog_open title=_"Task details"
                                       template="_details.tpl"
                                       arg=task

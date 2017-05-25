@@ -13,22 +13,22 @@
       <tr>
         <td class="text-center">
           {{
-            notification["created"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone
+            notification[1]["created"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone
           }}
         </td>
-        <td class="text-center">{{ notification["to"] }}</td>
+        <td class="text-center">{{ notification[1]["to"] }}</td>
         <td class="text-center">
-          {{ notification["subject"]|truncate:19 }}
+          {{ notification[1]["subject"]|truncate:19 }}
         </td>
         <td style="text-align: center;">
-          <i id="info_{{ notification["id"]|cleanout }}"
+          <i id="info_{{ notification[1]["id"]|cleanout }}"
              class="fa fa-info-circle zprimary pointer"
              title="{_ Details _}"></i>
-          {% wire id="info_"++notification["id"]|cleanout
+          {% wire id="info_"++notification[1]["id"]|cleanout
                   action={dialog_open title=_"Notification details"
                                       template="_notifications_smtp_log_details.tpl"
-                                      notification_id=notification["id"]
-                                      notification_created=notification["created"]
+                                      notification_id=notification[1]["id"]
+                                      notification_created=notification[1]["created"]
                                       width="auto"
                          }
           %}
