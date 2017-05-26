@@ -1,29 +1,42 @@
 {% if m.kazoo[{ui_element_opened element="ap_groups_widget_opened"}] %}
 <table id="admin_portal_groups_table" class="table display table-striped table-condensed">
-    <thead>
-        <tr>
-            <th style="text-align: center1;">{_ Group Name _}</th>
-            <th style="text-align: center;">{_ Endpoints amount _}</th>
-            <th style="text-align: center;"></th>
-            <th style="text-align: center;"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for group in m.kazoo.kz_list_account_groups %}
-	<tr>
-            <td style="text-align: center1;">{{ group["name"] }}</td>
-            <td style="text-align: center;">{{ group["endpoints"] }}</td>
-            <td style="text-align: center;"><i id="edit_{{ group["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++group["id"] action={ dialog_open title=_"Edit group "++group["name"] template="_edit_group_lazy.tpl" group_id=group["id"] } %}
-            <td style="text-align: center;"><i id="delete_{{ group["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
-            {% wire id="delete_"++group["id"]
-                    action={confirm text=_"Do you really want to delete group "++group["name"]++"?"
-                                action={postback postback={delete_group group_id=group["id"]} delegate="mod_kazoo"}
-                           }
-            %}
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th style="text-align: center1;">{_ Group Name _}</th>
+      <th style="text-align: center;">{_ Endpoints amount _}</th>
+      <th style="text-align: center;"></th>
+      <th style="text-align: center;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for group in m.kazoo.kz_list_account_groups %}
+      <tr>
+        <td style="text-align: center1;">{{ group[1]["name"] }}</td>
+        <td style="text-align: center;">{{ group[1]["endpoints"] }}</td>
+        <td style="text-align: center;">
+          <i id="edit_{{ group[1]["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i>
+        </td>
+        {% wire id="edit_"++group[1]["id"]
+                action={dialog_open title=_"Edit group "++group[1]["name"]
+                                    template="_edit_group_lazy.tpl"
+                                    group_id=group[1]["id"]
+                       }
+        %}
+        <td style="text-align: center;">
+          <i id="delete_{{ group[1]["id"] }}"
+             class="fa fa-trash-o pointer"
+             title="{_ Delete _}"></i>
+        </td>
+        {% wire id="delete_"++group[1]["id"]
+                action={confirm text=_"Do you really want to delete group "++group[1]["name"]++"?"
+                            action={postback postback={delete_group group_id=group[1]["id"]}
+                                             delegate="mod_kazoo"
+                                   }
+                       }
+        %}
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% javascript %}
@@ -51,6 +64,4 @@ var oTable = $('#admin_portal_groups_table').dataTable({
 
 });
 {% endjavascript %}
-{% else %}
 {% endif %}
-

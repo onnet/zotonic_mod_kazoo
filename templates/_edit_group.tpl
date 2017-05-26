@@ -5,7 +5,12 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input type="text" class="form-control margin-bottom-xs" id="groupname" name="name" value="{{ group_doc["name"] }}" placeholder="{_ Enter group name here _}">
+          <input type="text"
+                 class="form-control margin-bottom-xs"
+                 id="groupname"
+                 name="name"
+                 value="{{ group_doc["name"] }}"
+                 placeholder="{_ Enter group name here _}">
         </div>
       </div>
     </div>
@@ -14,8 +19,13 @@
       <div class="col-sm-12 columns"> 
         {% for option in m.kazoo.kz_list_account_users_short %}
         {% if option[1] %}
-        <label for="{{ option[1]|truncate:8:"" }}" class="checkbox-inline {% if option[1]|member:members %}checked{% endif %}">
-          <input type="checkbox" value="{{ option[1] }}" id="{{ option[1]|truncate:8:"" }}" name="user" {% if option[1]|member:members %}checked{% endif %}>
+        <label for="{{ option[1]|truncate:8:"" }}"
+               class="checkbox-inline {% if option[1]|member:members %}checked{% endif %}">
+          <input type="checkbox"
+                 value="{{ option[1] }}"
+                 id="{{ option[1]|truncate:8:"" }}"
+                 name="user"
+                 {% if option[1]|member:members %}checked{% endif %}>
           {{ option[2] }}
         </label>
         {% endif %}
@@ -27,8 +37,13 @@
       <div class="col-sm-12 columns"> 
         {% for option in m.kazoo.kz_list_account_devices_short %}
         {% if option[1] %}
-        <label for="{{ option[1]|truncate:8:"" }}" class="checkbox-inline {% if option[1]|member:members %}checked{% endif %}">
-          <input type="checkbox" value="{{ option[1] }}" id="{{ option[1]|truncate:8:"" }}" name="device" {% if option[1]|member:members %}checked{% endif %}>
+        <label for="{{ option[1]|truncate:8:"" }}"
+               class="checkbox-inline {% if option[1]|member:members %}checked{% endif %}">
+          <input type="checkbox"
+                 value="{{ option[1] }}"
+                 id="{{ option[1]|truncate:8:"" }}"
+                 name="device"
+                 {% if option[1]|member:members %}checked{% endif %}>
           {{ option[2] }}
         </label>
         {% endif %}
@@ -44,7 +59,9 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-12">
-          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save group _}</button>
+          <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+            {_ Save group _}
+          </button>
         </div>
       </div>
     </div>

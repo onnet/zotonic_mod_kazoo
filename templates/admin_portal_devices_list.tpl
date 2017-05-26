@@ -2,26 +2,34 @@
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
-        action={ toggle target="ap_devices_widget_opened" }
-        action={ toggle target="arrow_right_"++#dtid }
-        action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="ap_devices_widget_opened" } delegate="mod_kazoo" }
+        action={toggle target="ap_devices_widget_opened"}
+        action={toggle target="arrow_right_"++#dtid}
+        action={toggle target="arrow_down_"++#dtid}
+        action={postback postback={trigger_innoui_widget arg="ap_devices_widget_opened"}
+                         delegate="mod_kazoo"
+               }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
     <i id="arrow_right_{{ #dtid }}"
-       style="{% if m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}display: none;{% endif %}"
+       style="{% if m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}
+                display: none;
+              {% endif %}"
        class="arrowpad fa fa-arrow-circle-right"></i>
     <i id="arrow_down_{{ #dtid }}"
-       style="{% if not m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}display: none;{% endif %}"
+       style="{% if not m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}
+                display: none;
+              {% endif %}"
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"add device"
-              action={dialog_open title=_"Add device" template="_add_device_dialog.tpl" } %}
+              action={dialog_open title=_"Add device" template="_add_device_dialog.tpl"}
+    %}
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"refresh list"
-              action={emit signal={update_admin_portal_devices_list_tpl signal_filter=m.kazoo.signal_filter} } %}
+              action={emit signal={update_admin_portal_devices_list_tpl signal_filter=m.kazoo.signal_filter}}
+    %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
@@ -29,7 +37,9 @@
 {% block widget_content %}
             
 <div id="ap_devices_widget_opened"
-     style="{% if not m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}display: none;{% endif %}">
+     style="{% if not m.kazoo[{ui_element_opened element="ap_devices_widget_opened"}] %}
+              display: none;
+            {% endif %}">
     <div class="text-center p-3">
         {% ilazy class="fa fa-spinner fa-spin fa-3x"
                  action={update target="ap_devices_widget_opened"
@@ -37,5 +47,4 @@
         %}
     </div>
 </div>
-
 {% endblock %}
