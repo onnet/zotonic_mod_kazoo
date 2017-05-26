@@ -1,14 +1,16 @@
 -module(modkazoo_util2).
 -author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 
-%% interface functions
--export([
-     translit/1
-    ,rand_hex_binary/1
-    ,to_hex/1
-    ,check_file_size_exceeded/3
-    ,if_substring_in_json/2
-    ,to_integer/2
+-export([translit/1
+        ,rand_hex_binary/1
+        ,to_hex/1
+        ,check_file_size_exceeded/3
+        ,if_substring_in_json/2
+        ,to_integer/2
+        ,is_text/1
+        ,encode_data/1
+        ,maybe_encode_data/2
+        ,decode_data/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -85,3 +87,30 @@ to_integer(Var, Default) ->
         Num when is_integer(Num) -> Num;
         _ -> Default
     end.
+
+%% @spec is_text(Mime) -> bool()
+%% %% @doc Check if a mime type is textual
+is_text("text/" ++ _) -> true;
+is_text("application/x-javascript") -> true;
+is_text("application/xhtml+xml") -> true;
+is_text("application/xml") -> true;
+is_text(_Mime) -> false.
+
+%% Encode the data so that the identity variant comes first and then the gzip'ed variant
+encode_data(Data) when is_binary(Data) ->
+    {Data, zlib:gzip(Data)}.
+
+maybe_encode_data(Data, Context) ->
+    case z_context:get(encode_data, Context, false) of 
+        true -> encode_data(Data);
+        false -> Data
+    end.
+
+decode_data(gzip, Data) when is_binary(Data) ->
+    zlib:gzip(Data);
+decode_data(identity, Data) when is_binary(Data) ->
+    Data;
+decode_data(identity, {Data, _Gzip}) ->
+    Data;
+decode_data(gzip, {_Data, Gzip}) ->
+    Gzip.

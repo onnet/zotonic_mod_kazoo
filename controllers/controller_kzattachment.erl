@@ -1,13 +1,13 @@
 -module(controller_kzattachment).
--export([
-    service_available/1,
-    allowed_methods/1,
-    resource_exists/1,
-    forbidden/1,
-    content_types_provided/1,
-    charsets_provided/1,
-    provide_content/1,
-    finish_request/1
+-export([service_available/1
+        ,allowed_methods/1
+        ,resource_exists/1
+        ,forbidden/1
+        ,content_types_provided/1
+        ,encodings_provided/1
+        ,charsets_provided/1
+        ,provide_content/1
+        ,finish_request/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -50,8 +50,20 @@ content_types_provided(Context) ->
             {[{<<"audio/mpeg">>, provide_content}], Context}
     end.
 
+encodings_provided(Context) ->
+    Mime = z_context:get(mime, Context),
+    Encodings = case z_media_identify:is_mime_compressed(Mime) of
+        true -> [{<<"identity">>, fun(Data) -> Data end}];
+        _    -> [{<<"identity">>, fun(Data) -> modkazoo_util2:decode_data(identity, Data) end}
+                ,{<<"gzip">>, fun(Data) -> modkazoo_util2:decode_data(gzip, Data) end}]
+    end,
+    {Encodings, z_context:set(encode_data, length(Encodings) > 1, Context)}.
+
 charsets_provided(Context) ->
-    {no_charset, Context}.
+    case modkazoo_util2:is_text(z_context:get(mime, Context)) of
+        true -> {[{<<"utf-8">>, fun(X) -> X end}], Context};
+        _ -> {no_charset, Context}
+    end.
 
 resource_exists(Context) ->
     {true , Context}.
@@ -60,11 +72,12 @@ provide_content(Context) ->
     case z_context:get_q(<<"doc_type">>, Context) of
         <<"onbill_modb">> ->
             case onbill_modb_attachment(Context) of
-                {'ok', Body} ->
+                {'ok', Data} ->
                     MediaName = z_context:get_q(<<"doc_id">>, Context),
                     Context1 = z_context:set_resp_header(<<"content-disposition">>
                                                         ,<<"attachment; filename=", MediaName/binary, ".pdf">>
                                                         ,Context),
+                    Body = modkazoo_util2:maybe_encode_data(Data, Context),
                     {Body, z_context:set(body, Body, Context1)};
                 _ -> api_error(404, 0, "No attachment found", Context)
             end;
@@ -72,10 +85,11 @@ provide_content(Context) ->
             DocId = z_context:get_q(<<"doc_id">>, Context),
             AccountId = z_context:get_q(<<"account_id">>, Context),
             case onbill_util:get_e911_attachment(DocId, AccountId, Context) of
-                {'ok', [50,_,_], Headers, Body} ->
+                {'ok', [50,_,_], Headers, Data} ->
                     Context1 = z_context:set_resp_header(<<"content-disposition">>
                                                         ,?TO_BIN(proplists:get_value("content-disposition", Headers))
                                                         ,Context),
+                    Body = modkazoo_util2:maybe_encode_data(Data, Context),
                     {Body, z_context:set(body, Body, Context1)};
                 _E ->
                     lager:info("provide_content eror: ~p",[_E]),
@@ -86,10 +100,11 @@ provide_content(Context) ->
             TaskId = z_context:get_q(<<"doc_id">>, Context),
             AccountId = z_context:get_q(<<"account_id">>, Context),
             case kazoo_util:get_tasks_csv(AttName, TaskId, AccountId, Context) of
-                {'ok', [50,_,_], Headers, Body} ->
+                {'ok', [50,_,_], Headers, Data} ->
                     Context1 = z_context:set_resp_header(<<"content-disposition">>
                                                         ,?TO_BIN(proplists:get_value("content-disposition", Headers))
                                                         ,Context),
+                    Body = modkazoo_util2:maybe_encode_data(Data, Context),
                     {Body, z_context:set(body, Body, Context1)};
                 _E ->
                     lager:info("provide_content eror: ~p",[_E]),
@@ -100,7 +115,8 @@ provide_content(Context) ->
             Context1 = z_context:set_resp_header(<<"content-disposition">>
                                                 ,<<"attachment; filename=", MediaName/binary, ".mp3">>
                                                 ,Context),
-            {'ok', Body} = call_recording_attachment(Context),
+            {'ok', Data} = call_recording_attachment(Context),
+            Body = modkazoo_util2:maybe_encode_data(Data, Context),
             {Body, z_context:set(body, Body, Context1)};
         _ ->
             {<<>>, Context}
