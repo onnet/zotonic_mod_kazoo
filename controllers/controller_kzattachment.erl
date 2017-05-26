@@ -78,7 +78,7 @@ provide_content(Context) ->
                                                         ,Context),
                     {Body, z_context:set(body, Body, Context1)};
                 _E ->
-                    lager:info("IAM provide_content eror: ~p",[_E]),
+                    lager:info("provide_content eror: ~p",[_E]),
                     api_error(404, 0, "No attachment found", Context)
             end;
         <<"tasks_csv">> ->
@@ -92,7 +92,7 @@ provide_content(Context) ->
                                                         ,Context),
                     {Body, z_context:set(body, Body, Context1)};
                 _E ->
-                    lager:info("IAM provide_content eror: ~p",[_E]),
+                    lager:info("provide_content eror: ~p",[_E]),
                     api_error(404, 0, "No attachment found", Context)
             end;
         <<"call_recording">> ->

@@ -39,19 +39,19 @@ allowed_methods(Context) ->
 
 forbidden(Context) ->
     case z_context:get_q('id', Context) of
-        <<DocId:32>> ->
+        <<DocId:32/binary>> ->
             case kazoo_util:kz_get_account_prompt_attachment(DocId, Context) of
                  <<"">> ->
                      {true, Context};
                  _ ->
                      {false, Context}
             end;
-        _ ->
+        _E ->
             {true, Context}
     end.
 
 content_types_provided(Context) ->
-    {[{z_context:get(mime, Context), provide_content}], Context}.
+    {[{?TO_BIN(z_context:get(mime, Context)), provide_content}], Context}.
 
 encodings_provided(Context) ->
     Mime = z_context:get(mime, Context),
