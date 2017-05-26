@@ -2032,13 +2032,13 @@ kz_channel_eavesdrop(Id, Mode, CallId, AccountId, Context) ->
 add_group(Context) ->
     Endpoints = lists:foldr(fun(T,J) -> case T of
                                            {_,[]} -> []++J; 
-                                           {"user",Id} ->  J++[{?TO_BIN(Id),{[{<<"type">>,<<"user">>}]}}];
-                                           {"device",Id} ->  J++[{?TO_BIN(Id),{[{<<"type">>,<<"device">>}]}}];
+                                           {<<"user">>,Id} ->  J++[{Id,{[{<<"type">>,<<"user">>}]}}];
+                                           {<<"device">>,Id} ->  J++[{Id,{[{<<"type">>,<<"device">>}]}}];
                                            _ -> []++J 
                                        end 
                                end, [], z_context:get_q_all(Context)),
     Props = modkazoo_util:filter_empty(
-        [{[<<"data">>,<<"name">>],?TO_BIN(z_context:get_q("name",Context))}
+        [{[<<"data">>,<<"name">>],z_context:get_q(name,Context)}
         ,{[<<"data">>,<<"endpoints">>],{Endpoints}}
         ]),
     DataBag = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_GROUP, Props),
@@ -2050,15 +2050,16 @@ modify_group(Context) ->
     modify_group(z_context:get_q("group_id",Context), Context).
 
 modify_group(GroupId, Context) ->
+lager:info("IAM modify_group z_context:get_q_all(Context): ~p",[z_context:get_q_all(Context)]),
     Endpoints = lists:foldr(fun(T,J) -> case T of
                                            {_,[]} -> []++J; 
-                                           {"user",Id} ->  J++[{?TO_BIN(Id),{[{<<"type">>,<<"user">>}]}}];
-                                           {"device",Id} ->  J++[{?TO_BIN(Id),{[{<<"type">>,<<"device">>}]}}];
+                                           {<<"user">>,Id} ->  J++[{Id,{[{<<"type">>,<<"user">>}]}}];
+                                           {<<"device">>,Id} ->  J++[{Id,{[{<<"type">>,<<"device">>}]}}];
                                            _ -> []++J 
                                        end 
                                end, [], z_context:get_q_all(Context)),
     Props = modkazoo_util:filter_empty(
-        [{[<<"data">>,<<"name">>],?TO_BIN(z_context:get_q("name",Context))}
+        [{[<<"data">>,<<"name">>],z_context:get_q(name,Context)}
         ,{[<<"data">>,<<"endpoints">>],{Endpoints}}
         ]),
     DataBag = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, kz_get_group_doc(GroupId, Context), Props),
@@ -2896,7 +2897,7 @@ vmbox_message(Verb, MessageId, VMBoxId, Context) ->
     crossbar_account_request(Verb, API_String, [], Context).
 
 kz_conference(Context) ->
-    Id = z_context:get_q("conference_id",Context),
+    Id = z_context:get_q("conference_id", Context),
     Numbers = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end
                        ,z_string:split(z_context:get_q("numbers", Context),",")),
     Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end
