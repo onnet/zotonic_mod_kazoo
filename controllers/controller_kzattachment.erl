@@ -110,7 +110,6 @@ finish_request(Context) ->
     {ok, Context}.
 
 onbill_modb_attachment(Context) ->
-lager:info("onbill_modb_attachment AccountId: ~p",[z_context:get_q(account_id, Context)]),
     AccountId = z_context:get_q("account_id", Context),
     DocId = z_context:get_q("doc_id", Context),
     AuthToken = z_context:get_q("auth_token", Context),
