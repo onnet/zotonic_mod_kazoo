@@ -4,7 +4,9 @@
   <thead>
     <tr>
       <th style="text-align: center;"></th>
-      <th style="text-align: center1;">{_ Blacklist Name _}</th>
+      <th style="text-align: center1;">
+        {_ Blacklist Name _}
+      </th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
     </tr>
@@ -13,46 +15,46 @@
     {% for blacklist in m.kazoo.kz_list_account_blacklists %}
       <tr>
         <td style="text-align: center;">
-          {% if blacklist["id"]|member:blacklists %}
-            <i id="toggle_bl_member_{{ blacklist["id"] }}"
+          {% if blacklist[1]["id"]|member:blacklists %}
+            <i id="toggle_bl_member_{{ blacklist[1]["id"] }}"
                class="fa fa-toggle-on pointer"
                title="Active"></i>
           {% else %}
-            <i id="toggle_bl_member_{{ blacklist["id"] }}"
+            <i id="toggle_bl_member_{{ blacklist[1]["id"] }}"
                class="fa fa-toggle-off pointer"
                title="Deactivated"></i>
           {% endif %}
-          {% wire id="toggle_bl_member_"++blacklist["id"]
+          {% wire id="toggle_bl_member_"++blacklist[1]["id"]
                   action={confirm text=_"Do you really want to proceed?"
                                   action={postback postback={toggle_blacklist_member
-                                                             blacklist_id=blacklist["id"]
+                                                             blacklist_id=blacklist[1]["id"]
                                                             }
                                                    delegate="mod_kazoo"
                                          }
                          }
           %}
         </td>
-        <td style="text-align: center1;">{{ blacklist["name"] }}</td>
+        <td style="text-align: center1;">{{ blacklist[1]["name"] }}</td>
         <td style="text-align: center;">
-          <i id="edit_{{ blacklist["id"] }}"
+          <i id="edit_{{ blacklist[1]["id"] }}"
              class="fa fa-edit pointer"
              title="{_ Edit _}"></i></td>
-          {% wire id="edit_"++blacklist["id"]
-                  action={dialog_open title=_"Edit blacklist"++" "++blacklist["name"]
+          {% wire id="edit_"++blacklist[1]["id"]
+                  action={dialog_open title=_"Edit blacklist"++" "++blacklist[1]["name"]
                                       template="_edit_blacklist_lazy.tpl"
-                                      blacklist_id=blacklist["id"]
+                                      blacklist_id=blacklist[1]["id"]
                          }
           %}
         <td style="text-align: center;">
-          <i id="delete_{{ blacklist["id"] }}"
+          <i id="delete_{{ blacklist[1]["id"] }}"
              class="fa fa-trash-o pointer"
              title="{_ Delete _}"></i>
-          {% wire id="delete_"++blacklist["id"]
+          {% wire id="delete_"++blacklist[1]["id"]
                   action={confirm text=_"Do you really want to delete blacklist "
-                                         ++ blacklist["name"]
+                                         ++ blacklist[1]["name"]
                                          ++ "?"
                                   action={postback postback={delete_blacklist
-                                                             blacklist_id=blacklist["id"]
+                                                             blacklist_id=blacklist[1]["id"]
                                                             }
                                                    delegate="mod_kazoo"
                                          }
