@@ -1,35 +1,55 @@
 {% if m.kazoo[{ui_element_opened element="ap_menus_widget_opened"}] %}
 <table id="admin_portal_menus_table" class="table display table-striped table-condensed">
-    <thead>
+  <thead>
+    <tr>
+      <th style="text-align: center1;">{_ Menu name _}</th>
+      <th style="text-align: center;">{_ Retries _}</th>
+      <th style="text-align: center;">{_ Timeout _}</th>
+      <th style="text-align: center;">{_ Ext. length _}</th>
+      <th style="text-align: center;"></th>
+      <th style="text-align: center;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for menu in m.kazoo.kz_list_account_menus %}
+      {% with m.kazoo[{kz_get_account_menu menu_id=menu[1]["id"]}] as menu_details %}
         <tr>
-            <th style="text-align: center1;">{_ Menu name _}</th>
-            <th style="text-align: center;">{_ Retries _}</th>
-            <th style="text-align: center;">{_ Timeout _}</th>
-            <th style="text-align: center;">{_ Ext. length _}</th>
-            <th style="text-align: center;"></th>
-            <th style="text-align: center;"></th>
+          <td style="text-align: center1;">{{ menu[1]["name"] }}</td>
+          <td style="text-align: center;">{{ menu_details[1]["retries"] }}</td>
+          <td style="text-align: center;">
+            {{ (menu_details[1]["timeout"]/1000)|to_integer }}
+          </td>
+          <td style="text-align: center;">
+            {{ menu_details[1]["max_extension_length"] }}
+          </td>
+          <td style="text-align: center;">
+            <i id="edit_{{ menu[1]["id"] }}"
+               class="fa fa-edit pointer"
+               title="{_ Edit _}"></i>
+          </td>
+          {% wire id="edit_"++menu[1]["id"]
+                  action={dialog_open title=_"Edit menu"++" "++menu[1]["name"]
+                                      template="_edit_menu_lazy.tpl"
+                                      menu_id=menu[1]["id"]
+                                      width="auto"
+                         }
+          %}
+          <td style="text-align: center;">
+            <i id="delete_{{ menu[1]["id"] }}"
+               class="fa fa-trash-o pointer"
+               title="{_ Delete _}"></i>
+          </td>
+          {% wire id="delete_"++menu[1]["id"]
+                  action={confirm text=_"Do you really want to delete menu "++menu[1]["name"]++"?"
+                              action={postback postback={delete_menu menu_id=menu[1]["id"]}
+                                               delegate="mod_kazoo"
+                                     }
+                         }
+          %}
         </tr>
-    </thead>
-    <tbody>
-        {% for menu in m.kazoo.kz_list_account_menus %}
-        {% with m.kazoo[{kz_get_account_menu menu_id=menu["id"]}] as menu_details %}
-	<tr>
-            <td style="text-align: center1;">{{ menu["name"] }}</td>
-            <td style="text-align: center;">{{ menu_details[1]["retries"] }}</td>
-            <td style="text-align: center;">{{ (menu_details[1]["timeout"]/1000)|to_integer }}</td>
-            <td style="text-align: center;">{{ menu_details[1]["max_extension_length"] }}</td>
-            <td style="text-align: center;"><i id="edit_{{ menu["id"] }}" class="fa fa-edit pointer" title="{_ Edit _}"></i></td>
-            {% wire id="edit_"++menu["id"] action={ dialog_open title=_"Edit menu"++" "++menu["name"] template="_edit_menu_lazy.tpl" menu_id=menu["id"] width="auto" } %}
-            <td style="text-align: center;"><i id="delete_{{ menu["id"] }}" class="fa fa-trash-o pointer" title="{_ Delete _}"></i></td>
-            {% wire id="delete_"++menu["id"]
-                    action={confirm text=_"Do you really want to delete menu "++menu["name"]++"?"
-                                action={postback postback={delete_menu menu_id=menu["id"]} delegate="mod_kazoo"}
-                           }
-            %}
-        </tr>
-        {% endwith %}
-        {% endfor %}
-    </tbody>
+      {% endwith %}
+    {% endfor %}
+  </tbody>
 </table>
 
 {% javascript %}
@@ -57,6 +77,4 @@ var oTable = $('#admin_portal_menus_table').dataTable({
 
 });
 {% endjavascript %}
-{% else %}
 {% endif %}
-
