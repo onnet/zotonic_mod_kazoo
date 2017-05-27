@@ -17,13 +17,13 @@
         {% for server_details in trunk_doc[1]["servers"] %}
           {% with
                m.kazoo[{kz_registration_details_by_username
-                        username=server_details["auth"][1]["auth_user"]}]
+                        username=server_details[1]["auth"][1]["auth_user"]}]
              as
                reg_details
           %}
             <tr>
               <td style="text-align: center;">
-                {% if server_details["options"][1]["enabled"] %}
+                {% if server_details[1]["options"][1]["enabled"] %}
                   <i id="ts_servers_options_enabled"
                      class="fa fa-toggle-on pointer"
                      title="Enabled"></i>
@@ -55,10 +55,10 @@
                 {% endif %}
               </td>
               <td style="text-align: center1;">
-                {{ server_details["server_name"] }}
+                {{ server_details[1]["server_name"] }}
               </td>
               <td style="text-align: center;">
-                {{ server_details["auth"][1]["auth_method"] }}
+                {{ server_details[1]["auth"][1]["auth_method"] }}
               </td>
               <td style="text-align: center;">
                 {% if reg_details %}
@@ -82,7 +82,7 @@
                    title="{_ Edit _}"></i>
               </td>
               {% wire id="edit_"++forloop.counter
-                      action={dialog_open title=_"Edit trunk"++" "++server_details["server_name"]
+                      action={dialog_open title=_"Edit trunk"++" "++server_details[1]["server_name"]
                                           template="_edit_trunk_lazy.tpl"
                                           trunk_id=trunk_id
                                           server_index=forloop.counter width="auto"
@@ -96,10 +96,10 @@
                   {% wire id="flush_"++forloop.counter
                           action={confirm text=_"Do you really want to flush registration for trunk"
                                                  ++ " "
-                                                 ++ server_details["server_name"]
+                                                 ++ server_details[1]["server_name"]
                                                  ++ "?"
                                           action={postback postback={flush_pbx_registration_by_username
-                                                                     sip_username=server_details["auth"][1]["auth_user"]
+                                                                     sip_username=server_details[1]["auth"][1]["auth_user"]
                                                                     }
                                                            delegate="mod_kazoo"
                                                  }
@@ -113,7 +113,7 @@
                    title="{_ Delete _}"></i></td>
               {% wire id="delete_"++forloop.counter
                       action={confirm text=_"Do you really want to delete trunk "
-                                             ++ server_details["server_name"]
+                                             ++ server_details[1]["server_name"]
                                              ++ "?"
                                       action={postback postback={delete_trunk trunk_id=trunk_id
                                                                               server_index=forloop.counter
