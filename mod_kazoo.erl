@@ -1421,15 +1421,16 @@ event({postback,toggle_all_calls_recording,_,_}, Context) ->
     _ = kazoo_util:toggle_all_calls_recording(Context),
     z_render:update("all_calls_recording_enabled", z_template:render("_all_calls_recording.tpl", [], Context), Context);
 
-event({postback,add_blacklisted_number,_,_},Context) ->
-    case z_context:get_q("new_blacklisted_number",Context) of
-        [] ->
+event({postback,<<"add_blacklisted_number">>,_,_},Context) ->
+    case z_context:get_q('new_blacklisted_number',Context) of
+        <<>> ->
             Context;
         Number ->
             z_render:insert_top("blacklisted_numbers_list"
                                ,z_template:render("_blacklisted_number.tpl"
-                                                 ,[{blacklisted_number,z_convert:to_binary(modkazoo_util:cleanout(Number))}
-                                                  ,{blacklisted_description,modkazoo_util:get_q_bin("new_blacklisted_description", Context)}
+                                                 ,[{blacklisted_number, modkazoo_util:cleanout(Number)}
+                                                  ,{blacklisted_description
+                                                   ,z_context:get_q('new_blacklisted_description', Context)}
                                                   ]
                                                  ,Context)
                                ,Context) 

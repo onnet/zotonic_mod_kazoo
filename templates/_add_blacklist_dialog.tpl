@@ -35,13 +35,13 @@
           {% button id="add_blacklisted_number"
                     class="col-xs-12 btn btn-zprimary margin-bottom-xs"
                     text=_"Add"
+                    action={set_value target="new_blacklisted_number" value=""}
+                    action={set_value target="new_blacklisted_description" value=""}
                     action={postback postback="add_blacklisted_number"
                                      delegate="mod_kazoo"
                                      qarg="new_blacklisted_number"
                                      qarg="new_blacklisted_description"
                            }
-                    action={set_value target="new_blacklisted_number" value=""}
-                    action={set_value target="new_blacklisted_description" value=""}
           %}
       </div>
     </div>
