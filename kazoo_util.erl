@@ -3609,27 +3609,65 @@ ts_server_set_field(K, V, Ind, TrunkId, Context) ->
     Index = z_convert:to_integer(Ind),
     CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
     Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
-    NewServers = lists:sublist(Servers, Index-1) ++ [modkazoo_util:set_value(K, V, lists:nth(Index, Servers))] ++ lists:nthtail(Index, Servers),
+    NewServers = lists:sublist(Servers, Index-1)
+                 ++ [modkazoo_util:set_value(K, V, lists:nth(Index, Servers))]
+                 ++ lists:nthtail(Index, Servers),
     NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
     kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context).
 
 update_trunk_server(Server, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"options">>,<<"enabled">>], 'true', J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"inbound_format">>], ?TO_BIN(z_context:get_q("inbound_format",Context)), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"auth">>,<<"auth_method">>], ?TO_BIN(z_context:get_q("auth_method",Context)), J) end
-                ,fun(J) -> case z_context:get_q("auth_trunk_user",Context) of
-                               'undefined' -> J;
-                               User -> modkazoo_util:set_value([<<"auth">>,<<"auth_user">>], ?TO_BIN(User), J)
+                ,fun(J) -> modkazoo_util:set_value([<<"options">>,<<"inbound_format">>]
+                                                  ,z_context:get_q('inbound_format',Context)
+                                                  ,J)
+                 end
+                ,fun(J) -> modkazoo_util:set_value([<<"auth">>,<<"auth_method">>]
+                                                  ,z_context:get_q('auth_method',Context)
+                                                  ,J)
+                 end
+                ,fun(J) -> case z_context:get_q('auth_trunk_user',Context) of
+                               <<>> -> J;
+                               User -> modkazoo_util:set_value([<<"auth">>,<<"auth_user">>], User, J)
                            end
                  end
-                ,fun(J) -> case z_context:get_q("auth_password",Context) of
-                               'undefined' -> J;
-                               Pwd -> modkazoo_util:set_value([<<"auth">>,<<"auth_password">>], ?TO_BIN(Pwd), J)
+                ,fun(J) -> case z_context:get_q('auth_password',Context) of
+                               <<>> -> J;
+                               Pwd -> modkazoo_util:set_value([<<"auth">>,<<"auth_password">>], Pwd, J)
                            end
                  end
-                ,fun(J) -> case z_context:get_q("ipaddress",Context) of 'undefined' -> J; Ip -> modkazoo_util:set_value([<<"auth">>,<<"ip">>], ?TO_BIN(Ip), J) end end
-                ,fun(J) -> case z_context:get_q("ipaddress",Context) of 'undefined' -> J; Ip -> modkazoo_util:set_value([<<"options">>,<<"ip">>], ?TO_BIN(Ip), J) end end
-                ,fun(J) -> modkazoo_util:set_value([<<"server_name">>], ?TO_BIN(z_context:get_q("server_name",Context)), J) end],
+                ,fun(J) -> case z_context:get_q('ipaddress',Context) of
+                               <<>> -> J;
+                               Ip -> modkazoo_util:set_value([<<"auth">>,<<"ip">>], Ip, J)
+                           end
+                 end
+                ,fun(J) -> case z_context:get_q('ipaddress',Context) of
+                               <<>> -> J;
+                               Ip -> modkazoo_util:set_value([<<"options">>,<<"ip">>], Ip, J)
+                           end
+                 end
+                ,fun(J) -> case z_context:get_q('cid_number',Context) of
+                               <<>> -> J;
+                               CID_Number ->
+                                   modkazoo_util:set_value([<<"options">>,<<"caller_id">>,<<"cid_number">>]
+                                                          ,CID_Number
+                                                          ,J)
+                           end
+                 end
+                ,fun(J) -> case z_context:get_q('cid_name',Context) of
+                               <<>> ->
+                                   modkazoo_util:set_value([<<"options">>,<<"caller_id">>,<<"cid_name">>]
+                                                          ,z_context:get_q('cid_number',Context)
+                                                          ,J);
+                               CID_Name ->
+                                   modkazoo_util:set_value([<<"options">>,<<"caller_id">>,<<"cid_name">>]
+                                                          ,CID_Name
+                                                          ,J)
+                           end
+                 end
+                ,fun(J) -> modkazoo_util:set_value([<<"server_name">>]
+                          ,z_context:get_q('server_name',Context)
+                          ,J)
+                 end],
     lists:foldl(fun(F, J) -> F(J) end, Server, Routines).
 
 kz_list_account_webhooks(Context) ->
