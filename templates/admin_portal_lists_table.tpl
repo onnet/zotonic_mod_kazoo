@@ -13,41 +13,41 @@
     {% for list in m.kazoo.kz_list_account_lists %}
       <tr>
         <td style="text-align: center1;">
-          {{ list["name"] }}
-          <i id="edit_{{ list["id"] }}"
+          {{ list[1]["name"] }}
+          <i id="edit_{{ list[1]["id"] }}"
              class="fa fa-edit pointer"
              title="{_ Edit _}"></i>
-          {% wire id="edit_"++list["id"]
-                  action={dialog_open title=_"Edit list"++" "++list["name"]
+          {% wire id="edit_"++list[1]["id"]
+                  action={dialog_open title=_"Edit list"++" "++list[1]["name"]
                                       template="_edit_list_lazy.tpl"
-                                      list_id=list["id"]
+                                      list_id=list[1]["id"]
                                       width="auto"
                          }
           %}
         </td>
         <td style="text-align: center1;">
-          {{ list["description"] }}
+          {{ list[1]["description"] }}
         </td>
         <td style="text-align: center;">
-          <i id="edit_entries_{{ list["id"] }}"
+          <i id="edit_entries_{{ list[1]["id"] }}"
              class="fa fa-edit pointer"
              title="{_ Edit entries _}"></i></td>
-          {% wire id="edit_entries_"++list["id"]
-                  action={dialog_open title=_"Edit entries"++" "++list["name"]
+          {% wire id="edit_entries_"++list[1]["id"]
+                  action={dialog_open title=_"Edit entries"++" "++list[1]["name"]
                                       template="_edit_list_entries_lazy.tpl"
-                                      list_id=list["id"]
-                                      list_type=list["list_type"]
+                                      list_id=list[1]["id"]
+                                      list_type=list[1]["list_type"]
                                       width="auto"
                          }
           %}
         <td style="text-align: center;">
-          <i id="delete_{{ list["id"] }}"
+          <i id="delete_{{ list[1]["id"] }}"
              class="fa fa-trash-o pointer"
              title="{_ Delete _}"></i>
         </td>
-        {% wire id="delete_"++list["id"]
-                action={confirm text=_"Do you really want to delete list "++list["name"]++"?"
-                                action={postback postback={delete_list list_id=list["id"]}
+        {% wire id="delete_"++list[1]["id"]
+                action={confirm text=_"Do you really want to delete list "++list[1]["name"]++"?"
+                                action={postback postback={delete_list list_id=list[1]["id"]}
                                                  delegate="mod_kazoo"
                                        }
                        }
