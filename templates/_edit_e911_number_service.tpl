@@ -67,19 +67,19 @@
           {% endif %}
           {% for e911_address in confirmed_addresses %}
             <div class="funkyradio-zalarm">
-              <input id="{{ e911_address['id'] }}"
+              <input id="{{ e911_address[1]['id'] }}"
                      type="radio"
                      name="confirmed_address"
-                     value="{{ e911_address['id'] }}"
+                     value="{{ e911_address[1]['id'] }}"
                      title="Confirmed address">
-              <label for="{{ e911_address['id'] }}">
-                {{ e911_address["street_address"] }}
-                {{ e911_address["extended_address"] }},
-                {{ e911_address["locality"] }},
-                {{ e911_address["region"] }}
-                {{ e911_address["postal_code"] }}
+              <label for="{{ e911_address[1]['id'] }}">
+                {{ e911_address[1]["street_address"] }}
+                {{ e911_address[1]["extended_address"] }},
+                {{ e911_address[1]["locality"] }},
+                {{ e911_address[1]["region"] }}
+                {{ e911_address[1]["postal_code"] }}
                 {# print e911_address #}
-                {% wire id=e911_address['id']
+                {% wire id=e911_address[1]['id']
                         type="click"
                         action={slide_up target="new_address_span"}
                         action={slide_down target="confirm_and_cancel_btn"}
@@ -113,36 +113,56 @@
           Monthly fee for 
           {{ m.kazoo.kz_current_service_plans[1]["items"][1]["number_services"][1]["e911"][1]["name"] }}
           amounts to
-          {{ m.kazoo.kz_current_service_plans[1]["items"][1]["number_services"][1]["e911"][1]["rate"]|currency_sign }}
+          {{ m.kazoo.kz_current_service_plans[1]["items"][1]["number_services"][1]["e911"][1]["rate"]
+             |currency_sign
+          }}
           per number.
         </span>
       </div>
     </div>
   </div>
-  <div id="new_address_span" class="{% if number_info[1]["e911"] or confirmed_addresses[1] %}display_none{% endif %}">
+  <div id="new_address_span"
+       class="{% if number_info[1]["e911"] or confirmed_addresses[1] %}
+                display_none
+              {% endif %}">
     {% include "_e911_address_fields.tpl" %}
   </div>
   <input type="hidden" name="number" value="{{ number }}">
   <div id="confirm_and_cancel_btn"
-       class="form-group {% if number_info[1]["e911"] or confirmed_addresses[1] %}display_none{% endif %}">
+       class="form-group
+              {% if number_info[1]["e911"] or confirmed_addresses[1] %}
+                display_none
+              {% endif %}">
     <div class="row">
       <div class="col-sm-6">
-        {% button id="confirm_e911_address_edit_btn" class="col-xs-12 btn btn-zalarm margin-bottom-xs" text=_"Confirm" %}
+        {% button id="confirm_e911_address_edit_btn"
+                  class="col-xs-12 btn btn-zalarm margin-bottom-xs"
+                  text=_"Confirm"
+        %}
         {% wire id="confirm_e911_address_edit_btn"
                 type="click"
                 action={submit}
         %}
       </div>
       <div class="col-sm-6">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Cancel" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Cancel"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>
   <div id="cancel_only_btn"
-       class="form-group {% if not (number_info[1]["e911"] or confirmed_addresses[1]) %}display_none{% endif %}">
+       class="form-group
+              {% if not (number_info[1]["e911"] or confirmed_addresses[1]) %}
+                display_none
+              {% endif %}">
     <div class="row">
       <div class="col-sm-12">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Close" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Close"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>

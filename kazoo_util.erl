@@ -667,7 +667,6 @@ kz_set_device_doc(["dial_plan","system"], V, DeviceId, Context) ->
 kz_set_device_doc(["media","encryption","methods"], <<"No encryption">>, DeviceId, Context) ->
     kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], [], DeviceId, Context);
 kz_set_device_doc(["media","encryption","methods"], <<V/binary>>, DeviceId, Context) ->
-  lager:info("IAM V: ~p",[V]),
     kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], binary:split(V, <<",">>), DeviceId, Context);
 kz_set_device_doc(K, V, DeviceId, Context) ->
     CurrDoc = kz_get_device_doc(DeviceId, Context),
@@ -2050,7 +2049,6 @@ modify_group(Context) ->
     modify_group(z_context:get_q("group_id",Context), Context).
 
 modify_group(GroupId, Context) ->
-lager:info("IAM modify_group z_context:get_q_all(Context): ~p",[z_context:get_q_all(Context)]),
     Endpoints = lists:foldr(fun(T,J) -> case T of
                                            {_,[]} -> []++J; 
                                            {<<"user">>,Id} ->  J++[{Id,{[{<<"type">>,<<"user">>}]}}];
@@ -2342,7 +2340,6 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                                              ,Context)
                           ,Context);
         _ ->
-    lager:info("1"),
             Context1 = z_render:insert_bottom(PathToChildren
                                      ,z_template:render("_cf_child.tpl",[{tool_name,ToolName}
                                                                         ,{element_id, ElementId}
@@ -2350,18 +2347,15 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                                                                         ,{switch,Switch}]
                                                         ,Context)
                                      ,Context),
-    lager:info("2"),
             ModalHeader =
                 case ToolName of
                     <<"disa">> -> <<"Configure">>;
                     <<"response">> -> <<"Configure">>;
                     _ -> <<"Select">>
                 end,
-    lager:info("3"),
             cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"module">>], ToolName, Context),
             cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"children">>], {[]}, Context),
         %    z_render:dialog(<<(?__(ModalHeader, Context1))/binary, " ">>
-    lager:info("4"),
             z_render:dialog("Change me "
                            ,<<"_cf_select_", ToolName/binary, ".tpl">>
                            ,[{element_id, ElementId},{tool_name,ToolName}], Context1)
@@ -2372,7 +2366,6 @@ cf_child_not_exists(ElementId, Context) ->
                                           ,z_context:get_session('current_callflow', Context)).
 
 cf_load_to_session(CallflowId,Context) ->
-    lager:info("CallflowId: ~p",[CallflowId]),
     case CallflowId of
         [] -> 'ok';
         'undefined' -> 'ok';
@@ -2600,8 +2593,6 @@ cf_get_element_by_id(ElementId, Context) ->
 cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                     ,{dragdrop,{drop_args,[{drop_id,DropId},{drop_parent,DropParent}]},mod_kazoo,BranchId}}
               ,Context) ->
-    lager:info("Drop DropParent: ~p",[DropParent]),
-    lager:info("Drop BranchId: ~p",[BranchId]),
     case DropParent of
         <<"cidlistmatch">> ->
             [KeysList,AddOn] = [[<<"match">>,<<"nomatch">>],[]],
@@ -2692,9 +2683,6 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
                                 ]
                                ,Context);
         "check_cid" ->
-            lager:info("Drop ExistingElementId: ~p",[ExistingElementId]),
-            lager:info("Drop TL: ~p",[lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))]),
-            lager:info("Switch: ~p",[hd(lists:reverse(cf_element_path(ExistingElementId)))]),
             [KeysList,AddOn] =
                 case modkazoo_util:get_value(lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
                                                ++[<<"data">>,<<"use_absolute_mode">>]
@@ -4145,8 +4133,6 @@ kz_limits(Verb, AccountId, DataBag, Context) ->
     crossbar_account_request(Verb, API_String, DataBag, Context, 'return_error').
 
 save_trunks_limits(InputValue, TrunksType, AccountId, AcceptCharges, Context) ->
-  AuthToken = z_context:get_session(kazoo_auth_token, Context),
-  lager:info("IAM AuthToken: ~p",[AuthToken]),
     CurrDoc = kz_limits('get', AccountId, [], Context),
     QtyDiff = ?TO_INT(InputValue) - modkazoo_util:get_value(?TO_BIN(TrunksType), CurrDoc, 0),
     Upd = [{?TO_BIN(TrunksType), ?TO_INT(InputValue)}
@@ -4265,7 +4251,6 @@ services_status(Verb, AccountId, DataBag, Context) ->
 
 toggle_services_status(AccountId, Context) ->
     StatusData = services_status('get', AccountId, [], Context),
-  lager:info("IAM AuthToken: ~p",[z_context:get_session(kazoo_auth_token, Context)]),
     case modkazoo_util:get_value(<<"in_good_standing">>, StatusData) of
         'false' ->
             DataBag = ?MK_DATABAG({[{<<"in_good_standing">>, 'true'},{<<"reason">>,<<"administratively_justified">>}]}),
@@ -4328,44 +4313,17 @@ metaflows(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?METAFLOWS/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
-%system_config(Verb, Category, DataBag, Context) ->
-%    API_String = <<?V2/binary, ?SYSTEM_CONFIGS/binary, "/", Category/binary>>,
-%    crossbar_account_request(Verb, API_String, DataBag, Context).
-%
 config(Verb, Category, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?CONFIGS/binary, "/", Category/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
-%
-%get_config(Category, AccountId, Context) ->
-%    case kz_current_context_superadmin(Context) of
-%        'true' ->
-%            modkazoo_util:get_value(<<"default">>, system_config('get', Category, [], Context));
-%        'false' ->
-%            config('get', Category, AccountId, [], Context)
-%    end.
-%
-%set_config_field(K, V, Category, AccountId, Context) ->
-%    KVJObj = modkazoo_util:set_value(K, V, modkazoo_util:new()),
-%    case kz_current_context_superadmin(Context) of
-%        'true' ->
-%            DefaultJObj = modkazoo_util:set_value(<<"default">>, KVJObj, modkazoo_util:new()),
-%            system_config('patch', Category, ?MK_DATABAG(DefaultJObj), Context);
-%        'false' ->
-%            config('patch', Category, AccountId, ?MK_DATABAG(KVJObj), Context)
-%    end.
-%set_config_field(K, V, Category, AccountId, Context) ->
-%    KVJObj = modkazoo_util:set_value(K, V, modkazoo_util:new()),
-%    config('patch', Category, AccountId, ?MK_DATABAG(KVJObj), Context).
+
 set_config_field(K, V, Category, AccountId, Context) ->
     CurrDoc = config('get', Category, AccountId, [], Context),
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
-lager:info("IAM CurrDoc: ~p",[CurrDoc]),
-lager:info("IAM NewDoc: ~p",[NewDoc]),
     config('post', Category, AccountId, ?MK_DATABAG(NewDoc), Context).
 
 config_toggle(K, Category, AccountId, Context) ->
     CurrDoc = config('get', Category, AccountId, [], Context),
-lager:info("IAM CurrDoc: ~p",[CurrDoc]),
     case modkazoo_util:get_value(K, CurrDoc) of
         'true' -> set_config_field(K, 'false', Category, AccountId, Context);
         _ -> set_config_field(K, 'true', Category, AccountId, Context)
