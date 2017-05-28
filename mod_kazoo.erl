@@ -209,7 +209,7 @@ event({submit,password_recovery_form,_,_}, Context) ->
      %   kazoo_util:growl_redirect("error", "Something went wrong, please try again", "home", Context)
   end;
 
-event({postback,rate_seek,_,_}, Context) ->
+event({postback,<<"rate_seek">>,_,_}, Context) ->
     Number = z_convert:to_binary(re:replace(z_context:get_q("rate_seek",Context), "[^0-9]", "", [global, {return, list}])),
     case kazoo_util:rate_number(Number, Context) of
         {'ok', PriceInfo} ->
@@ -267,7 +267,7 @@ event({submit, send_fax, _, _}, Context) ->
 
   end;
 
-event({postback,kazoo_transaction,_,_}, Context) ->
+event({postback,<<"kazoo_transaction">>,_,_}, Context) ->
     case z_convert:to_float(z_context:get_q("kazoo_transaction", Context)) of
         Amount when Amount >= 10, Amount =< 200 ->
             case kazoo_util:make_payment(Amount, z_context:get_session('kazoo_account_id', Context), Context) of
@@ -337,14 +337,14 @@ event({submit,add_card,<<"add_card_form">>,<<"add_card_form">>}, Context) ->
             Context
     end;
 
-event({postback,topup_submit_btn,_,_},Context) ->
+event({postback,<<"topup_submit_btn">>,_,_},Context) ->
     kazoo_util:topup_submit(z_context:get_q("threshold", Context)
                            ,z_context:get_q("amount", Context)
                            ,z_context:get_session('kazoo_account_id', Context)
                            ,Context),
     z_render:update("make_payment_topup_settings_tpl", z_template:render("_make_payment_topup_settings.tpl", [], Context), Context);
 
-event({postback,topup_disable_btn,_,_},Context) ->
+event({postback,<<"topup_disable_btn">>,_,_},Context) ->
     kazoo_util:topup_disable(z_context:get_session('kazoo_account_id', Context),Context),
     z_render:update("make_payment_topup_settings_tpl", z_template:render("_make_payment_topup_settings.tpl", [], Context), Context);
 
@@ -352,7 +352,7 @@ event({postback,{trigger_innoui_widget,[{arg,WidgetId}]},_,_}, Context) ->
     kazoo_util:trigger_innoui_widget(WidgetId, Context),
     Context;
 
-event({postback,issue_proforma_invoice,_,_},Context) ->
+event({postback,<<"issue_proforma_invoice">>,_,_},Context) ->
     try z_convert:to_float(z_context:get_q("invoice_amount",Context)) of
         Amount when Amount == 'undefined' orelse Amount =< 0 ->
             Context1 = z_render:update("onnet_widget_make_invoice_tpl"
@@ -373,7 +373,7 @@ event({postback,issue_proforma_invoice,_,_},Context) ->
             z_render:growl_error(?__("Please input correct amount of funds you'd like to transfer.", Context1), Context1)
     end;
 
-event({postback,new_numbers_lookup,_,_}, Context) ->
+event({postback,<<"new_numbers_lookup">>,_,_}, Context) ->
     AreaCode = case z_convert:to_binary(z_context:get_q("areacode",Context)) of
         <<"0", Number/binary>> -> Number;
         Number -> Number
@@ -1320,94 +1320,94 @@ event({submit,cf_select_eavesdrop,<<"form_cf_select_eavesdrop">>,<<"form_cf_sele
                                   ,Context),
     z_render:dialog_close(Context);
 
-event({postback,toggle_featurecode_voicemail_check,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_voicemail_check">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_voicemail_check(Context),
     mod_signal:emit({signal_featurecode_voicemail_check, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_voicemail_direct,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_voicemail_direct">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_voicemail_direct(Context),
     mod_signal:emit({signal_featurecode_voicemail_direct, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_park_and_retrieve,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_park_and_retrieve">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_park_and_retrieve(Context),
     mod_signal:emit({signal_featurecode_park_and_retrieve, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_park_valet,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_park_valet">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_park_valet(Context),
     mod_signal:emit({signal_featurecode_park_valet, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_park_retrieve,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_park_retrieve">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_park_retrieve(Context),
     mod_signal:emit({signal_featurecode_park_retrieve, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_intercom,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_intercom">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_intercom(Context),
     mod_signal:emit({signal_featurecode_intercom, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_privacy,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_privacy">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_privacy(Context),
     mod_signal:emit({signal_featurecode_privacy, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_hotdesk_enable,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_hotdesk_enable">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_enable(Context),
     mod_signal:emit({signal_featurecode_hotdesk_enable, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_hotdesk_disable,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_hotdesk_disable">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_disable(Context),
     mod_signal:emit({signal_featurecode_hotdesk_disable, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_hotdesk_toggle,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_hotdesk_toggle">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_hotdesk_toggle(Context),
     mod_signal:emit({signal_featurecode_hotdesk_toggle, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_call_forward_activate,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_call_forward_activate">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_activate(Context),
     mod_signal:emit({signal_featurecode_call_forward_activate, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_call_forward_deactivate,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_call_forward_deactivate">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_deactivate(Context),
     mod_signal:emit({signal_featurecode_call_forward_deactivate, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_call_forward_toggle,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_call_forward_toggle">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_toggle(Context),
     mod_signal:emit({signal_featurecode_call_forward_toggle, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_featurecode_call_forward_update,_,_}, Context) ->
+event({postback,<<"toggle_featurecode_call_forward_update">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_call_forward_update(Context),
     mod_signal:emit({signal_featurecode_call_forward_update, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,set_featurecode_dynamic_cid,_,_}, Context) ->
+event({postback,<<"set_featurecode_dynamic_cid">>,_,_}, Context) ->
     _ = kazoo_util:set_featurecode_dynamic_cid(z_context:get_q("dynamic_cid_list_id",Context), Context),
     mod_signal:emit({signal_featurecode_dynamic_cid, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
-event({postback,set_featurecode_eavesdrop,_,_}, Context) ->
+event({postback,<<"set_featurecode_eavesdrop">>,_,_}, Context) ->
     _ = kazoo_util:set_featurecode_eavesdrop(z_context:get_q("eavesdrop_approved_list_id",Context)
                                             ,z_context:get_q("eavesdrop_target_list_id",Context)
                                             ,Context),
     mod_signal:emit({signal_featurecode_eavesdrop, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
-event({postback,delete_featurecode_dynamic_cid,_,_}, Context) ->
+event({postback,<<"delete_featurecode_dynamic_cid">>,_,_}, Context) ->
     _ = kazoo_util:delete_featurecode(<<"dynamic_cid">>, Context),
     mod_signal:emit({signal_featurecode_dynamic_cid, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
-event({postback,delete_featurecode_eavesdrop,_,_}, Context) ->
+event({postback,<<"delete_featurecode_eavesdrop">>,_,_}, Context) ->
     _ = kazoo_util:delete_featurecode(<<"eavesdrop_feature">>, Context),
     mod_signal:emit({signal_featurecode_eavesdrop, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
@@ -1417,7 +1417,7 @@ event({postback,{toggle_blacklist_member,[{blacklist_id,BlacklistId}]},_,_}, Con
     mod_signal:emit({update_admin_portal_blacklists_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,toggle_all_calls_recording,_,_}, Context) ->
+event({postback,<<"toggle_all_calls_recording">>,_,_}, Context) ->
     _ = kazoo_util:toggle_all_calls_recording(Context),
     z_render:update("all_calls_recording_enabled", z_template:render("_all_calls_recording.tpl", [], Context), Context);
 
@@ -1565,7 +1565,7 @@ event({postback,{toggle_webhook,[{webhook_id,WebhookId}]},_,_}, Context) ->
     mod_signal:emit({update_admin_portal_webhooks_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,refresh_user_callstats,_,_}, Context) ->
+event({postback,<<"refresh_user_callstats">>,_,_}, Context) ->
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
     {CreatedFrom, CreatedTo} =
         case modkazoo_util:get_q_bin(<<"selected_billing_period">>, Context) of
@@ -1601,9 +1601,9 @@ event({postback,refresh_user_callstats,_,_}, Context) ->
                    ,Context),
     Context;
 
-event({postback,refresh_admin_callstats,_,_}, Context) ->
+event({postback,<<"refresh_admin_callstats">>,_,_}, Context) ->
     {CreatedFrom, CreatedTo} =
-        case modkazoo_util:get_q_bin(<<"selected_billing_period">>, Context) of
+        case z_context:get_q(<<"selected_billing_period">>, Context) of
             <<"today">> -> {modkazoo_util:today_begins_tstamp(Context)
                            ,modkazoo_util:today_ends_tstamp(Context)};
             <<"7_days">> ->
@@ -1641,7 +1641,7 @@ event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context)
     _ = kazoo_util:set_global_carrier_routing(AccountId, Context),
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
-event({postback,reseller_based_routing,_,_}, Context) ->
+event({postback,<<"reseller_based_routing">>,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     ResellerId = case kazoo_util:kz_current_context_reseller_status(Context) of
         'true' -> z_context:get_session(kazoo_account_id, Context);
@@ -1669,7 +1669,7 @@ event({postback,{reseller_based_routing,[{account_id,AccountId}]},_,_}, Context)
     end,
     z_render:update("rs_outbound_routing", z_template:render("_rs_outbound_routing.tpl", [{account_id, AccountId}], Context), Context);
 
-event({postback,account_based_routing,_,_}, Context) ->
+event({postback,<<"account_based_routing">>,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     _ = kazoo_util:set_account_based_routing(AccountId, Context),
     mod_signal:emit({update_reseller_portal_resources_tpl, ?SIGNAL_FILTER(Context)}, Context),
@@ -1714,7 +1714,7 @@ event({postback,{delete_account_list_entry,[{list_id,ListId},{entry_id,EntryId},
     _ = kazoo_util:delete_account_list_entry(EntryId, ListId, Context),
     z_render:update("list_entries_div", z_template:render(TemplateName, [{list_id, ListId}], Context), Context);
 
-event({postback,conference_selected,_,_},Context) ->
+event({postback,<<"conference_selected">>,_,_},Context) ->
     ConferenceId = z_context:get_q("triggervalue", Context),
     _ = z_session:set('selected_conference_id', ConferenceId, Context),
     z_render:update("child_sandbox", z_template:render("conference_info.tpl", [], Context), Context);
@@ -1763,10 +1763,10 @@ event({postback,{remove_notification_template,[{notification_id,NotificationId}]
     mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,add_conf_participant,_,_}, Context) ->
+event({postback,<<"add_conf_participant">>,_,_}, Context) ->
     kazoo_util:add_conf_participant(Context);
 
-event({postback,start_outbound_conference,_,_}, Context) ->
+event({postback,<<"start_outbound_conference">>,_,_}, Context) ->
     kazoo_util:start_outbound_conference(Context);
 
 event({postback,{do_conference_action,[{action, Action},{conference_id,ConferenceId}]},_,_}, Context) ->
@@ -1777,7 +1777,7 @@ event({postback,{do_conference_participant_action,[{action, Action},{participant
     _ = kazoo_util:do_conference_participant_action(Action, ParticipantId, ConferenceId, Context),
     Context;
 
-event({postback,add_conference_participants_table_line,_,_}, Context) ->
+event({postback,<<"add_conference_participants_table_line">>,_,_}, Context) ->
     ConferenceId = z_context:get_q(conference_id, Context),
     ParticipantId = z_context:get_q(participant_id, Context),
     Participant = kazoo_util:kz_conference_participant(ParticipantId,ConferenceId,Context),
@@ -1787,7 +1787,7 @@ event({postback,add_conference_participants_table_line,_,_}, Context) ->
                                      ,Context)
                    ,Context);
 
-event({postback,update_conference_participants_table_line,_,_}, Context) ->
+event({postback,<<"update_conference_participants_table_line">>,_,_}, Context) ->
     ConferenceId = z_context:get_q(conference_id, Context),
     ParticipantId = z_context:get_q(participant_id, Context),
     Participant = kazoo_util:kz_conference_participant(ParticipantId,ConferenceId,Context),
@@ -1797,7 +1797,7 @@ event({postback,update_conference_participants_table_line,_,_}, Context) ->
                                      ,Context)
                    ,Context);
 
-event({postback,maybe_update_conference_participants_headline,_,_}, Context) ->
+event({postback,<<"maybe_update_conference_participants_headline">>,_,_}, Context) ->
     ConferenceId = z_context:get_q(conference_id, Context),
     EventName = z_context:get_q(event_name, Context),
     kazoo_util:maybe_update_conference_participants_headline(EventName, ConferenceId, Context),
@@ -1811,14 +1811,14 @@ event({postback,{channel_hangup,[{channel_id,ChannelId}]},_,_}, Context) ->
 event({postback,{channel_hangup_confirm,[{channel_id,ChannelId}]},_,_}, Context) ->
     z_render:dialog(?__("Please confirm ",Context), "_confirm_channel_hangup.tpl", [{channel_id, ChannelId}], Context);
 
-event({postback,channel_hangup_confirm,_,_}, Context) ->
+event({postback,<<"channel_hangup_confirm">>,_,_}, Context) ->
     ChannelId = z_context:get_q("channel_id", Context),
     z_render:dialog(?__("Please confirm ",Context), "_confirm_channel_hangup.tpl", [{channel_id, ChannelId}], Context);
 
 event({postback,{channel_eavesdrop_dialog,[{channel_id,ChannelId}]},_,_}, Context) ->
     z_render:dialog(?__("Please choose device to eavesdrop with ",Context), "_channel_eavesdrop_dialog.tpl", [{channel_id, ChannelId}], Context);
 
-event({postback,channel_eavesdrop_dialog,_,_}, Context) ->
+event({postback,<<"channel_eavesdrop_dialog">>,_,_}, Context) ->
     ChannelId = z_context:get_q("channel_id", Context),
     z_render:dialog(?__("Please choose device to eavesdrop with ",Context), "_channel_eavesdrop_dialog.tpl", [{channel_id, ChannelId}], Context);
 
@@ -1835,7 +1835,7 @@ event({postback,{channel_transfer_dialog,[{channel_id,ChannelId}]},_,_}, Context
                    ,[{channel_id, ChannelId}]
                    ,Context);
 
-event({postback,channel_transfer_dialog,_,_}, Context) ->
+event({postback,<<"channel_transfer_dialog">>,_,_}, Context) ->
     ChannelId = z_context:get_q("channel_id", Context),
     z_render:dialog(?__("Please select callflow to transfer chosen leg to ",Context)
                    ,"_channel_transfer_dialog.tpl"
@@ -1919,7 +1919,7 @@ event({postback,{toggle_services_status,[{account_id,AccountId}]},_,_}, Context)
     mod_signal:emit({update_onbill_account_details, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({postback,add_account_ip_acl_entry,_,_}, Context) ->
+event({postback,<<"add_account_ip_acl_entry">>,_,_}, Context) ->
     case z_context:get_q("new_ip_entry",Context) of
         [] -> Context;
         IP_Entry ->
@@ -2016,7 +2016,7 @@ event({postback,[{notify_disable_btn,[{account_id,AccountId}]}],_,_}, Context) -
     _ = kazoo_util:kz_set_acc_doc([<<"notifications">>, <<"low_balance">>, <<"enabled">>], 'false', AccountId, Context),
     z_render:update("set_notify_level_tpl", z_template:render("_set_notify_level.tpl", [{'account_id', AccountId}], Context), Context);
 
-event({postback,toggle_show_legs_status,_,_}, Context) ->
+event({postback,<<"toggle_show_legs_status">>,_,_}, Context) ->
     case z_context:get_session('show_cdr_legs', Context) of
         'true' ->
             z_context:set_session('show_cdr_legs', 'false', Context),
@@ -2155,7 +2155,7 @@ event({drag,_,_},Context) ->
 event({sort,_,_},Context) ->
     Context;
 
-event({postback,refresh_onbill_docs,_,_}, Context) ->
+event({postback,<<"refresh_onbill_docs">>,_,_}, Context) ->
     DocsMonthInput = z_context:get_q("docsmonthInput",Context),
     [Month,Year] = z_string:split(DocsMonthInput,"/"),
     mod_signal:emit({update_onbill_widget_invoices_tpl, ?SIGNAL_FILTER(Context) ++ [{'year',Year},{'month',Month}]}, Context),
@@ -2190,14 +2190,14 @@ event({postback,{generate_rs_related_documents,[{account_id,AccountId}, {doc_typ
                                      ,Context)
                    ,Context);
 
-event({postback,generate_children_docs,_,_}, Context) ->
+event({postback,<<"generate_children_docs">>,_,_}, Context) ->
     SelectedBillingPeriod  = z_context:get_q("selected_billing_period", Context),
     [Ts,_] = z_string:split(SelectedBillingPeriod, ","),
     Timestamp = z_convert:to_integer(Ts),
     _ = onbill_util:generate_monthly_docs('who_cares', <<"all_children">>, Timestamp, Context),
     z_render:growl(?__("Process started and could take a while.",Context), Context);
 
-event({postback,onbill_set_variables_json,_A,_B}, Context) ->
+event({postback,<<"onbill_set_variables_json">>,_A,_B}, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     event({postback,{onbill_set_variables_json,[{account_id, AccountId}]},_A,_B}, Context);
 event({postback,{onbill_set_variables_json,[{account_id, AccountId}]},_,_}, Context) ->
@@ -2263,7 +2263,7 @@ lager:info("IAM service_ends: ~p",[z_context:get_q("service_ends", Context)]),
     end,
     z_render:dialog_close(Context);
 
-event({postback,disarm_credit,_,_}, Context) ->
+event({postback,<<"disarm_credit">>,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     DataBag = ?MK_DATABAG({[{<<"armed">>,false}]}),
     PrPt = onbill_util:promised_payment('patch', AccountId, DataBag, Context),
