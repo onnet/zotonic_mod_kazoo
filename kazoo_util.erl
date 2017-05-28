@@ -1049,7 +1049,7 @@ email_sender_name(Context) ->
     end.
 
 send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Context) ->
-    {ClientIP, _}  = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     SalesEmail = m_config:get_value('mod_kazoo', sales_email, Context),
     SenderName = email_sender_name(Context),
     case z_context:get_q("signup_file", Context) of

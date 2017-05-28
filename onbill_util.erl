@@ -233,7 +233,7 @@ e911_address(Verb, DocId, AccountId, DataBag, Context) ->
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 set_e911_address(Number, AccountId, Context) ->
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     {upload, UploadFilename, UploadTmp, _, _} = z_context:get_q("address_confirmation_file",Context),
     {ok, FileData} = file:read_file(UploadTmp),
     {ok, FileIdnProps} = z_media_identify:identify(UploadTmp, Context),

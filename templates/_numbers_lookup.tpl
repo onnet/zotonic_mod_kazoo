@@ -13,32 +13,33 @@
   <tbody id="mytbodyid">
     {% for number in free_numbers %}
       <tr>
-        <td class="td-center">{{ number["friendly_name"] }}</td>
-        <td class="td-center">{{ number["number"] }}</td>
-        <td class="td-center">{{ number["activation_charge"]|currency_sign }}</td>
-        <td class="td-center">{{ number["rate"]|currency_sign }}</td>
+        <td class="td-center">{{ number[1]["friendly_name"] }}</td>
+        <td class="td-center">{{ number[1]["number"] }}</td>
+        <td class="td-center">{{ number[1]["activation_charge"]|currency_sign }}</td>
+        <td class="td-center">{{ number[1]["rate"]|currency_sign }}</td>
         <td class="td-center">
-          <i id="select_number_{{ number["number"]|cleanout }}" class="fa fa-square-o pointer"></i>
-          {% wire id="select_number_"++number["number"]|cleanout
-                  action={hide target="select_number_"++number["number"]|cleanout }
-                  action={show target="deselect_number_"++number["number"]|cleanout }
+          <i id="select_number_{{ number[1]["number"]|cleanout }}"
+             class="fa fa-square-o pointer"></i>
+          {% wire id="select_number_"++number[1]["number"]|cleanout
+                  action={hide target="select_number_"++number[1]["number"]|cleanout }
+                  action={show target="deselect_number_"++number[1]["number"]|cleanout }
                   action={show target="buy_selected_numbers_button" }
                   action={insert_bottom
                           target="selected_numbers_array"
                           text="<input id='selected_number_hidden_input_"
-                                          ++number["number"]|cleanout
+                                          ++number[1]["number"]|cleanout
                                           ++"' type='hidden' name='numbers_about_to_purchase' value='"
-                                          ++number["number"]
+                                          ++number[1]["number"]
                                           ++"' >" }
 
           %}
-          <i id="deselect_number_{{ number["number"]|cleanout }}"
+          <i id="deselect_number_{{ number[1]["number"]|cleanout }}"
              class="fa fa-check-square-o pointer"
              style="display: none;"></i>
-          {% wire id="deselect_number_"++number["number"]|cleanout
-                  action={hide target="deselect_number_"++number["number"]|cleanout }
-                  action={show target="select_number_"++number["number"]|cleanout }
-                  action={remove target="selected_number_hidden_input_"++number["number"]|cleanout }
+          {% wire id="deselect_number_"++number[1]["number"]|cleanout
+                  action={hide target="deselect_number_"++number[1]["number"]|cleanout }
+                  action={show target="select_number_"++number[1]["number"]|cleanout }
+                  action={remove target="selected_number_hidden_input_"++number[1]["number"]|cleanout }
           %}
         </td>
       </tr>
@@ -46,7 +47,11 @@
   </tbody>
 </table>
 
-{% wire id="numbers_to_purchase_array_form" type="submit" postback="selected_numbers_array_form" delegate="mod_kazoo" %}
+{% wire id="numbers_to_purchase_array_form"
+        type="submit"
+        postback="selected_numbers_array_form"
+        delegate="mod_kazoo"
+%}
 <form id="numbers_to_purchase_array_form" method="post" action="postback">
   <span id="selected_numbers_array"></span>
 </form>

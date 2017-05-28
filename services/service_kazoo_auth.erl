@@ -55,7 +55,7 @@ reply_auth_result({ok, {_, _}, {'account_id', 'undefined'}, {_, _}, {_, _}, {_, 
 reply_auth_result({ok, {_, _}, {_, _}, {'auth_token', <<>>}, {_, _}, {_, _}}, Context) ->
     reply_auth_result(<<"Auth failure">>, Context);
 reply_auth_result({'ok', {_, _}, {'account_id', AccountId}, {'auth_token', AuthToken}, {_, _}, {'account_name', AccountName}}, Context) ->
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     lager:info("Successfully authenticated Kazoo user at ~p. IP address: ~p.", [AccountName, ClientIP]),
     Values = [{<<"status">>,<<"success">>}
              ,{<<"auth_token">>,AuthToken}
@@ -64,6 +64,6 @@ reply_auth_result({'ok', {_, _}, {'account_id', AccountId}, {'auth_token', AuthT
     DataBag = modkazoo_util:set_values(Values,{[]}),
     jiffy:encode(DataBag);
 reply_auth_result(_, Context) ->
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     lager:info("Failed to authenticate Kazoo user. IP address: ~p.", [ClientIP]),
     <<"{\"status\": \"authentication failure\"}">>.

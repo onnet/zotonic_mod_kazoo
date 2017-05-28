@@ -406,7 +406,7 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
         NumberToAdd -> 
             _ = kazoo_util:rs_add_number(NumberToAdd, AccountId, Context),
             lager:info("Number add attempt: ~p",[NumberToAdd]),
-            {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+            ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
             SenderName = kazoo_util:email_sender_name(Context),
             Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
                    ,{login_name, z_context:get_session('kazoo_login_name', Context)}
@@ -422,7 +422,7 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
 
 event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     lager:info("Number deallocation attempt: ~p",[Number]),
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     SenderName = kazoo_util:email_sender_name(Context),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
@@ -456,7 +456,7 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
 event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,_}, Context) ->
     lager:info("Number deallocation attempt: ~p",[Number]),
     SenderName = kazoo_util:email_sender_name(Context),
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
@@ -2314,7 +2314,7 @@ event({submit,selected_numbers_array_form,_,_}, Context) ->
     end;
 
 event({submit,{allocate_numbers,[{numbers,Numbers}]},_,_}, Context) ->
-    {ClientIP, _} = webmachine_request:peer(z_context:get_reqdata(Context)),
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     SenderName = kazoo_util:email_sender_name(Context),
     EmailFrom = m_config:get_value('mod_kazoo', sales_email, Context),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
