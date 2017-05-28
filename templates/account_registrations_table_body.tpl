@@ -10,26 +10,35 @@
   <tbody>
     {% for device in m.kazoo.get_account_registrations %}
       <tr>
-        <td class="text-center">{{ device["username"] }}</td>
-        <td class="text-center">{{ device["user_agent"]|truncate:19 }}</td>
-        <td class="text-center"><a target="_blank" href='https://{{ device["contact_ip"] }}'>{{ device["contact_ip"] }}</a></td>
+        <td class="text-center">{{ device[1]["username"] }}</td>
+        <td class="text-center">{{ device[1]["user_agent"]|truncate:19 }}</td>
+        <td class="text-center">
+          <a target="_blank"
+             href='https://{{ device[1]["contact_ip"] }}'>{{ device[1]["contact_ip"] }}</a>
+        </td>
         <td style="text-align: center;">
-          <i id="info_{{ device["username"] }}" class="fa fa-info-circle zprimary pointer" title="{_ Details _}"></i>
-          {% wire id="info_"++device["username"] action={ dialog_open title=_"Registration details" template="_details.tpl" arg=device } %}
+          <i id="info_{{ device[1]["username"] }}"
+             class="fa fa-info-circle zprimary pointer"
+             title="{_ Details _}"></i>
+          {% wire id="info_"++device[1]["username"]
+                  action={dialog_open title=_"Registration details"
+                                      template="_details.tpl"
+                                      arg=device
+                         }
+          %}
         </td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
-
 {% javascript %}
 var oTable = $('#rs_account_registrations_table').dataTable({
-"pagingType": "simple",
-"bFilter" : true,
-"aaSorting": [[ 0, "desc" ]],
-"aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
-"iDisplayLength" : 5,
-"oLanguage" : {
+  "pagingType": "simple",
+  "bFilter" : true,
+  "aaSorting": [[ 0, "desc" ]],
+  "aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
+  "iDisplayLength" : 5,
+  "oLanguage" : {
         "sInfoThousands" : " ",
         "sLengthMenu" : "_MENU_ {_ lines per page _}",
         "sSearch" : "{_ Filter _}:",
@@ -41,10 +50,7 @@ var oTable = $('#rs_account_registrations_table').dataTable({
                 "sPrevious" : "{_ Back _}",
                 "sNext" : "{_ Forward _}"
         }
-},
-"columnDefs": [
-],
-
+  },
+  "columnDefs": [ ]
 });
 {% endjavascript %}
-
