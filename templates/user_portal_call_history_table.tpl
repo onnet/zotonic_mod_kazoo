@@ -13,7 +13,7 @@
     <tbody>
       {% with m.kazoo.get_user_timezone as user_timezone %}
         {% for call in calls %}
-          {% include "user_cdr_table_line.tpl" call=call timezone=user_timezone %}
+          {% include "user_cdr_table_line.tpl" call=call[1] timezone=user_timezone %}
         {% endfor %}
       {% endwith %}
     </tbody>

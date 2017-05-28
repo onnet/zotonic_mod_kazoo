@@ -9,16 +9,23 @@
     </tr>
   </thead>
   <tbody>
-    {% for ledger in m.kazoo[{kz_list_ledgers account_id=account_id selected_billing_period=selected_billing_period ledger_id="per-minute-voip"}] %}
-      <tr id={{ ledger["id"] }} {% if ledger["subscription_id"] %}style="cursor: pointer;"{% endif %}>
+    {% for ledger in m.kazoo[{kz_list_ledgers account_id=account_id
+                                              selected_billing_period=selected_billing_period
+                                              ledger_id="per-minute-voip"
+                            }]
+    %}
+      <tr id={{ ledger[1]["id"] }}
+          {% if ledger[1]["subscription_id"] %}
+            style="cursor: pointer;"
+          {% endif %}>
         <td class="td-center">
-          {{ ledger["period"][1]["start"]|gregsec_to_date|date:"Y-m-d H:i T":timezone }}
+          {{ ledger[1]["period"][1]["start"]|gregsec_to_date|date:"Y-m-d H:i T":timezone }}
         </td>
-        <td class="td-center">{{ ledger["metadata"][1]["caller_id_number"] }}</td>
-        <td class="td-center">{{ ledger["metadata"][1]["callee_id_number"] }}</td>
-        <td class="td-center">{{ (ledger["usage"][1]["quantity"]/60)|to_integer }} {_ min _}</td>
+        <td class="td-center">{{ ledger[1]["metadata"][1]["caller_id_number"] }}</td>
+        <td class="td-center">{{ ledger[1]["metadata"][1]["callee_id_number"] }}</td>
+        <td class="td-center">{{ (ledger[1]["usage"][1]["quantity"]/60)|to_integer }} {_ min _}</td>
         <td class="td-center">
-          {{ m.config.mod_kazoo.local_currency_sign.value }}{{ ledger["amount"]|format_price:[".",""] }}
+          {{ m.config.mod_kazoo.local_currency_sign.value }}{{ ledger[1]["amount"]|format_price:[".",""] }}
         </td>
       </tr>
     {% endfor %}
@@ -48,6 +55,4 @@ var oTable = $('#rs_per_minute_calls_lists_table').dataTable({
 },
 
 });
-
 {% endjavascript %}
-
