@@ -9,46 +9,58 @@
 </thead>
 <tbody>
   {% for cred in m.kazoo.kz_cccp_creds_list %}
-    {% if cred["pin"] %}
+    {% if cred[1]["pin"] %}
       <tr>
         <td style="text-align: center;">
-          <i id="{{ cred["id"] }}_cccp_active_state_toggler"
-             class="fa fa-toggle-{% if cred["active"] %}on{% else %}off{% endif %} pointer pull-right"
+          <i id="{{ cred[1]["id"] }}_cccp_active_state_toggler"
+             class="fa
+                    fa-toggle-{% if cred[1]["active"] %}on{% else %}off{% endif %}
+                    pointer
+                    pull-right"
              style="margin: 0.1em 1em 0 0"></i>
-          {% wire id=cred["id"] ++ "_cccp_active_state_toggler"
+          {% wire id=cred[1]["id"] ++ "_cccp_active_state_toggler"
                   type="click"
-                  action={postback postback={cccp_field_toggler doc_id=cred["id"]
-                                                                field_name="active"
-                                                                signal_id="update_authorized_pin_table_tpl"
+                  action={postback postback={cccp_field_toggler
+                                             doc_id=cred[1]["id"]
+                                             field_name="active"
+                                             signal_id="update_authorized_pin_table_tpl"
                                             }
                                    delegate="mod_kazoo"
                          }
           %}
         </td>
-        <td style="text-align: center;">{{ cred["pin"] }}</td>
+        <td style="text-align: center;">{{ cred[1]["pin"] }}</td>
         <td style="text-align: center;">
-          {{ m.kazoo[{kz_user_doc_by_ownerid owner_id=cred["user_id"] }][1]["username"] }}
+          {{ m.kazoo[{kz_user_doc_by_ownerid owner_id=cred[1]["user_id"] }][1]["username"] }}
         </td>
         <td style="text-align: center;">
-          <i id="{{ cred["id"] }}_cccp_retain_cid_toggler"
-             class="fa fa-toggle-{% if cred["retain_cid"] %}on{% else %}off{% endif %} pointer"></i>
-          {% wire id=cred["id"] ++ "_cccp_retain_cid_toggler"
+          <i id="{{ cred[1]["id"] }}_cccp_retain_cid_toggler"
+             class="fa
+                    fa-toggle-{% if cred[1]["retain_cid"] %}on{% else %}off{% endif %}
+                    pointer"></i>
+          {% wire id=cred[1]["id"] ++ "_cccp_retain_cid_toggler"
                   type="click"
-                  action={postback postback={cccp_field_toggler doc_id=cred["id"]
-                                                                field_name="retain_cid"
-                                                                signal_id="update_authorized_pin_table_tpl"
+                  action={postback postback={cccp_field_toggler
+                                             doc_id=cred[1]["id"]
+                                             field_name="retain_cid"
+                                             signal_id="update_authorized_pin_table_tpl"
                                             }
                                    delegate="mod_kazoo"
                          }
           %}
         </td>
         <td style="text-align: center;">
-          <i id={{ cred["id"] }} style="cursor: pointer;" class="fa fa-trash-o" title="{_ Delete _}"></i>
+          <i id={{ cred[1]["id"] }}
+             style="cursor: pointer;"
+             class="fa fa-trash-o"
+             title="{_ Delete _}"></i>
         </td>
       </tr>
-      {% wire id=cred["id"]
+      {% wire id=cred[1]["id"]
               action={confirm text=_"Do you really want to delete this Pin?"
-                              action={postback postback={del_cccp_doc doc_id=cred["id"]} delegate="mod_kazoo"}
+                              action={postback postback={del_cccp_doc doc_id=cred[1]["id"]}
+                                               delegate="mod_kazoo"
+                                     }
                      }
       %}
     {% endif %}
