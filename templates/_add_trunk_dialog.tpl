@@ -94,6 +94,9 @@
                     name="cid_number"
                     class="form-control margin-bottom-xs"
                     style="text-align:center;">
+              <option style="text-align:center;" value="">
+                -- {_ No specified CID _} --
+              </option>
               {% for account_number in m.kazoo.get_acc_numbers %} 
                 <option value="{{ account_number }}"
                         {% if server[1]["options"][1]["caller_id"][1]["cid_number"] == account_number %}

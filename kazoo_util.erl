@@ -3646,22 +3646,15 @@ update_trunk_server(Server, Context) ->
                            end
                  end
                 ,fun(J) -> case z_context:get_q('cid_number',Context) of
-                               <<>> -> J;
+                               <<>> -> modkazoo_util:delete_key([<<"options">>,<<"caller_id">>] ,J);
                                CID_Number ->
-                                   modkazoo_util:set_value([<<"options">>,<<"caller_id">>,<<"cid_number">>]
-                                                          ,CID_Number
-                                                          ,J)
-                           end
-                 end
-                ,fun(J) -> case z_context:get_q('cid_name',Context) of
-                               <<>> ->
-                                   modkazoo_util:set_value([<<"options">>,<<"caller_id">>,<<"cid_name">>]
-                                                          ,z_context:get_q('cid_number',Context)
-                                                          ,J);
-                               CID_Name ->
-                                   modkazoo_util:set_value([<<"options">>,<<"caller_id">>,<<"cid_name">>]
-                                                          ,CID_Name
-                                                          ,J)
+                                   CID_Name = case z_context:get_q('cid_name',Context) of
+                                                  <<>> -> CID_Number;
+                                                  CName -> CName
+                                              end,
+                                   Values = [{[<<"options">>,<<"caller_id">>,<<"cid_number">>], CID_Number}
+                                            ,{[<<"options">>,<<"caller_id">>,<<"cid_name">>], CID_Name}],
+                                   modkazoo_util:set_values(Values ,J)
                            end
                  end
                 ,fun(J) -> modkazoo_util:set_value([<<"server_name">>]
