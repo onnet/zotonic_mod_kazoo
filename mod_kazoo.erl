@@ -1704,9 +1704,9 @@ event({postback,{delete_list,[{list_id, ListId}]},_,_}, Context) ->
     mod_signal:emit({update_admin_portal_lists_tpl, ?SIGNAL_FILTER(Context)}, Context);
 
 event({submit,account_list_entries,_,_}, Context) ->
-    ListId = z_context:get_q("list_id", Context),
-    ListType = z_convert:to_binary(z_context:get_q("list_type", Context)),
-    TemplateName = z_context:get_q("template_name", Context),
+    ListId = z_context:get_q('list_id', Context),
+    ListType = z_context:get_q('list_type', Context),
+    TemplateName = z_context:get_q('template_name', Context),
     _ = kazoo_util:kz_account_list_add_entry(ListType, ListId, Context),
     z_render:update("list_entries_div", z_template:render(TemplateName, [{list_id, ListId}], Context), Context);
 

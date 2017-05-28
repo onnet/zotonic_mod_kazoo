@@ -59,12 +59,7 @@
                 style="text-align:center;"
                 data-live-search="true">
           {% for number in m.kazoo.get_acc_numbers %}
-            <option value="{{ number }}"
-                    {% if c2call[1]["caller_id_number"] == number %}
-                      selected
-                    {% endif %}>
-              {{ number }}
-            </option>
+            <option value="{{ number }}"> {{ number }}</option>
           {% endfor %}
         </select>
         {% javascript %}

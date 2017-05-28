@@ -3340,7 +3340,7 @@ kz_get_account_blacklist(BlacklistId, Context) ->
 set_blacklist_doc(Id, Name, Nums, Context) ->
     Props =  [{<<"name">>, ?TO_BIN(Name)}
              ,{<<"id">>, ?TO_BIN(Id)}
-             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {?TO_BIN(modkazoo_util:cleanout(X))
+             ,{<<"numbers">>, ?JSON_WRAPPER(lists:map(fun(X) -> {modkazoo_util:cleanout(X)
                                                                 ,modkazoo_util:set_value(<<"description">>, modkazoo_util:get_q_bin(X, Context), ?EMPTY_JSON_OBJECT)}
                                                       end
                                            ,Nums))
@@ -3971,32 +3971,31 @@ kz_list_account_list_entries(ListId,Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_account_list_add_entry(ListType, ListId, Context) ->
-    EntryId = z_context:get_q("entry_id", Context),
+    EntryId = z_context:get_q('entry_id', Context),
     CurrDoc = case EntryId of
-        'undefined' -> ?EMPTY_JSON_OBJECT;
+        <<>> -> ?EMPTY_JSON_OBJECT;
          _ -> kz_get_account_list_entry(EntryId, ListId, Context)
     end,
     Routines = list_routines(ListType, Context),
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?LISTS/binary, "/", ?TO_BIN(ListId)/binary, ?ENTRIES/binary>>,
     case EntryId of
         'undefined' ->
-            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?LISTS/binary, "/", ?TO_BIN(ListId)/binary, ?ENTRIES/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?LISTS/binary, "/", ListId/binary, ?ENTRIES/binary>>,
             crossbar_account_request('put', API_String, ?MK_DATABAG(NewDoc), Context);
         _ ->
-            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?LISTS/binary, "/", ?TO_BIN(ListId)/binary,
-                                                                  ?ENTRIES/binary, "/", ?TO_BIN(EntryId)/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?LISTS/binary, "/", ListId/binary,
+                                                                  ?ENTRIES/binary, "/", EntryId/binary>>,
             crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
     end.
 
 list_routines(<<"phone_book">>, Context) ->
-    [fun(J) -> modkazoo_util:set_value(<<"number">>, re:replace(z_context:get_q("list_entry_number", Context), "[^0-9]", "", [global, {return, binary}]), J) end
-     ,fun(J) -> modkazoo_util:set_value(<<"displayname">>, modkazoo_util:get_q_bin("list_entry_displayname",Context), J) end
+    [fun(J) -> modkazoo_util:set_value(<<"number">>, modkazoo_util:cleanout(z_context:get_q('list_entry_number', Context)), J) end
+    ,fun(J) -> modkazoo_util:set_value(<<"displayname">>, z_context:get_q('list_entry_displayname', Context), J) end
     ];
 list_routines(<<"dynamic_cid">>, Context) ->
-    [fun(J) -> modkazoo_util:set_value(<<"cid_key">>, modkazoo_util:get_q_bin("cid_key", Context), J) end
-     ,fun(J) -> modkazoo_util:set_value(<<"cid_name">>, modkazoo_util:get_q_bin("cid_name",Context), J) end
-     ,fun(J) -> modkazoo_util:set_value(<<"cid_number">>, modkazoo_util:get_q_bin("cid_number",Context), J) end
+    [fun(J) -> modkazoo_util:set_value(<<"cid_key">>, z_context:get_q('cid_key', Context), J) end
+     ,fun(J) -> modkazoo_util:set_value(<<"cid_name">>, z_context:get_q('cid_name', Context), J) end
+     ,fun(J) -> modkazoo_util:set_value(<<"cid_number">>, z_context:get_q('cid_number', Context), J) end
     ];
 list_routines(_, Context) ->
     list_routines(<<"phone_book">>, Context).
