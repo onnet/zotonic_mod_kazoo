@@ -29,12 +29,12 @@
      style="cursor: pointer; font-size: 0.7em;"></i>
 </span>
 {% wire id="deregister_cross"
-        action={session_set key="webrtc_dev_sip_username" value=""} 
-        action={script script="phone_deregister()"} 
         action={update target="user_portal_webphone_lazy_tpl"
                        template="user_portal_webphone_lazy.tpl"
                        headline=_"Webphone"
                } 
+        action={script script="phone_deregister()"} 
+        action={session_set key="webrtc_dev_sip_username" value=""} 
 %}
 <span id="status_line"></span>
 
