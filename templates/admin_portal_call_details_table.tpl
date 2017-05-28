@@ -1,24 +1,24 @@
 {% if m.kazoo[{ui_element_opened element="ap_calls_list_widget_opened"}] %}
 <table id="admin_portal_call_details_table" class="table display table-striped table-condensed">
-    <thead>
-        <tr>
-            <th style="text-align: center;">{_ Date _}</th>
-            <th style="text-align: center;">{_ Agent/Direction _}</th>
-            <th style="text-align: center;">{_ From _}</th>
-            <th style="text-align: center;">{_ To _}</th>
-            <th style="text-align: center;">{_ Duration _}</th>
-            <th style="text-align: center;">{_ Leg direction _}</th>
-            <th style="text-align: center;">{_ Hangup/Limits _}</th>
-            <th style="text-align: center;">{_ Type/Trunks _}</th>
-            <th style="text-align: center;"></th>
-            <th style="text-align: center;"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for call in calls %}
-            {% include "admin_cdr_leg_table_line.tpl" call=call %}
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th style="text-align: center;">{_ Date _}</th>
+      <th style="text-align: center;">{_ Agent/Direction _}</th>
+      <th style="text-align: center;">{_ From _}</th>
+      <th style="text-align: center;">{_ To _}</th>
+      <th style="text-align: center;">{_ Duration _}</th>
+      <th style="text-align: center;">{_ Leg direction _}</th>
+      <th style="text-align: center;">{_ Hangup/Limits _}</th>
+      <th style="text-align: center;">{_ Type/Trunks _}</th>
+      <th style="text-align: center;"></th>
+      <th style="text-align: center;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for call in calls %}
+      {% include "admin_cdr_leg_table_line.tpl" call=call[1] %}
+    {% endfor %}
+  </tbody>
 </table>
 
 {% javascript %}
@@ -45,6 +45,4 @@ var oTable = $('#admin_portal_call_details_table').dataTable({
 
 });
 {% endjavascript %}
-{% else %}
 {% endif %}
-
