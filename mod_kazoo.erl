@@ -1029,7 +1029,7 @@ event({postback,{cf_delete,[{cf,<<"current_callflow">>}]},_,_},Context) ->
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context);
 
 event({postback,{cf_ring_group_select,[{element_type,ElementType}]},_,_},Context) ->
-    Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
+    Selected = jiffy:decode(z_context:get_q('triggervalue', Context)),
     Context1 = z_render:insert_bottom("sorter"
                                      ,z_template:render("_cf_select_ring_group_element.tpl"
                                                        ,[{selected_value,Selected},{element_type,ElementType}]

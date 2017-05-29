@@ -423,7 +423,7 @@ m_find_value({kz_get_account_prompt, [{prompt_id, PromptId}]}, _M, Context) ->
     kazoo_util:kz_get_account_prompt(PromptId, Context);
 
 m_find_value({cf_get_module_info, [{module_name, ModuleName},{module_path,ModulePath}]}, _M, Context) ->
-    kazoo_util:cf_get_module_info(z_convert:to_binary(ModuleName),lists:map(fun (K) -> z_convert:to_binary(K) end, z_string:split(ModulePath,"-")),Context);
+    kazoo_util:cf_get_module_info(ModuleName, binary:split(ModulePath, <<"-">>, [global]), Context);
 
 m_find_value(kz_list_account_conferences, _M, Context) ->
     kazoo_util:kz_list_account_conferences(Context);

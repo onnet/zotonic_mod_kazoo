@@ -97,10 +97,10 @@
       <h4 class="text-center">{_ Groups _}:</h4>
       {% wire id="group_selector"
               type="change"
+              action={script script="$('#group_selector').get(0).selectedIndex = 0;"}
               action={postback postback={cf_ring_group_select element_type="group"}
                                delegate="mod_kazoo"
                      }
-              action={script script="$('#group_selector').get(0).selectedIndex = 0;"}
       %}
       <select id="group_selector"
               name="selected"
@@ -125,10 +125,10 @@
       <h4 class="text-center">{_ Users _}:</h4>
       {% wire id="user_selector"
               type="change"
+              action={script script="$('#user_selector').get(0).selectedIndex = 0;"}
               action={postback postback={cf_ring_group_select element_type="user"}
                                delegate="mod_kazoo"
                      }
-              action={script script="$('#user_selector').get(0).selectedIndex = 0;"}
       %}
       <select id="user_selector"
               name="selected"
@@ -155,10 +155,10 @@
       <h4 class="text-center">{_ Devices _}:</h4>
       {% wire id="device_selector"
               type="change"
+              action={script script="$('#device_selector').get(0).selectedIndex = 0;"}
               action={postback postback={cf_ring_group_select element_type="device"}
                                delegate="mod_kazoo"
                      }
-              action={script script="$('#device_selector').get(0).selectedIndex = 0;"}
       %}
       <select id="device_selector"
               name="selected"
