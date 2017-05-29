@@ -2369,7 +2369,8 @@ cf_load_to_session(CallflowId,Context) ->
     case CallflowId of
         [] -> 'ok';
         'undefined' -> 'ok';
-        "new" -> z_context:set_session('current_callflow', ?EMPTY_CALLFLOW, Context);
+        <<>> -> 'ok';
+        <<"new">> -> z_context:set_session('current_callflow', ?EMPTY_CALLFLOW, Context);
         _ -> z_context:set_session('current_callflow', kz_get_account_callflow(CallflowId, Context), Context)
     end.
 
@@ -2585,9 +2586,10 @@ cf_park_element(ElementId,Context) ->
     z_render:growl(?__("Branch saved", Context), Context).
 
 cf_element_path(ElementId) ->
-    binary:split(ElementId, <<"-">>, [global]).
+    binary:split(?TO_BIN(ElementId), <<"-">>, [global]).
 
 cf_get_element_by_id(ElementId, Context) ->
+lager:info("IAM z_context:get_session('current_callflow', Context): ~p",[z_context:get_session('current_callflow', Context)]),
     modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)). 
 
 cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}

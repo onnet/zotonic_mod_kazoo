@@ -1126,33 +1126,31 @@ event({submit,cf_select_check_cid,_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({submit,cf_select_option,_,_},Context) ->
-    lager:info("Existing_Element_id: ~p",[z_context:get_q("existing_element_id", Context)]),
-    case z_context:get_q("existing_element_id", Context) of
+    case z_context:get_q('existing_element_id', Context) of
         [] ->
-            kazoo_util:cf_child([{tool_name,z_context:get_q("tool_name", Context)}
-                                ,{drop_id,z_context:get_q("drop_id", Context)}
-                                ,{drop_parent,z_context:get_q("drop_parent", Context)}
-                                ,{branch_id,z_context:get_q("branch_id", Context)}
-                                ,{switch,z_context:get_q("switch", Context)}]
+            kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
+                                ,{drop_id,z_context:get_q('drop_id', Context)}
+                                ,{drop_parent,z_context:get_q('drop_parent', Context)}
+                                ,{branch_id,z_context:get_q('branch_id', Context)}
+                                ,{switch,z_context:get_q('switch', Context)}]
                                ,Context);
         ExistingElementId -> 
-            kazoo_util:cf_set_new_switch(ExistingElementId,z_context:get_q("switch", Context),Context),
+            kazoo_util:cf_set_new_switch(ExistingElementId, z_context:get_q('switch', Context),Context),
             mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
 
 event({submit,cf_select_option_temporal_route,_,_},Context) ->
-    lager:info("Existing_Element_id: ~p",[z_context:get_q("existing_element_id", Context)]),
-    case z_context:get_q("existing_element_id", Context) of
+    case z_context:get_q('existing_element_id', Context) of
         [] ->
-            kazoo_util:cf_child([{tool_name,z_context:get_q("tool_name", Context)}
-                                ,{drop_id,z_context:get_q("drop_id", Context)}
-                                ,{drop_parent,z_context:get_q("drop_parent", Context)}
-                                ,{branch_id,z_context:get_q("branch_id", Context)}
-                                ,{switch,z_context:get_q("switch", Context)}]
+            kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
+                                ,{drop_id,z_context:get_q('drop_id', Context)}
+                                ,{drop_parent,z_context:get_q('drop_parent', Context)}
+                                ,{branch_id,z_context:get_q('branch_id', Context)}
+                                ,{switch,z_context:get_q('switch', Context)}]
                                ,Context);
         ExistingElementId -> 
-            kazoo_util:cf_set_new_switch(ExistingElementId,z_context:get_q("switch", Context),Context),
+            kazoo_util:cf_set_new_switch(ExistingElementId, z_context:get_q('switch', Context),Context),
             mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
@@ -1188,7 +1186,7 @@ event({submit,cf_select_disa,_,_},Context) ->
     z_render:dialog_close(Context);
 
 event({postback,{cf_load,_},_,_},Context) ->
-    kazoo_util:cf_load_to_session(z_context:get_q("triggervalue", Context),Context),
+    kazoo_util:cf_load_to_session(z_context:get_q('triggervalue', Context),Context),
     kazoo_util:cf_notes_flush(Context),
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
     Context;
@@ -1202,7 +1200,14 @@ event({postback,{cf_reload,_},_,_},Context) ->
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
+event(#postback{ message = {check_children, Args} }, Context) ->
+    lager:info("IAM Args: ~p", [Args]),
+    Context;
+
 event({postback,{check_children,[{id,BranchId},{drop_id,DropId},{drop_parent,DropParent}]},_,_},Context) ->
+lager:info("IAM BranchId: ~p",[BranchId]),
+lager:info("IAM DropId: ~p",[DropId]),
+lager:info("IAM DropParent: ~p",[DropParent]),
     kazoo_util:cf_may_be_add_child(BranchId,DropId,DropParent,Context);
 
 event({postback,{cf_delete_element,[{element_id,ElementId}]},_,_},Context) ->
