@@ -13,7 +13,11 @@
         ,user_id
         ,device_id
 %}
-{% wire id="form_cf_select_eavesdrop" type="submit" postback="cf_select_eavesdrop" delegate="mod_kazoo" %}
+{% wire id="form_cf_select_eavesdrop"
+        type="submit"
+        postback="cf_select_eavesdrop"
+        delegate="mod_kazoo"
+%}
 <form id="form_cf_select_eavesdrop" method="post" action="postback">
   <div class="form-group">
     <label class="form-control-onnet margin-bottom-xs">Target
@@ -35,14 +39,16 @@
         </div>
         <div id="choice_input_div_target"class="col-sm-6">
           {% if device_id %}
-            {% include "_group_user_device_selector.tpl" selector_name="target_selected"
-                                                         quasitriggervalue="device"
-                                                         selected_element=device_id
+            {% include "_group_user_device_selector.tpl"
+                       selector_name="target_selected"
+                       quasitriggervalue="device"
+                       selected_element=device_id
             %}
           {% else %}
-            {% include "_group_user_device_selector.tpl" selector_name="target_selected"
-                                                         quasitriggervalue="user"
-                                                         selected_element=user_id
+            {% include "_group_user_device_selector.tpl"
+                       selector_name="target_selected"
+                       quasitriggervalue="user"
+                       selected_element=user_id
             %}
           {% endif %}
         </div>
@@ -81,19 +87,22 @@
         </div>
         <div id="choice_input_div_approved"class="col-sm-6">
           {% if approved_user_id %}
-            {% include "_group_user_device_selector.tpl" selector_name="approved_selected"
-                                                         quasitriggervalue="user"
-                                                         selected_element=approved_user_id
+            {% include "_group_user_device_selector.tpl"
+                       selector_name="approved_selected"
+                       quasitriggervalue="user"
+                       selected_element=approved_user_id
             %}
           {% elseif approved_device_id %}
-            {% include "_group_user_device_selector.tpl" selector_name="approved_selected"
-                                                         quasitriggervalue="device"
-                                                         selected_element=approved_device_id
+            {% include "_group_user_device_selector.tpl"
+                       selector_name="approved_selected"
+                       quasitriggervalue="device"
+                       selected_element=approved_device_id
             %}
           {% else %}
-            {% include "_group_user_device_selector.tpl" selector_name="approved_selected"
-                                                         quasitriggervalue="group"
-                                                         selected_element=approved_group_id
+            {% include "_group_user_device_selector.tpl"
+                       selector_name="approved_selected"
+                       quasitriggervalue="group"
+                       selected_element=approved_group_id
             %}
           {% endif %}
         </div>
@@ -106,7 +115,9 @@
   <div class="row">
     <div class="col-sm-12">
       <button id="button_cf_select_eavesdrop"
-              class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
+              class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+        {_ Save _}
+      </button>
     </div>
   </div>
 </div>

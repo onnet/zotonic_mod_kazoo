@@ -17,7 +17,7 @@
           {% for key in available_keys %}
             <option value="{{ key }}">
               {% if key=="_" %}
-                Default3 action
+                {_ Default action _}
               {% else %}
                 {{ key }}
               {% endif %}
