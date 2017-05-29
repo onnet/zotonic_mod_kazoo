@@ -42,7 +42,7 @@
             action={show target="option_"++selected_value[1]["id"]}
     %} 
     <div class="col-xs-1 text-center">
-      <a style="padding-left: 7px;">
+      <a style="padding-left: 2em;">
         <i id="{{ #delete}}"
            style="cursor: pointer;"
            class="fa fa-trash-o"

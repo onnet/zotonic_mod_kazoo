@@ -2387,11 +2387,13 @@ cf_may_be_add_root_child(Context) ->
         ModuleName ->
             lager:info("may_be_add_child ModuleName: ~p",[ModuleName]),
             [KzElementId, KzElementName] = cf_get_module_info(ModuleName,[<<"flow">>],Context),
-            z_render:insert_bottom("flow-root",z_template:render("_cf_child.tpl",[{tool_name,z_convert:to_list(ModuleName)}
-                                                                                 ,{element_id,"flow"}
-                                                                                 ,{kz_element_id, KzElementId}
-                                                                                 ,{kz_element_name, KzElementName}
-                                                                                 ,{drop_parent,"root"}],Context),Context)
+            lager:info("may_be_add_child KzElementId: ~p",[KzElementId]),
+            lager:info("may_be_add_child KzElementName: ~p",[KzElementName]),
+            z_render:insert_bottom(<<"flow-root">>, z_template:render("_cf_child.tpl",[{tool_name,ModuleName}
+                                                                                      ,{element_id,<<"flow">>}
+                                                                                      ,{kz_element_id, KzElementId}
+                                                                                      ,{kz_element_name, KzElementName}
+                                                                                      ,{drop_parent,<<"root">>}],Context),Context)
     end.
 
 cf_may_be_add_desc_child(BranchId,DropId,DropParent,Context) ->
@@ -2401,7 +2403,6 @@ cf_may_be_add_desc_child(BranchId,DropId,DropParent,Context) ->
     lager:info("cf_may_be_add_desc_child DropParent: ~p",[DropParent]),
     ElementPath = binary:split(BranchId, <<"-">>, [global]),
     lager:info("cf_may_be_add_desc_child ElementPath: ~p",[ElementPath]),
-    lager:info("cf_may_be_add_desc_child current_callflow: ~p",[z_context:get_session('current_callflow', Context)]),
     case modkazoo_util:get_value(ElementPath++[<<"children">>],z_context:get_session('current_callflow', Context)) of
         'undefined' -> Context;
         {[]} -> Context;
@@ -2418,9 +2419,9 @@ cf_add_desc_child(BranchId,DropId,DropParent,Switch,Context) ->
     lager:info("cf_add_desc_child DropId: ~p",[DropId]),
     lager:info("cf_add_desc_child DropParent: ~p",[DropParent]),
     lager:info("cf_add_desc_child Swicth: ~p",[Switch]),
-    PathToChildren = BranchId++"-children",
+    PathToChildren = <<BranchId/binary, "-children">>,
     lager:info("cf_add_desc_child PathToChildren: ~p",[PathToChildren]),
-    ElementId = PathToChildren++"-"++z_convert:to_list(Switch),
+    ElementId = <<PathToChildren/binary, "-", Switch/binary>>,
     lager:info("cf_add_desc_child ElementId: ~p",[ElementId]),
     ElementPath = binary:split(BranchId,<<"-">>,[global]),
     ParentModuleName = modkazoo_util:get_value(ElementPath++[<<"module">>],z_context:get_session('current_callflow', Context)),
@@ -2430,12 +2431,17 @@ cf_add_desc_child(BranchId,DropId,DropParent,Switch,Context) ->
     ModuleName = modkazoo_util:get_value(ModulePath++[<<"module">>],z_context:get_session('current_callflow', Context)),
     lager:info("cf_add_desc_child ModuleName: ~p",[ModuleName]),
     [KzElementId, KzElementName] = cf_get_module_info(ModuleName,ModulePath,Context),
-    z_render:insert_bottom(PathToChildren ,z_template:render("_cf_child.tpl",[{tool_name,z_convert:to_list(ModuleName)}
-                                                                             ,{element_id, ElementId}
-                                                                             ,{kz_element_id, KzElementId}
-                                                                             ,{kz_element_name, KzElementName}
-                                                                             ,{drop_parent,z_convert:to_list(ParentModuleName)}
-                                                                             ,{switch,Switch}],Context),Context).
+    z_render:insert_bottom(PathToChildren
+                          ,z_template:render(<<"_cf_child.tpl">>
+                                            ,[{tool_name, ModuleName}
+                                             ,{element_id, ElementId}
+                                             ,{kz_element_id, KzElementId}
+                                             ,{kz_element_name, KzElementName}
+                                             ,{drop_parent, ParentModuleName}
+                                             ,{switch, Switch}
+                                             ]
+                                            ,Context)
+                          ,Context).
 
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"user">> ->
     Id = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
@@ -2586,10 +2592,9 @@ cf_park_element(ElementId,Context) ->
     z_render:growl(?__("Branch saved", Context), Context).
 
 cf_element_path(ElementId) ->
-    binary:split(?TO_BIN(ElementId), <<"-">>, [global]).
+    binary:split(ElementId, <<"-">>, [global]).
 
 cf_get_element_by_id(ElementId, Context) ->
-lager:info("IAM z_context:get_session('current_callflow', Context): ~p",[z_context:get_session('current_callflow', Context)]),
     modkazoo_util:get_value(cf_element_path(ElementId), z_context:get_session('current_callflow', Context)). 
 
 cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}

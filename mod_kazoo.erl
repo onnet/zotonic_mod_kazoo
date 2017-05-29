@@ -1201,14 +1201,16 @@ event({postback,{cf_reload,_},_,_},Context) ->
     Context;
 
 event(#postback{ message = {check_children, Args} }, Context) ->
-    lager:info("IAM Args: ~p", [Args]),
-    Context;
+    kazoo_util:cf_may_be_add_child(proplists:get_value(id, Args)
+                                  ,proplists:get_value(drop_id, Args)
+                                  ,proplists:get_value(drop_parent, Args)
+                                  ,Context);
 
-event({postback,{check_children,[{id,BranchId},{drop_id,DropId},{drop_parent,DropParent}]},_,_},Context) ->
-lager:info("IAM BranchId: ~p",[BranchId]),
-lager:info("IAM DropId: ~p",[DropId]),
-lager:info("IAM DropParent: ~p",[DropParent]),
-    kazoo_util:cf_may_be_add_child(BranchId,DropId,DropParent,Context);
+%event({postback,{check_children,[{id,BranchId},{drop_id,DropId},{drop_parent,DropParent}]},_,_},Context) ->
+%lager:info("IAM BranchId: ~p",[BranchId]),
+%lager:info("IAM DropId: ~p",[DropId]),
+%lager:info("IAM DropParent: ~p",[DropParent]),
+%    kazoo_util:cf_may_be_add_child(BranchId,DropId,DropParent,Context);
 
 event({postback,{cf_delete_element,[{element_id,ElementId}]},_,_},Context) ->
     kazoo_util:cf_delete_element(ElementId,Context);
