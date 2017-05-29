@@ -30,10 +30,10 @@
                 style="text-align:center;"
                 data-live-search="true">
           {% for option in m.kazoo.kz_list_account_media %}
-            <option value="{{ option["id"] }}"
-                    {% if option["id"] == element_data[1]["data"][1]["media"] %}
+            <option value="{{ option[1]["id"] }}"
+                    {% if option[1]["id"] == element_data[1]["data"][1]["media"] %}
                       selected
-                    {% endif %}>{{ option["name"] }}</option>
+                    {% endif %}>{{ option[1]["name"] }}</option>
           {% endfor %}
         </select>
       </div>
@@ -48,7 +48,10 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">
-      <button id="button_cf_select_response" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Commit _}</button>
+      <button id="button_cf_select_response"
+              class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+        {_ Commit _}
+      </button>
     </div>
   </div>
 </div>
@@ -57,13 +60,13 @@
         action={submit target="form_cf_select_response"}
 %}
 {% javascript %}
-    $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
-    $('#response_selector').selectpicker({size: 5});
-    $(function() {
-        $('#response_selector').on('change', function(){
-          var selected = $(this).find("option:selected").val();
-          var selected_name = $(this).find("option:selected").text();
-        });
-    });
+  $('.modal-header h3').append($('#{{ tool_name }}  div.tool_name').text());
+  $('#response_selector').selectpicker({size: 5});
+  $(function() {
+      $('#response_selector').on('change', function(){
+        var selected = $(this).find("option:selected").val();
+        var selected_name = $(this).find("option:selected").text();
+      });
+  });
 {% endjavascript %}
 {% endwith %}
