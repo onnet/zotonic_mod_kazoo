@@ -1126,8 +1126,9 @@ event({submit,cf_select_check_cid,_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({submit,cf_select_option,_,_},Context) ->
+lager:info("IAM cf_select_option: ~p",[z_context:get_q('existing_element_id', Context)]),
     case z_context:get_q('existing_element_id', Context) of
-        [] ->
+        <<>> ->
             kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
                                 ,{drop_id,z_context:get_q('drop_id', Context)}
                                 ,{drop_parent,z_context:get_q('drop_parent', Context)}
@@ -1142,7 +1143,7 @@ event({submit,cf_select_option,_,_},Context) ->
 
 event({submit,cf_select_option_temporal_route,_,_},Context) ->
     case z_context:get_q('existing_element_id', Context) of
-        [] ->
+        <<>> ->
             kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
                                 ,{drop_id,z_context:get_q('drop_id', Context)}
                                 ,{drop_parent,z_context:get_q('drop_parent', Context)}

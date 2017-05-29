@@ -2677,7 +2677,7 @@ cf_available_keys(KeysList,ElementPath,AddOn,Context) ->
 
 cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
     case DropParent of
-        "cidlistmatch" ->
+        <<"cidlistmatch">> ->
             [KeysList,AddOn] = [[<<"match">>,<<"nomatch">>],[]],
             z_render:dialog(?__("Choose route option",Context)
                                ,"_cf_select_option_cidlistmatch.tpl"
@@ -2689,7 +2689,7 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
                                                                   ,Context)}
                                 ]
                                ,Context);
-        "check_cid" ->
+        <<"check_cid">> ->
             [KeysList,AddOn] =
                 case modkazoo_util:get_value(lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
                                                ++[<<"data">>,<<"use_absolute_mode">>]
@@ -2707,22 +2707,21 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
                                                                    ,AddOn
                                                                    ,Context)}]
                                  ,Context);
-        "menu" ->
+        <<"menu">> ->
             z_render:dialog(?__("Menu option",Context)
                                , "_cf_select_option.tpl"
                                ,[{existing_element_id,ExistingElementId}
-                                ,{kz_element_id,hd(lists:reverse(modkazoo_util:split_b(ExistingElementId,"-")))}
+                                ,{kz_element_id,hd(lists:reverse(binary:split(ExistingElementId,<<"-">>,[global])))}
                                 ,{available_keys,cf_available_keys(?MENU_KEYS_LIST
                                                                   ,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
                                                                   ,Context)}]
                             ,Context);
-        "temporal_route" ->
+        <<"temporal_route">> ->
             KeysList = [<<"_">>]++lists:map(fun(X) -> modkazoo_util:get_value(<<"id">>,X) end, kz_list_account_temporal_rules(Context)),
             z_render:dialog(?__("Menu option",Context)
                                  ,"_cf_select_option_temporal_route.tpl"
                                ,[{existing_element_id,ExistingElementId}
-                                ,{kz_element_id,hd(lists:reverse(modkazoo_util:split_b(ExistingElementId,"-")))}
-                          %      ,{available_keys,cf_available_keys(KeysList,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId))))),Context)}]
+                                ,{kz_element_id,hd(lists:reverse(binary:split(ExistingElementId,<<"-">>,[global])))}
                                 ,{available_keys,KeysList}]
                             ,Context)
     end.
