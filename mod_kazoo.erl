@@ -1062,7 +1062,7 @@ event({submit,cf_select_ring_group,_,_},Context) ->
     z_render:dialog_close(Context);
 
 event({postback,{cf_page_group_select,[{element_type,ElementType}]},_,_},Context) ->
-    Selected = jiffy:decode(z_context:get_q("triggervalue", Context)),
+    Selected = jiffy:decode(z_context:get_q('triggervalue', Context)),
     Context1 = z_render:insert_bottom("sorter"
                                      ,z_template:render("_cf_select_page_group_element.tpl"
                                                        ,[{selected_value,Selected},{element_type,ElementType}]
@@ -1074,7 +1074,11 @@ event({submit,cf_select_page_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = kazoo_util:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","name"]
-                                 ,z_convert:to_binary(z_context:get_q("name", Context))
+                                 ,z_context:get_q('name', Context)
+                                 ,Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","audio"]
+                                 ,z_context:get_q('audio', Context)
                                  ,Context),
     _ = kazoo_util:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","endpoints"]
