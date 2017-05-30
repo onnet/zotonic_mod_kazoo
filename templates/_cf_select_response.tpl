@@ -20,7 +20,7 @@
                class="form-control margin-bottom-xs"
                id="message"
                name="message"
-               placeholder="{_ Code _}"
+               placeholder="{_ Message _}"
                value="{{ element_data[1]["data"][1]["message"] }}">
       </div>
       <div class="col-sm-5">

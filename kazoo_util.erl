@@ -2355,8 +2355,7 @@ cf_child([{tool_name,ToolName},{drop_id,DropId},{drop_parent,DropParent},{branch
                 end,
             cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"module">>], ToolName, Context),
             cf_set_session('current_callflow', binary:split(ElementId,<<"-">>,[global])++[<<"children">>], {[]}, Context),
-        %    z_render:dialog(<<(?__(ModalHeader, Context1))/binary, " ">>
-            z_render:dialog("Change me "
+            z_render:dialog(<<(?__(ModalHeader, Context1))/binary, " ">>
                            ,<<"_cf_select_", ToolName/binary, ".tpl">>
                            ,[{element_id, ElementId},{tool_name,ToolName}], Context1)
     end.
