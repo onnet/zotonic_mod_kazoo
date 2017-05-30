@@ -5,7 +5,10 @@
       <th class="td-center">{_ Date _}</th>
       <th class="td-center1">{_ Description _}</th>
       <th class="td-center">{_ Sum _}</th>
-      {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
+      {% if (m.kazoo.kz_current_context_superadmin
+              or
+             m.kazoo.kz_current_context_reseller_status)
+      %}
         <th class="td-center"></th>
         <th class="td-center"></th>
         <th class="td-center"></th>
@@ -37,7 +40,10 @@
         <td class="pri-1 td-right">
           {{ transaction[1]["amount"]|format_price:[".",""]|currency_sign }}
         </td>
-        {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
+        {% if (m.kazoo.kz_current_context_superadmin
+                or
+               m.kazoo.kz_current_context_reseller_status)
+        %}
           <td class="td-center">
             {% if transaction[1]["metadata"][1]["invoice_id"] %}
              <a target="_blank"

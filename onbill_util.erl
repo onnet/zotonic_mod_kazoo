@@ -187,7 +187,7 @@ onbill_transaction(TransactionId, AccountId, Context) ->
 
 onbill_transaction(Verb, TransactionId, AccountId, DataBag, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRANSACTIONS/binary, "/", ?TO_BIN(TransactionId)/binary>>,
-    kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
+    kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context, 'return_error').
 
 promised_payment(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

@@ -71,6 +71,11 @@ lager:info("IAM IP: ~p",[cowmachine_req:peer(z_context:get_reqdata(Context))]),
              ,{'account_name', Account_Name}
         } ->
             lager:info("Succesfull authentication of Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
+            lager:info("Session ID: ~p.", [z_session_manager:get_session_id(Context)]),
+            mod_signal:emit({emit_growl_signal
+                            ,?SIGNAL_FILTER(Context) ++ [{'text',?__("Signing in ...", Context)},{'type', 'notice'}]
+                            }
+                           ,Context),
             AccountDoc = kazoo_util:kz_get_acc_doc_by_account_id_and_authtoken(Account_Id, Auth_Token, Context),
             case modkazoo_util:get_value(<<"crossbar_ip_acl">>, AccountDoc) of
                 'undefined' ->
@@ -79,12 +84,13 @@ lager:info("IAM IP: ~p",[cowmachine_req:peer(z_context:get_reqdata(Context))]),
                     maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context)
             end;
         {'badauth', Code, Data} ->
-            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p. Data: ~p.", [Login,Account,ClientIP,Data]),
+            lager:info("SessionID: ~p.", [z_session_manager:get_session_id(Context)]),
+            lager:info("Failed (badauth) to authenticate Kazoo user ~p@~p. IP address: ~p. Data: ~p.", [Login,Account,ClientIP,Data]),
             lager:info("Failed to authenticate Kazoo user ~p@~p. Code: ~p.", [Login,Account,Code]),
             lager:info("Failed to authenticate Kazoo user ~p@~p. Data: ~p.", [Login,Account,Data]),
             growl_login_error(Data, Context);
         _E ->
-            lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p. Error: ~p", [Login,Account,ClientIP, _E]),
+            lager:info("Failed (E) to authenticate Kazoo user ~p@~p. IP address: ~p. Error: ~p", [Login,Account,ClientIP, _E]),
             z_render:growl_error(?__("Auth failed.", Context), Context)
     end.
 

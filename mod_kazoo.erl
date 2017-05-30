@@ -2556,12 +2556,22 @@ event({submit,issue_invoice_for_transaction,_,_}, Context) ->
     end;
 
 event({postback,{onbill_transaction_delete,[{account_id, AccountId},{transaction_id, TransactionId}]},_,_}, Context) ->
-    onbill_util:onbill_transaction('delete', TransactionId, AccountId, [], Context),
-    modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
-    Context;
+    case onbill_util:onbill_transaction('delete', TransactionId, AccountId, [], Context) of
+        {'error', _ReturnCode, Body} ->
+            Message = modkazoo_util:get_first_defined([[<<"message">>]
+                                                      ,[<<"data">>,<<"message">>]
+                                                      ]
+                                                     ,jiffy:decode(Body)
+                                                     ,<<"Something went wrong">>),
+            z_render:growl_error(?__(z_convert:to_list(Message), Context), Context);
+        _ ->
+            modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+            Context
+    end;
 
 event({postback,{onbill_generated_doc_delete,[{account_id,AccountId},{doc_id,DocId}]},_,_}, Context) ->
-    onbill_util:doc('delete', AccountId, DocId, [], Context),
+ Res =   onbill_util:doc('delete', AccountId, DocId, [], Context),
+lager:info("IAM onbill_generated_doc_delete Res: ~p",[Res]),
     modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     Context;
 
@@ -2587,4 +2597,3 @@ maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, 
                                               ]
                                              ,Context)
                            ,Context).
-
