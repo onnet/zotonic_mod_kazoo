@@ -28,7 +28,7 @@
     ,kz_device_doc_field/3
     ,kz_media_doc_field/3
     ,create_kazoo_account/1
-    ,create_kazoo_user/9
+    ,add_user/9
     ,kz_create_default_callflow/2
     ,kz_create_default_callflow_sec/3
     ,update_kazoo_user/1
@@ -952,7 +952,7 @@ create_kazoo_account(Context) ->
                                  AccId -> AccId
                             end,
     UserPassword = modkazoo_util:rand_hex_binary(10),
-    create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
+    add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
     send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context),
     {'new_account_id', CreatedUserAccountId}.
  
@@ -1000,10 +1000,10 @@ update_kazoo_user(Context) ->
     crossbar_account_request('post', API_String, {[{<<"data">>, NewDoc}]}, Context),
     Context.
 
-create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, AccountId, Context) ->
-    create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, <<"admin">>, AccountId, Context).
+add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, AccountId, Context) ->
+    add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, <<"admin">>, AccountId, Context).
 
-create_kazoo_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLevel, AccountId, Context) ->
+add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLevel, AccountId, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     DataBag = {[{<<"data">>,
                   {[{<<"apps">>,

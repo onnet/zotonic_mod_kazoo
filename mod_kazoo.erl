@@ -644,7 +644,10 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
                            ,Context1)
     end;
 
-event({submit,add_new_user_form,_,_}, Context) ->
+event(#postback{ message = {add_new_user, Args} }, Context) ->
+    kazoo_util:add_user(proplists:get_value(databag, Args), 'true', Context);
+
+event({submit,add_new_user,_,_}, Context) ->
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
       'ok' = modkazoo_util:check_field_filled("surname",Context),
@@ -656,7 +659,7 @@ event({submit,add_new_user_form,_,_}, Context) ->
           Email -> 'ok';
           _ -> throw({'error', 'emails_not_equal'})
       end,
-      kazoo_util:create_kazoo_user(Email
+      kazoo_util:add_user(Email
                        ,modkazoo_util:rand_hex_binary(10)
                        ,z_convert:to_binary(z_context:get_q("firstname", Context))
                        ,z_convert:to_binary(z_context:get_q("surname", Context))
