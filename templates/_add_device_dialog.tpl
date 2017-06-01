@@ -1,10 +1,15 @@
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
-  <li class="active"><a href="#sipphone" role="tab" data-toggle="tab">{_ SIP Phone _}</a></li>
-  <li><a href="#cellphone" role="tab" data-toggle="tab">{_ Cell Phone _}</a></li>
-  <li><a href="#sip_uri" role="tab" data-toggle="tab">{_ SIP URI _}</a></li>
+  <li class="active">
+    <a href="#sipphone" role="tab" data-toggle="tab">{_ SIP Phone _}</a>
+  </li>
+  <li>
+    <a href="#cellphone" role="tab" data-toggle="tab">{_ Cell Phone _}</a>
+  </li>
+  <li>
+    <a href="#sip_uri" role="tab" data-toggle="tab">{_ SIP URI _}</a>
+  </li>
 </ul>
-
 <div class="tab-content">
   <!-- Basic -->
   <div class="active tab-pane fade in" id="sipphone">

@@ -857,10 +857,16 @@ event({postback
                            ,Context)
     end;
 
+event(#postback{ message = {add_new_device, Args} }, Context) ->
+    kazoo_util:add_device(proplists:get_value(databag, Args), 'true', Context);
+
 event({submit,add_new_device,_,_}, Context) ->
-    _ = kazoo_util:add_device(Context),
-    mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-    z_render:dialog_close(Context);
+    case kazoo_util:is_trial_account(Context) of
+        'false' ->
+            kazoo_util:add_device(Context);
+        {'true', TimeLeft} ->
+            _ = kazoo_util:add_device('true', Context)
+    end;
 
 event({submit,add_new_group,_,_}, Context) ->
     case z_context:get_q("name",Context) of

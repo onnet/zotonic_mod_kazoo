@@ -166,6 +166,8 @@
     ,classify_number/2
     ,kz_list_classifiers/1
     ,add_device/1
+    ,add_device/2
+    ,add_device/3
     ,add_group/1
     ,kz_list_account_groups/1
     ,kz_list_account_blacklists/1
@@ -1935,21 +1937,88 @@ kz_list_classifiers(Context) ->
     end.
 
 add_device(Context) ->
+    AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+    add_device(AcceptCharges, Context).
+
+add_device(AcceptCharges, Context) ->
+    DeviceType = z_context:get_q('device_type',Context),
     Props = modkazoo_util:filter_empty(
-        [{[<<"data">>,<<"sip">>,<<"username">>],?TO_BIN(z_context:get_q("sipusername",Context))}
-        ,{[<<"data">>,<<"sip">>,<<"password">>],?TO_BIN(z_context:get_q("sippassword",Context))}
+        [{[<<"data">>,<<"sip">>,<<"username">>],z_context:get_q('sipusername',Context)}
+        ,{[<<"data">>,<<"sip">>,<<"password">>],z_context:get_q('sippassword',Context)}
         ,{[<<"data">>,<<"sip">>,<<"invite_format">>], case z_context:get_q("route",Context) of 'undefined' -> <<"username">>; _ -> <<"route">> end}
         ,{[<<"data">>,<<"sip">>,<<"route">>], ?TO_BIN(z_context:get_q("route",Context))}
         ,{[<<"data">>,<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
-        ,{[<<"data">>,<<"call_forward">>,<<"number">>],?TO_BIN(z_context:get_q("cellphonenumber",Context))}
-        ,{[<<"data">>,<<"name">>],?TO_BIN(z_context:get_q("name",Context))}
-        ,{[<<"data">>,<<"owner_id">>],?TO_BIN(z_context:get_q("device_owner_id",Context))}
-        ,{[<<"data">>,<<"device_type">>],?TO_BIN(z_context:get_q("device_type",Context))}
+        ,{[<<"data">>,<<"call_forward">>,<<"number">>],z_context:get_q('cellphonenumber',Context)}
+        ,{[<<"data">>,<<"name">>],z_context:get_q('name',Context)}
+        ,{[<<"data">>,<<"owner_id">>],z_context:get_q('device_owner_id',Context)}
+        ,{[<<"data">>,<<"device_type">>], DeviceType}
         ]),
     DataBag = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_DEVICE_SIP, Props),
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>,
-    _ = crossbar_account_request('put', API_String, DataBag, Context),
-    Context.
+    add_device(DataBag, AcceptCharges, Context).
+
+add_device(DataBag, AcceptCharges, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>,
+    AcceptChargesCataBag = modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, DataBag),
+    case crossbar_account_request('put', API_String, AcceptChargesCataBag, Context, 'return_error') of
+        {'error', "402", Body} ->
+            Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+            case modkazoo_util:get_value([<<"devices">>,<<"sip_devices">>], Data) of
+                'undefined' ->
+                    Message = modkazoo_util:get_value(<<"message">>, Data),
+                    mod_signal:emit({emit_growl_signal
+                                    ,?SIGNAL_FILTER(Context) ++
+                                     [{'text',?__(?TO_LST(Message), Context)}
+                                     ,{'type', 'error'}
+                                     ]}
+                                    ,Context),
+                    z_render:dialog_close(Context);
+                LimitsItem ->
+                    AccountId = z_context:get_session('kazoo_account_id', Context),
+                    Expences = modkazoo_util:get_value(<<"activation_charge">>, LimitsItem)
+                               + modkazoo_util:get_value(<<"rate">>, LimitsItem),
+                    CurrentAccountCredit = modkazoo_util:get_value(<<"amount">>, current_account_credit(AccountId, Context)),
+                    PVT_Limits = onbill_util:onbill_pvt_limits('get', AccountId, [], Context),
+                    MaybePostpayCredit =
+                        case modkazoo_util:get_value(<<"allow_postpay">>, PVT_Limits, 'false') of
+                            'true' ->
+                                modkazoo_util:get_value(<<"max_postpay_amount">>, PVT_Limits, 0);
+                            'false' -> 0
+                        end,
+                    case Expences > (CurrentAccountCredit + MaybePostpayCredit) of
+                        'true' ->
+                            mod_signal:emit({emit_growl_signal
+                                            ,?SIGNAL_FILTER(Context) ++
+                                             [{'text',?__("Not enough funds.", Context)}
+                                             ,{'type', 'error'}
+                                             ]}
+                                            ,Context),
+                            z_render:dialog_close(Context);
+                        'false' ->
+                            z_render:dialog(?__("Charges Confirmation",Context)
+                                           ,"_accept_new_element_charges.tpl"
+                                           ,[{item, LimitsItem}
+                                            ,{databag, DataBag}
+                                            ,{account_id, AccountId}
+                                            ,{width, "auto"}
+                                            ]
+                                           ,Context)
+                    end
+            end;
+        {'error', _ReturnCode, Body} ->
+            Message = modkazoo_util:get_value([<<"data">>,<<"message">>], jiffy:decode(Body)),
+            mod_signal:emit({emit_growl_signal
+                            ,?SIGNAL_FILTER(Context) ++
+                             [{'text',?__(?TO_LST(Message), Context)}
+                             ,{'type', 'error'}
+                             ]}
+                            ,Context),
+            z_render:dialog_close(Context);
+        _E ->
+            mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
+            modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+            z_render:dialog_close(Context)
+    end.
+
 
 kz_list_account_groups(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?GROUPS/binary>>,
