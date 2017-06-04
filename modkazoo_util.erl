@@ -3,6 +3,7 @@
 
 -export([new/0
     ,is_defined/1
+    ,to_undefined/1
     ,pad_month/1
     ,get_keys/1
     ,get_keys/2
@@ -79,6 +80,16 @@ is_defined(Var) ->
         "" -> false;
         <<"">> -> false;
         _ -> true
+    end.
+
+to_undefined(Var) ->
+    case Var of
+        'undefined' -> 'undefined';
+        "" -> 'undefined';
+        <<>> -> 'undefined';
+        [<<>>] -> 'undefined';
+        [] -> 'undefined';
+        _ -> Var
     end.
 
 pad_month(Month) when Month < 10 ->

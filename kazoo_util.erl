@@ -375,8 +375,48 @@
 
 -define(MENU_KEYS_LIST, [<<"_">>,<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>]).
 
+-define(MK_ACCOUNT, 
+    {[{<<"call_restriction">>,{[]}}
+      ,{<<"notifications">>,
+       {[{<<"voicemail_to_email">>,{[]}}
+         ,{<<"fax_to_email">>,{[]}}
+         ,{<<"deregister">>,{[]}}]}}
+      ,{<<"provision">>,{[]}}
+      ,{<<"apps">>,[]}
+      ,{<<"language">>, <<"en-en">>}
+      ,{<<"timezone">>, <<"UTC">>}
+      ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
+      ,{<<"is_trial_account">>, 'true'}
+    ]}).
+
+-define(MK_USER, 
+    {[{<<"apps">>,
+       {[{<<"voip">>,
+          {[{<<"label">>,<<"VoIP Services">>},
+            {<<"icon">>,<<"device">>},
+            {<<"api_url">>,<<(modkazoo_util:rand_hex_binary(5))/binary, "/v1">>}]}}]}},
+      {<<"call_forward">>,
+       {[{<<"substitute">>,false},
+         {<<"enabled">>,false},
+         {<<"require_keypress">>,false},
+         {<<"keep_caller_id">>,false},
+         {<<"direct_calls_only">>,false}]}},
+      {<<"username">>, modkazoo_util:rand_hex_binary(5)},
+      {<<"first_name">>, modkazoo_util:rand_hex_binary(5)},
+      {<<"last_name">>, modkazoo_util:rand_hex_binary(5)},
+      {<<"enabled">>, 'true'},
+      {<<"email">>, modkazoo_util:rand_hex_binary(5)},
+      {<<"contact_phonenumber">>, modkazoo_util:rand_hex_binary(5)},
+      {<<"password">>, modkazoo_util:rand_hex_binary(5)},
+      {<<"priv_level">>,<<"user">>},
+      {<<"vm_to_email_enabled">>,true},
+      {<<"fax_to_email_enabled">>,true},
+      {<<"verified">>,false},
+      {<<"timezone">>,get_account_timezone(Context)},
+      {<<"record_call">>,false}
+     ]}).
+
 -define(MK_DEVICE_SIP, 
-{[{<<"data">>,
    {[{<<"enabled">>,true},
      {<<"media">>,
       {[{<<"peer_to_peer">>,<<"auto">>},
@@ -400,7 +440,7 @@
      {<<"provision">>,{[]}},
      {<<"name">>,modkazoo_util:rand_hex_binary(3)},
      {<<"ignore_completed_elsewhere">>,false},
-     {<<"suppress_unregister_notifications">>,true}]}}]}).
+     {<<"suppress_unregister_notifications">>,true}]}).
 
 -define(MK_GROUP, 
 {[{<<"data">>,
@@ -900,6 +940,7 @@ kz_media_doc_field(Field, MediaId, Context) when is_list(Field) ->
     modkazoo_util:get_value(?TO_BIN(Field), kz_get_media_doc(MediaId, Context)).
 
 create_kazoo_account(Context) ->
+    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     Firstname = ?TO_BIN(z_context:get_q("firstname", Context)),
     Surname = ?TO_BIN(z_context:get_q("surname", Context)),
     Username = modkazoo_util:to_lower_binary(z_context:get_q("username", Context)),
@@ -913,47 +954,52 @@ create_kazoo_account(Context) ->
     end,
     ResellerId = case z_context:get_session('kazoo_account_id', Context) of
         'undefined' -> 
-            {'ok', {'account_id', AdminAccountId}, {'auth_token', _}, {'crossbar', _}} = kz_admin_creds(Context),
+            AdminAccountId = ?TO_BIN(z_context:get_q("kazoo_reseller_id", Context)),
             AdminAccountId;
-        AccountId -> AccountId
+        AccountId ->
+          AccountId
     end,
-    DataBag = {[{<<"data">>,
-                  {[{<<"call_restriction">>,{[]}}
-                    ,{<<"notifications">>,
-                     {[{<<"voicemail_to_email">>,{[]}}
-                       ,{<<"fax_to_email">>,{[]}}
-                       ,{<<"deregister">>,{[]}}]}}
-                    ,{<<"contact">>,{[{<<"billing">>,{[{<<"email">>,Email},{<<"number">>,Phonenumber}]}}]}}
-                    ,{<<"provision">>,{[]}}
-                    ,{<<"apps">>,[]}
-                    ,{<<"name">>,Accountname}
-                    ,{<<"language">>,case m_config:get_value('mod_kazoo', 'default_kazoo_language', Context) of
-                                         'undefined' -> <<"en-en">>;
-                                          Lang -> ?TO_BIN(Lang)
-                                      end
-                     }
-                    ,{<<"timezone">>,case m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context) of
-                                         'undefined' -> <<"Europe/London">>;
-                                          TZ -> ?TO_BIN(TZ)
-                                      end
-                     }
-                    ,{<<"realm">>,<<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>}
-                    ,{<<"available_apps">>,[<<"voip">>,<<"pbxs">>]}
-                    ,{<<"is_trial_account">>, 'true'}
-                  ]}
-              }]},
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ResellerId/binary>>,
+
+    Language = 
+        case m_config:get_value('mod_kazoo', 'default_kazoo_language', Context) of
+            'undefined' -> <<"en-en">>;
+             Lang -> ?TO_BIN(Lang)
+        end,
+    Timezone = 
+        case m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context) of
+            'undefined' -> <<"Europe/London">>;
+            TZ -> ?TO_BIN(TZ)
+        end,
+    Realm = <<(modkazoo_util:normalize_account_name(Accountname))/binary, DefaultRealm/binary>>,
+
+    Props = modkazoo_util:filter_empty([
+         {[<<"name">>], Accountname}
+        ,{[<<"contact">>,<<"billing">>,<<"email">>], Email}
+        ,{[<<"contact">>,<<"billing">>,<<"number">>], Phonenumber}
+        ,{[<<"contact">>,<<"signup">>,<<"email">>], Email}
+        ,{[<<"contact">>,<<"signup">>,<<"number">>], Phonenumber}
+        ,{[<<"contact">>,<<"signup">>,<<"first_name">>], Firstname}
+        ,{[<<"contact">>,<<"signup">>,<<"last_name">>], Surname}
+        ,{[<<"contact">>,<<"signup">>,<<"client_ip">>], ClientIP}
+        ,{[<<"language">>], Language}
+        ,{[<<"timezone">>], Timezone}
+        ,{[<<"realm">>], Realm}
+        ]),
+
+    AccountJObj = modkazoo_util:set_values(Props, ?MK_ACCOUNT),
+
     case z_context:get_session(kazoo_auth_token, Context) of
-        'undefined' -> {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context);
-        _ -> {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, [], jiffy:encode(DataBag), Context)
+        'undefined' ->
+            API_String = <<?V2/binary, "/onbill_signup/", ResellerId/binary>>,
+            {'ok', _, _, Body} = crossbar_noauth_request_raw('put', API_String, ?MK_DATABAG(AccountJObj), Context);
+        _ ->
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, ResellerId/binary, "/onbill_signup/", ResellerId/binary>>,
+            {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, [], jiffy:encode(?MK_DATABAG(AccountJObj)), Context)
     end,
     CreatedUserAccountId =  case modkazoo_util:get_value([<<"data">>,<<"id">>], jiffy:decode(Body)) of
                                 'undefined' -> throw({'error', 'account_name_already_in_use'});
                                  AccId -> AccId
                             end,
-    UserPassword = modkazoo_util:rand_hex_binary(10),
-    add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, CreatedUserAccountId, Context),
-    send_signup_email(Accountname, Username, Firstname, Surname, Email, UserPassword, Context),
     {'new_account_id', CreatedUserAccountId}.
  
 valid_account_name(Name) when size(Name) < 3 -> 'false';
@@ -1005,35 +1051,20 @@ add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, Account
 
 add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLevel, AccountId, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-    DataBag = {[{<<"data">>,
-                  {[{<<"apps">>,
-                     {[{<<"voip">>,
-                        {[{<<"label">>,<<"VoIP Services">>},
-                          {<<"icon">>,<<"device">>},
-                          {<<"api_url">>,<<Crossbar_URL/binary, "/v1">>}]}}]}},
-                    {<<"call_forward">>,
-                     {[{<<"substitute">>,false},
-                       {<<"enabled">>,false},
-                       {<<"require_keypress">>,false},
-                       {<<"keep_caller_id">>,false},
-                       {<<"direct_calls_only">>,false}]}},
-                    {<<"username">>, Username},
-                    {<<"first_name">>, Firstname},
-                    {<<"last_name">>, Surname},
-                    {<<"enabled">>, 'true'},
-                    {<<"email">>, Email},
-                    {<<"contact_phonenumber">>, Phonenumber},
-                    {<<"password">>, UserPassword},
-                    {<<"priv_level">>,PrivLevel},
-                    {<<"vm_to_email_enabled">>,true},
-                    {<<"fax_to_email_enabled">>,true},
-                    {<<"verified">>,false},
-                    {<<"timezone">>,get_account_timezone(Context)},
-                    {<<"record_call">>,false}
-                   ]}
-               }]},
+    Props = modkazoo_util:filter_empty([
+         {[<<"apps">>,<<"voip">>,<<"api_url">>],<<Crossbar_URL/binary, "/v2">>}
+        ,{[<<"username">>], Username}
+        ,{[<<"first_name">>], Firstname}
+        ,{[<<"last_name">>], Surname}
+        ,{[<<"email">>], Email}
+        ,{[<<"contact_phonenumber">>], Phonenumber}
+        ,{[<<"password">>], UserPassword}
+        ,{[<<"priv_level">>], PrivLevel}
+        ,{[<<"timezone">>], get_account_timezone(Context)}
+        ]),
+    UserJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_USER, Props),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
-    {'ok', _, _, Body} = crossbar_admin_request('put', API_String, DataBag, Context),
+    {'ok', _, _, Body} = crossbar_admin_request('put', API_String, ?MK_DATABAG(UserJObj), Context),
     Doc = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
     UserId = modkazoo_util:get_value(<<"id">>, Doc),
     API_String2 = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(UserId)/binary>>,
@@ -1943,18 +1974,18 @@ add_device(Context) ->
 add_device(AcceptCharges, Context) ->
     DeviceType = z_context:get_q('device_type',Context),
     Props = modkazoo_util:filter_empty(
-        [{[<<"data">>,<<"sip">>,<<"username">>],z_context:get_q('sipusername',Context)}
-        ,{[<<"data">>,<<"sip">>,<<"password">>],z_context:get_q('sippassword',Context)}
-        ,{[<<"data">>,<<"sip">>,<<"invite_format">>], case z_context:get_q("route",Context) of 'undefined' -> <<"username">>; _ -> <<"route">> end}
-        ,{[<<"data">>,<<"sip">>,<<"route">>], ?TO_BIN(z_context:get_q("route",Context))}
-        ,{[<<"data">>,<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
-        ,{[<<"data">>,<<"call_forward">>,<<"number">>],z_context:get_q('cellphonenumber',Context)}
-        ,{[<<"data">>,<<"name">>],z_context:get_q('name',Context)}
-        ,{[<<"data">>,<<"owner_id">>],z_context:get_q('device_owner_id',Context)}
-        ,{[<<"data">>,<<"device_type">>], DeviceType}
+        [{[<<"sip">>,<<"username">>],z_context:get_q('sipusername',Context)}
+        ,{[<<"sip">>,<<"password">>],z_context:get_q('sippassword',Context)}
+        ,{[<<"sip">>,<<"invite_format">>], case z_context:get_q("route",Context) of 'undefined' -> <<"username">>; _ -> <<"route">> end}
+        ,{[<<"sip">>,<<"route">>], ?TO_BIN(z_context:get_q("route",Context))}
+        ,{[<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
+        ,{[<<"call_forward">>,<<"number">>],z_context:get_q('cellphonenumber',Context)}
+        ,{[<<"name">>],z_context:get_q('name',Context)}
+        ,{[<<"owner_id">>],z_context:get_q('device_owner_id',Context)}
+        ,{[<<"device_type">>], DeviceType}
         ]),
-    DataBag = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_DEVICE_SIP, Props),
-    add_device(DataBag, AcceptCharges, Context).
+    DeviceJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_DEVICE_SIP, Props),
+    add_device(?MK_DATABAG(DeviceJObj), AcceptCharges, Context).
 
 add_device(DataBag, AcceptCharges, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>,
@@ -4092,22 +4123,22 @@ notifications_smtplog_by_id(LogId, Context) ->
 
 kz_notifications(Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
-    NotificationId = z_context:get_q("notification_id", Context),
+    NotificationId = z_context:get_q('notification_id', Context),
     CurrNotifyDoc = kz_notification_info(NotificationId, Context),
     Plain = ?TO_BIN(kz_notification_template("text/plain", NotificationId, AccountId, Context)),
     HTML = kz_notification_template("text/html", NotificationId, AccountId, Context),
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], modkazoo_util:get_q_bin("to", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"email_addresses">>], emails_list("input_cc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"type">>], modkazoo_util:get_q_bin("cc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"email_addresses">>], emails_list("input_bcc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"type">>], modkazoo_util:get_q_bin("bcc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"from">>], modkazoo_util:get_q_bin("from", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"subject">>], modkazoo_util:get_q_bin("subject", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
-               ],
-    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
+    Values = modkazoo_util:filter_empty([{[<<"to">>,<<"email_addresses">>], emails_list('input_to', Context)}
+             ,{[<<"to">>,<<"type">>], z_context:get_q('to', Context)}
+             ,{[<<"cc">>,<<"email_addresses">>], emails_list('input_cc', Context)}
+             ,{[<<"cc">>,<<"type">>], z_context:get_q('cc', Context)}
+             ,{[<<"bcc">>,<<"email_addresses">>], emails_list('input_bcc', Context)}
+             ,{[<<"bcc">>,<<"type">>], z_context:get_q('bcc', Context)}
+             ,{[<<"from">>], z_context:get_q('from', Context)}
+             ,{[<<"subject">>], z_context:get_q('subject', Context)}
+             ,{[<<"template_charset">>], <<"utf-8">>}
+             ]),
+    NewDoc = modkazoo_util:set_values(Values, CurrNotifyDoc),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", NotificationId/binary>>,
     _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
         'undefined' ->
@@ -4117,8 +4148,8 @@ kz_notifications(Context) ->
     end.
 
 emails_list(Field, Context) ->
-    case z_context:get_q(Field, Context) of
-        'undefined' -> [];
+    case ?EMPTY(z_context:get_q(Field, Context)) of
+        'undefined' -> 'undefined';
         List -> lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9@_.-]", "", [global, {return, binary}]) end, z_string:split(List,","))
     end.
 

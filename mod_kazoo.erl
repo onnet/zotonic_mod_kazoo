@@ -96,7 +96,8 @@ event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) -
       'ok' = modkazoo_util:check_field_filled("email",Context),
       'ok' = modkazoo_util:check_field_filled("phonenumber",Context),
       Email = z_context:get_q_all("email",Context),
-      {{ok, _}, _} = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), [false,"^[-+0-9 ()]+$"], Context),
+      V2 = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), {false,<<"^[-+0-9 ()]+$">>}, Context),
+      {{ok, _}, _} = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), {false,<<"^[-+0-9 ()]+$">>}, Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
       case z_context:get_q_all("username",Context) of
           Email -> 'ok';

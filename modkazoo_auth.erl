@@ -55,7 +55,6 @@ refresh_superadmin_and_reseller_flags(Context) ->
     _ = set_superadmin_and_reseller_flags(Context).
 
 do_sign_in(Login, Password, Account, Context) ->
-lager:info("IAM IP: ~p",[cowmachine_req:peer(z_context:get_reqdata(Context))]),
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     case kazoo_util:kz_user_creds(Login, Password, Account, Context) of
         {'ok', {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->

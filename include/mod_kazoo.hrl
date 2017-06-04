@@ -11,7 +11,7 @@
 -define(IS_JSON_GUARD(Obj), is_tuple(Obj)
         andalso is_list(element(1, Obj))
        ).
-
+-define(EMPTY(Var), modkazoo_util:to_undefined(Var)).
 
 -define(TIMEZONES_LIST, [<<"Africa/Abidjan">>,
              <<"Africa/Accra">>,
