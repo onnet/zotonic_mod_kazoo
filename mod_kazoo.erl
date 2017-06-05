@@ -88,7 +88,6 @@ event({postback,{signout,[]}, _, _}, Context) ->
     modkazoo_auth:signout(Context);
 
 event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) ->
-    lager:info("innosignup event variables: ~p", [z_context:get_q_all(Context)]),
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
       'ok' = modkazoo_util:check_field_filled("surname",Context),

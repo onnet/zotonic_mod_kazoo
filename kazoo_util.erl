@@ -29,8 +29,6 @@
     ,kz_media_doc_field/3
     ,create_kazoo_account/1
     ,add_user/9
-    ,kz_create_default_callflow/2
-    ,kz_create_default_callflow_sec/3
     ,update_kazoo_user/1
     ,kz_list_account_users/1
     ,kz_list_account_users/2
@@ -147,7 +145,6 @@
     ,sync_service_plans/2
     ,reconcile_service_plans/2
     ,add_service_plan/3
-    ,admin_add_service_plan/3
     ,remove_service_plan_from_account/3
     ,valid_card_exists/1
     ,is_creditable/1
@@ -1010,20 +1007,6 @@ kz_account_create_callflow(Routines, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary>>,
     crossbar_account_request('put', API_String, DataBag, Context).
 
-kz_create_default_callflow_sec(Seconds,AccountId, Context) ->
-    timer:sleep(Seconds),
-    kz_create_default_callflow(AccountId, Context).
-
-kz_admin_create_callflow(AccountId, Routines, Context) ->
-    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CALLFLOWS/binary>>,
-    crossbar_admin_request('put', API_String, DataBag, Context).
-
-kz_create_default_callflow(AccountId, Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"no_match">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>, <<"module">>], <<"offnet">>, J) end],
-    kz_admin_create_callflow(AccountId, Routines, Context).
-
 update_kazoo_user(Context) ->
     CallForwardEnabled = modkazoo_util:on_to_true(z_context:get_q("call_forward_enabled", Context)),
     ForwardTo = ?TO_BIN(z_context:get_q("ring-number-txt", Context)),
@@ -1064,11 +1047,11 @@ add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLev
         ]),
     UserJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_USER, Props),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
-    {'ok', _, _, Body} = crossbar_admin_request('put', API_String, ?MK_DATABAG(UserJObj), Context),
+    {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, ?MK_DATABAG(UserJObj), Context),
     Doc = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
     UserId = modkazoo_util:get_value(<<"id">>, Doc),
     API_String2 = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(UserId)/binary>>,
-    crossbar_admin_request('post', API_String2, ?MK_DATABAG(modkazoo_util:set_value(<<"enabled">>,'true', Doc)), Context).
+    crossbar_account_request('post', API_String2, ?MK_DATABAG(modkazoo_util:set_value(<<"enabled">>,'true', Doc)), Context).
 
 email_sender_name(Context) ->
     case z_context:get_session('kazoo_account_id', Context) of
@@ -1851,11 +1834,6 @@ add_service_plan(PlanId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
     DataBag = {[{<<"data">>, {[{<<"id">>, ?TO_BIN(PlanId)}]}}]},
     crossbar_account_request('post', API_String, DataBag, Context).
-
-admin_add_service_plan(PlanId, AccountId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
-    DataBag = {[{<<"data">>, {[{<<"id">>, ?TO_BIN(PlanId)}]}}]},
-    crossbar_admin_request('post', API_String, DataBag, Context).
 
 remove_service_plan_from_account(PlanId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?SERVICE_PLANS/binary, "/", ?TO_BIN(PlanId)/binary>>,
