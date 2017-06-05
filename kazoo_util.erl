@@ -971,6 +971,7 @@ create_kazoo_account(Context) ->
 
     Props = modkazoo_util:filter_empty([
          {[<<"name">>], Accountname}
+        ,{[<<"username">>], Username}
         ,{[<<"contact">>,<<"billing">>,<<"email">>], Email}
         ,{[<<"contact">>,<<"billing">>,<<"number">>], Phonenumber}
         ,{[<<"contact">>,<<"signup">>,<<"email">>], Email}
@@ -1029,9 +1030,6 @@ update_kazoo_user(Context) ->
     crossbar_account_request('post', API_String, {[{<<"data">>, NewDoc}]}, Context),
     Context.
 
-add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, AccountId, Context) ->
-    add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, <<"admin">>, AccountId, Context).
-
 add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLevel, AccountId, Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     Props = modkazoo_util:filter_empty([
@@ -1062,64 +1060,6 @@ email_sender_name(Context) ->
                 SenderName -> lager:info("SenderName: ~p", [SenderName]), SenderName
             end
     end.
-
-send_signup_email(Accountname, Username, Firstname, Surname, Email, Password, Context) ->
-    ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
-    SalesEmail = m_config:get_value('mod_kazoo', sales_email, Context),
-    SenderName = email_sender_name(Context),
-    case z_context:get_q("signup_file", Context) of
-        {upload, SignUploadFilename, SignUploadTmp, _, _} ->
-            false = modkazoo_util2:check_file_size_exceeded(signup_file, SignUploadTmp, 15000000),
-            SignUploadFilenameVar = [{signup_file, SignUploadFilename}],
-            {ok, FileData} = file:read_file(SignUploadTmp),
-            {ok, FileIdnProps} = z_media_identify:identify(SignUploadTmp, Context),
-            SignUpload = [#upload{tmpfile=SignUploadTmp
-                                 ,data=FileData
-                                 ,filename=modkazoo_util2:translit(SignUploadFilename)
-                                 ,mime=proplists:get_value(mime, FileIdnProps)
-                                 }
-                         ];
-        _ ->
-            SignUpload = [],
-            SignUploadFilenameVar = []
-    end,
-
-    Vars = [{email, Email}
-            ,{sender_name, SenderName}
-            ,{accountname, Accountname}
-            ,{username, Username}
-            ,{firstname, Firstname}
-            ,{surname, Surname}
-            ,{password, Password}
-            ,{clientip, ClientIP}
-            ,{comments, ?TO_BIN(z_context:get_q("comments", Context))}
-            ,{phonenumber, ?TO_BIN(z_context:get_q("phonenumber", Context))}
-           ] ++ SignUploadFilenameVar,
-
-    Attachments = SignUpload,
-
-    case modkazoo_util:get_q_bin("notify_signed_up",Context) of
-        <<"yes">> -> 
-            E_SignUp = #email{
-                to=Email,
-                from=SalesEmail,
-                html_tpl="_email_signup_greeting.tpl",
-                vars=Vars,
-                attachments=Attachments
-            },
-            z_email:send(E_SignUp, Context);
-        _ ->
-            'ok'
-    end,
-
-    E_SignUp_Copy = #email{
-        to=SalesEmail,
-        from=SalesEmail,
-        html_tpl="_email_signup_greeting.tpl",
-        vars=Vars,
-        attachments=Attachments
-    },
-    z_email:send(E_SignUp_Copy, Context).
 
 kz_list_account_users(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
