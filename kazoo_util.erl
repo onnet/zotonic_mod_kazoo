@@ -1047,7 +1047,7 @@ add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLev
         ]),
     UserJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_USER, Props),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
-    {'ok', _, _, Body} = crossbar_account_send_raw_request('put', API_String, ?MK_DATABAG(UserJObj), Context),
+    {'ok', _, _, Body} = crossbar_account_send_request('put', API_String, ?MK_DATABAG(UserJObj), Context),
     Doc = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
     UserId = modkazoo_util:get_value(<<"id">>, Doc),
     API_String2 = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(UserId)/binary>>,
