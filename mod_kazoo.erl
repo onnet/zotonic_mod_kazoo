@@ -95,7 +95,6 @@ event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) -
       'ok' = modkazoo_util:check_field_filled("email",Context),
       'ok' = modkazoo_util:check_field_filled("phonenumber",Context),
       Email = z_context:get_q_all("email",Context),
-      V2 = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), {false,<<"^[-+0-9 ()]+$">>}, Context),
       {{ok, _}, _} = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), {false,<<"^[-+0-9 ()]+$">>}, Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
       case z_context:get_q_all("username",Context) of
@@ -644,8 +643,8 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
                            ,Context1)
     end;
 
-event(#postback{ message = {add_new_user, Args} }, Context) ->
-    kazoo_util:add_user(proplists:get_value(databag, Args), 'true', Context);
+%event(#postback{ message = {add_new_user, Args} }, Context) ->
+%    kazoo_util:add_user(proplists:get_value(databag, Args), 'true', Context);
 
 event({submit,add_new_user,_,_}, Context) ->
     try
@@ -867,8 +866,8 @@ event({submit,add_new_device,_,_}, Context) ->
     case kazoo_util:is_trial_account(Context) of
         'false' ->
             kazoo_util:add_device(Context);
-        {'true', TimeLeft} ->
-            _ = kazoo_util:add_device('true', Context)
+        {'true', _TimeLeft} ->
+            kazoo_util:add_device('true', Context)
     end;
 
 event({submit,add_new_group,_,_}, Context) ->

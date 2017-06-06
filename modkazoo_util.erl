@@ -87,8 +87,8 @@ to_undefined(Var) ->
         'undefined' -> 'undefined';
         "" -> 'undefined';
         <<>> -> 'undefined';
-        [<<>>] -> 'undefined';
         [] -> 'undefined';
+        [<<>>] -> 'undefined';
         _ -> Var
     end.
 
@@ -300,7 +300,7 @@ to_hex_binary(S) ->
     << <<(binary_to_hex_char(B div 16)), (binary_to_hex_char(B rem 16))>> || <<B>> <= Bin>>.
 
 rand_hex_binary(Size) when is_integer(Size) andalso Size > 0 ->
-    to_hex_binary(crypto:rand_bytes(Size)).
+    to_hex_binary(crypto:strong_rand_bytes(Size)).
 
 binary_to_hex_char(N) when N < 10 -> $0 + N;
 binary_to_hex_char(N) when N < 16 -> $a - 10 + N.

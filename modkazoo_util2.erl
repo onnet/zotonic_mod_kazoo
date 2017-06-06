@@ -63,7 +63,7 @@ to_hex(S) ->
     string:to_lower(lists:flatten([io_lib:format("~2.16.0B", [H]) || H <- z_convert:to_list(S)])).
 
 rand_hex_binary(Size) when is_integer(Size) andalso Size > 0 ->
-    to_hex_binary(crypto:rand_bytes(Size)).
+    to_hex_binary(crypto:strong_rand_bytes(Size)).
 
 binary_to_hex_char(N) when N < 10 -> $0 + N;
 binary_to_hex_char(N) when N < 16 -> $a - 10 + N.
