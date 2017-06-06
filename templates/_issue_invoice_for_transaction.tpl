@@ -28,8 +28,8 @@
                type="text"
                class="form-control margin-bottom-xs bg_color_white"
                name="invoice_date"
-               value="{{ transaction["created"]|gregsec_to_date|date: 'd/m/Y' }}"
-               data-date="{{ transaction["created"]|gregsec_to_date|date: 'd/m/Y' }}"
+               value="{{ transaction[1]["created"]|gregsec_to_date|date: 'd/m/Y' }}"
+               data-date="{{ transaction[1]["created"]|gregsec_to_date|date: 'd/m/Y' }}"
                data-date-format="dd/mm/yyyy"
                data-date-autoclose="true"
                data-date-language={{ z_language }}
@@ -74,7 +74,7 @@
     </div>
   </div>
   <input type="hidden" name="account_id" value="{{ account_id }}">
-  <input type="hidden" name="transaction_id" value="{{ transaction["id"] }}">
+  <input type="hidden" name="transaction_id" value="{{ transaction[1]["id"] }}">
   <input type="hidden" name="selected_billing_period" value="{{ selected_billing_period }}">
 </form>
 {% print transaction %}

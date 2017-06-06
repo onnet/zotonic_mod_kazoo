@@ -1906,7 +1906,13 @@ add_device(AcceptCharges, Context) ->
     add_device(?MK_DATABAG(DeviceJObj), AcceptCharges, Context).
 
 add_device(DataBag, AcceptCharges, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>,
+    API_String =
+        case is_trial_account(Context) of
+            {'true', _} ->
+                <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>;
+            'false' ->
+                <<?V2/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>
+        end,
     AcceptChargesCataBag = modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, DataBag),
     case crossbar_account_request('put', API_String, AcceptChargesCataBag, Context, 'return_error') of
         {'error', "402", Body} ->
