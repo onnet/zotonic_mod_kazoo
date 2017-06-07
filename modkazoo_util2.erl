@@ -20,6 +20,8 @@
 
 
 -spec(translit(utf8_str()) -> ascii_str()).
+translit(Data) when is_binary(Data) ->
+    translit(z_convert:to_list(Data));
 translit(Data) ->
     translit(Data, []).
 
