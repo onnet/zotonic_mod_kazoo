@@ -371,6 +371,9 @@ m_find_value(get_user_timezone, _M, Context) ->
 m_find_value(tz_list, _M, _Context) ->
     ?TIMEZONES_LIST;
 
+m_find_value(us_states_list, _M, _Context) ->
+    ?US_STATES_LIST;
+
 m_find_value(valid_card_exists, _M, Context) ->
     kazoo_util:valid_card_exists(Context);
 

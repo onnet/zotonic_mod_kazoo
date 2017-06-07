@@ -62,7 +62,10 @@
     %}
 
     {# lib "css/font-awesome.min.css" #}
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+          rel="stylesheet"
+          integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
+          crossorigin="anonymous">
     {% lib "css/telicon.css" %}
     {% lib "css/icons-2600hz.css" %}
 
@@ -83,6 +86,7 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <!--  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.6/socket.io.min.js"></script> -->
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="/lib/js/countries.js"></script>
 
   </head>
   <body>

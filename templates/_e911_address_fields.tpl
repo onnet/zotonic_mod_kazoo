@@ -9,12 +9,21 @@
                placeholder="{_ Address Line 1 _} {_ (mandatory) _}">
       </div>
       <div class="col-sm-6">
-        <input type="text"
-               class="form-control"
-               id="region"
-               name="region"
-               value="{{ e911_address_doc[1]["region"] }}"
-               placeholder="{_ State _} {_ (mandatory) _}">
+        <select id="region"
+                name="region"
+                class="form-control"
+                data-live-search="true"
+                data-width="auto1">
+          <option value=""> -- Select State -- </option>
+          {% for region in m.kazoo.us_states_list %}
+            <option value="{{ region[1]["abbreviation"] }}"
+                    {% if region[1]["abbreviation"] == e911_address_doc[1]["region"] %}
+                      selected
+                    {% endif %}>
+              {{ region[1]["abbreviation"] }} -- {{ region[1]["name"] }}
+            </option>
+          {% endfor %}
+        </select>
       </div>
     </div>
   </div>
@@ -81,3 +90,11 @@
       $('#{{ #proofinput }}').val($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
   </script>
+
+  {% javascript %}
+    $('#region').selectpicker({
+    //  style: 'btn-xs btn-onnet',
+      size: 5
+    });
+  {% endjavascript %}
+
