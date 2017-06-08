@@ -981,6 +981,7 @@ create_kazoo_account(Context) ->
         ,{[<<"contact">>,<<"signup">>,<<"client_ip">>], ClientIP}
         ,{[<<"language">>], Language}
         ,{[<<"timezone">>], Timezone}
+        ,{[<<"companyname">>], Companyname}
         ,{[<<"realm">>], Realm}
         ]),
 
