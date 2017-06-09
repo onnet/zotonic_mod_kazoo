@@ -49,7 +49,7 @@
             %}
             {% wire id="confirm_trunks_payment"
                     type="click"
-                    action={postback postback={add_new_device databag=databag}
+                    action={postback postback={add_new_element databag=databag element_type=element_type}
                                      delegate="mod_kazoo"
                            }
                     action={dialog_close}

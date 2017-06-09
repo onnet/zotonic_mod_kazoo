@@ -345,7 +345,6 @@ datepick_to_tstamp(DayMonthYear) when is_binary(DayMonthYear) ->
     [Day, Month, Year] = binary:split(DayMonthYear, <<"/">>, [global]),
     calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(Year),z_convert:to_integer(Month),z_convert:to_integer(Day)},{0,0,0}});
 datepick_to_tstamp(DayMonthYear) ->
-  lager:info("IAM DayMonthYear: ~p",[DayMonthYear]),
     datepick_to_tstamp(z_convert:to_binary(DayMonthYear)).
 
 datepick_to_tstamp_end_day('undefined') ->

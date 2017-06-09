@@ -28,7 +28,6 @@
     ,kz_device_doc_field/3
     ,kz_media_doc_field/3
     ,create_kazoo_account/1
-    ,add_user/9
     ,update_kazoo_user/1
     ,kz_list_account_users/1
     ,kz_list_account_users/2
@@ -162,6 +161,9 @@
     ,delete_device/2
     ,classify_number/2
     ,kz_list_classifiers/1
+    ,add_user/1
+    ,add_user/2
+    ,add_user/3
     ,add_device/1
     ,add_device/2
     ,add_device/3
@@ -387,29 +389,24 @@
     ]}).
 
 -define(MK_USER, 
-    {[{<<"apps">>,
-       {[{<<"voip">>,
-          {[{<<"label">>,<<"VoIP Services">>},
-            {<<"icon">>,<<"device">>},
-            {<<"api_url">>,<<(modkazoo_util:rand_hex_binary(5))/binary, "/v1">>}]}}]}},
-      {<<"call_forward">>,
-       {[{<<"substitute">>,false},
-         {<<"enabled">>,false},
-         {<<"require_keypress">>,false},
-         {<<"keep_caller_id">>,false},
-         {<<"direct_calls_only">>,false}]}},
-      {<<"username">>, modkazoo_util:rand_hex_binary(5)},
+    {[{<<"username">>, modkazoo_util:rand_hex_binary(5)},
       {<<"first_name">>, modkazoo_util:rand_hex_binary(5)},
       {<<"last_name">>, modkazoo_util:rand_hex_binary(5)},
       {<<"enabled">>, 'true'},
       {<<"email">>, modkazoo_util:rand_hex_binary(5)},
-      {<<"contact_phonenumber">>, modkazoo_util:rand_hex_binary(5)},
+  %    {<<"contact_phonenumber">>, modkazoo_util:rand_hex_binary(5)},
       {<<"password">>, modkazoo_util:rand_hex_binary(5)},
       {<<"priv_level">>,<<"user">>},
       {<<"vm_to_email_enabled">>,true},
       {<<"fax_to_email_enabled">>,true},
       {<<"verified">>,false},
       {<<"timezone">>,get_account_timezone(Context)},
+      {<<"call_forward">>,
+       {[{<<"substitute">>,false},
+         {<<"enabled">>,false},
+         {<<"require_keypress">>,false},
+         {<<"keep_caller_id">>,false},
+         {<<"direct_calls_only">>,false}]}},
       {<<"record_call">>,false}
      ]}).
 
@@ -951,8 +948,13 @@ create_kazoo_account(Context) ->
     end,
     ResellerId = case z_context:get_session('kazoo_account_id', Context) of
         'undefined' -> 
-            AdminAccountId = ?TO_BIN(z_context:get_q("kazoo_reseller_id", Context)),
-            AdminAccountId;
+            case z_context:get_q("kazoo_reseller_id", Context) of
+                'undefined' ->
+                    lager:info("No reseller_is configured for signup..."),
+                    <<>>;
+                 AdminAccountId ->
+                     ?TO_BIN(AdminAccountId)
+            end;
         AccountId ->
           AccountId
     end,
@@ -1031,26 +1033,99 @@ update_kazoo_user(Context) ->
     crossbar_account_request('post', API_String, {[{<<"data">>, NewDoc}]}, Context),
     Context.
 
-add_user(Username, UserPassword, Firstname, Surname, Email, Phonenumber, PrivLevel, AccountId, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+add_user(Context) ->
+    AcceptCharges = modkazoo_util:get_q_boolean("accept_charges", Context),
+    add_user(AcceptCharges, Context).
+
+add_user(AcceptCharges, Context) ->
+    Email = z_context:get_q('email',Context),
+    UserPassword = modkazoo_util:rand_hex_binary(10),
     Props = modkazoo_util:filter_empty([
-         {[<<"apps">>,<<"voip">>,<<"api_url">>],<<Crossbar_URL/binary, "/v2">>}
-        ,{[<<"username">>], Username}
-        ,{[<<"first_name">>], Firstname}
-        ,{[<<"last_name">>], Surname}
+         {[<<"username">>], Email}
+        ,{[<<"first_name">>], z_context:get_q('firstname', Context)}
+        ,{[<<"last_name">>], z_context:get_q('surname', Context)}
         ,{[<<"email">>], Email}
-        ,{[<<"contact_phonenumber">>], Phonenumber}
         ,{[<<"password">>], UserPassword}
-        ,{[<<"priv_level">>], PrivLevel}
+        ,{[<<"priv_level">>], <<"user">>}
         ,{[<<"timezone">>], get_account_timezone(Context)}
         ]),
-    UserJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_USER, Props),
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
-    {'ok', _, _, Body} = crossbar_account_send_request('put', API_String, ?MK_DATABAG(UserJObj), Context),
-    Doc = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
-    UserId = modkazoo_util:get_value(<<"id">>, Doc),
-    API_String2 = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(UserId)/binary>>,
-    crossbar_account_request('post', API_String2, ?MK_DATABAG(modkazoo_util:set_value(<<"enabled">>,'true', Doc)), Context).
+    UserJObj = modkazoo_util:set_values(Props, ?MK_USER),
+    add_user(?MK_DATABAG(UserJObj), AcceptCharges, Context).
+
+add_user(DataBag, AcceptCharges, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String =
+        case is_trial_account(Context) of
+            {'true', _} ->
+                <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>;
+            'false' ->
+                <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>
+        end,
+    AcceptChargesCataBag = modkazoo_util:set_value(<<"accept_charges">>, AcceptCharges, DataBag),
+    case crossbar_account_request('put', API_String, AcceptChargesCataBag, Context, 'return_error') of
+        {'error', "402", Body} ->
+            Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+            case modkazoo_util:get_value([<<"users">>,<<"user">>], Data) of
+                'undefined' ->
+                    Message = modkazoo_util:get_value(<<"message">>, Data),
+                    mod_signal:emit({emit_growl_signal
+                                    ,?SIGNAL_FILTER(Context) ++
+                                     [{'text',?__(?TO_LST(Message), Context)}
+                                     ,{'type', 'error'}
+                                     ]}
+                                    ,Context),
+                    z_render:dialog_close(Context);
+                LimitsItem ->
+                    AccountId = z_context:get_session('kazoo_account_id', Context),
+                    Expences = modkazoo_util:get_value(<<"activation_charge">>, LimitsItem)
+                               + modkazoo_util:get_value(<<"rate">>, LimitsItem),
+                    CurrentAccountCredit = modkazoo_util:get_value(<<"amount">>, current_account_credit(AccountId, Context)),
+                    PVT_Limits = onbill_util:onbill_pvt_limits('get', AccountId, [], Context),
+                    MaybePostpayCredit =
+                        case modkazoo_util:get_value(<<"allow_postpay">>, PVT_Limits, 'false') of
+                            'true' ->
+                                modkazoo_util:get_value(<<"max_postpay_amount">>, PVT_Limits, 0);
+                            'false' -> 0
+                        end,
+                    case Expences > (CurrentAccountCredit + MaybePostpayCredit) of
+                        'true' ->
+                            mod_signal:emit({emit_growl_signal
+                                            ,?SIGNAL_FILTER(Context) ++
+                                             [{'text',?__("Not enough funds.", Context)}
+                                             ,{'type', 'error'}
+                                             ]}
+                                            ,Context),
+                            z_render:dialog_close(Context);
+                        'false' ->
+                            z_render:dialog(?__("Charges Confirmation",Context)
+                                           ,"_accept_new_element_charges.tpl"
+                                           ,[{item, LimitsItem}
+                                            ,{databag, DataBag}
+                                            ,{element_type, <<"user">>}
+                                            ,{account_id, AccountId}
+                                            ,{width, "auto"}
+                                            ]
+                                           ,Context)
+                    end
+            end;
+        {'error', _ReturnCode, Body} ->
+            Message = modkazoo_util:get_first_defined([[<<"data">>,<<"username">>,<<"unique">>,<<"message">>]
+                                                      ,[<<"message">>]
+                                                      ]
+                                                     ,jiffy:decode(Body)
+                                                     ,<<"Something went wrong">>),
+            mod_signal:emit({emit_growl_signal
+                            ,?SIGNAL_FILTER(Context) ++
+                             [{'text',?__(?TO_LST(Message), Context)}
+                             ,{'type', 'error'}
+                             ]}
+                            ,Context),
+            z_render:dialog_close(Context);
+        _E ->
+            mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
+            modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
+            z_render:dialog_close(Context)
+    end.
 
 email_sender_name(Context) ->
     case z_context:get_session('kazoo_account_id', Context) of
@@ -1954,6 +2029,7 @@ add_device(DataBag, AcceptCharges, Context) ->
                                            ,"_accept_new_element_charges.tpl"
                                            ,[{item, LimitsItem}
                                             ,{databag, DataBag}
+                                            ,{element_type, <<"device">>}
                                             ,{account_id, AccountId}
                                             ,{width, "auto"}
                                             ]
@@ -1974,7 +2050,6 @@ add_device(DataBag, AcceptCharges, Context) ->
             modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
             z_render:dialog_close(Context)
     end.
-
 
 kz_list_account_groups(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?GROUPS/binary>>,
