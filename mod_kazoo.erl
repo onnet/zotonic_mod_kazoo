@@ -643,8 +643,13 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
                            ,Context1)
     end;
 
-%event(#postback{ message = {add_new_user, Args} }, Context) ->
-%    kazoo_util:add_user(proplists:get_value(databag, Args), 'true', Context);
+event(#postback{ message = {add_new_element, Args} }, Context) ->
+    case proplists:get_value(element_type, Args) of
+        <<"device">> ->
+            kazoo_util:add_device(proplists:get_value(databag, Args), 'true', Context);
+        <<"user">> ->
+            kazoo_util:add_user(proplists:get_value(databag, Args), 'true', Context)
+    end;
 
 event({submit,add_new_user,_,_}, Context) ->
     try
@@ -652,23 +657,18 @@ event({submit,add_new_user,_,_}, Context) ->
       'ok' = modkazoo_util:check_field_filled("surname",Context),
       'ok' = modkazoo_util:check_field_filled("username",Context),
       'ok' = modkazoo_util:check_field_filled("email",Context),
-      Email = z_context:get_q_all("email",Context),
+      Email = z_context:get_q('email',Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
-      case z_context:get_q_all("username",Context) of
+      case z_context:get_q('username',Context) of
           Email -> 'ok';
           _ -> throw({'error', 'emails_not_equal'})
       end,
-      kazoo_util:add_user(Email
-                       ,modkazoo_util:rand_hex_binary(10)
-                       ,z_convert:to_binary(z_context:get_q("firstname", Context))
-                       ,z_convert:to_binary(z_context:get_q("surname", Context))
-                       ,z_convert:to_binary(Email)
-                       ,'undefined'
-                       ,<<"user">>
-                       ,z_context:get_session('kazoo_account_id', Context)
-                       ,Context),
-      mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-      z_render:dialog_close(Context)
+      case kazoo_util:is_trial_account(Context) of
+          'false' ->
+              kazoo_util:add_user(Context);
+          {'true', _TimeLeft} ->
+              kazoo_util:add_user('true', Context)
+      end
     catch
       error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
       error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
@@ -676,6 +676,14 @@ event({submit,add_new_user,_,_}, Context) ->
       E1:E2 ->
           lager:info("Err ~p:~p", [E1, E2]),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
+    end;
+
+event({submit,add_new_device,_,_}, Context) ->
+    case kazoo_util:is_trial_account(Context) of
+        'false' ->
+            kazoo_util:add_device(Context);
+        {'true', _TimeLeft} ->
+            kazoo_util:add_device('true', Context)
     end;
 
 event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
@@ -857,17 +865,6 @@ event({postback
                                               ]
                                              ,Context)
                            ,Context)
-    end;
-
-event(#postback{ message = {add_new_device, Args} }, Context) ->
-    kazoo_util:add_device(proplists:get_value(databag, Args), 'true', Context);
-
-event({submit,add_new_device,_,_}, Context) ->
-    case kazoo_util:is_trial_account(Context) of
-        'false' ->
-            kazoo_util:add_device(Context);
-        {'true', _TimeLeft} ->
-            kazoo_util:add_device('true', Context)
     end;
 
 event({submit,add_new_group,_,_}, Context) ->
@@ -1138,7 +1135,6 @@ event({submit,cf_select_check_cid,_,_}, Context) ->
     z_render:dialog_close(Context);
 
 event({submit,cf_select_option,_,_},Context) ->
-lager:info("IAM cf_select_option: ~p",[z_context:get_q('existing_element_id', Context)]),
     case z_context:get_q('existing_element_id', Context) of
         <<>> ->
             kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
@@ -1218,12 +1214,6 @@ event(#postback{ message = {check_children, Args} }, Context) ->
                                   ,proplists:get_value(drop_id, Args)
                                   ,proplists:get_value(drop_parent, Args)
                                   ,Context);
-
-%event({postback,{check_children,[{id,BranchId},{drop_id,DropId},{drop_parent,DropParent}]},_,_},Context) ->
-%lager:info("IAM BranchId: ~p",[BranchId]),
-%lager:info("IAM DropId: ~p",[DropId]),
-%lager:info("IAM DropParent: ~p",[DropParent]),
-%    kazoo_util:cf_may_be_add_child(BranchId,DropId,DropParent,Context);
 
 event({postback,{cf_delete_element,[{element_id,ElementId}]},_,_},Context) ->
     kazoo_util:cf_delete_element(ElementId,Context);
@@ -2261,11 +2251,6 @@ event({submit,periodic_fee,_,_}, Context) ->
                                        ,{<<"service_starts">>, ServiceStarts}
                                        ,{<<"service_ends">>, ServiceEnds}
                                        ]),
-lager:info("IAM Qty: ~p",[z_context:get_q("quantity", Context, 1)]),
-lager:info("IAM TO_INT: ~p",[?TO_INT(z_context:get_q("quantity", Context), 1)]),
-lager:info("IAM Props: ~p",[Props]),
-lager:info("IAM service_starts: ~p",[z_context:get_q("service_starts", Context)]),
-lager:info("IAM service_ends: ~p",[z_context:get_q("service_ends", Context)]),
     case ?TO_BIN(z_context:get_q("fee_id", Context)) of
         <<>> ->
             DataBag = ?MK_DATABAG(modkazoo_util:set_values(Props, modkazoo_util:new())),
@@ -2578,8 +2563,7 @@ event({postback,{onbill_transaction_delete,[{account_id, AccountId},{transaction
     end;
 
 event({postback,{onbill_generated_doc_delete,[{account_id,AccountId},{doc_id,DocId}]},_,_}, Context) ->
- Res =   onbill_util:doc('delete', AccountId, DocId, [], Context),
-lager:info("IAM onbill_generated_doc_delete Res: ~p",[Res]),
+    onbill_util:doc('delete', AccountId, DocId, [], Context),
     modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     Context;
 
