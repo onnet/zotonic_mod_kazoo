@@ -4,6 +4,30 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "All"
+msgstr "Все"
+
+msgid "Account's notifications"
+msgstr "Уведомления"
+
 msgid "Current state"
 msgstr "Текущее состояние"
 

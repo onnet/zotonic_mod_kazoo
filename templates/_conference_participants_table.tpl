@@ -23,7 +23,7 @@ var oTable = $('#conference_current_participants_table1').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
 "aaSorting": [[ 0, "desc" ]],
-"aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
+"aLengthMenu" : [[5, 15, -1], [5, 15, "{_ All _}"]],
 "iDisplayLength" : 5,
 "oLanguage" : {
         "sInfoThousands" : " ",

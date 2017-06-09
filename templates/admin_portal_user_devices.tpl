@@ -57,7 +57,7 @@ var oTable = $('#admin_portal_user_devices_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
 "aaSorting": [[ 0, "asc" ]],
-"aLengthMenu" : [[5, 15, -1], [5, 15, "All"]],
+"aLengthMenu" : [[5, 15, -1], [5, 15, "{_ All _}"]],
 "iDisplayLength" : 5,
 "oLanguage" : {
         "sInfoThousands" : " ",
