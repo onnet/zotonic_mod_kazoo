@@ -4,23 +4,1358 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Current information"
+msgstr "Текущее состояние"
 
-msgid ""
-msgstr ""
+msgid "Join time"
+msgstr "Время присоединения"
 
-msgid ""
-msgstr ""
+msgid "Conference is empty now"
+msgstr "Конференция пуста"
 
-msgid ""
-msgstr ""
+msgid "Sale!  First number free"
+msgstr "Акция - Первый номер бесплатно!"
 
-msgid ""
-msgstr ""
+msgid "VIRTUAL PBX"
+msgstr "ВИРТУАЛЬНАЯ АТС"
 
-msgid ""
-msgstr ""
+msgid "News"
+msgstr "Новости"
+
+msgid "Last updates"
+msgstr "Новости"
+
+msgid "Russia"
+msgstr "Россия"
+
+msgid "Electronic Data Interchange"
+msgstr "Электронный документооборот"
+
+msgid "City Reach Data Centre"
+msgstr "Дата-центр City Reach"
+
+msgid "Notify when balance falls below"
+msgstr "Уведомлять если баланс ниже"
+
+msgid "save"
+msgstr "сохранить"
+
+msgid "disable alert"
+msgstr "отключить оповещение"
+
+msgid "Low balance notify level"
+msgstr "Уровень оповещеня о низком балансе"
+
+msgid "Prefix"
+msgstr "Код направления"
+
+msgid "For Customers"
+msgstr "Для клиентов"
+
+msgid "Please authorize as administratior to display of manage access credentials"
+msgstr "Для простмотра или управления пин-кодами необходимо авторизоваться с реквизитами доступа услуги Виртуальный офис"
+
+msgid "Callback"
+msgstr "Обратный вызов"
+
+msgid "Off"
+msgstr "Выкл"
+
+msgid "On"
+msgstr "Вкл"
+
+msgid "PIN access phone number"
+msgstr "Номер доступа по ПИН-коду"
+
+msgid "Callback service phone number"
+msgstr "Номер доступа для обратного вызова"
+
+msgid "add"
+msgstr "добавить"
+
+msgid "add pin"
+msgstr "добавить пин"
+
+msgid "add pin-code"
+msgstr "добавить пин-код"
+
+msgid "add cid"
+msgstr "добавить номер"
+
+msgid "add authorized cid"
+msgstr "добавить авторизованный номер"
+
+msgid "add authorized CID"
+msgstr "добавить авторизованный номер"
+
+msgid "Pin-code list"
+msgstr "Список пин-кодов"
+
+msgid "Authorized CID list"
+msgstr "Список авторизованных номеров"
+
+msgid "New CID"
+msgstr "Новый номер"
+
+msgid "Authorized CID"
+msgstr "Авторизованный номер"
+
+msgid "PIN"
+msgstr "ПИН"
+
+msgid "Authorized PIN"
+msgstr "ПИН-код"
+
+msgid "Outbound CID"
+msgstr "АОН"
+
+msgid "Callback service"
+msgstr "Сервис обратного вызова"
+
+msgid "Admin auth failed."
+msgstr "Ошибка авторизации."
+
+msgid "Admin Login"
+msgstr "Доступ администратора"
+
+msgid "Moscow"
+msgstr "Москва"
+
+msgid "Saint Petersburg"
+msgstr "Санкт-Петербург"
+
+msgid "#"
+msgstr "№"
+
+msgid "dated"
+msgstr "от"
+
+msgid "Standard"
+msgstr "Стандарт"
+
+msgid "Standart"
+msgstr "Стандартный"
+
+msgid "Input Email"
+msgstr "Введите Email"
+
+msgid "Business Center «Lidval»"
+msgstr "Бизнес-центр «Лидваль»"
+
+msgid "Support Enquiries"
+msgstr "Поддержка клиентов"
+
+msgid "Sales Enquiries"
+msgstr "Отдел продаж"
+
+msgid "IVR"
+msgstr "Голосовое приветствие"
+
+msgid "Terms & Cons"
+msgstr "Условия и Тарифы"
+
+msgid "Rates"
+msgstr "Тарифы"
+
+msgid "rates"
+msgstr "тарифы"
+
+msgid "Preparing reports..."
+msgstr "Создание отчетов..."
+
+msgid "Issuing an invoice..."
+msgstr "Выписывается счет..."
+
+msgid "Moscow and St-Petersburg phone numbers"
+msgstr "Телефонные номера Москвы и Петербурга"
+
+msgid "PBX CRM Integration"
+msgstr "АТС для интеграции CRM"
+
+msgid "Virual Office"
+msgstr "Виртуальный офис"
+
+msgid "Cloud Computing"
+msgstr "Облачные вычисления"
+
+msgid "Business Telephony"
+msgstr "Бизнес Телефония"
+
+msgid "Enjoy your work, expand your business, we'll help you"
+msgstr "Работайте с удовольствием, расширяйте свой бизнес, а мы поможем"
+
+msgid "monthly fee for a Hosted PBX, regardless of the number of connected phones and trunks"
+msgstr "абонентская плата за услугу Виртуальная АТС или Виртуальный офис независимо от количества подключенных номеров и абонентов"
+
+msgid "mo"
+msgstr "мес"
+
+msgid "Our rates are very ATTRACTIVE indeed"
+msgstr "Наши ЦЕНЫ действительно ПРИВЛЕКАТЕЛЬНЫ"
+
+msgid "IN TELECOMS WE CAN DO ANYTHING"
+msgstr "В ОБЛАСТИ СВЯЗИ МЫ МОЖЕМ ВСЁ"
+
+msgid "13 years of experience in the telecommunications market allows us to state that"
+msgstr "13-летний опыт работы на рынке телекоммуникаций позволяет нам утверждать"
+
+msgid "and let us know what you are dreaming of"
+msgstr "и расскажите нам о чём Вы мечтаете"
+
+msgid "Take a look at your communication creatively"
+msgstr "Подойдите к организации связи творчески"
+
+msgid "And it means that"
+msgstr "А это значит"
+
+msgid "COMMUNICATION IS EVERYTHING FOR YOU"
+msgstr "СВЯЗЬ ДЛЯ ВАС ВСЁ"
+
+msgid "You are a modern person"
+msgstr "Вы – современный человек"
+
+msgid "Wherever You Are"
+msgstr "где бы Вы ни находились"
+
+msgid "Whoever You Are"
+msgstr "Кем бы Вы ни были"
+
+msgid "Order"
+msgstr "Заказать"
+
+msgid "more blogs"
+msgstr "еще статьи"
+
+msgid "more news"
+msgstr "еще новости"
+
+msgid "News"
+msgstr "Новости"
+
+msgid "Please wait while statistics will be loaded..."
+msgstr "Пожалуйста подождите пока загрузится статистика..."
+
+msgid "Details"
+msgstr "Подробно"
+
+msgid "Receive password"
+msgstr "Получить пароль"
+
+msgid "Recover"
+msgstr "Восстановить"
+
+msgid "Enter"
+msgstr "Войти"
+
+msgid "Counterparty's Details"
+msgstr "Реквизиты контрагента"
+
+msgid "Choose number"
+msgstr "Выбрать номер"
+
+msgid "How to make payment"
+msgstr "Как оплатить услуги"
+
+msgid "Payments"
+msgstr "Оплата услуг"
+
+msgid "Licenses"
+msgstr "Лицензии"
+
+msgid "Trademark"
+msgstr "Товарный знак"
+
+msgid "Company details"
+msgstr "Реквизиты предприятия"
+
+msgid "Network"
+msgstr "Сеть"
+
+msgid "Service Order"
+msgstr "Заказ услуги"
+
+msgid "Make an order"
+msgstr "Сделать заказ"
+
+msgid "Internet Access"
+msgstr "Доступ в Интернет"
+
+msgid "Important info"
+msgstr "Важная информация"
+
+msgid "updates"
+msgstr "новости"
+
+msgid "Last"
+msgstr "Последние"
+
+msgid "Last Updates"
+msgstr "Последние новости"
+
+msgid "Events"
+msgstr "События"
+
+msgid "Comments"
+msgstr "Коментарии"
+
+msgid "Blog"
+msgstr "Блог"
+
+msgid "Enter email"
+msgstr "Введите email"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "St. Petersburg"
+msgstr "Санкт-Петербург"
+
+msgid "Subscribe"
+msgstr "Подписка"
+
+msgid "3-5 B. Morskaya str."
+msgstr "Большая Морская ул., д.3-5"
+
+msgid "office"
+msgstr "офис"
+
+msgid "We promise not to bother you too often"
+msgstr "Обещаем не беспокоить Вас часто"
+
+msgid "Enter your e-mail below to subscribe to our free newsletter"
+msgstr "Введите Ваш e-mail для подписки на новости нашей компании"
+
+msgid "Home"
+msgstr "На главную"
+
+msgid "Go Social"
+msgstr "В сети"
+
+msgid "Stay in touch with us"
+msgstr "Оставайтесь на связи"
+
+msgid "Hosted Microsoft Software"
+msgstr "Аренда ПО Microsoft"
+
+msgid "Choose"
+msgstr "Выбрать"
+
+msgid "Cloud Storage"
+msgstr "Сетевое хранилище"
+
+msgid "Available Phone Numbers"
+msgstr "Свободные телефонные номера"
+
+msgid "Phone Numbers"
+msgstr "Телефонные номера"
+
+msgid "My Account"
+msgstr "Личный кабинет"
+
+msgid "Sign in"
+msgstr "Войти"
+
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+msgid "Sign out"
+msgstr "Выйти"
+
+msgid "About us"
+msgstr "О компании"
+
+msgid "Services"
+msgstr "Услуги"
+
+msgid "Contact us"
+msgstr "Контакты"
+
+msgid "Expired"
+msgstr "Просрочен"
+
+msgid "for"
+msgstr "для"
+
+msgid "requested document attached to this email"
+msgstr "запрошенный документ находится в приложении к письму"
+
+msgid "Dear customer"
+msgstr "Уважаемый клиент"
+
+msgid "Email format is incorrect"
+msgstr "Неверный формат адреса"
+
+msgid "Invoice sent to: "
+msgstr "Счет отправлен на: "
+
+msgid "Input email"
+msgstr "Введите адрес"
+
+msgid "Other email"
+msgstr "Другой адрес"
+
+msgid "Choose email address"
+msgstr "Выберите адрес электронной почты"
+
+msgid "Other address"
+msgstr "Другой адрес"
+
+msgid "Send invoice"
+msgstr "Отправить счет"
+
+msgid "Payment type"
+msgstr "Тип платежа"
+
+msgid "Please make sure that you have sufficient funds."
+msgstr "Пожалуйста убедитесь, что на Вашем лицевом счете достаточно средств."
+
+msgid "Operator"
+msgstr "Оператор"
+
+msgid "Yandex.Money"
+msgstr "«Яндекс.Деньги»"
+
+msgid "Do you really want to change password?"
+msgstr "Вы уверены, что хотите изменить пароль?"
+
+msgid "cancel password change"
+msgstr "отменить смену пароля"
+
+msgid "Email to send password: "
+msgstr "Адрес для отправки пароля: "
+
+msgid "change password"
+msgstr "изменить пароль"
+
+msgid "cancel order"
+msgstr "отменить заказ"
+
+msgid "cancel"
+msgstr "отменить"
+
+msgid "Agreement number"
+msgstr "Номер договора"
+
+msgid "Customer"
+msgstr "Клиент"
+
+msgid "Additional numbers order received"
+msgstr "Получен заказ дополнительных номеров ГТС"
+
+msgid "Additional numbers order"
+msgstr "Заказ дополнительных номеров ГТС"
+
+msgid "Do you really want to sent this request?"
+msgstr "Вы уверены, что хотите отправить заявку?"
+
+msgid "Customer's email: "
+msgstr "Email заказчика: "
+
+msgid "Order sent."
+msgstr "Запрос отправлен."
+
+msgid "New password sent to: "
+msgstr "Новый пароль отправлен на: "
+
+msgid "Copy sent to: "
+msgstr "Копия заказа отправлена на: "
+
+msgid "send request"
+msgstr "отправить запрос"
+
+msgid "Remove"
+msgstr "Убрать"
+
+msgid "Requester's IP address"
+msgstr "IP-адрес, осуществивший запрос"
+
+msgid "Order additional number"
+msgstr "Заказ дополнительного номера"
+
+msgid "order additional number"
+msgstr "заказать дополнительный номер"
+
+msgid "Access details to email"
+msgstr "Реквизиты доступа, соответствующие адресу"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Login"
+msgstr "Логин"
+
+msgid "Password sent. Please check your mailbox."
+msgstr "Пароль отправлен. Проверьте почтовый ящик."
+
+msgid "No such email address"
+msgstr "Указанный адрес не зарегистрирован"
+
+msgid "Receive"
+msgstr "Получить"
+
+msgid "Please type in your registered Email address"
+msgstr "Пожалуйста введите адрес эл. почты"
+
+msgid "Password recovery"
+msgstr "Восстановление пароля"
+
+msgid "min"
+msgstr "мин."
+
+msgid "cancel credit"
+msgstr "аннулировать кредит"
+
+msgid "PBX Type"
+msgstr "Тип АТС"
+
+msgid "Choose PBX type"
+msgstr "Выберите тип АТС"
+
+msgid "OS Distros"
+msgstr "Дистрибутивы"
+
+msgid "Virtual Servers Rates"
+msgstr "Тарифы на услугу Виртуальный Сервер"
+
+msgid "Another distros also could be available for order. Please send an enquiry for additinal information to"
+msgstr "Другие дистрибутивы так же могут быть доступны для заказа. В случае необходимости отправьте запрос на наш электронный адрес: "
+
+msgid "Server Template"
+msgstr "Шаблон сервера"
+
+msgid "Tariff"
+msgstr "Тарифный план"
+
+msgid "Stock FreePBX"
+msgstr "Стандартный шаблон FreePBX"
+
+msgid "IT Turism Template"
+msgstr "Шаблон Тур менеджер CRM"
+
+msgid "Nova CRM Template"
+msgstr "Шаблон Nova CRM"
+
+msgid "CRM Integration Ordered"
+msgstr "Заказана интеграция с системой CRM"
+
+msgid "HOSTED PBX"
+msgstr "Виртуальный офис"
+
+msgid "Hosted PBX Server"
+msgstr "Сервер Виртуальной АТС"
+
+msgid "Virtual server type"
+msgstr "Тип виртуального сервера"
+
+msgid "Please wait while numbers are loading..."
+msgstr "Пожалуйста подождите пока загружается список свободных номеров..."
+
+msgid "Maximum file size exceeded. Please try to upload smaller registered adress page file."
+msgstr "Максимальный размер файла превышен. Пожалуйста загрузите страницу паспорта с регистрацией меньшего размера."
+
+msgid "Maximum file size exceeded. Please try to upload smaller page1 file."
+msgstr "Максимальный размер файла превышен. Пожалуйста загрузите первую страницу паспорта меньшего размера."
+
+msgid "Passport registered address page absent"
+msgstr "Страница паспорта с регистрацией отсутствует"
+
+msgid "Passport page1 absent"
+msgstr "Первая страница паспорта отсутствует"
+
+msgid "Maximum file size exceeded. Please try to upload smaller file."
+msgstr "Максимальный размер файла превышен. Пожалуйста загрузите файл меньшего размера."
+
+msgid "Invalid email format"
+msgstr "Неверный формат адреса эл. почты"
+
+msgid "Incorrect Email field"
+msgstr "Неверный формат адреса эл. почты"
+
+msgid "Invalid phone format"
+msgstr "Неверный формат телефонного номера"
+
+msgid "Incorrect Contact phone field"
+msgstr "Неверный формат телефонного номера"
+
+msgid "All fields should be filled in"
+msgstr "Все поля должны быть заполнены"
+
+msgid "At least one number should be choosen"
+msgstr "Необходимо выбрать хотя бы один номер"
+
+msgid "Page is under construction"
+msgstr "Страница находится на стадии разработки"
+
+msgid "'prove you are human'"
+msgstr "'подтвердите что вы человек'"
+
+msgid "add number"
+msgstr "добавить номер"
+
+msgid "Chosen numbers"
+msgstr "Выбранные номера"
+
+msgid "Add number to order"
+msgstr "Добавить номер к заказу"
+
+msgid "Choose another number"
+msgstr "Выбрать другой номер"
+
+msgid "Inbound calls statistics for number"
+msgstr "Статистика входящих вызовов на номер"
+
+msgid "Add phone number to your order"
+msgstr "Добавьте номер к Вашему заказу"
+
+msgid "Comments"
+msgstr "Комментарии"
+
+msgid "Order copy sent to your email"
+msgstr "Копия заказа отправлена на Ваш эл. адрес"
+
+msgid "Please upload your passport reg. address page copy"
+msgstr "Загрузите копию страницы паспорта с регистрацией"
+
+msgid "Please upload your passport page 1 copy"
+msgstr "Пожалуйста загрузите копию 1-ой страницы паспорта"
+
+msgid "Passport reg. address page copy"
+msgstr "Копия страницы паспорта с регистрацией"
+
+msgid "Passport page 1 copy"
+msgstr "Копия 1-ой страницы паспорта"
+
+msgid "Company details file"
+msgstr "Файл с реквизитами предприятия"
+
+msgid "Individual"
+msgstr "Физическое лицо"
+
+msgid "Company"
+msgstr "Юридическое лицо"
+
+msgid "Organisation"
+msgstr "Юридическое лицо"
+
+msgid "Contact information"
+msgstr "Контактная информация"
+
+msgid "Thank you for your order"
+msgstr "Благодарим за Ваш заказ"
+
+msgid "Service order completed"
+msgstr "Заказ услуги выполнен"
+
+msgid "Amount of concurrent calls"
+msgstr "Количество одновременных вызовов"
+
+msgid "Counterparty type"
+msgstr "Тип контрагента"
+
+msgid "Best regards"
+msgstr "С уважением"
+
+msgid "OnNet Communications Inc."
+msgstr "ЗАО «ОнНет комьюникейшнс»"
+
+msgid "OnNet communications Inc."
+msgstr "ЗАО «ОнНет комьюникейшнс»"
+
+msgid "Order number"
+msgstr "Номер заказа"
+
+msgid "Service order received"
+msgstr "Получен заказ услуги"
+
+msgid "add one more number"
+msgstr "добавить еще номер"
+
+msgid "Clear form"
+msgstr "Очистить форму"
+
+msgid "Make an order"
+msgstr "Отправить заявку"
+
+msgid "Server parameters"
+msgstr "Параметры сервера"
+
+msgid "Choose server parameters"
+msgstr "Выберите параметры сервера"
+
+msgid "Counterparty information"
+msgstr "Информация о контрагенте"
+
+msgid "Please provide counterparty information"
+msgstr "Пожалуйста загрузите необходимую для заключения договора информацию"
+
+msgid "Fill in the contact information form"
+msgstr "Заполните форму контактной информации"
+
+msgid "Chosen numbers"
+msgstr "Выбранные номера"
+
+msgid "Choose phone numbers"
+msgstr "Выберите телефонные номера"
+
+msgid "Choose service"
+msgstr "Выберите услугу"
+
+msgid "Virtual Office"
+msgstr "Виртуальный Офис"
+
+msgid "Virtual PBX"
+msgstr "Виртуальная АТС"
+
+msgid "SIP Trunk"
+msgstr "SIP линия"
+
+msgid "Virtual Server"
+msgstr "Виртуальный Сервер"
+
+msgid "Please upload your company details or provide this information within Comments field"
+msgstr "Загрузите реквизиты предприятия или скопируйте информацию в поле Комментарии"
+
+msgid "Please upload your company details"
+msgstr "Загрузите реквизиты предприятия"
+
+msgid "No file chosen"
+msgstr "Файл не выбран"
+
+msgid "Must contain only letters."
+msgstr "Должны быть только буквы."
+
+msgid "Contact email address"
+msgstr "Адрес эл. почты для контакта"
+
+msgid "Contact phone number"
+msgstr "Номер телефона для контакта"
+
+msgid "Service order"
+msgstr "Заказ услуги"
+
+msgid "Services order"
+msgstr "Заказ услуг"
+
+msgid "Services order form"
+msgstr "Форма заказа услуг"
+
+msgid "Firstname"
+msgstr "Имя"
+
+msgid "Middlename"
+msgstr "Отчество"
+
+msgid "generate"
+msgstr "генерировать"
+
+msgid "Calls report"
+msgstr "Детализация вызовов"
+
+msgid "Your account is currently blocked.  Please contact support."
+msgstr "Учетная запись закрыта и более недействительна. Пожалуйста обратитесь в службу поддержки."
+
+msgid "export in csv format"
+msgstr "экспортировать в формат csv"
+
+msgid "Please note that password is case sensitive and check that your caps lock key is off."
+msgstr "Обратите внимание, что пароль чувствителен к регистру, и убедитесь, что режим caps lock выключен."
+
+msgid "Filtered from"
+msgstr "Отфильтровано из"
+
+msgid "Allocated IP Addresses"
+msgstr "Выделенные IP адреса"
+
+msgid "Please wait"
+msgstr "Подождите пожалуйста"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Credit amount"
+msgstr "Обещанный платеж"
+
+msgid "Maturity date"
+msgstr "Срок погашения"
+
+msgid "Contract date"
+msgstr "Дата заключения"
+
+msgid "Contract number"
+msgstr "Номер договора"
+
+msgid "Chief accountant"
+msgstr "Главный бухгалтер"
+
+msgid "Director"
+msgstr "Директор"
+
+msgid "Postal Address"
+msgstr "Почтовый адрес"
+
+msgid "Billing Address"
+msgstr "Адрес доставки счета"
+
+msgid "Registered Office Address"
+msgstr "Юридический адрес"
+
+msgid "Fax"
+msgstr "Факс"
+
+msgid "INN / KPP"
+msgstr "ИНН / КПП"
+
+msgid "Enter the amount, excluding VAT"
+msgstr "Введите сумму без учета НДС"
+
+msgid "Previous payment"
+msgstr "Предыдущий платеж"
+
+msgid "Choose amount"
+msgstr "Выберите сумму"
+
+msgid "Apply for credit"
+msgstr "Выполнить обещанный платеж"
+
+msgid "ASSIST - Electronic Payment System"
+msgstr "Платежная система «Ассист»"
+
+msgid "Dengi Online"
+msgstr "«Деньги Online»"
+
+msgid "ASSIST"
+msgstr "«Ассист»"
+
+msgid "Dengi Online - Electronic Payment System"
+msgstr "Платежная система «Деньги Online»"
+
+msgid "Yandex.Money - Electronic Payment System"
+msgstr "Платежная система «Яндекс.Деньги»"
+
+msgid "Enter an amount to pay"
+msgstr "Введите сумму для оплаты"
+
+msgid "Issue an invoice"
+msgstr "Выписать счет"
+
+msgid "Undefined"
+msgstr "Неопределён"
+
+msgid "Active"
+msgstr "Активный"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Current month expenses"
+msgstr "Расход за текущий месяц"
+
+msgid "Current balance"
+msgstr "Текущий баланс"
+
+msgid "Account status"
+msgstr "Статус учетной записи"
+
+msgid "entries"
+msgstr "записей"
+
+msgid "Showing 0 entries"
+msgstr "Просмотр 0 записей"
+
+msgid "of"
+msgstr "из"
+
+msgid "to"
+msgstr "по"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Showing"
+msgstr "Просмотр с"
+
+msgid "Nothing found, sorry"
+msgstr "Ничего не найдено - извините"
+
+msgid "lines per page"
+msgstr "строк на страницу"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Forward"
+msgstr "Вперед"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Current balance"
+msgstr "Текущий баланс"
+
+msgid "Account status"
+msgstr "Статус учетной записи"
+
+msgid "Contact person"
+msgstr "Контактное лицо"
+
+msgid "view documents"
+msgstr "перейти к документам"
+
+msgid "dashboard"
+msgstr "панель"
+
+msgid "Period"
+msgstr "Период"
+
+msgid "all information"
+msgstr "вся информация"
+
+msgid "Choose month"
+msgstr "Выберите месяц"
+
+msgid "Invoices"
+msgstr "Счета"
+
+msgid "VAT Invoices"
+msgstr "Счет-фактуры"
+
+msgid "Total (all pages):"
+msgstr "Итого (все страницы):"
+
+msgid "Counterparty"
+msgstr "Контрагент"
+
+msgid "Acts"
+msgstr "Акты"
+
+msgid "incl."
+msgstr "вкл."
+
+msgid "VAT"
+msgstr "НДС"
+
+msgid "#"
+msgstr "№"
+
+msgid "Total"
+msgstr "Итого"
+
+msgid "Total:"
+msgstr "Итого:"
+
+msgid "Last incoming calls of today"
+msgstr "Последние входящие вызовы за сегодня"
+
+msgid "Costs for current day, RUB (excl VAT)"
+msgstr "Начисления за сегодняшний день, руб (без учета НДС)"
+
+msgid "Costs for selected period, RUB (excl VAT)"
+msgstr "Начисления за выбранный период, руб (без учета НДС)"
+
+msgid "Local calls"
+msgstr "Местные вызовы"
+
+msgid "Long distance calls"
+msgstr "Мoбильные и мг/мн вызовы"
+
+msgid "refresh results"
+msgstr "обновить результаты"
+
+msgid "Fee type"
+msgstr "Вид затрат"
+
+msgid "Fixed fees"
+msgstr "Фиксированные платежи"
+
+msgid "Services usage"
+msgstr "Тарифицировано услуг"
+
+msgid "All"
+msgstr "Все"
+
+msgid "inbound"
+msgstr "входящие"
+
+msgid "outbound"
+msgstr "исходящие"
+
+msgid "choose calls direction"
+msgstr "направление вызовов"
+
+msgid "choose calls type"
+msgstr "тип вызовов"
+
+msgid "Till:"
+msgstr "по:"
+
+msgid "From:"
+msgstr "C:"
+
+msgid "Day:"
+msgstr "День:"
+
+msgid "Month:"
+msgstr "Месяц:"
+
+msgid "Day"
+msgstr "День"
+
+msgid "Month"
+msgstr "Месяц"
+
+msgid "Inbound calls"
+msgstr "Входящие вызовы"
+
+msgid "Inbound"
+msgstr "Входящий"
+
+msgid "Outbound calls"
+msgstr "Исходящие вызовы"
+
+msgid "Outbound"
+msgstr "Исходящий"
+
+msgid "RUR"
+msgstr "Руб."
+
+msgid "Min"
+msgstr "Мин."
+
+msgid "Direction"
+msgstr "Направление"
+
+msgid "Start time"
+msgstr "Начало"
+
+msgid "Callee"
+msgstr "Номер Б"
+
+msgid "Caller"
+msgstr "Номер А"
+
+msgid "Price"
+msgstr "Цена"
+
+msgid "Quantity"
+msgstr "Кол-во"
+
+msgid "Cost"
+msgstr "Стоимость"
+
+msgid "Sum"
+msgstr "Сумма"
+
+msgid "show statistics"
+msgstr "перейти к статистике"
+
+msgid "Phone calls statistics"
+msgstr "Статистика телефонных вызовов"
+
+msgid "Select day"
+msgstr "Выберите день"
+
+msgid "Select month"
+msgstr "Выберите месяц"
+
+msgid "Select interval"
+msgstr "Выберите интервал"
+
+msgid "day"
+msgstr "день"
+
+msgid "month"
+msgstr "месяц"
+
+msgid "Interval"
+msgstr "Интервал"
+
+msgid "interval"
+msgstr "интервал"
+
+msgid "choose interval type"
+msgstr "выберите тип интервала"
+
+msgid "IP Addresses"
+msgstr "IP адреса"
+
+msgid "Phone numbers"
+msgstr "Номера ГТС"
+
+msgid "Tariff name"
+msgstr "Название тарифа"
+
+msgid "Service name"
+msgstr "Название услуги"
+
+msgid "Fee name"
+msgstr "Название платежа"
+
+msgid "Current month services, RUB (excl VAT)"
+msgstr "Услуги в текущем месяце, руб (без учета НДС)"
+
+msgid "excl VAT"
+msgstr "без учета НДС"
+
+msgid "Monthly fees, RUB (excl VAT)"
+msgstr "Ежемесячные начисления, руб (без учета НДС)"
+
+msgid "RUB, excl VAT"
+msgstr "Руб, без учета НДС"
+
+msgid "Monthly fees"
+msgstr "Ежемесячные начисления"
+
+msgid "Telephony"
+msgstr "Телефония"
+
+msgid "Internet"
+msgstr "Интернет"
+
+msgid "Blocked"
+msgstr "Заблокирована"
+
+msgid "Active"
+msgstr "Активна"
+
+msgid "Option is under construction."
+msgstr "Опция на стадии разработки."
+
+msgid "invoice requested"
+msgstr "выставить счет."
+
+msgid "Please input integer number."
+msgstr "Пожалуйста введите целое число."
+
+msgid "Missed event happened."
+msgstr "Произошло неопознанное событие."
+
+msgid "Must be a number."
+msgstr "Введите число"
+
+msgid "payment requested"
+msgstr "платеж выполнен"
+
+msgid "credit requested"
+msgstr "обещанный платеж"
+
+msgid "Loan"
+msgstr "Кредит"
+
+msgid "Wire transfer"
+msgstr "Безналичный расчет"
+
+msgid "Online payment"
+msgstr "Платеж онлайн"
+
+msgid "Online payments"
+msgstr "Платежи онлайн"
+
+msgid "rub"
+msgstr "руб"
+
+msgid "rub."
+msgstr "руб."
+
+msgid "proceed"
+msgstr "выполнить"
+
+msgid "last ten"
+msgstr "последние 10"
+
+msgid "make payments"
+msgstr "перейти к оплате"
+
+msgid "Credit"
+msgstr "Кредит"
+
+msgid "Invoice"
+msgstr "Счет"
+
+msgid "Payment"
+msgstr "Платеж"
+
+msgid "Payments"
+msgstr "Платежи"
+
+msgid "Payments list"
+msgstr "Список платежей"
+
+msgid "Payments list ( last ten )"
+msgstr "Список платежей ( последние десять )"
+
+msgid "COL2Test"
+msgstr "КОЛ2Тест"
+
+msgid "text"
+msgstr "текст"
+
+msgid "Account"
+msgstr "Учетная запись"
+
+msgid "Account Details"
+msgstr "Общая информация"
+
+msgid "Information"
+msgstr "Общая информация"
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "Make payment"
+msgstr "Оплатить"
+
+msgid "Account details"
+msgstr "Общая информация о клиенте"
+
+msgid "Company details"
+msgstr "Реквизиты предприятия"
+
+msgid "Current agreements"
+msgstr "Действующие договоры"
+
+msgid "Are you sure you want to exit the customer interface?"
+msgstr "Вы уверены, что желаете покинуть личный кабинет?"
+
+msgid "Expired"
+msgstr "Просрочен"
+
+msgid "General settings"
+msgstr "Общие настройки"
+
+msgid "Privilege level"
+msgstr "Уровень доступа"
+
+msgid "Portal users details"
+msgstr "Пользователи портала"
+
+msgid "Portal account details"
+msgstr "Учетная запись портала"
+
+msgid "Portal URL"
+msgstr "Адрес портала"
+
+msgid "Restrictions details"
+msgstr "Детализация ограничений"
+
+msgid "User and device level restrictions could be managed in particular service interface"
+msgstr "Ограничения на уровне пользователя или устройства могут быть настроены в интерфейсе соответствующей услуги"
+
+msgid "Not applicable"
+msgstr "Неприменимо"
+
+msgid "Call support"
+msgstr "Обратитесь в поддержку"
+
+msgid "Change"
+msgstr "Изменить"
+
+msgid "Denied"
+msgstr "Запрещено"
+
+msgid "Allowed"
+msgstr "Разрешено"
+
+msgid "Classifier"
+msgstr "Тип вызова"
+
+msgid "Trunks"
+msgstr "АТС"
+
+msgid "Call restrictions"
+msgstr "Ограничения вызовов по направлениям"
+
+msgid "fax documents retention period is one month"
+msgstr "документы хранятся не более одного месяца"
+
+msgid "call recordings retention period is one month"
+msgstr "записи хранятся не более одного месяца"
+
+msgid "Last month recordings"
+msgstr "Записи текущего месяца"
+
+msgid "Play"
+msgstr "Воспроизвести"
+
+msgid "Fax number"
+msgstr "Номер факса"
+
+msgid "Listen"
+msgstr "Прослушать"
+
+msgid "Calls recording"
+msgstr "Запись разговоров"
+
+msgid "Call recordings"
+msgstr "Записи разговоров"
+
+msgid "Check to add company name to fax header"
+msgstr "Включить наименование отправителя в заголовок"
+
+msgid "Status panel"
+msgstr "Текущее состояние"
+
+msgid "No number entered"
+msgstr "Номер не введен"
+
+msgid "No document chosen"
+msgstr "Документ не выбран"
+
+msgid "refresh"
+msgstr "обновить"
+
+msgid "Incoming Faxes"
+msgstr "Принятые факсы"
+
+msgid "Outgoing Faxes"
+msgstr "Отправить факс"
+
+msgid "Last inbound Faxes"
+msgstr "Последние принятые факсы"
+
+msgid "Recent incoming faxes"
+msgstr "Последние полученные факсы"
+
+msgid "Recent outgoing faxes"
+msgstr "Последние отправленные факсы"
+
+msgid "Please choose the number of attempts"
+msgstr "Bыберите количество попыток отправки"
+
+msgid "Please choose the number to send fax from"
+msgstr "Выберите номер с которого будет отправлен факс"
+
+msgid "Please upload your document"
+msgstr "Пожалуйста загрузите Ваш документ"
+
+msgid "Enter the number of the Fax to send document to"
+msgstr "Введите номер факса для отправки документа"
+
+msgid "send fax"
+msgstr "отправить факс"
+
+msgid "Send Fax Form"
+msgstr "Форма отправки факса"
+
+msgid "Registered SIP devices"
+msgstr "Зарегистрированные SIP устройства"
+
+msgid "Agent"
+msgstr "Агент"
+
+msgid "Port"
+msgstr "Порт"
+
+msgid "IP address"
+msgstr "IP адрес"
+
+msgid "Registration details"
+msgstr "Информация о регистрации"
+
+msgid "Current Settings"
+msgstr "Текущие настройки"
+
+msgid "lines per page"
+msgstr "строк на страницу"
 
 msgid "All"
 msgstr "Все"
@@ -291,6 +1626,9 @@ msgstr "Микрофон"
 
 msgid "Select Callflow"
 msgstr "Выбрать маршрут"
+
+msgid "System monitor"
+msgstr "Текущее состояние"
 
 msgid "System default"
 msgstr "Стандартный"
