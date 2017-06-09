@@ -10,8 +10,23 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Transactions list"
+msgstr "Список транзакций"
+
+msgid "create reports"
+msgstr "генерировать отчеты"
+
+msgid "create docs"
+msgstr "генерировать документы"
+
+msgid "add debit"
+msgstr "начислить услугу"
+
+msgid "add credit"
+msgstr "добавить средства"
+
+msgid "Monitor"
+msgstr "Монитор"
 
 msgid "Detailed"
 msgstr "Подробно"
