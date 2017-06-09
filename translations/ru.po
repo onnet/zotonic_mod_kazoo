@@ -4,6 +4,30 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Detailed"
+msgstr "Подробно"
+
+msgid "Range"
+msgstr "Диапазон"
+
+msgid "This month"
+msgstr "Текущий месяц"
+
+msgid "Today"
+msgstr "Сегодня"
+
+msgid "Retain CID"
+msgstr "Сохранить АОН"
+
 msgid "Current information"
 msgstr "Текущее состояние"
 
