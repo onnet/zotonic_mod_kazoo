@@ -8,8 +8,8 @@
       <th class="td-center">{_ Sum _}</th>
       <th class="td-center">{_ VAT _}</th>
       <th class="td-center">{_ Total _}</th>
+      <th class="td-center"></th>
       {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
-        <th class="td-center"></th>
         <th class="td-center"></th>
       {% endif %}
         </tr>
@@ -34,13 +34,13 @@
         <td class="td-center">{{ doc[1]["total_netto"]|currency_sign }}</td>
         <td class="td-center">{{ doc[1]["total_vat"]|currency_sign }}</td>
         <td class="td-center">{{ doc[1]["total_brutto"]|currency_sign }}</td>
+        <td>
+          <a target="_blank"
+             href="{{ m.onbill[{attachment_download_link account_id=account_id doc_id=doc[1]["id"] doc_type="onbill_modb"}] }}">
+           <i class="fa fa-download zprimary" title="{_ Download _}"></i></a>
+          </a>
+        </td>
         {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status) %}
-          <td>
-            <a target="_blank"
-               href="{{ m.onbill[{attachment_download_link account_id=account_id doc_id=doc[1]["id"] doc_type="onbill_modb"}] }}">
-             <i class="fa fa-download zprimary" title="{_ Download _}"></i></a>
-            </a>
-          </td>
           <td>
             {% if doc[1]["type"] == "transaction_based_invoice" %}
               <i id="delete_doc_{{ doc[1]["id"] }}" class="fa fa-trash zalarm pointer"></i>
