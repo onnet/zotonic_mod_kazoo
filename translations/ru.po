@@ -31,9 +31,6 @@ msgstr "Россия"
 msgid "Electronic Data Interchange"
 msgstr "Электронный документооборот"
 
-msgid "City Reach Data Centre"
-msgstr "Дата-центр City Reach"
-
 msgid "Notify when balance falls below"
 msgstr "Уведомлять если баланс ниже"
 
@@ -139,9 +136,6 @@ msgstr "Стандартный"
 msgid "Input Email"
 msgstr "Введите Email"
 
-msgid "Business Center «Lidval»"
-msgstr "Бизнес-центр «Лидваль»"
-
 msgid "Support Enquiries"
 msgstr "Поддержка клиентов"
 
@@ -181,44 +175,8 @@ msgstr "Облачные вычисления"
 msgid "Business Telephony"
 msgstr "Бизнес Телефония"
 
-msgid "Enjoy your work, expand your business, we'll help you"
-msgstr "Работайте с удовольствием, расширяйте свой бизнес, а мы поможем"
-
-msgid "monthly fee for a Hosted PBX, regardless of the number of connected phones and trunks"
-msgstr "абонентская плата за услугу Виртуальная АТС или Виртуальный офис независимо от количества подключенных номеров и абонентов"
-
 msgid "mo"
 msgstr "мес"
-
-msgid "Our rates are very ATTRACTIVE indeed"
-msgstr "Наши ЦЕНЫ действительно ПРИВЛЕКАТЕЛЬНЫ"
-
-msgid "IN TELECOMS WE CAN DO ANYTHING"
-msgstr "В ОБЛАСТИ СВЯЗИ МЫ МОЖЕМ ВСЁ"
-
-msgid "13 years of experience in the telecommunications market allows us to state that"
-msgstr "13-летний опыт работы на рынке телекоммуникаций позволяет нам утверждать"
-
-msgid "and let us know what you are dreaming of"
-msgstr "и расскажите нам о чём Вы мечтаете"
-
-msgid "Take a look at your communication creatively"
-msgstr "Подойдите к организации связи творчески"
-
-msgid "And it means that"
-msgstr "А это значит"
-
-msgid "COMMUNICATION IS EVERYTHING FOR YOU"
-msgstr "СВЯЗЬ ДЛЯ ВАС ВСЁ"
-
-msgid "You are a modern person"
-msgstr "Вы – современный человек"
-
-msgid "Wherever You Are"
-msgstr "где бы Вы ни находились"
-
-msgid "Whoever You Are"
-msgstr "Кем бы Вы ни были"
 
 msgid "Order"
 msgstr "Заказать"
