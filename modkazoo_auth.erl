@@ -211,7 +211,7 @@ may_be_clean_third_party_billing(Context) ->
     end.
 
 run_ip_acl([H|T], ClientIP) ->
-    case orber_acl:verify(ClientIP, z_convert:to_list(H), inet) of
+    case orber_acl:verify(z_convert:to_list(ClientIP), z_convert:to_list(H), inet) of
         true -> true;
         _ -> run_ip_acl(T,ClientIP)
     end;
