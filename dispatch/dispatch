@@ -28,6 +28,4 @@
  {onbill_dashboard,["onbill_dashboard"],         controller_template,  [ {template, "dashboard.tpl"} ]},
  {onbill_finance_details,["onbill_finance_details"],         controller_template,  [ {template, "finance_details.tpl"} ]},
  {finance_details,["finance_details"],         controller_template,  [ {template, "finance_details.tpl"} ]}
-
-
 ].

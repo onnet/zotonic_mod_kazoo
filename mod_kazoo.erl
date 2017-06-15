@@ -30,7 +30,6 @@ observe_search_query(_, _) ->
 
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched postback notify: no_auth"),
- %   {ok, Context1} = z_session_manager:stop_session(Context),
     z_render:wire({redirect, [{dispatch, home}]}, Context);
 
 observe_postback_notify(A, _Context) ->
@@ -40,8 +39,6 @@ observe_postback_notify(A, _Context) ->
 observe_kazoo_notify({kazoo_notify, <<"no_auth">>,_,_,_}, Context) ->
     lager:info("Catched kazoo notify: no_auth"),
     z_session:add_script(<<"z_notify('no_auth');">>, Context#context.session_pid);
- %   {ok, Context1} = z_session_manager:stop_session(Context),
- %   z_render:wire({redirect, [{dispatch, "home"}]}, Context1);
 
 observe_kazoo_notify(A, _Context) ->
     lager:info("Catched kazoo notify: ~p", [A]),
@@ -399,8 +396,8 @@ event({postback,<<"new_numbers_lookup">>,_,_}, Context) ->
             z_render:update("numbers_to_choose",z_template:render("_numbers_lookup.tpl", [{free_numbers, []}], Context),Context)
     end;
 
-event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
-    case z_context:get_q("new_number_to_add",Context) of
+event({postback,{rs_add_number,[{account_id, AccountId}]},_,_}, Context) ->
+    case z_context:get_q('new_number_to_add', Context) of
         'undefined' -> z_render:growl_error(?__("Something wrong happened.", Context), Context);
         NumberToAdd -> 
             _ = kazoo_util:rs_add_number(NumberToAdd, AccountId, Context),
@@ -412,9 +409,9 @@ event({postback,{rs_add_number,[{account_id,AccountId}]},_,_}, Context) ->
                    ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
                    ,{clientip, ClientIP}
                    ,{sender_name, SenderName}
-                   ,{number, NumberToAdd}],
+                   ,{numbers, [NumberToAdd]}],
             spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
-            lager:info("Number add attempt AccountId: ~p",[ AccountId]),
+            lager:info("Number add attempt AccountId: ~p. Vars: ~p",[AccountId, Vars]),
             mod_signal:emit({update_rs_allocated_numbers_tpl, ?SIGNAL_FILTER(Context) ++ [{account_id, AccountId}]}, Context),
             Context
     end;
@@ -1502,23 +1499,23 @@ event({postback,<<"rs_account_demask">>,_,_},Context) ->
     _ = modkazoo_auth:may_be_set_user_data(Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
     _ = modkazoo_auth:set_session_currency_sign(Context),
-    z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
+    z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
 
 event({submit,{addcccpcidform, _}, _, _}, Context) ->
     NewAuthCID = z_convert:to_binary(z_context:get_q("cid_number", Context)),
     UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
     _ = kazoo_util:add_cccp_doc({<<"cid">>, NewAuthCID}, {<<"user_id">>, UserId}, Context),
-    z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
+    z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({submit,{addcccppinform, _}, _, _}, Context) ->
     NewAuthPIN = z_convert:to_binary(z_context:get_q("pin_number", Context)),
     UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
     _ = kazoo_util:add_cccp_doc({<<"pin">>, NewAuthPIN}, {<<"user_id">>, UserId}, Context),
-    z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
+    z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
     _ = kazoo_util:del_cccp_doc(DocId, Context),
-    z_render:wire({redirect, [{dispatch, "callback"}]}, Context);
+    z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({submit,rs_account_lookup,_,_},Context) ->
     AccountId = case z_context:get_q("search_option", Context) of
@@ -2075,7 +2072,7 @@ event({postback,{redirect_to_reseller_portal,[{realm, Realm}]},_,_}, Context) ->
                        || Child <- kazoo_util:kz_list_account_children(Context)
                        ,modkazoo_util:get_value(<<"realm">>, Child) == ?TO_BIN(Realm)],
     z_context:set_session('rs_selected_account_id', AccountId, Context),
-    z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
+    z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
 
 event({'postback',{'save_trunks_limits',[{'trunks_type', TrunksType},{'account_id','undefined'}]},_,_}, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

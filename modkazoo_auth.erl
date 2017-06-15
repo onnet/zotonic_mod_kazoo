@@ -75,11 +75,15 @@ do_sign_in(Login, Password, Account, Context) ->
                             ,?SIGNAL_FILTER(Context) ++ [{'text',?__("Signing in ...", Context)},{'type', 'notice'}]
                             }
                            ,Context),
+            lager:info("IAM do_sign_in 1"),
             AccountDoc = kazoo_util:kz_get_acc_doc_by_account_id_and_authtoken(Account_Id, Auth_Token, Context),
+            lager:info("IAM do_sign_in 2"),
             case modkazoo_util:get_value(<<"crossbar_ip_acl">>, AccountDoc) of
                 'undefined' ->
+            lager:info("IAM do_sign_in 3"),
                     setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context);
                 ACL ->
+            lager:info("IAM do_sign_in 4"),
                     maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context)
             end;
         {'badauth', Code, Data} ->
@@ -104,6 +108,7 @@ growl_login_error(Data, Context) ->
 maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, ACL, ClientIP, Context) ->
     case run_ip_acl(ACL, ClientIP) of
         'true' ->
+            lager:info("IAM maybe_setup_environment 1"),
             setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context);
         _ -> 
             lager:info("Failed to pass IP ACL check ~p. IP address: ~p.", [ACL,ClientIP]),
@@ -111,7 +116,9 @@ maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, A
     end.
 
 setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context1) ->
-    {ok, Context2} = z_session_manager:ensure_session(Context1),
+            lager:info("IAM setup_environment 1"),
+Context2 = z_context:continue_session(z_context:ensure_qs(Context1)),
+ %   {ok, Context2} = z_session_manager:ensure_session(Context1),
     z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
     z_context:set_session(auth_user_id, Owner_Id, Context2),
     Context = z_session:ensure_page_session(Context2),
@@ -124,21 +131,30 @@ setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context
     _ = may_be_set_reseller_data(Context),
     _ = may_be_add_third_party_billing(Context),
     _ = set_session_currency_sign(Context),
-    choose_page_to_redirect(z_render:wire({mask, [{target_id, "sign_in_form"}]}, Context)).
+            lager:info("IAM setup_environment 2"),
+    choose_page_to_redirect(z_render:wire({mask, [{target_id, <<"sign_in_form">>}]}, Context)).
 
 choose_page_to_redirect(Context) ->
+            lager:info("IAM choose_page_to_redirect 1"),
     case is_superadmin_or_reseller(Context) of
         'true' ->
-            z_render:wire({redirect, [{dispatch, "reseller_portal"}]}, Context);
+            lager:info("IAM choose_page_to_redirect 2"),
+            z_render:wire({redirect, [{<<"dispatch">>, <<"user_porta">>}]}, Context);
+         %   z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
         'false' -> 
             case z_dispatcher:url_for('dashboard',Context) of
                 'undefined' -> 
                     case z_context:get_session('kazoo_account_admin', Context) of 
-                        'true' -> z_render:wire({redirect, [{dispatch, "admin_settings"}]}, Context);
-                        'false' -> z_render:wire({redirect, [{dispatch, "user_portal"}]}, Context)
+                        'true' ->
+            lager:info("IAM choose_page_to_redirect true"),
+                            z_render:wire({redirect, [{dispatch, admin_settings}]}, Context);
+                        'false' ->
+            lager:info("IAM choose_page_to_redirect false"),
+                            z_render:wire({redirect, [{dispatch, user_portal}]}, Context)
                     end;
-                _ ->
-                    z_render:wire({redirect, [{dispatch, "dashboard"}]}, Context) 
+                _D ->
+            lager:info("IAM choose_page_to_redirect URL: ~p", [_D]),
+                    z_render:wire({redirect, [{dispatch, dashboard}]}, Context) 
             end
     end.
 
@@ -167,7 +183,7 @@ may_be_set_reseller_data(Context) ->
 
 signout(Context) ->
     {ok, Context1} = z_session_manager:stop_session(Context),
-    z_render:wire({redirect, [{dispatch, "home"}]}, Context1).
+    z_render:wire({redirect, [{dispatch, home}]}, Context1).
 
 gcapture_check(Context) ->
     case z_context:get_session(kazoo_reseller_account_id, Context) of
