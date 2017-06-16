@@ -768,6 +768,10 @@ crossbar_account_send_request(Verb, API_String, ContentType, DataBag, AuthToken,
                           _ -> DataBag
                       end
               end,
+    lager:info("crossbar_account_send_request URL: ~p", [URL]),
+    lager:info("crossbar_account_send_request Headers: ~p", [req_headers(ContentType, AuthToken)]),
+    lager:info("crossbar_account_send_request Verb: ~p", [Verb]),
+    lager:info("crossbar_account_send_request Payload: ~p", [Payload]),
     ibrowse:send_req(URL, req_headers(ContentType, AuthToken), Verb, Payload, [{'inactivity_timeout', 15000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
