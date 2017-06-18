@@ -170,8 +170,10 @@ may_be_set_reseller_data(Context) ->
     end.
 
 signout(Context) ->
-    {ok, Context1} = z_session_manager:stop_session(Context),
-    z_render:wire({redirect, [{dispatch, home}]}, Context1).
+% ?PRINT("signout1"),
+    {ok, ContextNoSession} = z_session_manager:stop_session(Context),
+?PRINT("signout2"),
+    z_render:wire({redirect, [{dispatch, home}]}, ContextNoSession).
 
 gcapture_check(Context) ->
     case z_context:get_session(kazoo_reseller_account_id, Context) of

@@ -7,14 +7,12 @@
 
 -export([init/1]).
 
--export([
-     observe_search_query/2
-    ,observe_postback_notify/2
-    ,observe_kazoo_notify/2
-    ,observe_topmenu_element/2
-    ,observe_onbill_topmenu_element/2
-    ,observe_currency_sign/2
-    ,event/2
+-export([observe_postback_notify/2
+        ,observe_kazoo_notify/2
+        ,observe_topmenu_element/2
+        ,observe_onbill_topmenu_element/2
+        ,observe_currency_sign/2
+        ,event/2
 ]).
 
 
@@ -25,12 +23,9 @@ init(_Context) ->
     application:start('ibrowse'),
     'ok'.
 
-observe_search_query(_, _) ->
-    'undefined'.
-
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
-    lager:info("Catched postback notify: <<no_auth>>"),
-    z_render:wire({redirect, [{dispatch, home}]}, Context);
+    lager:info("Catched postback notify: <<no_auth before redirect to home>>"),
+    z_render:wire({redirect, [{dispatch, "home"}]}, Context);
 
 observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
@@ -69,20 +64,16 @@ observe_onbill_topmenu_element(_, Context) ->
         'true' -> <<"_onbill_topmenu.tpl">>
     end.
 
-event({submit,{innoauth,[]},<<"sign_in_form">>,<<"sign_in_form">>}, Context) ->
-    Login = z_convert:to_binary(z_context:get_q("username",Context)),
-    Password = z_convert:to_binary(z_context:get_q("password",Context)),
-    Account = z_convert:to_binary(z_context:get_q("account",Context)),
+event({submit,{innoauth,[]},_,_}, Context) ->
+    Login = z_context:get_q('username',Context),
+    Password = z_context:get_q('password',Context),
+    Account = z_context:get_q('account',Context),
     modkazoo_auth:do_sign_in(Login, Password, Account, Context);
 
-event({submit,{innoauth,[]},<<"sign_in_page_form">>,<<"sign_in_page_form">>}, Context) ->
-    Login = z_convert:to_binary(z_context:get_q("username_page",Context)),
-    Password = z_convert:to_binary(z_context:get_q("password_page",Context)),
-    Account = z_convert:to_binary(z_context:get_q("account_page",Context)),
-    modkazoo_auth:do_sign_in(Login, Password, Account, Context);
-
-event({postback,{signout,[]}, _, _}, Context) ->
-    modkazoo_auth:signout(Context);
+event({postback,signout,_,_}, Context) ->
+    {ok, ContextNoSession} = z_session_manager:stop_session(Context),
+?PRINT("signout2"),
+    z_render:wire({redirect, [{dispatch, home}]}, ContextNoSession);
 
 event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) ->
     try
