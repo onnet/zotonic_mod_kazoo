@@ -29,7 +29,7 @@ observe_search_query(_, _) ->
     'undefined'.
 
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
-    lager:info("Catched postback notify: no_auth"),
+    lager:info("Catched postback notify: <<no_auth>>"),
     z_render:wire({redirect, [{dispatch, home}]}, Context);
 
 observe_postback_notify(A, _Context) ->
@@ -37,7 +37,7 @@ observe_postback_notify(A, _Context) ->
     undefined.
 
 observe_kazoo_notify({kazoo_notify, <<"no_auth">>,_,_,_}, Context) ->
-    lager:info("Catched kazoo notify: no_auth"),
+    lager:info("Catched kazoo notify: <<no_auth>>"),
     z_session:add_script(<<"z_notify('no_auth');">>, Context#context.session_pid);
 
 observe_kazoo_notify(A, _Context) ->

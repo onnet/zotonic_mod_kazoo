@@ -811,7 +811,7 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
                     error_return(ReturnCode, Body, Default);
                 _ -> 
                     case ReturnCode of
-                        "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
+                        "401" -> z_notifier:notify({kazoo_notify, <<"no_auth">>,'undefined','undefined','undefined'}, Context);
                         "429" ->
                             mod_signal:emit({emit_growl_signal
                                             ,?SIGNAL_FILTER(Context) ++
@@ -846,7 +846,7 @@ crossbar_account_authtoken_request(Verb, API_String, DataBag, AuthToken, Context
                     modkazoo_util:get_value(<<"data">>, jiffy:decode(Body));
                 _ -> 
                     case ReturnCode of
-                        "401" -> z_notifier:notify({kazoo_notify, "no_auth",'undefined','undefined','undefined'}, Context);
+                        "401" -> z_notifier:notify({kazoo_notify, <<"no_auth">>,'undefined','undefined','undefined'}, Context);
                         "429" ->
                             mod_signal:emit({emit_growl_signal
                                             ,?SIGNAL_FILTER(Context) ++
