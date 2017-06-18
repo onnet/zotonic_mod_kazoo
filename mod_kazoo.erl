@@ -64,7 +64,7 @@ observe_onbill_topmenu_element(_, Context) ->
         'true' -> <<"_onbill_topmenu.tpl">>
     end.
 
-event({submit,{innoauth,[]},_,_}, Context) ->
+event({submit,signin,_,_}, Context) ->
     Login = z_context:get_q('username',Context),
     Password = z_context:get_q('password',Context),
     Account = z_context:get_q('account',Context),
@@ -75,7 +75,7 @@ event({postback,signout,_,_}, Context) ->
 ?PRINT("signout2"),
     z_render:wire({redirect, [{dispatch, home}]}, ContextNoSession);
 
-event({submit,{innosignup,[]},<<"sign_up_form">>,<<"sign_up_form">>}, Context) ->
+event({submit,signup,_,_}, Context) ->
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
       'ok' = modkazoo_util:check_field_filled("surname",Context),

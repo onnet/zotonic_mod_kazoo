@@ -1,4 +1,4 @@
-{% wire id="sign_up_form" type="submit" postback={innosignup} delegate="mod_kazoo" %}
+{% wire id="sign_up_form" type="submit" postback="signup" delegate="mod_kazoo" %}
 <form id="sign_up_form" method="post" action="postback">
   <div class="form-group">
     <div class="row">

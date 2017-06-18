@@ -11,7 +11,7 @@
     <div class="col-md-8 col-md-offset-2 signup">
       {% wire id="sign_up_form"
               type="submit"
-              postback={innosignup}
+              postback="signup"
               delegate="mod_kazoo"
       %}
       <form id="sign_up_form" method="post" action="postback">
