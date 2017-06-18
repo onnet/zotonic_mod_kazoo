@@ -16,31 +16,43 @@
           </label>
         </div>
         <div class="col-sm-6">
-          <label class="form-control-onnet margin-bottom-xs">{_ Invite format _}
-            <select id="inbound_format"
-                    name="inbound_format"
-                    class="form-control margin-bottom-xs"
-                    style="text-align:center;">
-              <option value="e164"
-                      {% if server[1]["options"][1]["inbound_format"] == "e164" %}
-                        selected
-                      {% endif %}>
-                E.164@Realm
-              </option>
-              <option value="username"
-                      {% if server[1]["options"][1]["inbound_format"] == "username" %}
-                        selected
-                      {% endif %}>
-                SIP_Username@Realm
-              </option>
-            </select>
+          <label class="form-control-onnet margin-bottom-xs pl-1">
+            {_ Realm _}:
+            <input type="text"
+                   class="form-control margin-bottom-xs zprimary"
+                   style="background-color: white!important;"
+                   value="{% if trunk_doc[1]["account"][1]["auth_realm"]
+                            %}{{ trunk_doc[1]["account"][1]["auth_realm"] }}{%
+                              else %}{{ m.kazoo.get_account_realm }}{% endif %}"
+                   readonly>
           </label>
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
+          <label class="form-control-onnet margin-bottom-xs">{_ Media handling _}
+            <select id="media_handling"
+                    name="media_handling"
+                    class="form-control margin-bottom-xs"
+                    style="text-align:center;">
+              <option value="bypass"
+                      {% if server[1]["options"][1]["media_handling"] == "bypass" %}
+                        selected
+                      {% endif %}>
+                bypass
+              </option>
+              <option value="process"
+                      {% if server[1]["options"][1]["media_handling"] == "process" %}
+                        selected
+                      {% endif %}>
+                process
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="col-sm-3">
           <label class="form-control-onnet margin-bottom-xs">
             {_ Auth method _}
             {% wire id="auth_method"
@@ -76,15 +88,24 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-4">
-          <label class="form-control-onnet margin-bottom-xs pl-1">
-            {_ Realm _}:
-            <input type="text"
-                   class="form-control margin-bottom-xs zprimary"
-                   style="background-color: white!important;"
-                   value="{% if trunk_doc[1]["account"][1]["auth_realm"]
-                            %}{{ trunk_doc[1]["account"][1]["auth_realm"] }}{%
-                              else %}{{ m.kazoo.get_account_realm }}{% endif %}"
-                   readonly>
+          <label class="form-control-onnet margin-bottom-xs">{_ Invite format _}
+            <select id="inbound_format"
+                    name="inbound_format"
+                    class="form-control margin-bottom-xs"
+                    style="text-align:center;">
+              <option value="e164"
+                      {% if server[1]["options"][1]["inbound_format"] == "e164" %}
+                        selected
+                      {% endif %}>
+                E.164@Realm
+              </option>
+              <option value="username"
+                      {% if server[1]["options"][1]["inbound_format"] == "username" %}
+                        selected
+                      {% endif %}>
+                SIP_Username@Realm
+              </option>
+            </select>
           </label>
         </div>
         <div class="col-sm-4">

@@ -22,7 +22,7 @@
     ,kz_get_user_doc/1
     ,kz_get_user_doc/2
     ,kz_get_user_doc/3
-    ,kz_get_user_doc_by_authtoken/4
+    ,kz_get_user_doc/4
     ,kz_user_doc_field/2
     ,kz_user_doc_field/3
     ,kz_device_doc_field/3
@@ -628,9 +628,9 @@ kz_get_user_doc(OwnerId, Context) ->
 
 kz_get_user_doc(OwnerId, AccountId, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
-    kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context).
+    kz_get_user_doc(OwnerId, AccountId, AuthToken, Context).
 
-kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context) ->
+kz_get_user_doc(OwnerId, AccountId, AuthToken, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
@@ -651,7 +651,7 @@ kz_set_user_doc(K, V, OwnerId, Context) ->
     kz_set_user_doc(K, V, OwnerId, AccountId, AuthToken, Context).
 
 kz_set_user_doc(K, V, OwnerId, AccountId, AuthToken, Context) ->
-    CurrDoc = kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context),
+    CurrDoc = kz_get_user_doc(OwnerId, AccountId, AuthToken, Context),
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' -> 
@@ -768,10 +768,10 @@ crossbar_account_send_request(Verb, API_String, ContentType, DataBag, AuthToken,
                           _ -> DataBag
                       end
               end,
-    lager:info("crossbar_account_send_request URL: ~p", [URL]),
-    lager:info("crossbar_account_send_request Headers: ~p", [req_headers(ContentType, AuthToken)]),
-    lager:info("crossbar_account_send_request Verb: ~p", [Verb]),
-    lager:info("crossbar_account_send_request Payload: ~p", [Payload]),
+ %   lager:info("crossbar_account_send_request URL: ~p", [URL]),
+ %   lager:info("crossbar_account_send_request Headers: ~p", [req_headers(ContentType, AuthToken)]),
+ %   lager:info("crossbar_account_send_request Verb: ~p", [Verb]),
+ %   lager:info("crossbar_account_send_request Payload: ~p", [Payload]),
     ibrowse:send_req(URL, req_headers(ContentType, AuthToken), Verb, Payload, [{'inactivity_timeout', 15000}]).
 
 crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context) ->
@@ -1381,7 +1381,7 @@ current_account_credit(AccountId, Context) ->
 
 kz_check_device_registration(DeviceId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary, ?STATUS/binary>>, 
-    DevicesStatus = crossbar_account_request('get', API_String, [], Context),
+    DevicesStatus = crossbar_account_request('get', API_String, [], Context, []),
     lists:member({[{<<"device_id">>,?TO_BIN(DeviceId)},{<<"registered">>,true}]}, DevicesStatus).
 
 kz_get_registrations_by_accountid(AccountId, Context) ->
@@ -3735,6 +3735,11 @@ update_trunk_server(Server, Context) ->
                 ,fun(J) -> case z_context:get_q('ipaddress',Context) of
                                <<>> -> J;
                                Ip -> modkazoo_util:set_value([<<"auth">>,<<"ip">>], Ip, J)
+                           end
+                 end
+                ,fun(J) -> case z_context:get_q('media_handling',Context) of
+                               <<>> -> J;
+                               MH -> modkazoo_util:set_value([<<"options">>,<<"media_handling">>], MH, J)
                            end
                  end
                 ,fun(J) -> case z_context:get_q('ipaddress',Context) of

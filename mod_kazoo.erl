@@ -153,7 +153,7 @@ event({postback,{reset_password,[{username,FormUsername}]},_,_}, Context) ->
                     FormUsername -> FormUsername
                end,
     case kazoo_util:password_recovery(Username, AccountName, Context) of
-        <<"">> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
+        <<>> -> z_render:growl_error(?__("The provided account name could not be found",Context), Context);
         Answer -> z_render:growl(?__(Answer, Context), Context)
     end;
 
@@ -166,7 +166,7 @@ event({postback,{password_reset_submit,[{reset_id,ResetId}]},_,_}, Context) ->
             AccountId = modkazoo_util:get_value(<<"account_id">>, Data),
             OwnerId = modkazoo_util:get_value(<<"owner_id">>, Data),
             AccountName = modkazoo_util:get_value(<<"account_name">>, Data),
-            UserDoc = kazoo_util:kz_get_user_doc_by_authtoken(OwnerId, AccountId, AuthToken, Context),
+            UserDoc = kazoo_util:kz_get_user_doc(OwnerId, AccountId, AuthToken, Context),
             UserName = modkazoo_util:get_value(<<"username">>, UserDoc),
             z_render:update("password_change_span_id"
                            ,z_template:render("password_change_form.tpl"
@@ -533,7 +533,7 @@ event({postback,{toggle_field,[{type,Type}
                              ,_,_}, Context) ->
     TargetId = case Prefix of
                    'undefined' -> FieldName;
-                   L -> L ++ FieldName
+                   L -> <<L/binary, FieldName/binary>>
                end,
     case Type of
         <<"account">> ->
@@ -598,7 +598,7 @@ event({postback,{delete_device,[{device_id,DeviceId}]},_,_}, Context) ->
 
 event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_}, Context) ->
     case Type of
-        "user" ->
+        <<"user">> ->
             _ = kazoo_util:kz_set_user_doc(Field, 'true', DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("user_enabled_status"
@@ -607,7 +607,7 @@ event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_
             z_render:update("user_enable_control"
                            ,z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1)
                            ,Context1);
-        "device" ->
+        <<"device">> ->
             _ = kazoo_util:kz_set_device_doc(Field, 'true', DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("device_enabled_status"
@@ -620,7 +620,7 @@ event({postback,{enable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_
 
 event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,_}, Context) ->
     case Type of
-        "user" ->
+        <<"user">> ->
             _ = kazoo_util:kz_set_user_doc(Field, 'false', DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("user_enabled_status"
@@ -629,7 +629,7 @@ event({postback,{disable_doc,[{type,Type},{doc_id,DocId},{field_name,Field}]},_,
             z_render:update("user_enable_control"
                            ,z_template:render("_enable_control.tpl", [{type,Type},{doc_id,DocId},{field_name,Field}], Context1)
                            ,Context1);
-        "device" ->
+        <<"device">> ->
             _ = kazoo_util:kz_set_device_doc(Field, 'false', DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             Context1 = z_render:update("device_enabled_status"
