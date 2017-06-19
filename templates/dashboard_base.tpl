@@ -25,6 +25,10 @@
                           action={update template="_z_growl_add.tpl"}
                  }
   %}
+  {% wire action={connect signal={page_mask_signal signal_filter=m.kazoo.signal_filter}
+                          action={update template="_z_add_page_mask.tpl"}
+                 }
+  %}
 {% else %}
 {% javascript %}
   z_notify("no_auth");

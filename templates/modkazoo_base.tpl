@@ -86,7 +86,6 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <!--  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.6/socket.io.min.js"></script> -->
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script src="/lib/js/countries.js"></script>
 
   </head>
   <body>
@@ -95,7 +94,6 @@
     {% block main %}{% endblock %}
 
     {% include "footer.tpl" %}
-
     {% script %}
   </body>
 </html>

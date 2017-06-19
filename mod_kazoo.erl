@@ -24,8 +24,7 @@ init(_Context) ->
     'ok'.
 
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
-    lager:info("Catched postback notify: <<no_auth before redirect to home>>"),
-    z_render:wire({redirect, [{dispatch, "home"}]}, Context);
+    z_render:wire({redirect, [{dispatch, home}]}, Context);
 
 observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
@@ -71,9 +70,7 @@ event({submit,signin,_,_}, Context) ->
     modkazoo_auth:do_sign_in(Login, Password, Account, Context);
 
 event({postback,signout,_,_}, Context) ->
-    {ok, ContextNoSession} = z_session_manager:stop_session(Context),
-?PRINT("signout2"),
-    z_render:wire({redirect, [{dispatch, home}]}, ContextNoSession);
+    z_session_manager:stop_session(Context);
 
 event({submit,signup,_,_}, Context) ->
     try

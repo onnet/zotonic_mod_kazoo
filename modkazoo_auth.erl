@@ -5,7 +5,6 @@
     ,is_superadmin_or_reseller/1
     ,refresh_superadmin_and_reseller_flags/1
     ,do_sign_in/4
-    ,signout/1
     ,gcapture_check/1
     ,process_signup_form/1
     ,may_be_add_third_party_billing/1
@@ -71,6 +70,10 @@ do_sign_in(Login, Password, Account, Context) ->
         } ->
             lager:info("Succesfull authentication of Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             lager:info("Session ID: ~p.", [z_session_manager:get_session_id(Context)]),
+            mod_signal:emit({page_mask_signal
+                            ,?SIGNAL_FILTER(Context) ++ [{'target', "sign_in_form"}]
+                            }
+                           ,Context),
             mod_signal:emit({emit_growl_signal
                             ,?SIGNAL_FILTER(Context) ++ [{'text',?__("Signing in ...", Context)},{'type', 'notice'}]
                             }
@@ -110,12 +113,9 @@ maybe_setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, A
             z_render:growl_error(?__("ACL violation.", Context), Context)
     end.
 
-setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context1) ->
-Context2 = z_context:continue_session(z_context:ensure_qs(Context1)),
- %   {ok, Context2} = z_session_manager:ensure_session(Context1),
-    z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
-    z_context:set_session(auth_user_id, Owner_Id, Context2),
-    Context = z_session:ensure_page_session(Context2),
+setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context0) ->
+    {'ok', Context} = z_session_manager:ensure_session(Context0),
+    z_context:set_session(auth_timestamp, calendar:universal_time(), Context),
     z_context:set_session(kazoo_owner_id, Owner_Id, Context),
     z_context:set_session(kazoo_auth_token, Auth_Token, Context),
     z_context:set_session(kazoo_account_id, Account_Id, Context),
@@ -125,15 +125,14 @@ Context2 = z_context:continue_session(z_context:ensure_qs(Context1)),
     _ = may_be_set_reseller_data(Context),
     _ = may_be_add_third_party_billing(Context),
     _ = set_session_currency_sign(Context),
-    choose_page_to_redirect(z_render:wire({mask, [{target_id, <<"sign_in_form">>}]}, Context)).
+    choose_page_to_redirect(Context).
 
 choose_page_to_redirect(Context) ->
     case is_superadmin_or_reseller(Context) of
         'true' ->
-            z_render:wire({redirect, [{<<"dispatch">>, <<"user_porta">>}]}, Context);
-         %   z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
+            z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
         'false' -> 
-            case z_dispatcher:url_for('dashboard',Context) of
+            case z_dispatcher:url_for('dashboard', Context) of
                 'undefined' -> 
                     case z_context:get_session('kazoo_account_admin', Context) of 
                         'true' ->
@@ -168,12 +167,6 @@ may_be_set_reseller_data(Context) ->
         'false' ->
             clean_superadmin_and_reseller_flags(Context)
     end.
-
-signout(Context) ->
-% ?PRINT("signout1"),
-    {ok, ContextNoSession} = z_session_manager:stop_session(Context),
-?PRINT("signout2"),
-    z_render:wire({redirect, [{dispatch, home}]}, ContextNoSession).
 
 gcapture_check(Context) ->
     case z_context:get_session(kazoo_reseller_account_id, Context) of
