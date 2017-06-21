@@ -521,7 +521,7 @@ event({postback,{toggle_field,[{type,Type}
                              ,_,_}, Context) ->
     TargetId = case Prefix of
                    'undefined' -> FieldName;
-                   L -> <<L/binary, FieldName/binary>>
+                   L -> <<L/binary, (?TO_BIN(FieldName))/binary>>
                end,
     case Type of
         <<"account">> ->
@@ -791,7 +791,8 @@ event({postback
     case Type of
         <<"account">> ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
-            z_render:update(Prefix++FieldName
+      %      z_render:update(Prefix++FieldName
+            z_render:update(<<Prefix/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
                                               ,{doc_id,DocId}
@@ -824,7 +825,7 @@ event({postback
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-            z_render:update(Prefix++FieldName
+            z_render:update(<<Prefix/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
                                               ,{doc_id,DocId}

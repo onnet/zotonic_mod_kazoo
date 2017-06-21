@@ -698,11 +698,11 @@ kz_get_device_doc(DeviceId, Context) ->
         'true' -> []
     end.
 
-kz_set_device_doc(["dial_plan","system"], V, DeviceId, Context) ->
+kz_set_device_doc([<<"dial_plan">>,<<"system">>], V, DeviceId, Context) ->
     kz_set_device_doc([<<"dial_plan">>,<<"system">>], [?TO_BIN(V)], DeviceId, Context);
-kz_set_device_doc(["media","encryption","methods"], <<"No encryption">>, DeviceId, Context) ->
+kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], <<"No encryption">>, DeviceId, Context) ->
     kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], [], DeviceId, Context);
-kz_set_device_doc(["media","encryption","methods"], <<V/binary>>, DeviceId, Context) ->
+kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], <<V/binary>>, DeviceId, Context) ->
     kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], binary:split(V, <<",">>), DeviceId, Context);
 kz_set_device_doc(K, V, DeviceId, Context) ->
     CurrDoc = kz_get_device_doc(DeviceId, Context),
