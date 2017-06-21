@@ -24,7 +24,8 @@ init(_Context) ->
     'ok'.
 
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->
-    z_render:wire({redirect, [{dispatch, home}]}, Context);
+    {ok, ContextNoSession} = z_session_manager:stop_session(Context),
+    z_render:wire({redirect, [{dispatch, home}]}, ContextNoSession);
 
 observe_postback_notify(A, _Context) ->
     lager:info("Catched postback notify: ~p", [A]),
