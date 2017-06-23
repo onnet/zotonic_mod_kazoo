@@ -22,6 +22,12 @@
      class="arrowpad fa fa-arrow-circle-down"></i>
 </span>
 {{ headline }}
+{% button class="btn btn-xs btn-onnet pull-right"
+          text=_"refresh list"
+          action={emit signal={user_portal_faxes_incoming_tpl
+                               signal_filter=m.kazoo.signal_filter}
+                 }
+%}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

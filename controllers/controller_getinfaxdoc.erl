@@ -36,7 +36,7 @@ allowed_methods(Context) ->
 
 forbidden(Context) ->
     case z_context:get_q('id', Context) of
-        <<_:6/binary, "-", _:32/binary, ".pdf">> = DocId ->
+        <<_:6/binary, "-", _:32/binary>> = DocId ->
             case kazoo_util:kz_incoming_fax_attachment_pdf(DocId, Context) of
                  <<"">> ->
                      {true, Context};

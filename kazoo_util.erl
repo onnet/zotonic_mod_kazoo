@@ -1511,7 +1511,7 @@ kz_incoming_fax_attachment_pdf(DocId, Context) ->
     end.
 
 kz_incoming_fax_attachment_tiff(DocId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?FAXES_INCOMING/binary, ?TO_BIN(DocId)/binary, ?ATTACHMENT/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?FAXES_INBOX/binary, ?TO_BIN(DocId)/binary, ?ATTACHMENT/binary>>,
     crossbar_account_attachment_request('get', API_String, [], Context).
 
 phone_number(<<"+", Number/binary>>, Context) ->
