@@ -14,40 +14,40 @@
   </thead>
   <tbody>
     {% for attempt in m.kazoo.kz_list_incoming_faxes %}
-      {% if attempt["timestamp"] %}
+      {% if attempt[1]["timestamp"] %}
         <tr>
           <td style="text-align: center; white-space: nowrap;">
-            {{ attempt["timestamp"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
+            {{ attempt[1]["timestamp"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
           </td>
           <td style="text-align: center;">
-            {{ attempt["from_number"]|pretty_phonenumber }}
+            {{ attempt[1]["from_number"]|pretty_phonenumber }}
           </td>
           <td style="text-align: center;">
-            {% if attempt["rx_result"][1]["success"] %}{_ Success _}{% else %}{_ Failed _}{% endif %}
+            {% if attempt[1]["rx_result"][1]["success"] %}{_ Success _}{% else %}{_ Failed _}{% endif %}
           </td>
           <td style="text-align: center;">
-            <a href="/getinfaxdoc/id/{{ attempt["id"] }}"><i class="fa fa-download" title="{_ Download _}"></i></a>
+            <a href="/getinfaxdoc/id/{{ attempt[1]["id"] }}"><i class="fa fa-download" title="{_ Download _}"></i></a>
           </td>
           <td style="text-align: center;">
-            <i id={{ attempt["id"] }}
+            <i id={{ attempt[1]["id"] }}
                style="cursor: pointer;"
                class="fa fa-info-circle zprimary pointer"
                title="{_ Details _}"></i>
           </td>
           <td style="text-align: center;">
-            <i id="fax_delete_{{ attempt["id"] }}"
+            <i id="fax_delete_{{ attempt[1]["id"] }}"
                style="cursor: pointer;"
                class="fa fa-trash-o"
                title="{_ Delete _}"></i>
           </td>
         </tr>
-        {% wire id=attempt["id"]
+        {% wire id=attempt[1]["id"]
                 action={dialog_open title=_"Fax details" template="_details.tpl" arg=attempt}
         %}
-        {% wire id="fax_delete_"++attempt["id"]
+        {% wire id="fax_delete_"++attempt[1]["id"]
                 action={confirm text=_"Do you really want to delete incoming fax from "
-                                       ++attempt["from_number"]|pretty_phonenumber++"?"
-                                action={postback postback={delete_incoming_fax fax_id=attempt["id"]}
+                                       ++attempt[1]["from_number"]|pretty_phonenumber++"?"
+                                action={postback postback={delete_incoming_fax fax_id=attempt[1]["id"]}
                                                  delegate="mod_kazoo"
                                        }
                        }
