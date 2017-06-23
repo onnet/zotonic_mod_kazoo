@@ -435,6 +435,8 @@
 -define(REGISTRATIONS, <<"/registrations">>).
 -define(COUNT, <<"/count">>).
 -define(FAXES, <<"/faxes">>).
+-define(FAXES_INBOX, <<"/faxes/inbox/">>).
+-define(FAXES_OUTBOX, <<"/faxes/outbox/">>).
 -define(FAXES_OUTGOING, <<"/faxes/outgoing/">>).
 -define(FAXES_INCOMING, <<"/faxes/incoming/">>).
 -define(ATTACHMENT, <<"/attachment">>).

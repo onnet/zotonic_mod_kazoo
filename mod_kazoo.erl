@@ -486,8 +486,10 @@ event({submit,{start_webphone_form,[]},_,_}, Context) ->
 
 event({postback,{delete_incoming_fax,[{fax_id, FaxId}]},_,_}, Context) ->
     _ = kazoo_util:kz_incoming_fax_delete(FaxId, Context),
-    z_render:update("user_portal_faxes_incoming"
-                   ,z_template:render("user_portal_faxes_incoming.tpl", [{headline,?__("Incoming faxes", Context)}], Context)
+    z_render:update("user_portal_faxes_incoming_tpl"
+                   ,z_template:render("user_portal_faxes_incoming.tpl"
+                                     ,[{headline,?__("Incoming faxes", Context)}]
+                                     ,Context)
                    ,Context);
 
 event({postback,{toggle_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, AccountId}]},_,_}, Context) ->

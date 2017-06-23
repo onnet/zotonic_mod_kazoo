@@ -1487,7 +1487,7 @@ kz_incoming_fax(DocId, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_incoming_fax_delete(DocId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?FAXES_INCOMING/binary, ?TO_BIN(DocId)/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?FAXES_INBOX/binary, ?TO_BIN(DocId)/binary>>,
     crossbar_account_request('delete', API_String, [], Context).
 
 kz_incoming_fax_attachment_pdf(DocId, Context) ->
