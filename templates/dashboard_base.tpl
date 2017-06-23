@@ -30,8 +30,9 @@
                  }
   %}
 {% else %}
-{% javascript %}
-  z_notify("no_auth");
-{% endjavascript %}
+  {% javascript %}
+    z_notify("no_auth");
+  {% endjavascript %}
+  {% wire action={redirect location="/"} %}
 {% endif %}
 {% endblock %}
