@@ -1,10 +1,6 @@
 <div class="row">
-
-<br />
 <div class="col-sm-12">
-
 {% with m.kazoo.kz_get_acc_doc as account_doc %}
-
 <table id="admin_portal_user_devices_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
@@ -67,7 +63,6 @@
 </table>
 </div> 
 </div> 
-
 {% javascript %}
 var oTable = $('#admin_portal_user_devices_table').dataTable({
 "pagingType": "simple",
