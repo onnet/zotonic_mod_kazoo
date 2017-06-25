@@ -16,31 +16,31 @@
     </thead>
     <tbody>
         {% for device in m.kazoo[{kz_list_user_devices owner_id=user_id}] %}
-        {% with m.kazoo[{kz_get_device_registration_details device_id=device["id"]}] as device_details %}
-        {% with m.kazoo[{kz_check_device_registration device_id=device["id"]}] as device_registered %}
+        {% with m.kazoo[{kz_get_device_registration_details device_id=device[1]["id"]}] as device_details %}
+        {% with m.kazoo[{kz_check_device_registration device_id=device[1]["id"]}] as device_registered %}
         <tr>
             <td style="text-align: center;">
-                {% if device["device_type"]=="sip_device" %}
-                  <i class="{% if device["enabled"] %}
+                {% if device[1]["device_type"]=="sip_device" %}
+                  <i class="{% if device[1]["enabled"] %}
                                 {% if device_registered %}registered
                                     {% else %}unregistered
                                 {% endif %}
                             {% endif %}
                             icon-telicon-voip-phone icon-device"></i>
-                {% elseif device["device_type"]=="softphone" %}
-                  <i class="{% if device["enabled"] %}
-                                {% if m.kazoo[{kz_check_device_registration device_id=device["id"]}] %}registered
+                {% elseif device[1]["device_type"]=="softphone" %}
+                  <i class="{% if device[1]["enabled"] %}
+                                {% if m.kazoo[{kz_check_device_registration device_id=device[1]["id"]}] %}registered
                                     {% else %}unregistered
                                 {% endif %}
                             {% endif %} 
                             icon-telicon-soft-phone icon-device"></i>
-                {% elseif device["device_type"]=="cellphone" %}
+                {% elseif device[1]["device_type"]=="cellphone" %}
                   <i class="registered fa fa-mobile"></i>
                 {% else %}
                   <i class="registered fa fa-phone"></i>
                 {% endif %}
             </td>
-            <td style="text-align: center;">{{ device["name"] }}</td>
+            <td style="text-align: center;">{{ device[1]["name"] }}</td>
             <td style="text-align: center;">{% if device_registered %}{{ device_details[1]["contact_ip"] }}{% else %}-{% endif %}</td>
             <td style="text-align: center;">{% if device_registered %}{{ device_details[1]["user_agent"] }}{% else %}-{% endif %}</td>
         </tr>
@@ -75,5 +75,4 @@ var oTable = $('#admin_portal_user_devices_table').dataTable({
 
 });
 {% endjavascript %}
-
 {% endwith %}
