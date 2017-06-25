@@ -2557,9 +2557,11 @@ event({postback,{onbill_generated_doc_delete,[{account_id,AccountId},{doc_id,Doc
     Context;
 
 event({submit,device_media_settings,_,_}, Context) ->
-    Codecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('codecs',Context)),
     DeviceId = z_context:get_q('device_id', Context),
+    Codecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('codecs',Context)),
     kazoo_util:kz_set_device_doc([<<"media">>,<<"audio">>,<<"codecs">>], Codecs, DeviceId, Context),
+    VideoCodecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('videocodecs',Context)),
+    kazoo_util:kz_set_device_doc([<<"media">>,<<"video">>,<<"codecs">>], VideoCodecs, DeviceId, Context),
     mod_signal:emit({emit_growl_signal
                     ,?SIGNAL_FILTER(Context) ++
                      [{'text',?__("Settings saved.", Context)}
