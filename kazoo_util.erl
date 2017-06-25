@@ -414,7 +414,7 @@
    {[{<<"enabled">>,true},
      {<<"media">>,
       {[{<<"peer_to_peer">>,<<"auto">>},
-        {<<"audio">>,{[{<<"codecs">>,[<<"PCMU">>,<<"PCMA">>]}]}},
+        {<<"audio">>,{[{<<"codecs">>,[<<"PCMA">>,<<"PCMU">>]}]}},
         {<<"video">>,{[{<<"codecs">>,[]}]}},
         {<<"fax">>,{[{<<"option">>,<<"true">>}]}},
         {<<"fax_option">>,true}]}},

@@ -1,10 +1,10 @@
 {% with m.kazoo[{kz_device_doc device_id=device_id}][1] as device_doc %}
-{% wire id="form_device_sip_acl"
+{% wire id="form_device_media_settings"
         type="submit"
-        postback="add_device_sip_acl"
+        postback="device_media_settings"
         delegate="mod_kazoo"
 %}
-<form id="form_device_sip_acl" method="post" action="postback">
+<form id="form_device_media_settings" method="post" action="postback">
   <div class="form-group">
     <div class="row">
         <div class="col-sm-2">
@@ -55,7 +55,6 @@
   </div>
   <input type="hidden" name="device_id" value="{{ device_id }}" />
 </form>
-{% print device_doc["media"][1]["audio"][1]["codecs"] %}
 {% endwith %}
 <script type="text/javascript">
 $(document).ready(function() {
