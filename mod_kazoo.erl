@@ -2556,6 +2556,21 @@ event({postback,{onbill_generated_doc_delete,[{account_id,AccountId},{doc_id,Doc
     modkazoo_util:delay_signal(2 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     Context;
 
+event({submit,user_media_settings,_,_}, Context) ->
+    UserId = z_context:get_q('user_id', Context),
+    Codecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('codecs',Context)),
+    kazoo_util:kz_set_user_doc([<<"media">>,<<"audio">>,<<"codecs">>], Codecs, UserId, Context),
+    VideoCodecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('videocodecs',Context)),
+    kazoo_util:kz_set_user_doc([<<"media">>,<<"video">>,<<"codecs">>], VideoCodecs, UserId, Context),
+    mod_signal:emit({emit_growl_signal
+                    ,?SIGNAL_FILTER(Context) ++
+                     [{'text',?__("Settings saved.", Context)}
+                     ,{'type', 'notice'}
+                     ]}
+                    ,Context),
+    z_render:update(<<"mediasettings">>
+                   ,z_template:render("admin_portal_user_media_settings.tpl" ,[{user_id,UserId}] ,Context)
+                   ,Context);
 event({submit,device_media_settings,_,_}, Context) ->
     DeviceId = z_context:get_q('device_id', Context),
     Codecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('codecs',Context)),
