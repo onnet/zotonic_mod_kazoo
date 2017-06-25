@@ -3,8 +3,12 @@
 <form id="resource-form"  method="post" action="postback">
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
-  <li class="active"><a href="#resources_basic" role="tab" data-toggle="tab">{_ Basic _}</a></li>
-  <li><a href="#resources_options" role="tab" data-toggle="tab">{_ Options _}</a></li>
+  <li class="active">
+    <a href="#resources_basic" role="tab" data-toggle="tab">{_ Basic _}</a>
+  </li>
+  <li>
+    <a href="#resources_options" role="tab" data-toggle="tab">{_ Options _}</a>
+  </li>
 </ul>
 
 <div class="tab-content">
@@ -23,7 +27,10 @@
 <div class="form-group">
   <div class="row">
     <div class="col-sm-12">
-      <button id="button_edit_resources" class="col-xs-12 btn btn-zprimary margin-bottom-xs">{_ Save _}</button>
+      <button id="button_edit_resources"
+              class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+        {_ Save _}
+      </button>
     </div>
   </div>
 </div>

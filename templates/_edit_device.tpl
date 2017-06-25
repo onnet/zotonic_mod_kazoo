@@ -7,7 +7,7 @@
 {% endif %}
 {% if device_doc["device_type"]!="cellphone" and device_doc["device_type"]!="sip_uri" %}
 <!--  <li><a href="#sipsettings" role="tab" data-toggle="tab">SIP Settings</a></li> -->
-<!--  <li><a href="#audiosettings" role="tab" data-toggle="tab">Audio</a></li> -->
+  <li><a href="#audiosettings" role="tab" data-toggle="tab">Audio</a></li>
   <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
   <li><a href="#device_sip_access" role="tab" data-toggle="tab">{_ SIP ACL _}</a></li>
 {% endif %}

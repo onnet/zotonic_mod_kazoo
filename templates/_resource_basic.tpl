@@ -50,24 +50,61 @@
     <div class="form-group">
       <div class="row">
         <div class="col-sm-6">
-          <input id="flags" name="flags" type="text" class="form-control margin-bottom-xs" placeholder="{_ Flags (comma separated) _}"
-                            value="{% for flag in resource["flags"] %}{{ flag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+          <input id="flags"
+                 name="flags"
+                 type="text"
+                 class="form-control margin-bottom-xs"
+                 placeholder="{_ Flags (comma separated) _}"
+                 value="{% for flag in resource["flags"] %}{{ flag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
         </div>
         <div class="col-sm-2">
-          <label for="PCMA" class="checkbox-inline {% if "PCMA"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="PCMA" name="codecs" value="PCMA" {% if "PCMA"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}>
+          <label for="PCMA"
+                 class="checkbox-inline
+                        {% if "PCMA"|member:resource["gateways"][1][1]["codecs"] %}
+                          checked
+                        {% endif %}"
+                 style="width: 100%">
+            <input type="checkbox"
+                   id="PCMA"
+                   name="codecs"
+                   value="PCMA"
+                   {% if "PCMA"|member:resource["gateways"][1][1]["codecs"] %}
+                     checked
+                   {% endif %}>
             {_ PCMA _}
           </label>
         </div>
         <div class="col-sm-2">
-          <label for="PCMU" class="checkbox-inline {% if "PCMU"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="PCMU" name="codecs" value="PCMU" {% if "PCMU"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}>
+          <label for="PCMU"
+                 class="checkbox-inline
+                        {% if "PCMU"|member:resource["gateways"][1][1]["codecs"] %}
+                          checked
+                        {% endif %}"
+                 style="width: 100%">
+            <input type="checkbox"
+                   id="PCMU"
+                   name="codecs"
+                   value="PCMU"
+                   {% if "PCMU"|member:resource["gateways"][1][1]["codecs"] %}
+                     checked
+                   {% endif %}>
             {_ PCMU _}
           </label>
         </div>
         <div class="col-sm-2">
-          <label for="OPUS" class="checkbox-inline {% if "OPUS"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}" style="width: 100%">
-            <input type="checkbox" id="OPUS" name="codecs" value="OPUS" {% if "OPUS"|member:resource["gateways"][1][1]["codecs"] %}checked{% endif %}>
+          <label for="OPUS"
+                 class="checkbox-inline
+                        {% if "OPUS"|member:resource["gateways"][1][1]["codecs"] %}
+                          checked
+                        {% endif %}"
+                 style="width: 100%">
+            <input type="checkbox"
+                   id="OPUS"
+                   name="codecs"
+                   value="OPUS"
+                   {% if "OPUS"|member:resource["gateways"][1][1]["codecs"] %}
+                     checked
+                   {% endif %}>
             {_ OPUS _}
           </label>
         </div>
