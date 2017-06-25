@@ -7,7 +7,7 @@
 {% endif %}
 {% if device_doc["device_type"]!="cellphone" and device_doc["device_type"]!="sip_uri" %}
 <!--  <li><a href="#sipsettings" role="tab" data-toggle="tab">SIP Settings</a></li> -->
-  <li><a href="#audiosettings" role="tab" data-toggle="tab">Audio</a></li>
+  <li><a href="#mediasettings" role="tab" data-toggle="tab">Media</a></li>
   <li><a href="#restrictions" role="tab" data-toggle="tab">{_ Restrictions _}</a></li>
   <li><a href="#device_sip_access" role="tab" data-toggle="tab">{_ SIP ACL _}</a></li>
 {% endif %}
@@ -32,9 +32,16 @@
   <div class="tab-pane fade" id="sipsettings">
     {% include "admin_portal_device_sip_settings.tpl" %}
   </div>
-  <!-- Audio Settings -->
-  <div class="tab-pane fade" id="audiosettings">
-    {% include "admin_portal_device_audio_settings.tpl" %}
+  <!-- Media Settings -->
+  <div class="tab-pane fade" id="mediasettings">
+    <div class="text-center">
+      {% ilazy  class="fa fa-spinner fa-spin fa-3x"
+                action={update target="mediasettings"
+                               template="admin_portal_device_media_settings.tpl"
+                               device_id=device_id
+                       }
+      %}
+    </div>
   </div>
   <div class="tab-pane fade" id="restrictions">
     {% include "admin_portal_device_restrictions.tpl" %}
