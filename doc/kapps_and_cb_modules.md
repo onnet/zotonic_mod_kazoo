@@ -76,6 +76,7 @@ sup kapps_config set_boolean fax ensure_valid_caller_id true
 
 sup kapps_config set_boolean callflow ensure_valid_caller_id true
 
+sup kapps_config set_integer crossbar pagination_page_size 1000
 sup kapps_config set_integer crossbar token_auth_expiry 21600
 sup kapps_config set_integer crossbar.braintree max_account_credit 700
 sup kapps_config set_boolean crossbar.channels system_wide_channels_list true
