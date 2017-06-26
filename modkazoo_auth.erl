@@ -40,6 +40,9 @@ is_superadmin_or_reseller(Context) ->
 
 set_superadmin_and_reseller_flags(Context) ->
     AccountDoc = kazoo_util:kz_get_acc_doc(Context),
+  lager:info("IAM set_superadmin_and_reseller_flags AccountDoc: ~p",[AccountDoc]),
+?PRINT(modkazoo_util:get_value(<<"is_reseller">>,AccountDoc)),
+?PRINT(modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc)),
     z_context:set_session('kazoo_is_reseller', modkazoo_util:get_value(<<"is_reseller">>,AccountDoc,'false'), Context),
     z_context:set_session('kazoo_superduper_admin'
                          ,modkazoo_util:get_value(<<"superduper_admin">>,AccountDoc,'false')
