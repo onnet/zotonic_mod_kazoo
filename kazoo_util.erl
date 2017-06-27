@@ -1171,11 +1171,11 @@ kz_list_user_vmboxes(Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_vmbox_details(VMBoxId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_user_vmbox_messages(VMBoxId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary, ?MESSAGES/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary, ?MESSAGES/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
 kz_purge_voicemails(VMBoxId, DaysTo, Context) ->
@@ -1248,7 +1248,7 @@ cdr_jobj_add_localtime(CdrElement, Timezone) ->
                            ,CdrElement).
 
 kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary,
                    ?MESSAGES/binary, "/", ?TO_BIN(MediaId)/binary, ?RAW/binary, <<"?">>/binary,
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
     <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
@@ -1327,7 +1327,7 @@ set_vm_message_folder(Folder, VMBoxId, MediaId, Context) ->
     Messages = [update_folder1(Message, Folder, MediaId, modkazoo_util:get_value(<<"media_id">>, Message))
                 || Message <- modkazoo_util:get_value(<<"messages">>, CurrVMBox, [])],
     NewVMBox = modkazoo_util:set_value(<<"messages">>, Messages, CurrVMBox),
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary>>,
     crossbar_account_request('post', API_String, {[{<<"data">>, NewVMBox}]}, Context).
 
 update_folder1(Message, Folder, MediaId, MediaId) ->
@@ -2981,15 +2981,15 @@ kz_vmbox(Context) ->
     end.
 
 kz_vmbox(Verb, VMBoxId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
 vmbox_messages(Verb, VMBoxId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary, ?MESSAGES/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary, ?MESSAGES/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
 vmbox_message(Verb, MessageId, VMBoxId, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", ?TO_BIN(VMBoxId)/binary
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary
                   ,?MESSAGES/binary, "/", ?TO_BIN(MessageId)/binary>>,
     crossbar_account_request(Verb, API_String, [], Context).
 
