@@ -723,8 +723,8 @@ event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, Fiel
                               ,{doc_id,DocId}
                               ,{field_name, FieldName}
                               ,{options,Options}
-                              ,{prefix,""}
-                              ,{postfix,""}
+                              ,{prefix, <<>>}
+                              ,{postfix,<<>>}
                               ]
            },<<>>,<<>>},Context);
 
@@ -734,8 +734,8 @@ event({postback
                           ,{doc_id,DocId}
                           ,{field_name, FieldName}
                           ,{options,Options}
-                          ,{prefix,RawPrefix}
-                          ,{postfix,RawPostfix}
+                          ,{prefix,Prefix}
+                          ,{postfix,Postfix}
                           ]
        },_,_},Context)
     ->
@@ -744,8 +744,8 @@ event({postback
                               ,{doc_id,DocId}
                               ,{field_name, FieldName}
                               ,{options,Options}
-                              ,{prefix,RawPrefix}
-                              ,{postfix,RawPostfix}
+                              ,{prefix,Prefix}
+                              ,{postfix,Postfix}
                               ,{account_id,z_context:get_session('kazoo_account_id', Context)}
                               ]
            },<<>>,<<>>}, Context);
@@ -755,8 +755,8 @@ event({postback
                           ,{doc_id,DocId}
                           ,{field_name, FieldName}
                           ,{options,Options}
-                          ,{prefix,RawPrefix}
-                          ,{postfix,RawPostfix}
+                          ,{prefix,Prefix}
+                          ,{postfix,Postfix}
                           ,{account_id,'undefined'}
                           ]
        },_,_}, Context)
@@ -766,8 +766,8 @@ event({postback
                               ,{doc_id,DocId}
                               ,{field_name, FieldName}
                               ,{options,Options}
-                              ,{prefix,RawPrefix}
-                              ,{postfix,RawPostfix}
+                              ,{prefix,Prefix}
+                              ,{postfix,Postfix}
                               ,{account_id,z_context:get_session('kazoo_account_id', Context)}
                               ]
            },<<>>,<<>>}, Context);
@@ -777,26 +777,16 @@ event({postback
                           ,{doc_id,DocId}
                           ,{field_name, FieldName}
                           ,{options,Options}
-                          ,{prefix,RawPrefix}
-                          ,{postfix,RawPostfix}
+                          ,{prefix,Prefix}
+                          ,{postfix,Postfix}
                           ,{account_id,AccountId}
                           ]
        },_,_}, Context)
     ->
-?PRINT(RawPrefix),
-    Prefix = case RawPrefix of
-        'undefined' -> "";
-        Pre -> Pre
-    end,
-    Postfix = case RawPostfix of
-        'undefined' -> "";
-        Post -> Post
-    end,
     case Type of
         <<"account">> ->
             _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
-      %      z_render:update(Prefix++FieldName
-            z_render:update(<<Prefix/binary,(?TO_BIN(FieldName))/binary>>
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
                                               ,{doc_id,DocId}
@@ -811,7 +801,7 @@ event({postback
         <<"user">> ->
             _ = kazoo_util:kz_set_user_doc(FieldName, ?TO_BIN(z_context:get_q("input_value", Context)), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-            z_render:update(Prefix++FieldName
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
                                               ,{doc_id,DocId}
@@ -833,7 +823,7 @@ event({postback
 ?PRINT(Prefix),
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-            z_render:update(<<Prefix/binary,(?TO_BIN(FieldName))/binary>>
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl"
                                              ,[{type,Type}
                                               ,{doc_id,DocId}
