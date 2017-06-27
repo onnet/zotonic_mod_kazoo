@@ -939,12 +939,12 @@ kz_media_doc_field(Field, MediaId, Context) when is_list(Field) ->
 
 create_kazoo_account(Context) ->
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
-    Firstname = ?TO_BIN(z_context:get_q("firstname", Context)),
-    Surname = ?TO_BIN(z_context:get_q("surname", Context)),
+    Firstname = z_context:get_q(firstname, Context),
+    Surname = z_context:get_q(surname, Context),
     Username = modkazoo_util:to_lower_binary(z_context:get_q("username", Context)),
-    Companyname = ?TO_BIN(z_context:get_q("companyname", Context)),
-    Email = ?TO_BIN(z_context:get_q("email", Context)),
-    Phonenumber = ?TO_BIN(z_context:get_q("phonenumber", Context)),
+    Companyname = z_context:get_q(companyname, Context),
+    Email = z_context:get_q(email, Context),
+    Phonenumber = z_context:get_q(phonenumber, Context),
     DefaultRealm = m_config:get_value('mod_kazoo', 'kazoo_default_realm', Context),
     Accountname = case valid_account_name(Companyname) of
       'false' -> ?TO_BIN(modkazoo_util2:translit(z_convert:to_list(<<Firstname/binary, <<" ">>/binary, Surname/binary>>)));
@@ -1017,11 +1017,11 @@ kz_account_create_callflow(Routines, Context) ->
 
 update_kazoo_user(Context) ->
     CallForwardEnabled = modkazoo_util:on_to_true(z_context:get_q("call_forward_enabled", Context)),
-    ForwardTo = ?TO_BIN(z_context:get_q("ring-number-txt", Context)),
+    ForwardTo = z_context:get_q('ring-number-txt', Context),
     RingVoip = not modkazoo_util:on_to_true(z_context:get_q("ring-device-checkbox", Context)),
     KeepCallerID = modkazoo_util:on_to_true(z_context:get_q("call_forward_keep_caller_id", Context)),
     VmToEmail = modkazoo_util:on_to_true(z_context:get_q("vm-to-email-checkbox", Context)),
-    Timezone = ?TO_BIN(z_context:get_q("user_timezone", Context)),
+    Timezone = z_context:get_q(user_timezone, Context),
     z_context:set_session('user_timezone', Timezone, Context),
     CurrentDoc = kz_get_user_doc(Context),
     Routines = [fun(J) -> modkazoo_util:set_value([<<"call_forward">>, <<"enabled">>], CallForwardEnabled, J) end
@@ -1975,7 +1975,7 @@ add_device(AcceptCharges, Context) ->
         [{[<<"sip">>,<<"username">>],z_context:get_q('sipusername',Context)}
         ,{[<<"sip">>,<<"password">>],z_context:get_q('sippassword',Context)}
         ,{[<<"sip">>,<<"invite_format">>], case z_context:get_q("route",Context) of 'undefined' -> <<"username">>; _ -> <<"route">> end}
-        ,{[<<"sip">>,<<"route">>], ?TO_BIN(z_context:get_q("route",Context))}
+        ,{[<<"sip">>,<<"route">>], z_context:get_q(route,Context)}
         ,{[<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
         ,{[<<"call_forward">>,<<"number">>],z_context:get_q('cellphonenumber',Context)}
         ,{[<<"name">>],z_context:get_q('name',Context)}
@@ -2368,20 +2368,20 @@ kz_list_account_menus(Context) ->
 
 kz_menu(Context) ->
     Id = z_context:get_q("menu_id",Context),
-    Props = [{<<"name">>, ?TO_BIN(z_context:get_q("name", Context))}
-            ,{<<"retries">>, ?TO_BIN(z_context:get_q("retries", Context))}
-            ,{<<"timeout">>, ?TO_BIN(z_context:get_q("timeout", Context))}
-            ,{<<"max_extension_length">>, ?TO_BIN(z_context:get_q("max_extension_length", Context))}
+    Props = [{<<"name">>, z_context:get_q(name, Context)}
+            ,{<<"retries">>, z_context:get_q(retries, Context)}
+            ,{<<"timeout">>, z_context:get_q(timeout, Context)}
+            ,{<<"max_extension_length">>, z_context:get_q(max_extension_length, Context)}
             ,{<<"media">>, {[{<<"exit_media">>, not(modkazoo_util:on_to_true(z_context:get_q("suppress_media", Context)))}
                             ,{<<"invalid_media">>, not(modkazoo_util:on_to_true(z_context:get_q("suppress_media", Context)))}
                             ,{<<"transfer_media">>, not(modkazoo_util:on_to_true(z_context:get_q("suppress_media", Context)))}
-                            ,{<<"greeting">>, ?TO_BIN(z_context:get_q("greeting", Context))}]}}
-            ,{<<"record_pin">>, ?TO_BIN(z_context:get_q("record_pin", Context))}
+                            ,{<<"greeting">>, z_context:get_q(greeting, Context)}]}}
+            ,{<<"record_pin">>, z_context:get_q(record_pin, Context)}
             ,{<<"allow_record_from_offnet">>, modkazoo_util:on_to_true(z_context:get_q("allow_record_from_offnet", Context))}
             ,{<<"hunt">>, modkazoo_util:on_to_true(z_context:get_q("hunt", Context))}
             ,{<<"suppress_media">>, modkazoo_util:on_to_true(z_context:get_q("suppress_media", Context))}
-            ,{<<"hunt_allow">>, ?TO_BIN(z_context:get_q("hunt_allow", Context))}
-            ,{<<"hunt_deny">>, ?TO_BIN(z_context:get_q("hunt_deny", Context))}
+            ,{<<"hunt_allow">>, z_context:get_q(hunt_allow, Context)}
+            ,{<<"hunt_deny">>, z_context:get_q(hunt_deny, Context)}
             ,{<<"id">>, ?TO_BIN(Id)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
@@ -2850,15 +2850,15 @@ cf_time_of_the_day(Context) ->
             ,{<<"time_window_stop">>, ?TO_BIN(TimeWindowStop)}
             ,{<<"wdays">>, case Wdays of 'undefined' -> 'undefined'; _ -> lists:map(fun(Wday) -> ?TO_BIN(Wday) end, Wdays) end}
             ,{<<"days">>, case Days of 'undefined' -> 'undefined'; _ -> lists:map(fun(Day) -> ?TO_BIN(Day) end, [Days]) end}
-            ,{<<"interval">>, ?TO_BIN(z_context:get_q("interval",Context))}
-            ,{<<"cycle">>, ?TO_BIN(z_context:get_q("cycle",Context))}
-            ,{<<"name">>, ?TO_BIN(z_context:get_q("name",Context))}
-            ,{<<"type">>, ?TO_BIN(z_context:get_q("type",Context))}
+            ,{<<"interval">>, z_context:get_q(interval,Context)}
+            ,{<<"cycle">>, z_context:get_q(cycle,Context)}
+            ,{<<"name">>, z_context:get_q(name,Context)}
+            ,{<<"type">>, z_context:get_q(type,Context)}
             ,{<<"start_date">>, StartDate}
             ,{<<"id">>, ?TO_BIN(Id)}
             ,{<<"enabled">>, z_convert:to_atom(z_context:get_q("enabled",Context))}
-            ,{<<"ordinal">>, ?TO_BIN(z_context:get_q("ordinal",Context))}
-            ,{<<"month">>, ?TO_BIN(z_context:get_q("month",Context))}],
+            ,{<<"ordinal">>, z_context:get_q(ordinal,Context)}
+            ,{<<"month">>, z_context:get_q(month,Context)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
         'undefined'->
@@ -2953,16 +2953,16 @@ kz_list_account_c2calls(Context) ->
 
 kz_vmbox(Context) ->
     Id = z_context:get_q("vmbox_id",Context),
-    Props = [{<<"name">>, ?TO_BIN(z_context:get_q("name", Context))}
-            ,{<<"mailbox">>, ?TO_BIN(z_context:get_q("mailbox", Context))}
-            ,{<<"pin">>, ?TO_BIN(z_context:get_q("pin", Context))}
-            ,{<<"owner_id">>, ?TO_BIN(z_context:get_q("owner_id", Context))}
+    Props = [{<<"name">>, z_context:get_q(name, Context)}
+            ,{<<"mailbox">>, z_context:get_q(mailbox, Context)}
+            ,{<<"pin">>, z_context:get_q(pin, Context)}
+            ,{<<"owner_id">>, z_context:get_q(owner_id, Context)}
             ,{<<"media">>, case z_context:get_q("unavailable_message_id", Context) of
                                [] -> 'undefined';
                                MessageId -> {[{<<"unavailable">>, ?TO_BIN(MessageId)}]}
                            end
              }
-            ,{<<"timezone">>, ?TO_BIN(z_context:get_q("vmbox_timezone", Context))}
+            ,{<<"timezone">>, z_context:get_q(vmbox_timezone, Context)}
             ,{<<"is_setup">>, modkazoo_util:on_to_true(z_context:get_q("is_setup", Context))}
             ,{<<"require_pin">>, modkazoo_util:on_to_true(z_context:get_q("require_pin", Context))}
             ,{<<"check_if_owner">>, modkazoo_util:on_to_true(z_context:get_q("check_if_owner", Context))}
@@ -2999,12 +2999,12 @@ kz_conference(Context) ->
                        ,z_string:split(z_context:get_q("numbers", Context),",")),
     Pins = lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9]", "", [global, {return, binary}]) end
                     ,z_string:split(z_context:get_q("pins", Context),",")),
-    Props = [{<<"name">>, ?TO_BIN(z_context:get_q("conference_name", Context))}
+    Props = [{<<"name">>, z_context:get_q(conference_name, Context)}
             ,{<<"member">>, {[{<<"numbers">>, case Numbers of [<<>>] -> []; _ -> Numbers end}
                             ,{<<"pins">>, case Pins of [<<>>] -> []; _ -> Pins end}
                             ,{<<"join_muted">>, modkazoo_util:on_to_true(z_context:get_q("join_muted", Context))}
                             ,{<<"join_deaf">>, modkazoo_util:on_to_true(z_context:get_q("join_deaf", Context))}]}}
-            ,{<<"owner_id">>, ?TO_BIN(z_context:get_q("owner_id", Context))}
+            ,{<<"owner_id">>, z_context:get_q(owner_id, Context)}
             ,{<<"play_name">>, modkazoo_util:on_to_true(z_context:get_q("play_name", Context))}
             ,{<<"moderator">>, {[{<<"numbers">>, []}
                             ,{<<"pins">>, []}
@@ -3121,12 +3121,12 @@ current_conference_participants_number(ConferenceId, Context) ->
 
 kz_c2call(Context) ->
     Id = z_context:get_q("c2call_id",Context),
-    Props = [{<<"name">>, ?TO_BIN(z_context:get_q("name", Context))}
+    Props = [{<<"name">>, z_context:get_q(name, Context)}
             ,{<<"auth_required">>, modkazoo_util:on_to_true(z_context:get_q("auth_required", Context))}
-            ,{<<"dial_first">>, ?TO_BIN(z_context:get_q("dial_first", Context))}
-            ,{<<"extension">>, ?TO_BIN(z_context:get_q("extension", Context))}
-            ,{<<"caller_id_number">>, ?TO_BIN(z_context:get_q("caller_id_number", Context))}
-            ,{<<"outbound_callee_id_number">>, ?TO_BIN(z_context:get_q("caller_id_number", Context))}
+            ,{<<"dial_first">>, z_context:get_q(dial_first, Context)}
+            ,{<<"extension">>, z_context:get_q(extension, Context)}
+            ,{<<"caller_id_number">>, z_context:get_q(caller_id_number, Context)}
+            ,{<<"outbound_callee_id_number">>, z_context:get_q(caller_id_number, Context)}
             ,{<<"id">>, ?TO_BIN(Id)}],
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(modkazoo_util:filter_empty(Props), modkazoo_util:new())),
     case Id of
@@ -4015,8 +4015,8 @@ rs_kz_customer_update(RecipientAccountId, AccountId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"from">>], modkazoo_util:get_q_bin("from", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"subject">>], modkazoo_util:get_q_bin("subject", Context), J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"plain">>, ?TO_BIN(z_context:get_q("text_body", Context)), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(?TO_BIN(z_context:get_q("html_body", Context))), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_context:get_q(text_body, Context), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(z_context:get_q(html_body, Context)), J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"user_type">>, modkazoo_util:get_q_bin("selected_user", Context), J) end
                 ,fun(J) when RecipientAccountId == 'undefined' -> J; (J) -> modkazoo_util:set_value(<<"recipient_id">>, RecipientAccountId, J) end
                ],
