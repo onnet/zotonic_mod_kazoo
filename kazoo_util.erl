@@ -693,7 +693,7 @@ kz_get_device_doc(DeviceId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse DeviceId =:= 'undefoned' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", ?TO_BIN(DeviceId)/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", DeviceId/binary>>,
             crossbar_account_request('get', API_String, [], Context);
         'true' -> []
     end.
@@ -713,7 +713,7 @@ kz_set_device_doc(K, V, DeviceId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse DeviceId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", ?TO_BIN(DeviceId)/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", DeviceId/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
         'true' -> []
     end.
