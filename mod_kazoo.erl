@@ -783,6 +783,7 @@ event({postback
                           ]
        },_,_}, Context)
     ->
+?PRINT(RawPrefix),
     Prefix = case RawPrefix of
         'undefined' -> "";
         Pre -> Pre
@@ -826,6 +827,10 @@ event({postback
                 [] -> 'undefined';
                 Val -> z_convert:to_binary(Val)
             end,
+?PRINT(FieldName),
+?PRINT(InputValue),
+?PRINT(DocId),
+?PRINT(Prefix),
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(<<Prefix/binary,(?TO_BIN(FieldName))/binary>>

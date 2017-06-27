@@ -2,6 +2,7 @@
 -define(EMPTY_JSON_OBJECT, ?JSON_WRAPPER([])).
 -define(MK_DATABAG(JObj), {[{<<"data">>, JObj}]}).
 -define(TO_BIN(Var), <<(z_convert:to_binary(Var))/binary>>).
+%%-define(TO_BIN(Var), z_convert:to_binary(Var)).
 -define(TO_INT(Var), z_convert:to_integer(Var)).
 -define(TO_INT(Var, Default), modkazoo_util2:to_integer(Var, Default)).
 -define(TO_FLT(Var), z_convert:to_float(Var)).

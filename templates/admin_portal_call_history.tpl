@@ -22,19 +22,30 @@
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
   {{ headline }}
+  <i id="refresh_todays_calls_list"
+     style="padding-left: 0.5em;"
+     class="fa fa-refresh pointer"
+     title="{_ refresh today's calls list _}."></i>
+  {% wire id="refresh_todays_calls_list"
+          action={emit signal={update_admin_portal_call_history_tpl
+                               signal_filter=m.kazoo.signal_filter
+                              }
+                 }
+          action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
+  %}
   <span id="select_range_span"
         class="ml-1
                {% if m.signal[signal].selected_billing_period != "range" %}
                  display_none
                {% endif %}">
     {% button class="btn btn-xs btn-onnet pull-right" text=_"refresh results"
-              action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
               action={postback postback="refresh_admin_callstats"
                                qarg="selected_billing_period"
                                qarg="callstatsdayFrom"
                                qarg="callstatsdayTo"
                                delegate="mod_kazoo"
                      }
+              action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
     %}
     <input id="callstatsdayTo"
            type="text"
@@ -113,12 +124,14 @@
                                  }"
                  }
   %}
-  {% wire name="show_selected_period_cdr" action={postback postback="refresh_admin_callstats"
-                                                           qarg="selected_billing_period"
-                                                           qarg="callstatsdayFrom"
-                                                           qarg="callstatsdayTo"
-                                                           delegate="mod_kazoo"
-                                                 }
+  {% wire name="show_selected_period_cdr"
+          action={postback postback="refresh_admin_callstats"
+                           qarg="selected_billing_period"
+                           qarg="callstatsdayFrom"
+                           qarg="callstatsdayTo"
+                           delegate="mod_kazoo"
+                 }
+          action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
   %}
   <i id="show_legs_toggler"
      class="fa fa-toggle-{% if m.session.show_cdr_legs %}on{% else %}off{% endif %}
@@ -128,13 +141,13 @@
   {% wire id="show_legs_toggler"
           type="click"
           action={postback postback="toggle_show_legs_status" delegate="mod_kazoo"}
-          action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
           action={postback postback="refresh_admin_callstats"
                            qarg="selected_billing_period"
                            qarg="callstatsdayFrom"
                            qarg="callstatsdayTo"
                            delegate="mod_kazoo"
                  }
+          action={mask target="admin_portal_call_history_table" message=_"Sending request"++"..."}
   %}
   <span class="pull-right pr-05"> {_ Detailed _}: </span>
 {% endblock %}
