@@ -631,10 +631,10 @@ kz_get_user_doc(OwnerId, AccountId, Context) ->
     kz_get_user_doc(OwnerId, AccountId, AuthToken, Context).
 
 kz_get_user_doc(OwnerId, AccountId, AuthToken, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", OwnerId/binary>>,
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", OwnerId/binary>>,
             crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>);
         'true' -> []
     end.
@@ -655,7 +655,7 @@ kz_set_user_doc(K, V, OwnerId, AccountId, AuthToken, Context) ->
     NewDoc = modkazoo_util:set_value(K, V, CurrDoc),
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' -> 
-            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", OwnerId/binary>>,
             crossbar_account_authtoken_request('post', API_String, {[{<<"data">>, NewDoc}]}, AuthToken, Context, <<>>);
         'true' -> []
     end.
@@ -1366,7 +1366,7 @@ change_credentials(Username, Password, OwnerId, Context) ->
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of
         'false' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, "/", ?TO_BIN(OwnerId)/binary>>,
+            API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?USERS/binary, "/", OwnerId/binary>>,
             crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context, 'return_error');
         'true' -> []
     end.
