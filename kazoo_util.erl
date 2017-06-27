@@ -632,7 +632,6 @@ kz_get_user_doc(OwnerId, AccountId, Context) ->
     kz_get_user_doc(OwnerId, AccountId, AuthToken, Context).
 
 kz_get_user_doc(OwnerId, AccountId, AuthToken, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", OwnerId/binary>>,
     case AccountId =:= 'undefined' orelse OwnerId =:= 'undefined' orelse OwnerId =:= 'null' of
         'false' -> 
             API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary, "/", OwnerId/binary>>,
