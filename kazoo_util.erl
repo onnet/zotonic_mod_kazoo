@@ -558,6 +558,7 @@ kz_creds(URL, DataBag, Context) ->
         case ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 15000}]) of
             {'ok', [50,_,_], _, Body} ->
                 JsonBody = jiffy:decode(Body),
+?PRINT(JsonBody),
                 Owner_Id = modkazoo_util:get_value([<<"data">>, <<"owner_id">>], JsonBody),
                 Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
                 Account_Name = modkazoo_util:get_value([<<"data">>, <<"account_name">>], JsonBody),

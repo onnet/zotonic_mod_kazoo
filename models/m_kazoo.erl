@@ -131,8 +131,12 @@ m_find_value({kz_get_account_blacklist, [{blacklist_id, BlacklistId}]}, _M, Cont
     kazoo_util:kz_get_account_blacklist(BlacklistId, Context);
 
 m_find_value(kz_list_account_users_short, _M, Context) ->
-    lists:map(fun (UserDoc) -> [z_convert:to_list(modkazoo_util:get_value(<<"id">>,UserDoc))
-                               ,<<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary,<<" ">>/binary,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>] end,
+    lists:map(fun (UserDoc) -> [modkazoo_util:get_value(<<"id">>,UserDoc)
+                               ,<<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary
+                                 ," "
+                                 ,(modkazoo_util:get_value(<<"last_name">>,UserDoc))/binary>>
+                               ]
+              end,
               kazoo_util:kz_list_account_users(Context))  ++ [["","-No owner-"]];
 
 m_find_value(kz_list_account_devices, _M, Context) ->

@@ -1440,7 +1440,7 @@ event({postback,{delete_blacklist,[{blacklist_id,BlacklistId}]},_,_},Context) ->
     Context;
 
 event({postback,<<"rs_child_selected">>,_,_},Context) ->
-    AccountId =  z_context:get_q("triggervalue", Context),
+    AccountId =  z_context:get_q(triggervalue, Context),
     _ = z_session:set('rs_selected_account_id', AccountId, Context),
     z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context),
     Context;
