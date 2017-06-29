@@ -135,9 +135,9 @@ onbill_modb_attachment(Context) ->
     end.
 
 call_recording_attachment(Context) ->
-    AccountId = z_context:get_q("account_id", Context),
-    RecordingId = z_context:get_q("recording_id", Context),
-    AuthToken = z_context:get_q("auth_token", Context),
+    AccountId = z_context:get_q(account_id, Context),
+    RecordingId = z_context:get_q(recording_id, Context),
+    AuthToken = z_context:get_q(auth_token, Context),
     Body = kazoo_util:call_recording_attachment(AccountId, RecordingId, AuthToken, Context),
     {ok, Body}.
 

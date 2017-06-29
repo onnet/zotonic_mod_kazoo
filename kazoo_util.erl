@@ -558,7 +558,6 @@ kz_creds(URL, DataBag, Context) ->
         case ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 15000}]) of
             {'ok', [50,_,_], _, Body} ->
                 JsonBody = jiffy:decode(Body),
-?PRINT(JsonBody),
                 Owner_Id = modkazoo_util:get_value([<<"data">>, <<"owner_id">>], JsonBody),
                 Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
                 Account_Name = modkazoo_util:get_value([<<"data">>, <<"account_name">>], JsonBody),
@@ -1270,7 +1269,7 @@ kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context) ->
     <<"https://", ?TO_BIN(z_dispatcher:hostname(Context))/binary, API_String/binary>>. 
 
 call_recording_attachment(AccountId, RecordingId, AuthToken, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary,?RECORDINGS/binary,"/", ?TO_BIN(RecordingId)/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary,?RECORDINGS/binary,"/", RecordingId/binary>>,
     crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [{"Accept", "audio/mpeg"}], [], Context).
 
 kz_cdr_list_reduce(CdrList, Context) when is_list(CdrList) ->
