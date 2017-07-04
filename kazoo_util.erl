@@ -2840,9 +2840,9 @@ cf_time_of_the_day(Context) ->
     Wdays = lists:filter(fun(Wd) -> case Wd of [] -> false; _ -> true end end, z_context:get_q_all("wdays",Context)),
     Days = z_context:get_q("days",Context),
     [StartDay,StartMonth,StartYear] = z_string:split(z_context:get_q("start_date",Context),"/"),
-    StartDate = calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(StartYear)
-                                                        ,z_convert:to_integer(StartMonth)
-                                                        ,z_convert:to_integer(StartDay)}
+    StartDate = calendar:datetime_to_gregorian_seconds({{z_convert:to_integer(z_string:trim(StartYear))
+                                                        ,z_convert:to_integer(z_string:trim(StartMonth))
+                                                        ,z_convert:to_integer(z_string:trim(StartDay))}
                                                         ,{0,0,0}}),
     Id = z_context:get_q("id",Context),
     Props = [{<<"time_window_start">>, ?TO_BIN(TimeWindowStart)}
