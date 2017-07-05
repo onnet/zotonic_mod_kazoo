@@ -1512,8 +1512,9 @@ event({submit,rs_account_lookup,_,_},Context) ->
             Context1 = z_render:dialog_close(Context),
             z_render:growl_error(?__("Nothing found", Context1), Context1); 
         _ ->
+            z_context:set_session('rs_selected_account_id', AccountId, Context),
             Context1 = z_render:dialog_close(Context),
-            z_render:update("child_sandbox", z_template:render("_child_info.tpl", [{account_id, AccountId}], Context1), Context1)
+            z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [], Context1), Context1)
     end;
 
 event({submit,kz_trunk_server,_,_},Context) ->
