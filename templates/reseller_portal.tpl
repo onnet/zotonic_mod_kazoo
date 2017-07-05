@@ -2,13 +2,12 @@
 
 {% block service_description %}
 
-{# include "cf_app_style.tpl" #}
-{# lib "css/kazoo/cf_tables.css" #}
-{# lib "css/kazoo/cf_mod_kazoo.css" #}
-
-<span id="reseller_children_area">
-  {% include "reseller_children.tpl" %}
-</span>
+{% if m.session.kazoo_superduper_admin or m.session.kazoo_is_reseller %}
+  <span id="reseller_children_area">
+    {% include "reseller_children.tpl" %}
+  </span>
+{% else %}
+  {% wire action={redirect location="/dashboard"} %}
+{% endif %}
 
 {% endblock %}
-
