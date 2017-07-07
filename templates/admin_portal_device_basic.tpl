@@ -102,6 +102,19 @@
         </span>
       </div>
     </div>
+    <!-- Invite format -->
+    <div class="row">
+      <div class="col-xs-5"><label class="edit_user_label">{_ Invite format _}</label></div>
+      <div id="device_sipinvite_format" class="col-xs-5">
+          {% include "_show_field_select.tpl" type="device"
+                                              doc_id=device_id
+                                              field_name=["sip","invite_format"]
+                                              options=["username", "e164", "route", "contact"]
+                                              prefix="device_"
+                                              postfix="_bootsearch"
+          %}
+      </div>
+    </div>
     <!-- T.38 Flag -->
     <div class="row">
       <div class="col-xs-5"><label class="edit_user_label">T.38</label></div>
