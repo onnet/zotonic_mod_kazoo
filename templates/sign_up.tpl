@@ -103,12 +103,12 @@
             <div class="col-sm-6">
               {% button text=_"Create an account"
                         class="btn btn-zprimary margin-bottom-xs"
-                        action={script script="grecaptcha.execute(); $('form#sign_up_form').submit();"}
+                        action={script script="$('form#sign_up_form').submit();"}
               %}
             </div>
-            <div id="google_recaptcha" class="col-sm-6">
+            <span id="google_recaptcha">
               {% include "_google_recaptcha.tpl" %}
-            </div>
+            </span>
           </div>
         </div>
         <input type="hidden" name="notify_signed_up" value="yes" />
