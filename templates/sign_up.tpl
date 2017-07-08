@@ -103,10 +103,7 @@
             <div class="col-sm-6">
               {% button text=_"Create an account"
                         class="btn btn-zprimary margin-bottom-xs"
-                        action={submit target="sign_up_form"}
-                        action={update target="google_recaptcha"
-                                       template="_google_recaptcha.tpl"
-                               }
+                        action={script script="grecaptcha.execute(); $('form#sign_up_form').submit();"}
               %}
             </div>
             <div id="google_recaptcha" class="col-sm-6">
