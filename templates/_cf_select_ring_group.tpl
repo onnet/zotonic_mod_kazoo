@@ -109,14 +109,14 @@
               data-live-search="true">
         <option value="" selected>-- {_ Select to add _} --</option>
         {% for group in account_groups %}
-          <option id="option_{{ group["id"] }}"
+          <option id="option_{{ group[1]["id"] }}"
                   {% for selected_endpoint in element_data[1]["data"][1]["endpoints"] %}
-                    {% if selected_endpoint["id"] == group["id"] %}
+                    {% if selected_endpoint["id"] == group[1]["id"] %}
                       style="display:none;"
                     {% endif %}
                   {% endfor %}
-                  value='{"id":"{{ group["id"] }}","name":"{{ group["name"] }}","endpoint_type":"group" }'>
-            {{ group["name"] }}
+                  value='{"id":"{{ group[1]["id"] }}","name":"{{ group[1]["name"] }}","endpoint_type":"group" }'>
+            {{ group[1]["name"] }}
           </option>
         {% endfor %}
       </select>

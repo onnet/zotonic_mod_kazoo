@@ -52,6 +52,8 @@
   </div>
 </div>
 {% javascript %}
+  if ( $('#option_{{ selected_value[1]["id"] }}').val() ) {
     var SelectedJObj = JSON.parse($('#option_{{ selected_value[1]["id"] }}').val());
     $('#{{ #name }}').text(SelectedJObj['name']);
+  }
 {% endjavascript %}
