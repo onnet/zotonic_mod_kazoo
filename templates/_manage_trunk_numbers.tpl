@@ -61,7 +61,7 @@
     {% wire id="button_save_numbers_list" action={submit target="form_manage_trunk_numbers"} %}
     <div class="col-sm-6">
       <button id="button_save_numbers_list"
-              class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+              class="col-xs-12 btn btn-zalarm margin-bottom-xs">
         {_ Save numbers list _}
       </button>
     </div>
@@ -69,7 +69,7 @@
     <div class="col-sm-6">
       <button id="button_cancel_numbers_list"
               class="col-xs-12 btn btn-zprimary margin-bottom-xs">
-        {_ Cancel _}
+        {_ Close _}
       </button>
     </div>
   </div>

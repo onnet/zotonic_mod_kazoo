@@ -1,4 +1,3 @@
-{% print codecs %}
 <div class="form-group">
   <label class="form-control-onnet margin-bottom-xs">{_ Audio codecs _}:
     <div class="row">
@@ -75,9 +74,16 @@
 </div>
 <div class="form-group">
   <div class="row">
-    <div class="col-sm-12">
-      <button class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+    <div class="col-sm-6">
+      <button class="col-xs-12 btn btn-zalarm margin-bottom-xs">
         {_ Save codecs _}
+      </button>
+    </div>
+    {% wire id="button_cancel_numbers_list" action={dialog_close} %}
+    <div class="col-sm-6">
+      <button id="button_cancel_numbers_list"
+              class="col-xs-12 btn btn-zprimary margin-bottom-xs">
+        {_ Close _}
       </button>
     </div>
   </div>

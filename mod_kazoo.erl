@@ -1520,7 +1520,7 @@ event({submit,rs_account_lookup,_,_},Context) ->
 event({submit,kz_trunk_server,_,_},Context) ->
     _ = kazoo_util:kz_trunk_server(Context),
     mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-    z_render:dialog_close(Context);
+    z_render:growl(?__("Setting saved", Context), Context);
 
 event({postback,{delete_trunk,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     kazoo_util:kz_trunk_server_delete(TrunkId, Index, Context),
@@ -1529,7 +1529,7 @@ event({postback,{delete_trunk,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, C
 
 event({submit,manage_trunk_numbers,_,_}, Context) ->
     _ = kazoo_util:kz_trunk_server_numbers(Context),
-    z_render:dialog_close(Context);
+    z_render:growl(?__("Setting saved", Context), Context);
 
 event({postback,{flush_registration_by_username,[{sip_username, Username}]},_,_}, Context) ->
     _ = kazoo_util:kz_flush_registration_by_username(Username, Context),
