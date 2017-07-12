@@ -281,6 +281,7 @@
     ,kz_trunk_server_delete/3
     ,kz_trunk_server_numbers/1
     ,sync_trunkstore_realms/2
+    ,ts_server_set_field/5
     ,ts_trunk_disable/3
     ,ts_trunk_enable/3
     ,kz_list_account_webhooks/1

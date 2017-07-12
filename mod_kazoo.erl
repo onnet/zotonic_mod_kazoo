@@ -2579,6 +2579,13 @@ event({submit,device_media_settings,_,_}, Context) ->
                    ,z_template:render("admin_portal_device_media_settings.tpl" ,[{device_id,DeviceId}] ,Context)
                    ,Context);
 
+event({submit,trunkstore_media_settings,_,_}, Context) ->
+    TrunkId = z_context:get_q('trunk_id', Context),
+    ServerIndex = z_context:get_q('server_index', Context),
+    Codecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('codecs',Context)),
+    kazoo_util:ts_server_set_field([<<"options">>,<<"codecs">>], Codecs, ServerIndex, TrunkId, Context),
+    Context;
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),

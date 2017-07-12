@@ -149,25 +149,6 @@
       <input type="hidden" name="server_index" value="{{ server_index }}">
     {% endif %}
 </form>
-{% if trunk_id %}
-  {% wire id="button_add_trunk_manage_numbers"
-          action={dialog_open title=_"Manage trunk numbers"
-                              template="_manage_trunk_numbers.tpl"
-                              trunk_id=trunk_id
-                              server_index=server_index
-                 }
-  %}
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-12">
-        <button id="button_add_trunk_manage_numbers"
-                class="col-xs-12 btn btn-zprimary margin-bottom-xs">
-          {_ Manage trunk numbers _}
-        </button>
-      </div>
-    </div>
-  </div>
-{% endif %}
 {% wire id="button_add_trunk_save" action={submit target="form_kz_trunk"} %}
 <div class="form-group">
   <div class="row">
