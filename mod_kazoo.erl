@@ -2584,7 +2584,7 @@ event({submit,trunkstore_media_settings,_,_}, Context) ->
     ServerIndex = z_context:get_q('server_index', Context),
     Codecs = lists:foldl(fun(Codec,J) -> case Codec of <<>> -> J; _ -> J ++ [Codec] end end, [], z_context:get_q_all('codecs',Context)),
     kazoo_util:ts_server_set_field([<<"options">>,<<"codecs">>], Codecs, ServerIndex, TrunkId, Context),
-    Context;
+    z_render:growl(?__("Setting saved", Context), Context);
 
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
