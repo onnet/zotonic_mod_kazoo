@@ -2,7 +2,7 @@
 %% Auth options.
 %%
 %% By user credentials:
-%% curl -X POST https://domain.tld/api/kazoo/auth -d '{"data":{"login": "my_login", "password": "my_pwd", "account_name":"my_account_name_here"}}
+%% curl -X POST https://domain.tld/api/kazoo/auth -d '{"data":{"login": "my_login", "password": "my_pwd", "account_name":"my_account_name_here"}}'
 %%
 %% By md5 hash
 %% Creds = io_lib:format("~s:~s", ["my_login","my_pwd"]).
@@ -18,11 +18,11 @@
 -svc_title("Kazoo auth proxy.").
 -svc_needauth(false).
 
--export([process_post/2]).
+-export([process_post/1]).
 
 -include_lib("zotonic.hrl").
 
-process_post(_ReqData, Context) ->
+process_post(Context) ->
     PostDataStr = get_post_data(z_context:get_q_all_noz(Context)),
     PostDataJObj = jiffy:decode(PostDataStr),
     ReqJObj = modkazoo_util:get_value(<<"data">>, PostDataJObj),
@@ -44,11 +44,10 @@ maybe_password_auth(ReqJObj, Context) ->
             reply_auth_result(kazoo_util:kz_user_creds(Md5Hash, AccountName, Context), Context)
     end.
 
-get_post_data([{K,_}|T]) ->
-    case string:str(K, "\"data\"") of
-        0 -> get_post_data(T);
-        _ -> K
-    end.
+get_post_data([{<<"{\"data\":", _/binary>> = DataBStr,_}|T]) ->
+    DataBStr;
+get_post_data([{_,_}|T]) ->
+    get_post_data(T).
 
 reply_auth_result({ok, {_, _}, {'account_id', 'undefined'}, {_, _}, {_, _}, {_, _}}, Context) ->
     reply_auth_result(<<"Auth failure">>, Context);
