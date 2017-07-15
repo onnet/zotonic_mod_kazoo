@@ -526,7 +526,7 @@
 
 kz_admin_creds(Context) ->
     Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
-    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?API_AUTH/binary>>),
+    URL = z_convert:to_list(<<Crossbar_URL/binary, ?V2/binary, ?API_AUTH/binary>>),
     API_Key = m_config:get_value('mod_kazoo', 'kazoo_super_duper_api_key', Context),
     DataBag = {[{<<"data">>, {[{<<"api_key">>, API_Key}]}}]},
     Payload = jiffy:encode(DataBag),
