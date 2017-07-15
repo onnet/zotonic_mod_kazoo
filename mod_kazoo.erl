@@ -64,6 +64,12 @@ observe_onbill_topmenu_element(_, Context) ->
         'true' -> <<"_onbill_topmenu.tpl">>
     end.
 
+observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
+    modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
+observe_account_balance(_Param, Context) ->
+    ?PRINT(_Param),
+    'undefined'.
+
 event({submit,signin,_,_}, Context) ->
     Login = z_context:get_q('username',Context),
     Password = z_context:get_q('password',Context),

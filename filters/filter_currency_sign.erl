@@ -10,14 +10,19 @@
 
 currency_sign('undefined', _Context) ->
     'undefined';
-currency_sign(Amount, Context) ->
-    build_a_fortune(?TO_FLT(Amount), Context).
+currency_sign(Amt, Context) ->
+    build_a_fortune(Amt, Context).
 
 currency_sign('undefined', _Args, _Context) ->
     'undefined';
-currency_sign(Amount, _Args, Context) ->
-    build_a_fortune(?TO_FLT(Amount), Context).
+currency_sign(Amt, _Args, Context) ->
+    build_a_fortune(Amt, Context).
 
+build_a_fortune([Amt], Context) ->
+    build_a_fortune(Amt, Context);
+build_a_fortune(Amt, Context) when is_list(Amt); is_binary(Amt) ->
+    Amount = ?TO_FLT(re:replace(Amt, "[^A-Za-z0-9.]", "", [global, {return, binary}])),
+    build_a_fortune(Amount, Context);
 build_a_fortune(Amount, Context) ->
     CurrencySign = case z_context:get_session('currency_sign', Context) of
                        'undefined' -> <<"£"/utf8>>;
