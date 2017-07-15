@@ -44,7 +44,7 @@ maybe_password_auth(ReqJObj, Context) ->
             reply_auth_result(kazoo_util:kz_user_creds(Md5Hash, AccountName, Context), Context)
     end.
 
-get_post_data([{<<"{\"data\":", _/binary>> = DataBStr,_}|T]) ->
+get_post_data([{<<"{\"data\":", _/binary>> = DataBStr,_}|_T]) ->
     DataBStr;
 get_post_data([{_,_}|T]) ->
     get_post_data(T).

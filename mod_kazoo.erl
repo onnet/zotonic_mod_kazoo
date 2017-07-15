@@ -12,6 +12,7 @@
         ,observe_topmenu_element/2
         ,observe_onbill_topmenu_element/2
         ,observe_currency_sign/2
+        ,observe_account_balance/2
         ,event/2
 ]).
 
@@ -66,7 +67,7 @@ observe_onbill_topmenu_element(_, Context) ->
 
 observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
-observe_account_balance(_Param, Context) ->
+observe_account_balance(_Param, _Context) ->
     ?PRINT(_Param),
     'undefined'.
 

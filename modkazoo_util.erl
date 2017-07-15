@@ -87,7 +87,6 @@ to_undefined(Var) ->
         'undefined' -> 'undefined';
         "" -> 'undefined';
         <<>> -> 'undefined';
-        [] -> 'undefined';
         [<<>>] -> 'undefined';
         _ -> Var
     end.
