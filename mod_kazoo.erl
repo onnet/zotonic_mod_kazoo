@@ -483,7 +483,7 @@ event({postback,{fix_allocated_numbers,[{account_id, AccountId}]},_,_}, Context)
     Context;
 
 event({submit,{start_webphone_form,[]},_,_}, Context) ->
-    DeviceId = z_context:get_q("webrtc_device",Context),
+    DeviceId = z_context:get_q('webrtc_device',Context),
     DeviceDoc = kazoo_util:kz_get_device_doc(DeviceId, Context),
     z_context:set_session('webrtc_dev_id', modkazoo_util:get_value(<<"id">>,DeviceDoc), Context),
     z_context:set_session('webrtc_dev_name', modkazoo_util:get_value(<<"name">>,DeviceDoc), Context),
