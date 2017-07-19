@@ -3,6 +3,7 @@
     <th style="text-align: center;">{_ Active _}</th>
     <th style="text-align: center;">{_ Authorized CID _}</th>
     <th style="text-align: center;">{_ User _}</th>
+    <th style="text-align: center;">{_ Comment _}</th>
     <th style="text-align: center;">{_ Retain CID _}</th>
     <th style="text-align: center;">{_ Delete _}</th>
   </tr>
@@ -32,6 +33,20 @@
         <td style="text-align: center;">{{ cred[1]["cid"] }}</td>
         <td style="text-align: center;">
           {{ m.kazoo[{kz_user_doc_by_ownerid owner_id=cred[1]["user_id"] }][1]["username"] }}
+        </td>
+        <td id="{{ cred[1]["id"] }}comment" style="text-align: center;">
+          {% wire id="edit_"++cred[1]["id"]++"comment"
+                  type="click"
+                  action={update target=cred[1]["id"]++"comment"
+                                 template="_edit_field.tpl"
+                                 type="cccp_creds"
+                                 doc_id=cred[1]["id"]
+                                 prefix=cred[1]["id"]
+                                 field_name="comment"
+                         }
+          %}
+          {{ cred[1]["comment"] }}
+          <i id="edit_{{ cred[1]["id"] }}comment" class="fa fa-edit pointer" title="Edit field"></i>
         </td>
         <td style="text-align: center;">
           <i id="{{ cred[1]["id"] }}_cccp_retain_cid_toggler"

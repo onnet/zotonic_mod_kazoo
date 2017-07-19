@@ -9,7 +9,7 @@
      current_value
   %}
     {% for option in options %}
-      {% if option[1]|is_list %}
+      {% if option|is_list %}
         <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>
           {{ option[2]|vartrans }}
         </option>

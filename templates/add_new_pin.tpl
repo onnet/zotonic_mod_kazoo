@@ -21,6 +21,11 @@
   <option value="{{ user[1]["id"] }}">{{ user[1]["username"] }}</option>
 {% endfor %}
 </select>
+<i class="fa fa-comments fa-lg hidden-md pl-05" title="{_ Add comment _}"></i>
+<input type="text"
+       class="input input-number-onnet"
+       name="pin_comment"
+       maxlength="50"/>
 {% javascript %}
     $('#cccp_outbound_pin_selector').selectpicker({size: 5, style: 'btn-xs btn-onnet'});
     $('#cccp_pin_user_id').selectpicker({size: 5, style: 'btn-xs btn-onnet'});

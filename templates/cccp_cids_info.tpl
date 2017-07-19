@@ -27,11 +27,16 @@
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
 
 {% block widget_content %}
-{% wire action={connect signal={update_authorized_cid_table_tpl signal_filter=m.kazoo.signal_filter}
-                        action={update target="auth_cid_table" template="_authorized_cid_table.tpl"}
+{% wire action={connect signal={update_authorized_cid_table_tpl
+                                signal_filter=m.kazoo.signal_filter
+                               }
+                        action={update target="auth_cid_table"
+                                       template="_authorized_cid_table.tpl"
+                               }
                }
 %}
-<table id="auth_cid_table" class="table table-condensed table-hover table-centered">
+<table id="auth_cid_table"
+       class="table table-condensed table-hover table-centered">
   {% include "_authorized_cid_table.tpl" %}
 </table>
 {% endblock %}
