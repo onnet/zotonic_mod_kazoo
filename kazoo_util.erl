@@ -3653,7 +3653,7 @@ kz_trunk_server_numbers(Context) ->
             Index = z_convert:to_integer(z_context:get_q("server_index",Context)),
             CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
             Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
-            NewServers = lists:sublist(Servers, Index-1) ++ [modkazoo_util:set_value(<<"DIDs">>, TS_Numbers, lists:nth(Index, Servers))] ++ lists:nthtail(Index, Servers),
+            NewServers = lists:sublist(Servers, Index-1) ++ [modkazoo_util:set_value(<<"DIDs">>, TS_Numbers, lists:nth(Index, Servers))] ++ lists:nthtail(Index+1, Servers),
             NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
             kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context)
     end.
