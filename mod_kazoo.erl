@@ -681,47 +681,89 @@ event({submit,add_new_device,_,_}, Context) ->
             kazoo_util:add_device('true', Context)
     end;
 
-event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
-    event({postback
-          ,{save_field,[{type,Type}
-                       ,{doc_id,DocId}
-                       ,{field_name, FieldName}
-                       ,{account_id, z_context:get_session('kazoo_account_id', Context)}
-                       ]
-           },<<>>,<<>>},Context);
+%event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName}]},_,_}, Context) ->
+%    event({postback
+%          ,{save_field,[{type,Type}
+%                       ,{doc_id,DocId}
+%                       ,{field_name, FieldName}
+%                       ,{account_id, z_context:get_session('kazoo_account_id', Context)}
+%                       ]
+%           },<<>>,<<>>},Context);
 
-event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, 'undefined'}]},_,_}, Context) ->
-    event({postback
-          ,{save_field,[{type,Type}
-                       ,{doc_id,DocId}
-                       ,{field_name, FieldName}
-                       ,{account_id, z_context:get_session('kazoo_account_id', Context)}
-                       ]
-           },<<>>,<<>>},Context);
-
-event({postback,{save_field,[{type,Type},{doc_id,DocId},{field_name, FieldName},{account_id, AccountId}]},_,_}, Context) ->
+event({postback,{save_field,[{type,Type}
+                            ,{doc_id,DocId}
+                            ,{field_name, FieldName}
+                            ,{prefix,Prefix}
+                            ,{postfix,Postfix}
+                            ,{account_id, AccId}
+                            ]
+                },_,_}, Context) ->
+    AccountId = case AccId of
+                    'undefined' -> z_context:get_session('kazoo_account_id', Context);
+                    _ -> AccId
+                end,
     case Type of
         <<"account">> ->
-            _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
-            z_render:update(FieldName
+            _ = kazoo_util:kz_set_acc_doc(FieldName, z_context:get_q(input_value, Context), AccountId, Context),
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field.tpl"
-                                             ,[{type,Type},{doc_id,DocId},{field_name,FieldName},{account_id, AccountId}]
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ,{account_id, AccountId}
+                                              ]
                                              ,Context
                                              )
                            ,Context);
         <<"user">> ->
-            _ = kazoo_util:kz_set_user_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
+            _ = kazoo_util:kz_set_user_doc(FieldName, z_context:get_q(input_value, Context), DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-            z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
+                           ,z_template:render("_show_field.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ]
+                                             ,Context
+                                             )
+                           ,Context);
         <<"device">> ->
-            _ = kazoo_util:kz_set_device_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), DocId, Context),
+            _ = kazoo_util:kz_set_device_doc(FieldName, z_context:get_q(input_value, Context), DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-            z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context);
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
+                           ,z_template:render("_show_field.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ]
+                                             ,Context)
+                           ,Context);
+        <<"cccp_creds">> ->
+            _ = kazoo_util:cccp_field_set(FieldName, z_context:get_q(input_value, Context), DocId, Context),
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
+                           ,z_template:render("_show_field.tpl"
+                                             ,[{type,Type}
+                                              ,{doc_id,DocId}
+                                              ,{field_name,FieldName}
+                                              ,{prefix,Prefix}
+                                              ,{postfix,Postfix}
+                                              ,{account_id, AccountId}
+                                              ]
+                                             ,Context
+                                             )
+                           ,Context);
         <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
             z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),
             timer:sleep(1000),
-            z_render:update(FieldName, z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
+            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
+                           ,z_template:render("_show_field.tpl", [{type,Type},{doc_id,DocId},{field_name,FieldName}], Context), Context)
     end;
 
 event({postback,{save_field_select,[{type,Type},{doc_id,DocId},{field_name, FieldName},{options,Options}]},_,_}, Context) ->
@@ -1491,16 +1533,26 @@ event({postback,<<"rs_account_demask">>,_,_},Context) ->
     _ = modkazoo_auth:set_session_currency_sign(Context),
     z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
 
-event({submit,{addcccpcidform, _}, _, _}, Context) ->
-    NewAuthCID = z_convert:to_binary(z_context:get_q("cid_number", Context)),
-    UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
-    _ = kazoo_util:add_cccp_doc({<<"cid">>, NewAuthCID}, {<<"user_id">>, UserId}, Context),
+event({submit,addcccpcidform,_,_}, Context) ->
+    NewAuthCID = z_context:get_q(cid_number, Context),
+    Comment = z_context:get_q(cid_comment, Context),
+    UserId = z_context:get_q(user_id, Context),
+    Values = [{<<"cid">>, NewAuthCID}
+             ,{<<"user_id">>, UserId}
+             ,{<<"comment">>, Comment}
+             ,{<<"active">>, true}],
+    _ = kazoo_util:add_cccp_doc(modkazoo_util:set_values(Values, modkazoo_util:new()), Context),
     z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
-event({submit,{addcccppinform, _}, _, _}, Context) ->
-    NewAuthPIN = z_convert:to_binary(z_context:get_q("pin_number", Context)),
-    UserId = z_convert:to_binary(z_context:get_q("user_id", Context)),
-    _ = kazoo_util:add_cccp_doc({<<"pin">>, NewAuthPIN}, {<<"user_id">>, UserId}, Context),
+event({submit,addcccppinform, _, _}, Context) ->
+    NewAuthPIN = z_context:get_q(pin_number, Context),
+    Comment = z_context:get_q(pin_comment, Context),
+    UserId = z_context:get_q(user_id, Context),
+    Values = [{<<"pin">>, NewAuthPIN}
+             ,{<<"user_id">>, UserId}
+             ,{<<"comment">>, Comment}
+             ,{<<"active">>, true}],
+    _ = kazoo_util:add_cccp_doc(modkazoo_util:set_values(Values, modkazoo_util:new()), Context),
     z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->

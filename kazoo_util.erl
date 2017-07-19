@@ -261,10 +261,12 @@
     ,rs_delete_account/2
     ,toggle_all_calls_recording/1
     ,kz_cccp_creds_list/1
-    ,add_cccp_doc/3
+    ,add_cccp_doc/2
     ,add_cccp_autodial/5
     ,del_cccp_doc/2
     ,cccp_field_toggler/3
+    ,cccp_field/3
+    ,cccp_field_set/4
     ,kz_find_account_by_number/2
     ,kz_admin_find_accountname_by_number/2
     ,kz_admin_get_account_by_number/2
@@ -423,8 +425,7 @@
       {[{<<"method">>,<<"password">>},
         {<<"invite_format">>,<<"username">>},
         {<<"username">>,modkazoo_util:rand_hex_binary(5)},
-        {<<"password">>,modkazoo_util:rand_hex_binary(5)},
-        {<<"expire_seconds">>,<<"360">>}]}},
+        {<<"password">>,modkazoo_util:rand_hex_binary(5)}]}},
      {<<"contact_list">>,{[{<<"exclude">>,false}]}},
      {<<"call_forward">>,
       {[{<<"enabled">>,false},
@@ -714,8 +715,15 @@ kz_set_device_doc(K, V, DeviceId, Context) ->
     case Account_Id =:= 'undefined' orelse DeviceId =:= 'undefined' of
         'false' -> 
             API_String = <<?V1/binary, ?ACCOUNTS/binary, Account_Id/binary, ?DEVICES/binary, "/", DeviceId/binary>>,
-            crossbar_account_request('post', API_String,  {[{<<"data">>, NewDoc}]}, Context);
+            crossbar_account_request('post', API_String,  {[{<<"data">>, device_doc_cure(NewDoc)}]}, Context);
         'true' -> []
+    end.
+
+device_doc_cure(Doc) ->
+    case modkazoo_util:get_value([<<"sip">>,<<"expire_seconds">>], Doc, undefined) of
+        'undeined' -> Doc;
+         ExpSec when is_integer(ExpSec) -> Doc;
+         ExpSec -> modkazoo_util:set_value([<<"sip">>,<<"expire_seconds">>], ?TO_INT(ExpSec), Doc)
     end.
 
 crossbar_noauth_request_raw(Verb, API_String, DataBag, Context) ->
@@ -3537,10 +3545,9 @@ kz_cccp_creds_list(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
-add_cccp_doc(Field1, Field2, Context) ->
+add_cccp_doc(Payload, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary>>,
-    DataBag = {[{<<"data">>, {[Field1, Field2, {<<"active">>, true}]}}]},
-    crossbar_account_request('put', API_String, DataBag, Context).
+    crossbar_account_request('put', API_String, ?MK_DATABAG(Payload), Context).
 
 add_cccp_autodial(ALegNumber, BLegNumber, UserId, MediaId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, ?AUTODIAL/binary>>,
@@ -3568,6 +3575,29 @@ cccp_field_toggler(DocId, FieldName, Context) ->
     end,
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, "/", ?TO_BIN(DocId)/binary>>,
     crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
+
+cccp_field(K, DocId, Context) ->
+    CurrDoc = get_cccp_doc(DocId, Context),
+    modkazoo_util:get_value(K, CurrDoc).
+
+cccp_field_set(K, V, DocId, Context) ->
+    CurrDoc = get_cccp_doc(DocId, Context),
+?PRINT(K),
+?PRINT(V),
+?PRINT(DocId),
+?PRINT(CurrDoc),
+    NewDoc = case V of
+        'undefined' -> modkazoo_util:delete_key(K, CurrDoc);
+         _ -> modkazoo_util:set_value(K, V, CurrDoc)
+    end,
+?PRINT(NewDoc),
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    case AccountId =:= 'undefined' orelse DocId =:= 'undefined' of
+        'false' ->
+            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?CCCPS/binary, "/", ?TO_BIN(DocId)/binary>>,
+            crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context);
+        'true' -> []
+    end.
 
 kz_find_account_by_number(Number, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?PHONE_NUMBERS/binary, "/", ?TO_BIN(Number)/binary, ?IDENTIFY/binary>>,
