@@ -3683,7 +3683,9 @@ kz_trunk_server_numbers(Context) ->
             Index = z_convert:to_integer(z_context:get_q("server_index",Context)),
             CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
             Servers = modkazoo_util:get_value(<<"servers">>, CurrTrunkDoc),
-            NewServers = lists:sublist(Servers, Index-1) ++ [modkazoo_util:set_value(<<"DIDs">>, TS_Numbers, lists:nth(Index, Servers))] ++ lists:nthtail(Index+1, Servers),
+            NewServers = lists:sublist(Servers, Index-1)
+                         ++ [modkazoo_util:set_value(<<"DIDs">>, TS_Numbers, lists:nth(Index, Servers))]
+                         ++ lists:nthtail(Index, Servers),
             NewTrunkDoc = modkazoo_util:set_value(<<"servers">>, NewServers, CurrTrunkDoc),
             kz_trunk('post', TrunkId, ?MK_DATABAG(NewTrunkDoc), Context)
     end.
@@ -3695,13 +3697,13 @@ kz_trunk(Verb, TrunkId, DataBag, Context) ->
 kz_trunk(Verb, TrunkId, AccountId, DataBag, Context) ->
     case Verb of
         'get' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, "/", ?TO_BIN(TrunkId)/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, "/", ?TO_BIN(TrunkId)/binary>>,
             crossbar_account_request(Verb, API_String, [], Context);
         'put' -> 
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary>>,
             crossbar_account_request(Verb, API_String, DataBag, Context);
         'post' ->
-            API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, "/", ?TO_BIN(TrunkId)/binary>>,
+            API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CONNECTIVITY/binary, "/", ?TO_BIN(TrunkId)/binary>>,
             crossbar_account_request(Verb, API_String, DataBag, Context);
         _ -> 'ok'
     end.
