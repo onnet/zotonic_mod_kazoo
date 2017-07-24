@@ -49,13 +49,29 @@
     </div>
     <div class="form-group">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <input id="flags"
                  name="flags"
                  type="text"
                  class="form-control margin-bottom-xs"
                  placeholder="{_ Flags (comma separated) _}"
                  value="{% for flag in resource["flags"] %}{{ flag }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+        </div>
+        <div class="col-sm-2">
+          <label for="fax_option"
+                 class="checkbox-inline
+                        {% if resource["gateways"][1][1]["media"][1]["fax_option"] %}
+                          checked
+                        {% endif %}"
+                 style="width: 100%">
+            <input type="checkbox"
+                   id="fax_option"
+                   name="fax_option"
+                   {% if resource["gateways"][1][1]["media"][1]["fax_option"] %}
+                     checked
+                   {% endif %}>
+            {_ T.38 _}
+          </label>
         </div>
         <div class="col-sm-2">
           <label for="PCMA"

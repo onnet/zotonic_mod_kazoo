@@ -476,6 +476,7 @@
   {<<"gateways">>,
    [{[{<<"prefix">>,<<>>},
       {<<"codecs">>,[<<"PCMA">>,<<"PCMU">>]},
+      {<<"media">>,{[{<<"fax_option">>,true}]}},
       {<<"progress_timeout">>,<<"7">>},
       {<<"server">>,<<>>},
       {<<"username">>,<<>>},
@@ -3962,6 +3963,7 @@ resource(Context) ->
         ,{<<"progress_timeout">>,modkazoo_util:get_q_bin("progress_timeout",Context)}
         ,{<<"realm">>,modkazoo_util:get_q_bin("realm",Context)}
         ,{<<"format_from_uri">>,modkazoo_util:on_to_true(z_context:get_q("format_from_uri",Context))}
+        ,{[<<"media">>,<<"fax_option">>],modkazoo_util:on_to_true(z_context:get_q("fax_option",Context))}
         ,{<<"codecs">>,lists:foldl(fun(Codec,J) -> case Codec of [] -> J; _ -> J ++ [?TO_BIN(Codec)] end end, [], z_context:get_q_all("codecs",Context))}
         ]),
     PropsResource = modkazoo_util:filter_empty(
