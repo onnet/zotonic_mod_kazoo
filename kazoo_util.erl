@@ -3678,7 +3678,11 @@ kz_trunk_server_numbers(Context) ->
         TrunkId ->
             TS_Numbers = case z_context:get_q_all("ts_number",Context) of
                 [] -> {[]};
-                NumbersList -> ?JSON_WRAPPER(lists:map(fun(Number) -> {?TO_BIN(Number), ?EMPTY_JSON_OBJECT} end, NumbersList))
+                NumbersList -> ?JSON_WRAPPER(lists:map(fun(Number) ->
+                                                           {?TO_BIN(Number)
+                                                           ,modkazoo_util:set_value(<<"force_outbound">>, false, ?EMPTY_JSON_OBJECT)}
+                                                       end
+                                                      ,NumbersList))
             end,
             Index = z_convert:to_integer(z_context:get_q("server_index",Context)),
             CurrTrunkDoc = kz_trunk('get', TrunkId, [], Context),
