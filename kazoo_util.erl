@@ -475,7 +475,7 @@
   {<<"enabled">>,false},
   {<<"gateways">>,
    [{[{<<"prefix">>,<<>>},
-      {<<"codecs">>,[<<"PCMA">>]},
+      {<<"codecs">>,[<<"PCMA">>,<<"PCMU">>]},
       {<<"progress_timeout">>,<<"7">>},
       {<<"server">>,<<>>},
       {<<"username">>,<<>>},
@@ -496,6 +496,10 @@
   {<<"cid_rules">>,[]},
   {<<"caller_id_options">>,{[{<<"type">>,<<"external">>}]}},
   {<<"type">>,<<"local">>},
+  {<<"media">>,
+   {[{<<"audio">>, {[{<<"codecs">>,[<<"PCMA">>,<<"PCMU">>]}]}},
+     {<<"fax_option">>,true}
+    ]}},
   {<<"name">>,<<>>},
   {<<"emergency">>,false},
   {<<"grace_period">>,5},
@@ -3681,6 +3685,7 @@ kz_trunk_server_numbers(Context) ->
                 NumbersList -> ?JSON_WRAPPER(lists:map(fun(Number) ->
                                                            {?TO_BIN(Number)
                                                            ,modkazoo_util:set_value(<<"force_outbound">>, false, ?EMPTY_JSON_OBJECT)}
+                                                        %   ,?EMPTY_JSON_OBJECT}
                                                        end
                                                       ,NumbersList))
             end,
