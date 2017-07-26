@@ -1579,7 +1579,12 @@ event({submit,rs_account_lookup,_,_},Context) ->
 event({submit,kz_trunk_server,_,_},Context) ->
     _ = kazoo_util:kz_trunk_server(Context),
     mod_signal:emit({update_admin_portal_trunk_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-    z_render:growl(?__("Setting saved", Context), Context);
+    case z_context:get_q("server_index",Context) of
+        'undefined' -> 
+            z_render:dialog_close(Context);
+        Ind ->
+            z_render:growl(?__("Setting saved", Context), Context)
+    end;
 
 event({postback,{delete_trunk,[{trunk_id,TrunkId},{server_index,Index}]},_,_}, Context) ->
     kazoo_util:kz_trunk_server_delete(TrunkId, Index, Context),
