@@ -8,8 +8,8 @@
             <input id="new_account_ip_acl_entry" name="new_ip_entry" type="text" class="form-control" placeholder="1.2.3.4 {_ or _} 5.6.7.8/27" />
             {% wire id="add_account_ip_acl_entry"
                     type="click"
-                    action={postback postback="add_account_ip_acl_entry" delegate="mod_kazoo" qarg="new_account_ip_acl_entry"}
                     action={set_value target="new_account_ip_acl_entry" value=""}
+                    action={postback postback="add_account_ip_acl_entry" delegate="mod_kazoo" qarg="new_account_ip_acl_entry"}
             %}
             <span id="add_account_ip_acl_entry" class="input-group-addon bradius-0 pointer">
              {_ Add entry _}
