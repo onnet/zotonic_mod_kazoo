@@ -408,7 +408,11 @@ m_find_value(kz_list_account_media, _M, Context) ->
 m_find_value(kz_list_account_media_short, _M, Context) ->
     [["","Default"]]
     ++
-    lists:map(fun (MediaDoc) -> [z_convert:to_list(modkazoo_util:get_value(<<"id">>,MediaDoc)),modkazoo_util:get_value(<<"name">>,MediaDoc)] end, kazoo_util:kz_list_account_media(Context));
+    lists:map(fun (MediaDoc) ->
+                  [z_convert:to_list(modkazoo_util:get_value(<<"id">>,MediaDoc))
+                  ,modkazoo_util:get_value(<<"name">>,MediaDoc)]
+              end
+             ,kazoo_util:kz_list_account_media(Context));
 
 m_find_value(kz_list_account_menus, _M, Context) ->
     kazoo_util:kz_list_account_menus(Context);
@@ -657,6 +661,14 @@ m_find_value({queues,[{account_id, 'undefined'}]}, _M, Context) ->
     m_find_value({queues,[{account_id, AccountId}]}, _M, Context);
 m_find_value({queues,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:queues('get', AccountId, [], Context);
+
+m_find_value({queue,[{queue_id, 'undefined'}, {account_id, AccountId}]}, _M, Context) ->
+    'undefined';
+m_find_value({queue,[{queue_id, QueueId}, {account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({queue,[{queue_id, QueueId}, {account_id, AccountId}]}, _M, Context);
+m_find_value({queue,[{queue_id, QueueId}, {account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:queue('get', QueueId, AccountId, [], Context);
 
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),

@@ -372,6 +372,7 @@
     ,config_toggle/4
     ,queues/4
     ,queue/5
+    ,queue_update/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4495,3 +4496,34 @@ queues(Verb, AccountId, DataBag, Context) ->
 queue(Verb, QueueId, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?QUEUES/binary, "/", QueueId/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+queue_update(Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    QueueName = z_context:get_q('queue_name', Context),
+    Announce = modkazoo_util:to_undefined(z_context:get_q('announce', Context)),
+    Values = modkazoo_util:filter_undefined(
+        [{<<"name">>, QueueName}
+        ,{<<"strategy">>,z_context:get_q('strategy', Context)}
+        ,{<<"enter_when_empty">>,modkazoo_util:on_to_true(z_context:get_q('enter_when_empty', Context))}
+        ,{<<"record_caller">>,modkazoo_util:on_to_true(z_context:get_q('record_caller', Context))}
+        ,{<<"agent_ring_timeout">>,?TO_INT(z_context:get_q('agent_ring_timeout', Context))}
+        ,{<<"agent_wrapup_time">>,?TO_INT(z_context:get_q('agent_wrapup_time', Context))}
+        ,{<<"caller_exit_key">>,z_context:get_q('caller_exit_key', Context)}
+        ,{<<"connection_timeout">>,?TO_INT(z_context:get_q('connection_timeout', Context))}
+        ,{<<"max_queue_size">>,?TO_INT(z_context:get_q('max_queue_size', Context))}
+        ,{<<"ring_simultaneously">>,?TO_INT(z_context:get_q('ring_simultaneously', Context))}
+        ]),
+    case z_context:get_q('queue_id', Context) of
+        'undefined' ->
+            Queue = maybe_announce(Announce, modkazoo_util:set_values(Values, modkazoo_util:new())),
+            queues('put', AccountId, ?MK_DATABAG(Queue), Context);
+        QueueId ->
+            CurrQueue = queue('get', QueueId, AccountId, [], Context),
+            Queue = maybe_announce(Announce, modkazoo_util:set_values(Values, CurrQueue)),
+            queue('post', QueueId, AccountId, ?MK_DATABAG(Queue), Context)
+    end.
+
+maybe_announce('undefined', JObj) ->
+    modkazoo_util:delete_key(<<"announce">>, JObj);
+maybe_announce(Announce, JObj) ->
+    modkazoo_util:set_value(<<"announce">>, Announce, JObj).

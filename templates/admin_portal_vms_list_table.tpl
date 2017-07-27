@@ -89,7 +89,7 @@ var oTable = $('#admin_portal_vms_table').dataTable({
         }
 },
 "columnDefs": [
-],
+]
 
 });
 {% endjavascript %}

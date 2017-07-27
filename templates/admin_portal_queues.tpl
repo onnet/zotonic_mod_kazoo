@@ -25,7 +25,7 @@
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"add queue"
               action={dialog_open title=_"Add queue"
-                                  template="_add_queue_dialog.tpl"
+                                  template="_edit_queue_dialog.tpl"
                                   width="auto"
                      }
     %}

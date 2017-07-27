@@ -33,7 +33,7 @@
              title="{_ Edit entries _}"></i></td>
           {% wire id="edit_entries_"++queue[1]["id"]
                   action={dialog_open title=_"Edit"++" "++queue[1]["name"]
-                                      template="_edit_queue_entries_lazy.tpl"
+                                      template="_edit_queue_lazy.tpl"
                                       queue_id=queue[1]["id"]
                                       width="auto"
                          }

@@ -306,6 +306,7 @@ binary_to_hex_char(N) when N < 16 -> $a - 10 + N.
 
 on_to_true(Res) ->
     case Res of
+        <<"on">> -> 'true';
         "on" -> 'true';
         ["on"] -> 'true';
         _ -> 'false'
