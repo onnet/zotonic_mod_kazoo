@@ -370,6 +370,8 @@
     ,config/5
     ,set_config_field/5
     ,config_toggle/4
+    ,queues/4
+    ,queue/5
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4485,3 +4487,11 @@ config_toggle(K, Category, AccountId, Context) ->
         'true' -> set_config_field(K, 'false', Category, AccountId, Context);
         _ -> set_config_field(K, 'true', Category, AccountId, Context)
     end.
+
+queues(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?QUEUES/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+queue(Verb, QueueId, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?QUEUES/binary, "/", QueueId/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).

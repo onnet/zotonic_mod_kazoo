@@ -499,7 +499,6 @@
 -define(CUSTOMER_UPDATE, <<"/customer_update">>).
 -define(PREVIEW, <<"/preview">>).
 -define(SMTPLOG, <<"/smtplog">>).
--define(QUEUES, <<"/queues">>).
 -define(EAVESDROP, <<"/eavesdrop">>).
 -define(CLICKTOCALL, <<"/clicktocall">>).
 -define(DIALPLANS, <<"/dialplans">>).
@@ -521,6 +520,8 @@
 -define(METAFLOWS, <<"/metaflows">>).
 -define(SYSTEM_CONFIGS, <<"/system_configs">>).
 -define(CONFIGS, <<"/configs">>).
+-define(QUEUES, <<"/queues">>).
+-define(AGENTS, <<"/agents">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).

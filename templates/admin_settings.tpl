@@ -150,5 +150,16 @@
         {% include "admin_portal_lists.tpl" headline=_"Lists" %}
   </span>
 
+  {% wire action={connect signal={update_admin_portal_queues_tpl signal_filter=m.kazoo.signal_filter}
+                          action={update target="admin_portal_queues_tpl"
+                                         template="admin_portal_queues.tpl"
+                                         headline=_"Queues"
+                                 }
+                 }
+  %}
+  <span id="admin_portal_queues_tpl">
+        {% include "admin_portal_queues.tpl" headline=_"Queues" %}
+  </span>
+
 </div>
 {% endblock %}

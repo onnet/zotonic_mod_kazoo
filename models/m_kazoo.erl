@@ -159,6 +159,8 @@ m_find_value(kz_list_account_vmboxes, _M, Context) ->
 m_find_value(kz_list_user_vmboxes, _M, Context) ->
     kazoo_util:kz_list_user_vmboxes(Context);
 
+m_find_value({kz_list_user_vmbox_details, [{vmbox_id, 'undefined'}]}, _M, Context) ->
+    'undefined';
 m_find_value({kz_list_user_vmbox_details, [{vmbox_id, VMBoxId}]}, _M, Context) ->
     kazoo_util:kz_list_user_vmbox_details(VMBoxId, Context);
 
@@ -649,6 +651,12 @@ m_find_value({metaflows,[{account_id, 'undefined'}]}, _M, Context) ->
     m_find_value({metaflows,[{account_id, AccountId}]}, _M, Context);
 m_find_value({metaflows,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:metaflows('get', AccountId, [], Context);
+
+m_find_value({queues,[{account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({queues,[{account_id, AccountId}]}, _M, Context);
+m_find_value({queues,[{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:queues('get', AccountId, [], Context);
 
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
