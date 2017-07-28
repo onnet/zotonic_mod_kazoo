@@ -154,6 +154,12 @@
                                             icon="rightarrow"
                                             help="Return a custom SIP error code"
           %}
+          {% include "_cf_tool_element.tpl" tool_id="acdc_member"
+                                            tool_name="acdc_member"
+                                            tool_descr="acdc member"
+                                            icon="circle_graph"
+                                            help="Puts the caller into the ACDc queue."
+          %}
           <div class="clear">
           </div>
           <div class="app_list_nav">

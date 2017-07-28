@@ -1359,6 +1359,14 @@ event({submit,cf_select_eavesdrop,<<"form_cf_select_eavesdrop">>,<<"form_cf_sele
                                   ,Context),
     z_render:dialog_close(Context);
 
+event({submit,cf_select_acdc_member,_,_},Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    _ = kazoo_util:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","id"]
+                                 ,z_convert:to_binary(z_context:get_q("selected", Context))
+                                 ,Context),
+    z_render:dialog_close(Context);
+
 event({postback,<<"toggle_featurecode_voicemail_check">>,_,_}, Context) ->
     _ = kazoo_util:toggle_featurecode_voicemail_check(Context),
     mod_signal:emit({signal_featurecode_voicemail_check, ?SIGNAL_FILTER(Context)}, Context),
