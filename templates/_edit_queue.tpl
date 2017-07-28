@@ -1,4 +1,5 @@
-{% print m.kazoo[{queue queue_id=queue_id account_id=account_id}] %}
+{# print m.kazoo[{queue queue_id=queue_id account_id=account_id}] #}
+{# print m.kazoo[{queue_roster queue_id=queue_id account_id=account_id}] #}
 
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -31,7 +32,7 @@
         action={add_class class="active" target="agentssettings_li"}
         action={remove_class class="active" target="basic_li"}
         action={update target="tab_content"
-                       template="_trunkstore_agents_settings.tpl"
+                       template="_edit_queue_agents.tpl"
                        queue_id=queue_id
                }
 %}

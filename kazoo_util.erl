@@ -373,6 +373,9 @@
     ,queues/4
     ,queue/5
     ,queue_update/1
+    ,queue_agents/1
+    ,queue_roster/5
+    ,acdc_call_stats/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -4527,3 +4530,28 @@ maybe_announce('undefined', JObj) ->
     modkazoo_util:delete_key(<<"announce">>, JObj);
 maybe_announce(Announce, JObj) ->
     modkazoo_util:set_value(<<"announce">>, Announce, JObj).
+
+queue_agents(Context) ->
+    case z_context:get_q('queue_id', Context) of
+        'undefined' ->
+            Context;
+        QueueId ->
+            AccountId = z_context:get_session(kazoo_account_id, Context),
+            Agents =
+                lists:foldr(fun(T,J) -> case T of
+                                            <<_:32/binary>> -> [T]++J;
+                                            _ -> J
+                                        end
+                            end
+                           ,[]
+                           ,z_context:get_q_all('user', Context)),
+            queue_roster('post', QueueId, AccountId, ?MK_DATABAG(Agents), Context)
+    end.
+
+queue_roster(Verb, QueueId, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?QUEUES/binary, "/", QueueId/binary, ?ROSTER/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+acdc_call_stats(AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?ACDC_CALL_STATS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).

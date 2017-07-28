@@ -670,6 +670,18 @@ m_find_value({queue,[{queue_id, QueueId}, {account_id, 'undefined'}]}, _M, Conte
 m_find_value({queue,[{queue_id, QueueId}, {account_id, AccountId}]}, _M, Context) ->
     kazoo_util:queue('get', QueueId, AccountId, [], Context);
 
+m_find_value({queue_roster,[{queue_id, 'undefined'}, {account_id, AccountId}]}, _M, Context) ->
+    'undefined';
+m_find_value({queue_roster,[{queue_id, QueueId}, {account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({queue_roster,[{queue_id, QueueId}, {account_id, AccountId}]}, _M, Context);
+m_find_value({queue_roster,[{queue_id, QueueId}, {account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:queue_roster('get', QueueId, AccountId, [], Context);
+
+m_find_value(acdc_call_stats, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    kazoo_util:acdc_call_stats(AccountId, Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

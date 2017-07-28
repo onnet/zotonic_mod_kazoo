@@ -32,7 +32,7 @@
         {% endfor %}
       </div>
     </div>
-    <div class="form-group" id="grp_users_list">
+    <div class="form-group" id="grp_devices_list">
       <h4>Devices:</h4>
       <div class="col-sm-12 columns"> 
         {% for option in m.kazoo.kz_list_account_devices_short %}
