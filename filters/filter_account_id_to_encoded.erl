@@ -1,7 +1,6 @@
 -module(filter_account_id_to_encoded).
--export([
-          account_id_to_encoded/2,
-          account_id_to_encoded/3
+-export([account_id_to_encoded/2
+        ,account_id_to_encoded/3
 ]).
 
 account_id_to_encoded(String, _Context) ->

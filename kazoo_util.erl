@@ -596,8 +596,9 @@ kz_get_acc_doc(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     kz_get_acc_doc_by_account_id(AccountId, Context).
 
-kz_get_acc_doc_by_account_id('undefined', _Context) ->
-    <<>>;
+kz_get_acc_doc_by_account_id('undefined', Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    kz_get_acc_doc_by_account_id(AccountId, Context);
 kz_get_acc_doc_by_account_id(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary>>,
     crossbar_account_request('get', API_String, [], Context).

@@ -6,6 +6,7 @@
       <th style="text-align: center;">{_ Description _}</th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
+      <th style="text-align: center;"></th>
     </tr>
   </thead>
   <tbody>
@@ -30,7 +31,7 @@
         <td style="text-align: center;">
           <i id="edit_entries_{{ queue[1]["id"] }}"
              class="fa fa-edit pointer"
-             title="{_ Edit entries _}"></i></td>
+             title="{_ Edit entries _}"></i>
           {% wire id="edit_entries_"++queue[1]["id"]
                   action={dialog_open title=_"Edit"++" "++queue[1]["name"]
                                       template="_edit_queue_lazy.tpl"
@@ -38,6 +39,19 @@
                                       width="auto"
                          }
           %}
+        </td>
+        <td style="text-align: center;">
+          <i id="info_{{ queue[1]["id"] }}"
+             class="fa fa-info-circle zprimary pointer"
+             title="{_ Details _}"></i>
+          {% wire id="info_"++queue[1]["id"]
+                  action={dialog_open title=_"Queue details"
+                                      template="_details_queue.tpl"
+                                      queue_id=queue[1]["id"]
+                                      width="auto"
+                         }
+          %}
+        </td>
         <td style="text-align: center;">
           <i id="delete_{{ queue[1]["id"] }}"
              class="fa fa-trash-o pointer"
