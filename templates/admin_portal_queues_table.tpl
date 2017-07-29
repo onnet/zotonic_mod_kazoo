@@ -14,16 +14,6 @@
       <tr>
         <td style="text-align: center1;">
           {{ queue[1]["name"] }}
-          <i id="edit_{{ queue[1]["id"] }}"
-             class="fa fa-edit pointer"
-             title="{_ Edit _}"></i>
-          {% wire id="edit_"++queue[1]["id"]
-                  action={dialog_open title=_"Edit queue"++" "++queue[1]["name"]
-                                      template="_edit_queue_lazy.tpl"
-                                      queue_id=queue[1]["id"]
-                                      width="auto"
-                         }
-          %}
         </td>
         <td style="text-align: center1;">
           {{ queue[1]["description"] }}
@@ -31,7 +21,7 @@
         <td style="text-align: center;">
           <i id="edit_entries_{{ queue[1]["id"] }}"
              class="fa fa-edit pointer"
-             title="{_ Edit entries _}"></i>
+             title="{_ Edit _}"></i>
           {% wire id="edit_entries_"++queue[1]["id"]
                   action={dialog_open title=_"Edit"++" "++queue[1]["name"]
                                       template="_edit_queue_lazy.tpl"
