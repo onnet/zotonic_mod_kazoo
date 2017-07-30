@@ -2695,6 +2695,15 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"eavesdro
 cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"response">> ->
     Code = modkazoo_util:get_value_bin(ModulePath++[<<"data">>,<<"code">>],z_context:get_session('current_callflow', Context)), 
     ['undefined', <<"SIP Code: ", Code/binary>>];
+cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"acdc_member">> ->
+    Id = modkazoo_util:get_value(ModulePath++[<<"data">>,<<"id">>],z_context:get_session('current_callflow', Context)),
+    case modkazoo_util:get_value([<<"metadata">>,Id,<<"name">>],z_context:get_session('current_callflow', Context)) of
+        'undefined' -> 
+            AccountId = z_context:get_session('kazoo_account_id', Context),
+            QueueDoc = queue('get', Id, AccountId, [], Context),
+            [Id,modkazoo_util:get_value(<<"name">>,QueueDoc)];
+        Name -> [Id, Name]
+    end;
 cf_get_module_info(_ModuleName,_ModulePath,_Context) ->
     ['undefined','undefined'].
 
