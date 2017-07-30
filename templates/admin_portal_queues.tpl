@@ -22,6 +22,20 @@
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
+
+         <span style="padding-left: 3em;">
+            {_ max connect failures _}:
+         </span>
+         <span id="max_connect_failures">
+            {% include "_show_field.tpl" type="account"
+                                         doc_id="_no_need_"
+                                         field_name=["max_connect_failures"]
+                                         width="4em"
+            %}
+         </span>
+
+
+
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"add queue"
               action={dialog_open title=_"Add queue"

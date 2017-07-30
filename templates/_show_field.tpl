@@ -13,5 +13,6 @@
                        placeholder=placeholder
                        prefix=prefix
                        postfix=postfix
+                       width=width
                }
 %}

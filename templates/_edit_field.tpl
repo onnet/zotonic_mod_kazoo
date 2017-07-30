@@ -1,6 +1,8 @@
 <input id="{{ prefix }}{{ field_name }}_input"
        name="input_value"
-       style="width:70%; height:20px; text-align:center;"
+       style="width:{% if width %}{{ width }}{% else %}70%{% endif %};
+              height:{% if height %}{{ height }}{% else %}20px{% endif %};
+              text-align:{% if text-align %}{{ text-align }}{% else %}center{% endif %};"
        type="text"
        placeholder="{{ placeholder }}"
        value="{{ m.kazoo[{kz_doc_field type=type
@@ -18,12 +20,13 @@
                        account_id=account_id
                        prefix=prefix
                        postfix=postfix
+                       width=width
                        placeholder=placeholder}
 %}
 <i id="{{ prefix }}{{ field_name }}_save" class="fa fa-save pointer" title="{_ Save _}"></i>
 {% wire id=prefix++field_name++"_save"
         type="click"
-        action={postback postback={save_field type doc_id field_name prefix postfix account_id}
+        action={postback postback={save_field type doc_id field_name prefix postfix account_id width}
                          delegate="mod_kazoo" 
                          qarg=prefix++field_name++"_input"
                          inject_args type=type
@@ -32,5 +35,6 @@
                                      prefix=prefix
                                      postfix=postfix
                                      account_id=account_id
+                                     width=width
                }
 %}
