@@ -355,8 +355,6 @@
 -include_lib("zotonic.hrl").
 -include_lib("include/mod_kazoo.hrl").
 
--define(MENU_KEYS_LIST, [<<"_">>,<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>]).
-
 -define(MK_ACCOUNT, 
     {[{<<"call_restriction">>,{[]}}
       ,{<<"notifications">>,
@@ -424,15 +422,6 @@
      ,{<<"resources">>,{[]}}
    ]}
   }
-]}).
-
--define(EMPTY_CALLFLOW, 
-{[{<<"flow">>,
-   {[{<<"children">>,{[]}}
-     ,{<<"data">>,{[]}}
-     ]}}
- ,{<<"numbers">>,[]}
- ,{<<"patterns">>,[]}
 ]}).
 
 -define(EMPTY_TS_SERVER,

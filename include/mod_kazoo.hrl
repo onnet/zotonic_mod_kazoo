@@ -423,6 +423,17 @@
 %%
 -define(UNIX_EPOCH_IN_GREGORIAN, 62167219200).
 
+-define(MENU_KEYS_LIST, [<<"_">>,<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>]).
+
+-define(EMPTY_CALLFLOW,
+{[{<<"flow">>,
+   {[{<<"children">>,{[]}}
+     ,{<<"data">>,{[]}}
+     ]}}
+ ,{<<"numbers">>,[]}
+ ,{<<"patterns">>,[]}
+]}).
+
 %% Kazo API tokens
 -define(V1, <<"/v1">>).
 -define(V2, <<"/v2">>).

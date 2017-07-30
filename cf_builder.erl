@@ -33,17 +33,6 @@
 -include_lib("zotonic.hrl").
 -include_lib("include/mod_kazoo.hrl").
 
--define(EMPTY_CALLFLOW,
-{[{<<"flow">>,
-   {[{<<"children">>,{[]}}
-     ,{<<"data">>,{[]}}
-     ]}}
- ,{<<"numbers">>,[]}
- ,{<<"patterns">>,[]}
-]}).
-
--define(MENU_KEYS_LIST, [<<"_">>,<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>]).
-
 cf_add_number(Number, Context) ->
     CurrentCallflow = case z_context:get_session('current_callflow', Context) of
         'undefined' -> ?EMPTY_CALLFLOW;
