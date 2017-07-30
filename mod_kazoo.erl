@@ -799,7 +799,7 @@ event({postback,{delete_group,[{group_id,GroupId}]},_,_}, Context) ->
 event({drop,_,_}=A,Context) ->
     try
         lager:info("Drop A: ~p",[A]),
-        kazoo_util:cf_handle_drop(A,Context)
+        cf_builder:cf_handle_drop(A,Context)
     catch
       _E1:_E2 -> 'ok'
     end;
@@ -811,9 +811,9 @@ event({submit,cf_add_number,_,_},Context) ->
             case re:replace(Num, " ", "", [global, {return, binary}]) of
                 <<>> -> 'ok';
                 Number -> 
-                    _ = kazoo_util:cf_add_number(Number,Context),
+                    _ = cf_builder:cf_add_number(Number,Context),
                     case z_context:get_q("number_type", Context) of
-                        "number_type_1" -> kazoo_util:cf_notes_number_action("add", Number, Context);
+                        "number_type_1" -> cf_builder:cf_notes_number_action("add", Number, Context);
                         _ -> 'ok'
                     end
             end
@@ -824,56 +824,56 @@ event({submit,cf_add_number,_,_},Context) ->
             case re:replace(Patt, " ", "", [global, {return, binary}]) of
                 <<>> -> 'ok';
                 Pattern -> 
-                    _ = kazoo_util:cf_add_pattern(Pattern,Context)
+                    _ = cf_builder:cf_add_pattern(Pattern,Context)
             end
     end,
     mod_signal:emit({update_cf_numbers_div, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_delete_number,[{number,Number}]},_,_}, Context) ->
-    _ = kazoo_util:cf_delete_number(Number, Context),
+    _ = cf_builder:cf_delete_number(Number, Context),
     mod_signal:emit({update_cf_numbers_div, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{cf_note_number,[{action,Action},{number,Number}]},_,_},Context) ->
-    kazoo_util:cf_notes_number_action(Action, Number, Context),
+    cf_builder:cf_notes_number_action(Action, Number, Context),
     Context;
 
 event({submit,cf_edit_name,_,_},Context) ->
-    _ = kazoo_util:cf_edit_name(z_context:get_q("callflow_name", Context),Context),
-    _ = kazoo_util:cf_contact_list_exclude(z_context:get_q("callflow_exclude", Context),Context),
+    _ = cf_builder:cf_edit_name(z_context:get_q("callflow_name", Context),Context),
+    _ = cf_builder:cf_contact_list_exclude(z_context:get_q("callflow_exclude", Context),Context),
     mod_signal:emit({update_cf_edit_name, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_user,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","timeout"]
                                  ,z_convert:to_binary(z_context:get_q("timeout", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_device,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","timeout"]
                                  ,z_convert:to_binary(z_context:get_q("timeout", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_play,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
@@ -881,7 +881,7 @@ event({submit,cf_select_play,_,_},Context) ->
 
 event({submit,cf_select_voicemail,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
@@ -889,7 +889,7 @@ event({submit,cf_select_voicemail,_,_},Context) ->
 
 event({submit,cf_select_callflow,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
@@ -897,24 +897,24 @@ event({submit,cf_select_callflow,_,_},Context) ->
 
 event({submit,cf_select_record_call,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"start">>, Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","url"], <<>>, Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"start">>, Context),
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","url"], <<>>, Context),
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","format"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","time_limit"], <<"6000">>, Context),
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","time_limit"], <<"6000">>, Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_group_pickup,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     PickupType = z_context:get_q("pickup_type", Context)++"_id",
     Selected = jiffy:decode(z_context:get_q("selected", Context)),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data",PickupType]
                                  ,modkazoo_util:get_value(<<"id">>,Selected)
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","name"]
                                  ,modkazoo_util:get_value(<<"name">>,Selected)
                                  ,Context),
@@ -922,21 +922,21 @@ event({submit,cf_select_group_pickup,_,_},Context) ->
 
 event({submit,cf_select_receive_fax,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","owner_id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","media","fax_option"]
                                  ,modkazoo_util:on_to_true(z_context:get_q("t_38_checkbox", Context))
                                  ,Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_save,[{cf,<<"current_callflow">>}]},_,_},Context) ->
-    kazoo_util:cf_save('current_callflow', Context);
+    cf_builder:cf_save('current_callflow', Context);
 
 event({postback,{cf_delete,[{cf,<<"current_callflow">>}]},_,_},Context) ->
-    kazoo_util:cf_delete('current_callflow', Context),
+    cf_builder:cf_delete('current_callflow', Context),
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context);
 
 event({postback,{cf_ring_group_select,[{element_type,ElementType}]},_,_},Context) ->
@@ -950,25 +950,25 @@ event({postback,{cf_ring_group_select,[{element_type,ElementType}]},_,_},Context
 
 event({submit,cf_select_ring_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","name"]
                                  ,z_convert:to_binary(z_context:get_q("name", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","strategy"]
                                  ,z_convert:to_binary(z_context:get_q("strategy", Context))
                                  ,Context),
     _ = case z_convert:to_binary(z_context:get_q("ringback", Context)) of
         <<>> -> modkazoo_util:delete_session_jobj_key('current_callflow', z_string:split(ElementId,"-")++["data","ringback"], Context);
-        Ringback -> kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","ringback"], Ringback, Context)
+        Ringback -> cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","ringback"], Ringback, Context)
     end,
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","endpoints"]
-                                 ,kazoo_util:cf_build_ring_group_endpoints(Context)
+                                 ,cf_builder:cf_build_ring_group_endpoints(Context)
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","timeout"]
-                                 ,kazoo_util:cf_calculate_ring_group_timeout(Context)
+                                 ,cf_builder:cf_calculate_ring_group_timeout(Context)
                                  ,Context),
     z_render:dialog_close(Context);
 
@@ -983,23 +983,23 @@ event({postback,{cf_page_group_select,[{element_type,ElementType}]},_,_},Context
 
 event({submit,cf_select_page_group,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","name"]
                                  ,z_context:get_q('name', Context)
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","audio"]
                                  ,z_context:get_q('audio', Context)
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","endpoints"]
-                                 ,kazoo_util:cf_build_page_group_endpoints(Context)
+                                 ,cf_builder:cf_build_page_group_endpoints(Context)
                                  ,Context),
     z_render:dialog_close(Context);
 
 event({submit,cf_select_menu,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
@@ -1007,7 +1007,7 @@ event({submit,cf_select_menu,_,_},Context) ->
 
 event({submit,cf_select_temporal_route,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","timezone"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
@@ -1015,7 +1015,7 @@ event({submit,cf_select_temporal_route,_,_}, Context) ->
 
 event({submit,cf_select_cidlistmatch,_,_}, Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),
@@ -1028,13 +1028,13 @@ event({submit,cf_select_check_cid,_,_}, Context) ->
                                     ,?EMPTY_JSON_OBJECT)
         of
             ?EMPTY_JSON_OBJECT -> 'ok';
-            _ -> kazoo_util:may_be_check_cid_children_clean(Context)
+            _ -> cf_builder:may_be_check_cid_children_clean(Context)
         end,
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,modkazoo_util:split_b(ElementId,"-")++["data","use_absolute_mode"]
                                  ,z_convert:to_atom(z_context:get_q("selected", Context))
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,modkazoo_util:split_b(ElementId,"-")++["data","regex"]
                                  ,z_convert:to_binary(z_context:get_q("regex", Context))
                                  ,Context),
@@ -1043,14 +1043,14 @@ event({submit,cf_select_check_cid,_,_}, Context) ->
 event({submit,cf_select_option,_,_},Context) ->
     case z_context:get_q('existing_element_id', Context) of
         <<>> ->
-            kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
+            cf_builder:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
                                 ,{drop_id,z_context:get_q('drop_id', Context)}
                                 ,{drop_parent,z_context:get_q('drop_parent', Context)}
                                 ,{branch_id,z_context:get_q('branch_id', Context)}
                                 ,{switch,z_context:get_q('switch', Context)}]
                                ,Context);
         ExistingElementId -> 
-            kazoo_util:cf_set_new_switch(ExistingElementId, z_context:get_q('switch', Context),Context),
+            cf_builder:cf_set_new_switch(ExistingElementId, z_context:get_q('switch', Context),Context),
             mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
@@ -1058,14 +1058,14 @@ event({submit,cf_select_option,_,_},Context) ->
 event({submit,cf_select_option_temporal_route,_,_},Context) ->
     case z_context:get_q('existing_element_id', Context) of
         <<>> ->
-            kazoo_util:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
+            cf_builder:cf_child([{tool_name,z_context:get_q('tool_name', Context)}
                                 ,{drop_id,z_context:get_q('drop_id', Context)}
                                 ,{drop_parent,z_context:get_q('drop_parent', Context)}
                                 ,{branch_id,z_context:get_q('branch_id', Context)}
                                 ,{switch,z_context:get_q('switch', Context)}]
                                ,Context);
         ExistingElementId -> 
-            kazoo_util:cf_set_new_switch(ExistingElementId, z_context:get_q('switch', Context),Context),
+            cf_builder:cf_set_new_switch(ExistingElementId, z_context:get_q('switch', Context),Context),
             mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
             z_render:dialog_close(Context)
     end;
@@ -1078,7 +1078,7 @@ event({submit,cf_select_response,_,_},Context) ->
         ,{<<"message">>, modkazoo_util:get_q_bin("message", Context)}
         ,{<<"media">>, modkazoo_util:get_q_bin("selected", Context)}
         ]),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data"]
                                  ,modkazoo_util:set_values(DataValues, modkazoo_util:new())
                                  ,Context),
@@ -1094,49 +1094,49 @@ event({submit,cf_select_disa,_,_},Context) ->
         ,{<<"retries">>, modkazoo_util:get_q_bin("retries", Context)}
         ,{<<"interdigit">>, modkazoo_util:get_q_bin("interdigit", Context)}
         ]),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data"]
                                  ,modkazoo_util:set_values(DataValues, modkazoo_util:new())
                                  ,Context),
     z_render:dialog_close(Context);
 
 event({postback,{cf_load,_},_,_},Context) ->
-    kazoo_util:cf_load_to_session(z_context:get_q('triggervalue', Context),Context),
-    kazoo_util:cf_notes_flush(Context),
+    cf_builder:cf_load_to_session(z_context:get_q('triggervalue', Context),Context),
+    cf_builder:cf_notes_flush(Context),
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event({postback,{cf_reload,_},_,_},Context) ->
     case modkazoo_util:get_value(<<"id">>,z_context:get_session('current_callflow', Context)) of
-        'undefined' -> kazoo_util:cf_load_to_session("new", Context);
-        CallflowId -> kazoo_util:cf_load_to_session(CallflowId, Context)
+        'undefined' -> cf_builder:cf_load_to_session("new", Context);
+        CallflowId -> cf_builder:cf_load_to_session(CallflowId, Context)
     end,
-    kazoo_util:cf_notes_flush(Context),
+    cf_builder:cf_notes_flush(Context),
     mod_signal:emit({update_cf_builder_area, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
 event(#postback{ message = {check_children, Args} }, Context) ->
-    kazoo_util:cf_may_be_add_child(proplists:get_value(id, Args)
+    cf_builder:cf_may_be_add_child(proplists:get_value(id, Args)
                                   ,proplists:get_value(drop_id, Args)
                                   ,proplists:get_value(drop_parent, Args)
                                   ,Context);
 
 event({postback,{cf_delete_element,[{element_id,ElementId}]},_,_},Context) ->
-    kazoo_util:cf_delete_element(ElementId,Context);
+    cf_builder:cf_delete_element(ElementId,Context);
 
 event({postback,{cf_park_element,[{element_id,ElementId}]},_,_},Context) ->
-    kazoo_util:cf_park_element(ElementId,Context);
+    cf_builder:cf_park_element(ElementId,Context);
 
 event({postback,{cf_choose_new_switch,[{element_id,ExistingElementId},{drop_parent,DropParent}]},_,_},Context) ->
-    kazoo_util:cf_choose_new_switch(ExistingElementId,DropParent,Context);
+    cf_builder:cf_choose_new_switch(ExistingElementId,DropParent,Context);
 
 event({submit,cf_time_of_the_day,_,_},Context) ->
-    _ = kazoo_util:cf_time_of_the_day(Context),
+    _ = cf_builder:cf_time_of_the_day(Context),
     mod_signal:emit({update_admin_portal_time_of_the_day_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({postback,{delete_time_of_the_day_rule,[{rule_id,RuleId}]},_,_},Context) ->
-    _ = kazoo_util:cf_delete_time_of_the_day_rule(RuleId,Context),
+    _ = cf_builder:cf_delete_time_of_the_day_rule(RuleId,Context),
     mod_signal:emit({update_admin_portal_time_of_the_day_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
@@ -1161,12 +1161,12 @@ event({submit,kz_menu,_,_},Context) ->
 
 event({submit,cf_select_prepend_cid,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"prepend">>, Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","action"], <<"prepend">>, Context),
+    _ = cf_builder:cf_set_session('current_callflow'
                                   ,z_string:split(ElementId,"-")++["data","caller_id_name_prefix"]
                                   ,z_convert:to_binary(z_context:get_q("caller_id_name_prefix", Context))
                                   ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                   ,z_string:split(ElementId,"-")++["data","caller_id_number_prefix"]
                                   ,z_convert:to_binary(z_context:get_q("caller_id_number_prefix", Context))
                                   ,Context),
@@ -1174,11 +1174,11 @@ event({submit,cf_select_prepend_cid,_,_},Context) ->
 
 event({submit,cf_select_set_cid,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                   ,z_string:split(ElementId,"-")++["data","caller_id_name"]
                                   ,z_convert:to_binary(z_context:get_q("caller_id_name", Context))
                                   ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                   ,z_string:split(ElementId,"-")++["data","caller_id_number"]
                                   ,z_convert:to_binary(z_context:get_q("caller_id_number", Context))
                                   ,Context),
@@ -1208,9 +1208,9 @@ event({submit,cf_select_conference,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     case z_context:get_q("selected", Context) of
         [] -> 
-            _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], ?EMPTY_JSON_OBJECT, Context);
+            _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data"], ?EMPTY_JSON_OBJECT, Context);
         Id -> 
-            _ = kazoo_util:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(Id), Context)
+            _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","id"], z_convert:to_binary(Id), Context)
     end,
     z_render:dialog_close(Context);
 
@@ -1220,16 +1220,16 @@ event({submit,cf_select_eavesdrop,<<"form_cf_select_eavesdrop">>,<<"form_cf_sele
     ApprovedType = z_convert:to_binary("approved_"++z_context:get_q("approved_type", Context)++"_id"),
     TargetSelected = modkazoo_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("target_selected", Context))),
     ApprovedSelected = modkazoo_util:get_value(<<"id">>,jiffy:decode(z_context:get_q("approved_selected", Context))),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data"]
                                  ,{[{TargetType,TargetSelected},{ApprovedType,ApprovedSelected}]}
                                  ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                   ,[<<"metadata">>,TargetSelected]
                                   ,{[{<<"name">>,modkazoo_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("target_selected", Context)))}
                                     ,{<<"pvt_type">>,z_convert:to_binary(z_context:get_q("target_type", Context))}]}
                                   ,Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                   ,[<<"metadata">>,ApprovedSelected]
                                   ,{[{<<"name">>,modkazoo_util:get_value(<<"name">>,jiffy:decode(z_context:get_q("approved_selected", Context)))}
                                     ,{<<"pvt_type">>,z_convert:to_binary(z_context:get_q("approved_type", Context))}]}
@@ -1238,7 +1238,7 @@ event({submit,cf_select_eavesdrop,<<"form_cf_select_eavesdrop">>,<<"form_cf_sele
 
 event({submit,cf_select_acdc_member,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
-    _ = kazoo_util:cf_set_session('current_callflow'
+    _ = cf_builder:cf_set_session('current_callflow'
                                  ,z_string:split(ElementId,"-")++["data","id"]
                                  ,z_convert:to_binary(z_context:get_q("selected", Context))
                                  ,Context),

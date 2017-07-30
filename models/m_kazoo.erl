@@ -159,7 +159,7 @@ m_find_value(kz_list_account_vmboxes, _M, Context) ->
 m_find_value(kz_list_user_vmboxes, _M, Context) ->
     kazoo_util:kz_list_user_vmboxes(Context);
 
-m_find_value({kz_list_user_vmbox_details, [{vmbox_id, 'undefined'}]}, _M, Context) ->
+m_find_value({kz_list_user_vmbox_details, [{vmbox_id, 'undefined'}]}, _M, _Context) ->
     'undefined';
 m_find_value({kz_list_user_vmbox_details, [{vmbox_id, VMBoxId}]}, _M, Context) ->
     kazoo_util:kz_list_user_vmbox_details(VMBoxId, Context);
@@ -431,13 +431,13 @@ m_find_value({kz_get_temporal_rule, [{rule_id, RuleId}]}, _M, Context) ->
     kazoo_util:kz_get_temporal_rule(RuleId, Context);
 
 m_find_value({cf_get_element_by_id, [{element_id, ElementId}]}, _M, Context) ->
-    kazoo_util:cf_get_element_by_id(ElementId, Context);
+    cf_builder:cf_get_element_by_id(ElementId, Context);
 
 m_find_value({kz_get_account_prompt, [{prompt_id, PromptId}]}, _M, Context) ->
     kazoo_util:kz_get_account_prompt(PromptId, Context);
 
 m_find_value({cf_get_module_info, [{module_name, ModuleName},{module_path,ModulePath}]}, _M, Context) ->
-    kazoo_util:cf_get_module_info(ModuleName, binary:split(ModulePath, <<"-">>, [global]), Context);
+    cf_builder:cf_get_module_info(ModuleName, binary:split(ModulePath, <<"-">>, [global]), Context);
 
 m_find_value(kz_list_account_conferences, _M, Context) ->
     kazoo_util:kz_list_account_conferences(Context);
@@ -603,7 +603,7 @@ m_find_value(list_system_dialplans_names, _M, Context) ->
     kazoo_util:list_system_dialplans_names(Context);
 
 m_find_value({cf_notes_get, [{type, Type}]}, _M, Context) ->
-    kazoo_util:cf_notes_get(Type, Context);
+    cf_builder:cf_notes_get(Type, Context);
 
 m_find_value(kz_account_access_lists, _M, Context) ->
     kazoo_util:kz_account_access_lists('get', [], Context);
@@ -662,7 +662,7 @@ m_find_value({queues,[{account_id, 'undefined'}]}, _M, Context) ->
 m_find_value({queues,[{account_id, AccountId}]}, _M, Context) ->
     kazoo_util:queues('get', AccountId, [], Context);
 
-m_find_value({queue,[{queue_id, 'undefined'}, {account_id, AccountId}]}, _M, Context) ->
+m_find_value({queue,[{queue_id, 'undefined'}, {account_id, _AccountId}]}, _M, _Context) ->
     'undefined';
 m_find_value({queue,[{queue_id, QueueId}, {account_id, 'undefined'}]}, _M, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
@@ -670,7 +670,7 @@ m_find_value({queue,[{queue_id, QueueId}, {account_id, 'undefined'}]}, _M, Conte
 m_find_value({queue,[{queue_id, QueueId}, {account_id, AccountId}]}, _M, Context) ->
     kazoo_util:queue('get', QueueId, AccountId, [], Context);
 
-m_find_value({queue_roster,[{queue_id, 'undefined'}, {account_id, AccountId}]}, _M, Context) ->
+m_find_value({queue_roster,[{queue_id, 'undefined'}, {account_id, _AccountId}]}, _M, _Context) ->
     'undefined';
 m_find_value({queue_roster,[{queue_id, QueueId}, {account_id, 'undefined'}]}, _M, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
