@@ -755,8 +755,8 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
                            ,z_template:render("_show_field_select.tpl", Args, Context)
                            ,Context);
         <<"device">> ->
-            InputValue = case z_context:get_q("input_value", Context) of
-                [] -> 'undefined';
+            InputValue = case z_context:get_q(input_value, Context) of
+                <<>> -> 'undefined';
                 InputVal -> InputVal
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
