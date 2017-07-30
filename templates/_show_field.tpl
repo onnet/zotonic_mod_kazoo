@@ -14,5 +14,6 @@
                        prefix=prefix
                        postfix=postfix
                        width=width
+                       convert_macro=convert_macro
                }
 %}

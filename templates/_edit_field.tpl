@@ -21,12 +21,13 @@
                        prefix=prefix
                        postfix=postfix
                        width=width
+                       convert_macro=convert_macro
                        placeholder=placeholder}
 %}
 <i id="{{ prefix }}{{ field_name }}_save" class="fa fa-save pointer" title="{_ Save _}"></i>
 {% wire id=prefix++field_name++"_save"
         type="click"
-        action={postback postback={save_field type doc_id field_name prefix postfix account_id width}
+        action={postback postback={save_field type doc_id field_name prefix postfix account_id width convert_macro}
                          delegate="mod_kazoo" 
                          qarg=prefix++field_name++"_input"
                          inject_args type=type
@@ -36,5 +37,6 @@
                                      postfix=postfix
                                      account_id=account_id
                                      width=width
+                                     convert_macro=convert_macro
                }
 %}

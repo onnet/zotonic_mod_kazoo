@@ -691,26 +691,31 @@ event({postback,{save_field, Args},_,_}, Context) ->
                     'undefined' -> z_context:get_session('kazoo_account_id', Context);
                     AccId -> AccId
                 end,
+    InputVal = 
+        case proplists:get_value(convert_macro, Args) of
+            'undefined' -> z_context:get_q(input_value, Context);
+            <<"TO_INT">> -> ?TO_INT(z_context:get_q(input_value, Context))
+        end,
     case proplists:get_value(type, Args) of
         <<"account">> ->
-            _ = kazoo_util:kz_set_acc_doc(FieldName, z_context:get_q(input_value, Context), AccountId, Context),
+            _ = kazoo_util:kz_set_acc_doc(FieldName, InputVal, AccountId, Context),
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field.tpl", Args, Context)
                            ,Context);
         <<"user">> ->
-            _ = kazoo_util:kz_set_user_doc(FieldName, z_context:get_q(input_value, Context), DocId, Context),
+            _ = kazoo_util:kz_set_user_doc(FieldName, InputVal, DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field.tpl", Args, Context)
                            ,Context);
         <<"device">> ->
-            _ = kazoo_util:kz_set_device_doc(FieldName, z_context:get_q(input_value, Context), DocId, Context),
+            _ = kazoo_util:kz_set_device_doc(FieldName, InputVal, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field.tpl", Args, Context)
                            ,Context);
         <<"cccp_creds">> ->
-            _ = kazoo_util:cccp_field_set(FieldName, z_context:get_q(input_value, Context), DocId, Context),
+            _ = kazoo_util:cccp_field_set(FieldName, InputVal, DocId, Context),
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field.tpl", Args, Context)
                            ,Context);
@@ -732,14 +737,19 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
                     'undefined' -> z_context:get_session('kazoo_account_id', Context);
                     AccId -> AccId
                 end,
+    InputVal = 
+        case proplists:get_value(convert_macro, Args) of
+            'undefined' -> z_context:get_q(input_value, Context);
+            <<"TO_INT">> -> ?TO_INT(z_context:get_q(input_value, Context))
+        end,
     case proplists:get_value(type, Args) of
         <<"account">> ->
-            _ = kazoo_util:kz_set_acc_doc(FieldName, z_convert:to_binary(z_context:get_q("input_value", Context)), AccountId, Context),
+            _ = kazoo_util:kz_set_acc_doc(FieldName, InputVal, AccountId, Context),
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl", Args, Context)
                            ,Context);
         <<"user">> ->
-            _ = kazoo_util:kz_set_user_doc(FieldName, ?TO_BIN(z_context:get_q("input_value", Context)), DocId, Context),
+            _ = kazoo_util:kz_set_user_doc(FieldName, InputVal, DocId, Context),
             mod_signal:emit({update_admin_portal_users_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl", Args, Context)
@@ -747,7 +757,7 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
         <<"device">> ->
             InputValue = case z_context:get_q("input_value", Context) of
                 [] -> 'undefined';
-                Val -> z_convert:to_binary(Val)
+                InputVal -> InputVal
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),

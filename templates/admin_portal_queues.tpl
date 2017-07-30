@@ -31,6 +31,7 @@
                                          doc_id="_no_need_"
                                          field_name=["max_connect_failures"]
                                          width="4em"
+                                         convert_macro="TO_INT"
             %}
          </span>
 
