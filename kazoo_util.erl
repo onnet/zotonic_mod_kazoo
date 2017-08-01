@@ -3539,7 +3539,11 @@ kz_notifications(Context) ->
 emails_list(Field, Context) ->
     case ?EMPTY(z_context:get_q(Field, Context)) of
         'undefined' -> 'undefined';
-        List -> lists:map(fun (K) -> re:replace(K, "[^A-Za-z0-9@_.-]", "", [global, {return, binary}]) end, z_string:split(List,","))
+        List -> lists:map(fun (K) ->
+                              re:replace(K, "[^A-Za-z0-9@_.-]", "", [global, {return, binary}])
+                          end
+                         ,binary:split(<<"tech@onnet.su, mx8@mail.ru">>, <<",">>, [global])
+                         )
     end.
 
 kz_notification_toggle(State, NotificationId, Context) ->
@@ -3886,3 +3890,11 @@ queue_roster(Verb, QueueId, AccountId, DataBag, Context) ->
 acdc_call_stats(AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?ACDC_CALL_STATS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+agents(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?AGENTS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+agents(Verb, QueueId, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?QUEUES/binary, "/", QueueId/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
