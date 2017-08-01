@@ -3539,10 +3539,10 @@ kz_notifications(Context) ->
 emails_list(Field, Context) ->
     case ?EMPTY(z_context:get_q(Field, Context)) of
         'undefined' -> 'undefined';
-        List -> lists:map(fun (K) ->
+        Emails -> lists:map(fun (K) ->
                               re:replace(K, "[^A-Za-z0-9@_.-]", "", [global, {return, binary}])
                           end
-                         ,binary:split(<<"tech@onnet.su, mx8@mail.ru">>, <<",">>, [global])
+                         ,binary:split(Emails, <<",">>, [global])
                          )
     end.
 
