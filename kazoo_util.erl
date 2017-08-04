@@ -583,7 +583,7 @@ kz_adminget_acc_doc_by_account_id(AccountId, Context) ->
 kz_set_acc_doc(K, V, Context) ->
     kz_set_acc_doc(K, V, z_context:get_session('kazoo_account_id', Context), Context).
 
-kz_set_acc_doc(["dial_plan","system"], V, AccountId, Context) ->
+kz_set_acc_doc([<<"dial_plan">>,<<"system">>], V, AccountId, Context) when is_binary(V) ->
     kz_set_acc_doc([<<"dial_plan">>,<<"system">>], [?TO_BIN(V)], AccountId, Context);
 kz_set_acc_doc(K, V, AccountId, Context) ->
     CurrDoc = kz_get_acc_doc_by_account_id(AccountId, Context),
