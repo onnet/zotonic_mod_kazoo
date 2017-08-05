@@ -1,6 +1,6 @@
 {% with m.kazoo[{queue_roster queue_id=queue_id account_id=account_id}] as agents %}
-  {% wire id="form_queue_agents" type="submit" postback="queue_agents" delegate="mod_kazoo" %}
-  <form id="form_queue_agents" method="post" action="postback">
+  {% wire id="form_queue_agents_roster" type="submit" postback="queue_agents_roster" delegate="mod_kazoo" %}
+  <form id="form_queue_agents_roster" method="post" action="postback">
     <div class="form-group" id="grp_users_list">
         <h4>Users:</h4>
         <div class="col-sm-12 columns">

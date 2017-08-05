@@ -347,7 +347,7 @@
     ,queues/4
     ,queue/5
     ,queue_update/1
-    ,queue_agents/1
+    ,queue_agents_roster/1
     ,queue_roster/5
     ,acdc_call_stats/2
 ]).
@@ -3866,7 +3866,7 @@ maybe_announce('undefined', JObj) ->
 maybe_announce(Announce, JObj) ->
     modkazoo_util:set_value(<<"announce">>, Announce, JObj).
 
-queue_agents(Context) ->
+queue_agents_roster(Context) ->
     case z_context:get_q('queue_id', Context) of
         'undefined' ->
             Context;

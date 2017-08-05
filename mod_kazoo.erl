@@ -2540,8 +2540,8 @@ event({submit,queue_update,_,_}, Context) ->
     mod_signal:emit({update_admin_portal_queues_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
-event({submit,queue_agents,_,_}, Context) ->
-    kazoo_util:queue_agents(Context),
+event({submit,queue_agents_roster,_,_}, Context) ->
+    kazoo_util:queue_agents_roster(Context),
     z_render:growl(?__("Setting saved", Context), Context);
 
 event(A, Context) ->

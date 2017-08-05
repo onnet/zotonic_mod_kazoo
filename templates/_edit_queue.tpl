@@ -32,7 +32,7 @@
         action={add_class class="active" target="agentssettings_li"}
         action={remove_class class="active" target="basic_li"}
         action={update target="tab_content"
-                       template="_edit_queue_agents.tpl"
+                       template="_edit_queue_agents_roster.tpl"
                        queue_id=queue_id
                }
 %}
