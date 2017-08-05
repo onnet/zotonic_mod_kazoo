@@ -19,6 +19,19 @@
           </div>
           <div class="panel-body text-center">
             {{ astatus }}
+            {% if astatus == "ready" %}
+              <i id="logout_{{ agent[1]["id"] }}"
+                 class="fa fa-stop pointer zprimary pl-1"
+                 title="{_ Logout _}"></i>
+            {% elif astatus == "logged_out" %}
+              <i id="login_{{ agent[1]["id"] }}"
+                 class="fa fa-play pointer zalarm pl-1"
+                 title="{_ Login _}"></i>
+            {% else %}
+              <i id="login_{{ agent[1]["id"] }}"
+                 class="fa fa-play pointer pl-1"
+                 title="{_ Resume _}"></i>
+            {% endif %}
           </div>
         </div>
       </div>
