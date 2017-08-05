@@ -2544,6 +2544,14 @@ event({submit,queue_agents_roster,_,_}, Context) ->
     kazoo_util:queue_agents_roster(Context),
     z_render:growl(?__("Setting saved", Context), Context);
 
+event({postback,{login_agent,[{agent_id,AgentId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    kazoo_util:agents_status('post', AgentId, AccountId, ?MK_DATABAG({[{<<"status">>,<<"login">>}]}), Context);
+
+event({postback,{logout_agent,[{agent_id,AgentId}]},_,_}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    kazoo_util:agents_status('post', AgentId, AccountId, ?MK_DATABAG({[{<<"status">>,<<"logout">>}]}), Context);
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),

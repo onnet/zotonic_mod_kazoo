@@ -23,10 +23,20 @@
               <i id="logout_{{ agent[1]["id"] }}"
                  class="fa fa-stop pointer zprimary pl-1"
                  title="{_ Logout _}"></i>
+              {% wire id="logout_"++agent[1]["id"]
+                      action={postback postback={logout_agent agent_id=agent[1]["id"]}
+                                       delegate="mod_kazoo"
+                             }
+              %}
             {% elif astatus == "logged_out" %}
               <i id="login_{{ agent[1]["id"] }}"
                  class="fa fa-play pointer zalarm pl-1"
                  title="{_ Login _}"></i>
+              {% wire id="login_"++agent[1]["id"]
+                      action={postback postback={login_agent agent_id=agent[1]["id"]}
+                                       delegate="mod_kazoo"
+                             }
+              %}
             {% else %}
               <i id="login_{{ agent[1]["id"] }}"
                  class="fa fa-play pointer pl-1"
