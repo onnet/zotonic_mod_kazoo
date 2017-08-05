@@ -14,6 +14,11 @@
                    name="user"
                    {% if option[1]|member:agents %}checked{% endif %}>
             {{ option[2] }}
+            <span class="pull-right">
+              <small>
+                ({{ m.kazoo[{agents_status agent_id=option[1] account_id=account_id}] }})
+              </small>
+            </span>
           </label>
           {% endif %}
           {% endfor %}

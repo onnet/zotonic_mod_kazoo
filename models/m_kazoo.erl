@@ -682,6 +682,28 @@ m_find_value(acdc_call_stats, _M, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     kazoo_util:acdc_call_stats(AccountId, Context);
 
+m_find_value({agents,[{account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({agents,[{account_id, AccountId}]}, _M, Context);
+m_find_value({agents,[{account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:agents('get', AccountId, [], Context);
+
+m_find_value({agents_status,[{agent_id, 'undefined'}, {account_id, _AccountId}]}, _M, _Context) ->
+    'undefined';
+m_find_value({agents_status,[{agent_id, AgentId}, {account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({agents_status,[{agent_id, AgentId}, {account_id, AccountId}]}, _M, Context);
+m_find_value({agents_status,[{agent_id, AgentId}, {account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:agents_status('get', AgentId, AccountId, [], Context);
+
+m_find_value({agents_queue_status,[{agent_id, 'undefined'}, {account_id, _AccountId}]}, _M, _Context) ->
+    'undefined';
+m_find_value({agents_queue_status,[{agent_id, AgentId}, {account_id, 'undefined'}]}, _M, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    m_find_value({agents_queue_status,[{agent_id, AgentId}, {account_id, AccountId}]}, _M, Context);
+m_find_value({agents_queue_status,[{agent_id, AgentId}, {account_id, AccountId}]}, _M, Context) ->
+    kazoo_util:agents_queue_status('get', AgentId, AccountId, [], Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),

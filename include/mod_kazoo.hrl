@@ -535,6 +535,7 @@
 -define(AGENTS, <<"/agents">>).
 -define(ROSTER, <<"/roster">>).
 -define(ACDC_CALL_STATS, <<"/acdc_call_stats">>).
+-define(QUEUE_STATUS, <<"/queue_status">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).

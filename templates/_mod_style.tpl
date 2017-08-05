@@ -30,6 +30,26 @@ border-color: {{ m.config.mod_kazoo.color1.value }};
   border-color: {{ m.config.mod_kazoo.color2.value }};
 }
 
+.panel-zprimary {
+    border-color: {{ m.config.mod_kazoo.color1.value }};
+}
+
+.panel-zprimary>.panel-heading {
+    color: {{ m.config.mod_kazoo.color3.value }}!important;
+    background-color: {{ m.config.mod_kazoo.color1.value }};
+    border-color: {{ m.config.mod_kazoo.color1.value }};
+}
+
+.panel-zalarm {
+    border-color: {{ m.config.mod_kazoo.color2.value }};
+}
+
+.panel-zalarm>.panel-heading {
+    color: {{ m.config.mod_kazoo.color3.value }}!important;
+    background-color: {{ m.config.mod_kazoo.color2.value }};
+    border-color: {{ m.config.mod_kazoo.color2.value }};
+}
+
 h2 {
   font-size: 30px;
   margin-top: 20px;
