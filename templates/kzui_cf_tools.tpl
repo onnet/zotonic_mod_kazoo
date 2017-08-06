@@ -154,14 +154,29 @@
                                             icon="rightarrow"
                                             help="Return a custom SIP error code"
           %}
-          {% if m.session.kazoo_reseller_account_id %}
+          <div class="clear">
+          </div>
+          <div class="app_list_nav">
+          </div>
+        </div>
+      </div>
+      <div id="Advanced" name="Advanced" class="category inactive">
+        <div class="open">
+          Queues
+        </div>
+        <div class="content">
           {% include "_cf_tool_element.tpl" tool_id="acdc_member"
                                             tool_name="acdc_member"
-                                            tool_descr="acdc member"
+                                            tool_descr="Queue"
                                             icon="circle_graph"
                                             help="Puts the caller into the ACDc queue."
           %}
-          {% endif %}
+          {% include "_cf_tool_element.tpl" tool_id="acdc_agent"
+                                            tool_name="acdc_agent"
+                                            tool_descr="Agent"
+                                            icon="circle_graph"
+                                            help="Change agent status."
+          %}
           <div class="clear">
           </div>
           <div class="app_list_nav">

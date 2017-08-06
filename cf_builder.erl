@@ -456,6 +456,16 @@ cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"acdc_mem
             [Id,modkazoo_util:get_value(<<"name">>,QueueDoc)];
         Name -> [Id, Name]
     end;
+cf_get_module_info(ModuleName,ModulePath,Context) when ModuleName == <<"acdc_agent">> ->
+    case modkazoo_util:get_value(ModulePath++[<<"data">>,<<"action">>]
+                                ,z_context:get_session('current_callflow', Context)
+                                )
+    of
+        <<"login">> -> ['undefined', <<"Login">>];
+        <<"logout">> -> ['undefined', <<"Logout">>];
+        <<"pause">> -> ['undefined', <<"Pause">>];
+        <<"resume">> -> ['undefined', <<"Resume">>]
+    end;
 cf_get_module_info(_ModuleName,_ModulePath,_Context) ->
     ['undefined','undefined'].
 
