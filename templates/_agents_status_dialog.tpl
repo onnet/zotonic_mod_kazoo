@@ -1,8 +1,10 @@
 <div class="row row-centered">
   {% for agent in m.kazoo[{agents account_id=account_id}] %}
     {% include "_agents_status_dialog_element.tpl"
-               agent=agent
+               agent_id=agent[1]["id"]
                account_id=account_id
+               first_name=agent[1]["first_name"]
+               last_name=agent[1]["last_name"]
     %}
   {% endfor %}
 </div>

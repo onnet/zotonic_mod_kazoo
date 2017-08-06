@@ -351,6 +351,7 @@
     ,queue_roster/5
     ,acdc_call_stats/2
     ,agents/4
+    ,agent/5
     ,agents_status/5
     ,agents_queue_status/5
 ]).
@@ -3896,6 +3897,10 @@ acdc_call_stats(AccountId, Context) ->
 
 agents(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?AGENTS/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
+
+agent(Verb, AgentId, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?AGENTS/binary, "/", AgentId/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
 agents_status(Verb, AgentId, AccountId, DataBag, Context) ->
