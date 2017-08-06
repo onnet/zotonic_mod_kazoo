@@ -1,50 +1,14 @@
-<div class="row">
+<div class="row row-centered">
   {% for agent in m.kazoo[{agents account_id=account_id}] %}
-    {% with m.kazoo[{agents_status agent_id=agent[1]["id"] account_id=account_id}] as astatus %}
-      {# print agent #}
-      {# print m.kazoo[{agents_status agent_id=agent[1]["id"] account_id=account_id}] #}
-      <div class="col-xs-3">
-        <div class="panel
-                    {% if astatus == "ready" %}
-                      panel-zprimary
-                    {% elif astatus == "logged_out" %}
-                      panel-zalarm
-                    {% else %}
-                      panel-info
-                    {% endif %}
-                    ">
-          <div class="panel-heading text-center">
-            {{ agent[1]["first_name"] }}
-            {{ agent[1]["last_name"] }}
-          </div>
-          <div class="panel-body text-center">
-            {{ astatus }}
-            {% if astatus == "ready" %}
-              <i id="logout_{{ agent[1]["id"] }}"
-                 class="fa fa-stop pointer zprimary pl-1"
-                 title="{_ Logout _}"></i>
-              {% wire id="logout_"++agent[1]["id"]
-                      action={postback postback={logout_agent agent_id=agent[1]["id"]}
-                                       delegate="mod_kazoo"
-                             }
-              %}
-            {% elif astatus == "logged_out" %}
-              <i id="login_{{ agent[1]["id"] }}"
-                 class="fa fa-play pointer zalarm pl-1"
-                 title="{_ Login _}"></i>
-              {% wire id="login_"++agent[1]["id"]
-                      action={postback postback={login_agent agent_id=agent[1]["id"]}
-                                       delegate="mod_kazoo"
-                             }
-              %}
-            {% else %}
-              <i id="login_{{ agent[1]["id"] }}"
-                 class="fa fa-play pointer pl-1"
-                 title="{_ Resume _}"></i>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    {% endwith %}
+    {% include "_agents_status_dialog_element.tpl"
+               agent=agent
+               account_id=account_id
+    %}
   {% endfor %}
 </div>
+{% wire id="refresh_agents_status_dialog"
+        action={replace target="agents_status_dialog"
+                        template="_agents_status_dialog_lazy.tpl"
+                        conference_id=conference_id
+               }
+%}

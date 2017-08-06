@@ -924,4 +924,15 @@ div#ws_cf_tools .popover {
   padding: 0px;
 }
 
+.row-centered {
+    text-align:center;
+}
+
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+
 </style>

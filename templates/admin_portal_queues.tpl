@@ -42,7 +42,12 @@
     %}
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"agents status"
-              action={dialog_open title=_"Agents status"
+              action={dialog_open title=_"Agents status
+                                          <small>
+                                            <i id='refresh_agents_status_dialog'
+                                               class='fa fa-refresh pointer'
+                                               title='Refresh'>
+                                          </small>"
                                   template="_agents_status_dialog_lazy.tpl"
                                   width="auto"
                      }
@@ -57,11 +62,11 @@
               display: none;
             {% endif %}">
   <div class="text-center p-3">
-      {% ilazy class="fa fa-spinner fa-spin fa-3x"
-               action={update target="ap_queues_widget_opened"
-                              template="admin_portal_queues_table.tpl"
-                      }
-      %}
+    {% ilazy class="fa fa-spinner fa-spin fa-3x"
+             action={update target="ap_queues_widget_opened"
+                            template="admin_portal_queues_table.tpl"
+                    }
+    %}
   </div>
 </div>
 {% endblock %}
