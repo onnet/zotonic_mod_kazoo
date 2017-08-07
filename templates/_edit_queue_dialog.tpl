@@ -64,6 +64,8 @@
                 <option value="{{ seconds }}"
                         {% if queue[1]["agent_ring_timeout"] == seconds %}
                           selected
+                        {% elif (not queue[1]["agent_ring_timeout"] ) and seconds == 10 %}
+                          selected
                         {% endif %}>
                   {{ seconds }}
                 </option>
@@ -95,6 +97,8 @@
                 <option value="{{ key }}"
                         {% if queue[1]["caller_exit_key"] == key %}
                           selected
+                        {% elif (not queue[1]["caller_exit_key"] ) and key == "#" %}
+                          selected
                         {% endif %}>
                   {{ key }}
                 </option>
@@ -110,7 +114,12 @@
                    type="text"
                    class="form-control margin-bottom-xs"
                    placeholder="Connection timeout"
-                   value="{{ queue[1]["connection_timeout"] }}">
+                   {% if queue[1]["connection_timeout"] %}
+                     value='{{ queue[1]["connection_timeout"] }}'
+                   {% else %}
+                     value='3600'
+                   {% endif %}
+            >
           </label>
         </div>
       </div>
