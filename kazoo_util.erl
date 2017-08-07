@@ -3842,7 +3842,6 @@ queue(Verb, QueueId, AccountId, DataBag, Context) ->
 queue_update(Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
     QueueName = z_context:get_q('queue_name', Context),
-    Announce = modkazoo_util:to_undefined(z_context:get_q('announce', Context)),
     Values = modkazoo_util:filter_undefined(
         [{<<"name">>, QueueName}
         ,{<<"strategy">>,z_context:get_q('strategy', Context)}
@@ -3855,20 +3854,27 @@ queue_update(Context) ->
         ,{<<"max_queue_size">>,?TO_INT(z_context:get_q('max_queue_size', Context))}
         ,{<<"ring_simultaneously">>,?TO_INT(z_context:get_q('ring_simultaneously', Context))}
         ]),
+    KVs = [{<<"announce">>, modkazoo_util:to_undefined(z_context:get_q('announce', Context))}
+          ,{<<"moh">>, modkazoo_util:to_undefined(z_context:get_q('moh', Context))}],
     case z_context:get_q('queue_id', Context) of
         'undefined' ->
-            Queue = maybe_announce(Announce, modkazoo_util:set_values(Values, modkazoo_util:new())),
+            Queue = maybe_fields(KVs, modkazoo_util:set_values(Values, modkazoo_util:new())),
             queues('put', AccountId, ?MK_DATABAG(Queue), Context);
         QueueId ->
             CurrQueue = queue('get', QueueId, AccountId, [], Context),
-            Queue = maybe_announce(Announce, modkazoo_util:set_values(Values, CurrQueue)),
+            Queue = maybe_fields(KVs, modkazoo_util:set_values(Values, CurrQueue)),
             queue('post', QueueId, AccountId, ?MK_DATABAG(Queue), Context)
     end.
 
-maybe_announce('undefined', JObj) ->
-    modkazoo_util:delete_key(<<"announce">>, JObj);
-maybe_announce(Announce, JObj) ->
-    modkazoo_util:set_value(<<"announce">>, Announce, JObj).
+maybe_fields([], JObj) ->
+    JObj;
+maybe_fields([{K,V}|T], JObj) ->
+    maybe_fields(T, maybe_field(K, V, JObj)).
+
+maybe_field(Key, 'undefined', JObj) ->
+    modkazoo_util:delete_key(Key, JObj);
+maybe_field(Key, Value, JObj) ->
+    modkazoo_util:set_value(Key, Value, JObj).
 
 queue_agents_roster(Context) ->
     case z_context:get_q('queue_id', Context) of

@@ -155,7 +155,32 @@
             </select>
           </label>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-3">
+          <label class="form-control-onnet margin-bottom-xs">
+            {_ MOH _}
+            <select id="moh"
+                    name="moh"
+                    class="form-control margin-bottom-xs"
+                    style="text-align:center;"
+                    data-live-search="true">
+              <option value=""
+                      {% if not queue[1]["moh"] %}
+                        selected
+                      {% endif %}>
+                {_ Default _}
+              </option>
+              {% for option in m.kazoo.kz_list_account_media %}
+                <option value="{{ option[1]["id"] }}"
+                        {% if queue[1]["moh"] == option[1]["id"] %}
+                          selected
+                        {% endif %}>
+                  {{ option[1]["name"] }}
+                </option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+        <div class="col-sm-3">
           <label class="form-control-onnet margin-bottom-xs">
             {_ Announcement _}
             <select id="announce"
