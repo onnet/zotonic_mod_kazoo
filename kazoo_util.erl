@@ -3379,7 +3379,7 @@ kz_notification_template(ContentType, NotificationId, Context) ->
 
 kz_notification_template(ContentType, NotificationId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
-    crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContentType}], [], Context).
+    erlang:list_to_binary(crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContentType}], [], Context)).
 
 kz_save_notification_template(ContentType, NotificationId, AccountId, MessageBody, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
