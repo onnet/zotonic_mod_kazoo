@@ -1349,9 +1349,9 @@ growl_redirect(Type, Text, Dispatch, Context) ->
 
 change_credentials(Username, Password, OwnerId, Context) ->
     CurrDoc = kz_get_user_doc(OwnerId, Context),
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"username">>], ?TO_BIN(Username), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"email">>], ?TO_BIN(Username), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"password">>], ?TO_BIN(Password), J) end],
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"username">>], Username, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"email">>], Username, J) end
+                ,fun(J) -> modkazoo_util:set_value([<<"password">>], Password, J) end],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrDoc, Routines),
     Account_Id = z_context:get_session('kazoo_account_id', Context),
     case Account_Id =:= 'undefined' orelse OwnerId =:= 'undefined' of

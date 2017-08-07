@@ -552,21 +552,21 @@ event({postback,{toggle_field,[{type,Type}
 event({submit,passwordForm,_,_}, Context) ->
     lager:info("passwordForm event variables: ~p", [z_context:get_q_all(Context)]),
   try
-    case z_context:get_q("username",Context) of
-        [] -> 
+    case modkazoo_util:to_undefined(z_context:get_q(username,Context)) of
+        'undefined' -> 
             _ = kazoo_util:kz_set_user_doc(<<"password">>, z_convert:to_binary(z_context:get_q("password1", Context))
                                            ,z_convert:to_binary(z_context:get_q("chpwd_user_id", Context))
                                            ,Context),
             z_render:growl(?__("Password changed", Context), Context);
         Username ->
             {{ok, _}, _} = validator_base_email:validate(email, 2, Username, [], Context),
-            case z_context:get_q("email",Context) of
+            case z_context:get_q(email,Context) of
                 Username -> 'ok';
                 _ -> throw({'error', 'emails_not_equal'})
             end,
             case kazoo_util:change_credentials(Username
-                                              ,z_context:get_q("password1", Context)
-                                              ,z_context:get_q("chpwd_user_id", Context)
+                                              ,z_context:get_q(password1, Context)
+                                              ,z_context:get_q(chpwd_user_id, Context)
                                               ,Context)
             of
                 {'error', _ReturnCode, _Body} -> throw({'error', 'username_already_in_use'});
