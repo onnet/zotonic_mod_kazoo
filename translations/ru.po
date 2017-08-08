@@ -4,11 +4,41 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Select action"
+msgstr "Выберите задание"
 
-msgid ""
-msgstr ""
+msgid "Select job category"
+msgstr "Выберите категорию задания"
+
+msgid "Add background job"
+msgstr "Добавить фоновое задание"
+
+msgid "Add task"
+msgstr "Добавить задание"
+
+msgid "add task"
+msgstr "добавить задание"
+
+msgid "Background jobs"
+msgstr "Фоновые задания"
+
+msgid "System-wide registrations"
+msgstr "Зарегистрированные устройства"
+
+msgid "Accounts"
+msgstr "Учетные записи"
+
+msgid "Save new password"
+msgstr "Сохранить новый пароль"
+
+msgid "Enter new password for"
+msgstr "Введите новый пароль для"
+
+msgid "No, thanks!"
+msgstr "Нет, спасибо!"
+
+msgid "Password change"
+msgstr "Смена пароля"
 
 msgid "Transactions list"
 msgstr "Список транзакций"
