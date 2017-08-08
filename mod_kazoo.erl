@@ -168,12 +168,12 @@ event({postback,{password_reset_submit,[{reset_id,ResetId}]},_,_}, Context) ->
 event({submit,password_recovery_form,_,_}, Context) ->
     lager:info("password_recovery_form variables: ~p", [z_context:get_q_all(Context)]),
   try
-    Password = z_context:get_q("password1", Context),
-    OwnerId = z_context:get_q("owner_id", Context),
-    AccountId = z_context:get_q("account_id", Context),
-    AuthToken = z_context:get_q("auth_token", Context),
-    AccountName = z_context:get_q("account_name", Context),
-    UserName = z_context:get_q("username", Context),
+    Password = z_context:get_q('password1', Context),
+    OwnerId = z_context:get_q('owner_id', Context),
+    AccountId = z_context:get_q('account_id', Context),
+    AuthToken = z_context:get_q('auth_token', Context),
+    AccountName = z_context:get_q('account_name', Context),
+    UserName = z_context:get_q('username', Context),
     _ = kazoo_util:kz_set_user_doc(<<"password">>, Password, OwnerId, AccountId, AuthToken, Context),
     z_render:update("password_change_span_id"
                    ,z_template:render("password_change_success.tpl",[{'account_name', AccountName},{'username', UserName}],Context)
