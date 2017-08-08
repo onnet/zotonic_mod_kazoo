@@ -4,6 +4,21 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid "controls"
+msgstr "управление"
+
+msgid "agents status"
+msgstr "состояние агентов"
+
+msgid "add queue"
+msgstr "добавить очередь"
+
+msgid "Queues"
+msgstr "Очереди"
+
+msgid "Signing in ..."
+msgstr "Авторизация ..."
+
 msgid "Select action"
 msgstr "Выберите задание"
 
