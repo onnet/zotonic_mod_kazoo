@@ -1668,16 +1668,13 @@ event({postback,<<"conference_selected">>,_,_},Context) ->
     z_render:update("child_sandbox", z_template:render("conference_info.tpl", [], Context), Context);
 
 event({submit,sendmail_test_notification,_,_}, Context) ->
-    Email = z_context:get_q("chosen_email", Context),
-    AccountId = z_context:get_session(kazoo_account_id, Context),
-    NotificationId = z_context:get_q("notification_id", Context),
-    _ = kazoo_util:sendmail_test_notification(Email, AccountId, NotificationId, Context),
+    _ = kazoo_util:sendmail_test_notification(Context),
     mod_signal:emit({update_reseller_portal_notifications_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);
 
 event({submit,edit_notification_html,_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
-    NotificationId = z_context:get_q("notification_id", Context),
+    NotificationId = z_context:get_q(notification_id, Context),
     CurrNotifyDoc = kazoo_util:kz_notification_info(NotificationId, Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
         'undefined' ->

@@ -304,7 +304,7 @@
     ,kz_account_list_add_entry/3
     ,delete_account_list_entry/3
     ,email_sender_name/1
-    ,sendmail_test_notification/4
+    ,sendmail_test_notification/1
     ,notifications_smtplog/1
     ,notifications_smtplog_by_id/2
     ,kz_notifications/1
@@ -3390,21 +3390,22 @@ rs_kz_all_customers_update(AccountId, Context) ->
 
 rs_kz_customer_update(RecipientAccountId, AccountId, Context) ->
     CurrNotifyDoc = kz_notification_info(<<"customer_update">>, Context),
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], emails_list("input_to", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], modkazoo_util:get_q_bin("to", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"email_addresses">>], emails_list("input_cc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"cc">>,<<"type">>], modkazoo_util:get_q_bin("cc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"email_addresses">>], emails_list("input_bcc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"bcc">>,<<"type">>], modkazoo_util:get_q_bin("bcc", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"from">>], modkazoo_util:get_q_bin("from", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"subject">>], modkazoo_util:get_q_bin("subject", Context), J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"plain">>, z_context:get_q(text_body, Context), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(z_context:get_q(html_body, Context)), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"user_type">>, modkazoo_util:get_q_bin("selected_user", Context), J) end
-                ,fun(J) when RecipientAccountId == 'undefined' -> J; (J) -> modkazoo_util:set_value(<<"recipient_id">>, RecipientAccountId, J) end
-               ],
-    NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
+    Values = 
+        [{[<<"to">>,<<"email_addresses">>], emails_list('input_to', Context)}
+        ,{[<<"to">>,<<"type">>], z_context:get_q('to', Context)}
+        ,{[<<"cc">>,<<"email_addresses">>], emails_list('input_cc', Context)}
+        ,{[<<"cc">>,<<"type">>], z_context:get_q('cc', Context)}
+        ,{[<<"bcc">>,<<"email_addresses">>], emails_list('input_bcc', Context)}
+        ,{[<<"bcc">>,<<"type">>], z_context:get_q('bcc', Context)}
+        ,{[<<"from">>], z_context:get_q('from', Context)}
+        ,{[<<"subject">>], z_context:get_q('subject', Context)}
+        ,{[<<"template_charset">>], <<"utf-8">>}
+        ,{<<"plain">>, z_context:get_q(text_body, Context)}
+        ,{<<"html">>, base64:encode(z_context:get_q('html_body', Context))}
+        ,{<<"user_type">>, z_context:get_q('selected_user', Context)}
+        ,{<<"recipient_id">>, RecipientAccountId}
+        ],
+    NewDoc = maybe_fields(Values, CurrNotifyDoc),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, ?CUSTOMER_UPDATE/binary, ?MESSAGE/binary>>,
     crossbar_account_send_request('post', API_String, ?MK_DATABAG(NewDoc), Context).
 
@@ -3482,21 +3483,27 @@ list_routines(_, Context) ->
 kz_get_account_list_entry(_EntryId, _ListId, _Context) ->
     ?EMPTY_JSON_OBJECT.
 
+sendmail_test_notification(Context) ->
+    Email = z_context:get_q(chosen_email, Context),
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    NotificationId = z_context:get_q(notification_id, Context),
+    sendmail_test_notification(Email, AccountId, NotificationId, Context).
+
 sendmail_test_notification(Email, AccountId, NotificationId, Context) ->
     CurrNotifyDoc = kz_notification_info(NotificationId, Context),
     Plain = ?TO_BIN(kz_notification_template("text/plain", NotificationId, AccountId, Context)),
     HTML = kz_notification_template("text/html", NotificationId, AccountId, Context),
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], [?TO_BIN(Email)], J) end
+    Routines = [fun(J) -> modkazoo_util:set_value([<<"to">>,<<"email_addresses">>], [Email], J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"to">>,<<"type">>], <<"specified">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"template_charset">>], <<"utf-8">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"enabled">>], 'true', J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"from">>, ?TO_BIN(Email), J) end
-                ,fun(J) -> modkazoo_util:set_value(<<"reply_to">>, ?TO_BIN(Email), J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"from">>, Email, J) end
+                ,fun(J) -> modkazoo_util:set_value(<<"reply_to">>, Email, J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"plain">>, Plain, J) end
                 ,fun(J) -> modkazoo_util:set_value(<<"html">>, base64:encode(HTML), J) end
                ],
     NewDoc = lists:foldl(fun(F, J) -> F(J) end, CurrNotifyDoc, Routines),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary, ?PREVIEW/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", NotificationId/binary, ?PREVIEW/binary>>,
     _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
         'undefined' ->
@@ -3520,17 +3527,18 @@ kz_notifications(Context) ->
     CurrNotifyDoc = kz_notification_info(NotificationId, Context),
     Plain = ?TO_BIN(kz_notification_template("text/plain", NotificationId, AccountId, Context)),
     HTML = kz_notification_template("text/html", NotificationId, AccountId, Context),
-    Values = modkazoo_util:filter_empty([{[<<"to">>,<<"email_addresses">>], emails_list('input_to', Context)}
-             ,{[<<"to">>,<<"type">>], z_context:get_q('to', Context)}
-             ,{[<<"cc">>,<<"email_addresses">>], emails_list('input_cc', Context)}
-             ,{[<<"cc">>,<<"type">>], z_context:get_q('cc', Context)}
-             ,{[<<"bcc">>,<<"email_addresses">>], emails_list('input_bcc', Context)}
-             ,{[<<"bcc">>,<<"type">>], z_context:get_q('bcc', Context)}
-             ,{[<<"from">>], z_context:get_q('from', Context)}
-             ,{[<<"subject">>], z_context:get_q('subject', Context)}
-             ,{[<<"template_charset">>], <<"utf-8">>}
-             ]),
-    NewDoc = modkazoo_util:set_values(Values, CurrNotifyDoc),
+    Values =
+        [{[<<"to">>,<<"email_addresses">>], emails_list('input_to', Context)}
+        ,{[<<"to">>,<<"type">>], z_context:get_q('to', Context)}
+        ,{[<<"cc">>,<<"email_addresses">>], emails_list('input_cc', Context)}
+        ,{[<<"cc">>,<<"type">>], z_context:get_q('cc', Context)}
+        ,{[<<"bcc">>,<<"email_addresses">>], emails_list('input_bcc', Context)}
+        ,{[<<"bcc">>,<<"type">>], z_context:get_q('bcc', Context)}
+        ,{[<<"from">>], z_context:get_q('from', Context)}
+        ,{[<<"subject">>], z_context:get_q('subject', Context)}
+        ,{[<<"template_charset">>], <<"utf-8">>}
+        ],
+    NewDoc = maybe_fields(Values, CurrNotifyDoc),
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", NotificationId/binary>>,
     _ = crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context),
     case modkazoo_util:get_value(<<"account_overridden">>, CurrNotifyDoc) of
