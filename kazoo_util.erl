@@ -354,6 +354,7 @@
     ,agent/5
     ,agents_status/5
     ,agents_queue_status/5
+    ,forgottenpwd/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1325,11 +1326,19 @@ update_folder1(Message, Folder, MediaId, MediaId) ->
 update_folder1(Message, _, _, _) ->
     Message.
 
-password_recovery(Username, AccountName, Context) ->
+password_recovery(Username, NumberOrAccountname, Context) ->
+    case password_recovery(Username, <<"account_name">>, NumberOrAccountname, Context) of
+        <<>> -> 
+            password_recovery(Username, <<"phone_number">>, NumberOrAccountname, Context);
+        Resp ->
+            Resp
+    end.
+
+password_recovery(Username, K, V, Context) ->
     API_String = <<?V2/binary, ?USER_AUTH/binary, ?RECOVERY/binary>>,
     DataBag = {[{<<"data">>,
-                  {[{<<"username">>, ?TO_BIN(Username)}
-                    ,{<<"account_name">>, ?TO_BIN(AccountName)}
+                  {[{<<"username">>, Username}
+                    ,{K, V}
                     ,{<<"ui_url">>, <<"https://", ?TO_BIN(z_dispatcher:hostname(Context))/binary, "/password_reset_form">>}
                   ]}
               }]},
@@ -3924,3 +3933,25 @@ agents_status(Verb, AgentId, AccountId, DataBag, Context) ->
 agents_queue_status(Verb, AgentId, AccountId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?AGENTS/binary, "/", AgentId/binary, ?QUEUE_STATUS/binary>>,
     crossbar_account_request(Verb, API_String, DataBag, Context).
+
+forgottenpwd(Context) ->
+    Username = z_convert:to_binary(z_context:get_q('forgotten_username',Context)),
+    NumberOrName = modkazoo_util:normalize_account_name(z_context:get_q('forgotten_account_name',Context)),
+    case password_recovery(Username, NumberOrName, Context) of
+        <<>> -> z_render:growl_error(?__("No account found",Context), Context);
+        Answer ->
+            lager:info("Password recovery request answer: ~p",[Answer]),
+            Routines = [fun(Ctx) ->
+                            z_render:wire([{set_class, [{target, "forgot-pwd-box"},{class,"search-box hidden"}]}]
+                                         ,Ctx)
+                        end
+                       ,fun(Ctx) -> z_render:growl(?__("Please check your mailbox", Ctx), Ctx) end
+                       ,fun(Ctx) ->
+                            z_render:update("password_change_span_id"
+                                           ,z_template:render("password_change_check_email.tpl",[],Ctx)
+                                           ,Ctx)
+                        end
+                       ],
+            lists:foldl(fun(F, Ctx) -> F(Ctx) end, Context, Routines)
+    end.
+
