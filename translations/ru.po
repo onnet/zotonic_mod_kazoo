@@ -4,11 +4,29 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Save queue"
+msgstr "Сохранить очередь"
+
 msgid "controls"
 msgstr "управление"
 
+msgid "Agents status"
+msgstr "Состояние агентов"
+
 msgid "agents status"
 msgstr "состояние агентов"
+
+msgid "Add queue"
+msgstr "Добавить очередь"
 
 msgid "add queue"
 msgstr "добавить очередь"
