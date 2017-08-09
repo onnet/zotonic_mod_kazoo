@@ -20,6 +20,18 @@
         </span>
       </div>
     </div>
+    <!-- Device type -->
+    <div class="row">
+      <div class="col-xs-5"><label class="edit_user_label">{_ Device type _}</label></div>
+      <div id="device_device_type" class="col-xs-5">
+          {% include "_show_field_select.tpl" type="device"
+                                              doc_id=device_id
+                                              field_name=["device_type"]
+                                              options=["sip_device", "softphone", "fax", "cellphone"]
+                                              prefix="device_"
+          %}
+      </div>
+    </div>
     <!-- Device status -->
     <div class="row">
       <div class="col-xs-5"><label class="edit_user_label">{_ Device status _}</label></div>
@@ -120,7 +132,7 @@
       <div class="col-xs-5"><label class="edit_user_label">T.38</label></div>
       <div id="mediafax_option" class="col-xs-5">
         <i id="toggle_mediafax_option"
-           class="fa fa-toggle-{% if device_doc["media"][1]["fax_option"] %}on{% else %}off{% endif %} pointer"></i>
+           class="fa fa-toggle-{% if device_doc["media"][1]["fax_option"] == "true" %}on{% else %}off{% endif %} pointer"></i>
         {% wire id="toggle_mediafax_option"
                 type="click"
                 action={postback postback={toggle_field type doc_id field_name account_id}
