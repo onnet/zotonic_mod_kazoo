@@ -120,7 +120,7 @@
           </span>
         </div>
         <div>
-          Fax
+          Fax to email
           <span id="fax_to_email_enabled">
             <i id="toggle_fax_to_email_enabled"
                class="fa fa-toggle-{% if user_doc["fax_to_email_enabled"] %}on{% else %}off{% endif %} pointer"></i>
@@ -150,6 +150,26 @@
                                             options=m.kazoo.tz_list
                                             prefix="user_"
                                             postfix="_bootsearch"
+        %}
+      </div>
+    </div>
+    <!-- T.38 Flag -->
+    <div class="row">
+      <div class="col-xs-5">
+        <label class="edit_user_label">T.38</label>
+      </div>
+      <div id="mediafax_option" class="col-xs-5">
+        <i id="toggle_mediafax_option"
+           class="fa fa-toggle-{% if user_doc["media"][1]["fax_option"] == "true" %}on{% else %}off{% endif %} pointer"></i>
+        {% wire id="toggle_mediafax_option"
+                type="click"
+                action={postback postback={toggle_field type doc_id field_name account_id}
+                                 delegate="mod_kazoo"
+                                 inject_args type="user"
+                                             doc_id=user_id
+                                             field_name=["media","fax_option"]
+                                             account_id=account_id
+                       }
         %}
       </div>
     </div>

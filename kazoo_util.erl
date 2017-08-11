@@ -627,7 +627,7 @@ kz_set_user_doc(K, V, Context) ->
     OwnerId = z_context:get_session('kazoo_owner_id', Context),
     kz_set_user_doc(K, V, OwnerId, Context).
 
-kz_set_user_doc(["dial_plan","system"], V, OwnerId, Context) ->
+kz_set_user_doc([<<"dial_plan">>,<<"system">>], V, OwnerId, Context) when is_binary(V) ->
     kz_set_user_doc([<<"dial_plan">>,<<"system">>], [?TO_BIN(V)], OwnerId, Context);
 kz_set_user_doc(K, V, OwnerId, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
@@ -682,7 +682,7 @@ kz_get_device_doc(DeviceId, Context) ->
         'true' -> []
     end.
 
-kz_set_device_doc([<<"dial_plan">>,<<"system">>], V, DeviceId, Context) ->
+kz_set_device_doc([<<"dial_plan">>,<<"system">>], V, DeviceId, Context) when is_binary(V) ->
     kz_set_device_doc([<<"dial_plan">>,<<"system">>], [?TO_BIN(V)], DeviceId, Context);
 kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], <<"No encryption">>, DeviceId, Context) ->
     kz_set_device_doc([<<"media">>,<<"encryption">>,<<"methods">>], [], DeviceId, Context);
