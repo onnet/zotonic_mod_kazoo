@@ -6,11 +6,15 @@
     {% for option in options %}
       {% if option|is_list %}
         <option value="{{ option[1] }}" {% if option[1] == current_value %}selected{% endif %}>
-          {{ option[2]|vartrans }}
+          Opt {{ option[2]|vartrans }}
+        </option>
+      {% elif option[1]["id"] %}
+        <option value="{{ option[1]["id"] }}" {% if option[1]["id"] == current_value %}selected{% endif %}>
+          Opt {{ option[1]["name"]|vartrans }}
         </option>
       {% else %}
         <option value="{{ option }}" {% if option == current_value %}selected{% endif %}>
-          {{ option|vartrans }}
+          Not {{ option|vartrans }}
         </option>
       {% endif %}
     {% endfor %}

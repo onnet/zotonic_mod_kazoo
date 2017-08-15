@@ -1903,20 +1903,20 @@ event({submit,add_device_sip_acl,_,_}, Context) ->
 
 event({submit,add_credit,_,_}, Context) ->
     lager:info("add_credit event variables: ~p", [z_context:get_q_all(Context)]),
-    Amount = z_context:get_q("credit_amount", Context),
-    AccountId = z_context:get_q("account_id", Context),
-    Description = z_context:get_q("credit_description", Context),
-    Reason = z_context:get_q("credit_reason", Context),
+    Amount = z_context:get_q('credit_amount', Context),
+    AccountId = z_context:get_q('account_id', Context),
+    Description = z_context:get_q('credit_description', Context),
+    Reason = z_context:get_q('credit_reason', Context),
     [_Day, _Month, _Year] = string:tokens(z_context:get_q("credit_date", Context),"/"),
     kazoo_util:kz_transactions_credit(<<"free">>, Amount, Reason, Description, AccountId, Context),
     modkazoo_util:delay_signal(3 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     z_render:dialog_close(Context);
 
 event({submit,add_debit,_,_}, Context) ->
-    Amount = z_context:get_q("debit_amount", Context),
-    AccountId = z_context:get_q("account_id", Context),
-    Description = z_context:get_q("debit_description", Context),
-    Reason = z_context:get_q("debit_reason", Context),
+    Amount = z_context:get_q('debit_amount', Context),
+    AccountId = z_context:get_q('account_id', Context),
+    Description = z_context:get_q('debit_description', Context),
+    Reason = z_context:get_q('debit_reason', Context),
     kazoo_util:kz_transactions_debit(Amount, Reason, Description, AccountId, Context),
     modkazoo_util:delay_signal(3 ,'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
     z_render:dialog_close(Context);

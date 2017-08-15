@@ -1641,19 +1641,19 @@ kz_current_balance(AccountId, Context) ->
 
 kz_transactions_credit(CreditType, Amount, Reason, Description, AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, ?CREDIT/binary>>,
-    DataBag = {[{<<"data">>,{[{<<"amount">>, ?TO_BIN(Amount)}
-                             ,{<<"reason">>, ?TO_BIN(Reason)}
-                             ,{<<"description">>, ?TO_BIN(Description)}
-                             ,{<<"credit_type">>, ?TO_BIN(CreditType)}
+    DataBag = {[{<<"data">>,{[{<<"amount">>, Amount}
+                             ,{<<"reason">>, Reason}
+                             ,{<<"description">>, Description}
+                             ,{<<"credit_type">>, CreditType}
                              ]}}]},
     lager:info("kz_transactions_credit DataBag: ~p", [DataBag]),
     crossbar_account_request('put', API_String, DataBag, Context).
 
 kz_transactions_debit(Amount, Reason, Description, AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, ?DEBIT/binary>>,
-    DataBag = {[{<<"data">>,{[{<<"amount">>, ?TO_BIN(Amount)}
-                              ,{<<"reason">>, ?TO_BIN(Reason)}
-                              ,{<<"description">>, ?TO_BIN(Description)}
+    DataBag = {[{<<"data">>,{[{<<"amount">>, Amount}
+                              ,{<<"reason">>, Reason}
+                              ,{<<"description">>, Description}
                              ]}}]},
     crossbar_account_request('delete', API_String, DataBag, Context).
 
