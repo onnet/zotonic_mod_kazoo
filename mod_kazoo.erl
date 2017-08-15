@@ -528,6 +528,10 @@ event({postback,{toggle_field,[{type,Type}
         <<"device">> ->
             _ = kazoo_util:kz_toggle_device_doc(FieldName, DocId, Context),
             maybe_update_toggled_field(TargetId, Type, DocId, FieldName, Prefix, AccountId, Context);
+        <<"onbill_variables">> ->
+            _ = onbill_util:toggle_onbill_variable(FieldName, AccountId, Context),
+            mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
+            Context;
         <<"config">> ->
             z_notifier:notify1({'doc_field', 'toggle', ?TO_BIN(DocId), ?TO_BIN(FieldName), AccountId}, Context),
             timer:sleep(1000),

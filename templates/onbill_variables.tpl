@@ -20,6 +20,13 @@
 
 {% block widget_content %}
             
+{% wire action={connect signal={refresh_onbill_variables_settings_signal signal_filter=m.kazoo.signal_filter}
+                        action={update target="onbill_variables_settings_"++account_id++"_widget_opened"
+                                       template="onbill_variables_settings.tpl"
+                                       account_id=account_id
+                               }
+               }
+%}
 <div id="onbill_variables_settings_{{ account_id }}_widget_opened"
      style="display: none;">
   <div class="text-center p-3">

@@ -45,6 +45,7 @@
          ,onbill_proforma/4
          ,onbill_proforma_doc/5
          ,create_proforma_invoice/3
+         ,toggle_onbill_variable/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -395,3 +396,14 @@ onbill_proforma_doc(Verb, DocId, AccountId, DataBag, Context) ->
 create_proforma_invoice(Amount, AccountId, Context) ->
     DataBag = ?MK_DATABAG({[{<<"amount">>, Amount}]}),
     onbill_proforma('put', AccountId, DataBag, Context).
+
+toggle_onbill_variable(FieldName, AccountId, Context) ->
+    CurrDoc = variables(AccountId, Context),
+    case modkazoo_util:get_value(FieldName, CurrDoc) of
+        'true' ->
+            NewDoc = modkazoo_util:set_value(FieldName, 'false', CurrDoc),
+            variables('post', AccountId, ?MK_DATABAG(NewDoc), Context);
+        _ ->
+            NewDoc = modkazoo_util:set_value(FieldName, 'true', CurrDoc),
+            variables('post', AccountId, ?MK_DATABAG(NewDoc), Context)
+    end.

@@ -1,51 +1,45 @@
-{% if m.kazoo[{ui_element_opened element="ap_general_settings_widget_opened"}] %}
+{% with m.onbill[{onbill_get_variables account_id=account_id }]
+   as onbill_variables
+%}
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
-      <th style="width: 40%;"class="text-center1">{_ Reseller's name _}</th>
-      <th class="text-left">
-        <span id="sender_name">
-              {% include "_show_field.tpl" type="account"
-                                           doc_id="_no_need_"
-                                           field_name=["sender_name"]
-                                           account_id=account_id
-              %}
-        </span>
+      <th class="text-center1">{_ force_postpay_billing_day _}</th>
+      <th>
+          <span id="force_postpay_billing_day">
+            <i id="toggle_force_postpay_billing_day"
+               class="fa fa-toggle-{% if onbill_variables[1]["force_postpay_billing_day"] %}on{% else %}off{% endif %} pointer"></i>
+            {% wire id="toggle_force_postpay_billing_day"
+                    type="click"
+                    action={postback postback={toggle_field type doc_id field_name account_id}
+                                     delegate="mod_kazoo"
+                                     inject_args type="onbill_variables"
+                                                 doc_id="_no_need_"
+                                                 field_name="force_postpay_billing_day"
+                                                 account_id=account_id
+                           }
+            %}
+          </span>
       </th>
-    </tr>
-    <tr>
-      <th style="width: 40%;"class="text-center1">{_ Account language _}</th>
-      <th class="text-left">
-       <span id="language">
-          {% include "_show_field_select.tpl" type="account"
-                                              doc_id="_no_need_"
-                                              field_name="language"
-                                              options=["en-us","ru-ru","fr-fr"]
-          %}
-       </span>
-      </th>
-    </tr>
-    <tr>
-      <th class="text-center1">{_ Account timezone _}</th>
-      <th class="text-left">
-       <span id="general_timezone">
-          {% include "_show_field_select.tpl" type="account"
-                                              doc_id="_no_need_"
-                                              field_name="timezone"
-                                              options=m.kazoo.tz_list prefix="general_"
-                                              postfix="_bootsearch"
-          %}
-       </span>
-      </th>
-    </tr>
-    <tr>
-      <th class="text-center1">{_ Outbound routing _}</th>
-      <th class="text-left">
-       <span id="account_outbound_routing_selection">
-          {% include "_account_outbound_routing_selection.tpl" %}
-       </span>
+      <th class="text-center1">{_ force_prepay_billing_day _}</th>
+      <th>
+          <span id="force_prepay_billing_day">
+            <i id="toggle_force_prepay_billing_day"
+               class="fa fa-toggle-{% if onbill_variables[1]["force_prepay_billing_day"] %}on{% else %}off{% endif %} pointer"></i>
+            {% wire id="toggle_force_prepay_billing_day"
+                    type="click"
+                    action={postback postback={toggle_field type doc_id field_name account_id}
+                                     delegate="mod_kazoo"
+                                     inject_args type="onbill_variables"
+                                                 doc_id="_no_need_"
+                                                 field_name="force_prepay_billing_day"
+                                                 account_id=account_id
+                           }
+            %}
+          </span>
       </th>
     </tr>
   </thead>
 </table>
-{% endif %}
+{% print onbill_variables %}
+{% endwith %}
