@@ -4,7 +4,48 @@
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
-      <th class="text-center">
+      <th class="text-left">{_ country_of_residence _}</th>
+      <th class="text-left">
+        <span id="country_of_residence">
+          {% wire id="edit_country_of_residence"
+                  type="click"
+                  action={update target="country_of_residence"
+                                 template="_edit_field_select.tpl"
+                                 type="onbill_variables"
+                                 field_name="country_of_residence"
+                                 options=["ru","us","uk","ua"]
+                         }
+          %}
+          <span>
+            {{ onbill_variables[1]["country_of_residence"] }}
+            <i id="edit_country_of_residence" class="fa fa-edit pointer" title="Edit field"></i>
+          </span>
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ default_service_plan _}</th>
+      <th class="text-left">
+        <span id="default_service_plan">
+          {% wire id="edit_default_service_plan"
+                  type="click"
+                  action={update target="default_service_plan"
+                                 template="_edit_field_select.tpl"
+                                 type="onbill_variables"
+                                 field_name="default_service_plan"
+                                 options=m.kazoo.kz_service_plans
+                         }
+          %}
+          <span>
+            {{ onbill_variables[1]["default_service_plan"] }}
+            <i id="edit_default_service_plan" class="fa fa-edit pointer" title="Edit field"></i>
+          </span>
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left" width=50%>{_ force_postpay_billing_day _}</th>
+      <th class="text-left">
           <span id="force_postpay_billing_day">
             <i id="toggle_force_postpay_billing_day"
                class="fa
@@ -22,8 +63,10 @@
             %}
           </span>
       </th>
-      <th class="text-left">{_ force_postpay_billing_day _}</th>
-      <th class="text-center">
+    </tr>
+    <tr>
+      <th class="text-left">{_ force_prepay_billing_day _}</th>
+      <th class="text-left">
           <span id="force_prepay_billing_day">
             <i id="toggle_force_prepay_billing_day"
                class="fa
@@ -41,7 +84,6 @@
             %}
           </span>
       </th>
-      <th class="text-left">{_ force_prepay_billing_day _}</th>
     </tr>
   </thead>
 </table>

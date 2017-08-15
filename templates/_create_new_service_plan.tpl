@@ -1,10 +1,15 @@
 <div class="form-group">
   <div class="row">
-    <div class="col-sm-6" style="text-align: center; margin-top: 0.5em;">
-        Please input new service plan id:
+    <div class="col-sm-6"
+         style="text-align: center; margin-top: 0.5em;">
+      Please input new service plan id:
     </div>
     <div class="col-sm-6">
-        <input type="text" class="form-control margin-bottom-xs" id="new_service_plan_id" name="new_service_plan_id" value="">
+      <input type="text"
+             class="form-control margin-bottom-xs"
+             id="new_service_plan_id"
+             name="new_service_plan_id"
+             value="">
     </div>
   </div>
 </div>

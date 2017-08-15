@@ -77,6 +77,7 @@ m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}, {acco
         <<"device">> -> kazoo_util:kz_device_doc_field(Field, DocId, Context);
         <<"media">> -> kazoo_util:kz_media_doc_field(Field, DocId, Context);
         <<"cccp_creds">> -> kazoo_util:cccp_field(Field, DocId, Context);
+        <<"onbill_variables">> -> onbill_util:variables_field(Field, AccountId, Context);
         <<"config">> -> z_notifier:first({'doc_field', 'get', ?TO_BIN(DocId), Field, AccountId}, Context);
         E -> lager:info("kz_doc_field Error: ~p",[E])
     end;

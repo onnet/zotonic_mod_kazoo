@@ -753,6 +753,10 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
             z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
                            ,z_template:render("_show_field_select.tpl", Args, Context)
                            ,Context);
+        <<"onbill_variables">> ->
+            _ = onbill_util:set_onbill_variable(FieldName, InputVal, AccountId, Context),
+            mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
+            Context;
         <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
             z_notifier:notify1({'doc_field', 'save', ?TO_BIN(DocId), ?TO_BIN(FieldName), ConfValue, AccountId}, Context),

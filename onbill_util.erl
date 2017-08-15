@@ -9,6 +9,7 @@
          ,generate_transaction_based_invoice/5
          ,variables/2
          ,variables/4
+         ,variables_field/3
          ,onbill_service_plan/2
          ,onbill_service_plan/5
          ,carrier/2
@@ -46,6 +47,7 @@
          ,onbill_proforma_doc/5
          ,create_proforma_invoice/3
          ,toggle_onbill_variable/3
+         ,set_onbill_variable/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -60,6 +62,7 @@
 -define(RESELLERS, <<"/onbill_resellers">>).
 -define(CARRIERS, <<"/onbill_carriers">>).
 -define(VARIABLES, <<"/onbill_variables">>).
+-define(ONBILL_SERVICE_PLANS, <<"/onbill_service_plans">>).
 -define(PERIODIC_FEES, <<"/periodic_fees">>).
 -define(ONBILL_TRANSACTIONS, <<"/onbill_transactions">>).
 -define(PROMISED_PAYMENT, <<"/promised_payment">>).
@@ -94,13 +97,16 @@ variables(Verb, CustomerId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(CustomerId))/binary, ?VARIABLES/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
+variables_field(FieldName, CustomerId, Context) ->
+    modkazoo_util:get_value(FieldName, variables(CustomerId, Context)).
+
 onbill_service_plan(ServicePlanId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     onbill_service_plan('get', AccountId, ServicePlanId, [], Context).
 
 onbill_service_plan(Verb, AccountId, ServicePlanId, DataBag, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary
-                   ,?SERVICE_PLANS/binary,"/",(z_convert:to_binary(ServicePlanId))/binary>>,
+                   ,?ONBILL_SERVICE_PLANS/binary,"/",(z_convert:to_binary(ServicePlanId))/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 carrier(CarrierId, Context) ->
@@ -407,3 +413,8 @@ toggle_onbill_variable(FieldName, AccountId, Context) ->
             NewDoc = modkazoo_util:set_value(FieldName, 'true', CurrDoc),
             variables('post', AccountId, ?MK_DATABAG(NewDoc), Context)
     end.
+
+set_onbill_variable(FieldName, InputVal, AccountId, Context) ->
+    CurrDoc = variables(AccountId, Context),
+    NewDoc = modkazoo_util:set_value(FieldName, InputVal, CurrDoc),
+    variables('post', AccountId, ?MK_DATABAG(NewDoc), Context).
