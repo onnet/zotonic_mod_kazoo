@@ -531,6 +531,7 @@ event({postback,{toggle_field,[{type,Type}
         <<"onbill_variables">> ->
             _ = onbill_util:toggle_onbill_variable(FieldName, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
+            mod_signal:emit({refresh_onbill_variables_doc_signal, ?SIGNAL_FILTER(Context)}, Context),
             Context;
         <<"config">> ->
             z_notifier:notify1({'doc_field', 'toggle', ?TO_BIN(DocId), ?TO_BIN(FieldName), AccountId}, Context),
@@ -756,6 +757,7 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
         <<"onbill_variables">> ->
             _ = onbill_util:set_onbill_variable(FieldName, InputVal, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
+            mod_signal:emit({refresh_onbill_variables_doc_signal, ?SIGNAL_FILTER(Context)}, Context),
             Context;
         <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
@@ -2141,6 +2143,8 @@ event({postback,<<"onbill_set_variables_json">>,_A,_B}, Context) ->
 event({postback,{onbill_set_variables_json,[{account_id, AccountId}]},_,_}, Context) ->
     JsString = z_context:get_q("json_storage_"++z_convert:to_list(AccountId), Context),
     DataBag = {[{<<"data">>, jiffy:decode(JsString)}]},
+    modkazoo_util:delay_signal(2, 'refresh_onbill_variables_settings_signal', ?SIGNAL_FILTER(Context), Context),
+    modkazoo_util:delay_signal(2, 'refresh_onbill_variables_doc_signal', ?SIGNAL_FILTER(Context), Context),
     growl_bad_result(onbill_util:variables(post, AccountId, DataBag, Context), Context);
 
 event({postback,{onbill_set_doc_json,[{doc_id,DocId},{doc_type, DocType}]},_,_}, Context) ->

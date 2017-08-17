@@ -85,6 +85,69 @@
           </span>
       </th>
     </tr>
+    <tr>
+      <th class="text-left">{_ apply_discount_to_prorated _}</th>
+      <th class="text-left">
+          <span id="apply_discount_to_prorated">
+            <i id="toggle_apply_discount_to_prorated"
+               class="fa
+                      fa-toggle-{% if onbill_variables[1]["apply_discount_to_prorated"] %}on{% else %}off{% endif %}
+                      pointer"></i>
+            {% wire id="toggle_apply_discount_to_prorated"
+                    type="click"
+                    action={postback postback={toggle_field type doc_id field_name account_id}
+                                     delegate="mod_kazoo"
+                                     inject_args type="onbill_variables"
+                                                 doc_id="_no_need_"
+                                                 field_name="apply_discount_to_prorated"
+                                                 account_id=account_id
+                           }
+            %}
+          </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ vat_disposition _}</th>
+      <th class="text-left">
+        <span id="vat_disposition">
+          {% wire id="edit_vat_disposition"
+                  type="click"
+                  action={update target="vat_disposition"
+                                 template="_edit_field_select.tpl"
+                                 type="onbill_variables"
+                                 field_name="vat_disposition"
+                                 options=["netto","brutto"]
+                         }
+          %}
+          <span>
+            {{ onbill_variables[1]["vat_disposition"] }}
+            <i id="edit_vat_disposition" class="fa fa-edit pointer" title="Edit field"></i>
+          </span>
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ vat_rate _}</th>
+      <th class="text-left">
+        <span id="vat_rate">
+          {% wire id="edit_vat_rate"
+                  type="click"
+                  action={update target="vat_rate"
+                                 template="_edit_field_select.tpl"
+                                 type="onbill_variables"
+                                 field_name="vat_rate"
+                                 options=["18","20"]
+                         }
+          %}
+          <span>
+            {% if onbill_variables[1]["vat_rate"] %}
+              {{ onbill_variables[1]["vat_rate"] }}%
+            {% endif %}
+            <i id="edit_vat_rate" class="fa fa-edit pointer" title="Edit field"></i>
+          </span>
+        </span>
+      </th>
+    </tr>
   </thead>
 </table>
 {# print onbill_variables #}
