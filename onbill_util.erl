@@ -121,7 +121,8 @@ carrier(Verb, AccountId, CarrierId, DataBag, Context) ->
 carrier_template(Verb, Headers, AccountId, CarrierId, TemplateId, MessageBody, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary
                   ,?CARRIERS/binary,"/",(z_convert:to_binary(CarrierId))/binary,"/",(z_convert:to_binary(TemplateId))/binary>>,
-    erlang:list_to_binary(kazoo_util:crossbar_account_send_raw_request_body(Verb, API_String, Headers, MessageBody, Context)).
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    erlang:list_to_binary(kazoo_util:crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, MessageBody, Context,"")).
 
 onbill_modb_attachment(AccountId, DocId, AuthToken, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary

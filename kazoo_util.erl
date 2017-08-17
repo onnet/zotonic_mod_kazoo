@@ -12,6 +12,7 @@
     ,crossbar_account_send_raw_request/5
     ,crossbar_account_send_raw_request_body/5
     ,crossbar_account_send_raw_request_body/6
+    ,crossbar_account_send_raw_request_body/7
     ,crossbar_noauth_request_raw/4
     ,crossbar_noauth_request/4
     ,kz_get_acc_doc/1
@@ -770,6 +771,9 @@ crossbar_account_send_raw_request_body(Verb, API_String, Headers, Data, Context)
     crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context).
 
 crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context) ->
+    crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context, <<>>).
+
+crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Data, Context, Default) ->
     case crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) of
         {'ok', [50,_,_], _, Body} ->  Body; %  50 = "2"
         E -> 
@@ -777,7 +781,7 @@ crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, Dat
             lager:info("crossbar_account_send_raw_request_body Error Verb: ~p", [Verb]),
             lager:info("crossbar_account_send_raw_request_body Error API_String: ~p", [API_String]),
             lager:info("crossbar_account_send_raw_request_body Error Data: ~p", [Data]),
-            <<>>
+            Default
     end.
         
 crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
@@ -3388,7 +3392,8 @@ kz_notification_template(ContentType, NotificationId, Context) ->
 
 kz_notification_template(ContentType, NotificationId, AccountId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
-    erlang:list_to_binary(crossbar_account_send_raw_request_body('get', API_String, [{"Accept", ContentType}], [], Context)).
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    erlang:list_to_binary(crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [{"Accept", ContentType}], [], Context,"")).
 
 kz_save_notification_template(ContentType, NotificationId, AccountId, MessageBody, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?NOTIFICATIONS/binary, "/", ?TO_BIN(NotificationId)/binary>>,
