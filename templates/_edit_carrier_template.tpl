@@ -14,20 +14,39 @@
                 });
 </script-->
 
-{% wire id="edit-carrier-template-form" type="submit" postback="edit_carrier_template" delegate="mod_kazoo" %}
+{% wire id="edit-carrier-template-form"
+        type="submit"
+        postback="edit_carrier_template"
+        delegate="mod_kazoo"
+%}
 <form id="edit-carrier-template-form" method="post" action="postback">
   <div class="form-group">
-    <textarea id="html_body" name="html_body" style="height: 300px; width: 100%">{{ m.onbill[{carrier_template carrier_id=q.carrier_id template_id=q.template_id}] }}</textarea>
-    <input id="carrier_id" type="hidden" name="carrier_id" value={{ q.carrier_id }} />
-    <input id="template_id" type="hidden" name="template_id" value={{ q.template_id }} />
+    <textarea id="html_body"
+              name="html_body"
+              style="height: 300px; width: 100%">{{ m.onbill[{carrier_template carrier_id=q.carrier_id template_id=q.template_id}] }}</textarea>
+    <input id="carrier_id"
+           type="hidden"
+           name="carrier_id"
+           value={{ q.carrier_id }} />
+    <input id="template_id"
+           type="hidden"
+           name="template_id"
+           value={{ q.template_id }} />
   </div>
   <div class="form-group">
     <div class="row">
       <div class="col-sm-6">
-        <button id="button_edit_html" class="col-xs-12 btn btn-zalarm margin-bottom-xs" type="submit">{_ Save template _}</button>
+        <button id="button_edit_html"
+                class="col-xs-12 btn btn-zalarm margin-bottom-xs"
+                type="submit">
+          {_ Save template _}
+        </button>
       </div>
       <div class="col-sm-6">
-        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs" text=_"Cancel" action={dialog_close} %}
+        {% button class="col-xs-12 btn btn-zprimary margin-bottom-xs"
+                  text=_"Cancel"
+                  action={dialog_close}
+        %}
       </div>
     </div>
   </div>

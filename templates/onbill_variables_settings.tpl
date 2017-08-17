@@ -148,6 +148,26 @@
         </span>
       </th>
     </tr>
+    <tr>
+      <th class="text-left">{_ currency_sign _}</th>
+      <th class="text-left">
+        <span id="currency_sign">
+          {% wire id="edit_currency_sign"
+                  type="click"
+                  action={update target="currency_sign"
+                                 template="_edit_field_select.tpl"
+                                 type="onbill_variables"
+                                 field_name="currency_sign"
+                                 options=["₽ ","$","£"]
+                         }
+          %}
+          <span>
+            {{ onbill_variables[1]["currency_sign"] }}
+            <i id="edit_currency_sign" class="fa fa-edit pointer" title="Edit field"></i>
+          </span>
+        </span>
+      </th>
+    </tr>
   </thead>
 </table>
 {# print onbill_variables #}

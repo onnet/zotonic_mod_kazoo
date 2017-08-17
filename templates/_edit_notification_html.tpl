@@ -20,7 +20,11 @@
                 });
 </script>
 
-{% wire id="edit-notification-html-form" type="submit" postback="edit_notification_html" delegate="mod_kazoo" %}
+{% wire id="edit-notification-html-form"
+        type="submit"
+        postback="edit_notification_html"
+        delegate="mod_kazoo"
+%}
 <form id="edit-notification-html-form" method="post" action="postback">
   <div class="form-group">
     <textarea id="html_body"
