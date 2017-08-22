@@ -33,7 +33,7 @@
               <i id="toggle_device_enabled_{{ device[1]["id"] }}"
                  class="fa fa-toggle-on pointer"></i>
               {% wire id="toggle_device_enabled_"++device[1]["id"]
-                      action={confirm text=_"Do you really want to enable this device"++"?"
+                      action={confirm text=_"Do you really want to disable this device"++"?"
                                       action={postback postback={disable_doc type doc_id field_name}
                                                        inject_args type="device"
                                                                    doc_id=device[1]["id"]
@@ -46,7 +46,7 @@
               <i id="toggle_device_enabled_{{ device[1]["id"] }}"
                  class="fa fa-toggle-off pointer"></i>
               {% wire id="toggle_device_enabled_"++device[1]["id"]
-                      action={confirm text=_"Do you really want to disable this device"++"?"
+                      action={confirm text=_"Do you really want to enable this device"++"?"
                                       action={postback postback={enable_doc type doc_id field_name}
                                                        inject_args type="device"
                                                                    doc_id=device[1]["id"]

@@ -10,8 +10,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Do you really want to enable this device"
+msgstr "Вы действительно хотите активировать это устройство"
+
+msgid "Do you really want to disable this device"
+msgstr "Вы действительно хотите деактивировать это устройство"
 
 msgid "Save queue"
 msgstr "Сохранить очередь"
