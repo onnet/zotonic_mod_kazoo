@@ -2206,8 +2206,8 @@ kz_set_group_doc(K, V, GroupId, Context) ->
     end.
 
 kz_list_account_media(Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary>>,
-    crossbar_account_request('get', API_String, [], Context).
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?MEDIA/binary>>,
+    crossbar_account_request('get', API_String, [], Context, []).
 
 kz_get_media_doc(MediaId, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
