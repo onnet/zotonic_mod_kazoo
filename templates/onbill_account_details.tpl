@@ -67,6 +67,7 @@
         </span>
       </th>
     </tr>
+  {% if m.session.display_billing %}
     {% if account_doc[1]["trial_time_left"] %}
       <tr>
         <th>
@@ -187,6 +188,7 @@
         %}
       {% endif %}
     </tr>
+  {% endif %}
     <tr>
       <th>{_ Reseller status _}</th>
       <th>
@@ -232,10 +234,12 @@
 
   </thead>
 </table>
-{% rs_service_plans_manager %}
-<span id="set_notify_level_tpl">
-  {% set_balance_level_notify %}
-</span>
+{% if m.session.display_billing %}
+  {% rs_service_plans_manager %}
+  <span id="set_notify_level_tpl">
+    {% set_balance_level_notify %}
+  </span>
+{% endif %}
 {% include "rs_account_details_subwidget.tpl" %}
 {% endwith %}
 {% endblock %}

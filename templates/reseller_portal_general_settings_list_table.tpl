@@ -38,6 +38,33 @@
        </span>
       </th>
     </tr>
+    {% with m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id }]
+       as onbill_variables
+    %}
+    <tr>
+      <th style="width: 40%;"class="text-center1">{_ Display billing widgets _}</th>
+      <th class="text-left">
+        <span id="display_billing">
+          <i id="toggle_display_billing"
+             class="fa
+                    fa-toggle-{% if onbill_variables[1]["display_billing"] %}on{% else %}off{% endif %}
+                    pointer"></i>
+          {% wire id="toggle_display_billing"
+                  type="click"
+                  action={mask target="ap_general_settings_widget_opened"}
+                  action={postback postback="refresh_display_billing" delegate="mod_kazoo"}
+                  action={postback postback={toggle_field type doc_id field_name account_id}
+                                   delegate="mod_kazoo"
+                                   inject_args type="onbill_variables"
+                                               doc_id="_no_need_"
+                                               field_name="display_billing"
+                                               account_id=m.session.kazoo_account_id
+                         }
+          %}
+        </span>
+      </th>
+    </tr>
+    {% endwith %}
     <tr>
       <th class="text-center1">{_ Outbound routing _}</th>
       <th class="text-left">

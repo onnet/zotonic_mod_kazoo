@@ -13,6 +13,7 @@
         ,observe_onbill_topmenu_element/2
         ,observe_currency_sign/2
         ,observe_account_balance/2
+        ,observe_dashboard_tpl/2
         ,event/2
 ]).
 
@@ -70,6 +71,9 @@ observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
 observe_account_balance(_Param, _Context) ->
     ?PRINT(_Param),
     'undefined'.
+
+observe_dashboard_tpl(_, Context) ->
+    <<"mod_kazoo_dashboard.tpl">>.
 
 event({submit,signin,_,_}, Context) ->
     Login = z_context:get_q('username',Context),
@@ -1401,6 +1405,7 @@ event({postback,{'rs_account_mask',[{'account_id',AccountIdRaw}]},_,_},Context) 
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
     _ = modkazoo_auth:may_be_set_user_data(Context),
     _ = modkazoo_auth:set_session_currency_sign(Context),
+    _ = modkazoo_auth:set_session_billing_status_vars(Context),
     modkazoo_auth:choose_page_to_redirect(Context);
 
 event({postback,<<"rs_account_demask">>,_,_},Context) ->
@@ -1419,6 +1424,7 @@ event({postback,<<"rs_account_demask">>,_,_},Context) ->
     _ = modkazoo_auth:may_be_set_user_data(Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
     _ = modkazoo_auth:set_session_currency_sign(Context),
+    _ = modkazoo_auth:set_session_billing_status_vars(Context),
     z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
 
 event({submit,addcccpcidform,_,_}, Context) ->
@@ -2565,6 +2571,11 @@ event({postback,{logout_agent,[{agent_id,AgentId},{first_name,FirstName},{last_n
                                       ,[{agent_id, AgentId},{first_name,FirstName},{last_name,LastName}]
                                       ,Context)
                     ,Context);
+
+event({postback,<<"refresh_display_billing">>,_,_}, Context) ->
+    timer:sleep(1000),
+    modkazoo_auth:set_session_billing_status_vars(Context),
+    z_render:wire({reload, []}, Context);
 
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),

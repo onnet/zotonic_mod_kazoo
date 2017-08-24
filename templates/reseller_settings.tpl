@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block service_description %}
+
 <div class="pl-10 pr-10 col-md-6">
   {% wire action={connect signal={update_reseller_portal_general_settings_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="reseller_portal_general_settings_tpl"
@@ -67,12 +68,14 @@
   <span id="account_allocated_numbers_tpl">
         {% include "account_allocated_numbers.tpl" headline=_"Allocated numbers" %}
   </span>
-  {% include "onbill_service_plans.tpl" headline=_"Service plans" %}
-  {% include "onbill_variables.tpl" headline=_"OnBill settings" account_id=m.session.kazoo_account_id %}
-  {% include "onbill_variables_doc.tpl" headline=_"OnBill settings doc" account_id=m.session.kazoo_account_id %}
-  {% for carrier_id in m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id}][1]["carriers"] %}
-    {% include "onbill_carrier.tpl" carrier_id=carrier_id headline=_"Carrier"++" "++carrier_id %}
-  {% endfor %}
+  {% if m.session.display_billing %}
+    {% include "onbill_variables.tpl" headline=_"OnBill settings" account_id=m.session.kazoo_account_id %}
+    {% include "onbill_variables_doc.tpl" headline=_"OnBill settings doc" account_id=m.session.kazoo_account_id %}
+    {% include "onbill_service_plans.tpl" headline=_"Service plans" %}
+    {% for carrier_id in m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id}][1]["carriers"] %}
+      {% include "onbill_carrier.tpl" carrier_id=carrier_id headline=_"Carrier"++" "++carrier_id %}
+    {% endfor %}
+  {% endif %}
 </div>
 {% endblock %}
 

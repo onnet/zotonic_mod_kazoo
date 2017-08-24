@@ -97,6 +97,7 @@
     </tr>
   </tbody>
 </table>
+{% if m.session.display_billing %}
 <table class="table table-condensed table-centered">
   <tbody>
     <tr style="height: 10px; color: white!important; background-color: white!important;">
@@ -158,4 +159,5 @@
       {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% endwith %}

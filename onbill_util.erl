@@ -48,6 +48,7 @@
          ,create_proforma_invoice/3
          ,toggle_onbill_variable/3
          ,set_onbill_variable/4
+         ,billing_status/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -71,6 +72,7 @@
 -define(BILLING_PERIODS, <<"/billing_periods">>).
 -define(PERIOD_BALANCE, <<"/period_balance">>).
 -define(CURRENCY_SIGN, <<"/currency_sign">>).
+-define(BILLING_STATUS, <<"/billing_status">>).
 -define(ONBILL_E911, <<"/onbill_e911">>).
 -define(CONFIRM_ADDRESS, <<"/confirm">>).
 -define(ONBILL_TRIAL, <<"/onbill_trial">>).
@@ -231,6 +233,11 @@ currency_sign(Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?CURRENCY_SIGN/binary>>,
     Res = kazoo_util:crossbar_account_request('get', API_String, [], Context),
     modkazoo_util:get_value(<<"currency_sign">>, Res).
+
+billing_status(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?BILLING_STATUS/binary>>,
+    kazoo_util:crossbar_account_request('get', API_String, [], Context, ?EMPTY_JSON_OBJECT).
 
 onbill_e911_addresses(Verb, AccountId, DataBag, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_E911/binary>>,
