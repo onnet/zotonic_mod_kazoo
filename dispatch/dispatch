@@ -1,31 +1,25 @@
-[
- {reseller_portal,["reseller_portal"],         controller_template,  [ {template, "reseller_portal.tpl"} ]},
- {reseller_settings,["reseller_settings"],         controller_template,  [ {template, "reseller_settings.tpl"} ]},
- {reseller_system_monitor,["reseller_system_monitor"],         controller_template,  [ {template, "reseller_system_monitor.tpl"} ]},
- {admin_settings,["admin_settings"],         controller_template,  [ {template, "admin_settings.tpl"} ]},
- {admin_integrations,["admin_integrations"],         controller_template,  [ {template, "admin_integrations.tpl"} ]},
- {admin_system_monitor,["admin_system_monitor"],         controller_template,  [ {template, "admin_system_monitor.tpl"} ]},
- {admin_feature_codes,["admin_feature_codes"],         controller_template,  [ {template, "admin_feature_codes.tpl"} ]},
- {admin_statistics,["admin_statistics"],         controller_template,  [ {template, "admin_statistics.tpl"} ]},
- {admin_callflows,["admin_callflows"],         controller_template,  [ {template, "admin_callflows.tpl"} ]},
- {user_portal,["user_portal"],         controller_template,  [ {template, "user_portal.tpl"} ]},
+[{reseller_portal,["reseller_portal"], controller_template, [{template, "reseller_portal.tpl"}]},
+ {reseller_settings,["reseller_settings"], controller_template, [{template, "reseller_settings.tpl"}]},
+ {reseller_system_monitor,["reseller_system_monitor"], controller_template, [{template, "reseller_system_monitor.tpl"}]},
+ {admin_settings,["admin_settings"], controller_template, [{template, "admin_settings.tpl"}]},
+ {admin_integrations,["admin_integrations"], controller_template, [{template, "admin_integrations.tpl"}]},
+ {admin_system_monitor,["admin_system_monitor"], controller_template, [{template, "admin_system_monitor.tpl"}]},
+ {admin_feature_codes,["admin_feature_codes"], controller_template, [{template, "admin_feature_codes.tpl"}]},
+ {admin_statistics,["admin_statistics"], controller_template, [{template, "admin_statistics.tpl"}]},
+ {admin_callflows,["admin_callflows"], controller_template, [{template, "admin_callflows.tpl"}]},
+ {user_portal,["user_portal"], controller_template, [{template, "user_portal.tpl"}]},
  {callback, ["callback"], controller_template, [{template, "callback.tpl"}]},
  {conference_manager, ["conference_manager"], controller_template, [{template, "conference_manager.tpl"}]},
  {password_reset_form, ["password_reset_form"], controller_template, [{template, "password_reset_form.tpl"}]},
-
  {getinfaxdoc, ["getinfaxdoc","id",id], controller_getinfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
  {getfaxdoc, ["getfaxdoc","id",id], controller_getfaxdoc, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
  {getprompt, ["getprompt","id",id], controller_getprompt, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
-
  {kzattachment, ["kzattachment"], controller_kzattachment, [{use_cache, false},{content_disposition, attachment},{ssl, any}]},
-
- {signup,["signup"],         controller_template,  [ {template, "sign_up.tpl"} ]},
-
-
- {billing_accounts,["billing_accounts"],         controller_template,  [ {template, "account_select_base.tpl"} ]},
- {billing_operations,["billing_operations"],         controller_template,  [ {template, "billing_operations.tpl"} ]},
- {dashboard,["dashboard"],         controller_template,  [ {template, "mod_kazoo_dashboard.tpl"} ]},
- {onbill_dashboard,["onbill_dashboard"],         controller_template,  [ {template, "mod_kazoo_dashboard.tpl"} ]},
- {onbill_finance_details,["onbill_finance_details"],         controller_template,  [ {template, "finance_details.tpl"} ]},
- {finance_details,["finance_details"],         controller_template,  [ {template, "finance_details.tpl"} ]}
+ {signup,["signup"], controller_template, [{template, "sign_up.tpl"}]},
+ {billing_accounts,["billing_accounts"], controller_template, [{template, "account_select_base.tpl"}]},
+ {billing_operations,["billing_operations"], controller_template, [{template, "billing_operations.tpl"}]},
+ {dashboard,["dashboard"], controller_template, [{template, "dashboard.tpl"} ]},
+ {onbill_dashboard,["onbill_dashboard"], controller_template,  [{template, "mod_kazoo_dashboard.tpl"}]},
+ {onbill_finance_details,["onbill_finance_details"], controller_template, [{template, "finance_details.tpl"}]},
+ {finance_details,["finance_details"], controller_template, [{template, "finance_details.tpl"}]}
 ].

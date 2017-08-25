@@ -10,7 +10,7 @@
 -export([observe_postback_notify/2
         ,observe_kazoo_notify/2
         ,observe_topmenu_element/2
-        ,observe_onbill_topmenu_element/2
+        ,observe_billing_topmenu_element/2
         ,observe_currency_sign/2
         ,observe_account_balance/2
         ,observe_dashboard_tpl/2
@@ -60,10 +60,17 @@ observe_currency_sign(_A, Context) ->
         CurrencySign -> {'ok', CurrencySign}
     end.
 
-observe_onbill_topmenu_element(_, Context) ->
+observe_billing_topmenu_element(_, Context) ->
     case modkazoo_auth:is_auth(Context) of
-        'false' -> 'undefined';
-        'true' -> <<"_onbill_topmenu.tpl">>
+        'false' ->
+            'undefined';
+        'true' ->
+            case z_context:get_session('display_billing', Context) of
+                'true'->
+                    <<"_onbill_topmenu.tpl">>;
+                'false' ->
+                    'undefined'
+            end
     end.
 
 observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
@@ -73,7 +80,17 @@ observe_account_balance(_Param, _Context) ->
     'undefined'.
 
 observe_dashboard_tpl(_, Context) ->
-    <<"mod_kazoo_dashboard.tpl">>.
+    case z_context:get_session('kazoo_account_admin', Context) of
+        'true'->
+            case z_context:get_session('display_billing', Context) of
+                'true'->
+                    <<"mod_kazoo_dashboard.tpl">>;
+                _ ->
+                    <<"admin_settings.tpl">>
+            end;
+        _ ->
+            <<"user_portal.tpl">>
+    end.
 
 event({submit,signin,_,_}, Context) ->
     Login = z_context:get_q('username',Context),
