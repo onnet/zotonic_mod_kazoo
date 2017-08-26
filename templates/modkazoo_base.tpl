@@ -29,7 +29,7 @@
     %}
 
     {% lib
-          "css/project.css"
+          "css/phiz_customisation.css"
     %}
 
     {% all include "_mod_style.tpl" %}

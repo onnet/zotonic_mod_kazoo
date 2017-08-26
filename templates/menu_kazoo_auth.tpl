@@ -1,6 +1,7 @@
 <div style="
        {% if m.config.mod_kazoo.color2.value %}
          background-color: {{ m.config.mod_kazoo.color2.value }};
+         border-color: {{ m.config.mod_kazoo.color2.value }};
        {% else %}
          background-color: #303039;
        {% endif %}"
