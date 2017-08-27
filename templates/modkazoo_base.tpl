@@ -28,10 +28,6 @@
           "css/jquery.loadmask.css"
     %}
 
-    {% lib
-          "css/phiz_customisation.css"
-    %}
-
     {% all include "_mod_style.tpl" %}
  
     {% lib "js/modules/ubf.js" %}
