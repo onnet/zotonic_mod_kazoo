@@ -73,6 +73,9 @@ observe_billing_topmenu_element(_, Context) ->
             end
     end.
 
+observe_account_balance({account_balance,[{account_id, 'undefined'}]}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    observe_account_balance({account_balance,[{account_id, AccountId}]}, Context);
 observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
 observe_account_balance(_Param, _Context) ->
