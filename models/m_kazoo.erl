@@ -343,8 +343,11 @@ m_find_value({kz_list_ledgers,[{account_id,AccountId},{selected_billing_period,S
     kazoo_util:kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context);
 
 m_find_value({kz_ledgers_summ,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{ledger_id,LedgerId}]}, _M, Context) ->
-    LedgersList = m_find_value({kz_list_ledgers,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{ledger_id,LedgerId}]}, _M, Context),
-    lists:foldl(fun(X, Acc) -> case z_convert:to_list(modkazoo_util:get_value([<<"source">>,<<"service">>], X)) of
+    LedgersList =
+        m_find_value({kz_list_ledgers,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{ledger_id,LedgerId}]}
+                    ,_M
+                    ,Context),
+    lists:foldl(fun(X, Acc) -> case modkazoo_util:get_value([<<"source">>,<<"service">>], X) of
                                    LedgerId -> Acc + modkazoo_util:get_value([<<"amount">>], X);
                                    _ -> Acc
                                end
