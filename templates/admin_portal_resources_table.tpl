@@ -2,9 +2,9 @@
 <table id="admin_portal_resources_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
+      <th style="text-align: center;"></th>
       <th style="text-align: center1;">{_ Resource name _}</th>
       <th style="text-align: center;">{_ Weight cost _}</th>
-      <th style="text-align: center;">{_ Enabled _}</th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
@@ -13,26 +13,33 @@
   <tbody>
     {% for resource in m.kazoo.kz_list_account_resources %}
       <tr>
-        <td style="text-align: center1;">{{ resource[1]["name"] }}</td>
-        {% wire id="toggle_resource_"++resource[1]["id"]
-                action={confirm text=_"Do you really want to change this setting?"
-                                action={postback postback={toggle_resource resource_id=resource[1]["id"]}
-                                                 delegate="mod_kazoo"
-                                       }
-                       }
-        %}
-        <td style="text-align: center;">{{ resource[1]["weight_cost"] }}</td>
         <td style="text-align: center;">
           {% if resource[1]["enabled"] %}
             <i id="toggle_resource_{{ resource[1]["id"] }}"
-                class="fa fa-check zprimary pointer"
-                title="Active"></i>
+               class="fa fa-toggle-on pointer"
+               title="Active"></i>
+               {% wire id="toggle_resource_"++resource[1]["id"]
+                       action={confirm text=_"Do you really want to deactivate"++" "++resource[1]["name"]++"?"
+                                       action={postback postback={toggle_resource resource_id=resource[1]["id"]}
+                                                        delegate="mod_kazoo"
+                                              }
+                              }
+               %}
           {% else %}
             <i id="toggle_resource_{{ resource[1]["id"] }}"
-               class="fa fa-remove zalarm pointer"
+               class="fa fa-toggle-off pointer"
                title="Deactivated"></i>
+               {% wire id="toggle_resource_"++resource[1]["id"]
+                       action={confirm text=_"Do you really want to activate"++" "++resource[1]["name"]++"?"
+                                       action={postback postback={toggle_resource resource_id=resource[1]["id"]}
+                                                        delegate="mod_kazoo"
+                                              }
+                              }
+               %}
           {% endif %}
         </td>
+        <td style="text-align: center1;">{{ resource[1]["name"] }}</td>
+        <td style="text-align: center;">{{ resource[1]["weight_cost"] }}</td>
         <td style="text-align: center;">
           <i id="edit_{{ resource[1]["id"] }}"
              class="fa fa-edit pointer"
@@ -80,7 +87,7 @@
 var oTable = $('#admin_portal_resources_table').dataTable({
 "pagingType": "simple",
 "bFilter" : true,
-"aaSorting": [[ 0, "desc" ]],
+"aaSorting": [[ 1, "desc" ]],
 "aLengthMenu" : [[5, 15, -1], [5, 15, "{_ All _}"]],
 "iDisplayLength" : 5,
 "oLanguage" : {
