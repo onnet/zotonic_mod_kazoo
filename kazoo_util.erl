@@ -1622,7 +1622,7 @@ kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER(?TO_BIN(CreatedFrom), ?TO_BIN(CreatedTo))/binary, ?SET_REASON(Reason)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 

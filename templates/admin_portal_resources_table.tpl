@@ -7,6 +7,7 @@
       <th style="text-align: center;">{_ Enabled _}</th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;"></th>
+      <th style="text-align: center;"></th>
     </tr>
   </thead>
   <tbody>
@@ -59,6 +60,17 @@
                                        }
                        }
         %}
+        <td style="text-align: center;">
+          <i id="info_{{ resource[1]["id"] }}"
+             class="fa fa-info-circle zprimary pointer"
+             title="{_ Details _}"></i>
+          {% wire id="info_"++resource[1]["id"]
+                  action={dialog_open title=_"Registration details"
+                                      template="_resource_details.tpl"
+                                      resource_id=resource[1]["id"]
+                         }
+          %}
+        </td>
       </tr>
     {% endfor %}
   </tbody>
