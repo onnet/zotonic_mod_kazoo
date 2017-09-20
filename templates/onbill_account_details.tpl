@@ -67,42 +67,42 @@
         </span>
       </th>
     </tr>
-  {% if m.session.display_billing %}
-    {% if account_doc[1]["trial_time_left"] %}
-      <tr>
-        <th>
-          {_ Trial status _}
-        </th>
-        <th>
-          {% if account_doc[1]["trial_time_left"] > 0 %}
-            <span class="zprimary">
-              {_ In Progress _}.
-              {{ (account_doc[1]["trial_time_left"]/60/60/24)|to_integer }}
-              {_ days left _}
-            </span>
-          {% else %}
-            <span class="zalarm">
-              {_ Expired _}
-              {{ (account_doc[1]["trial_time_left"]/60/60/24 * (-1))|to_integer }}
-              {_ days ago _}
-            </span>
-          {% endif %}
-          <span class="pull-right" style="padding-right: 1em;">
-            <i id="{{ #edit_account_trial_state }}"
-                style="cursor: pointer;"
-                class="fa fa-edit pointer"
-                title="{_ Edit _}"></i>
+  {% if account_doc[1]["trial_time_left"] %}
+    <tr>
+      <th>
+        {_ Trial status _}
+      </th>
+      <th>
+        {% if account_doc[1]["trial_time_left"] > 0 %}
+          <span class="zprimary">
+            {_ In Progress _}.
+            {{ (account_doc[1]["trial_time_left"]/60/60/24)|to_integer }}
+            {_ days left _}
           </span>
-          {% wire id=#edit_account_trial_state
-                  action={dialog_open title=_"Trial status manager"
-                                      template="_rs_trial_status_manager.tpl"
-                                      account_id=account_id
-                                      trial_time_left=account_doc[1]["trial_time_left"]
-                         }
-          %}
-        </th>
-      </tr>
-    {% else %}
+        {% else %}
+          <span class="zalarm">
+            {_ Expired _}
+            {{ (account_doc[1]["trial_time_left"]/60/60/24 * (-1))|to_integer }}
+            {_ days ago _}
+          </span>
+        {% endif %}
+        <span class="pull-right" style="padding-right: 1em;">
+          <i id="{{ #edit_account_trial_state }}"
+              style="cursor: pointer;"
+              class="fa fa-edit pointer"
+              title="{_ Edit _}"></i>
+        </span>
+        {% wire id=#edit_account_trial_state
+                action={dialog_open title=_"Trial status manager"
+                                    template="_rs_trial_status_manager.tpl"
+                                    account_id=account_id
+                                    trial_time_left=account_doc[1]["trial_time_left"]
+                       }
+        %}
+      </th>
+    </tr>
+  {% else %}
+    {% if m.session.display_billing %}
       {% with m.onbill[{current_billing_period account_id=account_id}],
               m.onbill[{onbill_pvt_limits account_id=account_id}]
               as
@@ -149,6 +149,8 @@
       </tr>
       {% endwith %}
     {% endif %}
+  {% endif %}
+  {% if m.session.display_billing %}
     <tr>
       <th>
         {_ Billing status _}

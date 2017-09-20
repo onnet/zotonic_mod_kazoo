@@ -2,9 +2,7 @@
 
 {% block widget_headline %}
     {{ headline }} 
-    {% if m.session.kazoo_reseller_account_id
-          and
-          (m.session.kazoo_account_id != m.session.kazoo_reseller_account_id)
+    {% if m.kazoo.maybe_masked
           and
           pr_pt[1]["armed"]
     %}
@@ -22,6 +20,7 @@
     {% include "_onbill_widget_dashboard_credit_disarmed.tpl" pr_pt=pr_pt %}
   {% endif %}
 
-  {% print m.onbill.promised_payment[1] %}
+  {# print m.onbill.promised_payment[1] #}
+  {# print m.kazoo.maybe_masked #}
 
 {% endblock %}

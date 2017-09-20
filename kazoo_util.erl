@@ -356,6 +356,7 @@
     ,agents_status/5
     ,agents_queue_status/5
     ,forgottenpwd/1
+    ,maybe_masked/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -3960,3 +3961,7 @@ forgottenpwd(Context) ->
             lists:foldl(fun(F, Ctx) -> F(Ctx) end, Context, Routines)
     end.
 
+maybe_masked(Context) ->
+    z_context:get_session(kazoo_reseller_account_id, Context) =/= 'undefined'
+    andalso (z_context:get_session(kazoo_account_id, Context)
+             =/= z_context:get_session(kazoo_reseller_account_id, Context)).

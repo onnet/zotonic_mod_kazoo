@@ -708,6 +708,9 @@ m_find_value({agents_queue_status,[{agent_id, AgentId}, {account_id, 'undefined'
 m_find_value({agents_queue_status,[{agent_id, AgentId}, {account_id, AccountId}]}, _M, Context) ->
     kazoo_util:agents_queue_status('get', AgentId, AccountId, [], Context);
 
+m_find_value(maybe_masked, _M, Context) ->
+    kazoo_util:maybe_masked(Context);
+
 m_find_value(_V, _VV, _Context) ->
     lager:info("m_find_value _V: ~p", [_V]),
     lager:info("m_find_value _VV: ~p", [_VV]),
