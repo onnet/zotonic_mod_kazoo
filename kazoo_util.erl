@@ -109,6 +109,7 @@
     ,kz_list_subscriptions/2
     ,kz_current_balance/2
     ,kz_transactions_credit/6
+    ,kz_admin_transactions_credit/6
     ,kz_transactions_debit/5
     ,kz_get_subscription/2
     ,kz_bt_customer/1
@@ -1652,6 +1653,16 @@ kz_transactions_credit(CreditType, Amount, Reason, Description, AccountId, Conte
                              ]}}]},
     lager:info("kz_transactions_credit DataBag: ~p", [DataBag]),
     crossbar_account_request('put', API_String, DataBag, Context).
+
+kz_admin_transactions_credit(CreditType, Amount, Reason, Description, AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, ?CREDIT/binary>>,
+    DataBag = {[{<<"data">>,{[{<<"amount">>, Amount}
+                             ,{<<"reason">>, Reason}
+                             ,{<<"description">>, Description}
+                             ,{<<"credit_type">>, CreditType}
+                             ]}}]},
+    lager:info("kz_transactions_credit DataBag: ~p", [DataBag]),
+    crossbar_admin_request('put', API_String, DataBag, Context).
 
 kz_transactions_debit(Amount, Reason, Description, AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, ?DEBIT/binary>>,
