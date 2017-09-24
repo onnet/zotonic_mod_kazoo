@@ -27,11 +27,11 @@
   </span>
   {# Credit status #}
   <div id="update_widget_dashboard_credit">
-    {# with m.onbill.promised_payment as pr_pt #}
-      {# if pr_pt[1]["enabled"] #}
-        {# include "onbill_widget_dashboard_credit.tpl" headline=_"Credit" pr_pt=pr_pt #}
-      {# endif #}
-    {# endwith #}
+    {% with m.onbill.promised_payment as pr_pt %}
+      {% if pr_pt[1]["enabled"] %}
+        {% include "onbill_widget_dashboard_credit.tpl" headline=_"Credit" pr_pt=pr_pt %}
+      {% endif %}
+    {% endwith %}
   </div>
 
 </div>

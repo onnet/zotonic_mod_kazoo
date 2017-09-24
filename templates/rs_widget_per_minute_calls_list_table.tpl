@@ -6,6 +6,7 @@
       <th class="td-center">{_ To _}</th>
       <th class="td-center">{_ Duration _}</th>
       <th class="td-center">{_ Sum _}</th>
+      <th class="td-center"></th>
     </tr>
   </thead>
   <tbody>
@@ -26,6 +27,21 @@
         <td class="td-center">{{ (ledger[1]["usage"][1]["quantity"]/60)|to_integer }} {_ min _}</td>
         <td class="td-center">
           {{ m.config.mod_kazoo.local_currency_sign.value }}{{ ledger[1]["amount"]|format_price:[".",""] }}
+        </td>
+        <td style="text-align: center;">
+          <i id="info_{{ ledger[1]["id"] }}"
+             class="fa fa-info-circle zprimary pointer"
+             title="{_ Details _}"></i>
+          {% wire id="info_"++ledger[1]["id"]
+                  action={dialog_open title=ledger[1]["metadata"][1]["caller_id_number"]
+                                            ++" <i class='fa fa-long-arrow-right'></i> "
+                                            ++ledger[1]["metadata"][1]["callee_id_number"]
+                                            ++" "
+                                            ++ledger[1]["metadata"][1]["rate"][1]["description"]
+                                      template="_details.tpl"
+                                      arg=ledger
+                         }
+          %}
         </td>
       </tr>
     {% endfor %}

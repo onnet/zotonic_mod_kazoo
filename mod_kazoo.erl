@@ -73,6 +73,9 @@ observe_billing_topmenu_element(_, Context) ->
             end
     end.
 
+observe_account_balance({account_balance,[{account_id, 'undefined'}]}, Context) ->
+    AccountId = z_context:get_session(kazoo_account_id, Context),
+    observe_account_balance({account_balance,[{account_id, AccountId}]}, Context);
 observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
 observe_account_balance(_Param, _Context) ->
@@ -2238,11 +2241,18 @@ event({submit,arm_credit,_,_}, Context) ->
     Credit_amount = z_context:get_q("creditme",Context),
     try z_convert:to_integer(Credit_amount) of
         Amount ->
-            DataBag = ?MK_DATABAG({[{<<"armed">>, true}
-                                   ,{<<"amount">>, Amount}
-                                   ]}
-                                 ),
-            PrPt = onbill_util:promised_payment('patch', AccountId, DataBag, Context),
+            Start =
+                case kazoo_util:maybe_masked(Context) of
+                    'true' -> modkazoo_util:current_tstamp(Context);
+                    'false' -> 'undefined'
+                end,
+            Values =
+                modkazoo_util:filter_empty([{<<"armed">>, true}
+                                           ,{<<"amount">>, Amount}
+                                           ,{<<"start">>, Start}
+                                           ]),
+            Bag = modkazoo_util:set_values(Values, modkazoo_util:new()),
+            PrPt = onbill_util:promised_payment('patch', AccountId, ?MK_DATABAG(Bag), Context),
             z_render:update("update_widget_dashboard_credit"
                            ,z_template:render("onbill_widget_dashboard_credit.tpl"
                                              ,[{headline,"Credit"},{pr_pt, PrPt}]

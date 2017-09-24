@@ -357,6 +357,7 @@
     ,agents_status/5
     ,agents_queue_status/5
     ,forgottenpwd/1
+    ,maybe_masked/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1623,7 +1624,7 @@ kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Context) ->
     crossbar_account_request('get', API_String, [], Context).
 
 kz_list_transactions(AccountId, CreatedFrom, CreatedTo, Reason, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?TRANSACTIONS/binary, <<"?">>/binary,
                    ?MK_TIME_FILTER(?TO_BIN(CreatedFrom), ?TO_BIN(CreatedTo))/binary, ?SET_REASON(Reason)/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
@@ -3971,3 +3972,7 @@ forgottenpwd(Context) ->
             lists:foldl(fun(F, Ctx) -> F(Ctx) end, Context, Routines)
     end.
 
+maybe_masked(Context) ->
+    z_context:get_session(kazoo_reseller_account_id, Context) =/= 'undefined'
+    andalso (z_context:get_session(kazoo_account_id, Context)
+             =/= z_context:get_session(kazoo_reseller_account_id, Context)).

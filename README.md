@@ -1,4 +1,4 @@
-# OK UI (OnNet Kazoo UI)
+# OK UI (OnNet Kazoo UI) by kirill.sysoev@gmail.com
 
 This is a Zotonic module.
 It provides user/admin/reseller interface for Kazoo cloud-based VoIP platform (https://github.com/2600hz/kazoo)
