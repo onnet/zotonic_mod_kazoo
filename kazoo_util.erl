@@ -18,6 +18,7 @@
     ,kz_get_acc_doc/1
     ,kz_get_acc_doc_by_account_id/2
     ,kz_get_acc_doc_by_account_id_and_authtoken/3
+    ,kz_adminget_acc_doc_by_account_id/2
     ,kz_account_doc_field/2
     ,kz_account_doc_field/3
     ,kz_get_user_doc/1
@@ -32,6 +33,7 @@
     ,update_kazoo_user/1
     ,kz_list_account_users/1
     ,kz_list_account_users/2
+    ,kz_admin_list_account_users/2
     ,kz_list_account_devices/1
     ,kz_list_account_cdr/3
     ,kz_list_account_cdr/5
@@ -1144,6 +1146,11 @@ kz_list_account_users(Context) ->
 kz_list_account_users(AccountId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
+
+kz_admin_list_account_users(AccountId, Context) ->
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
+    {'ok', _, _, Body} = crossbar_admin_request('get', API_String, [], Context),
+    modkazoo_util:get_value([<<"data">>], jiffy:decode(Body)).
 
 kz_list_account_devices(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?DEVICES/binary>>,
