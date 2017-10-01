@@ -7,8 +7,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Password changed successfully. Please try to sign-in as"
+msgstr "Пароль успешно изменен. Пожалуйста попробуйте войти как"
 
 msgid "Do you really want to enable this device"
 msgstr "Вы действительно хотите активировать это устройство"
