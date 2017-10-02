@@ -443,7 +443,7 @@
          {<<"caller_id">>,{[]}},
          {<<"e911_info">>,{[]}},
          {<<"failover">>,{[]}},
-         {<<"media_handling">>,<<"bypass">>}]}},
+         {<<"media_handling">>,<<"process">>}]}},
       {<<"permissions">>,{[{<<"users">>,[]}]}},
       {<<"monitor">>,{[{<<"monitor_enabled">>,false}]}},
       {<<"server_type">>,<<"FreePBX">>}
