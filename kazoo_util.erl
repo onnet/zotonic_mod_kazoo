@@ -1993,17 +1993,27 @@ add_device(Context) ->
 
 add_device(AcceptCharges, Context) ->
     DeviceType = z_context:get_q('device_type',Context),
+    AuthProps =
+        case z_context:get_q('sip_ip_auth',Context) of
+            <<_/binary>> = IP ->
+                [{[<<"sip">>,<<"method">>],<<"ip">>}
+                ,{[<<"sip">>,<<"ip">>], IP}
+                ];
+            _ ->
+                [{[<<"sip">>,<<"method">>],<<"password">>}
+                ,{[<<"sip">>,<<"username">>],z_context:get_q('sipusername',Context)}
+                ,{[<<"sip">>,<<"password">>],z_context:get_q('sippassword',Context)}
+                ]
+        end,
     Props = modkazoo_util:filter_empty(
-        [{[<<"sip">>,<<"username">>],z_context:get_q('sipusername',Context)}
-        ,{[<<"sip">>,<<"password">>],z_context:get_q('sippassword',Context)}
-        ,{[<<"sip">>,<<"invite_format">>], case z_context:get_q("route",Context) of 'undefined' -> <<"username">>; _ -> <<"route">> end}
+        [{[<<"sip">>,<<"invite_format">>], case z_context:get_q("route",Context) of 'undefined' -> <<"username">>; _ -> <<"route">> end}
         ,{[<<"sip">>,<<"route">>], z_context:get_q(route,Context)}
         ,{[<<"call_forward">>,<<"enabled">>], case z_context:get_q("cellphonenumber",Context) of 'undefined' -> false; _ -> true end}
         ,{[<<"call_forward">>,<<"number">>],z_context:get_q('cellphonenumber',Context)}
         ,{[<<"name">>],z_context:get_q('name',Context)}
         ,{[<<"owner_id">>],z_context:get_q('device_owner_id',Context)}
         ,{[<<"device_type">>], DeviceType}
-        ]),
+        ] ++ AuthProps),
     DeviceJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_DEVICE_SIP, Props),
     add_device(?MK_DATABAG(DeviceJObj), AcceptCharges, Context).
 
