@@ -85,6 +85,9 @@
     </div>
   </div>
 
+
+  {% if device_doc["sip"][1]["method"] == "ip" %}
+
   <!-- SIP IP Auth field -->
   <div class="row">
     <div class="col-xs-5">
@@ -111,6 +114,8 @@
         </span>
     </div>
   </div>
+
+  {% endif %}
 
   <br />
   </div>

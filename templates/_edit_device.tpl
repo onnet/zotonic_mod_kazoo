@@ -1,8 +1,8 @@
 {% with m.kazoo[{kz_device_doc device_id=device_id}][1] as device_doc %}
 <div min-height="50%">
 <ul class="nav nav-tabs nav-justified" role="tablist">
-  <li class="active"><a href="#basic" role="tab" data-toggle="tab">{_ Basic _}</a></li>
 {% if device_doc["device_type"]!="sip_uri" %}
+  <li class="active"><a href="#basic" role="tab" data-toggle="tab">{_ Basic _}</a></li>
   <li><a href="#callerid" role="tab" data-toggle="tab">{_ Caller ID _}</a></li>
 {% endif %}
 {% if device_doc["device_type"]!="cellphone" and device_doc["device_type"]!="sip_uri" %}

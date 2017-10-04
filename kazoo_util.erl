@@ -1995,7 +1995,7 @@ add_device(AcceptCharges, Context) ->
     DeviceType = z_context:get_q('device_type',Context),
     AuthProps =
         case z_context:get_q('sip_ip_auth',Context) of
-            <<_/binary>> = IP ->
+            <<_:7/binary, _/binary>> = IP ->
                 [{[<<"sip">>,<<"method">>],<<"ip">>}
                 ,{[<<"sip">>,<<"ip">>], IP}
                 ];
@@ -2078,8 +2078,6 @@ add_device(DataBag, AcceptCharges, Context) ->
                    ,[<<"message">>]
                    ],
             Message = modkazoo_util:get_first_defined(Keys, jiffy:decode(Body)),
-            ?PRINT(jiffy:decode(Body)),
-            ?PRINT(Message),
             mod_signal:emit({emit_growl_signal
                             ,?SIGNAL_FILTER(Context) ++
                              [{'text',?__(?TO_LST(Message), Context)}
@@ -2976,15 +2974,10 @@ cccp_field(K, DocId, Context) ->
 
 cccp_field_set(K, V, DocId, Context) ->
     CurrDoc = get_cccp_doc(DocId, Context),
-?PRINT(K),
-?PRINT(V),
-?PRINT(DocId),
-?PRINT(CurrDoc),
     NewDoc = case V of
         'undefined' -> modkazoo_util:delete_key(K, CurrDoc);
          _ -> modkazoo_util:set_value(K, V, CurrDoc)
     end,
-?PRINT(NewDoc),
     AccountId = z_context:get_session('kazoo_account_id', Context),
     case AccountId =:= 'undefined' orelse DocId =:= 'undefined' of
         'false' ->

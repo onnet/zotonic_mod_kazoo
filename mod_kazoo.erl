@@ -696,7 +696,6 @@ event({submit,add_new_device,_,_}, Context) ->
     end;
 
 event({postback,{save_field, Args},_,_}, Context) ->
-?PRINT(Args),
     DocId = proplists:get_value(doc_id, Args),
     FieldName = proplists:get_value(field_name, Args),
     Prefix = proplists:get_value(prefix, Args, <<>>),
@@ -775,9 +774,18 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
             end,
             _ = kazoo_util:kz_set_device_doc(FieldName, InputValue, DocId, Context),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
-            z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
-                           ,z_template:render("_show_field_select.tpl", Args, Context)
-                           ,Context);
+            case FieldName of
+                [<<"sip">>,<<"method">>] ->
+                    z_render:update(<<"device_edit_dialog_liver">>
+                                   ,z_template:render("_edit_device.tpl"
+                                                     ,[{'device_id', DocId}]
+                                                     , Context)
+                                   ,Context);
+                _EE ->
+                    z_render:update(<<(?TO_BIN(Prefix))/binary,(?TO_BIN(FieldName))/binary>>
+                                   ,z_template:render("_show_field_select.tpl", Args, Context)
+                                   ,Context)
+            end;
         <<"onbill_variables">> ->
             _ = onbill_util:set_onbill_variable(FieldName, InputVal, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
