@@ -63,6 +63,33 @@
     </div>
   </div>
 
+  <!-- SIP IP Auth field -->
+  <div class="row">
+    <div class="col-xs-5">
+      <label class="edit_user_label">
+        {_ IP Auth _}
+      </label>
+    </div>
+    <div id="sipip" class="col-xs-5">
+        {% wire id="edit_sipip"
+                type="click"
+                action={update target="sipip"
+                               template="_edit_field.tpl"
+                               type="device"
+                               doc_id=device_id
+                               field_name=["sip","ip"]
+                               placeholder="sip:support@company.com"
+                       }
+        %}
+        <span>
+            {{ device_doc["sip"][1]["ip"] }}
+            <i id="edit_sipip"
+               class="fa fa-edit pointer"
+               title="Edit field"></i>
+        </span>
+    </div>
+  </div>
+
   <br />
   </div>
   <div class="col-xs-2" id="device_enable_control">
