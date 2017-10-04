@@ -2073,7 +2073,13 @@ add_device(DataBag, AcceptCharges, Context) ->
                     end
             end;
         {'error', _ReturnCode, Body} ->
-            Message = modkazoo_util:get_value([<<"data">>,<<"message">>], jiffy:decode(Body)),
+            Keys = [[<<"data">>,<<"message">>]
+                   ,[<<"data">>,<<"sip.ip">>,<<"unique">>,<<"message">>]
+                   ,[<<"message">>]
+                   ],
+            Message = modkazoo_util:get_first_defined(Keys, jiffy:decode(Body)),
+            ?PRINT(jiffy:decode(Body)),
+            ?PRINT(Message),
             mod_signal:emit({emit_growl_signal
                             ,?SIGNAL_FILTER(Context) ++
                              [{'text',?__(?TO_LST(Message), Context)}

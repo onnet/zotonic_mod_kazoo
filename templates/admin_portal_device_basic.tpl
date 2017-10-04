@@ -64,8 +64,6 @@
       </div>
     </div>
 
-
-
     <!-- Realm field -->
     <div class="row">
       <div class="col-xs-5"><label class="edit_user_label">{_ Realm _}</label></div>
