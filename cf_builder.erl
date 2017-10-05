@@ -508,7 +508,7 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                                             ,z_context:get_session('current_callflow', Context))
                 of
                     'false' -> [[<<"nomatch">>,<<"match">>],[]];
-                    'true' -> [[<<"nomatch">>],[<<"caller_id">>]] 
+                    'true' -> [[<<"_">>],[<<"caller_id">>]] 
                 end,
             case cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context) of
                 [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
@@ -582,7 +582,7 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
                                             ,z_context:get_session('current_callflow', Context))
                 of
                     'false' -> [[<<"nomatch">>,<<"match">>],[]];
-                    'true' -> [[<<"nomatch">>],[<<"caller_id">>]]
+                    'true' -> [[<<"_">>],[<<"caller_id">>]]
                 end,
             z_render:dialog(?__("Choose route option",Context)
                                  , "_cf_select_option_check_cid.tpl"

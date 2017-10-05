@@ -16,6 +16,7 @@
           <option value=""> - {_ Select route key _} - </option>
           {% for key in available_keys %}
             <option value="{{ key }}">{% if key=="nomatch" %}{_ Default action _}
+                                      {% elseif key=="_" %}{_ Default action _}
                                       {% elseif key=="match" %}{_ Regex match action _}
                                       {% elseif key=="caller_id" %}{_ Caller ID Number _}
                                       {% else %}{{ key }}
