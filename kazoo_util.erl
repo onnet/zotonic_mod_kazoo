@@ -1009,8 +1009,8 @@ create_kazoo_account(Context) ->
 valid_account_name(Name) when size(Name) < 3 -> 'false';
 valid_account_name(_) -> 'true'.
 
-kz_account_create_callflow(Routines, Context) ->
-    DataBag = ?MK_DATABAG(lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines)),
+kz_account_create_callflow(Callflow, Context) ->
+    DataBag = ?MK_DATABAG(Callflow),
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CALLFLOWS/binary>>,
     crossbar_account_request('put', API_String, DataBag, Context).
 
@@ -1992,6 +1992,8 @@ add_device(Context) ->
     add_device(AcceptCharges, Context).
 
 add_device(AcceptCharges, Context) ->
+?PRINT(z_context:get_q_all(Context)),
+?PRINT(z_context:get_q('add_callflow',Context)),
     DeviceType = z_context:get_q('device_type',Context),
     AuthProps =
         case z_context:get_q('sip_ip_auth',Context) of
@@ -2012,6 +2014,8 @@ add_device(AcceptCharges, Context) ->
         ,{[<<"call_forward">>,<<"number">>],z_context:get_q('cellphonenumber',Context)}
         ,{[<<"name">>],z_context:get_q('name',Context)}
         ,{[<<"owner_id">>],z_context:get_q('device_owner_id',Context)}
+        ,{[<<"caller_id">>,<<"internal">>,<<"number">>],z_context:get_q('callerid_internal_number',Context)}
+        ,{[<<"caller_id">>,<<"external">>,<<"number">>],z_context:get_q('callerid_external_number',Context)}
         ,{[<<"device_type">>], DeviceType}
         ] ++ AuthProps),
     DeviceJObj = lists:foldl(fun({K,V},J) -> modkazoo_util:set_value(K,V,J) end, ?MK_DEVICE_SIP, Props),
@@ -2086,6 +2090,7 @@ add_device(DataBag, AcceptCharges, Context) ->
                             ,Context),
             z_render:dialog_close(Context);
         _E ->
+?PRINT(_E),
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
             z_render:dialog_close(Context)
@@ -2589,116 +2594,116 @@ kz_get_featurecode_by_name(FCName, Context) ->
     end.
 
 kz_add_featurecode_voicemail_check(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"check">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"voicemail">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*97">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"voicemail[action=check]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"97">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"check">>}
+             ,{[<<"flow">>,<<"module">>], <<"voicemail">>}
+             ,{[<<"numbers">>], [<<"*97">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"voicemail[action=check]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"97">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_voicemail_direct(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"compose">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"voicemail">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*\\*([0-9]*)$">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"voicemail[action=\"direct\"]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"\\*">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"compose">>}
+             ,{[<<"flow">>,<<"module">>], <<"voicemail">>}
+             ,{[<<"patterns">>], [<<"^\\*\\*([0-9]*)$">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"voicemail[action=\"direct\"]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"\\*">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_park_and_retrieve(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"auto">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"park">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*3([0-9]*)$">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"park_and_retrieve">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"3">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"auto">>}
+             ,{[<<"flow">>,<<"module">>], <<"park">>}
+             ,{[<<"patterns">>], [<<"^\\*3([0-9]*)$">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"park_and_retrieve">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"3">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_park_valet(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"park">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"park">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*4">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"valet">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"4">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"park">>}
+             ,{[<<"flow">>,<<"module">>], <<"park">>}
+             ,{[<<"numbers">>], [<<"*4">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"valet">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"4">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_park_retrieve(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"retrieve">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"retrieve">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*5([0-9]*)$">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"retrieve">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"5">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"retrieve">>}
+             ,{[<<"flow">>,<<"module">>], <<"retrieve">>}
+             ,{[<<"patterns">>], [<<"^\\*5([0-9]*)$">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"retrieve">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"5">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_intercom(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"compose">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"intercom">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*0([0-9]*)$">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"intercom">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"0">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"compose">>}
+             ,{[<<"flow">>,<<"module">>], <<"intercom">>}
+             ,{[<<"patterns">>], [<<"^\\*0([0-9]*)$">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"intercom">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"0">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_privacy(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"full">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"privacy">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*67([0-9]*)$">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"privacy[mode=full]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"67">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"full">>}
+             ,{[<<"flow">>,<<"module">>], <<"privacy">>}
+             ,{[<<"patterns">>], [<<"^\\*67([0-9]*)$">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"privacy[mode=full]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"67">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_hotdesk_enable(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"login">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"hotdesk">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*11">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"hotdesk[action=login]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"11">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"login">>}
+             ,{[<<"flow">>,<<"module">>], <<"hotdesk">>}
+             ,{[<<"numbers">>], [<<"*11">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"hotdesk[action=login]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"11">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_hotdesk_disable(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"logout">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"hotdesk">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*12">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"hotdesk[action=logout]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"12">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"logout">>}
+             ,{[<<"flow">>,<<"module">>], <<"hotdesk">>}
+             ,{[<<"numbers">>], [<<"*12">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"hotdesk[action=logout]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"12">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_hotdesk_toggle(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"toggle">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"hotdesk">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*13">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"hotdesk[action=toggle]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"13">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"toggle">>}
+             ,{[<<"flow">>,<<"module">>], <<"hotdesk">>}
+             ,{[<<"numbers">>], [<<"*13">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"hotdesk[action=toggle]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"13">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_call_forward_activate(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"activate">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*72">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=activate]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"72">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"activate">>}
+             ,{[<<"flow">>,<<"module">>], <<"call_forward">>}
+             ,{[<<"numbers">>], [<<"*72">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"call_forward[action=activate]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"72">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_call_forward_deactivate(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"deactivate">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*73">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=deactivate]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"73">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"deactivate">>}
+             ,{[<<"flow">>,<<"module">>], <<"call_forward">>}
+             ,{[<<"numbers">>], [<<"*73">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"call_forward[action=deactivate]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"73">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_call_forward_toggle(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"toggle">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"patterns">>], [<<"^\\*74([0-9]*)$">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=toggle]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"74">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"toggle">>}
+             ,{[<<"flow">>,<<"module">>], <<"call_forward">>}
+             ,{[<<"patterns">>], [<<"^\\*74([0-9]*)$">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"call_forward[action=toggle]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"74">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_add_featurecode_call_forward_update(Context) ->
-    Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"update">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"call_forward">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"numbers">>], [<<"*56">>], J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"call_forward[action=update]">>, J) end
-                ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"56">>, J) end],
-    kz_account_create_callflow(Routines, Context).
+    Values = [{[<<"flow">>,<<"data">>,<<"action">>], <<"update">>}
+             ,{[<<"flow">>,<<"module">>], <<"call_forward">>}
+             ,{[<<"numbers">>], [<<"*56">>]}
+             ,{[<<"featurecode">>, <<"name">>], <<"call_forward[action=update]">>}
+             ,{[<<"featurecode">>, <<"number">>], <<"56">>}],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 set_featurecode_dynamic_cid(ListId, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"data">>,<<"action">>], <<"lists">>, J) end
@@ -2708,6 +2713,7 @@ set_featurecode_dynamic_cid(ListId, Context) ->
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"number">>], <<"69">>, J) end
                 ,fun(J) -> modkazoo_util:set_value([<<"featurecode">>, <<"name">>], <<"dynamic_cid">>, J) end],
     update_featurecode(<<"dynamic_cid">>, Routines, Context).
+
 
 set_featurecode_eavesdrop(ApprovedGroupId, TargetGroupId, Context) ->
     Routines = [fun(J) -> modkazoo_util:set_value([<<"flow">>,<<"module">>], <<"eavesdrop_feature">>, J) end
@@ -2726,7 +2732,9 @@ set_featurecode_eavesdrop(ApprovedGroupId, TargetGroupId, Context) ->
 
 update_featurecode(FeatureCodeName, Routines, Context) ->
     case kz_get_featurecode_by_name(FeatureCodeName, Context) of
-        [] -> kz_account_create_callflow(Routines, Context);
+        [] ->
+            Callflow = lists:foldl(fun(F, J) -> F(J) end, ?EMPTY_CALLFLOW, Routines),
+            kz_account_create_callflow(Callflow, Context);
         JObj -> 
             CallflowId = modkazoo_util:get_value(<<"id">>,JObj),
             CurrDoc = kz_get_account_callflow(CallflowId, Context),
