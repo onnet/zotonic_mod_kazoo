@@ -24,7 +24,10 @@
     {{ headline }}
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"add device"
-              action={dialog_open title=_"Add device" template="_add_device_dialog.tpl"}
+              action={dialog_open title=_"Add device"
+                                  template="_add_device_dialog.tpl"
+                                  width="auto"
+                     }
     %}
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"refresh list"
