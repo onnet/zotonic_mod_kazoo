@@ -84,7 +84,7 @@
                  id="add_device_callflow"
                  name="add_device_callflow"
                  value="add_device_callflow">
-          {_ Add callflow _}
+            {_ Add callflow _}
         </label>
       </div>
     </div>

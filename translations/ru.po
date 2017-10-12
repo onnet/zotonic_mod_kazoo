@@ -4,8 +4,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Add callflow"
+msgstr "Добавить маршрут"
 
 msgid "Password changed successfully. Please try to sign-in as"
 msgstr "Пароль успешно изменен. Пожалуйста попробуйте войти как"
