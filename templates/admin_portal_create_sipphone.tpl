@@ -77,13 +77,13 @@
                placeholder="{_ Internal CID number _}">
       </div>
       <div class="col-sm-3">
-        <label for="add_callflow"
+        <label for="add_device_callflow"
                class="checkbox-inline"
                style="width: 100%">
           <input type="checkbox"
-                 id="add_callflow"
-                 name="add_callflow"
-                 value="add_callflow">
+                 id="add_device_callflow"
+                 name="add_device_callflow"
+                 value="add_device_callflow">
           {_ Add callflow _}
         </label>
       </div>

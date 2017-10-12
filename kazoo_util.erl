@@ -1992,8 +1992,6 @@ add_device(Context) ->
     add_device(AcceptCharges, Context).
 
 add_device(AcceptCharges, Context) ->
-?PRINT(z_context:get_q_all(Context)),
-?PRINT(z_context:get_q('add_callflow',Context)),
     DeviceType = z_context:get_q('device_type',Context),
     AuthProps =
         case z_context:get_q('sip_ip_auth',Context) of
@@ -2089,12 +2087,36 @@ add_device(DataBag, AcceptCharges, Context) ->
                              ]}
                             ,Context),
             z_render:dialog_close(Context);
-        _E ->
-?PRINT(_E),
+        Result ->
+            case modkazoo_util:get_value(<<"id">>, Result) of
+                ?MATCH_ACCOUNT_RAW(DeviceId) ->
+                    maybe_add_device_callflow(DeviceId, Context);
+                _ -> 'ok'
+            end,
             mod_signal:emit({update_admin_portal_devices_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
             modkazoo_util:delay_signal(3, 'update_fin_info_signal', ?SIGNAL_FILTER(Context), Context),
             z_render:dialog_close(Context)
     end.
+
+maybe_add_device_callflow(DeviceId, Context) ->
+    case z_context:get_q('add_device_callflow',Context) of
+        <<"add_device_callflow">> ->
+            CIDNumber = z_context:get_q('callerid_internal_number',Context),
+            add_device_callflow(DeviceId, CIDNumber, Context);
+        _ ->
+            'ok'
+    end. 
+
+add_device_callflow(DeviceId, <<>>, Context) ->
+    'ok';
+add_device_callflow(DeviceId, CIDNumber, Context) ->
+    Values = [{[<<"flow">>,<<"data">>,<<"id">>], DeviceId}
+             ,{[<<"flow">>,<<"data">>,<<"timeout">>], <<"60">>}
+             ,{[<<"flow">>,<<"data">>,<<"can_call_self">>], 'true'}
+             ,{[<<"flow">>,<<"module">>], <<"device">>}
+             ,{[<<"numbers">>], [CIDNumber]}
+             ],
+    kz_account_create_callflow(modkazoo_util:set_values(Values, ?EMPTY_CALLFLOW), Context).
 
 kz_list_account_groups(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?GROUPS/binary>>,
