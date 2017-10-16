@@ -59,29 +59,6 @@
                                             icon="trash"
                                             help=""
           %}
-          <div class="clear">
-          </div>
-          <div class="app_list_nav">
-          </div>
-        </div>
-      </div>
-      <div id="Advanced" name="Advanced" class="category inactive">
-        <div class="open">
-          Advanced
-        </div>
-        <div class="content">
-          {% include "_cf_tool_element.tpl" tool_id="callflow"
-                                            tool_name="callflow"
-                                            tool_descr="Callflow"
-                                            icon="callflow"
-                                            help=_"Transfer the call to another call flow"
-          %}
-          {% include "_cf_tool_element.tpl" tool_id="voicemail"
-                                            tool_name="voicemail"
-                                            tool_descr="Voicemail"
-                                            icon="voicemail"
-                                            help="Direct a caller to leave a voicemail message"
-          %}
           {% include "_cf_tool_element.tpl" tool_id="check_cid"
                                             tool_name="check_cid"
                                             tool_descr="CID Check"
@@ -93,6 +70,35 @@
                                             tool_descr="CID Match"
                                             icon="circle_graph"
                                             help="Route incoming call based on Caller ID."
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="route_to_cid"
+                                            tool_name="route_to_cid"
+                                            tool_descr="CID Lookup"
+                                            icon="circle_graph"
+                                            help="Route incoming call by Internal Caller ID."
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="callflow"
+                                            tool_name="callflow"
+                                            tool_descr="Callflow"
+                                            icon="callflow"
+                                            help=_"Transfer the call to another call flow"
+          %}
+          <div class="clear">
+          </div>
+          <div class="app_list_nav">
+          </div>
+        </div>
+      </div>
+      <div id="Advanced" name="Advanced" class="category inactive">
+        <div class="open">
+          Advanced
+        </div>
+        <div class="content">
+          {% include "_cf_tool_element.tpl" tool_id="voicemail"
+                                            tool_name="voicemail"
+                                            tool_descr="Voicemail"
+                                            icon="voicemail"
+                                            help="Direct a caller to leave a voicemail message"
           %}
           {% include "_cf_tool_element.tpl" tool_id="prepend_cid"
                                             tool_name="prepend_cid"

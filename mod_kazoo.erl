@@ -898,6 +898,31 @@ event({submit,cf_select_device,_,_},Context) ->
     _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
     z_render:dialog_close(Context);
 
+event({submit,cf_select_route_to_cid,_,_},Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    _ = cf_builder:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","timeout"]
+                                 ,z_convert:to_binary(z_context:get_q("timeout", Context))
+                                 ,Context),
+    _ = cf_builder:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","device_external_cid_lookup"]
+                                 ,z_convert:to_bool(z_context:get_q("device_external_cid_lookup", Context, 'false'))
+                                 ,Context),
+    _ = cf_builder:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","device_internal_cid_lookup"]
+                                 ,z_convert:to_bool(z_context:get_q("device_internal_cid_lookup", Context, 'false'))
+                                 ,Context),
+    _ = cf_builder:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","user_external_cid_lookup"]
+                                 ,z_convert:to_bool(z_context:get_q("user_external_cid_lookup", Context, 'false'))
+                                 ,Context),
+    _ = cf_builder:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","user_internal_cid_lookup"]
+                                 ,z_convert:to_bool(z_context:get_q("user_internal_cid_lookup", Context, 'false'))
+                                 ,Context),
+    _ = cf_builder:cf_set_session('current_callflow', z_string:split(ElementId,"-")++["data","can_call_self"], true, Context),
+    z_render:dialog_close(Context);
+
 event({submit,cf_select_play,_,_},Context) ->
     ElementId = z_context:get_q("element_id", Context),
     _ = cf_builder:cf_set_session('current_callflow'

@@ -34,19 +34,19 @@
 -include_lib("include/mod_kazoo.hrl").
 
 cf_add_number(Number, Context) ->
-    CurrentCallflow = case z_context:get_session('current_callflow', Context) of
-        'undefined' -> ?EMPTY_CALLFLOW;
+    CurrentCallflow = case z_context:get_session('current_callflow', Context, ?EMPTY_CALLFLOW) of
+        <<>> -> ?EMPTY_CALLFLOW;
         Callflow -> Callflow
     end,
-    Numbers = modkazoo_util:get_value([<<"numbers">>], CurrentCallflow) ++ [?TO_BIN(Number)],
+    Numbers = modkazoo_util:get_value([<<"numbers">>], CurrentCallflow, []) ++ [?TO_BIN(Number)],
     z_context:set_session('current_callflow', modkazoo_util:set_value([<<"numbers">>], Numbers, CurrentCallflow), Context).
 
 cf_add_pattern(Pattern, Context) ->
-    CurrentCallflow = case z_context:get_session('current_callflow', Context) of
-        'undefined' -> ?EMPTY_CALLFLOW;
+    CurrentCallflow = case z_context:get_session('current_callflow', Context, ?EMPTY_CALLFLOW) of
+        <<>> -> ?EMPTY_CALLFLOW;
         Callflow -> Callflow
     end,
-    Patterns = modkazoo_util:get_value([<<"patterns">>], CurrentCallflow) ++ [?TO_BIN(Pattern)],
+    Patterns = modkazoo_util:get_value([<<"patterns">>], CurrentCallflow, []) ++ [?TO_BIN(Pattern)],
     z_context:set_session('current_callflow', modkazoo_util:set_value([<<"patterns">>], Patterns, CurrentCallflow), Context).
 
 cf_delete_number(Number, Context) ->
