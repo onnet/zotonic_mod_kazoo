@@ -4,8 +4,6 @@
         postback="cf_select_route_to_cid"
         delegate="mod_kazoo"
 %}
-{% print element_data %}
-{% print element_data[1]["data"][1]["device_external_cid_lookup"] %}
 <form id="form_cf_select_route_to_cid" method="post" action="postback">
   <div class="form-group pt-1">
     <div class="row">
