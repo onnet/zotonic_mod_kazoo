@@ -35,6 +35,7 @@
 
 cf_add_number(Number, Context) ->
     CurrentCallflow = case z_context:get_session('current_callflow', Context, ?EMPTY_CALLFLOW) of
+        'undefined' -> ?EMPTY_CALLFLOW;
         <<>> -> ?EMPTY_CALLFLOW;
         Callflow -> Callflow
     end,
@@ -43,6 +44,7 @@ cf_add_number(Number, Context) ->
 
 cf_add_pattern(Pattern, Context) ->
     CurrentCallflow = case z_context:get_session('current_callflow', Context, ?EMPTY_CALLFLOW) of
+        'undefined' -> ?EMPTY_CALLFLOW;
         <<>> -> ?EMPTY_CALLFLOW;
         Callflow -> Callflow
     end,
