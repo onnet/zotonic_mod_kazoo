@@ -7,72 +7,76 @@
 <form id="form_cf_select_route_to_cid" method="post" action="postback">
   <div class="form-group pt-1">
     <div class="row">
-      <div class="col-sm-3">
-        <label for="user_external_cid_lookup"
+      <div class="col-sm-3 col-sm-offset-3">
+        <label for="user_cid_lookup"
                class="checkbox-inline
-                      {% if element_data[1]["data"][1]["user_external_cid_lookup"] %}
+                      {% if "user"|member:element_data[1]["data"][1]["endpoint_types"] %}
                         checked
                       {% endif %}"
                style="width: 100%">
           <input type="checkbox"
-                 id="user_external_cid_lookup"
-                 name="user_external_cid_lookup"
-                 value="user_external_cid_lookup"
-                 {% if element_data[1]["data"][1]["user_external_cid_lookup"] %}
+                 id="user_cid_lookup"
+                 name="endpoint_types"
+                 value="user"
+                 {% if "user"|member:element_data[1]["data"][1]["endpoint_types"] %}
                    checked
                  {% endif %}>
-          {_ User external CID _}
+          {_ Lookup users' CID _}
         </label>
       </div>
       <div class="col-sm-3">
-        <label for="user_internal_cid_lookup"
+        <label for="device_cid_lookup"
                class="checkbox-inline
-                      {% if element_data[1]["data"][1]["user_internal_cid_lookup"] %}
+                      {% if "device"|member:element_data[1]["data"][1]["endpoint_types"] %}
                         checked
                       {% endif %}"
                style="width: 100%">
           <input type="checkbox"
-                 id="user_internal_cid_lookup"
-                 name="user_internal_cid_lookup"
-                 value="user_internal_cid_lookup"
-                 {% if element_data[1]["data"][1]["user_internal_cid_lookup"] %}
+                 id="device_cid_lookup"
+                 name="endpoint_types"
+                 value="device"
+                 {% if "device"|member:element_data[1]["data"][1]["endpoint_types"] %}
                    checked
                  {% endif %}>
-          {_ User internal CID _}
+          {_ Lookup devices' CID _}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group pt-1">
+    <div class="row">
+      <div class="col-sm-3 col-sm-offset-3">
+        <label for="external_cid_lookup"
+               class="checkbox-inline
+                      {% if "external"|member:element_data[1]["data"][1]["cid_types"] %}
+                        checked
+                      {% endif %}"
+               style="width: 100%">
+          <input type="checkbox"
+                 id="external_cid_lookup"
+                 name="cid_types"
+                 value="external"
+                 {% if "external"|member:element_data[1]["data"][1]["cid_types"] %}
+                   checked
+                 {% endif %}>
+          {_ Lookup external CID _}
         </label>
       </div>
       <div class="col-sm-3">
-        <label for="device_external_cid_lookup"
+        <label for="internal_cid_lookup"
                class="checkbox-inline
-                      {% if element_data[1]["data"][1]["device_external_cid_lookup"] %}
+                      {% if "internal"|member:element_data[1]["data"][1]["cid_types"] %}
                         checked
                       {% endif %}"
                style="width: 100%">
           <input type="checkbox"
-                 id="device_external_cid_lookup"
-                 name="device_external_cid_lookup"
-                 value="device_external_cid_lookup"
-                 {% if element_data[1]["data"][1]["device_external_cid_lookup"] %}
+                 id="internal_cid_lookup"
+                 name="cid_types"
+                 value="internal"
+                 {% if "internal"|member:element_data[1]["data"][1]["cid_types"] %}
                    checked
                  {% endif %}>
-          {_ Device external CID _}
-        </label>
-      </div>
-      <div class="col-sm-3">
-        <label for="device_internal_cid_lookup"
-               class="checkbox-inline
-                      {% if element_data[1]["data"][1]["device_internal_cid_lookup"] %}
-                        checked
-                      {% endif %}"
-               style="width: 100%">
-          <input type="checkbox"
-                 id="device_internal_cid_lookup"
-                 name="device_internal_cid_lookup"
-                 value="device_internal_cid_lookup"
-                 {% if element_data[1]["data"][1]["device_internal_cid_lookup"] %}
-                   checked
-                 {% endif %}>
-          {_ Device internal CID _}
+          {_ Lookup internal CID _}
         </label>
       </div>
     </div>
