@@ -7,7 +7,7 @@
 <form id="form_cf_select_fax_detect" method="post" action="postback">
   <div class="form-group">
     <div class="row">
-      <div class="col-sm-3  col-sm-offset-4">
+      <div class="col-sm-4 col-sm-offset-4">
        <label class="form-control-onnet margin-bottom-xs">
           {_ Fax detect duration _}
         <select id="fax_detect_duration_s"
