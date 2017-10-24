@@ -1150,6 +1150,14 @@ event({submit,cf_select_disa,_,_},Context) ->
                                  ,Context),
     z_render:dialog_close(Context);
 
+event({submit,cf_select_fax_detect,_,_},Context) ->
+    ElementId = z_context:get_q("element_id", Context),
+    _ = cf_builder:cf_set_session('current_callflow'
+                                 ,z_string:split(ElementId,"-")++["data","duration"]
+                                 ,z_convert:to_binary(z_context:get_q("duration", Context))
+                                 ,Context),
+    z_render:dialog_close(Context);
+
 event({postback,{cf_load,_},_,_},Context) ->
     cf_builder:cf_load_to_session(z_context:get_q('triggervalue', Context),Context),
     cf_builder:cf_notes_flush(Context),

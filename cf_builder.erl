@@ -543,6 +543,21 @@ cf_handle_drop({drop,{dragdrop,{drag_args,[{tool_name,ToolName}]},mod_kazoo,_}
                                   ,{branch_id,BranchId}
                                   ,{available_keys,cf_available_keys(KeysList,cf_element_path(BranchId),Context)}]
                                  ,Context);
+        <<"fax_detect">> ->
+            [KeysList,AddOn] = [[<<"ON_FAX">>,<<"ON_VOICE">>],[]],
+            case cf_available_keys(KeysList,cf_element_path(BranchId),AddOn,Context) of
+                [] -> z_render:growl_error(?__("No routing keys left.",Context), Context); 
+                AvailableKeys ->
+                    z_render:dialog(?__("Choose route option",Context)
+                                   ,"_cf_select_option_fax_detect.tpl"
+                                   ,[{tool_name,ToolName}
+                                    ,{drop_id,DropId}
+                                    ,{drop_parent,DropParent}
+                                    ,{branch_id,BranchId}
+                                    ,{available_keys,AvailableKeys}
+                                    ]
+                                   ,Context)
+            end;
         _ ->
             Switch = case BranchId of
                 <<"flow0">> -> <<"">>;
@@ -611,7 +626,19 @@ cf_choose_new_switch(ExistingElementId,DropParent,Context) ->
                                ,[{existing_element_id,ExistingElementId}
                                 ,{kz_element_id,hd(lists:reverse(binary:split(ExistingElementId,<<"-">>,[global])))}
                                 ,{available_keys,KeysList}]
-                            ,Context)
+                            ,Context);
+        <<"fax_detect">> ->
+            [KeysList,AddOn] = [[<<"ON_FAX">>,<<"ON_VOICE">>],[]],
+            z_render:dialog(?__("Choose route option",Context)
+                               ,"_cf_select_option_fax_detect.tpl"
+                               ,[{existing_element_id,ExistingElementId}
+                                ,{switch,hd(lists:reverse(cf_element_path(ExistingElementId)))}
+                                ,{available_keys,cf_available_keys(KeysList
+                                                                  ,lists:reverse(tl(tl(lists:reverse(cf_element_path(ExistingElementId)))))
+                                                                  ,AddOn
+                                                                  ,Context)}
+                                ]
+                               ,Context)
     end.
 
 cf_set_new_switch(ExistingElementId,NewSwitch,Context) ->

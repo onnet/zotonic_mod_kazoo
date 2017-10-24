@@ -127,7 +127,7 @@
           {% include "_cf_tool_element.tpl" tool_id="record_call"
                                             tool_name="record_call"
                                             tool_descr="Record Call"
-                                            icon="conference"
+                                            icon="two_circles"
                                             help=""
           %}
           {% include "_cf_tool_element.tpl" tool_id="eavesdrop"
@@ -159,6 +159,12 @@
                                             tool_descr="Response"
                                             icon="rightarrow"
                                             help="Return a custom SIP error code"
+          %}
+          {% include "_cf_tool_element.tpl" tool_id="fax_detect"
+                                            tool_name="fax_detect"
+                                            tool_descr="Fax detect"
+                                            icon="graph3"
+                                            help="Detects fax on incoming call"
           %}
           <div class="clear">
           </div>

@@ -3,6 +3,7 @@
        or drop_parent == "temporal_route"
        or drop_parent == "check_cid"
        or drop_parent == "cidlistmatch"
+       or drop_parent == "fax_detect"
   %}
     {% include "_cf_child_head_option.tpl" %}
   {% else %}
