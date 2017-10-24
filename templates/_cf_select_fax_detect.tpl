@@ -3,6 +3,7 @@
         postback="cf_select_fax_detect"
         delegate="mod_kazoo"
 %}
+{% with m.kazoo[{cf_get_element_by_id element_id=element_id}] as element_data %}
 <form id="form_cf_select_fax_detect" method="post" action="postback">
   <div class="form-group">
     <div class="row">
@@ -13,11 +14,14 @@
                 name="duration"
                 class="form-control margin-bottom-xs"
                 style="text-align:center;">
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
+          {% for seconds in 3|range:7 %}
+            <option value="{{ seconds }}"
+              {% if seconds == element_data[1]["data"][1]["duration"] %}
+                selected
+              {% endif %}>
+              {{ seconds }}
+            </option>
+          {% endfor %}
         </select>
        </label>
       </div>
@@ -38,6 +42,7 @@
     </div>
   </div>
 </div>
+{% endwith %}
 {% wire id="button_cf_select_fax_detect"
         action={script script="$('#"++element_id++"_details').text(($('#use_absolute_mode_selector option:selected').text()))"}
         action={submit target="form_cf_select_fax_detect"}
