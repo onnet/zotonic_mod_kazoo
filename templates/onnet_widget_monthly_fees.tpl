@@ -40,7 +40,7 @@
   <table class="table table-condensed table-hover table-centered">
     <thead>
       <tr>
-        <th>{_ Fee name _}</th>
+        <th style="width: 50%;">{_ Fee name _}</th>
         <th class="text-center">{_ Rate _}</th>
         <th class="text-center">{_ Quantity _}</th>
         <th class="text-center">{_ Discount _}</th>
@@ -49,13 +49,23 @@
     </thead>
     <tbody>
       {% for service_item in m.onbill.kz_current_services[1]["services_list"] %}
-        <tr>
-          <td>{{ service_item[1]["name"] }}</td>
-          <td class="text-center">{{ service_item[1]["rate"]|currency_sign }}</td>
-          <td class="text-center">{{ service_item[1]["quantity"] }}</td>
-          <td class="text-center">{{ service_item[1]["total_discount"]|currency_sign }}</td>
-          <td class="text-center">{{ service_item[1]["discounted_item_cost"]|currency_sign }}</td>
-        </tr>
+        {% if service_item[1]["discounted_item_cost"] != "0.0" %}
+          <tr>
+            <td>{{ service_item[1]["name"] }}</td>
+            <td class="text-right" style="vertical-align: middle;">
+              {{ service_item[1]["rate"]|currency_sign }}
+            </td>
+            <td class="text-center" style="vertical-align: middle;">
+              {{ service_item[1]["quantity"] }}
+            </td>
+            <td class="text-right" style="vertical-align: middle;">
+              {{ service_item[1]["total_discount"]|currency_sign }}
+            </td>
+            <td class="text-right" style="vertical-align: middle;">
+              {{ service_item[1]["discounted_item_cost"]|currency_sign }}
+            </td>
+          </tr>
+        {% endif %}
       {% endfor %}
     </tbody>
   </table>

@@ -24,8 +24,10 @@
           {% for fee_item in m.kazoo[{kz_current_service_plans account_id=account_id}][1]["items"][1]["periodic_fees"][1] %}
              <option value="{{ fee_item[2][1]["item"] }}">
                {{ fee_item[2][1]["name"] }},
-               {{ fee_item[2][1]["activation_charge"] }},
-               {{ fee_item[2][1]["rate"] }}
+               {% if fee_item[2][1]["activation_charge"] != "0.0" %}
+                 {{ fee_item[2][1]["activation_charge"]|format_price:[".",""]|currency_sign }},
+               {% endif %}
+               {{ fee_item[2][1]["rate"]|format_price:[".",""]|currency_sign }}
              </option>
           {% endfor %}
         </select>
