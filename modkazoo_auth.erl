@@ -56,7 +56,7 @@ refresh_superadmin_and_reseller_flags(Context) ->
 
 do_sign_in(Login, Password, Account, Context) ->
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
-    case kazoo_util:kz_user_creds(Login, Password, Account, Context) of
+    case kazoo_util:kz_user_creds(modkazoo_util:to_lower_binary(Login), Password, Account, Context) of
         {'ok', {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->
             lager:info("Failed to authenticate Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             z_render:growl_error(?__("Admin auth failed.", Context), Context);
