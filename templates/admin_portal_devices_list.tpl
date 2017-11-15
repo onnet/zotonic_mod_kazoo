@@ -33,6 +33,13 @@
               text=_"refresh list"
               action={emit signal={update_admin_portal_devices_list_tpl signal_filter=m.kazoo.signal_filter}}
     %}
+    {% button class="btn btn-xs btn-onnet pull-right"
+              text=_"export"
+              action={dialog_open title=_"Export devices' credentials"
+                                  template="_export_devices_credentials.tpl"
+                                  width="auto"
+                     }
+    %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
