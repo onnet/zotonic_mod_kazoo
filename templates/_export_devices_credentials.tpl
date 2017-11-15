@@ -1,4 +1,4 @@
-NickName,Username,Password,CIDNumber
+NickName, Username, Password, CIDNumber
 <br />
 {% for device in m.kazoo.kz_list_account_devices %}
   {% with m.kazoo[{kz_device_doc device_id=device[1]["id"]}] as device_doc %}
