@@ -21,6 +21,13 @@
               {% endif %}" 
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
+  {% wire action={connect signal={refresh_tasks_widget_signal signal_filter=m.kazoo.signal_filter}
+                          action={update target="tasks_widget_tpl"
+                                         template="tasks_widget.tpl"
+                                         headline=_"Background jobs"
+                                 }
+                 }
+  %}
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"refresh"
             action={emit signal={refresh_tasks_widget_signal signal_filter=m.kazoo.signal_filter}}

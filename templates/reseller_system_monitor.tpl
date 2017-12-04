@@ -13,7 +13,7 @@
                                  }
                  }
   %}
-  <span id="reseller_current_calls_widget_tpl">
+  <span id="reseller_current_calls_widget_tpl" class="display_none">
     {% include "reseller_current_calls_widget.tpl" headline=_"System-wide current calls" %}
   </span>
   <span id="notifications_smtplog_widget_tpl">
@@ -30,16 +30,6 @@
   %}
   <span id="reseller_registrations_widget_tpl">
     {% include "reseller_registrations_widget.tpl" headline=_"System-wide registrations" %}
-  </span>
-  {% wire action={connect signal={refresh_tasks_widget_signal signal_filter=m.kazoo.signal_filter}
-                          action={update target="tasks_widget_tpl"
-                                         template="tasks_widget.tpl"
-                                         headline=_"Background jobs"
-                                 }
-                 }
-  %}
-  <span id="tasks_widget_tpl">
-    {% include "tasks_widget.tpl" headline=_"Background jobs" %}
   </span>
 </div>
 {% endblock %}

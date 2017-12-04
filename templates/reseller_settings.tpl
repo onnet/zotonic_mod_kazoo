@@ -39,6 +39,7 @@
   <span id="reseller_portal_notifications_tpl">
         {% include "reseller_portal_notifications.tpl" headline=_"Notifications" %}
   </span>
+
   {% for online_payment_system_config_body in m.notifier.map.online_payment_systems_configs %}
     {% if online_payment_system_config_body %}
       {% include online_payment_system_config_body %}

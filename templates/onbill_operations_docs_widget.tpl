@@ -2,10 +2,12 @@
 
 {% block widget_headline %}
 {% wire id="arrows_"++#dtid type="click"
-        action={ toggle target="onbill_operations_docs_widget_opened" }
-        action={ toggle target="arrow_right_"++#dtid }
-        action={ toggle target="arrow_down_"++#dtid }
-        action={ postback postback={trigger_innoui_widget arg="onbill_operations_docs_widget_opened" } delegate="mod_kazoo" }
+        action={toggle target="onbill_operations_docs_widget_opened"}
+        action={toggle target="arrow_right_"++#dtid}
+        action={toggle target="arrow_down_"++#dtid}
+        action={postback postback={trigger_innoui_widget arg="onbill_operations_docs_widget_opened"}
+                         delegate="mod_kazoo"
+               }
 %}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
     <i id="arrow_right_{{ #dtid }}" style="{% if m.kazoo[{ui_element_opened element="onbill_operations_docs_widget_opened"}] %}display: none;{% endif %}" 

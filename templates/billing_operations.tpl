@@ -10,7 +10,9 @@
   {% include "onbill_operations_docs_widget.tpl" headline=_"Docs operations" account_id=account_id %}
 </div>
 <div class="pl-10 pr-10 col-md-6">
-  {% include "_ratedecks_widget.tpl" headline=_"Ratedecks" account_id=account_id %}
+  <span id="tasks_widget_tpl">
+    {% include "tasks_widget.tpl" headline=_"Background jobs" %}
+  </span>
 </div>
 
 {% endblock %}

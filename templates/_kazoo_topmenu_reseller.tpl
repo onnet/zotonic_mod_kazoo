@@ -4,7 +4,7 @@
   %}
     <li><a href="/reseller_portal">{_ Accounts _}</a></li>
     <li><a href="/reseller_settings">{_ Settings _}</a>
-<!--    <li><a href="/billing_operations">{_ Operations _}</a></li> -->
+    <li><a href="/billing_operations">{_ Operations _}</a></li>
     <li><a href="/reseller_system_monitor">{_ Monitor _}</a></li>
   {% endif %}
 </ul>
