@@ -343,7 +343,7 @@ confirm_number_purchase_dialog(Context) ->
     ActivationCharge = modkazoo_util:get_value([NumberName, <<"activation_charge">>], PhoneNumbersServices),
     OrderQuantity = length(Numbers),
     AccountId = z_context:get_session(kazoo_account_id, Context),
-    PVT_Limits = onbill_util:onbill_pvt_limits('get', AccountId, [], Context),
+    PVT_Limits = onbill_pvt_limits('get', AccountId, [], Context),
     MaybePostpayCredit =
         case modkazoo_util:get_value(<<"allow_postpay">>, PVT_Limits, 'false') of
             'true' ->

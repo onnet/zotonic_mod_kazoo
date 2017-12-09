@@ -107,6 +107,27 @@
       </th>
     </tr>
     <tr>
+      <th class="text-left">{_ postpay_aggregate_invoice _}</th>
+      <th class="text-left">
+          <span id="postpay_aggregate_invoice">
+            <i id="toggle_postpay_aggregate_invoice"
+               class="fa
+                      fa-toggle-{% if onbill_variables[1]["postpay_aggregate_invoice"] %}on{% else %}off{% endif %}
+                      pointer"></i>
+            {% wire id="toggle_postpay_aggregate_invoice"
+                    type="click"
+                    action={postback postback={toggle_field type doc_id field_name account_id}
+                                     delegate="mod_kazoo"
+                                     inject_args type="onbill_variables"
+                                                 doc_id="_no_need_"
+                                                 field_name="postpay_aggregate_invoice"
+                                                 account_id=account_id
+                           }
+            %}
+          </span>
+      </th>
+    </tr>
+    <tr>
       <th class="text-left">{_ vat_disposition _}</th>
       <th class="text-left">
         <span id="vat_disposition">

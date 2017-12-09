@@ -805,7 +805,11 @@ crossbar_account_request(Verb, API_String, DataBag, Context, Default) ->
         {'ok', ReturnCode, Headers, Body} ->
             case ReturnCode of
                 [50,_,_] ->
-                    modkazoo_util:get_value(<<"data">>, jiffy:decode(Body));
+                    try
+                        modkazoo_util:get_value(<<"data">>, jiffy:decode(Body))
+                    catch
+                        _ -> Body
+                    end;
                 "402" -> 
                     error_return(ReturnCode, Body, Default);
                 _ -> 
@@ -3864,16 +3868,26 @@ account_task(Verb, TaskId, AccountId, DataBag, Context) ->
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
 add_new_task(Context) ->
-    case z_context:get_q("taskfile", Context) of
+  ?PRINT(z_context:get_q_all(Context)),
+    case z_context:get_q("task_args", Context) of
         {upload, UploadFilename, UploadTmp, _, _} ->
             add_new_task_file(UploadFilename, UploadTmp, Context);
+        <<Day:2/binary,"/",Month:2/binary,"/",Year:4/binary>> ->
+            GregSec = calendar:datetime_to_gregorian_seconds({{?TO_INT(Year), ?TO_INT(Month), ?TO_INT(Day)},{12,0,0}}),
+            DataBag = ?MK_DATABAG(modkazoo_util:set_value([<<"records">>, <<"billing_period_ts">>], GregSec, modkazoo_util:new())),
+            Category = modkazoo_util:get_q_bin(<<"task_category">>, Context),
+            Action = modkazoo_util:get_q_bin(<<"task_action">>, Context),
+            add_new_task('put', Category, Action, DataBag, Context);
         _ ->
             Category = modkazoo_util:get_q_bin(<<"task_category">>, Context),
             Action = modkazoo_util:get_q_bin(<<"task_action">>, Context),
-            API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?TASKS/binary
-                          ,"?category=", Category/binary, "&action=", Action/binary>>,
-            crossbar_account_request('put', API_String, [], Context)
+            add_new_task('put', Category, Action, [], Context)
     end.
+
+add_new_task(Verb, Category, Action, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?TASKS/binary
+                  ,"?category=", Category/binary, "&action=", Action/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
 
 add_new_task_file(UploadFilename, UploadTmp, Context) ->
     Category = modkazoo_util:get_q_bin(<<"task_category">>, Context),
