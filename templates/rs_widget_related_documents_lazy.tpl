@@ -19,28 +19,30 @@
              class="arrowpad fa fa-arrow-circle-down"></i>
         </span>
         {_ Related documents _}
-        <span style="float:right; padding-right:2em;">
-        {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status)
-              and m.kazoo.is_kazoo_account_admin
-        %}
-          {% button class="btn btn-xs btn-onnet" text=_"create docs"
+        {% if selected_billing_period|split:","|last|inno_timestamp_expired == "expired" %}
+          <span style="float:right; padding-right:2em;">
+          {% if (m.kazoo.kz_current_context_superadmin or m.kazoo.kz_current_context_reseller_status)
+                and m.kazoo.is_kazoo_account_admin
+          %}
+            {% button class="btn btn-xs btn-onnet" text=_"create docs"
+                      action={mask target="rs_related_documents_table_opened"}
+                      action={postback postback={generate_rs_related_documents account_id doc_type}
+                                       delegate="mod_kazoo"
+                                       qarg="selected_billing_period"
+                                       inject_args account_id=account_id doc_type="just_an_empty_field_yet"
+                             }
+            %}
+          {% endif %}
+          {% button class="btn btn-xs btn-onnet" text=_"create reports"
                     action={mask target="rs_related_documents_table_opened"}
                     action={postback postback={generate_rs_related_documents account_id doc_type}
                                      delegate="mod_kazoo"
                                      qarg="selected_billing_period"
-                                     inject_args account_id=account_id doc_type="just_an_empty_field_yet"
+                                     inject_args account_id=account_id doc_type="calls_reports"
                            }
           %}
+          </span>
         {% endif %}
-        {% button class="btn btn-xs btn-onnet" text=_"create reports"
-                  action={mask target="rs_related_documents_table_opened"}
-                  action={postback postback={generate_rs_related_documents account_id doc_type}
-                                   delegate="mod_kazoo"
-                                   qarg="selected_billing_period"
-                                   inject_args account_id=account_id doc_type="calls_reports"
-                         }
-        %}
-        </span>
       </th>
     </tr>
     <tr id="{{ #mytr }}" style="display: none;">
