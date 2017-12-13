@@ -64,7 +64,6 @@
         </span>
       </th>
     </tr>
-{% print onbill_variables %}
     <tr>
       <th style="width: 40%;"class="text-center1">{_ Display E911 widgets _}</th>
       <th class="text-left">
