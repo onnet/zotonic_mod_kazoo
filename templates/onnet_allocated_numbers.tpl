@@ -31,7 +31,9 @@
                            delegate="mod_kazoo"
                  }
   %}
-  {% e911_reminder %}
+  {% if m.session.display_e911 %}
+    {% e911_reminder %}
+  {% endif %}
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"purchase numbers"
             id="orderbtn"

@@ -218,6 +218,7 @@ run_ip_acl(_,_) -> false.
 
 set_session_billing_status_vars(Context) ->
     Vars = onbill_util:billing_status(Context),
+?PRINT(Vars),
     z_context:set_session('display_billing'
                          ,modkazoo_util:get_value(<<"display_billing">>,Vars,'true')
                          ,Context),

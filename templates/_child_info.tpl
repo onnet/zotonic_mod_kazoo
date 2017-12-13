@@ -37,17 +37,19 @@
   <span id="rs_allocated_numbers_tpl">
         {% include "rs_allocated_numbers.tpl" headline=_"Account's allocated numbers" account_id=account_id %}
   </span>
-  {% wire action={connect signal={rs_widget_e911_addresses_tpl signal_filter=m.kazoo.signal_filter}
-                          action={update target="rs_widget_e911_addresses_tpl"
-                                         template="rs_widget_e911_addresses.tpl"
-                                         headline=_"E911 addresses"
-                                         account_id=account_id
-                                 }
-                 }
-  %}
-  <span id="rs_widget_e911_addresses_tpl">
-    {% include "rs_widget_e911_addresses.tpl" headline=_"E911 addresses" account_id=account_id %}
-  </span>
+  {% if m.session.display_e911 %}
+    {% wire action={connect signal={rs_widget_e911_addresses_tpl signal_filter=m.kazoo.signal_filter}
+                            action={update target="rs_widget_e911_addresses_tpl"
+                                           template="rs_widget_e911_addresses.tpl"
+                                           headline=_"E911 addresses"
+                                           account_id=account_id
+                                   }
+                   }
+    %}
+    <span id="rs_widget_e911_addresses_tpl">
+      {% include "rs_widget_e911_addresses.tpl" headline=_"E911 addresses" account_id=account_id %}
+    </span>
+  {% endif %}
   {% if m.session.display_billing %}
     {% wire action={connect signal={update_fin_info_signal signal_filter=m.kazoo.signal_filter}
                             action={update target="rs_widget_transactions_list_tpl"
