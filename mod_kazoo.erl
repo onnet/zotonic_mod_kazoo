@@ -11,7 +11,6 @@
         ,observe_kazoo_notify/2
         ,observe_topmenu_element/2
         ,observe_billing_topmenu_element/2
-        ,observe_currency_sign/2
         ,observe_account_balance/2
         ,observe_dashboard_tpl/2
         ,event/2
@@ -51,13 +50,6 @@ choose_topmenu(Context) ->
     case modkazoo_auth:is_superadmin_or_reseller(Context) of
         'true' -> <<"_kazoo_topmenu_reseller.tpl">>;
         'false' -> <<"_kazoo_topmenu_hosted_pbx.tpl">>
-    end.
-
-observe_currency_sign(_A, Context) ->
-    case onbill_util:currency_sign(Context) of
-        <<"undefined">> -> 'undefined';
-        'undefined' -> 'undefined';
-        CurrencySign -> {'ok', CurrencySign}
     end.
 
 observe_billing_topmenu_element(_, Context) ->
@@ -1463,7 +1455,6 @@ event({postback,{'rs_account_mask',[{'account_id',AccountIdRaw}]},_,_},Context) 
     _ = modkazoo_auth:refresh_superadmin_and_reseller_flags(Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
     _ = modkazoo_auth:may_be_set_user_data(Context),
-    _ = modkazoo_auth:set_session_currency_sign(Context),
     _ = modkazoo_auth:set_session_billing_status_vars(Context),
     modkazoo_auth:choose_page_to_redirect(Context);
 
@@ -1482,7 +1473,6 @@ event({postback,<<"rs_account_demask">>,_,_},Context) ->
     _ = modkazoo_auth:may_be_clean_third_party_billing(Context),
     _ = modkazoo_auth:may_be_set_user_data(Context),
     _ = modkazoo_auth:may_be_add_third_party_billing(Context),
-    _ = modkazoo_auth:set_session_currency_sign(Context),
     _ = modkazoo_auth:set_session_billing_status_vars(Context),
     z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
 
@@ -2638,7 +2628,7 @@ event({postback,{logout_agent,[{agent_id,AgentId},{first_name,FirstName},{last_n
                                       ,Context)
                     ,Context);
 
-event({postback,<<"refresh_display_billing">>,_,_}, Context) ->
+event({postback,<<"refresh_billing_status_vars">>,_,_}, Context) ->
     timer:sleep(1000),
     modkazoo_auth:set_session_billing_status_vars(Context),
     z_render:wire({reload, []}, Context);

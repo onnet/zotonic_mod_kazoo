@@ -30,7 +30,6 @@
          ,current_billing_period/2
          ,billing_periods/2
          ,period_balance/3
-         ,currency_sign/1
          ,onbill_e911_addresses/4
          ,e911_address/5
          ,set_e911_address/3
@@ -71,7 +70,6 @@
 -define(CURRENT_BILLING_PERIOD, <<"/current_billing_period">>).
 -define(BILLING_PERIODS, <<"/billing_periods">>).
 -define(PERIOD_BALANCE, <<"/period_balance">>).
--define(CURRENCY_SIGN, <<"/currency_sign">>).
 -define(BILLING_STATUS, <<"/billing_status">>).
 -define(ONBILL_E911, <<"/onbill_e911">>).
 -define(CONFIRM_ADDRESS, <<"/confirm">>).
@@ -227,12 +225,6 @@ period_balance(AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?PERIOD_BALANCE/binary
                   ,"?timestamp=", ?TO_BIN(Timestamp)/binary>>,
     kazoo_util:crossbar_account_request('get', API_String, [], Context).
-
-currency_sign(Context) ->
-    AccountId = z_context:get_session('kazoo_account_id', Context),
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?CURRENCY_SIGN/binary>>,
-    Res = kazoo_util:crossbar_account_request('get', API_String, [], Context),
-    modkazoo_util:get_value(<<"currency_sign">>, Res).
 
 billing_status(Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),

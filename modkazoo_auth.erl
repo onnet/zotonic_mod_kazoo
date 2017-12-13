@@ -12,7 +12,6 @@
     ,may_be_set_user_data/1
     ,choose_page_to_redirect/1
     ,may_be_clean_third_party_billing/1
-    ,set_session_currency_sign/1
     ,set_session_billing_status_vars/1
 ]).
 
@@ -125,7 +124,6 @@ setup_environment(Owner_Id, Auth_Token, Account_Id, Account_Name, Login, Context
     _ = may_be_set_user_data(Context),
     _ = may_be_set_reseller_data(Context),
     _ = may_be_add_third_party_billing(Context),
-    _ = set_session_currency_sign(Context),
     _ = set_session_billing_status_vars(Context),
     choose_page_to_redirect(Context).
 
@@ -218,20 +216,14 @@ run_ip_acl([H|T], ClientIP) ->
     end;
 run_ip_acl(_,_) -> false.
 
-set_session_currency_sign(Context) ->
-    Sign =
-        case z_notifier:first('currency_sign', Context) of
-            {ok, KazooCurrencySign} -> KazooCurrencySign;
-            _ ->
-                case m_config:get_value('mod_kazoo', 'local_currency_sign', Context) of
-                    'undefined' -> <<"£"/utf8>>;
-                    LocalCurrencySign -> LocalCurrencySign
-                end
-        end,
-    z_context:set_session('currency_sign', Sign, Context).
-
 set_session_billing_status_vars(Context) ->
     Vars = onbill_util:billing_status(Context),
     z_context:set_session('display_billing'
-                         ,modkazoo_util:get_value(<<"display_billing">>,Vars,'false')
+                         ,modkazoo_util:get_value(<<"display_billing">>,Vars,'true')
+                         ,Context),
+    z_context:set_session('display_e911'
+                         ,modkazoo_util:get_value(<<"display_e911">>,Vars,'true')
+                         ,Context),
+    z_context:set_session('currency_sign'
+                         ,modkazoo_util:get_value(<<"currency_sign">>,Vars,<<"₽"/utf8>>)
                          ,Context).
