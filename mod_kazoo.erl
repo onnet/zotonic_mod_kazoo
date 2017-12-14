@@ -1504,7 +1504,7 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
 
 event({submit,rs_account_lookup,_,_},Context) ->
     AccountId = case z_context:get_q("search_option", Context) of
-        "by_phone_nunber" ->
+        "by_phone_number" ->
             kazoo_util:kz_find_account_by_number(z_context:get_q("name", Context), Context);
         _ ->
             'undefined'
