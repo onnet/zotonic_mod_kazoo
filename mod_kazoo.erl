@@ -1503,24 +1503,40 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
     z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({submit,rs_account_lookup,_,_},Context) ->
-    AccountId = case z_context:get_q("search_option", Context) of
+    SearchResult = case z_context:get_q("search_option", Context) of
         "phone_number" ->
             kazoo_util:kz_find_account_by_number(z_context:get_q("name", Context), Context);
         "onbill_data" ->
-            Res = onbill_util:find_by_onbill_data(z_context:get_q('name', Context), Context),
-?PRINT(Res),
-            'undefined';
+            LookupResult = onbill_util:find_by_onbill_data(z_context:get_q('name', Context), Context),
+            CandidatesList =
+                lists:foldl(fun(Key, Acc) ->
+                                Acc ++ modkazoo_util:get_value(Key, LookupResult, [])
+                            end
+                           ,[]
+                           ,modkazoo_util:get_keys(LookupResult)
+                           ),
+?PRINT(CandidatesList),
+            case CandidatesList of
+                [] -> 'undefined';
+                [SingleCandidate] -> 
+                    modkazoo_util:get_value(<<"id">>, SingleCandidate);
+                _ -> CandidatesList
+            end;
         _ ->
             'undefined'
     end,
-    case AccountId of
+    case SearchResult of
         'undefined' ->
             Context1 = z_render:dialog_close(Context),
             z_render:growl_error(?__("Nothing found", Context1), Context1); 
-        _ ->
+        <<AccountId:32/binary>> ->
             z_context:set_session('rs_selected_account_id', AccountId, Context),
             Context1 = z_render:dialog_close(Context),
-            z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [], Context1), Context1)
+            z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [], Context1), Context1);
+        _Something ->
+?PRINT(_Something),
+            Context1 = z_render:dialog_close(Context),
+            z_render:growl_error(?__("Something found", Context1), Context1)
     end;
 
 event({submit,kz_trunk_server,_,_},Context) ->
