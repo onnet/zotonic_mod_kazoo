@@ -92,9 +92,11 @@ m_find_value({kz_doc_field, [{type,Type}, {doc_id, DocId}, {field, Field}]}, _M,
     end;
 
 m_find_value(kz_list_account_users, _M, Context) ->
+?PRINT(1),
     kazoo_util:kz_list_account_users(Context);
 
 m_find_value({kz_list_account_users, [{account_id, AccountId}]}, _M, Context) ->
+?PRINT(2),
     kazoo_util:kz_list_account_users(AccountId, Context);
 
 m_find_value(kz_list_account_groups, _M, Context) ->
@@ -133,6 +135,7 @@ m_find_value({kz_get_account_blacklist, [{blacklist_id, BlacklistId}]}, _M, Cont
     kazoo_util:kz_get_account_blacklist(BlacklistId, Context);
 
 m_find_value(kz_list_account_users_short, _M, Context) ->
+?PRINT(3),
     lists:map(fun (UserDoc) -> [modkazoo_util:get_value(<<"id">>,UserDoc)
                                ,<<(modkazoo_util:get_value(<<"first_name">>,UserDoc))/binary
                                  ," "

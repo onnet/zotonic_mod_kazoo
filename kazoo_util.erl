@@ -1149,6 +1149,7 @@ kz_list_account_users(Context) ->
     kz_list_account_users(AccountId, Context).
 
 kz_list_account_users(AccountId, Context) ->
+?PRINT(AccountId),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 

@@ -1504,8 +1504,12 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
 
 event({submit,rs_account_lookup,_,_},Context) ->
     AccountId = case z_context:get_q("search_option", Context) of
-        "by_phone_number" ->
+        "phone_number" ->
             kazoo_util:kz_find_account_by_number(z_context:get_q("name", Context), Context);
+        "onbill_data" ->
+            Res = onbill_util:find_by_onbill_data(z_context:get_q('name', Context), Context),
+?PRINT(Res),
+            'undefined';
         _ ->
             'undefined'
     end,

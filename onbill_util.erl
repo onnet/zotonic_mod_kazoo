@@ -48,6 +48,7 @@
          ,toggle_onbill_variable/3
          ,set_onbill_variable/4
          ,billing_status/1
+         ,find_by_onbill_data/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -380,11 +381,11 @@ confirm_number_purchase_dialog(Context) ->
     end.
 
 onbill_trial(Verb, AccountId, DataBag, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary ,?ONBILL_TRIAL/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_TRIAL/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 onbill_pvt_limits(Verb, AccountId, DataBag, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary ,?ONBILL_PVT_LIMITS/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_PVT_LIMITS/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 save_pvt_limits_field(InputValue, FieldName, AccountId, Context) ->
@@ -392,11 +393,11 @@ save_pvt_limits_field(InputValue, FieldName, AccountId, Context) ->
     onbill_pvt_limits('post', AccountId, DataBag, Context).
 
 onbill_proforma(Verb, AccountId, DataBag, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary ,?ONBILL_PROFORMA/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_PROFORMA/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 onbill_proforma_doc(Verb, DocId, AccountId, DataBag, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary ,?ONBILL_PROFORMA/binary, "/", ?TO_BIN(DocId)/binary>>,
+    API_String = <<?V1/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILL_PROFORMA/binary, "/", ?TO_BIN(DocId)/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 create_proforma_invoice(Amount, AccountId, Context) ->
@@ -418,3 +419,17 @@ set_onbill_variable(FieldName, InputVal, AccountId, Context) ->
     CurrDoc = variables(AccountId, Context),
     NewDoc = modkazoo_util:set_value(FieldName, InputVal, CurrDoc),
     variables('post', AccountId, ?MK_DATABAG(NewDoc), Context).
+
+find_by_onbill_data(String, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    API_String = <<?V1/binary
+                  ,?ACCOUNTS/binary
+                  ,?TO_BIN(AccountId)/binary
+                  ,?ONBILL_SEARCH/binary
+                  ,?MULTI/binary
+                  ,"?t=onbill&by_name=", ?TO_BIN(String)/binary
+                  ,"&by_inn=", ?TO_BIN(String)/binary
+                  ,"&by_kpp=", ?TO_BIN(String)/binary>>,
+?PRINT(API_String),
+    kazoo_util:crossbar_account_request('get', API_String, [], Context).
+

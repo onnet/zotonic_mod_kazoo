@@ -7,7 +7,8 @@
                 name="search_option"
                 class="form-control margin-bottom-xs"
                 style="text-align:center;">
-          <option value="by_phone_number">{_ Search by phone number _}</option>
+          <option value="phone_number">{_ Search by phone number _}</option>
+          <option value="onbill_data">{_ Search by agreement data _}</option>
         </select>
       </div>
       <div class="col-sm-6">
