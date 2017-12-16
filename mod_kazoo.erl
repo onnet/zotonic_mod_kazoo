@@ -1512,7 +1512,8 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
     z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({postback,<<"rs_operations_find_account">>,_,_}, Context) ->
-    LookupResult = onbill_util:find_by_onbill_data(z_context:get_q('search_string', Context), Context),
+    SearchString = re:replace(z_context:get_q('search_string', Context), " ", "", [global, {return, binary}]),
+    LookupResult = onbill_util:find_by_onbill_data(SearchString, Context),
     CandidatesList =
         lists:foldl(fun(Key, Acc) ->
                         Acc ++ modkazoo_util:get_value(Key, LookupResult, [])
@@ -1529,7 +1530,8 @@ event({submit,rs_account_lookup,_,_},Context) ->
         "phone_number" ->
             kazoo_util:kz_find_account_by_number(z_context:get_q("name", Context), Context);
         "onbill_data" ->
-            LookupResult = onbill_util:find_by_onbill_data(z_context:get_q('name', Context), Context),
+            SearchString = re:replace(z_context:get_q('name', Context), " ", "", [global, {return, binary}]),
+            LookupResult = onbill_util:find_by_onbill_data(SearchString, Context),
             CandidatesList =
                 lists:foldl(fun(Key, Acc) ->
                                 Acc ++ modkazoo_util:get_value(Key, LookupResult, [])
