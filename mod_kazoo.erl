@@ -1512,7 +1512,7 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
     z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
 event({postback,<<"rs_operations_find_account">>,_,_}, Context) ->
-    LookupResult = onbill_util:find_by_onbill_data(z_context:get_q('search_string_value', Context), Context),
+    LookupResult = onbill_util:find_by_onbill_data(z_context:get_q('search_string', Context), Context),
     CandidatesList =
         lists:foldl(fun(Key, Acc) ->
                         Acc ++ modkazoo_util:get_value(Key, LookupResult, [])
