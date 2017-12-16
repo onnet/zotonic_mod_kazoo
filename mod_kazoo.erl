@@ -1437,6 +1437,15 @@ event({postback,<<"rs_child_selected">>,_,_},Context) ->
     z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context),
     Context;
 
+event({postback,{rs_select_child_btn,[{account_id,AccountId}]},_,_}, Context) ->
+    _ = mod_signal:emit({emit_growl_signal
+                        ,?SIGNAL_FILTER(Context)
+                         ++ [{'text',?__("Please wait while loading account", Context)},{'type', 'notice'}]}
+                       ,Context),
+    _ = z_session:set('rs_selected_account_id', AccountId, Context),
+    z_transport:session(javascript, <<"z_reload();">>, [{qos, 1}], Context),
+    Context;
+
 event({postback,{rs_account_delete,[{account_id,AccountId}]},_,_},Context) ->
     spawn(kazoo_util,rs_delete_account,[AccountId,Context]),
     z_render:wire({mask, [{target_id, "child_sandbox"}]}, Context);
@@ -1543,9 +1552,9 @@ event({submit,rs_account_lookup,_,_},Context) ->
                                 ,?SIGNAL_FILTER(Context)
                                  ++ [{'text',?__("Please wait", Context)},{'type', 'notice'}]}
                                ,Context),
-            z_render:dialog(?__("Please select an account you are looking for",Context)
-                           ,"_details.tpl"
-                           ,[{arg, SearchResult}]
+            z_render:dialog(?__("Please select an account you are looking for2",Context)
+                           ,"_details_account_lookup.tpl"
+                           ,[{candidates, SearchResult}]
                            ,Context)
     end;
 
