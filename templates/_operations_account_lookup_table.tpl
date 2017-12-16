@@ -1,6 +1,9 @@
 {# print candidates #}
 <table class="table table-condensed table-centered">
   <thead>
+    <tr style="height: 10px; color: white!important; background-color: white!important;">
+      <td colspan="3"></td>
+    </tr>
     {% for candidate in candidates %}
       <tr>
         <th width="15%">
