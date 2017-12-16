@@ -6,13 +6,13 @@
     </tr>
     {% for candidate in candidates %}
       <tr>
-        <th width="15%">
+        <th width="15%" style="vertical-align: middle;">
           {{ m.notifier.first[{account_balance account_id=candidate[1]["id"]}]|currency_sign }}
         </th>
         <th width="70%">
           {{ candidate[1]["name"] }}
         </th>
-        <th width="15%">
+        <th width="15%" style="vertical-align: middle;">
           <span style="float:right;">
             {% button class="btn btn-xs btn-onnet pull-right"
                       text=_"add credit"
