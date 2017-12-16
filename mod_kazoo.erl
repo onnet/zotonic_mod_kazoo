@@ -1530,13 +1530,23 @@ event({submit,rs_account_lookup,_,_},Context) ->
             Context1 = z_render:dialog_close(Context),
             z_render:growl_error(?__("Nothing found", Context1), Context1); 
         <<AccountId:32/binary>> ->
+            _ = mod_signal:emit({emit_growl_signal
+                                ,?SIGNAL_FILTER(Context)
+                                 ++ [{'text',?__("Please wait", Context)},{'type', 'notice'}]}
+                               ,Context),
             z_context:set_session('rs_selected_account_id', AccountId, Context),
             Context1 = z_render:dialog_close(Context),
             z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [], Context1), Context1);
-        _Something ->
-?PRINT(_Something),
-            Context1 = z_render:dialog_close(Context),
-            z_render:growl_error(?__("Something found", Context1), Context1)
+        _ ->
+?PRINT(SearchResult),
+            _ = mod_signal:emit({emit_growl_signal
+                                ,?SIGNAL_FILTER(Context)
+                                 ++ [{'text',?__("Please wait", Context)},{'type', 'notice'}]}
+                               ,Context),
+            z_render:dialog(?__("Please select an account you are looking for",Context)
+                           ,"_details.tpl"
+                           ,[{arg, SearchResult}]
+                           ,Context)
     end;
 
 event({submit,kz_trunk_server,_,_},Context) ->
