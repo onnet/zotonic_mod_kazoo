@@ -1511,6 +1511,19 @@ event({postback, {del_cccp_doc,[{doc_id,DocId}]}, _, _}, Context) ->
     _ = kazoo_util:del_cccp_doc(DocId, Context),
     z_render:wire({redirect, [{dispatch, callback}]}, Context);
 
+event({postback,<<"rs_operations_find_account">>,_,_}, Context) ->
+    LookupResult = onbill_util:find_by_onbill_data(z_context:get_q('search_string_value', Context), Context),
+    CandidatesList =
+        lists:foldl(fun(Key, Acc) ->
+                        Acc ++ modkazoo_util:get_value(Key, LookupResult, [])
+                    end
+                   ,[]
+                   ,modkazoo_util:get_keys(LookupResult)
+                   ),
+    z_render:update("rs_operations_account_lookup_widget_opened"
+                   ,z_template:render("_operations_account_lookup_table.tpl", [{candidates, CandidatesList}], Context)
+                   ,Context);
+
 event({submit,rs_account_lookup,_,_},Context) ->
     SearchResult = case z_context:get_q("search_option", Context) of
         "phone_number" ->

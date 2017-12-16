@@ -32,7 +32,7 @@
             {% button class="btn btn-xs btn-onnet pull-right"
                       text=_"add credit"
                       id="child_area_add_credit"
-                      action={dialog_open title=_"Add credit to "++account_doc[1]["name"]
+                      action={dialog_open title=_"Add credit to"++" "++account_doc[1]["name"]
                                           template="_rs_add_credit.tpl"
                                           account_id=account_id}
             %}

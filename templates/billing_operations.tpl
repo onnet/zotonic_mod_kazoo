@@ -11,8 +11,8 @@
     {% include "tasks_widget.tpl" headline=_"Background jobs" %}
   </span>
 </div>
-<div class="pl-10 pr-10 col-md-6 display_none">
-  {% include "onbill_operations_docs_widget.tpl" headline=_"Docs operations" account_id=account_id %}
+<div class="pl-10 pr-10 col-md-6">
+  {% include "operations_account_lookup.tpl" headline=_"Accounts management" %}
 </div>
 
 {% endblock %}

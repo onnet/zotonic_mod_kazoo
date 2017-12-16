@@ -1,8 +1,11 @@
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "find account"
+msgstr "найти учетную запись"
+
+msgid "Add credit to"
+msgstr "Провести платеж"
 
 msgid "Add callflow"
 msgstr "Добавить маршрут"
@@ -89,7 +92,7 @@ msgid "add debit"
 msgstr "начислить услугу"
 
 msgid "add credit"
-msgstr "добавить средства"
+msgstr "провести платеж"
 
 msgid "Monitor"
 msgstr "Монитор"
