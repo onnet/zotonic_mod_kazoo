@@ -23,7 +23,7 @@
                data-date-end-date="+0d"
                readonly/>
        {% javascript %}
-           $('#credit_date').datepicker();
+         $('#credit_date').datepicker();
        {% endjavascript %}
       </div>
       <div class="col-sm-4">

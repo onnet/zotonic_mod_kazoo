@@ -1,6 +1,9 @@
 msgid ""
 msgstr ""
 
+msgid "Credit account"
+msgstr "Провести платеж"
+
 msgid "find account"
 msgstr "найти учетную запись"
 

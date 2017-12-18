@@ -2113,6 +2113,8 @@ event({postback,{redirect_to_reseller_portal,[{realm, Realm}]},_,_}, Context) ->
     [AccountId] = [modkazoo_util:get_value(<<"id">>, Child)
                        || Child <- kazoo_util:kz_list_account_children(Context)
                        ,modkazoo_util:get_value(<<"realm">>, Child) == ?TO_BIN(Realm)],
+    event({postback,{redirect_to_reseller_portal,[{account_id, AccountId}]},<<>>,<<>>}, Context);
+event({postback,{redirect_to_reseller_portal,[{account_id, AccountId}]},_,_}, Context) ->
     z_context:set_session('rs_selected_account_id', AccountId, Context),
     z_render:wire({redirect, [{dispatch, reseller_portal}]}, Context);
 
