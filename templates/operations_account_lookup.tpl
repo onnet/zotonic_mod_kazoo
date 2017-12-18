@@ -22,6 +22,14 @@
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
   {{ headline }}
+
+  {% button class="btn btn-xs btn-onnet pull-right11"
+          text=_"create account"
+          action={dialog_open title=_"Create an account"
+                              template="_rs_add_account.tpl"
+                 }
+  %}
+
   {% button class="btn btn-xs btn-onnet pull-right"
             text=_"find account"
             action={postback postback="rs_operations_find_account"
