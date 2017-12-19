@@ -25,6 +25,14 @@
                                    delegate="mod_kazoo"
                          }
           %}
+          <i id="edit_onbill_variables_dialog_{{ candidate[1]["id"] }}"
+             class="fa fa-edit pointer"
+             title="Edit account onbill settings"></i>
+          {% wire id="edit_onbill_variables_dialog_"++candidate[1]["id"]
+                  action={postback postback={edit_onbill_variables_dialog account_id=candidate[1]["id"]}
+                                   delegate="mod_kazoo"
+                         }
+          %}
         </th>
         <th width="15%" style="vertical-align: middle;">
           <span style="float:right;">
