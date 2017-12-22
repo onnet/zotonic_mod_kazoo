@@ -17,23 +17,15 @@ m_find_value({onbill_get_doc, [{doc_id, DocId}]}, _M, Context) ->
 m_find_value({onbill_get_doc_json, [{doc_id, DocId}]}, _M, Context) ->
     jiffy:encode(onbill_util:doc(DocId, Context));
 
+m_find_value({onbill_get_variables, []}, _M, Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    onbill_util:variables(AccountId, Context);
+
 m_find_value({onbill_get_variables, [{account_id, AccountId}]}, _M, Context) ->
     onbill_util:variables(AccountId, Context);
 
 m_find_value({onbill_get_variables_json, [{account_id, AccountId}]}, _M, Context) ->
     jiffy:encode(onbill_util:variables(AccountId, Context));
-
-m_find_value({onbill_get_customer, [{customer_id, CustomerId}]}, _M, Context) ->
-    onbill_util:customer(CustomerId, Context);
-
-m_find_value({onbill_get_customer_json, [{customer_id, CustomerId}]}, _M, Context) ->
-    jiffy:encode(onbill_util:customer(CustomerId, Context));
-
-m_find_value({onbill_get_reseller, [{reseller_id, ResellerId}]}, _M, Context) ->
-    onbill_util:reseller(ResellerId, Context);
-
-m_find_value({onbill_get_reseller_json, [{reseller_id, ResellerId}]}, _M, Context) ->
-    jiffy:encode(onbill_util:reseller(ResellerId, Context));
 
 m_find_value({onbill_get_carrier, [{carrier_id, CarrierId}]}, _M, Context) ->
     onbill_util:carrier(CarrierId, Context);

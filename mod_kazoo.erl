@@ -71,7 +71,6 @@ observe_account_balance({account_balance,[{account_id, 'undefined'}]}, Context) 
 observe_account_balance({account_balance,[{account_id, AccountId}]}, Context) ->
     modkazoo_util:get_value(<<"amount">>, kazoo_util:current_account_credit(AccountId, Context));
 observe_account_balance(_Param, _Context) ->
-    ?PRINT(_Param),
     'undefined'.
 
 observe_dashboard_tpl(_, Context) ->
@@ -1545,7 +1544,6 @@ event({submit,rs_account_lookup,_,_},Context) ->
                            ,[]
                            ,modkazoo_util:get_keys(LookupResult)
                            ),
-?PRINT(CandidatesList),
             case CandidatesList of
                 [] -> 'undefined';
                 [SingleCandidate] -> 
@@ -1568,7 +1566,6 @@ event({submit,rs_account_lookup,_,_},Context) ->
             Context1 = z_render:dialog_close(Context),
             z_render:update("reseller_children_area", z_template:render("reseller_children.tpl", [], Context1), Context1);
         _ ->
-?PRINT(SearchResult),
             _ = mod_signal:emit({emit_growl_signal
                                 ,?SIGNAL_FILTER(Context)
                                  ++ [{'text',?__("Please wait", Context)},{'type', 'notice'}]}
@@ -2700,6 +2697,13 @@ event({postback,{edit_onbill_variables_dialog,[{account_id, AccountId}]},_,_}, C
                    ,"operations_edit_onbill_variables_dialog.tpl"
                    ,[{account_id, AccountId}]
                    ,Context);
+
+event({postback,{delete_carrier_agrm_var,[{account_id,AccountId},{agrm_carrier,AgrmCarrier}]},_,_}, Context) ->
+?PRINT(AccountId),
+?PRINT(AgrmCarrier),
+    onbill_util:delete_onbill_variable([<<"agrm">>, AgrmCarrier], AccountId, Context),
+    mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)}, Context),
+    Context;
 
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),

@@ -47,6 +47,7 @@
          ,create_proforma_invoice/3
          ,toggle_onbill_variable/3
          ,set_onbill_variable/4
+         ,delete_onbill_variable/3
          ,billing_status/1
          ,find_by_onbill_data/2
 ]).
@@ -418,6 +419,13 @@ toggle_onbill_variable(FieldName, AccountId, Context) ->
 set_onbill_variable(FieldName, InputVal, AccountId, Context) ->
     CurrDoc = variables(AccountId, Context),
     NewDoc = modkazoo_util:set_value(FieldName, InputVal, CurrDoc),
+    variables('post', AccountId, ?MK_DATABAG(NewDoc), Context).
+
+delete_onbill_variable(FieldPath, AccountId, Context) ->
+    CurrDoc = variables(AccountId, Context),
+?PRINT(CurrDoc),
+    NewDoc = modkazoo_util:delete_key(FieldPath, CurrDoc),
+?PRINT(NewDoc),
     variables('post', AccountId, ?MK_DATABAG(NewDoc), Context).
 
 find_by_onbill_data(String, Context) ->
