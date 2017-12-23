@@ -13,7 +13,10 @@
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
-      <th class="text-left">{_ Agreement holder name _}</th>
+      <th class="text-left"
+          style="width: 35%;">
+        {_ Agreement holder name _}
+      </th>
       <th class="text-left">
         <span id="account_name">
           {% include "_show_field.tpl" type="onbill_variables"

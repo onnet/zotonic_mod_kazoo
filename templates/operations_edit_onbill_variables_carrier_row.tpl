@@ -1,5 +1,6 @@
 <tr>
-  <th class="text-left">
+  <th class="text-left"
+      style="width: 35%;">
     {{ carrier_id }}
     <i id="delete_carrier_agrm_var_{{ carrier_id }}_{{ account_id }}"
        class="fa fa-trash-o pointer"></i>
