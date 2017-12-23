@@ -1149,7 +1149,6 @@ kz_list_account_users(Context) ->
     kz_list_account_users(AccountId, Context).
 
 kz_list_account_users(AccountId, Context) ->
-?PRINT(AccountId),
     API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?USERS/binary>>,
     crossbar_account_request('get', API_String, [], Context).
 
@@ -3869,7 +3868,6 @@ account_task(Verb, TaskId, AccountId, DataBag, Context) ->
     crossbar_account_request(Verb, API_String, DataBag, Context).
 
 add_new_task(Context) ->
-  ?PRINT(z_context:get_q_all(Context)),
     case z_context:get_q("task_args", Context) of
         {upload, UploadFilename, UploadTmp, _, _} ->
             add_new_task_file(UploadFilename, UploadTmp, Context);

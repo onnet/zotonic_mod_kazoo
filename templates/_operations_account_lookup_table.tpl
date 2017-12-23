@@ -1,4 +1,3 @@
-{# print candidates #}
 {% if candidates|length == 0 %}
 <table class="table table-condensed table-centered">
   <thead>

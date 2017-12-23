@@ -2699,11 +2699,11 @@ event({postback,{edit_onbill_variables_dialog,[{account_id, AccountId}]},_,_}, C
                    ,Context);
 
 event({postback,{delete_carrier_agrm_var,[{account_id,AccountId},{agrm_carrier,AgrmCarrier}]},_,_}, Context) ->
-?PRINT(AccountId),
-?PRINT(AgrmCarrier),
     onbill_util:delete_onbill_variable([<<"agrm">>, AgrmCarrier], AccountId, Context),
-    mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)}, Context),
-    Context;
+    z_render:dialog(?__("Account onbill details",Context)
+                   ,"operations_edit_onbill_variables_dialog.tpl"
+                   ,[{account_id, AccountId}]
+                   ,Context);
 
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),

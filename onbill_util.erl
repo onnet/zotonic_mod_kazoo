@@ -423,9 +423,7 @@ set_onbill_variable(FieldName, InputVal, AccountId, Context) ->
 
 delete_onbill_variable(FieldPath, AccountId, Context) ->
     CurrDoc = variables(AccountId, Context),
-?PRINT(CurrDoc),
     NewDoc = modkazoo_util:delete_key(FieldPath, CurrDoc),
-?PRINT(NewDoc),
     variables('post', AccountId, ?MK_DATABAG(NewDoc), Context).
 
 find_by_onbill_data(String, Context) ->

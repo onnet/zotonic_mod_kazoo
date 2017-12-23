@@ -1,12 +1,11 @@
 <span id="operations_edit_onbill_variables_dialog_span">
 {% wire action={connect signal={operations_edit_onbill_variables_dialog_signal signal_filter=m.kazoo.signal_filter}
-                        action={update target="operations_edit_onbill_variables_dialog_span"
+                        action={replace target="operations_edit_onbill_variables_dialog_span"
                                        template="operations_edit_onbill_variables_dialog.tpl"
                                        account_id=account_id
                                }
                }
 %}
-
 {% with m.onbill[{onbill_get_variables account_id=account_id }]
    as onbill_variables
 %}
