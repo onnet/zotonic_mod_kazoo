@@ -1,6 +1,24 @@
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid "Edit group"
+msgstr "Редактировать группу"
+
 msgid "Credit account"
 msgstr "Провести платеж"
 

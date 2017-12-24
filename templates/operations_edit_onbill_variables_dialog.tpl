@@ -6,8 +6,12 @@
                                }
                }
 %}
-{% with m.onbill[{onbill_get_variables account_id=account_id }]
-   as onbill_variables
+{% with
+     m.onbill[{onbill_get_variables account_id=account_id }],
+     m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id}]
+   as
+     account_onbill_variables,
+     reseller_onbill_variables
 %}
 {# print onbill_variables #}
 <table class="table table-condensed table-hover table-centered">
@@ -97,8 +101,8 @@
           data-live-search="true"
           class="btn-xs btn-onnet pull-left1 pr-1">
     <option selected disabled>{_ add _}</option>
-    {% for carrier_id in m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id}][1]["carriers"] %}
-      {% if onbill_variables[1]["agrm"][1][carrier_id]|is_undefined %}
+    {% for carrier_id in reseller_onbill_variables[1]["carriers"] %}
+      {% if account_onbill_variables[1]["agrm"][1][carrier_id]|is_undefined %}
         <option value="{{ carrier_id }}">{{ carrier_id }}</option>
       {% endif %}
     {% endfor %}
@@ -114,7 +118,35 @@
 <table class="table table-condensed table-hover table-centered"
        style="margin1: 0.5em!important; width=100%;">
   <thead id="carrier_agrm_table_th">
-    {% for carrier in onbill_variables[1]["agrm"][1] %}
+    {% for carrier in account_onbill_variables[1]["agrm"][1] %}
+      {% include "operations_edit_onbill_variables_carrier_select_var.tpl" carrier=carrier[1] account_id=account_id %}
+    {% endfor %}
+  </thead>
+</table>
+<br />
+<span style="font-size: 1.2em; ">{_ Groups _}:</span>
+  <select id="selected_group_to_add"
+          name="selected_group_to_add"
+          data-width="fit"
+          data-live-search="true"
+          class="btn-xs btn-onnet pull-left1 pr-1">
+    <option selected disabled>{_ add _}</option>
+    {% for group_id in reseller_onbill_variables[1]["accounts_groups"] %}
+        <option value="{{ group_id }}">{{ group_id }}</option>
+    {% endfor %}
+  </select>
+  {% wire id="selected_carrier_to_add"
+          type="change"
+          action={insert_bottom target="accounts_groups_table_th"
+                                template="operations_edit_onbill_variables_carrier_select_var.tpl"
+                                account_id=account_id
+                 }
+  %}
+
+<table class="table table-condensed table-hover table-centered"
+       style="margin1: 0.5em!important; width=100%;">
+  <thead id="accounts_groups_table_th">
+    {% for group in account_onbill_variables[1]["accounts_groups"][1] %}
       {% include "operations_edit_onbill_variables_carrier_select_var.tpl" carrier=carrier[1] account_id=account_id %}
     {% endfor %}
   </thead>
