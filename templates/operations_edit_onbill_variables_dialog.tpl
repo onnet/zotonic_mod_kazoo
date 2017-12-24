@@ -124,24 +124,18 @@
   </thead>
 </table>
 <br />
-<span style="font-size: 1.2em; ">{_ Groups _}:</span>
-  <select id="selected_group_to_add"
-          name="selected_group_to_add"
-          data-width="fit"
-          data-live-search="true"
-          class="btn-xs btn-onnet pull-left1 pr-1">
-    <option selected disabled>{_ add _}</option>
+<p style="font-size: 1.2em; ">{_ Groups _}:</p>
+<span style="display: inline-block;">
     {% for group_id in reseller_onbill_variables[1]["accounts_groups"] %}
-        <option value="{{ group_id }}">{{ group_id }}</option>
+      <i id="toggle_group_{{ group_id }}"
+         style="padding: 0.5em;"
+         class="fa fa-toggle-off">
+        <span style="padding: 0.5em; font-weight: bolder;">
+          {{ group_id }}
+       </span>
+      </i>
     {% endfor %}
-  </select>
-  {% wire id="selected_carrier_to_add"
-          type="change"
-          action={insert_bottom target="accounts_groups_table_th"
-                                template="operations_edit_onbill_variables_carrier_select_var.tpl"
-                                account_id=account_id
-                 }
-  %}
+</span>
 
 <table class="table table-condensed table-hover table-centered"
        style="margin1: 0.5em!important; width=100%;">
