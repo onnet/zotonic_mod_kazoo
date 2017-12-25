@@ -7,14 +7,14 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Bank Identification Code"
+msgstr "БИК"
 
-msgid ""
-msgstr ""
+msgid "Bank branch name"
+msgstr "Наименование отделения банка"
 
-msgid ""
-msgstr ""
+msgid "Bank name"
+msgstr "Название банка"
 
 msgid "Edit group"
 msgstr "Редактировать группу"
