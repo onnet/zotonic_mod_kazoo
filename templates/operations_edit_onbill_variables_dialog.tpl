@@ -16,16 +16,30 @@
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
+      <th style="width: 40%;"class="text-center1">{_ Customer type _}</th>
+      <th class="text-left">
+       <span id="{{ account_id }}customer_type">
+          {% include "_show_field_select.tpl" type="onbill_variables"
+                                              doc_id="_no_need_"
+                                              field_name=["customer_type"]
+                                              options=["corporate", "personal"]
+                                              prefix=account_id
+          %}
+       </span>
+      </th>
+    </tr>
+    <tr>
       <th class="text-left"
           style="width: 35%;">
         {_ Agreement holder name _}
       </th>
       <th class="text-left">
-        <span id="account_name">
+        <span id="{{ account_id }}account_name">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
                                        field_name=["account_name"]
                                        account_id=account_id
+                                       prefix=account_id
           %}
         </span>
       </th>

@@ -788,6 +788,7 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
             _ = onbill_util:set_onbill_variable(FieldName, InputVal, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
             mod_signal:emit({refresh_onbill_variables_doc_signal, ?SIGNAL_FILTER(Context)}, Context),
+            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)}, Context),
             Context;
         <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
