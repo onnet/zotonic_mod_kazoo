@@ -547,7 +547,7 @@ event({postback,{toggle_field,[{type,Type}
             _ = onbill_util:toggle_onbill_variable(FieldName, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
             mod_signal:emit({refresh_onbill_variables_doc_signal, ?SIGNAL_FILTER(Context)}, Context),
-            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)}, Context),
+            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)++[{'account_id', AccountId}]}, Context),
             Context;
         <<"config">> ->
             z_notifier:notify1({'doc_field', 'toggle', ?TO_BIN(DocId), ?TO_BIN(FieldName), AccountId}, Context),
@@ -728,7 +728,7 @@ event({postback,{save_field, Args},_,_}, Context) ->
             _ = onbill_util:set_onbill_variable(FieldName, InputVal, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
             mod_signal:emit({refresh_onbill_variables_doc_signal, ?SIGNAL_FILTER(Context)}, Context),
-            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)}, Context),
+            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)++[{'account_id', AccountId}]}, Context),
             Context;
         <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
@@ -788,7 +788,7 @@ event({postback ,{save_field_select, Args},_,_}, Context) ->
             _ = onbill_util:set_onbill_variable(FieldName, InputVal, AccountId, Context),
             mod_signal:emit({refresh_onbill_variables_settings_signal, ?SIGNAL_FILTER(Context)}, Context),
             mod_signal:emit({refresh_onbill_variables_doc_signal, ?SIGNAL_FILTER(Context)}, Context),
-            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)}, Context),
+            mod_signal:emit({operations_edit_onbill_variables_dialog_signal, ?SIGNAL_FILTER(Context)++[{'account_id', AccountId}]}, Context),
             Context;
         <<"config">> ->
             ConfValue = ?TO_BIN(z_context:get_q("input_value", Context)),
