@@ -4,8 +4,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "PSRN"
+msgstr "ОГРН"
 
 msgid "Bank Identification Code"
 msgstr "БИК"

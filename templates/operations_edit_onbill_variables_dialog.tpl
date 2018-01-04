@@ -69,6 +69,18 @@
       </th>
     </tr>
     <tr>
+      <th class="text-left">{_ OGRN _}</th>
+      <th class="text-left">
+        <span id="account_ogrn">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["account_ogrn"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
       <th class="text-left">{_ Billing address line 1 _}</th>
       <th class="text-left">
         <span id="billing_addressline1">
@@ -102,6 +114,50 @@
                                        account_id=account_id
           %}
         </span>
+      </th>
+    </tr>
+  </thead>
+</table>
+<br />
+<span style="font-size: 1.2em; ">{_ Agreement data _}:</span>
+<br />
+<table class="table table-condensed table-hover table-centered">
+  <thead>
+    <tr>
+      <th class="text-left">{_ Short Name  _}</th>
+      <th class="text-left">
+        <span id="agreement_datashort_name">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["agreement_data","short_name"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ in person (for a contract)  _}</th>
+      <th class="text-left">
+        <span id="agreement_datain_person">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["agreement_data","in_person"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th style="width: 40%;"class="text-center1">{_ Director title _}</th>
+      <th class="text-left">
+       <span id="{{ account_id }}agreement_datadirector_title">
+          {% include "_show_field_select.tpl" type="onbill_variables"
+                                              doc_id="_no_need_"
+                                              field_name=["agreement_data", "director_title"]
+                                              options=["agreement_data", "director_type"]
+                                              prefix=account_id
+          %}
+       </span>
       </th>
     </tr>
   </thead>
