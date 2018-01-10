@@ -138,7 +138,7 @@ event({postback,{delete_vm_message,[{vmbox_id,VMBoxId}, {media_id,MediaId}]}, _,
     mod_signal:emit({user_portal_voicemails_tpl, ?SIGNAL_FILTER(Context)}, Context),
     Context;
 
-event({submit,{forgottenpwd,[]},_,_}, Context) ->
+event({submit,forgottenpwd,_,_}, Context) ->
     kazoo_util:forgottenpwd(Context);
 
 event({postback,{reset_password,[{username,FormUsername}]},_,_}, Context) ->
