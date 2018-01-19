@@ -16,6 +16,14 @@
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
+    <i id="edit_onbill_variables_dialog_{{ account_id }}"
+       class="fa fa-edit pointer"
+       title="Edit account onbill settings"></i>
+    {% wire id="edit_onbill_variables_dialog_"++account_id
+            action={postback postback={edit_onbill_variables_dialog account_id=account_id}
+                             delegate="mod_kazoo"
+                   }
+    %}
     {% button class="btn btn-xs btn-onnet pull-right display_none"
               text=_"save" id="save_json_"++account_id
               action={postback postback={onbill_set_variables_json account_id=account_id}
