@@ -698,8 +698,9 @@ event({postback,{save_field, Args},_,_}, Context) ->
                 end,
     InputVal = 
         case proplists:get_value(convert_macro, Args) of
-            'undefined' -> z_context:get_q(input_value, Context);
-            <<"TO_INT">> -> ?TO_INT(z_context:get_q(input_value, Context))
+            <<"TO_INT">> -> ?TO_INT(z_context:get_q(input_value, Context));
+            <<"TO_GREGORIAN_SECONDS">> -> modkazoo_util:datepick_to_tstamp(z_context:get_q(input_value, Context));
+            _ -> z_context:get_q(input_value, Context)
         end,
     case proplists:get_value(type, Args) of
         <<"account">> ->

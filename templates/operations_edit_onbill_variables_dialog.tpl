@@ -124,12 +124,39 @@
 <table class="table table-condensed table-hover table-centered">
   <thead>
     <tr>
+      <th style="width: 40%;"class="text-center1">{_ Full type _}</th>
+      <th class="text-left">
+       <span id="{{ account_id }}full_type">
+          {% include "_show_field_select.tpl" type="onbill_variables"
+                                              doc_id="_no_need_"
+                                              field_name=["full_type"]
+                                              options=["Общество с ограниченной ответственностью"
+                                                      ,"Закрытое акционерное общество"
+                                                      ]
+                                              prefix=account_id
+          %}
+       </span>
+      </th>
+    </tr>
+    <tr>
       <th class="text-left">{_ Short Name  _}</th>
       <th class="text-left">
-        <span id="agreement_datashort_name">
+        <span id="short_name">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
-                                       field_name=["agreement_data","short_name"]
+                                       field_name=["short_name"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ Director (short) _}</th>
+      <th class="text-left">
+        <span id="gen_dir_u">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["gen_dir_u"]
                                        account_id=account_id
           %}
         </span>
@@ -138,10 +165,10 @@
     <tr>
       <th class="text-left">{_ in person (for a contract)  _}</th>
       <th class="text-left">
-        <span id="agreement_datain_person">
+        <span id="vlice">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
-                                       field_name=["agreement_data","in_person"]
+                                       field_name=["vlice"]
                                        account_id=account_id
           %}
         </span>
@@ -150,14 +177,87 @@
     <tr>
       <th style="width: 40%;"class="text-center1">{_ Director title _}</th>
       <th class="text-left">
-       <span id="{{ account_id }}agreement_datadirector_title">
+       <span id="{{ account_id }}dir_type">
           {% include "_show_field_select.tpl" type="onbill_variables"
                                               doc_id="_no_need_"
-                                              field_name=["agreement_data", "director_title"]
+                                              field_name=["dir_type"]
                                               options=["agreement_data", "director_type"]
                                               prefix=account_id
           %}
        </span>
+      </th>
+    </tr>
+    <tr>
+      <th style="width: 40%;"class="text-center1">{_ Director title (genitive) _}</th>
+      <th class="text-left">
+       <span id="{{ account_id }}dir_type_rod">
+          {% include "_show_field_select.tpl" type="onbill_variables"
+                                              doc_id="_no_need_"
+                                              field_name=["dir_type_rod"]
+                                              options=["agreement_data", "director_type"]
+                                              prefix=account_id
+          %}
+       </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ Legal basis (genitive) _}</th>
+      <th class="text-left">
+        <span id="act_on_what">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["act_on_what"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ Chief Accountant _}</th>
+      <th class="text-left">
+        <span id="gl_buhg_u">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["gl_buhg_u"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ Phone _}</th>
+      <th class="text-left">
+        <span id="phone">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["phone"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ Fax _}</th>
+      <th class="text-left">
+        <span id="fax">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["fax"]
+                                       account_id=account_id
+          %}
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <th class="text-left">{_ Email _}</th>
+      <th class="text-left">
+        <span id="email">
+          {% include "_show_field.tpl" type="onbill_variables"
+                                       doc_id="_no_need_"
+                                       field_name=["email"]
+                                       account_id=account_id
+          %}
+        </span>
       </th>
     </tr>
   </thead>
@@ -195,7 +295,7 @@
   </thead>
 </table>
 <br />
-<p style="font-size: 1.2em; ">{_ Groups2 _}:</p>
+<p style="font-size: 1.2em; ">{_ Account groups _}:</p>
 <span style="display: inline-block;">
   {% for group_id in reseller_onbill_variables[1]["accounts_groups"] %}
     <i id="toggle_group_{{ group_id }}"
