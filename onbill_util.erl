@@ -3,6 +3,7 @@
 
 -export([docs_listing/3
          ,onbill_modb_attachment/4
+         ,onbill_attachment/4
          ,onbill_attachment_link/4
          ,onbill_attachment_name_link/5
          ,generate_monthly_docs/4
@@ -96,7 +97,7 @@ variables(CustomerId, Context) ->
     variables('get', CustomerId, [], Context).
 
 variables(Verb, CustomerId, DataBag, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(CustomerId))/binary, ?VARIABLES/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(CustomerId)/binary, ?VARIABLES/binary>>,
     kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context).
 
 variables_field(FieldName, CustomerId, Context) ->
@@ -127,8 +128,12 @@ carrier_template(Verb, Headers, AccountId, CarrierId, TemplateId, MessageBody, C
     erlang:list_to_binary(kazoo_util:crossbar_account_send_raw_request_body(AuthToken, Verb, API_String, Headers, MessageBody, Context,"")).
 
 onbill_modb_attachment(AccountId, DocId, AuthToken, Context) ->
-    API_String = <<?V2/binary, ?ACCOUNTS/binary, (z_convert:to_binary(AccountId))/binary
-                   ,?ONBILLS/binary,"/",(z_convert:to_binary(DocId))/binary, ?ATTACHMENT/binary>>,
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary
+                   ,?ONBILLS/binary, "/", ?TO_BIN(DocId)/binary, ?ATTACHMENT/binary>>,
+    kazoo_util:crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [], [], Context).
+
+onbill_attachment(AttachmentId, AccountId, AuthToken, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?VARIABLES/binary, "/", ?TO_BIN(AttachmentId)/binary>>,
     kazoo_util:crossbar_account_send_raw_request_body(AuthToken, 'get', API_String, [], [], Context).
 
 onbill_attachment_link(AccountId, DocId, DocType, Context) ->
@@ -139,7 +144,7 @@ onbill_attachment_link(AccountId, DocId, DocType, Context) ->
                    ,"&doc_type=", ?TO_BIN(DocType)/binary
                    ,"&auth_token=", ?TO_BIN(AuthToken)/binary
                  >>,
-    <<"https://", (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, API_String/binary>>.
+    <<"https://", ?TO_BIN(z_dispatcher:hostname(Context))/binary, API_String/binary>>.
 
 onbill_attachment_name_link(AccountId, DocId, AttName, DocType, Context) ->
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
@@ -150,7 +155,7 @@ onbill_attachment_name_link(AccountId, DocId, AttName, DocType, Context) ->
                    ,"&doc_type=", ?TO_BIN(DocType)/binary
                    ,"&auth_token=", ?TO_BIN(AuthToken)/binary
                  >>,
-    <<"https://", (z_convert:to_binary(z_dispatcher:hostname(Context)))/binary, API_String/binary>>.
+    <<"https://", ?TO_BIN(z_dispatcher:hostname(Context))/binary, API_String/binary>>.
 
 generate_monthly_docs(DocType, AccountId, Timestamp, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,

@@ -40,6 +40,8 @@ forbidden(Context) ->
 
 content_types_provided(Context) ->
     case z_context:get_q(<<"doc_type">>, Context) of
+        <<"onbill">> ->
+            {[{<<"application/pdf">>, provide_content}], Context};
         <<"onbill_modb">> ->
             {[{<<"application/pdf">>, provide_content}], Context};
         <<"onbill_e911_address_proof">> ->
@@ -70,6 +72,17 @@ resource_exists(Context) ->
 
 provide_content(Context) ->
     case z_context:get_q(<<"doc_type">>, Context) of
+        <<"onbill">> ->
+            case onbill_attachment(Context) of
+                {'ok', Data} ->
+                    MediaName = z_context:get_q(<<"att_name">>, Context),
+                    Context1 = z_context:set_resp_header(<<"content-disposition">>
+                                                        ,<<"attachment; filename=", MediaName/binary>>
+                                                        ,Context),
+                    Body = modkazoo_util2:maybe_encode_data(Data, Context),
+                    {Body, z_context:set(body, Body, Context1)};
+                _ -> api_error(404, 0, "No attachment found", Context)
+            end;
         <<"onbill_modb">> ->
             case onbill_modb_attachment(Context) of
                 {'ok', Data} ->
@@ -124,6 +137,15 @@ provide_content(Context) ->
 
 finish_request(Context) ->
     {ok, Context}.
+
+onbill_attachment(Context) ->
+    AccountId = z_context:get_q("account_id", Context),
+    AttachmentId = z_context:get_q("att_name", Context),
+    AuthToken = z_context:get_q("auth_token", Context),
+    case onbill_util:onbill_attachment(AttachmentId, AccountId, AuthToken, Context) of
+        <<>> -> {error, <<>>};
+        Body -> {ok, Body}
+    end.
 
 onbill_modb_attachment(Context) ->
     AccountId = z_context:get_q("account_id", Context),

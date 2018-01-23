@@ -13,7 +13,11 @@
     %} 
   </th>
   <th class="text-left">
-    №
+    <a href="{{ m.onbill[{attachment_download_link account_id=account_id
+                                                   doc_id="test"
+                                                   attachment_name="task_filename"
+                                                   doc_type="onbill"}]
+             }}">№</a>
     <span id="agrm{{ carrier_id }}number">
       {% include "_show_field.tpl" type="onbill_variables"
                                    doc_id="_no_need_"
@@ -30,5 +34,23 @@
                                    convert_macro="TO_GREGORIAN_SECONDS"
       %}
     </span>
+  </th>
+  <th class="text-right">
+    {% with
+         m.kazoo[{kz_doc_field type="onbill_variables"
+                               doc_id="_no_need_"
+                               field=["agrm", carrier_id, "att_name"]
+                               account_id=account_id}]
+       as
+         att_name
+    %}
+      {% if att_name %}
+    <a href="{{ m.onbill[{attachment_download_link account_id=account_id
+                                                   doc_id="onbill"
+                                                   attachment_name=att_name
+                                                   doc_type="onbill"}] }}"
+    ><i class="fa fa-download" title="{_ Download _}"></i></a>
+      {% endif %}
+    {% endwith %}
   </th>
 </tr>
