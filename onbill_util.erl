@@ -8,6 +8,7 @@
          ,onbill_attachment_name_link/5
          ,generate_monthly_docs/4
          ,generate_transaction_based_invoice/5
+         ,generate_onbill_agrm/3
          ,variables/2
          ,variables/4
          ,variables_field/3
@@ -168,6 +169,14 @@ generate_transaction_based_invoice(TransactionId, InvoiceDescription, AccountId,
                                             ,{<<"invoice_description">>, InvoiceDescription}
                                             ,{<<"transaction_id">>, TransactionId}
                                             ,{<<"doc_type">>, <<"transaction_invoice">>}
+                                            ]),
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(Values, modkazoo_util:new())),
+    kazoo_util:crossbar_account_request('put', API_String, DataBag, Context, 'return_error').
+
+generate_onbill_agrm(CarrierId, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONBILLS/binary, ?GENERATE/binary>>,
+    Values = modkazoo_util:filter_undefined([{<<"carrier_id">>, CarrierId}
+                                            ,{<<"doc_type">>, <<"onbill_agrm">>}
                                             ]),
     DataBag = ?MK_DATABAG(modkazoo_util:set_values(Values, modkazoo_util:new())),
     kazoo_util:crossbar_account_request('put', API_String, DataBag, Context, 'return_error').

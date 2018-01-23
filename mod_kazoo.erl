@@ -2254,6 +2254,13 @@ event({postback,<<"generate_children_docs">>,_,_}, Context) ->
     _ = onbill_util:generate_monthly_docs('who_cares', <<"all_children">>, Timestamp, Context),
     z_render:growl(?__("Process started and could take a while.",Context), Context);
 
+event({postback,{generate_rs_agrm,[{account_id, AccountId},{carrier_id, CarrierId}]},_,_}, Context) ->
+    onbill_util:generate_onbill_agrm(CarrierId, AccountId, Context),
+    z_render:dialog(?__("Account onbill details",Context)
+                   ,"operations_edit_onbill_variables_dialog.tpl"
+                   ,[{account_id, AccountId}]
+                   ,Context);
+
 event({postback,<<"onbill_set_variables_json">>,_A,_B}, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     event({postback,{onbill_set_variables_json,[{account_id, AccountId}]},_A,_B}, Context);

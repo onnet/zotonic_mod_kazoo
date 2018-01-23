@@ -50,11 +50,20 @@
         ,agrm_number
     %}
       {% if att_name %}
-    <a href="{{ m.onbill[{attachment_download_link account_id=account_id
-                                                   doc_id=agrm_number|cleanout
-                                                   attachment_name=att_name
-                                                   doc_type="onbill"}] }}"
-    ><i class="fa fa-download" title="{_ Download _}"></i></a>
+        <a href="{{ m.onbill[{attachment_download_link account_id=account_id
+                                                       doc_id=agrm_number|cleanout
+                                                       attachment_name=att_name
+                                                       doc_type="onbill"}] }}"
+        ><i class="fa fa-download" title="{_ Download _}"></i></a>
+      {% else %}
+        <i id="agrm{{ carrier_id }}create" class="fa fa-plus pointer" title="{_ Create _}"></i>
+        {% wire id="agrm"++carrier_id++"create"
+                action={postback postback={generate_rs_agrm account_id=account_id
+                                                            carrier_id=carrier_id
+                                          }
+                                 delegate="mod_kazoo"
+                       }
+        %} 
       {% endif %}
     {% endwith %}
   </th>
