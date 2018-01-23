@@ -41,12 +41,17 @@
                                doc_id="_no_need_"
                                field=["agrm", carrier_id, "att_name"]
                                account_id=account_id}]
+        ,m.kazoo[{kz_doc_field type="onbill_variables"
+                               doc_id="_no_need_"
+                               field=["agrm", carrier_id, "number"]
+                               account_id=account_id}]
        as
          att_name
+        ,agrm_number
     %}
       {% if att_name %}
     <a href="{{ m.onbill[{attachment_download_link account_id=account_id
-                                                   doc_id="onbill"
+                                                   doc_id=agrm_number|cleanout
                                                    attachment_name=att_name
                                                    doc_type="onbill"}] }}"
     ><i class="fa fa-download" title="{_ Download _}"></i></a>

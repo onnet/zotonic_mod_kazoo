@@ -75,9 +75,9 @@ provide_content(Context) ->
         <<"onbill">> ->
             case onbill_attachment(Context) of
                 {'ok', Data} ->
-                    MediaName = z_context:get_q(<<"att_name">>, Context),
+                    MediaName = z_context:get_q(<<"doc_id">>, Context),
                     Context1 = z_context:set_resp_header(<<"content-disposition">>
-                                                        ,<<"attachment; filename=", MediaName/binary>>
+                                                        ,<<"attachment; filename=", MediaName/binary, ".pdf">>
                                                         ,Context),
                     Body = modkazoo_util2:maybe_encode_data(Data, Context),
                     {Body, z_context:set(body, Body, Context1)};
