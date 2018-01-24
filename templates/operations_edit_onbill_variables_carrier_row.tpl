@@ -56,8 +56,16 @@
                                                        doc_type="onbill"}] }}"
         ><i class="fa fa-download" title="{_ Download _}"></i></a>
       {% else %}
-        <i id="agrm{{ carrier_id }}create" class="fa fa-plus pointer" title="{_ Create _}"></i>
+        <i id="agrm{{ carrier_id }}create"
+           class="fa fa-plus pointer"
+           title="{_ Create _}"></i>
+        <i id="agrm{{ carrier_id }}spinner"
+           style="display: none;"
+           class="fa fa-spinner fa-spin"
+           title="{_ Please wait _}"></i>
         {% wire id="agrm"++carrier_id++"create"
+                action={hide target="agrm"++carrier_id++"create"}
+                action={show target="agrm"++carrier_id++"spinner"}
                 action={postback postback={generate_rs_agrm account_id=account_id
                                                             carrier_id=carrier_id
                                           }
