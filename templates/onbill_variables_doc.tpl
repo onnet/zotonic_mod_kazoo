@@ -24,6 +24,26 @@
                              delegate="mod_kazoo"
                    }
     %}
+    <i id="download_onbill_variables_dialog_{{ account_id }}"
+       class="pl-10 fa fa-download pointer"
+       title="LB to Kazoo sync"></i>
+    {% wire id="download_onbill_variables_dialog_"++account_id
+            action={confirm text=_"Do you really want to download data from LB?"
+                            action={postback postback={lb_to_kazoo_sync account_id=account_id}
+                                             delegate="mod_kazoo"
+                                   }
+                   }
+    %}
+    <i id="upload_onbill_variables_dialog_{{ account_id }}"
+       class="pl-10 fa fa-upload pointer"
+       title="Kazoo to LB sync"></i>
+    {% wire id="upload_onbill_variables_dialog_"++account_id
+            action={confirm text=_"Do you really want to upload data to LB?"
+                            action={postback postback={kazoo_to_lb_sync account_id=account_id}
+                                             delegate="mod_kazoo"
+                                   }
+                   }
+    %}
     {% button class="btn btn-xs btn-onnet pull-right display_none"
               text=_"save" id="save_json_"++account_id
               action={postback postback={onbill_set_variables_json account_id=account_id}
