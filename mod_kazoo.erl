@@ -2715,6 +2715,28 @@ event({postback,{delete_carrier_agrm_var,[{account_id,AccountId},{agrm_carrier,A
                    ,[{account_id, AccountId}]
                    ,Context);
 
+event({postback,{lb_to_kazoo_sync,[{account_id,AccountId}]},_,_}, Context) ->
+    mod_signal:emit({emit_growl_signal
+                    ,?SIGNAL_FILTER(Context) ++
+                     [{'text',?__("Import started.", Context)}
+                     ,{'type', 'notice'}
+                     ]}
+                    ,Context),
+    DataBag = ?MK_DATABAG(modkazoo_util:set_value(<<"action">>,  <<"lb_to_kazoo_sync">>, modkazoo_util:new())),
+    onbill_util:onlbs('put', AccountId, DataBag, Context),
+    z_render:growl(?__("Import processed", Context), Context);
+
+event({postback,{kazoo_to_lb_sync,[{account_id,AccountId}]},_,_}, Context) ->
+    mod_signal:emit({emit_growl_signal
+                    ,?SIGNAL_FILTER(Context) ++
+                     [{'text',?__("Export started.", Context)}
+                     ,{'type', 'notice'}
+                     ]}
+                    ,Context),
+    DataBag = ?MK_DATABAG(modkazoo_util:set_value(<<"action">>,  <<"kazoo_to_lb_sync">>, modkazoo_util:new())),
+    onbill_util:onlbs('put', AccountId, DataBag, Context),
+    z_render:growl(?__("Export processed", Context), Context);
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),

@@ -539,6 +539,7 @@
 -define(SEARCH, <<"/search">>).
 -define(ONBILL_SEARCH, <<"/onbill_search">>).
 -define(MULTI, <<"/multi">>).
+-define(ONLBS, <<"/onlbs">>).
 
 -define(MK_TIME_FILTER(CreatedFrom, CreatedTo), <<?CREATED_FROM/binary, CreatedFrom/binary, <<"&">>/binary, ?CREATED_TO/binary, CreatedTo/binary>>).
 -define(SET_REASON(Reason), case Reason of 'undefined' -> <<>>; _ -> <<"&reason=", ?TO_BIN(Reason)/binary>> end).

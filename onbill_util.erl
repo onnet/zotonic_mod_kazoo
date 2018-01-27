@@ -52,6 +52,7 @@
          ,delete_onbill_variable/3
          ,billing_status/1
          ,find_by_onbill_data/2
+         ,onlbs/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -452,3 +453,6 @@ find_by_onbill_data(String, Context) ->
                   ,"&by_kpp=", ?TO_BIN(String)/binary>>,
     kazoo_util:crossbar_account_request('get', API_String, [], Context, modkazoo_util:new()).
 
+onlbs(Verb, AccountId, DataBag, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, ?TO_BIN(AccountId)/binary, ?ONLBS/binary>>,
+    kazoo_util:crossbar_account_request(Verb, API_String, DataBag, Context, 'return_error').
