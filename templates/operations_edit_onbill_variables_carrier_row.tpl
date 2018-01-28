@@ -29,7 +29,7 @@
     <span id="agrm{{ carrier_id }}date_gts">
       {% include "_show_field_date.tpl" type="onbill_variables"
                                    doc_id="_no_need_"
-                                   field_name=["agrm", carrier_id, "date_gts"]
+                                   field_name=["agrm", carrier_id, "date"]
                                    account_id=account_id
                                    convert_macro="TO_GREGORIAN_SECONDS"
       %}
