@@ -34,10 +34,10 @@
         {_ Agreement holder name _}
       </th>
       <th class="text-left">
-        <span id="{{ account_id }}account_name">
+        <span id="{{ account_id }}name">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
-                                       field_name=["account_name"]
+                                       field_name=["name"]
                                        account_id=account_id
                                        prefix=account_id
           %}
@@ -47,10 +47,10 @@
     <tr>
       <th class="text-left">{_ INN _}</th>
       <th class="text-left">
-        <span id="account_inn">
+        <span id="inn">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
-                                       field_name=["account_inn"]
+                                       field_name=["inn"]
                                        account_id=account_id
           %}
         </span>
@@ -59,10 +59,10 @@
     <tr>
       <th class="text-left">{_ KPP _}</th>
       <th class="text-left">
-        <span id="account_kpp">
+        <span id="kpp">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
-                                       field_name=["account_kpp"]
+                                       field_name=["kpp"]
                                        account_id=account_id
           %}
         </span>
@@ -71,10 +71,10 @@
     <tr>
       <th class="text-left">{_ OGRN _}</th>
       <th class="text-left">
-        <span id="account_ogrn">
+        <span id="ogrn">
           {% include "_show_field.tpl" type="onbill_variables"
                                        doc_id="_no_need_"
-                                       field_name=["account_ogrn"]
+                                       field_name=["ogrn"]
                                        account_id=account_id
           %}
         </span>
