@@ -14,14 +14,14 @@ inno_seconds_to_time(Seconds, _Context) ->
 
 inno_seconds_to_time(Seconds, Args, _Context) ->
     case Args of
-        "hm" ->
+        <<"hm">> ->
             case Seconds of
                 'undefined' -> <<"00:00">>;
                 _ ->
                     {_,{Hours,Minutes,_}} = calendar:seconds_to_daystime(z_convert:to_integer(Seconds)),
                     z_convert:to_binary(io_lib:format("~2..0w:~2..0w",[Hours, Minutes]))
             end;
-        "hms" ->
+        <<"hms">> ->
             case Seconds of
                 'undefined' -> <<"00:00:00">>;
                 _ ->
