@@ -14,48 +14,48 @@
   </thead>
   <tbody id="currentcallstableid">
     {% for running_call in m.kazoo[{kz_list_account_channels account_id=account_id}] %} 
-      {% if running_call["direction"]=="inbound" %}
+      {% if running_call[1]["direction"]=="inbound" %}
       <tr>
-        <td style="text-align: center;">{{ running_call["uuid"]|cleanout }}</td>
-        <td style="text-align: center;">{{ running_call["presence_id"]|split:"@"|first }}
-                                        {# if running_call["answered"] #}
-                                     <!--     <i id="caller_{{ running_call["uuid"]|cleanout }}"
+        <td style="text-align: center;">{{ running_call[1]["uuid"]|cleanout }}</td>
+        <td style="text-align: center;">{{ running_call[1]["presence_id"]|split:"@"|first }}
+                                        {# if running_call[1]["answered"] #}
+                                     <!--     <i id="caller_{{ running_call[1]["uuid"]|cleanout }}"
                                                  class="dark-1 icon-telicon-failover"></i> -->
                                         {# endif #}
         </td>
-        {% wire id="caller_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_transfer_dialog channel_id=running_call["uuid"]}
+        {% wire id="caller_"++running_call[1]["uuid"]|cleanout
+                action={postback postback={channel_transfer_dialog channel_id=running_call[1]["uuid"]}
                                  delegate="mod_kazoo"
                        }
         %}
-        <td style="text-align: center;">{{ running_call["destination"] }}
-                                        {# if running_call["answered"] #}
-                                     <!--     <i id="callee_{{ running_call["uuid"]|cleanout }}"
+        <td style="text-align: center;">{{ running_call[1]["destination"] }}
+                                        {# if running_call[1]["answered"] #}
+                                     <!--     <i id="callee_{{ running_call[1]["uuid"]|cleanout }}"
                                                  class="dark-1 icon-telicon-failover"></i> -->
                                         {# endif #}
         </td>
-        {% wire id="callee_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_transfer_dialog channel_id=running_call["other_leg"]}
+        {% wire id="callee_"++running_call[1]["uuid"]|cleanout
+                action={postback postback={channel_transfer_dialog channel_id=running_call[1]["other_leg"]}
                                  delegate="mod_kazoo"
                        }
         %}
         <td style="text-align: center;">
-          {% if running_call["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}
+          {% if running_call[1]["answered"] %}{_ answered _}{% else %}{_ ringing _}{% endif %}
         </td>
         <td style="text-align: center;">
-          <i id="eavesdrop_{{ running_call["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i>
+          <i id="eavesdrop_{{ running_call[1]["uuid"]|cleanout }}" class="fa fa-volume-up pointer"></i>
         </td>
-        {% wire id="eavesdrop_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_eavesdrop_dialog channel_id=running_call["uuid"]}
+        {% wire id="eavesdrop_"++running_call[1]["uuid"]|cleanout
+                action={postback postback={channel_eavesdrop_dialog channel_id=running_call[1]["uuid"]}
                                  delegate="mod_kazoo"
                        }
         %}
         <td style="text-align: center;">
-          <i id="hangup_{{ running_call["uuid"]|cleanout }}"
+          <i id="hangup_{{ running_call[1]["uuid"]|cleanout }}"
              class="dark-1 icon-telicon-hangup pointer"></i>
         </td>
-        {% wire id="hangup_"++running_call["uuid"]|cleanout
-                action={postback postback={channel_hangup_confirm channel_id=running_call["uuid"]}
+        {% wire id="hangup_"++running_call[1]["uuid"]|cleanout
+                action={postback postback={channel_hangup_confirm channel_id=running_call[1]["uuid"]}
                                  delegate="mod_kazoo"
                        }
         %}
@@ -193,5 +193,4 @@
     }
 
   };
-
 {% endjavascript %}
