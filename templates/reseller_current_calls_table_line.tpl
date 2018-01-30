@@ -52,10 +52,12 @@
           <i id="hangup_{{ running_call[1]["uuid"]|cleanout }}"
              class="dark-1 icon-telicon-hangup pointer"></i>
           {% wire id="hangup_"++running_call[1]["uuid"]|cleanout
-                  action={postback postback={channel_hangup channel_id=running_call[1]["call_id"]
-                                                            account_id=running_call[1]["account_id"]
-                                            }
-                                   delegate="mod_kazoo"
+                  action={confirm text=_"Please confirm channel hangup!"
+                          action={postback postback={channel_hangup channel_id=running_call[1]["call_id"]
+                                                                    account_id=running_call[1]["account_id"]
+                                                    }
+                                           delegate="mod_kazoo"
+                                 }
                          }
           %}
           {% endif %}
