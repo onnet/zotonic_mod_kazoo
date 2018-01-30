@@ -39,10 +39,12 @@
             {_ answered _}
           {% elif running_call[1]["event_name"] == "CHANNEL_ANSWER" %}
             {_ answered _}
+          {% elif running_call[1]["event_name"] == "CHANNEL_CREATE" %}
+            {_ connecting _}
           {% elif running_call[1]["event_name"] %}
             {{ running_call[1]["event_name"] }}
           {% else %}
-            {_ ringing _}
+            {_ connecting _}
           {% endif %}
         </td>
         <td style="text-align: center;">
