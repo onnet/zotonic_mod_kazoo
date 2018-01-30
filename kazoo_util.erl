@@ -2183,12 +2183,18 @@ kz_channel_action(CallId, DataBag, Context) ->
 kz_channel_action(CallId, DataBag, 'undefined', Context) ->
     kz_channel_action(CallId, DataBag, z_context:get_session('kazoo_account_id', Context), Context);
 kz_channel_action(CallId, DataBag, AccountId, Context) ->
-    API_String = <<?V1/binary, ?ACCOUNTS/binary, AccountId/binary, ?CHANNELS/binary, "/", ?TO_BIN(CallId)/binary>>,
-    crossbar_account_request('post', API_String, DataBag, Context).
+    kz_channel_action('post', CallId, DataBag, AccountId, Context).
+kz_channel_action(Verb, CallId, DataBag, AccountId, Context) ->
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary, ?CHANNELS/binary, "/", ?TO_BIN(CallId)/binary>>,
+    crossbar_account_request(Verb, API_String, DataBag, Context).
 
 kz_channel_hangup(CallId, AccountId, Context) ->
-    DataBag = {[{<<"data">>, {[{<<"action">>, <<"hangup">>}]}}]},
-    kz_channel_action(CallId, DataBag, AccountId, Context).
+    Values =
+        [{<<"action">>, <<"hangup">>}
+        ,{<<"module">>, <<"hangup">>}
+        ],
+    DataBag = ?MK_DATABAG(modkazoo_util:set_values(Values, modkazoo_util:new())),
+    kz_channel_action('post', CallId, DataBag, AccountId, Context).
 
 kz_channel_transfer(Target, CallId, AccountId, Context) ->
     DataBag = {[{<<"data">>, {[{<<"action">>, <<"transfer">>}, {<<"target">>, ?TO_BIN(Target)}, {<<"takeback_dtmf">>, <<"*1">>}]}}]},

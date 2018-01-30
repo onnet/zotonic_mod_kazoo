@@ -1860,6 +1860,9 @@ event({postback,<<"maybe_update_conference_participants_headline">>,_,_}, Contex
 
 event({postback,{channel_hangup,[{channel_id,ChannelId}]},_,_}, Context) ->
     AccountId = z_context:get_session(kazoo_account_id, Context),
+    event({postback,{channel_hangup,[{channel_id,ChannelId},{account_id,AccountId}]},<<>>,<<>>}, Context);
+
+event({postback,{channel_hangup,[{channel_id,ChannelId},{account_id,AccountId}]},_,_}, Context) ->
     _ = kazoo_util:kz_channel_hangup(ChannelId, AccountId, Context),
     z_render:dialog_close(Context);
 
@@ -2756,8 +2759,6 @@ event({postback,<<"update_reseller_current_calls_table_line">>,_,_}, Context) ->
         ,{<<"call_id">>, proplists:get_value(<<"call_id">>, Data)}
         ,{<<"account_id">>, proplists:get_value(<<"account_id">>, CCVs)}
         ],
-    lager:info("update_reseller_current_calls_table_line Data: ~p", [Data]),
-    lager:info("update_reseller_current_calls_table_line Values: ~p", [Values]),
     z_render:replace(UUID
                    ,z_template:render("reseller_current_calls_table_line.tpl"
                                      ,[{running_call,modkazoo_util:set_values(Values,modkazoo_util:new())}]
