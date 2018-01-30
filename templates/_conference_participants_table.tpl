@@ -21,33 +21,5 @@
     {% endfor %}
   </tbody>
 </table>
-
-{% javascript %}
-var oTable = $('#conference_current_participants_table1').dataTable({
-"pagingType": "simple",
-"bFilter" : true,
-"aaSorting": [[ 0, "desc" ]],
-"aLengthMenu" : [[5, 15, -1], [5, 15, "{_ All _}"]],
-"iDisplayLength" : 5,
-"oLanguage" : {
-        "sInfoThousands" : " ",
-        "sLengthMenu" : "_MENU_ {_ lines per page _}",
-        "sSearch" : "{_ Filter _}:",
-        "sZeroRecords" : "{_ Nothing found, sorry _}",
-        "sInfo" : "{_ Showing _} _START_ {_ to _} _END_ {_ of _} _TOTAL_ {_ entries _}",
-        "sInfoEmpty" : "{_ Showing 0 entries _}",
-        "sInfoFiltered" : "({_ Filtered from _} _MAX_ {_ entries _})",
-        "oPaginate" : {
-                "sPrevious" : "{_ Back _}",
-                "sNext" : "{_ Forward _}"
-        }
-},
-"columnDefs": [
-]
-
-});
-
-{% endjavascript %}
 {% else %}
 {% endif %}
-

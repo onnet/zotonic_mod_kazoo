@@ -1,10 +1,10 @@
 {% wire name="channel_hangup" action={postback postback="channel_hangup_confirm" delegate="mod_kazoo"} %}
 {% wire name="channel_transfer" action={postback postback="channel_transfer_dialog" delegate="mod_kazoo"} %}
 {% wire name="channel_eavesdrop" action={postback postback="channel_eavesdrop_dialog" delegate="mod_kazoo"} %}
-<table id="admin_portal_current_calls_table" class="table display table-striped table-condensed">
+<table id="reseller_portal_current_calls_table" class="table display table-striped table-condensed">
   <thead>
     <tr>
-      <th style="text-align: center;">{_ CallId _}</th>
+      <th style="display: none;">{_ CallId _}</th>
       <th style="text-align: center;"></th>
       <th style="text-align: center;">{_ Account _}</th>
       <th style="text-align: center;">{_ Caller Number _}</th>
@@ -16,65 +16,10 @@
       <th style="text-align: center;"></th>
     </td>
   </thead>
-  <tbody id="currentcallstableid">
+  <tbody id="reseller_portal_current_calls_table_body">
     {% for running_call in m.kazoo.get_reseller_channels %} 
       {% if running_call[1]["direction"]=="inbound" %}
-      <tr>
-        <td style="text-align: center;">
-          {{ running_call[1]["uuid"]|cleanout }}
-        </td>
-        <td style="text-align: center;">
-          {{ running_call[1]["timestamp"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
-        </td>
-        <td style="text-align: center;">
-        </td>
-        <td style="text-align: center;">
-          {{ running_call[1]["presence_id"]|split:"@"|first }}
-        </td>
-        <td style="text-align: center;">
-          {{ running_call[1]["destination"] }}
-        </td>
-        <td style="text-align: center;">
-          <a id="realm_{{ running_call[1]["uuid"]|cleanout }}"
-             href="#">{{ running_call[1]["presence_id"]|split:"@"|last }}</a>
-          {% wire id="realm_"++running_call[1]["uuid"]|cleanout
-                  action={postback postback={redirect_to_reseller_portal
-                                             realm=running_call[1]["presence_id"]|split:"@"|last
-                                            }
-                                   delegate="mod_kazoo"}
-          %}
-        </td>
-        <td style="text-align: center;">
-          {% if running_call[1]["answered"] %}
-            {_ answered _}
-          {% else %}
-            {_ ringing _}
-          {% endif %}
-        </td>
-        <td style="text-align: center;">
-          {{ running_call[1]["elapsed_s"]|inno_seconds_to_time:"hms" }}
-        </td>
-        <td style="text-align: center;">
-          <i id="hangup_{{ running_call[1]["uuid"]|cleanout }}"
-             class="dark-1 icon-telicon-hangup pointer"></i>
-          {% wire id="hangup_"++running_call[1]["uuid"]|cleanout
-                  action={postback postback={channel_hangup_confirm channel_id=running_call[1]["uuid"]}
-                                   delegate="mod_kazoo"
-                         }
-          %}
-        </td>
-        <td style="text-align: center;">
-          <i id="info_{{ running_call[1]["uuid"]|cleanout }}"
-             class="fa fa-info-circle zprimary pointer"
-             title="{_ Details _}"></i>
-          {% wire id="info_"++running_call[1]["uuid"]|cleanout
-                  action={dialog_open title=_"Call details"
-                                      template="_details.tpl"
-                                      arg=running_call
-                         }
-          %}
-        </td>
-      </tr>
+        {% include "reseller_current_calls_table_line.tpl" running_call=running_call %}
       {% endif %}
     {% endfor %}
   </tbody>
@@ -128,42 +73,6 @@
     return namestr;
   };
 
-  var oTable = $('#admin_portal_current_calls_table').dataTable({
-    "pagingType": "simple",
-    "bFilter" : true,
-    "aaSorting": [[ 0, "desc" ]],
-    "aLengthMenu" : [[5, 15, -1], [5, 15, "{_ All _}"]],
-    "iDisplayLength" : -1,
-    "oLanguage" : {
-            "sInfoThousands" : " ",
-            "sLengthMenu" : "_MENU_ {_ lines per page _}",
-            "sSearch" : "{_ Filter _}:",
-            "sZeroRecords" : "{_ Nothing found, sorry _}",
-            "sInfo" : "{_ Showing _} _START_ {_ to _} _END_ {_ of _} _TOTAL_ {_ entries _}",
-            "sInfoEmpty" : "{_ Showing 0 entries _}",
-            "sInfoFiltered" : "({_ Filtered from _} _MAX_ {_ entries _})",
-            "oPaginate" : {
-                    "sPrevious" : "{_ Back _}",
-                    "sNext" : "{_ Forward _}"
-            }
-    },
-    "columnDefs": [
-                { "targets": [ 0 ], "visible": false },
-                { "targets": [ 1 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 2 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 3 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 4 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 5 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 6 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 7 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 8 ], className: "td-center", "defaultContent": " " },
-                { "targets": [ 9 ], className: "td-center", "defaultContent": " " },
-    ],
-    "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-         $(nRow).attr('id', aData[0]);
-    }
-  });
-
   var socket = new WebSocket('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
  
   function send(data) {
@@ -203,50 +112,25 @@
     switch(data.event_name) {
       case "CHANNEL_CREATE":
       if ( data["call_direction"] == "inbound") {
-        $(".dataTables_empty").remove();
         row_id = myreplace(data["call_id"]);
         if ($("#"+row_id).length == 0) {
-            oTable.api().row.add([row_id, 
-                                  '',
-                                  maybe_account_name(data), 
-                                  data.caller_id_number, 
-                                  get_calee_id_number(data), 
-                                  maybe_presence(data), 
-                                  '{_ ringing _}', 
-                                  seconds_to_time(data["elapsed_s"]), 
-                                  '<i class="dark-1 icon-telicon-hangup pointer" \
-                                      onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>',
-                                  '' 
-                                 ]).draw();
+            z_event("add_reseller_current_calls_table_line", { "data": data });
         }
       }
       break;
 
       case "CHANNEL_ANSWER":
-      row_id = myreplace(data["call_id"]);
-      oTable.api().row('#'+row_id).data([row_id,
-                                         '',
-                                         maybe_account_name(data), 
-                                         data.caller_id_number, 
-                                         get_calee_id_number(data), 
-                                   //    data["caller_id_number"]+' <i class="dark-1 icon-telicon-failover pointer" \
-                                   //                                  onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>', 
-                                   //    data["callee_id_number"]+' <i class="dark-1 icon-telicon-failover pointer" \
-                                   //                                  onclick="z_event('+"'channel_transfer'"+", \
-                                   //                                                   {channel_id: '"+data["Other-Leg-call_id"]+"'"+' } \
-                                   //                                                  );"></i>', 
-                                         maybe_presence(data), 
-                                         '{_ answered _}', 
-                                         seconds_to_time(data["elapsed_s"]), 
-                                         '<i class="dark-1 icon-telicon-hangup pointer" \
-                                             onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>',
-                                         '' 
-                                        ]).draw();
+      if ( data["call_direction"] == "inbound") {
+        z_event("update_reseller_current_calls_table_line", { "data": data });
+      }
       break;
 
       case "CHANNEL_DESTROY":
       row_id = myreplace(data["call_id"]);
-      oTable.api().row('#'+row_id).remove().draw();
+var row = document.getElementById(row_id);
+    console.log('row');
+    console.log(row);
+    row.parentNode.removeChild(row);
       break;
     }
 

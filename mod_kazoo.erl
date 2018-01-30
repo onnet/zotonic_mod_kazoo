@@ -2737,6 +2737,68 @@ event({postback,{kazoo_to_lb_sync,[{account_id,AccountId}]},_,_}, Context) ->
     onbill_util:onlbs('put', AccountId, DataBag, Context),
     z_render:growl(?__("Export processed", Context), Context);
 
+event(#z_msg_v1{data=Data}, Context) ->
+    RowId = proplists:get_value(<<"row_id">>, Data),
+    JObj = proplists:get_value(<<"jobj">>, Data),
+    Timestamp = proplists:get_value(<<"timestamp">>, JObj),
+    lager:info("Transport event RowId: ~p", [RowId]),
+    lager:info("Transport event JObj: ~p", [JObj]),
+    lager:info("Transport event Timestamp: ~p", [Timestamp]),
+    lager:info("Transport event Data: ~p", [Data]),
+    io:format("~p", [Data]),
+            z_render:wire(
+                {alert, [{text, ?__("Sorry, you are not allowed to delete this.", Context)}]},
+                Context);
+
+event({postback,<<"add_reseller_current_calls_table_line">>,_,_}, Context) ->
+    Data = z_context:get_q(data, Context),
+    CCVs = proplists:get_value(<<"custom_channel_vars">>, Data),
+    Dst = proplists:get_value(<<"to">>, Data),
+    [Destination|_] = binary:split(Dst, <<"@">>, [global]),
+    UUID = modkazoo_util:cleanout(proplists:get_value(<<"call_id">>, Data)),
+    Values =
+        [{<<"uuid">>, UUID}
+        ,{<<"account_name">>, proplists:get_value(<<"account_name">>, CCVs)}
+        ,{<<"timestamp">>, proplists:get_value(<<"timestamp">>, Data)}
+        ,{<<"presence_id">>, proplists:get_value(<<"presence_id">>, Data)}
+        ,{<<"caller_id_number">>, proplists:get_value(<<"caller_id_number">>, Data)}
+        ,{<<"callee_id_number">>, proplists:get_value(<<"callee_id_number">>, Data)}
+        ,{<<"from">>, proplists:get_value(<<"from">>, Data)}
+        ,{<<"destination">>, Destination}
+        ],
+    lager:info("add_reseller_current_calls_table_line Data: ~p", [Data]),
+    lager:info("add_reseller_current_calls_table_line Values: ~p", [Values]),
+    z_render:insert_top("reseller_portal_current_calls_table_body"
+                   ,z_template:render("reseller_current_calls_table_line.tpl"
+                                     ,[{running_call,modkazoo_util:set_values(Values,modkazoo_util:new())}]
+                                     ,Context)
+                   ,Context);
+
+event({postback,<<"update_reseller_current_calls_table_line">>,_,_}, Context) ->
+    Data = z_context:get_q(data, Context),
+    CCVs = proplists:get_value(<<"custom_channel_vars">>, Data),
+    Dst = proplists:get_value(<<"to">>, Data),
+    [Destination|_] = binary:split(Dst, <<"@">>, [global]),
+    UUID = modkazoo_util:cleanout(proplists:get_value(<<"call_id">>, Data)),
+    Values =
+        [{<<"uuid">>, UUID}
+        ,{<<"account_name">>, proplists:get_value(<<"account_name">>, CCVs)}
+        ,{<<"timestamp">>, proplists:get_value(<<"timestamp">>, Data)}
+        ,{<<"presence_id">>, proplists:get_value(<<"presence_id">>, Data)}
+        ,{<<"caller_id_number">>, proplists:get_value(<<"caller_id_number">>, Data)}
+        ,{<<"callee_id_number">>, proplists:get_value(<<"callee_id_number">>, Data)}
+        ,{<<"from">>, proplists:get_value(<<"from">>, Data)}
+        ,{<<"destination">>, Destination}
+        ,{<<"answered">>,true}
+        ],
+    lager:info("update_reseller_current_calls_table_line Data: ~p", [Data]),
+    lager:info("update_reseller_current_calls_table_line Values: ~p", [Values]),
+    z_render:replace(UUID
+                   ,z_template:render("reseller_current_calls_table_line.tpl"
+                                     ,[{running_call,modkazoo_util:set_values(Values,modkazoo_util:new())}]
+                                     ,Context)
+                   ,Context);
+
 event(A, Context) ->
     lager:info("Unknown event A: ~p", [A]),
     lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),

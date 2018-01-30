@@ -9,6 +9,12 @@
                          delegate="mod_kazoo"
                }
 %}
+{% wire name="add_reseller_current_calls_table_line"
+        action={postback postback="add_reseller_current_calls_table_line" delegate="mod_kazoo"}
+%}
+{% wire name="update_reseller_current_calls_table_line"
+        action={postback postback="update_reseller_current_calls_table_line" delegate="mod_kazoo"}
+%}
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
     <i id="arrow_right_{{ #dtid }}"
        style="{% if m.kazoo[{ui_element_opened element="ap_current_calls_widget_opened"}] %}
