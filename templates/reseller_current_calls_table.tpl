@@ -114,7 +114,8 @@
       if ( data["call_direction"] == "inbound") {
         row_id = myreplace(data["call_id"]);
         if ($("#"+row_id).length == 0) {
-            z_event("add_reseller_current_calls_table_line", { "data": data });
+            $("#reseller_portal_current_calls_table_body").prepend("<tr id='"+row_id+"' style='display: none;'><td>...contents...</td></tr>");
+            z_event("update_reseller_current_calls_table_line", { "data": data });
         }
       }
       break;

@@ -2768,7 +2768,8 @@ event({postback,<<"add_reseller_current_calls_table_line">>,_,_}, Context) ->
         ],
     lager:info("add_reseller_current_calls_table_line Data: ~p", [Data]),
     lager:info("add_reseller_current_calls_table_line Values: ~p", [Values]),
-    z_render:insert_top("reseller_portal_current_calls_table_body"
+  %  z_render:insert_top("reseller_portal_current_calls_table_body"
+    z_render:replace(UUID
                    ,z_template:render("reseller_current_calls_table_line.tpl"
                                      ,[{running_call,modkazoo_util:set_values(Values,modkazoo_util:new())}]
                                      ,Context)
@@ -2789,7 +2790,7 @@ event({postback,<<"update_reseller_current_calls_table_line">>,_,_}, Context) ->
         ,{<<"callee_id_number">>, proplists:get_value(<<"callee_id_number">>, Data)}
         ,{<<"from">>, proplists:get_value(<<"from">>, Data)}
         ,{<<"destination">>, Destination}
-        ,{<<"answered">>,true}
+        ,{<<"event_name">>, proplists:get_value(<<"event_name">>, Data)}
         ],
     lager:info("update_reseller_current_calls_table_line Data: ~p", [Data]),
     lager:info("update_reseller_current_calls_table_line Values: ~p", [Values]),

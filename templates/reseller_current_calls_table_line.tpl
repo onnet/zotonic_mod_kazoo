@@ -37,6 +37,10 @@
         <td style="text-align: center;">
           {% if running_call[1]["answered"] %}
             {_ answered _}
+          {% elif running_call[1]["event_name"] == "CHANNEL_ANSWER" %}
+            {_ answered _}
+          {% elif running_call[1]["event_name"] %}
+            {{ running_call[1]["event_name"] }}
           {% else %}
             {_ ringing _}
           {% endif %}
