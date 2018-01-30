@@ -27,7 +27,8 @@
               {% endif %}" 
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
-    {{ headline }}
+    {{ headline }}:
+    <span id="allcallscounter"></span>
     {% button class="btn btn-xs btn-onnet pull-right"
               text=_"refresh"
               action={emit signal={reseller_current_calls_widget_tpl signal_filter=m.kazoo.signal_filter}}

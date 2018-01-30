@@ -116,6 +116,7 @@
         if ($("#"+row_id).length == 0) {
             $("#reseller_portal_current_calls_table_body").prepend("<tr id='"+row_id+"' style='display: none;'><td>...contents...</td></tr>");
             z_event("update_reseller_current_calls_table_line", { "data": data });
+            $('#allcallscounter').text(document.getElementById('reseller_portal_current_calls_table').rows.length - 1);
         }
       }
       break;
@@ -123,6 +124,7 @@
       case "CHANNEL_ANSWER":
       if ( data["call_direction"] == "inbound") {
         z_event("update_reseller_current_calls_table_line", { "data": data });
+        $('#allcallscounter').text(document.getElementById('reseller_portal_current_calls_table').rows.length - 1);
       }
       break;
 
@@ -132,6 +134,7 @@ var row = document.getElementById(row_id);
     console.log('row');
     console.log(row);
     row.parentNode.removeChild(row);
+    $('#allcallscounter').text(document.getElementById('reseller_portal_current_calls_table').rows.length - 1);
       break;
     }
 
