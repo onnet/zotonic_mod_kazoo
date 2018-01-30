@@ -91,6 +91,18 @@
     return callee_id_number;
   };
 
+  function seconds_to_time(seconds){
+    console.log("log seconds");
+    console.log(seconds);
+    if (seconds) {
+        var timestr;
+        timestr = new Date(seconds * 1000).toISOString().substr(11, 8);
+    } else {
+        timestr = "not_found";
+    }
+    return timestr;
+  };
+
   var oTable = $('#admin_portal_current_calls_table').dataTable({
     "pagingType": "simple",
     "bFilter" : true,
@@ -117,6 +129,8 @@
                 { "targets": [ 3 ], className: "td-center" },
                 { "targets": [ 4 ], className: "td-center" },
                 { "targets": [ 5 ], className: "td-center" },
+                { "targets": [ 6 ], className: "td-center" },
+                { "targets": [ 7 ], className: "td-center" },
     ],
     "fnCreatedRow": function( nRow, aData, iDataIndex ) {
          $(nRow).attr('id', aData[0]);
@@ -154,6 +168,9 @@
   socket.onmessage = function(raw_message) {
     var data_obj = JSON.parse(raw_message.data);
     console.log(data_obj);
+    if (data_obj.data.custom_channel_vars) {
+        console.log(data_obj.data.custom_channel_vars.account_name);
+    };
     var data = data_obj.data;
 
     switch(data.event_name) {
@@ -163,12 +180,14 @@
         row_id = myreplace(data["call_id"]);
         if ($("#"+row_id).length == 0) {
             oTable.api().row.add([row_id, 
-                                  data["caller_id_number"], 
+                                  data.caller_id_number, 
                                   get_calee_id_number(data), 
+                                  data.presence_id.split("@")[1],
                                   '{_ ringing _}', 
-                                  '', 
+                                  seconds_to_time(data["elapsed_s"]), 
                                   '<i class="dark-1 icon-telicon-hangup pointer" \
-                                      onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>'
+                                      onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>',
+                                  '' 
                                  ]).draw();
         }
       }
@@ -185,11 +204,12 @@
                                    //                                  onclick="z_event('+"'channel_transfer'"+", \
                                    //                                                   {channel_id: '"+data["Other-Leg-call_id"]+"'"+' } \
                                    //                                                  );"></i>', 
+                                         data["presence_id"].split("@")[1],
                                          '{_ answered _}', 
-                                         '<i class="fa fa-volume-up pointer" \
-                                             onclick="z_event('+"'channel_eavesdrop'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>',
+                                         seconds_to_time(data["elapsed_s"]), 
                                          '<i class="dark-1 icon-telicon-hangup pointer" \
-                                             onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>'
+                                             onclick="z_event('+"'channel_hangup'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>',
+                                         '' 
                                         ]).draw();
       break;
 
