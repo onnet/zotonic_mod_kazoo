@@ -5,6 +5,8 @@
   <thead>
     <tr>
       <th style="text-align: center;">{_ CallId _}</th>
+      <th style="text-align: center;"></th>
+      <th style="text-align: center;">{_ Account _}</th>
       <th style="text-align: center;">{_ Caller Number _}</th>
       <th style="text-align: center;">{_ Callee Number _}</th>
       <th style="text-align: center;">{_ Realm _}</th>
@@ -20,6 +22,11 @@
       <tr>
         <td style="text-align: center;">
           {{ running_call[1]["uuid"]|cleanout }}
+        </td>
+        <td style="text-align: center;">
+          {{ running_call[1]["timestamp"]|gregsec_to_date|date:"Y-m-d H:i T":m.kazoo.get_user_timezone }}
+        </td>
+        <td style="text-align: center;">
         </td>
         <td style="text-align: center;">
           {{ running_call[1]["presence_id"]|split:"@"|first }}
@@ -103,12 +110,30 @@
     return timestr;
   };
 
+  function maybe_account_name(data_obj){
+    if (data_obj.custom_channel_vars) {
+        namestr = data_obj.custom_channel_vars.account_name;
+    } else {
+        namestr = " ";
+    }
+    return namestr;
+  };
+
+  function maybe_presence(data_obj){
+    if (data_obj.presence_id) {
+        realm_str = data_obj.presence_id.split("@")[1];
+    } else {
+        realm_str = " ";
+    }
+    return namestr;
+  };
+
   var oTable = $('#admin_portal_current_calls_table').dataTable({
     "pagingType": "simple",
     "bFilter" : true,
     "aaSorting": [[ 0, "desc" ]],
     "aLengthMenu" : [[5, 15, -1], [5, 15, "{_ All _}"]],
-    "iDisplayLength" : 5,
+    "iDisplayLength" : -1,
     "oLanguage" : {
             "sInfoThousands" : " ",
             "sLengthMenu" : "_MENU_ {_ lines per page _}",
@@ -124,13 +149,15 @@
     },
     "columnDefs": [
                 { "targets": [ 0 ], "visible": false },
-                { "targets": [ 1 ], className: "td-center" },
-                { "targets": [ 2 ], className: "td-center" },
-                { "targets": [ 3 ], className: "td-center" },
-                { "targets": [ 4 ], className: "td-center" },
-                { "targets": [ 5 ], className: "td-center" },
-                { "targets": [ 6 ], className: "td-center" },
-                { "targets": [ 7 ], className: "td-center" },
+                { "targets": [ 1 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 2 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 3 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 4 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 5 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 6 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 7 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 8 ], className: "td-center", "defaultContent": " " },
+                { "targets": [ 9 ], className: "td-center", "defaultContent": " " },
     ],
     "fnCreatedRow": function( nRow, aData, iDataIndex ) {
          $(nRow).attr('id', aData[0]);
@@ -180,9 +207,11 @@
         row_id = myreplace(data["call_id"]);
         if ($("#"+row_id).length == 0) {
             oTable.api().row.add([row_id, 
+                                  '',
+                                  maybe_account_name(data), 
                                   data.caller_id_number, 
                                   get_calee_id_number(data), 
-                                  data.presence_id.split("@")[1],
+                                  maybe_presence(data), 
                                   '{_ ringing _}', 
                                   seconds_to_time(data["elapsed_s"]), 
                                   '<i class="dark-1 icon-telicon-hangup pointer" \
@@ -196,7 +225,9 @@
       case "CHANNEL_ANSWER":
       row_id = myreplace(data["call_id"]);
       oTable.api().row('#'+row_id).data([row_id,
-                                         data["caller_id_number"], 
+                                         '',
+                                         maybe_account_name(data), 
+                                         data.caller_id_number, 
                                          get_calee_id_number(data), 
                                    //    data["caller_id_number"]+' <i class="dark-1 icon-telicon-failover pointer" \
                                    //                                  onclick="z_event('+"'channel_transfer'"+", { channel_id: '"+data["call_id"]+"'"+' });"></i>', 
@@ -204,7 +235,7 @@
                                    //                                  onclick="z_event('+"'channel_transfer'"+", \
                                    //                                                   {channel_id: '"+data["Other-Leg-call_id"]+"'"+' } \
                                    //                                                  );"></i>', 
-                                         data["presence_id"].split("@")[1],
+                                         maybe_presence(data), 
                                          '{_ answered _}', 
                                          seconds_to_time(data["elapsed_s"]), 
                                          '<i class="dark-1 icon-telicon-hangup pointer" \
