@@ -10,7 +10,6 @@
       <th style="text-align: center;">{_ Callee Number _}</th>
       <th style="text-align: center;">{_ Realm _}</th>
       <th style="text-align: center;">{_ Status _}</th>
-      <th style="text-align: center;">{_ Elapsed _}</th>
       <th style="text-align: center;">{_ Hang Up _}</th>
       <th style="text-align: center;"></th>
     </td>

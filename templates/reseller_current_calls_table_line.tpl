@@ -48,9 +48,6 @@
           {% endif %}
         </td>
         <td style="text-align: center;">
-          {{ running_call[1]["elapsed_s"]|inno_seconds_to_time:"hms" }}
-        </td>
-        <td style="text-align: center;">
           <i id="hangup_{{ running_call[1]["uuid"]|cleanout }}"
              class="dark-1 icon-telicon-hangup pointer"></i>
           {% wire id="hangup_"++running_call[1]["uuid"]|cleanout
@@ -65,8 +62,10 @@
              title="{_ Details _}"></i>
           {% wire id="info_"++running_call[1]["uuid"]|cleanout
                   action={dialog_open title=_"Call details"
-                                      template="_details.tpl"
-                                      arg=running_call
+                                      template="reseller_current_call_info_lazy.tpl"
+                                      uuid=running_call[1]["uuid"]
+                                      account_id=account_id
+                                      running_call=running_call
                          }
           %}
         </td>

@@ -2753,6 +2753,8 @@ event({postback,<<"update_reseller_current_calls_table_line">>,_,_}, Context) ->
         ,{<<"from">>, proplists:get_value(<<"from">>, Data)}
         ,{<<"destination">>, Destination}
         ,{<<"event_name">>, proplists:get_value(<<"event_name">>, Data)}
+        ,{<<"call_id">>, proplists:get_value(<<"call_id">>, Data)}
+        ,{<<"account_id">>, proplists:get_value(<<"account_id">>, CCVs)}
         ],
     lager:info("update_reseller_current_calls_table_line Data: ~p", [Data]),
     lager:info("update_reseller_current_calls_table_line Values: ~p", [Values]),
