@@ -8,6 +8,12 @@
         action={toggle target="save_json_"++account_id}
         action={toggle target="restore_json_"++account_id}
 %}
+{% with
+     m.onbill[{onbill_get_variables account_id=m.session.kazoo_account_id}]
+   as
+     reseller_onbill_variables
+%}
+
   <span id="arrows_{{ #dtid }}" style="cursor: pointer;">
     <i id="arrow_right_{{ #dtid }}"
        class="arrowpad fa fa-arrow-circle-right"></i>
@@ -15,7 +21,8 @@
        style="display: none;"
        class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
-    {{ headline }}
+  {{ headline }}
+  {% if reseller_onbill_variables[1]["country_of_residence"] == "ru" %}
     <i id="edit_onbill_variables_dialog_{{ account_id }}"
        class="fa fa-edit pointer"
        title="Edit account onbill settings"></i>
@@ -44,18 +51,20 @@
                                    }
                    }
     %}
-    {% button class="btn btn-xs btn-onnet pull-right display_none"
-              text=_"save" id="save_json_"++account_id
-              action={postback postback={onbill_set_variables_json account_id=account_id}
-                               qarg="json_storage_"++account_id
-                               delegate="mod_kazoo"
-                     }
-    %}
-    {% button class="btn btn-xs btn-onnet pull-right display_none"
-              text=_"restore"
-              id="restore_json_"++account_id
-    %}
+  {% endif %}
+  {% button class="btn btn-xs btn-onnet pull-right display_none"
+            text=_"save" id="save_json_"++account_id
+            action={postback postback={onbill_set_variables_json account_id=account_id}
+                             qarg="json_storage_"++account_id
+                             delegate="mod_kazoo"
+                   }
+  %}
+  {% button class="btn btn-xs btn-onnet pull-right display_none"
+            text=_"restore"
+            id="restore_json_"++account_id
+  %}
 
+{% endwith %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
