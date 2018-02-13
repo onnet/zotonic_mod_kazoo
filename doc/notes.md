@@ -115,7 +115,7 @@ zotonic start
 /home/zotonic/zotonic/bin/zotonic addsite -s blog phiz 
 vi /home/zotonic/zotonic/user/sites/phiz/config (set hostname and change default password)
 mv /home/zotonic/zotonic/user/sites/phiz/config ~/
-cd ~/zotonic/zotonic/user/sites
+cd ~/zotonic/user/sites
 rm -rf phiz
 git clone https://github.com/onnet/phiz.git
 mv ~/config phiz/
