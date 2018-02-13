@@ -99,13 +99,13 @@ event({submit,signup,_,_}, Context) ->
     try
       'ok' = modkazoo_util:check_field_filled("firstname",Context),
       'ok' = modkazoo_util:check_field_filled("surname",Context),
-      'ok' = modkazoo_util:check_field_filled("username",Context),
+      'ok' = modkazoo_util:check_field_filled("signup_username",Context),
       'ok' = modkazoo_util:check_field_filled("email",Context),
       'ok' = modkazoo_util:check_field_filled("phonenumber",Context),
       Email = z_context:get_q_all("email",Context),
       {{ok, _}, _} = validator_base_format:validate(format, 1, z_context:get_q_all("phonenumber",Context), {false,<<"^[-+0-9 ()]+$">>}, Context),
       {{ok, _}, _} = validator_base_email:validate(email, 2, Email, [], Context),
-      case z_context:get_q_all("username",Context) of
+      case z_context:get_q_all("signup_username",Context) of
           Email -> 'ok';
           _ -> throw({'error', 'emails_not_equal'})
       end,

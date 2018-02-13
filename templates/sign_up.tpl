@@ -38,8 +38,8 @@
             <div class="col-sm-6">
               <input type="text"
                      class="form-control margin-bottom-xs"
-                     id="username"
-                     name="username"
+                     id="signup_username"
+                     name="signup_username"
                      placeholder="{_ Enter email address (mandatory) _}">
             </div>
             <div class="col-sm-6">

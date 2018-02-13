@@ -944,7 +944,7 @@ create_kazoo_account(Context) ->
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     Firstname = z_context:get_q(firstname, Context),
     Surname = z_context:get_q(surname, Context),
-    Username = modkazoo_util:to_lower_binary(z_context:get_q("username", Context)),
+    Username = modkazoo_util:to_lower_binary(z_context:get_q("signup_username", Context)),
     Companyname = z_context:get_q(companyname, Context),
     Email = z_context:get_q(email, Context),
     Phonenumber = z_context:get_q(phonenumber, Context),
