@@ -30,13 +30,13 @@
   <div class="row">
     <div class="col-sm-6">
       {% wire id="button_cf_select_prompt_create"
-              action={dialog_open title=_"Add prompt"
+              action={dialog_open title=_"Add sound file"
                                   template="_add_media_dialog.tpl"
                      }
       %}
       <button id="button_cf_select_prompt_create"
               class="col-xs-12 btn btn-zprimary margin-bottom-xs">
-        {_ Add prompt _}
+        {_ Add sound file _}
       </button>
     </div>
     {% wire name="refresh_edit_prompt_btn_cf_prompt"

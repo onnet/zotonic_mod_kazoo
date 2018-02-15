@@ -131,12 +131,12 @@
   {% wire action={connect signal={update_admin_portal_vms_list_tpl signal_filter=m.kazoo.signal_filter}
                           action={update target="admin_portal_vms_list_tpl"
                                          template="admin_portal_vms_list.tpl"
-                                         headline=_"Voicemails"
+                                         headline=_"Voice mailboxes"
                                  }
                  }
   %}
   <span id="admin_portal_vms_list_tpl">
-        {% include "admin_portal_vms_list.tpl" headline=_"Voicemails" %}
+        {% include "admin_portal_vms_list.tpl" headline=_"Voice mailboxes" %}
   </span>
 
   {% wire action={connect signal={update_admin_portal_lists_tpl signal_filter=m.kazoo.signal_filter}

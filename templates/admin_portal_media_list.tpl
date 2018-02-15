@@ -14,7 +14,7 @@
                                    class="arrowpad fa fa-arrow-circle-down"></i>
   </span>
     {{ headline }}
-    {% button class="btn btn-xs btn-onnet pull-right" text=_"add prompt" action={ dialog_open title=_"Add prompt" template="_add_media_dialog.tpl" } %}
+    {% button class="btn btn-xs btn-onnet pull-right" text=_"add sound file" action={ dialog_open title=_"Add sound file" template="_add_media_dialog.tpl" } %}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

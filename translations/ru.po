@@ -2758,7 +2758,7 @@ msgstr "добавить группу"
 msgid "Add prompt"
 msgstr "Добавить приветствие"
 
-msgid "add prompt"
+msgid "add sound file"
 msgstr "добавить приветствие"
 
 msgid "Add menu"
@@ -2853,6 +2853,9 @@ msgstr "Настройки пользователя"
 
 msgid "Send fax"
 msgstr "Отправить факс"
+
+msgid "Voice mailboxes"
+msgstr "Голосовая почта"
 
 msgid "Voicemails"
 msgstr "Голосовая почта"
