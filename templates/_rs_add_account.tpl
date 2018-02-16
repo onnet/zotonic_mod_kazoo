@@ -13,7 +13,7 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-6">
-        <input type="text" class="form-control margin-bottom-xs" id="username" name="username" placeholder="{_ Email address _} {_ (mandatory) _}">
+        <input type="text" class="form-control margin-bottom-xs" id="signup_username" name="signup_username" placeholder="{_ Email address _} {_ (mandatory) _}">
       </div>
       <div class="col-sm-6">
         <input type="text" class="form-control margin-bottom-xs" id="email" name="email" placeholder="{_ Confirm email address _} {_ (mandatory) _}">

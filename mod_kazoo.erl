@@ -118,11 +118,14 @@ event({submit,signup,_,_}, Context) ->
       error:{badmatch,{{error, 1, invalid}, _}} -> z_render:growl_error(?__("Incorrect Contact phone field",Context), Context);
       error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
       error:{badmatch, []} -> z_render:growl_error(?__("Please accept our Terms of Service and Privacy Policy",Context), Context);
-      error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
+      error:{badmatch, _} = Err ->
+          ?PRINT(Err),
+          ?PRINT(z_context:get_q_all(Context)),
+          z_render:growl_error(?__("All fields should be filled in",Context), Context);
       throw:{error,emails_not_equal} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
       throw:{error,account_name_already_in_use} -> z_render:growl_error(?__("Account name already in use",Context), Context);
-      E1:E2 ->
-          lager:info("Err ~p:~p", [E1, E2]), 
+      Err ->
+          ?PRINT(Err),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
@@ -582,12 +585,20 @@ event({submit,passwordForm,_,_}, Context) ->
             z_render:dialog_close(z_render:growl(?__("User cedentials changed", Context), Context))
     end
   catch
-      error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
-      error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
-      throw:{error,'emails_not_equal'} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
-      throw:{error,'username_already_in_use'} -> z_render:growl_error(?__("Username/Email already in use",Context), Context);
-      E1:E2 ->
-          lager:info("Err ~p:~p", [E1, E2]),
+      error:{badmatch,{{error, 2, invalid}, _}} = Err ->
+          ?PRINT(Err),
+          z_render:growl_error(?__("Incorrect Email field",Context), Context);
+      error:{badmatch, _} = Err ->
+          ?PRINT(Err),
+          z_render:growl_error(?__("All fields should be filled in",Context), Context);
+      throw:{error,'emails_not_equal'} = Err ->
+          ?PRINT(Err),
+          z_render:growl_error(?__("Entered emails should be equal",Context), Context);
+      throw:{error,'username_already_in_use'} = Err ->
+          ?PRINT(Err),
+          z_render:growl_error(?__("Username/Email already in use",Context), Context);
+      Err ->
+          ?PRINT(Err),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
   end;
 
@@ -672,10 +683,12 @@ event({submit,add_new_user,_,_}, Context) ->
       end
     catch
       error:{badmatch,{{error, 2, invalid}, _}} -> z_render:growl_error(?__("Incorrect Email field",Context), Context);
-      error:{badmatch, _} -> z_render:growl_error(?__("All fields should be filled in",Context), Context);
+      error:{badmatch, _} = Err ->
+          ?PRINT(Err),
+          z_render:growl_error(?__("All fields should be filled in",Context), Context);
       throw:{error,emails_not_equal} -> z_render:growl_error(?__("Entered emails should be equal",Context), Context);
-      E1:E2 ->
-          lager:info("Err ~p:~p", [E1, E2]),
+      Err ->
+          ?PRINT(Err),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
@@ -2450,8 +2463,8 @@ event({submit,{set_e911_address,[{account_id,AccountId}]},_,_}, Context) ->
           z_render:growl_error(?__("Please provide proof of address file",Context), Context);
       error:{badmatch, _} ->
           z_render:growl_error(?__("All mandatory fields should be filled in",Context), Context);
-      E1:E2 ->
-          lager:info("Err ~p:~p", [E1, E2]),
+      Err ->
+          ?PRINT(Err),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
@@ -2469,10 +2482,11 @@ event({submit,{edit_e911_proof_address,[{doc_id,DocId},{account_id,AccountId}]},
                      ,Context),
       Context
     catch
-      error:{badmatch, _} ->
+      error:{badmatch, _} = Err ->
+          ?PRINT(Err),
           z_render:growl_error(?__("All mandatory fields should be filled in",Context), Context);
-      E1:E2 ->
-          lager:info("Err ~p:~p", [E1, E2]),
+      Err ->
+          ?PRINT(Err),
           z_render:growl_error(?__("All fields should be correctly filled in",Context), Context)
     end;
 
