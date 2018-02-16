@@ -237,9 +237,11 @@
   </thead>
 </table>
 {% if m.session.display_billing %}
-  {% rs_service_plans_manager %}
+  {# rs_service_plans_manager #}
+  {% include "_rs_service_plans_manager.tpl" %}
   <span id="set_notify_level_tpl">
-    {% set_balance_level_notify %}
+    {# set_balance_level_notify #}
+    {% include "_set_notify_level.tpl" %}
   </span>
 {% endif %}
 {% include "rs_account_details_subwidget.tpl" %}
