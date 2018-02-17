@@ -42,7 +42,8 @@ observe_kazoo_notify(A, _Context) ->
 
 observe_topmenu_element(_, Context) ->
     case modkazoo_auth:is_auth(Context) of
-        'false' -> 'undefined';
+      %%  'false' -> 'undefined';
+        'false' -> <<"menu_noauth.tpl">>;
         'true' -> choose_topmenu(Context)
     end.
 
