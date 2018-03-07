@@ -13,7 +13,7 @@
         ,decode_data/2
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -type(utf8_str() :: [integer()]).
 -type(ascii_str() :: [byte()]).

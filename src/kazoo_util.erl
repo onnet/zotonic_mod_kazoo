@@ -362,7 +362,7 @@
     ,maybe_masked/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("include/mod_kazoo.hrl").
 
 -define(MK_ACCOUNT, 

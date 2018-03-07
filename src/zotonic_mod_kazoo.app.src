@@ -1,0 +1,11 @@
+{application, zotonic_mod_kazoo, [
+    {description, "mod_kazoo module."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [zotonic_core, ibrowse]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/onnet/mod_kazoo"}]}
+]}.

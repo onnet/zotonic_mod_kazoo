@@ -7,7 +7,7 @@
         ,rs_kz_customer_update/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -define(HTML_TO_PDF, "/usr/local/bin/wkhtmltopdf --quiet").
 

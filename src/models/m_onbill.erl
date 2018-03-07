@@ -3,13 +3,13 @@
 
 -behaviour(gen_model).
 
--export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
+-export([m_get/2
+        ,m_find_value/3
+        ,m_to_list/2
+%    m_value/2
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 m_find_value({onbill_get_doc, [{doc_id, DocId}]}, _M, Context) ->
     onbill_util:doc(DocId, Context);
@@ -128,5 +128,10 @@ m_to_list(_V, _Context) ->
     lager:info("m_to_list _V: ~p", [_V]),
     [_V,"m_to_list"].
 
-m_value(#m{value=V}, _Context) -> V.
+%m_value(#m{value=V}, _Context) -> V.
 
+-spec m_get( list(), z:context() ) -> { term(), list() }.
+m_get([ _ | Rest ], _Context) ->
+    {undefined, Rest};
+m_get(_, _Context) ->
+    {undefined, []}.

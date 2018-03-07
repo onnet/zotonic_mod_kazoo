@@ -20,7 +20,7 @@
 
 -export([process_post/1]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 process_post(Context) ->
     PostDataStr = get_post_data(z_context:get_q_all_noz(Context)),

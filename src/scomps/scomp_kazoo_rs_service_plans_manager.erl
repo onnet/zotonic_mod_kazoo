@@ -3,7 +3,7 @@
 
 -export([vary/2, render/3]).
 
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 vary(_Params, _Context) -> nocache.
 

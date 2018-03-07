@@ -11,7 +11,7 @@
 
 -export([process_get/2]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("../include/mod_kazoo.hrl").
 
 process_get(_ReqData, Context) ->

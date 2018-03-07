@@ -16,7 +16,7 @@
         ,finish_request/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include("../include/mod_kazoo.hrl").
 
 -define(FILE_DIR, <<"/tmp/">>).

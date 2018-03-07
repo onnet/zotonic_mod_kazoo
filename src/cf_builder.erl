@@ -30,7 +30,7 @@
     ,may_be_check_cid_children_clean/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("include/mod_kazoo.hrl").
 
 cf_add_number(Number, Context) ->

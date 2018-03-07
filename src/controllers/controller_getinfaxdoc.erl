@@ -14,7 +14,7 @@
         ,finish_request/1
 ]).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include("../include/mod_kazoo.hrl").
 
 service_available(Context0) ->

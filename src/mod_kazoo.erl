@@ -17,11 +17,11 @@
 ]).
 
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("include/mod_kazoo.hrl").
 
 init(_Context) ->
-    application:start('ibrowse'),
+    application:ensure_all_started('ibrowse'),
     'ok'.
 
 observe_postback_notify({postback_notify, <<"no_auth">>,_,_,_}, Context) ->

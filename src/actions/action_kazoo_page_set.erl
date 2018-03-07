@@ -1,5 +1,5 @@
 -module(action_kazoo_page_set).
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4,
     event/2
