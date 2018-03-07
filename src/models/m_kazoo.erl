@@ -354,7 +354,7 @@ m_get([ {kz_list_ledgers,[{account_id,AccountId},{selected_billing_period,Select
     {kazoo_util:kz_list_ledgers(LedgerId, AccountId, CreatedFrom, CreatedTo, Context), Rest};
 
 m_get([ {kz_ledgers_summ,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{ledger_id,LedgerId}]} | Rest ], Context) ->
-    LedgersList =
+    {LedgersList, _} =
         m_get([ {kz_list_ledgers,[{account_id,AccountId},{selected_billing_period,SelectedBillingPeriod},{ledger_id,LedgerId}]} | Rest ]
                     ,Context),
     {lists:foldl(fun(X, Acc) -> case modkazoo_util:get_value([<<"source">>,<<"service">>], X) of
