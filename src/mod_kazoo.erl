@@ -1661,17 +1661,34 @@ event({postback,<<"refresh_user_callstats">>,_,_}, Context) ->
                         {CrFr, CrFr + (?SECONDS_IN_DAY * 30) - 1}
                 end
         end,
-    mod_signal:emit({update_user_portal_call_history_tpl
-                    ,?SIGNAL_FILTER(Context)
-                     ++ [{created_from, CreatedFrom}
-                        ,{created_to, CreatedTo}
-                        ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
-                        ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
-                        ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
-                        ]
-                    }
-                   ,Context),
-    Context;
+%    mod_signal:emit({update_user_portal_call_history_tpl
+%                    ,?SIGNAL_FILTER(Context)
+%                     ++ [{created_from, CreatedFrom}
+%                        ,{created_to, CreatedTo}
+%                        ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
+%                        ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
+%                        ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
+%                        ]
+%                    }
+%                   ,Context),
+%    Context;
+    ?PRINT("CDR lookup start"),
+    CDR = kazoo_util:kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context),
+    ?PRINT("CDR lookup end"),
+    ?PRINT(CDR),
+    Ctx = z_render:update("ap_calls_list_widget_opened"
+                         ,z_template:render("user_portal_call_history_table.tpl"
+                                           ,[{calls,CDR}
+                                            ,{created_from, CreatedFrom}
+                                            ,{created_to, CreatedTo}
+                                            ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
+                                            ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
+                                            ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
+                                            ]
+                                           ,Context)
+                         ,Context),
+    ?PRINT("Ctx prepared"),
+    Ctx;
 
 event({postback,<<"refresh_admin_callstats">>,_,_}, Context) ->
     {CreatedFrom, CreatedTo} =
@@ -1696,17 +1713,34 @@ event({postback,<<"refresh_admin_callstats">>,_,_}, Context) ->
                         {CrFr, CrFr + (?SECONDS_IN_DAY * 30) - 1}
                 end
         end,
-    mod_signal:emit({update_admin_portal_call_history_tpl
-                    ,?SIGNAL_FILTER(Context)
-                     ++ [{created_from, CreatedFrom}
-                        ,{created_to, CreatedTo}
-                        ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
-                        ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
-                        ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
-                        ]
-                    }
-                   ,Context),
-    Context;
+%    mod_signal:emit({update_admin_portal_call_history_tpl
+%                    ,?SIGNAL_FILTER(Context)
+%                     ++ [{created_from, CreatedFrom}
+%                        ,{created_to, CreatedTo}
+%                        ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
+%                        ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
+%                        ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
+%                        ]
+%                    }
+%                   ,Context),
+%    Context;
+    ?PRINT("CDR lookup start"),
+    CDR = kazoo_util:kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context),
+    ?PRINT("CDR lookup end"),
+    ?PRINT(CDR),
+    Ctx = z_render:update("ap_calls_list_widget_opened"
+                         ,z_template:render("admin_portal_call_history_table.tpl"
+                                           ,[{calls,CDR}
+                                            ,{created_from, CreatedFrom}
+                                            ,{created_to, CreatedTo}
+                                            ,{selected_billing_period, z_context:get_q("selected_billing_period",Context)}
+                                            ,{callstatsdayFrom, z_context:get_q("callstatsdayFrom",Context)}
+                                            ,{callstatsdayTo, z_context:get_q("callstatsdayTo",Context)}
+                                            ]
+                                           ,Context)
+                         ,Context),
+    ?PRINT("Ctx prepared"),
+    Ctx;
 
 
 event({postback,{global_carrier_routing,[{account_id,AccountId}]},_,_}, Context) ->
