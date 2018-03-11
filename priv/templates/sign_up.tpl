@@ -114,7 +114,7 @@
         <input type="hidden" name="notify_signed_up" value="yes" />
         <input type="hidden"
                name="kazoo_reseller_id"
-               value="{{ m.config.mod_kazoo.reseller_id.value }}" />
+               value="{{ m.vars.reseller_id }}" />
       </form>
     </div>
   </div>

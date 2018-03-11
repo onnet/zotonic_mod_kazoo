@@ -6,7 +6,7 @@
     <meta name="description" content="KazooUI Zotonic module">
     <meta name="author" content="kirill.sysoev@gmail.com">
     <link rel="shortcut icon" href="/lib/images/favicon.ico">
-    <title>{{ m.config.mod_kazoo.page_header.value }}</title>
+    <title>{{ m.vars.page_header }}</title>
 
     {% lib "js/jquery-2.1.1.min.js" %}
     {% lib "js/jquery-migrate-1.0.0.js" %}

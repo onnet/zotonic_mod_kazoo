@@ -180,7 +180,7 @@ gcapture_check(Context) ->
                    ,GCaptureResp/binary
                    ,"&remoteip="
                    ,ClientIP/binary>>,
-            {'ok', {{"HTTP/1.1", _ReturnCode, _State}, _Head, Body}} = httpc:request('get', {binary_to_list(URL), []}, [], []),
+            {'ok', {{"HTTP/1.1", _ReturnCode, _State}, _Head, Body}} = httpc:request('get', {z_convert:to_list(URL), []}, [], []),
             {JsonData} = jiffy:decode(Body),
             proplists:get_value(<<"success">>, JsonData);
         _ -> 'true'

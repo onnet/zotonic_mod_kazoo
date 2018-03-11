@@ -26,7 +26,7 @@
         <td class="td-center">{{ ledger[1]["metadata"][1]["callee_id_number"] }}</td>
         <td class="td-center">{{ (ledger[1]["usage"][1]["quantity"]/60)|to_integer }} {_ min _}</td>
         <td class="td-center">
-          {{ m.config.mod_kazoo.local_currency_sign.value }}{{ ledger[1]["amount"]|format_price:[".",""] }}
+          {{ m.vars.local_currency_sign }}{{ ledger[1]["amount"]|format_price:[".",""] }}
         </td>
         <td style="text-align: center;">
           <i id="info_{{ ledger[1]["id"] }}"

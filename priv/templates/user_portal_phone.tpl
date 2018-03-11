@@ -75,11 +75,11 @@
 <script type="text/javascript">
 
 var config = {
-  wsServers: "wss://{{ m.config.mod_kazoo.sip_registrar.value }}:{{ m.config.mod_kazoo.wss_port.value }}",
+  wsServers: "wss://{{ m.vars.sip_registrar }}:{{ m.vars.wss_port }}",
   uri: "sip:{{ m.session.webrtc_dev_sip_username }}@{{ m.kazoo.get_account_realm }}",
   authorizationUser: "{{ m.session.webrtc_dev_sip_username }}",
   password: "{{ m.session.webrtc_dev_sip_password }}",
-  userAgentString: "{{ m.config.mod_kazoo.user_agent_string.value }}",
+  userAgentString: "{{ m.vars.user_agent_string }}",
   traceSip: true,
   rel100: SIP.C.supported.SUPPORTED
 };

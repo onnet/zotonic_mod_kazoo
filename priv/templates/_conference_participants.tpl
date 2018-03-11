@@ -59,7 +59,7 @@
          class="input input-number-onnet pull-right"
          type="text"
          name="a_leg_number"
-         placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}"
+         placeholder="{{ m.vars.placeholder_phone }}"
          maxlength="12">
 {% endblock %}
 

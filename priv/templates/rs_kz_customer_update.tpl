@@ -5,7 +5,7 @@
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ From (email address) _}:
             <input type="text" class="form-control margin-bottom-xs" id="from" name="from" placeholder="{_ Enter sender's email adress here _}"
-                                                                                           value="{{ m.config.mod_kazoo.sales_email.value }}">
+                                                                                           value="{{ m.vars.sales_email }}">
           </label>
         </div>
         <div class="col-sm-6">

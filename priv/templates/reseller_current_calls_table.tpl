@@ -25,7 +25,7 @@
 
 {% javascript %}
 
-  var socket = new WebSocket('{{ m.config.mod_kazoo.kazoo_blackhole_url.value }}');
+  var socket = new WebSocket('{{ m.vars.kazoo_blackhole_url }}');
   socket.onopen = function() {
     send({
         action: 'unsubscribe',

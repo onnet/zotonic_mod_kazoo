@@ -39,7 +39,7 @@
          class="input input-number-onnet pull-right"
          type="text"
          name="new_number_to_add"
-         placeholder="{{ m.config.mod_kazoo.placeholder_phone.value }}"
+         placeholder="{{ m.vars.placeholder_phone }}"
          maxlength="13">
 {% endblock %}
 

@@ -92,7 +92,7 @@
                       {% if zone == vmbox[1]["timezone"]
                          or (not vmbox[1]["timezone"]
                              and
-                             zone == m.config.mod_kazoo.default_kazoo_timezone.value)
+                             zone == m.vars.default_kazoo_timezone)
                       %}
                         selected
                       {% endif %}>

@@ -21,7 +21,7 @@
         {_ Credit amount _}
       </td>
       <td>
-        {{ m.config.mod_kazoo.local_currency_sign.value }}{{ pr_pt[1]["amount"]|onnet_format_price }}
+        {{ m.vars.local_currency_sign }}{{ pr_pt[1]["amount"]|onnet_format_price }}
       </td>
     </tr>
     <tr>

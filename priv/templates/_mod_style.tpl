@@ -1,53 +1,53 @@
 <style type="text/css">
-.mkz-c1, .zprimary {color: {{ m.config.mod_kazoo.color1.value }}; }
-.mkz-bc1 {background-color: {{ m.config.mod_kazoo.color1.value }}; }
-.mkz-c2 {color: {{ m.config.mod_kazoo.color2.value }}; }
-.mkz-bc2 {background-color: {{ m.config.mod_kazoo.color2.value }}; }
-.mkz-c3 {color: {{ m.config.mod_kazoo.color3.value }}; }
-.mkz-bc3 {background-color: {{ m.config.mod_kazoo.color3.value }}; }
+.mkz-c1, .zprimary {color: {{ m.vars.color1 }}; }
+.mkz-bc1 {background-color: {{ m.vars.color1 }}; }
+.mkz-c2 {color: {{ m.vars.color2 }}; }
+.mkz-bc2 {background-color: {{ m.vars.color2 }}; }
+.mkz-c3 {color: {{ m.vars.color3 }}; }
+.mkz-bc3 {background-color: {{ m.vars.color3 }}; }
 
 .btn-zprimary,
 .btn-zprimary:hover {
-color: {{ m.config.mod_kazoo.color3.value }}!important;
-background-color: {{ m.config.mod_kazoo.color1.value }};
-border-color: {{ m.config.mod_kazoo.color1.value }};
+color: {{ m.vars.color3 }}!important;
+background-color: {{ m.vars.color1 }};
+border-color: {{ m.vars.color1 }};
 }
 
 .registered {
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
   font-size: 18px!important;
 }
 
 .unregistered {
-  color: {{ m.config.mod_kazoo.color2.value }};
+  color: {{ m.vars.color2 }};
   font-size: 18px!important;
 }
 
 .btn-zalarm,
 .btn-zalarm:hover {
-  color: {{ m.config.mod_kazoo.color3.value }}!important;
-  background-color: {{ m.config.mod_kazoo.color2.value }};
-  border-color: {{ m.config.mod_kazoo.color2.value }};
+  color: {{ m.vars.color3 }}!important;
+  background-color: {{ m.vars.color2 }};
+  border-color: {{ m.vars.color2 }};
 }
 
 .panel-zprimary {
-    border-color: {{ m.config.mod_kazoo.color1.value }};
+    border-color: {{ m.vars.color1 }};
 }
 
 .panel-zprimary>.panel-heading {
-    color: {{ m.config.mod_kazoo.color3.value }}!important;
-    background-color: {{ m.config.mod_kazoo.color1.value }};
-    border-color: {{ m.config.mod_kazoo.color1.value }};
+    color: {{ m.vars.color3 }}!important;
+    background-color: {{ m.vars.color1 }};
+    border-color: {{ m.vars.color1 }};
 }
 
 .panel-zalarm {
-    border-color: {{ m.config.mod_kazoo.color2.value }};
+    border-color: {{ m.vars.color2 }};
 }
 
 .panel-zalarm>.panel-heading {
-    color: {{ m.config.mod_kazoo.color3.value }}!important;
-    background-color: {{ m.config.mod_kazoo.color2.value }};
-    border-color: {{ m.config.mod_kazoo.color2.value }};
+    color: {{ m.vars.color3 }}!important;
+    background-color: {{ m.vars.color2 }};
+    border-color: {{ m.vars.color2 }};
 }
 
 h2 {
@@ -69,11 +69,11 @@ h3 {
 }
 
 a {
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
 }
 
 .nav-tabs > li > a {
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
 }
 
 .nav-tabs>li.active>a, 
@@ -92,10 +92,10 @@ body > iframe[src="about:blank"] {
 }
 
 .navbar-nav li#order {
-        background: {{ m.config.mod_kazoo.color1.value }};
-        background: linear-gradient(top, {{ m.config.mod_kazoo.color1.value }}, {{ m.config.mod_kazoo.color1.value }});
-        background: -webkit-linear-gradient(top, {{ m.config.mod_kazoo.color1.value }}, {{ m.config.mod_kazoo.color1.value }});
-        background: -moz-linear-gradient(top, {{ m.config.mod_kazoo.color1.value }}, {{ m.config.mod_kazoo.color1.value }});
+        background: {{ m.vars.color1 }};
+        background: linear-gradient(top, {{ m.vars.color1 }}, {{ m.vars.color1 }});
+        background: -webkit-linear-gradient(top, {{ m.vars.color1 }}, {{ m.vars.color1 }});
+        background: -moz-linear-gradient(top, {{ m.vars.color1 }}, {{ m.vars.color1 }});
         position: relative;
 }
 
@@ -105,7 +105,7 @@ div table tbody tr td label.radio {
 
 .pager li>a, .pager li>span {
   border-radius: 0px!important;
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
 }
 
 .th-onnet {
@@ -122,7 +122,7 @@ table#calls_list_table tfoot tr {
 }
 
 .zalarm {
-  color: {{ m.config.mod_kazoo.color2.value }};
+  color: {{ m.vars.color2 }};
 }
 
 .zwarning {
@@ -131,17 +131,17 @@ table#calls_list_table tfoot tr {
 
 .pagination>li>a,
 .pagination>li>a:hover {
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
 }
 
 .pagination > .active > a,
 .pagination > .active > a:hover {
-  background-color: {{ m.config.mod_kazoo.color1.value }};
+  background-color: {{ m.vars.color1 }};
 }
 
 .info-board-onnet {
   background-color: #eee;
-  border-color: {{ m.config.mod_kazoo.color1.value }};
+  border-color: {{ m.vars.color1 }};
 }
 
 input[type="text"].input-long-onnet {
@@ -239,7 +239,7 @@ input, select{
 .btn-onnet {
   color: #515151;
   background-color: #e6e6e6;
-  border-color: {{ m.config.mod_kazoo.color2.value }};
+  border-color: {{ m.vars.color2 }};
   margin-left: 3px;
 }
 
@@ -595,7 +595,7 @@ div#recaptcha_widget {
 
 .trans-list {
   text-align: left;
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
 }
 
 .trans-h {
@@ -608,16 +608,16 @@ div#recaptcha_widget {
 
 .edit_user_label {
   float: right;
-  color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color1 }};
 }
 
 .allotment_label {
   float: right;
-  color: {{ m.config.mod_kazoo.color2.value }};
+  color: {{ m.vars.color2 }};
 }
 
 label.radio-inline, label.checkbox-inline, label.radio, label.checkbox {
-  background-color: {{ m.config.mod_kazoo.color1.value }};
+  background-color: {{ m.vars.color1 }};
   color: #fff !important;
   cursor: pointer;
   font-weight: 400;
@@ -627,7 +627,7 @@ label.radio-inline, label.checkbox-inline, label.radio, label.checkbox {
   padding: 7px 10px 7px 30px;
 }
 label.radio-inline.checked, label.checkbox-inline.checked, label.radio.checked, label.checkbox.checked {
-  background-color: {{ m.config.mod_kazoo.color2.value }};
+  background-color: {{ m.vars.color2 }};
   color: #fff !important;
   text-shadow: 1px 1px 2px #000 !important;
 }
@@ -681,15 +681,15 @@ label.radio-inline.checked, label.checkbox-inline.checked, label.radio.checked, 
 .btn-zprimary-checkbox,
 .btn-zprimary-checkbox:hover {
 color: #ffffff;
-background-color: {{ m.config.mod_kazoo.color1.value }};
-border-color: {{ m.config.mod_kazoo.color1.value }};
+background-color: {{ m.vars.color1 }};
+border-color: {{ m.vars.color1 }};
 }
 
 .btn-zprimary-checkbox.active,
 .btn-zprimary-checkbox.active:hover {
 color: #ffffff;
-background-color: {{ m.config.mod_kazoo.color2.value }}!important;
-border-color: {{ m.config.mod_kazoo.color2.value }}!important;
+background-color: {{ m.vars.color2 }}!important;
+border-color: {{ m.vars.color2 }}!important;
 }
 
 .form-control-onnet {
@@ -836,7 +836,7 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
   left: 0;
   content: '';
   width: 2.5em;
-  background: {{ m.config.mod_kazoo.color1.value }};
+  background: {{ m.vars.color1 }};
 /*  border-radius: 3px 0 0 3px; */
 }
 
@@ -872,20 +872,20 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
 
 .funkyradio-default input[type="radio"]:checked ~ label:before,
 .funkyradio-default input[type="checkbox"]:checked ~ label:before {
-  color: {{ m.config.mod_kazoo.color3.value }};
-  background-color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color3 }};
+  background-color: {{ m.vars.color1 }};
 }
 
 .funkyradio-zprimary input[type="radio"]:checked ~ label:before,
 .funkyradio-zprimary input[type="checkbox"]:checked ~ label:before {
-  color: {{ m.config.mod_kazoo.color3.value }};
-  background-color: {{ m.config.mod_kazoo.color1.value }};
+  color: {{ m.vars.color3 }};
+  background-color: {{ m.vars.color1 }};
 }
 
 .funkyradio-zalarm input[type="radio"]:checked ~ label:before,
 .funkyradio-zalarm input[type="checkbox"]:checked ~ label:before {
-  color: {{ m.config.mod_kazoo.color3.value }};
-  background-color: {{ m.config.mod_kazoo.color2.value }};
+  color: {{ m.vars.color3 }};
+  background-color: {{ m.vars.color2 }};
 }
 
 .funkyradio-danger input[type="radio"]:checked ~ label:before,
@@ -896,11 +896,11 @@ table.dataTable thead .sorting_desc_disabled { background: url('/lib/images/sort
 
 .reminder911 {
   padding-left: 6em;
-  color: {{ m.config.mod_kazoo.color2.value }};
+  color: {{ m.vars.color2 }};
 }
 
 .datepicker table tr td.active.active {
-  background-color: {{ m.config.mod_kazoo.color2.value }}!important;
+  background-color: {{ m.vars.color2 }}!important;
 }
 
 .datepicker table tr td {

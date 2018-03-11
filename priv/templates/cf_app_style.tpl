@@ -662,7 +662,7 @@
 	width: 322px;
 }
 #ws_callflow .callflow .root > .top_bar {
-        background-color: {{ m.config.mod_kazoo.color1.value }};
+        background-color: {{ m.vars.color1 }};
         text-align: left;
 }
 #ws_callflow .callflow .root > .top_bar > span {
@@ -1090,7 +1090,7 @@
 	z-index: 10000;
 }
 #ws_callflow .title {
-	background: {{ m.config.mod_kazoo.color1.value }};
+	background: {{ m.vars.color1 }};
 	font-size: 12px;
 	height: 25px;
 	line-height: 25px;

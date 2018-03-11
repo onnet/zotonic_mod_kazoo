@@ -6,10 +6,10 @@
 
 <div class="pl-10 pr-10 col-md-12" style="margin-bottom: 1em;">
   <h5>
-    {_ Callback service phone number _}: {{ m.config.mod_kazoo.callback_number.value }}
+    {_ Callback service phone number _}: {{ m.vars.callback_number }}
   </h5>
   <h5>
-    {_ PIN access phone number _}: {{ m.config.mod_kazoo.callingcards_number.value }}
+    {_ PIN access phone number _}: {{ m.vars.callingcards_number }}
   </h5>
 </div>
 <div class="pl-10 pr-10 col-md-6">
