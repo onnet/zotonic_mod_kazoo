@@ -1727,7 +1727,7 @@ event({postback,<<"refresh_admin_callstats">>,_,_}, Context) ->
     ?PRINT("CDR lookup start"),
     CDR = kazoo_util:kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context),
     ?PRINT("CDR lookup end"),
-    ?PRINT(CDR),
+    ?PRINT(length(CDR)),
     Ctx = z_render:update("ap_calls_list_widget_opened"
                          ,z_template:render("admin_portal_call_history_table.tpl"
                                            ,[{calls,CDR}

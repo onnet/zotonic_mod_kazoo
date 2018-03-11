@@ -1,7 +1,7 @@
 <div style="
-       {% if m.config.mod_kazoo.color2.value %}
-         background-color: {{ m.config.mod_kazoo.color2.value }};
-         border-color: {{ m.config.mod_kazoo.color2.value }};
+       {% if m.vars.color2 %}
+         background-color: {{ m.vars.color2 }};
+         border-color: {{ m.vars.color2 }};
        {% else %}
          background-color: #303039;
        {% endif %}"
@@ -14,16 +14,16 @@
         <span class="icon-bar"></span>
       </button>
       <a class="hidden-xs navbar-brand" href="/">
-        {% if m.config.mod_kazoo.page_header.value %}
-          {{ m.config.mod_kazoo.page_header.value }}
+        {% if m.vars.page_header %}
+          {{ m.vars.page_header }}
         {% else %}
           Cloud PBX Portal
         {% endif %}
       </a>
       <a class="visible-xs navbar-brand" href="/">
-        {% if m.config.mod_kazoo.page_header_short.value %}
-          {{ m.config.mod_kazoo.page_header.value }}
-        {% elseif m.config.mod_kazoo.page_header.value %}
+        {% if m.vars.page_header_short %}
+          {{ m.vars.page_header }}
+        {% elseif m.vars.page_header %}
           Cloud PBX Portal
         {% else %}
           Cloud PBX
