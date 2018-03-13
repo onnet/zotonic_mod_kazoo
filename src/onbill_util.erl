@@ -269,7 +269,7 @@ set_e911_address(Number, AccountId, Context) ->
                 }
         ],
     SenderName = kazoo_util:email_sender_name(Context),
-    EmailFrom = m_config:get_value('mod_kazoo', sales_email, Context),
+    EmailFrom = m_vars:get_value('mod_kazoo', sales_email, Context),
     Vars = [{account_name, z_context:get_session('kazoo_account_name', Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{email_from, EmailFrom}

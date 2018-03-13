@@ -406,11 +406,11 @@ event({postback,{rs_add_number,[{account_id, AccountId}]},_,_}, Context) ->
             SenderName = kazoo_util:email_sender_name(Context),
             Vars = [{account_name, kazoo_util:get_account_name(Context)}
                    ,{login_name, z_context:get_session('kazoo_login_name', Context)}
-                   ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
+                   ,{email_from, m_vars:get_value('mod_kazoo', sales_email, Context)}
                    ,{clientip, ClientIP}
                    ,{sender_name, SenderName}
                    ,{numbers, [NumberToAdd]}],
-            spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
+            spawn('z_email', 'send_render', [m_vars:get_value('mod_kazoo', sales_email, Context), "_email_number_purchase.tpl", Vars, Context]),
             lager:info("Number add attempt AccountId: ~p. Vars: ~p",[AccountId, Vars]),
             mod_signal:emit({update_rs_allocated_numbers_tpl, ?SIGNAL_FILTER(Context) ++ [{account_id, AccountId}]}, Context),
             Context
@@ -422,13 +422,13 @@ event({postback,{deallocate_number,[{number,Number}]},_,_}, Context) ->
     SenderName = kazoo_util:email_sender_name(Context),
     Vars = [{account_name, kazoo_util:get_account_name(Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
-           ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
+           ,{email_from, m_vars:get_value('mod_kazoo', sales_email, Context)}
            ,{sender_name, SenderName}
            ,{clientip, ClientIP}
            ,{number, Number}],
     spawn('z_email'
          ,'send_render'
-         ,[m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]
+         ,[m_vars:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]
          ),
     case kazoo_util:deallocate_number(Number, Context) of
         <<>> ->
@@ -455,11 +455,11 @@ event({postback,{deallocate_number,[{number,Number},{account_id, AccountId}]},_,
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     Vars = [{account_name, kazoo_util:get_account_name(Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
-           ,{email_from, m_config:get_value('mod_kazoo', sales_email, Context)}
+           ,{email_from, m_vars:get_value('mod_kazoo', sales_email, Context)}
            ,{clientip, ClientIP}
            ,{sender_name, SenderName}
            ,{number, Number}],
-    spawn('z_email', 'send_render', [m_config:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
+    spawn('z_email', 'send_render', [m_vars:get_value('mod_kazoo', sales_email, Context), "_email_deallocate_number.tpl", Vars, Context]),
     case kazoo_util:deallocate_number(Number, AccountId, Context) of
         <<>> ->
             Context1 = z_render:update("rs_numbers_list_table"
@@ -2435,7 +2435,7 @@ event({submit,selected_numbers_array_form,_,_}, Context) ->
 event({submit,{allocate_numbers,[{numbers,Numbers}]},_,_}, Context) ->
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     SenderName = kazoo_util:email_sender_name(Context),
-    EmailFrom = m_config:get_value('mod_kazoo', sales_email, Context),
+    EmailFrom = m_vars:get_value('mod_kazoo', sales_email, Context),
     Vars = [{account_name, kazoo_util:get_account_name(Context)}
            ,{login_name, z_context:get_session('kazoo_login_name', Context)}
            ,{email_from, EmailFrom}

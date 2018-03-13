@@ -171,7 +171,7 @@ may_be_set_reseller_data(Context) ->
 gcapture_check(Context) ->
     case z_context:get_session(kazoo_reseller_account_id, Context) of
         'undefined' ->
-            CaptSecret = m_config:get_value('mod_kazoo', 'g_capture_secret', Context),
+            CaptSecret = m_vars:get_value('mod_kazoo', 'g_capture_secret', Context),
             GCaptureResp = z_context:get_q(<<"g-recaptcha-response">>,Context),
             ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
             URL = <<"https://www.google.com/recaptcha/api/siteverify?secret="

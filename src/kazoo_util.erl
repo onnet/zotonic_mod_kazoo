@@ -510,9 +510,9 @@
 ]}).
 
 kz_admin_creds(Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, ?V2/binary, ?API_AUTH/binary>>),
-    API_Key = m_config:get_value('mod_kazoo', 'kazoo_super_duper_api_key', Context),
+    API_Key = m_vars:get_value('mod_kazoo', 'kazoo_super_duper_api_key', Context),
     DataBag = {[{<<"data">>, {[{<<"api_key">>, API_Key}]}}]},
     Payload = jiffy:encode(DataBag),
     {'ok', _, _, Body} = ibrowse:send_req(URL, req_headers('undefined'), 'put', Payload, [{'inactivity_timeout', 15000}]),
@@ -527,13 +527,13 @@ kz_user_creds(Login, Password, AccountName, Context) ->
     kz_user_creds(Md5Hash, AccountName, Context).
 
 kz_user_creds(Md5Hash, AccountName, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?USER_AUTH/binary>>),
     DataBag = {[{<<"data">>, {[{<<"credentials">>, Md5Hash}, {<<"account_name">>, AccountName}]}}]},
     kz_creds(URL, DataBag, Context).
 
 kz_api_key_creds(API_Key, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, ?V1/binary, ?API_AUTH/binary>>),
     DataBag = {[{<<"data">>, {[{<<"api_key">>, ?TO_BIN(API_Key)}]}}]},
     kz_creds(URL, DataBag, Context).
@@ -548,7 +548,7 @@ kz_creds(URL, DataBag, Context) ->
                 Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
                 Account_Name = modkazoo_util:get_value([<<"data">>, <<"account_name">>], JsonBody),
                 Auth_Token = modkazoo_util:get_value(<<"auth_token">>, JsonBody),
-                Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+                Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
                 {'ok' ,{'owner_id', Owner_Id}
                       ,{'account_id', Account_Id}
                       ,{'auth_token', Auth_Token}
@@ -715,7 +715,7 @@ device_doc_cure(Doc) ->
     end.
 
 crossbar_noauth_request_raw(Verb, API_String, DataBag, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
@@ -754,7 +754,7 @@ crossbar_account_send_request(Verb, API_String, ContentType, DataBag, Context) -
     crossbar_account_send_request(Verb, API_String, ContentType, DataBag, AuthToken, Context).
 
 crossbar_account_send_request(Verb, API_String, ContentType, DataBag, AuthToken, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     Payload = case DataBag of
                   [] -> [];
@@ -793,7 +793,7 @@ crossbar_account_send_raw_request(Verb, API_String, Headers, Data, Context) ->
     crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context).
 
 crossbar_account_send_raw_request(AuthToken, Verb, API_String, Headers, Data, Context) ->
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     URL = z_convert:to_list(<<Crossbar_URL/binary, API_String/binary>>),
     ibrowse:send_req(URL, req_headers(AuthToken)++Headers, Verb, Data, [{'inactivity_timeout', 15000}]).
 
@@ -948,7 +948,7 @@ create_kazoo_account(Context) ->
     Companyname = z_context:get_q(companyname, Context),
     Email = z_context:get_q(email, Context),
     Phonenumber = z_context:get_q(phonenumber, Context),
-    DefaultRealm = m_config:get_value('mod_kazoo', 'kazoo_default_realm', Context),
+    DefaultRealm = m_vars:get_value('mod_kazoo', 'kazoo_default_realm', Context),
     Accountname = case valid_account_name(Companyname) of
       'false' -> ?TO_BIN(modkazoo_util2:translit(z_convert:to_list(<<Firstname/binary, <<" ">>/binary, Surname/binary>>)));
       'true' -> ?TO_BIN(modkazoo_util2:translit(z_convert:to_list(Companyname)))
@@ -967,12 +967,12 @@ create_kazoo_account(Context) ->
     end,
 
     Language = 
-        case m_config:get_value('mod_kazoo', 'default_kazoo_language', Context) of
+        case m_vars:get_value('mod_kazoo', 'default_kazoo_language', Context) of
             'undefined' -> <<"en-en">>;
              Lang -> ?TO_BIN(Lang)
         end,
     Timezone = 
-        case m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context) of
+        case m_vars:get_value('mod_kazoo', 'default_kazoo_timezone', Context) of
             'undefined' -> <<"Europe/London">>;
             TZ -> ?TO_BIN(TZ)
         end,
@@ -1136,10 +1136,10 @@ add_user(DataBag, AcceptCharges, Context) ->
 
 email_sender_name(Context) ->
     case z_context:get_session('kazoo_account_id', Context) of
-        'undefined' -> m_config:get_value('mod_kazoo', 'sender_name', Context);
+        'undefined' -> m_vars:get_value('mod_kazoo', 'sender_name', Context);
         ResellerId ->
             case kz_account_doc_field(<<"sender_name">>, ResellerId, Context) of
-                'undefined' -> m_config:get_value('mod_kazoo', 'sender_name', Context);
+                'undefined' -> m_vars:get_value('mod_kazoo', 'sender_name', Context);
                 SenderName -> lager:info("SenderName: ~p", [SenderName]), SenderName
             end
     end.
@@ -1259,7 +1259,7 @@ kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
     API_String = <<?V2/binary, ?ACCOUNTS(Context)/binary, ?VMBOXES/binary, "/", VMBoxId/binary,
                    ?MESSAGES/binary, "/", ?TO_BIN(MediaId)/binary, ?RAW/binary, <<"?">>/binary,
                    ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
-    <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+    <<(m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
     
 kz_kzattachment_link(RecordingId, DocType, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
@@ -1322,7 +1322,7 @@ kz_list_account_cdr_reduced(CreatedFrom, CreatedTo, Context) ->
 kz_incoming_fax_download_link(DocId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?FAXES_INCOMING/binary, ?TO_BIN(DocId)/binary,
                    ?ATTACHMENT/binary, <<"?">>/binary, ?AUTH_TOKEN/binary, (z_context:get_session(kazoo_auth_token, Context))/binary>>,
-    <<(m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
+    <<(m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context))/binary, API_String/binary>>. 
 
 is_kazoo_account_admin(Context) ->
     case z_context:get_session('kazoo_account_admin', Context) of
@@ -1451,7 +1451,7 @@ kz_flush_registration_by_username(Username, AccountId, Context) ->
 
 azrates(Context) ->
     {{Year,Month,Day},{Hour,_,_}} = erlang:localtime(),
-    RatesFile = m_config:get_value('mod_kazoo', 'rates_file', Context),
+    RatesFile = m_vars:get_value('mod_kazoo', 'rates_file', Context),
     case filelib:last_modified(RatesFile) of
         {{Year,Month,Day},{Hour,_,_}} -> 'ok';
         _ -> spawn('kazoo_util', 'azrates_refresh', [Context])
@@ -1470,7 +1470,7 @@ azrates_refresh(Context) ->
     DescriptionPriceTuples = lists:usort(ets:match(TabId,{'_','$1','$2','$3'})),
     CombinedRL = lists:map(fun ([Description, Cost, Surcharge]) -> {[{<<"prefix">>, ets:match(TabId, {'$1',Description,Cost,Surcharge})}
                                                           ,{<<"cost">>, Cost}, {<<"description">>, Description},{<<"surcharge">>,Surcharge}]} end, DescriptionPriceTuples),
-    file:write_file(m_config:get_value('mod_kazoo', 'rates_file', Context), jiffy:encode(CombinedRL)).
+    file:write_file(m_vars:get_value('mod_kazoo', 'rates_file', Context), jiffy:encode(CombinedRL)).
 
 rate_number(Number, Context) ->
     API_String = <<?RATES/binary, ?NUMBER/binary, "/", ?TO_BIN(Number)/binary>>, 
@@ -1733,7 +1733,7 @@ ui_element_state(ElementName,Context) ->
                     z_context:set_session(z_convert:to_atom(ElementName), 'false', Context),
                     'false';
                 _ ->
-                    case m_config:get_value('mod_kazoo', z_convert:to_atom(ElementName), Context) of
+                    case m_vars:get_value('mod_kazoo', z_convert:to_atom(ElementName), Context) of
                         <<"true">> ->
                             z_context:set_session(z_convert:to_atom(ElementName), 'true', Context),
                             'true';
@@ -1759,7 +1759,7 @@ lookup_numbers(Country, AreaCode, Context) ->
     lookup_numbers(Country, AreaCode, AccountId, Context).
 
 lookup_numbers('undefined', AreaCode, AccountId, Context) ->
-    Country = case m_config:get_value('mod_kazoo', 'default_country', Context) of
+    Country = case m_vars:get_value('mod_kazoo', 'default_country', Context) of
                   'undefined' -> <<"US">>;
                   Val -> Val
               end,
@@ -1911,10 +1911,10 @@ kz_get_user_timezone(Context) ->
 get_account_timezone(Context) ->
     case z_context:get_session('kazoo_account_id', Context) of
         'undefined' ->
-            m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
+            m_vars:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
         AccountId ->
             case kz_account_doc_field(<<"timezone">>, AccountId, Context) of
-                'undefined' -> m_config:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
+                'undefined' -> m_vars:get_value('mod_kazoo', 'default_kazoo_timezone', Context);
                 Timezone -> Timezone
             end
     end.
@@ -2616,7 +2616,7 @@ kz_c2call(Verb, C2CallId, DataBag, Context) ->
 
 kz_c2call_hyperlink(C2CallId, Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?CLICKTOCALL/binary, "/", ?TO_BIN(C2CallId)/binary, ?CONNECT/binary>>,
-    Crossbar_URL = m_config:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+    Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
     <<Crossbar_URL/binary, API_String/binary>>.
 
 kz_get_featurecode_by_name(FCName, Context) ->

@@ -20,7 +20,7 @@ email_attachment(CustomerEmail, FileName, Template, Vars, Data, Context) ->
         mime = "application/pdf"
     },
     Email = #email{
-        from=m_config:get_value('mod_kazoo', sales_email, Context),
+        from=m_vars:get_value('mod_kazoo', sales_email, Context),
         to=CustomerEmail,
         html_tpl=z_convert:to_list(Template),
         vars=[{clientip, ClientIP}|Vars],
@@ -86,7 +86,7 @@ rs_send_message(Context) ->
     RecipientAccountDoc = kazoo_util:kz_get_acc_doc_by_account_id(RecipientAccountId, Context),
 
     Vars = [
-             {sender_name, m_config:get_value('mod_kazoo', 'sender_name', Context)}
+             {sender_name, m_vars:get_value('mod_kazoo', 'sender_name', Context)}
             ,{accountname, modkazoo_util:get_value(<<"name">>, RecipientAccountDoc)}
            ],
 

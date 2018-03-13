@@ -578,7 +578,7 @@ m_get([ rs_customer_update_subject | Rest ], Context) ->
     Filename = "/tmp/" ++ z_convert:to_list(z_context:get_session(kazoo_account_id, Context)) ++ "_subject.tpl",
     case file:read_file(Filename) of
         {'ok', Data} -> {Data, Rest};
-        _ -> {m_config:get_value('mod_kazoo', 'sender_name', Context), Rest}
+        _ -> {m_vars:get_value('mod_kazoo', 'sender_name', Context), Rest}
     end;
 
 m_get([ rs_customer_update_html | Rest ], Context) ->
@@ -635,7 +635,7 @@ m_get([ {allotments_consumed,[{account_id, AccountId}]} | Rest ], Context) ->
     {kazoo_util:kz_allotments_consumed('get', AccountId, [], Context), Rest};
 
 m_get([ numbers_countries_list | Rest ], Context) ->
-    case m_config:get_value('mod_kazoo', 'numbers_countries_list', Context) of
+    case m_vars:get_value('mod_kazoo', 'numbers_countries_list', Context) of
         'undefined' -> {[<<"US">>], Rest};
         Countries -> {binary:split(Countries, <<",">>, ['global']), Rest}
     end;
