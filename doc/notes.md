@@ -60,9 +60,10 @@ cd ~/zotonic/user/modules
 git clone https://github.com/onnet/mod_kazoo.git zotonic_mod_kazoo
 git clone https://github.com/onnet/mod_bt.git zotonic_mod_bt
 
+vi ~/zotonic/user/sites/phiz/priv/config.d/vars #(adjust site variables)
+
 . /usr/local/erlang/activate
 make 
-
 
 exit  #(back to root env) 
 
