@@ -50,7 +50,8 @@ vi .bashrc
 cd /home/zotonic/ 
 
 git clone git://github.com/zotonic/zotonic.git 
-cd zotonic 
+cd /home/zotonic/zotonic 
+
 mkdir -p ~/zotonic/user/sites
 cd ~/zotonic/user/sites
 git clone https://github.com/onnet/phiz.git
@@ -71,7 +72,6 @@ echo "sleep 10" >> /etc/rc.local
 echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
 chmod a+x /etc/rc.local
 echo "`hostname --ip-address`    `hostname -f`    `hostname -s`" >> /etc/hosts
-
 echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc
 echo "export ZOTONIC_SSL_PORT=443" >> /home/zotonic/.bashrc
 echo "export ZOTONIC_LISTEN_PORT=80" >> /home/zotonic/.bashrc
