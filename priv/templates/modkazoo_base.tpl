@@ -33,7 +33,7 @@
     {% lib "js/modules/ubf.js" %}
     {% lib "js/apps/zotonic-1.0.js" %}
     {% lib "js/apps/z.widgetmanager.js" %}
-    {% lib "js/modules/z.adminwidget.js" %}
+    {# lib "js/modules/z.adminwidget.js" #}
     {% lib "js/modules/z.notice.js" %}
     {% lib "js/z.dialog.bootstrap3.js" %}
     {% lib "js/qlobber.js" %}
@@ -46,11 +46,14 @@
           "js/modules/z.formreplace.js"
           "js/modules/z.datepicker.js"
           "js/modules/z.menuedit.js"
-          "js/modules/z.cropcenter.js"
           "js/modules/livevalidation-1.3.js"
           "js/modules/jquery.loadmask.js"
           "js/modules/jquery.timepicker.min.js"
      %}
+
+    {# lib
+          "js/modules/z.cropcenter.js"
+    #}
 
     {% lib
           "css/datepicker3.css"
