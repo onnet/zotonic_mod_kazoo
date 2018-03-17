@@ -34,7 +34,6 @@ pip install braintree
 - Prepare system
 ```
 useradd zotonic 
-passwd zotonic 
 echo "sleep 10" >> /etc/rc.local 
 echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
 chmod a+x /etc/rc.local
