@@ -52,12 +52,16 @@ cd /home/zotonic/
 git clone git://github.com/zotonic/zotonic.git 
 cd /home/zotonic/zotonic 
 
-cd ~/zotonic/_checkouts
+mkdir -p ~/zotonic/user/sites
+cd ~/zotonic/user/sites
 git clone https://github.com/onnet/phiz.git
+
+mkdir -p ~/zotonic/user/modules
+cd ~/zotonic/user/modules
 git clone https://github.com/onnet/mod_kazoo.git zotonic_mod_kazoo
 git clone https://github.com/onnet/mod_bt.git zotonic_mod_bt
 
-vi ~/zotonic/_checkouts/phiz/priv/config.d/vars #(adjust site variables)
+vi ~/zotonic/user/sites/phiz/priv/config.d/vars #(adjust site variables)
 
 . /usr/local/erlang/activate
 make 
