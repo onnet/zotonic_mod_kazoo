@@ -11,21 +11,32 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Key | Rest ], Context) ->
-    case m_site:get(visible_keys, Context) of
-        'undefined' ->
-            lager:error("~p lookup: key not allowed ~p", [?MODULE, Key]),
-            {undefined, []};
-        VisibleKeys when is_list(VisibleKeys) ->
-            case lists:member(Key, VisibleKeys) of
-                'true' ->
-                    Var = m_site:get(Key, Context),
-                    {Var, Rest};
-                'false' ->
-                    lager:error("~p lookup: key not allowed ~p", [?MODULE, Key]),
-                    {undefined, []}
-            end
-    end.
+m_get(Key, Context) ->
+    m_get(Key, m_site:get(visible_keys, Context), Context).
+
+m_get([ Module, Key | Rest ], VisibleKeys, Context) when is_list(VisibleKeys) ->
+    case lists:member(Key, VisibleKeys) of
+        'true' ->
+            case m_config:get_value(Module, Key, Context) of
+                'undefined' -> {m_site:get(Key, Context)};
+                Val -> {Val, Rest}
+            end;
+        'false' ->
+            lager:error("~p lookup: key not allowed [ ~p | ~p ]", [?MODULE, Key, Rest]),
+            {undefined, []}
+    end;
+m_get([ Key | Rest ], VisibleKeys, Context) when is_list(VisibleKeys) ->
+    case lists:member(Key, VisibleKeys) of
+        'true' ->
+            Var = m_site:get(Key, Context),
+            {Var, Rest};
+        'false' ->
+            lager:error("~p lookup: key not allowed [ ~p | ~p ]", [?MODULE, Key, Rest]),
+            {undefined, []}
+    end;
+m_get(Key, _VisibleKeys, _Context) ->
+    lager:error("~p lookup: key not allowed ~p", [?MODULE, Key]),
+    {undefined, []}.
 
 -spec get_value(atom(), z:context()) -> term().
 get_value(Key, Context) ->

@@ -16,15 +16,15 @@
       <td>{_ Choose amount _}</td>
       <td>
          <input type="radio" name="creditme" value="25" />
-         {{ m.vars.local_currency_sign }}25
+         {{ m.session.currency_sign }}25
       </td>
       <td>
          <input type="radio" name="creditme" value="50" />
-         {{ m.vars.local_currency_sign }}50
+         {{ m.session.currency_sign }}50
       </td>
       <td>
          <input type="radio" name="creditme" value="100" />
-         {{ m.vars.local_currency_sign }}100
+         {{ m.session.currency_sign }}100
       </td>
       <td>
         <button class="btn btn-xs btn-onnet pull-right">

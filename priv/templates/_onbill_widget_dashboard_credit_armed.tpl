@@ -21,7 +21,7 @@
         {_ Credit amount _}
       </td>
       <td>
-        {{ m.vars.local_currency_sign }}{{ pr_pt[1]["amount"]|onnet_format_price }}
+        {{ m.session.currency_sign }}{{ pr_pt[1]["amount"]|onnet_format_price }}
       </td>
     </tr>
     <tr>

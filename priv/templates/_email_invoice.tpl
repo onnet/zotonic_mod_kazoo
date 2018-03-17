@@ -9,7 +9,7 @@
                 <br />
 		<p>{_ Requested pro-forma invoice attached to this email _}.</p>
                 <p>{_ Customer _}: <strong>{{ account_name }}</strong></p>
-                <p>{_ Amount _}: <strong>{{ m.vars.local_currency_sign }}{{ amount|format_price }}</strong></p>
+                <p>{_ Amount _}: <strong>{{ m.session.currency_sign }}{{ amount|format_price }}</strong></p>
                 <br />
 		<p>{_ Best regards _},</p>
 		<p>{_ OnNet Innovations Limited _}</p>

@@ -3,7 +3,7 @@
   <div id="dropin">
   </div>
   <input type="hidden" name="amount" value="{{ amount }}">
-  <input type="submit" value="Pay {{ m.vars.local_currency_sign }}{{ amount }}">
+  <input type="submit" value="Pay {{ m.session.currency_sign }}{{ amount }}">
 </form>
 
 {% javascript %}
