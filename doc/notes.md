@@ -33,6 +33,8 @@ pip install braintree
 ```
 - Prepare system
 ```
+useradd zotonic 
+passwd zotonic 
 echo "sleep 10" >> /etc/rc.local 
 echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
 chmod a+x /etc/rc.local
@@ -47,8 +49,6 @@ setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam.smp
 
 - Install Zotonic
 ```
-useradd zotonic 
-passwd zotonic 
 su - zotonic 
 
 vi ~/.bash_profile
