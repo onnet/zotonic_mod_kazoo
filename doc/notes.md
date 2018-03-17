@@ -31,6 +31,19 @@ pip install requests[security]
 pip install urllib3
 pip install braintree
 ```
+- Prepare system
+```
+echo "sleep 10" >> /etc/rc.local 
+echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
+chmod a+x /etc/rc.local
+echo "`hostname --ip-address`    `hostname -f`    `hostname -s`" >> /etc/hosts
+echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc
+echo "export ZOTONIC_SSL_PORT=443" >> /home/zotonic/.bashrc
+echo "export ZOTONIC_LISTEN_PORT=80" >> /home/zotonic/.bashrc
+echo "export ZOTONIC_SSL_LISTEN_PORT=443" >> /home/zotonic/.bashrc
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam
+setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam.smp
+```
 
 - Install Zotonic
 ```
@@ -65,19 +78,8 @@ vi ~/zotonic/user/sites/phiz/priv/config.d/vars #(adjust site variables)
 
 . /usr/local/erlang/activate
 make 
+zotonic debug # (or zotonic start)
 
-exit  #(back to root env) 
-
-echo "sleep 10" >> /etc/rc.local 
-echo 'su - zotonic -c "nohup /home/zotonic/zotonic/bin/zotonic start &"' >> /etc/rc.local 
-chmod a+x /etc/rc.local
-echo "`hostname --ip-address`    `hostname -f`    `hostname -s`" >> /etc/hosts
-echo "export ZOTONIC_PORT=80" >> /home/zotonic/.bashrc
-echo "export ZOTONIC_SSL_PORT=443" >> /home/zotonic/.bashrc
-echo "export ZOTONIC_LISTEN_PORT=80" >> /home/zotonic/.bashrc
-echo "export ZOTONIC_SSL_LISTEN_PORT=443" >> /home/zotonic/.bashrc
-setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam
-setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam.smp
 ```
 
 
