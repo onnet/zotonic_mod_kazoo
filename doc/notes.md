@@ -76,6 +76,7 @@ git clone https://github.com/onnet/mod_bt.git zotonic_mod_bt
 vi ~/zotonic/user/sites/phiz/priv/config.d/vars #(adjust site variables)
 
 . /usr/local/erlang/activate
+cd ~/zotonic
 make 
 zotonic debug # (or zotonic start)
 
