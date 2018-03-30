@@ -575,7 +575,6 @@ kz_auth_token_creds(AuthToken, Context) ->
                 Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
                 Account_Name = modkazoo_util:get_value([<<"data">>, <<"account_name">>], JsonBody),
                 Auth_Token = modkazoo_util:get_value(<<"auth_token">>, JsonBody),
-                Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
                 {'ok' ,{'owner_id', Owner_Id}
                       ,{'account_id', Account_Id}
                       ,{'auth_token', Auth_Token}
