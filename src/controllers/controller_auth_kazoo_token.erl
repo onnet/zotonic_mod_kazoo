@@ -32,6 +32,7 @@ previously_existed(Context) ->
 moved_temporarily(Context) ->
 ?PRINT(z_context:get_q_all(Context)),
     AuthToken = z_context:get_q(<<"auth_token">>,Context),
+    DispatchRule = z_context:get_q(<<"dispatch_rule">>,Context),
     ClientIP = cowmachine_req:peer(z_context:get_reqdata(Context)),
     case kazoo_util:kz_auth_token_creds(AuthToken, Context) of
         {'ok', {'owner_id', _}, {account_id, 'undefined'}, {'auth_token', _}, {'crossbar', _}, {'account_name', _}} ->
@@ -48,7 +49,7 @@ moved_temporarily(Context) ->
             lager:info("Session ID: ~p.", [z_session_manager:get_session_id(Context)]),
             lager:info("AuthToken: ~p.", [AuthToken]),
             Ctx = modkazoo_auth:setup_environment(Owner_Id, AuthToken, Account_Id, Account_Name, <<"test">>, Context),
-            AbsUrl = iolist_to_binary(z_context:abs_url(<<"/admin_feature_codes">>, Context)),
+            AbsUrl = z_context:abs_url(DispatchRule, Context),
             {{true, AbsUrl}, Ctx};
         {'badauth', _Code, Data} ->
             lager:info("SessionID: ~p.", [z_session_manager:get_session_id(Context)]),
