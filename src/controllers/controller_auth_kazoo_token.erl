@@ -49,8 +49,12 @@ moved_temporarily(Context) ->
             lager:info("Session ID: ~p.", [z_session_manager:get_session_id(Context)]),
             lager:info("AuthToken: ~p.", [AuthToken]),
             Ctx = modkazoo_auth:setup_environment(Owner_Id, AuthToken, Account_Id, Account_Name, <<"test">>, Context),
-            AbsUrl = z_context:abs_url(DispatchRule, Context),
-            {{true, AbsUrl}, Ctx};
+            case z_context:get_q(<<"dispatch_rule">>,Context) of
+                'undefined' ->
+                    {{true, z_context:abs_url(<<"/">>, Context)}, Ctx};
+                DispatchRule ->
+                    {{true, z_context:abs_url(DispatchRule, Context)}, Ctx}
+            end;
         {'badauth', _Code, Data} ->
             lager:info("SessionID: ~p.", [z_session_manager:get_session_id(Context)]),
             lager:info("Failed (badauth) to authenticate. IP address: ~p. Data: ~p.", [ClientIP,Data]),
