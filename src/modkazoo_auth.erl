@@ -13,6 +13,7 @@
     ,choose_page_to_redirect/1
     ,may_be_clean_third_party_billing/1
     ,set_session_billing_status_vars/1
+    ,setup_environment/6
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -70,6 +71,7 @@ do_sign_in(Login, Password, Account, Context) ->
         } ->
             lager:info("Succesfull authentication of Kazoo user ~p@~p. IP address: ~p.", [Login,Account,ClientIP]),
             lager:info("Session ID: ~p.", [z_session_manager:get_session_id(Context)]),
+            lager:info("AuthToken: ~p.", [Auth_Token]),
             mod_signal:emit({page_mask_signal
                             ,?SIGNAL_FILTER(Context) ++ [{'target', "sign_in_form"}]
                             }

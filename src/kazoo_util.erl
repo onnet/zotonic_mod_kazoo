@@ -5,6 +5,7 @@
     ,kz_user_creds/3
     ,kz_user_creds/4
     ,kz_api_key_creds/2
+    ,kz_auth_token_creds/2
     ,crossbar_admin_request/4
     ,crossbar_admin_request/5
     ,crossbar_account_request/4
@@ -553,6 +554,32 @@ kz_creds(URL, DataBag, Context) ->
                       ,{'account_id', Account_Id}
                       ,{'auth_token', Auth_Token}
                       ,{'crossbar', Crossbar_URL}
+                      ,{'account_name', Account_Name}
+                };
+            {'ok', Code, _, Body} ->
+                Data = modkazoo_util:get_value(<<"data">>, jiffy:decode(Body)),
+                {'badauth', Code, Data}
+        end
+    catch
+        _E ->
+            lager:info("kz_kreds Auth exception: ~p",[_E]),
+            <<"Auth exception">>
+    end.
+
+kz_auth_token_creds(AuthToken, Context) ->
+    try
+        case token_auth(AuthToken, Context) of 
+            {'ok', [50,_,_], _, Body} ->
+                JsonBody = jiffy:decode(Body),
+                Owner_Id = modkazoo_util:get_value([<<"data">>, <<"owner_id">>], JsonBody),
+                Account_Id = modkazoo_util:get_value([<<"data">>, <<"account_id">>], JsonBody),
+                Account_Name = modkazoo_util:get_value([<<"data">>, <<"account_name">>], JsonBody),
+                Auth_Token = modkazoo_util:get_value(<<"auth_token">>, JsonBody),
+                Crossbar_URL = m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context),
+                {'ok' ,{'owner_id', Owner_Id}
+                      ,{'account_id', Account_Id}
+                      ,{'auth_token', Auth_Token}
+                      ,{'crossbar', m_vars:get_value('mod_kazoo', 'kazoo_crossbar_url', Context)}
                       ,{'account_name', Account_Name}
                 };
             {'ok', Code, _, Body} ->
@@ -4041,3 +4068,7 @@ maybe_masked(Context) ->
     z_context:get_session(kazoo_reseller_account_id, Context) =/= 'undefined'
     andalso (z_context:get_session(kazoo_account_id, Context)
              =/= z_context:get_session(kazoo_reseller_account_id, Context)).
+
+token_auth(AuthToken, Context) ->
+    API_String = <<?V2/binary, ?TOKEN_AUTH/binary>>,
+    crossbar_account_send_request('get', API_String, "application/json", [], AuthToken, Context).

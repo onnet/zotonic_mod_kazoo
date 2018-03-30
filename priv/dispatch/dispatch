@@ -21,5 +21,6 @@
  {dashboard,["dashboard"], controller_template, [{template, "dashboard.tpl"} ]},
  {onbill_dashboard,["onbill_dashboard"], controller_template,  [{template, "mod_kazoo_dashboard.tpl"}]},
  {onbill_finance_details,["onbill_finance_details"], controller_template, [{template, "finance_details.tpl"}]},
+ {auth_kazoo_token, ["auth_kazoo_token"], controller_auth_kazoo_token, [{ssl,any}]},
  {finance_details,["finance_details"], controller_template, [{template, "finance_details.tpl"}]}
 ].
