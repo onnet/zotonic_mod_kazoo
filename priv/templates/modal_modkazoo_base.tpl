@@ -19,10 +19,10 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Material Design -->
-    <link href="//cdn.rawgit.com/FezVrasta/bootstrap-material-design/gh-pages-v3/dist/css/bootstrap-material-design.css" rel="stylesheet">
-    <link href="//cdn.rawgit.com/FezVrasta/bootstrap-material-design/gh-pages-v3/dist/css/ripples.min.css" rel="stylesheet">
+ <!--   <link href="//cdn.rawgit.com/FezVrasta/bootstrap-material-design/gh-pages-v3/dist/css/bootstrap-material-design.css" rel="stylesheet"> -->
+ <!--   <link href="//cdn.rawgit.com/FezVrasta/bootstrap-material-design/gh-pages-v3/dist/css/ripples.min.css" rel="stylesheet"> -->
 
-    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
+ <!--   <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet"> -->
 
     {% lib "js/jquery-2.1.1.min.js" %}
     {% lib "js/jquery-migrate-1.0.0.js" %}
