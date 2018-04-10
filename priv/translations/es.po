@@ -239,7 +239,7 @@ msgid "Callback service"
 msgstr "Servicio de devolución de llamada"
 
 msgid "Admin auth failed."
-msgstr "Error de autenticación de administrador. "
+msgstr "Error de autenticación de administrador."
 
 msgid "Admin Login"
 msgstr "Login de administrador"
@@ -263,7 +263,7 @@ msgid "Standart"
 msgstr "Standart"
 
 msgid "Input Email"
-msgstr "Correo electrónico de entrada "
+msgstr "Correo electrónico de entrada"
 
 msgid "Support Enquiries"
 msgstr "Consultas de soporte"
@@ -275,7 +275,7 @@ msgid "IVR"
 msgstr "IVR"
 
 msgid "Terms & Cons"
-msgstr "Términos y Contras "
+msgstr "Términos y Contras"
 
 msgid "Rates"
 msgstr "Precios"
@@ -290,19 +290,19 @@ msgid "Issuing an invoice..."
 msgstr "Issuing an invoice..."
 
 msgid "Moscow and St-Petersburg phone numbers"
-msgstr "Teléfonos de Moscú y San Petersburgo   "
+msgstr "Teléfonos de Moscú y San Petersburgo"
 
 msgid "PBX CRM Integration"
-msgstr "Integración PBX CRM "
+msgstr "Integración PBX CRM"
 
 msgid "Virual Office"
 msgstr " Oficina Virtual"
 
 msgid "Cloud Computing"
-msgstr "Computación en la nube "
+msgstr "Computación en la nube"
 
 msgid "Business Telephony"
-msgstr "Telefonía de negocios "
+msgstr "Telefonía de negocios"
 
 msgid "mo"
 msgstr "mes"
@@ -905,7 +905,7 @@ msgid "Apply for credit"
 msgstr "Solicitar crédito"
 
 msgid "ASSIST - Electronic Payment System"
-msgstr ASSIST - Sistema de pago electrónico""
+msgstr "ASSIST - Sistema de pago electrónico"
 
 msgid "Dengi Online"
 msgstr "Dengi en línea"
@@ -1601,7 +1601,7 @@ msgid "Save list"
 msgstr "Guardar lista"
 
 msgid "Dynamic CID"
-msgstr CID dinámico""
+msgstr "CID dinámico"
 
 msgid "BCC"
 msgstr "BCC"
@@ -2120,7 +2120,7 @@ msgid "Add trunk"
 msgstr "Agregar tronco"
 
 msgid "Edit trunk"
-msgstr Editar tronco"
+msgstr "Editar tronco"
 
 msgid "Trunkstore"
 msgstr "Trunkstore"
@@ -2898,5 +2898,4 @@ msgstr "Sobre nosotros"
 
 msgid "Contacts"
 msgstr "Contactos"
-
 
