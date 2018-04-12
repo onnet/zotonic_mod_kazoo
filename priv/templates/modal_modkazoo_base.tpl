@@ -18,12 +18,6 @@
     <!-- Bootstrap -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Material Design -->
-    <link href="//cdn.rawgit.com/FezVrasta/bootstrap-material-design/gh-pages-v3/dist/css/bootstrap-material-design.css" rel="stylesheet">
-    <link href="//cdn.rawgit.com/FezVrasta/bootstrap-material-design/gh-pages-v3/dist/css/ripples.min.css" rel="stylesheet">
-
-    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet">
-
     {% lib "js/jquery-2.1.1.min.js" %}
     {% lib "js/jquery-migrate-1.0.0.js" %}
     {% lib "js/jquery-ui.min.js" %}
@@ -100,38 +94,36 @@
     <!--  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.6/socket.io.min.js"></script> -->
   </head>
   <body>
-
-{% if m.kazoo.is_auth or m.session.lb_user_id %}
-  <div class="wrapper">
-    <div class="container" style="width: 95%">
-      <div id="page_title_row" class="row">
-        <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
-          {% block header_title %}{% endblock %}
+    {% include "modal_menu_auth.tpl" %}
+    {% if m.kazoo.is_auth or m.session.lb_user_id %}
+      <div class="wrapper" style="padding-top: 2em;">
+        <div class="container" style="width: 95%">
+          <div id="page_title_row" class="row">
+            <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+              {% block header_title %}{% endblock %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+              {% block service_description %}{% endblock %}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
-          {% block service_description %}{% endblock %}
-        </div>
-      </div>
-    </div>
-  </div>
-  {% wire action={connect signal={emit_growl_signal signal_filter=m.kazoo.signal_filter}
-                          action={update template="_z_growl_add.tpl"}
-                 }
-  %}
-  {% wire action={connect signal={page_mask_signal signal_filter=m.kazoo.signal_filter}
-                          action={update template="_z_add_page_mask.tpl"}
-                 }
-  %}
-{% else %}
-  {% javascript %}
-    z_notify("no_auth");
-  {% endjavascript %}
-  {% wire action={redirect location="/"} %}
-{% endif %}
-
-
+      {% wire action={connect signal={emit_growl_signal signal_filter=m.kazoo.signal_filter}
+                              action={update template="_z_growl_add.tpl"}
+                     }
+      %}
+      {% wire action={connect signal={page_mask_signal signal_filter=m.kazoo.signal_filter}
+                              action={update template="_z_add_page_mask.tpl"}
+                     }
+      %}
+    {% else %}
+      {% javascript %}
+        z_notify("no_auth");
+      {% endjavascript %}
+      {% wire action={redirect location="/"} %}
+    {% endif %}
     {% script %}
   </body>
 </html>

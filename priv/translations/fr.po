@@ -1,0 +1,2902 @@
+msgid ""
+msgstr ""
+
+msgid "Hello"
+msgstr "Bonjour"
+
+msgid "PSRN"
+msgstr "PSRN"
+
+msgid "Bank Identification Code"
+msgstr "Code d'identification bancaire"
+
+msgid "Bank branch name"
+msgstr "Nom de la succursale bancaire"
+
+msgid "Bank name"
+msgstr "Nom de banque"
+
+msgid "Edit group"
+msgstr "Modifier le groupe"
+
+msgid "Credit account"
+msgstr "Compte créditeur"
+
+msgid "find account"
+msgstr "trouver un compte"
+
+msgid "Add credit to"
+msgstr "Ajouter un crédit à"
+
+msgid "Add callflow"
+msgstr "Ajouter un flux d'appels"
+
+msgid "Password changed successfully. Please try to sign-in as"
+msgstr "Le mot de passe a été changé avec succès.Veuillez essayer de vous connecter en tant que"
+
+msgid "Do you really want to enable this device"
+msgstr "Voulez-vous vraiment activer cet appareil"
+
+msgid "Do you really want to disable this device"
+msgstr "Voulez-vous vraiment désactiver cet appareil"
+
+msgid "Save queue"
+msgstr "Enregistrer la file"
+
+msgid "controls"
+msgstr "contrôles"
+
+msgid "Agents status"
+msgstr "Statut des agents"
+
+msgid "agents status"
+msgstr "statut des agents"
+
+msgid "Add queue"
+msgstr "Ajouter une queue"
+
+msgid "add queue"
+msgstr "ajouter une file"
+
+msgid "Queues"
+msgstr "Files d'attente"
+
+msgid "Signing in ..."
+msgstr "Connectez-vous ..."
+
+msgid "Select action"
+msgstr "Sélectionnez l'action"
+
+msgid "Select job category"
+msgstr "Sélectionnez une catégorie d'emploi"
+
+msgid "Add background job"
+msgstr "Ajouter un travail de fond"
+
+msgid "Add task"
+msgstr "Ajouter une tâche"
+
+msgid "add task"
+msgstr "Ajouter une tâche"
+
+msgid "Background jobs"
+msgstr "Emplois de fond"
+
+msgid "System-wide registrations"
+msgstr "Enregistrements à l'échelle du système"
+
+msgid "Accounts"
+msgstr "Comptes"
+
+msgid "Save new password"
+msgstr "Enregistrer le nouveau mot de passe"
+
+msgid "Enter new password for"
+msgstr "Entrez un nouveau mot de passe pour"
+
+msgid "No, thanks!"
+msgstr "Non merci!"
+
+msgid "Password change"
+msgstr "Changement de mot de passe"
+
+msgid "Transactions list"
+msgstr "Liste des transactions"
+
+msgid "create reports"
+msgstr "créer des rapports"
+
+msgid "create docs"
+msgstr "créer des docs"
+
+msgid "add debit"
+msgstr "ajouter un débit"
+
+msgid "add credit"
+msgstr "ajouter un crédit"
+
+msgid "Monitor"
+msgstr "Moniteur"
+
+msgid "Detailed"
+msgstr "Détaillé"
+
+msgid "Range"
+msgstr "Gamme"
+
+msgid "This month"
+msgstr "Ce mois-ci"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "Retain CID"
+msgstr "Conserver le CID"
+
+msgid "Current information"
+msgstr "Informations actuelles"
+
+msgid "Join time"
+msgstr "Rejoignez le temps"
+
+msgid "Conference is empty now"
+msgstr "La conférence est vide maintenant"
+
+msgid "Sale!  First number free"
+msgstr "Vente!Premier numéro gratuit"
+
+msgid "VIRTUAL PBX"
+msgstr "PBX VIRTUEL"
+
+msgid "News"
+msgstr "Nouvelles"
+
+msgid "Last updates"
+msgstr "Dernières mises à jour"
+
+msgid "Russia"
+msgstr "Russie"
+
+msgid "Electronic Data Interchange"
+msgstr "Échange électronique de données"
+
+msgid "Notify when balance falls below"
+msgstr "Avertir quand l'équilibre tombe au-dessous"
+
+msgid "save"
+msgstr "enregistrer"
+
+msgid "disable alert"
+msgstr "désactiver l'alerte"
+
+msgid "Low balance notify level"
+msgstr "Niveau bas de notification de la balance"
+
+msgid "Prefix"
+msgstr " Préfixe"
+
+msgid "For Customers"
+msgstr "Pour les clients"
+
+msgid "Please authorize as administratior to display of manage access credentials"
+msgstr "Veuillez autoriser en tant qu'administrateur à afficher des informations d'identification de gestion d'accès"
+
+msgid "Callback"
+msgstr "Rappeler"
+
+msgid "Off"
+msgstr "De"
+
+msgid "On"
+msgstr "Sur"
+
+msgid "PIN access phone number"
+msgstr "Numéro de téléphone d'accès par code PIN"
+
+msgid "Callback service phone number"
+msgstr "Numéro de téléphone du service de rappel"
+
+msgid "add"
+msgstr "ajouter"
+
+msgid "add pin"
+msgstr "ajouter une broche "
+
+msgid "add pin-code"
+msgstr "ajouter un code pin"
+
+msgid "add cid"
+msgstr "ajouter du cid "
+
+msgid "add authorized cid"
+msgstr " ajouter un cid autorisé "
+
+msgid "add authorized CID"
+msgstr "ajouter un CID autorisé"
+
+msgid "Pin-code list"
+msgstr "Liste de codes PIN"
+
+msgid "Authorized CID list"
+msgstr "Liste CID autorisée"
+
+msgid "New CID"
+msgstr "Nouveau CID"
+
+msgid "Authorized CID"
+msgstr "CID autorisé"
+
+msgid "PIN"
+msgstr "ÉPINGLE"
+
+msgid "Authorized PIN"
+msgstr "NIP autorisé"
+
+msgid "Outbound CID"
+msgstr "CID sortant"
+
+msgid "Callback service"
+msgstr "Service de rappel"
+
+msgid "Admin auth failed."
+msgstr "L'authentification de l'administrateur a échoué "
+
+msgid "Admin Login"
+msgstr "Connexion Admin"
+
+msgid "Moscow"
+msgstr "Moscou"
+
+msgid "Saint Petersburg"
+msgstr "Saint-Pétersbourg"
+
+msgid "#"
+msgstr "#"
+
+msgid "dated"
+msgstr "daté"
+
+msgid "Standard"
+msgstr "la norme"
+
+msgid "Standart"
+msgstr "Standart"
+
+msgid "Input Email"
+msgstr " Email d'entrée"
+
+msgid "Support Enquiries"
+msgstr "Demandes de soutien"
+
+msgid "Sales Enquiries"
+msgstr "Demandes de vente"
+
+msgid "IVR"
+msgstr "IVR"
+
+msgid "Terms & Cons"
+msgstr "Conditions et inconvénients "
+
+msgid "Rates"
+msgstr "Les taux"
+
+msgid "rates"
+msgstr "les taux"
+
+msgid "Preparing reports..."
+msgstr "Préparation de rapports ..."
+
+msgid "Issuing an invoice..."
+msgstr "Emettre une facture ..."
+
+msgid "Moscow and St-Petersburg phone numbers"
+msgstr "Numéros de téléphone à Moscou et Saint-Pétersbourg   "
+
+msgid "PBX CRM Integration"
+msgstr "Intégration PBX CRM "
+
+msgid "Virual Office"
+msgstr " Bureau virtuel"
+
+msgid "Cloud Computing"
+msgstr " Cloud computing"
+
+msgid "Business Telephony"
+msgstr "Téléphonie commerciale "
+
+msgid "mo"
+msgstr "mo"
+
+msgid "Order"
+msgstr "Commande"
+
+msgid "more blogs"
+msgstr "plus de blogs "
+
+msgid "more news"
+msgstr "plus de nouvelles"
+
+msgid "News"
+msgstr "Nouvelles"
+
+msgid "Please wait while statistics will be loaded..."
+msgstr " Veuillez patienter pendant que les statistiques seront chargées ... "
+
+msgid "Details"
+msgstr "Détails"
+
+msgid "Receive password"
+msgstr "Mot de passe "
+
+msgid "Recover"
+msgstr "Récupérer"
+
+msgid "Enter"
+msgstr "Entrer"
+
+msgid "Counterparty's Details"
+msgstr " Détails de la contrepartie"
+
+msgid "Choose number"
+msgstr "Choisissez un nombre "
+
+msgid "How to make payment"
+msgstr "Comment faire le paiement "
+
+msgid "Payments"
+msgstr "Paiements "
+
+msgid "Licenses"
+msgstr "Licences"
+
+msgid "Trademark"
+msgstr " Marque déposée"
+
+msgid "Company details"
+msgstr "Détails de la société "
+
+msgid "Network"
+msgstr "Réseau"
+
+msgid "Service Order"
+msgstr "Demande de service "
+
+msgid "Make an order"
+msgstr "faire une commande "
+
+msgid "Internet Access"
+msgstr "Accès Internet"
+
+msgid "Important info"
+msgstr "Information importante"
+
+msgid "updates"
+msgstr "mises à jour"
+
+msgid "Last"
+msgstr "Dernier"
+
+msgid "Last Updates"
+msgstr " Dernières mises à jour"
+
+msgid "Events"
+msgstr "Événements"
+
+msgid "Comments"
+msgstr "commentaires"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Enter email"
+msgstr "Entrer un email "
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "St. Petersburg"
+msgstr "St. Pétersbourg"
+
+msgid "Subscribe"
+msgstr "Souscrire"
+
+msgid "3-5 B. Morskaya str."
+msgstr "3-5 B. Morskaya str."
+
+msgid "office"
+msgstr "Bureau"
+
+msgid "We promise not to bother you too often"
+msgstr "Nous promettons de ne pas vous déranger trop souvent"
+
+msgid "Enter your e-mail below to subscribe to our free newsletter"
+msgstr "Entrez votre e-mail ci-dessous pour vous abonner à notre newsletter gratuite"
+
+msgid "Home"
+msgstr "Accueil"
+
+msgid "Go Social"
+msgstr "Go Social"
+
+msgid "Stay in touch with us"
+msgstr "Restez en contact avec nous"
+
+msgid "Hosted Microsoft Software"
+msgstr "Logiciel Microsoft hébergé "
+
+msgid "Choose"
+msgstr "Choisir"
+
+msgid "Cloud Storage"
+msgstr " Stockage en ligne"
+
+msgid "Available Phone Numbers"
+msgstr "Numéros de téléphone disponibles "
+
+msgid "Phone Numbers"
+msgstr "Les numéros de téléphone "
+
+msgid "My Account"
+msgstr "Mon compte "
+
+msgid "Sign in"
+msgstr "se connecter"
+
+msgid "Sign up"
+msgstr "S'inscrire"
+
+msgid "Sign out"
+msgstr "Déconnexion"
+
+msgid "About us"
+msgstr "À propos de nous "
+
+msgid "Services"
+msgstr "Prestations de service"
+
+msgid "Contact us"
+msgstr "Contactez nous"
+
+msgid "Expired"
+msgstr "Expiré"
+
+msgid "for"
+msgstr "pour"
+
+msgid "requested document attached to this email"
+msgstr "document demandé joint à cet e-mail"
+
+msgid "Dear customer"
+msgstr "Cher client "
+
+msgid "Email format is incorrect"
+msgstr "Le format d'email est incorrect "
+
+msgid "Invoice sent to: "
+msgstr "Facture envoyée à:  "
+
+msgid "Input email"
+msgstr "Courriel d'entrée "
+
+msgid "Other email"
+msgstr "Autre email "
+
+msgid "Choose email address"
+msgstr "Choisissez l'adresse e-mail"
+
+msgid "Other address"
+msgstr "Autre adresse "
+
+msgid "Send invoice"
+msgstr "Envoyer une facture "
+
+msgid "Payment type"
+msgstr "Type de paiement "
+
+msgid "Please make sure that you have sufficient funds."
+msgstr "S'il vous plaît assurez-vous que vous avez suffisamment de fonds."
+
+msgid "Operator"
+msgstr "Opérateur"
+
+msgid "Yandex.Money"
+msgstr "Yandex.Money"
+
+msgid "Do you really want to change password?"
+msgstr "Voulez-vous vraiment changer le mot de passe?"
+
+msgid "cancel password change"
+msgstr "annuler le changement"
+
+msgid "Email to send password: "
+msgstr " Email pour envoyer le mot de passe: "
+
+msgid "change password"
+msgstr " changer le mot de passe"
+
+msgid "cancel order"
+msgstr " annuler la commande"
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "Agreement number"
+msgstr "Numéro d'agrément "
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "Additional numbers order received"
+msgstr "Commande de numéros supplémentaires reçue"
+
+msgid "Additional numbers order"
+msgstr "Commande de numéros supplémentaires"
+
+msgid "Do you really want to sent this request?"
+msgstr "Voulez-vous vraiment envoyer cette demande?"
+
+msgid "Customer's email: "
+msgstr "Email du client:"
+
+msgid "Order sent."
+msgstr " Commande envoyée"
+
+msgid "New password sent to: "
+msgstr "Nouveau mot de passe envoyé à:  "
+
+msgid "Copy sent to: "
+msgstr "Copie envoyée à: "
+
+msgid "send request"
+msgstr "envoyer une demande"
+
+msgid "Remove"
+msgstr "Retirer"
+
+msgid "Requester's IP address"
+msgstr "L'adresse IP du demandeur "
+
+msgid "Order additional number"
+msgstr "Commander un numéro supplémentaire"
+
+msgid "order additional number"
+msgstr "commander un numéro supplémentaire"
+
+msgid "Access details to email"
+msgstr "Accéder aux détails par courrier électronique"
+
+msgid "Password"
+msgstr "Mot de passe"
+
+msgid "Login"
+msgstr "S'identifier"
+
+msgid "Password sent. Please check your mailbox."
+msgstr "Mot de passe envoyé Veuillez vérifier votre boîte aux lettres."
+
+msgid "No such email address"
+msgstr "Aucune adresse e-mail "
+
+msgid "Receive"
+msgstr "Recevoir"
+
+msgid "Please type in your registered Email address"
+msgstr " Veuillez taper votre adresse e-mail enregistrée "
+
+msgid "Password recovery"
+msgstr "Récupération de mot de passe "
+
+msgid "min"
+msgstr "min"
+
+msgid "cancel credit"
+msgstr "annuler le crédit "
+
+msgid "PBX Type"
+msgstr "Type de PBX"
+
+msgid "Choose PBX type"
+msgstr "Choisissez le type de PBX"
+
+msgid "OS Distros"
+msgstr "OS Distros"
+
+msgid "Virtual Servers Rates"
+msgstr "Tarifs des serveurs virtuels"
+
+msgid "Another distros also could be available for order. Please send an enquiry for additinal information to"
+msgstr "Une autre distribution pourrait également être disponible à la commande.S'il vous plaît envoyer une demande d'informations supplémentaires à"
+
+msgid "Server Template"
+msgstr "Modèle de serveur "
+
+msgid "Tariff"
+msgstr "Tarif "
+
+msgid "Stock FreePBX"
+msgstr "Stock GratuitPBX"
+
+msgid "IT Turism Template"
+msgstr "Modèle de tourisme IT"
+
+msgid "Nova CRM Template"
+msgstr "Modèle Nova CRM"
+
+msgid "CRM Integration Ordered"
+msgstr "Intégration CRM commandée  "
+
+msgid "HOSTED PBX"
+msgstr " PBX HÉBERGÉ"
+
+msgid "Hosted PBX Server"
+msgstr "Serveur PBX hébergé "
+
+msgid "Virtual server type"
+msgstr "Type de serveur virtuel"
+
+msgid "Please wait while numbers are loading..."
+msgstr "Veuillez patienter pendant le chargement des numéros ..."
+
+msgid "Maximum file size exceeded. Please try to upload smaller registered adress page file."
+msgstr "La taille maximale du fichier a été dépassée.Veuillez essayer de télécharger un fichier de page d'adresse enregistré plus petit."
+
+msgid "Maximum file size exceeded. Please try to upload smaller page1 file."
+msgstr "La taille maximale du fichier a été dépassée.S'il vous plaît essayez de télécharger le plus petit fichier page1."
+
+msgid "Passport registered address page absent"
+msgstr "Passeport adresse enregistrée page absente"
+
+msgid "Passport page1 absent"
+msgstr "Passeport page1 absent"
+
+msgid "Maximum file size exceeded. Please try to upload smaller file."
+msgstr "La taille maximale du fichier a été dépassée.S'il vous plaît essayer de télécharger un fichier plus petit."
+
+msgid "Invalid email format"
+msgstr " Format d'email invalide"
+
+msgid "Incorrect Email field"
+msgstr "Champ Email incorrect"
+
+msgid "Invalid phone format"
+msgstr "Format de téléphone incorrect"
+
+msgid "Incorrect Contact phone field"
+msgstr "Champ de téléphone de contact incorrect"
+
+msgid "All fields should be filled in"
+msgstr "Tous les champs doivent être remplis"
+
+msgid "At least one number should be choosen"
+msgstr "Au moins un nombre devrait être choisi"
+
+msgid "Page is under construction"
+msgstr "La page est en construction"
+
+msgid "'prove you are human'"
+msgstr ""prouvez que vous êtes humain""
+
+msgid "add number"
+msgstr "ajouter un numéro"
+
+msgid "Chosen numbers"
+msgstr " Numéros choisis"
+
+msgid "Add number to order"
+msgstr "Ajouter un numéro pour commander"
+
+msgid "Choose another number"
+msgstr "Choisissez un autre numéro"
+
+msgid "Inbound calls statistics for number"
+msgstr "Statistiques des appels entrants pour le nombre"
+
+msgid "Add phone number to your order"
+msgstr "Ajouter un numéro de téléphone à votre commande"
+
+msgid "Comments"
+msgstr "commentaires"
+
+msgid "Order copy sent to your email"
+msgstr "Commande de copie envoyée à votre adresse e-mail"
+
+msgid "Please upload your passport reg. address page copy"
+msgstr "S'il vous plaît télécharger votre passeport reg.copie de la page d'adresse"
+
+msgid "Please upload your passport page 1 copy"
+msgstr "S'il vous plaît télécharger votre page de passeport 1 copie"
+
+msgid "Passport reg. address page copy"
+msgstr "Passeport reg.copie de la page d'adresse"
+
+msgid "Passport page 1 copy"
+msgstr "Passeport page 1 copie"
+
+msgid "Company details file"
+msgstr "Fichier de détails de l'entreprise"
+
+msgid "Individual"
+msgstr "Individuel"
+
+msgid "Company"
+msgstr "Compagnie"
+
+msgid "Organisation"
+msgstr "Organisation"
+
+msgid "Contact information"
+msgstr "Informations de contact"
+
+msgid "Thank you for your order"
+msgstr "Nous vous remercions de votre commande"
+
+msgid "Service order completed"
+msgstr "Commande de service terminée"
+
+msgid "Amount of concurrent calls"
+msgstr "Nombre d'appels simultanés"
+
+msgid "Counterparty type"
+msgstr "Type de contrepartie"
+
+msgid "Best regards"
+msgstr "Meilleures salutations"
+
+msgid "OnNet Communications Inc."
+msgstr "OnNet Communications Inc."
+
+msgid "OnNet communications Inc."
+msgstr "OnNet Communications Inc." 
+
+msgid "Order number"
+msgstr "Numéro de commande "
+
+msgid "Service order received"
+msgstr "Commande de service reçue"
+
+msgid "add one more number"
+msgstr "ajouter un numéro de plus"
+
+msgid "Clear form"
+msgstr "Forme claire"
+
+msgid "Make an order"
+msgstr "faire une commande"
+
+msgid "Server parameters"
+msgstr "Paramètres du serveur"
+
+msgid "Choose server parameters"
+msgstr "Choisir les paramètres du serveur
+
+msgid "Counterparty information"
+msgstr "Informations sur la contrepartie"
+
+msgid "Please provide counterparty information"
+msgstr "Veuillez fournir des informations sur la contrepartie"
+
+msgid "Fill in the contact information form"
+msgstr "Remplissez le formulaire d'informations de contact"
+
+msgid "Chosen numbers"
+msgstr "Numéros choisis"
+
+msgid "Choose phone numbers"
+msgstr "Choisissez les numéros de téléphone"
+
+msgid "Choose service"
+msgstr "Choisissez le service"
+
+msgid "Virtual Office"
+msgstr "Bureau virtuel"
+
+msgid "Virtual PBX"
+msgstr "PBX virtuel"
+
+msgid "SIP Trunk"
+msgstr "Tronc SIP "
+
+msgid "Virtual Server"
+msgstr "Serveur virtuel"
+
+msgid "Please upload your company details or provide this information within Comments field"
+msgstr "S'il vous plaît télécharger les détails de votre entreprise ou fournir cette information dans le champ Commentaires"
+
+msgid "Please upload your company details"
+msgstr "S'il vous plaît télécharger les détails de votre entreprise"
+
+msgid "No file chosen"
+msgstr "Aucun fichier choisi"
+
+msgid "Must contain only letters."
+msgstr "Doit contenir seulement des lettres."
+
+msgid "Contact email address"
+msgstr "adresse e-mail de contact"
+
+msgid "Contact phone number"
+msgstr "Numéro de téléphone de contact"
+
+msgid "Service order"
+msgstr "Demande de service"
+
+msgid "Services order"
+msgstr "Commande de services "
+
+msgid "Services order form"
+msgstr "Formulaire de commande de services"
+
+msgid "Firstname"
+msgstr "Prénom"
+
+msgid "Middlename"
+msgstr "Deuxième nom"
+
+msgid "generate"
+msgstr "produire"
+
+msgid "Calls report"
+msgstr " Rapport d'appels"
+
+msgid "Your account is currently blocked.  Please contact support."
+msgstr "Votre compte est actuellement bloqué S'il vous plaît contacter le support."
+
+msgid "export in csv format"
+msgstr "exporter en format csv"
+
+msgid "Please note that password is case sensitive and check that your caps lock key is off."
+msgstr "Veuillez noter que le mot de passe est sensible à la casse et vérifiez que la touche majuscule est désactivée."
+
+msgid "Filtered from"
+msgstr "Filtré à partir de"
+
+msgid "Allocated IP Addresses"
+msgstr " Adresses IP allouées"
+
+msgid "Please wait"
+msgstr "S'il vous plaît, attendez"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Credit amount"
+msgstr "Montant du crédit "
+
+msgid "Maturity date"
+msgstr "Date d'échéance"
+
+msgid "Contract date"
+msgstr "Date de contrat"
+
+msgid "Contract number"
+msgstr "Numéro de contrat "
+
+msgid "Chief accountant"
+msgstr " Chef comptable"
+
+msgid "Director"
+msgstr "Réalisateur"
+
+msgid "Postal Address"
+msgstr "Adresse postale "
+
+msgid "Billing Address"
+msgstr "Adresse de facturation "
+
+msgid "Registered Office Address"
+msgstr "Adresse du bureau enregistré "
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "INN / KPP"
+msgstr "INN / KPP"
+
+msgid "Enter the amount, excluding VAT"
+msgstr "Entrer le montant, hors TVA"
+
+msgid "Previous payment"
+msgstr "Paiement précédent"
+
+msgid "Choose amount"
+msgstr "Choix du montant"
+
+msgid "Apply for credit"
+msgstr "Demander un crédit"
+
+msgid "ASSIST - Electronic Payment System"
+msgstr "ASSIST - Système de paiement électronique"
+
+msgid "Dengi Online"
+msgstr "Dengi en ligne"
+
+msgid "ASSIST"
+msgstr "AIDER"
+
+msgid "Dengi Online - Electronic Payment System"
+msgstr "Dengi Online - Système de paiement électronique"
+
+msgid "Yandex.Money - Electronic Payment System"
+msgstr "Yandex.Money - Système de paiement électronique"
+
+msgid "Enter an amount to pay"
+msgstr "Entrez un montant à payer"
+
+msgid "Issue an invoice"
+msgstr "Émettre une facture"
+
+msgid "Undefined"
+msgstr "Indéfini"
+
+msgid "Active"
+msgstr "actif"
+
+msgid "Comment"
+msgstr "Commentaire"
+
+msgid "Current month expenses"
+msgstr "Dépenses du mois en cours"
+
+msgid "Current balance"
+msgstr "Solde actuel"
+
+msgid "Account status"
+msgstr "Statut du compte"
+
+msgid "entries"
+msgstr "entrées"
+
+msgid "Showing 0 entries"
+msgstr " Affichage de 0 entrées"
+
+msgid "of"
+msgstr "de"
+
+msgid "to"
+msgstr "à"
+
+msgid "Filter"
+msgstr "Filtre"
+
+msgid "Showing"
+msgstr "Montrer "
+
+msgid "Nothing found, sorry"
+msgstr "Rien trouvé, désolé"
+
+msgid "lines per page"
+msgstr "lignes par page"
+
+msgid "Back"
+msgstr "Arrière"
+
+msgid "Forward"
+msgstr "Vers l'avant"
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "Current balance"
+msgstr " Solde actuel"
+
+msgid "Account status"
+msgstr " Statut du compte "
+
+msgid "Contact person"
+msgstr "Contact "
+
+msgid "view documents"
+msgstr "voir les documents "
+
+msgid "dashboard"
+msgstr "tableau de bord"
+
+msgid "Period"
+msgstr "Période"
+
+msgid "all information"
+msgstr "toutes les informations"
+
+msgid "Choose month"
+msgstr "Choisissez le mois "
+
+msgid "Invoices"
+msgstr "Factures"
+
+msgid "VAT Invoices"
+msgstr "Factures de TVA"
+
+msgid "Total (all pages):"
+msgstr "Total (toutes les pages):"
+
+msgid "Counterparty"
+msgstr "Contrepartie"
+
+msgid "Acts"
+msgstr "Actes"
+
+msgid "incl."
+msgstr "incl."
+
+msgid "VAT"
+msgstr "T.V.A."
+
+msgid "#"
+msgstr "#"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Total:"
+msgstr "Total:"
+
+msgid "Last incoming calls of today"
+msgstr "Derniers appels entrants d'aujourd'hui"
+
+msgid "Costs for current day, RUB (excl VAT)"
+msgstr "Coûts pour la journée en cours, RUB (hors TVA)"
+
+msgid "Costs for selected period, RUB (excl VAT)"
+msgstr "Coûts pour la période sélectionnée, RUB (hors TVA)"
+
+msgid "Local calls"
+msgstr "Appels locaux "
+
+msgid "Long distance calls"
+msgstr " Appels longue distance"
+
+msgid "refresh results"
+msgstr "actualiser les résultats"
+
+msgid "Fee type"
+msgstr "Type de frais "
+
+msgid "Fixed fees"
+msgstr " Frais fixes"
+
+msgid "Services usage"
+msgstr " Utilisation des services"
+
+msgid "All"
+msgstr "Tout"
+
+msgid "inbound"
+msgstr "entrant"
+
+msgid "outbound"
+msgstr "sortant"
+
+msgid "choose calls direction"
+msgstr " choisissez la direction des appels"
+
+msgid "choose calls type"
+msgstr "choisir le type d'appels "
+
+msgid "Till:"
+msgstr "Jusqu'à:"
+
+msgid "From:"
+msgstr "De:"
+
+msgid "Day:"
+msgstr "Journée:"
+
+msgid "Month:"
+msgstr "Mois:"
+
+msgid "Day"
+msgstr "journée"
+
+msgid "Month"
+msgstr "Mois"
+
+msgid "Inbound calls"
+msgstr " Appels entrants"
+
+msgid "Inbound"
+msgstr "Entrant"
+
+msgid "Outbound calls"
+msgstr "Appels sortants "
+
+msgid "Outbound"
+msgstr "Sortant"
+
+msgid "RUR"
+msgstr "RUR"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Direction"
+msgstr "Direction"
+
+msgid "Start time"
+msgstr "Heure de début"
+
+msgid "Callee"
+msgstr "Callee "
+
+msgid "Caller"
+msgstr "Votre interlocuteur "
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "Quantity"
+msgstr "Quantité"
+
+msgid "Cost"
+msgstr "Coût"
+
+msgid "Sum"
+msgstr "Somme"
+
+msgid "show statistics"
+msgstr "Montrez les statistiques "
+
+msgid "Phone calls statistics"
+msgstr " Statistiques des appels téléphoniques "
+
+msgid "Select day"
+msgstr "Sélectionnez le jour"
+
+msgid "Select month"
+msgstr "Sélectionnez un mois "
+
+msgid "Select interval"
+msgstr " Sélectionnez un intervalle"
+
+msgid "day"
+msgstr "journée"
+
+msgid "month"
+msgstr "mois"
+
+msgid "Interval"
+msgstr "Intervalle"
+
+msgid "interval"
+msgstr "intervalle"
+
+msgid "choose interval type"
+msgstr "choisissez le type d'intervalle"
+
+msgid "IP Addresses"
+msgstr "Adresses IP"
+
+msgid "Phone numbers"
+msgstr "Les numéros de téléphone "
+
+msgid "Tariff name"
+msgstr "Nom du tarif "
+
+msgid "Service name"
+msgstr " Nom du service"
+
+msgid "Fee name"
+msgstr "Nom de la taxe "
+
+msgid "Current month services, RUB (excl VAT)"
+msgstr "Services du mois en cours, RUB (hors TVA) "
+
+msgid "excl VAT"
+msgstr "hors TVA"
+
+msgid "Monthly fees, RUB (excl VAT)"
+msgstr "Frais mensuels, RUB (hors TVA)"
+
+msgid "RUB, excl VAT"
+msgstr "RUB, hors TVA"
+
+msgid "Monthly fees"
+msgstr "Frais mensuels"
+
+msgid "Telephony"
+msgstr "Téléphonie"
+
+msgid "Internet"
+msgstr "l'Internet"
+
+msgid "Blocked"
+msgstr "Bloqué"
+
+msgid "Active"
+msgstr "actif"
+
+msgid "Option is under construction."
+msgstr "L'option est en construction."
+
+msgid "invoice requested"
+msgstr "facture demandée"
+
+msgid "Please input integer number."
+msgstr "S'il vous plaît entrer le nombre entier."
+
+msgid "Missed event happened."
+msgstr "Événement manqué est arrivé."
+
+msgid "Must be a number."
+msgstr "Doit être un nombre.""
+
+msgid "payment requested"
+msgstr "paiement demandé"
+
+msgid "credit requested"
+msgstr " crédit demandé"
+
+msgid "Loan"
+msgstr "Prêt"
+
+msgid "Wire transfer"
+msgstr "Virement bancaire"
+
+msgid "Online payment"
+msgstr "Paiement en ligne"
+
+msgid "Online payments"
+msgstr "Paiements en ligne "
+
+msgid "rub"
+msgstr "frotter"
+
+msgid "rub."
+msgstr "frotter."
+
+msgid "proceed"
+msgstr "procéder"
+
+msgid "last ten"
+msgstr "dix dernières"
+
+msgid "make payments"
+msgstr "effectuer des paiements"
+
+msgid "Credit"
+msgstr "Crédit"
+
+msgid "Invoice"
+msgstr "Facture d'achat"
+
+msgid "Payment"
+msgstr "Paiement"
+
+msgid "Payments"
+msgstr "Paiements"
+
+msgid "Payments list"
+msgstr "Liste de paiements"
+
+msgid "Payments list ( last ten )"
+msgstr " Liste des paiements (dix derniers) "
+
+msgid "COL2Test"
+msgstr "COL2Test"
+
+msgid "text"
+msgstr "texte"
+
+msgid "Account"
+msgstr " Compte"
+
+msgid "Account Details"
+msgstr "details du compte "
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Statistics"
+msgstr "Statistiques"
+
+msgid "Make payment"
+msgstr "Effectuer le paiement"
+
+msgid "Account details"
+msgstr "Details du compte "
+
+msgid "Company details"
+msgstr "Détails de la société "
+
+msgid "Current agreements"
+msgstr " Accords actuels"
+
+msgid "Are you sure you want to exit the customer interface?"
+msgstr "Êtes-vous sûr de vouloir quitter l'interface client?"
+
+msgid "Expired"
+msgstr "Expiré"
+
+msgid "General settings"
+msgstr "Réglages généraux "
+
+msgid "Privilege level"
+msgstr "Niveau de privilège "
+
+msgid "Portal users details"
+msgstr "Détails des utilisateurs du portail"
+
+msgid "Portal account details"
+msgstr "Détails du compte du portail"
+
+msgid "Portal URL"
+msgstr "URL du portail "
+
+msgid "Restrictions details"
+msgstr "Les restrictions"
+
+msgid "User and device level restrictions could be managed in particular service interface"
+msgstr "Les restrictions au niveau de l'utilisateur et du périphérique peuvent être gérées dans une interface de service particulière "
+
+msgid "Not applicable"
+msgstr "N'est pas applicable"
+
+msgid "Call support"
+msgstr "Appeler le support"
+
+msgid "Change"
+msgstr "Changement"
+
+msgid "Denied"
+msgstr "Refusé"
+
+msgid "Allowed"
+msgstr "Permis"
+
+msgid "Classifier"
+msgstr "Classificateur"
+
+msgid "Trunks"
+msgstr "Les troncs"
+
+msgid "Call restrictions"
+msgstr "Restrictions d'appel"
+
+msgid "fax documents retention period is one month"
+msgstr "la période de rétention des documents de télécopie est d'un mois"
+
+msgid "call recordings retention period is one month"
+msgstr "les enregistrements d'appel période de rétention est d'un mois"
+
+msgid "Last month recordings"
+msgstr "Enregistrements du mois dernier"
+
+msgid "Play"
+msgstr "Jouer"
+
+msgid "Fax number"
+msgstr "Numéro de fax"
+
+msgid "Listen"
+msgstr "Ecouter"
+
+msgid "Calls recording"
+msgstr "Appels d'enregistrement"
+
+msgid "Call recordings"
+msgstr "Appeler les enregistrements"
+
+msgid "Check to add company name to fax header"
+msgstr "Cocher pour ajouter le nom de l'entreprise à l'en-tête"
+
+msgid "Status panel"
+msgstr " Panneau d'état"
+
+msgid "No number entered"
+msgstr "Aucun numéro entré"
+
+msgid "No document chosen"
+msgstr "Aucun document choisi"
+
+msgid "refresh"
+msgstr "rafraîchir"
+
+msgid "Incoming Faxes"
+msgstr "Fax entrant"
+
+msgid "Outgoing Faxes"
+msgstr "Télécopies sortantes"
+
+msgid "Last inbound Faxes"
+msgstr "Dernier fax entrant"
+
+msgid "Recent incoming faxes"
+msgstr "Télécopies entrantes récentes"
+
+msgid "Recent outgoing faxes"
+msgstr "Télécopies sortantes récentes"
+
+msgid "Please choose the number of attempts"
+msgstr "Veuillez choisir le nombre de tentatives"
+
+msgid "Please choose the number to send fax from"
+msgstr "Veuillez choisir le numéro pour envoyer un fax depuis"
+
+msgid "Please upload your document"
+msgstr "Veuillez télécharger votre document"
+
+msgid "Enter the number of the Fax to send document to"
+msgstr "Entrez le numéro du fax à envoyer au document"
+
+msgid "send fax"
+msgstr "envoyer un fax"
+
+msgid "Send Fax Form"
+msgstr "Envoyer un formulaire de fax"
+
+msgid "Registered SIP devices"
+msgstr "Appareils SIP enregistrés"
+
+msgid "Agent"
+msgstr "Agent"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "IP address"
+msgstr "adresse IP "
+
+msgid "Registration details"
+msgstr "Détails d'inscription"
+
+msgid "Current Settings"
+msgstr "paramètres actuels
+
+msgid "lines per page"
+msgstr "lignes par page"
+
+msgid "All"
+msgstr "Tout"
+
+msgid "Account's notifications"
+msgstr "Notifications du compte"
+
+msgid "Current state"
+msgstr "Etat actuel"
+
+msgid "Integrations"
+msgstr "Intégrations"
+
+msgid "- No CID -"
+msgstr " - Pas de CID -"
+
+msgid "Admins only"
+msgstr "Administrateurs seulement"
+
+msgid "All users"
+msgstr "Tous les utilisateurs"
+
+msgid "Enter message subject here"
+msgstr "Entrez l'objet du message ici"
+
+msgid "Enter sender's email adress here"
+msgstr "Entrez l'adresse e-mail de l'expéditeur ici"
+
+msgid "From (email address)"
+msgstr "De l'adresse e-mail)"
+
+msgid "Subject"
+msgstr "Assujettir"
+
+msgid "Send an update"
+msgstr "Envoyer une mise à jour"
+
+msgid "send customers update"
+msgstr "envoyer les clients à jour"
+
+msgid "or"
+msgstr "ou"
+
+msgid "Web access restrictions setup"
+msgstr "Configuration des restrictions d'accès Web"
+
+msgid "Save ACL"
+msgstr "Enregistrer ACL"
+
+msgid "access restrtictions"
+msgstr "Restrictions d'accès"
+
+msgid "Available keys"
+msgstr "Clés disponibles "
+
+msgid "Full"
+msgstr "Plein"
+
+msgid "Whisper"
+msgstr "Chuchotement"
+
+msgid "Edit eavesdrop settings"
+msgstr "Modifier les paramètres d'écoute"
+
+msgid "Eavesdrop"
+msgstr "Eavesdrop"
+
+msgid "Switch off eavesdrop"
+msgstr "Désactiver l'écoute"
+
+msgid "Target group"
+msgstr "Groupe ciblé"
+
+msgid "Approved users"
+msgstr "Utilisateurs approuvés"
+
+msgid "Enter description for new number"
+msgstr "Entrez la description du nouveau numéro"
+
+msgid "Enter new number"
+msgstr "Entrez un nouveau numéro"
+
+msgid "Blacklisted numbers"
+msgstr "Numéros figurant sur la liste noire"
+
+msgid "Add new number to blacklist"
+msgstr "Ajouter un nouveau numéro à la liste noire"
+
+msgid "Account name already in use"
+msgstr "Nom du compte déjà utilisé"
+
+msgid "Account name already exists"
+msgstr "Le nom du compte existe déjà"
+
+msgid "In order to replace email address change username"
+msgstr "Afin de remplacer l'adresse e-mail, changez le nom d'utilisateur"
+
+msgid "Username/Email already in use"
+msgstr "Nom d'utilisateur / Email déjà utilisé"
+
+msgid "Do you really want to reset password?"
+msgstr "Voulez-vous vraiment réinitialiser le mot de passe?"
+
+msgid "Back to user's credentials change"
+msgstr "Retour aux informations d'identification de l'utilisateur"
+
+msgid "Close window"
+msgstr "Fermer la fenêtre"
+
+msgid "Digits"
+msgstr "Chiffres"
+
+msgid "Enter an email address here"
+msgstr "Entrez une adresse email ici"
+
+msgid "Enter an email address for new login name or leave blank to keep an existing one"
+msgstr "Entrez une adresse e-mail pour le nouveau nom de connexion ou laissez ce champ vide pour en conserver un existant"
+
+msgid "Enter new password"
+msgstr "Entrez un nouveau mot de passe "
+
+msgid "Save new user credentials"
+msgstr "Enregistrer les informations d'identification de nouveaux utilisateurs"
+
+msgid "Reset password to random and email to owner"
+msgstr "Réinitialiser le mot de passe au hasard et envoyer un courriel au propriétaire"
+
+msgid "Reset and email password"
+msgstr "Réinitialiser le mot de passe"
+
+msgid "Dialplan"
+msgstr "Plan de numérotation"
+
+msgid "Send message"
+msgstr "Envoyer le message"
+
+msgid "send message"
+msgstr "envoyer le message"
+
+msgid "Edit dynamic CID settings"
+msgstr "Modifier les paramètres dynamiques du CID"
+
+msgid "Switch off dynamic CID feature"
+msgstr "Désactiver la fonctionnalité CID dynamique"
+
+msgid "Add list"
+msgstr "Ajouter la liste"
+
+msgid "Enter description name here"
+msgstr "Entrez le nom de la description ici"
+
+msgid "Enter list name here"
+msgstr "Entrez le nom de la liste ici"
+
+msgid "Save list"
+msgstr "Enregistrer la liste"
+
+msgid "Dynamic CID"
+msgstr "CID dynamique"
+
+msgid "BCC"
+msgstr "BCC"
+
+msgid "CC"
+msgstr "CC"
+
+msgid "Save Click-to-Call"
+msgstr "Enregistrer Click-to-Call"
+
+msgid "Add Click-to-Call"
+msgstr "Ajouter Click-to-Call"
+
+msgid "Enter number to call here"
+msgstr "Entrez le numéro à appeler ici"
+
+msgid "Place test call"
+msgstr "Passer un appel de test"
+
+msgid "Show code"
+msgstr "Afficher le code"
+
+msgid "Hide code"
+msgstr "Cacher le code"
+
+msgid "Test"
+msgstr "Tester"
+
+msgid "1 day"
+msgstr "Un jour"
+
+msgid "3 days"
+msgstr "3 jours"
+
+msgid "7 days"
+msgstr "7 jours"
+
+msgid "15 days"
+msgstr "15 jours"
+
+msgid "Delete all messages"
+msgstr " Supprimer tous les messages"
+
+msgid "Older than"
+msgstr "Plus âgé que"
+
+msgid "Choose VMBox"
+msgstr "Choisissez VMBox"
+
+msgid "Clean up Voicemail Boxes"
+msgstr "Nettoyer les boîtes vocales"
+
+msgid "Purge messages"
+msgstr "Purger les messages"
+
+msgid "Test"
+msgstr "Tester"
+
+msgid "1 day"
+msgstr "Un jour"
+
+msgid "3 days"
+msgstr "3 jours"
+
+msgid "7 days"
+msgstr "7 jours"
+
+msgid "15 days"
+msgstr "15 jours"
+
+msgid "Delete all messages"
+msgstr "Supprimer tous les messages "
+
+msgid "Older than"
+msgstr "Plus âgé que"
+
+msgid "Choose VMBox"
+msgstr "Choisissez VMBox"
+
+msgid "Clean up Voicemail Boxes"
+msgstr "Nettoyer les boîtes vocales"
+
+msgid "Purge messages"
+msgstr "Purger les messages"
+
+msgid "purge messages"
+msgstr "purger les messages"
+
+msgid "Rule name"
+msgstr "Nom de la règle"
+
+msgid "Request example"
+msgstr "Demande d'exemple"
+
+msgid "Click-to-Call"
+msgstr "Cliquez pour appeler"
+
+msgid "Auth required"
+msgstr "Auth requis"
+
+msgid "Dial first"
+msgstr "Composez d'abord"
+
+msgid "Conference manager"
+msgstr "Responsable de la conférence"
+
+msgid "Microphone"
+msgstr "Microphone"
+
+msgid "Select Callflow"
+msgstr "Sélectionnez Callflow"
+
+msgid "System monitor"
+msgstr "Moniteur système"
+
+msgid "System default"
+msgstr "Défaillance du système"
+
+msgid "Changed"
+msgstr "Modifié"
+
+msgid "Overridden"
+msgstr "Surchargé"
+
+msgid "Number purchase attempt"
+msgstr "Tentative d'achat de numéro"
+
+msgid "tries to purchase phone number"
+msgstr "essaie d'acheter le numéro de téléphone"
+
+msgid "An account"
+msgstr "Un compte"
+
+msgid "deallocated phone number"
+msgstr "numéro de téléphone désalloué"
+
+msgid "Number dealocated"
+msgstr "Nombre réparti"
+
+msgid "Howdy, platform administrators"
+msgstr "Howdy, administrateurs de plate-forme"
+
+msgid "Reseller's name"
+msgstr "Nom du revendeur"
+
+msgid "Do you really want to add participant"
+msgstr "Voulez-vous vraiment ajouter un participant"
+
+msgid "add participant"
+msgstr "ajouter un participant"
+
+msgid "Kick off"
+msgstr "Démarrer"
+
+msgid "Mute/Unmute"
+msgstr "Mute / Unmute"
+
+msgid "Participant"
+msgstr "Participant"
+
+msgid "Current participants"
+msgstr "Participants actuels"
+
+msgid "Participants list"
+msgstr "Liste des participants"
+
+msgid "Play message"
+msgstr "Lire le message"
+
+msgid "Start"
+msgstr "Début"
+
+msgid "Allocated to"
+msgstr "Alloué à"
+
+msgid "Allocated numbers"
+msgstr "Numéros attribués "
+
+msgid "Edit entries"
+msgstr "Modifier les entrées"
+
+msgid "Add entry"
+msgstr "Ajouter une entrée"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Template name"
+msgstr "Nom du modèle"
+
+msgid "Lists"
+msgstr "Listes"
+
+msgid "Add webhook"
+msgstr "Ajouter un webhook"
+
+msgid "add webhook"
+msgstr "ajouter un webhook"
+
+msgid "Webhooks"
+msgstr "Webhooks"
+
+msgid "Browse"
+msgstr "Feuilleter"
+
+msgid "Upload document"
+msgstr "Télécharger le document"
+
+msgid "General routing"
+msgstr "Routage général"
+
+msgid "Account defined"
+msgstr "Compte défini"
+
+msgid "refresh list"
+msgstr "Rafraîchir la liste"
+
+msgid "Flags (comma separated)"
+msgstr "Drapeaux (séparés par des virgules)"
+
+msgid "Enter CID mask here"
+msgstr "Entrez le masque CID ici"
+
+msgid "Enter destination mask here"
+msgstr "Entrez le masque de destination ici"
+
+msgid "Enter server address here"
+msgstr "Entrez l'adresse du serveur ici"
+
+msgid "Enter resource name here"
+msgstr "Entrez le nom de la ressource ici"
+
+msgid "Enter Click-to-Call name here"
+msgstr "Entrez le nom Click-to-Call ici"
+
+msgid "Progress timeout"
+msgstr "Délai d'attente de progression"
+
+msgid "Pass realm"
+msgstr "Passer le domaine"
+
+msgid "Enter realm here"
+msgstr "Entrez dans le domaine ici"
+
+msgid "Enter suffix here"
+msgstr "Entrez le suffixe ici"
+
+msgid "Enter prefix here"
+msgstr "Entrez le préfixe ici"
+
+msgid "Reseller settings"
+msgstr "Paramètres du revendeur"
+
+msgid "Reseller Settings"
+msgstr "Paramètres du revendeur"
+
+msgid "Do you really want to delete route"
+msgstr "Voulez-vous vraiment supprimer l'itinéraire"
+
+msgid "Resource name"
+msgstr "Nom de la ressource"
+
+msgid "Weight cost"
+msgstr "Coût du poids"
+
+msgid "Edit route"
+msgstr "Modifier l'itinéraire"
+
+msgid "Add route"
+msgstr "Ajouter un itinéraire"
+
+msgid "add route"
+msgstr "ajouter une route"
+
+msgid "Outbound routing"
+msgstr "Routage sortant"
+
+msgid "at"
+msgstr "à"
+
+msgid "Delay"
+msgstr "Retard"
+
+msgid "Sending request"
+msgstr "Envoyer une requete"
+
+msgid "Choose date"
+msgstr "Choisir la date"
+
+msgid "Contact IP"
+msgstr "Contact IP"
+
+msgid "User agent"
+msgstr "Agent utilisateur"
+
+msgid "Current account calls"
+msgstr "Appels de compte courants"
+
+msgid "Incoming call from"
+msgstr " Appel entrant de"
+
+msgid "Account's allocated numbers"
+msgstr "Numéros attribués au compte"
+
+msgid "Do you really want to flush registration for device"
+msgstr "Voulez-vous vraiment vider l'enregistrement pour l'appareil?"
+
+msgid "Account's current registrations"
+msgstr "Les inscriptions actuelles du compte"
+
+msgid "answered"
+msgstr "répondu"
+
+msgid "ringing"
+msgstr "sonnerie"
+
+msgid "current calls"
+msgstr "appels en cours "
+
+msgid "call restrictions"
+msgstr "restrictions d'appel"
+
+msgid "Account level call restrictions"
+msgstr "Restrictions d'appel au niveau du compte"
+
+msgid "Notify on de-register"
+msgstr "Notifier lors de la désinscription"
+
+msgid "Date of creation"
+msgstr "Date de création"
+
+msgid "Please check your mailbox"
+msgstr "Veuillez vérifier votre boîte aux lettres"
+
+msgid "No account found"
+msgstr "Aucun compte trouvé"
+
+msgid "Account or Phone number"
+msgstr "Compte ou numéro de téléphone"
+
+msgid "Change password"
+msgstr "Changer le mot de passe"
+
+msgid "No custom prompt"
+msgstr "Aucune invite personnalisée"
+
+msgid "Last"
+msgstr "Dernier"
+
+msgid "Fifth"
+msgstr "Cinquième"
+
+msgid "Fourth"
+msgstr "Quatrième"
+
+msgid "Third"
+msgstr "Troisième"
+
+msgid "Second"
+msgstr "Seconde"
+
+msgid "First"
+msgstr "Premier"
+
+msgid "December"
+msgstr "décembre"
+
+msgid "November"
+msgstr "novembre"
+
+msgid "October"
+msgstr "octobre"
+
+msgid "September"
+msgstr "septembre"
+
+msgid "August"
+msgstr "août"
+
+msgid "July"
+msgstr "juillet"
+
+msgid "June"
+msgstr "juin"
+
+msgid "May"
+msgstr "Mai"
+
+msgid "April"
+msgstr "avril"
+
+msgid "March"
+msgstr "Mars"
+
+msgid "February"
+msgstr "février"
+
+msgid "January"
+msgstr "janvier"
+
+msgid "month"
+msgstr "mois"
+
+msgid "week"
+msgstr "la semaine"
+
+msgid "week(s)"
+msgstr "semaines)"
+
+msgid "month(s)"
+msgstr "mois)"
+
+msgid "Every"
+msgstr "Chaque"
+
+msgid "Forced Off"
+msgstr "Forcés de quitter"
+
+msgid "Forced On"
+msgstr "Forcé sur "
+
+msgid "Based on time"
+msgstr "Basé sur le temps"
+
+msgid "Yearly"
+msgstr "Annuel"
+
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgid "Weekly"
+msgstr "Hebdomadaire"
+
+msgid "Select to edit"
+msgstr "Sélectionnez pour modifier"
+
+msgid "Select account to edit"
+msgstr "Sélectionnez le compte à modifier "
+
+msgid "Without user"
+msgstr "Sans utilisateur"
+
+msgid "Default music"
+msgstr "Musique par défaut"
+
+msgid "Select timezone"
+msgstr "Sélectionner le fuseau horaire"
+
+msgid "Ring this device for"
+msgstr "Sonner cet appareil pour"
+
+msgid "seconds"
+msgstr "secondes"
+
+msgid "Add new Callflow"
+msgstr "Ajouter un nouveau flux d'appels"
+
+msgid "Pattern"
+msgstr "Modèle"
+
+msgid "Extension"
+msgstr "Extension"
+
+msgid "Spare numbers"
+msgstr "Numéros de rechange"
+
+msgid "Select voice prompt"
+msgstr "Sélectionnez l'invite vocale"
+
+msgid "Default ringback"
+msgstr "Annulation par défaut"
+
+msgid "In order"
+msgstr "En ordre"
+
+msgid "At the same time"
+msgstr "En même temps"
+
+msgid "Processing number removal..."
+msgstr "Suppression du numéro de traitement ..."
+
+msgid "Do you really want to add this number?"
+msgstr "Voulez-vous vraiment ajouter ce numéro?"
+
+msgid "Do you really want to delete this number?"
+msgstr "Voulez-vous vraiment supprimer ce numéro?"
+
+msgid "Save settings"
+msgstr "Enregistrer les paramètres"
+
+msgid "Select number to add"
+msgstr "Sélectionnez le numéro à ajouter"
+
+msgid "Select to add"
+msgstr "Sélectionnez pour ajouter"
+
+msgid "Save numbers list"
+msgstr "Enregistrer la liste des numéros"
+
+msgid "Manage trunk numbers"
+msgstr "Gérer les numéros de ligne"
+
+msgid "Auth method"
+msgstr "Méthode d'authentification"
+
+msgid "Invite format"
+msgstr "Inviter le format"
+
+msgid "Trunk name"
+msgstr "Nom du tronc"
+
+msgid "add trunk"
+msgstr "ajouter un coffre"
+
+msgid "Add trunk"
+msgstr "Ajouter un coffre"
+
+msgid "Edit trunk"
+msgstr "Modifier le coffre"
+
+msgid "Trunkstore"
+msgstr "Trunkstore"
+
+msgid "Do you really want to delete this Pin?"
+msgstr "Voulez-vous vraiment supprimer ce code?"
+
+msgid "Do you really want to delete this Authorized CID?"
+msgstr "Voulez-vous vraiment supprimer ce CID autorisé?"
+
+msgid "Music on hold"
+msgstr "Musique en attente"
+
+msgid "Menu option"
+msgstr "Option de menu"
+
+msgid "Choose menu option"
+msgstr "Choisissez l'option de menu"
+
+msgid "No saved brunch"
+msgstr "Pas de brunch sauvegardé"
+
+msgid "Branch saved"
+msgstr "Branche enregistrée"
+
+msgid "refresh"
+msgstr "rafraîchir"
+
+msgid "back to send fax form"
+msgstr "retour pour envoyer un formulaire de fax "
+
+msgid "sent notifications"
+msgstr "notifications envoyées "
+
+msgid "show sent faxes"
+msgstr "afficher les fax envoyés "
+
+msgid "submit fax"
+msgstr "soumettre un fax "
+
+msgid "Main account number"
+msgstr " Numéro de compte principal"
+
+msgid "Delete After Notification"
+msgstr "Supprimer après notification"
+
+msgid "Skip Instructions"
+msgstr "Ignorer les instructions"
+
+msgid "Skip Greeting"
+msgstr "Passer le salut"
+
+msgid "Auto-login enabled"
+msgstr "Connexion automatique activée"
+
+msgid "Require PIN"
+msgstr "Exiger le code PIN"
+
+msgid "Already Setup"
+msgstr "Déjà installé"
+
+msgid "Enter vmbox name here"
+msgstr "Entrez le nom de vmbox ici "
+
+msgid "Save voicemail box"
+msgstr " Enregistrer la boîte vocale"
+
+msgid "Unavailable message"
+msgstr "Message non disponible "
+
+msgid "PIN number"
+msgstr "Code PIN "
+
+msgid "Voicemail number"
+msgstr "Numéro de messagerie vocale"
+
+msgid "Voicemail owner"
+msgstr "Propriétaire de la messagerie vocale"
+
+msgid "Voicemail name"
+msgstr "Nom de la messagerie vocale "
+
+msgid "Edit voicemail box"
+msgstr "Modifier la boîte vocale"
+
+msgid "Account language"
+msgstr "Langue du compte "
+
+msgid "Account timezone"
+msgstr "Fuseau horaire du compte"
+
+msgid "Do you really want to delete vmbox"
+msgstr "Voulez-vous vraiment supprimer vmbox"
+
+msgid "Msg. amount"
+msgstr "Msg.montant"
+
+msgid "Number"
+msgstr "Nombre"
+
+msgid "Box"
+msgstr "Boîte"
+
+msgid "Add vmbox"
+msgstr "Ajouter vmbox"
+
+msgid "add vmbox"
+msgstr "ajouter vmbox"
+
+msgid "All calls recording"
+msgstr "Tous les appels d'enregistrement"
+
+msgid "Account Language"
+msgstr "Langue du compte"
+
+msgid "Do you really want to delete this callflow?"
+msgstr "Voulez-vous vraiment supprimer ce flux?"
+
+msgid "Do you really want to save this callflow?"
+msgstr "Voulez-vous vraiment enregistrer ce callflow?"
+
+msgid "Do you really want to reload this callflow?"
+msgstr "Voulez-vous vraiment recharger ce callflow?"
+
+msgid "Edit blacklist"
+msgstr "Modifier la liste noire"
+
+msgid "Enter rule name here"
+msgstr " Entrez le nom de la règle ici"
+
+msgid "Edit rule"
+msgstr " Modifier la règle"
+
+msgid "Enter menu name here"
+msgstr "Entrez le nom du menu ici "
+
+msgid "Save prompt"
+msgstr " Enregistrer l'invite"
+
+msgid "Edit prompt"
+msgstr "Modifier l'invite"
+
+msgid "Save Menu"
+msgstr "Enregistrer le menu "
+
+msgid "Suppress invalid"
+msgstr "Supprimer invalide "
+
+msgid "Outside recording"
+msgstr " Enregistrement extérieur"
+
+msgid "Dial extensions"
+msgstr " Composer les extensions"
+
+msgid "# of retries"
+msgstr "Nombre de tentatives"
+
+msgid "Allocating number..."
+msgstr "Attribution d'un numéro ... "
+
+msgid "Passwords match"
+msgstr "Les mots de passe correspondent "
+
+msgid "Uppercase letters"
+msgstr "Lettres capitales "
+
+msgid "Lowercase letters"
+msgstr "Minuscules "
+
+msgid "10 Characters long"
+msgstr "10 caractères longs "
+
+msgid "New password"
+msgstr "Nouveau mot de passe "
+
+msgid "Direct Calls Only"
+msgstr "Appels directs seulement "
+
+msgid "Require Key Press"
+msgstr " Exiger une touche de presse "
+
+msgid "Bypass user's phones"
+msgstr "Contourner les téléphones de l'utilisateur "
+
+msgid "Redirect calls to"
+msgstr " Rediriger les appels vers "
+
+msgid "Realm"
+msgstr "Domaine "
+
+msgid "Assign To"
+msgstr "Affecter à"
+
+msgid "Device status"
+msgstr "Statut du périphérique "
+
+msgid "Device Nickname"
+msgstr " Pseudonyme du périphérique"
+
+msgid "Join deaf"
+msgstr " Rejoindre un sourd"
+
+msgid "Join muted"
+msgstr " Rejoignez en sourdine"
+
+msgid "Save conference"
+msgstr "Enregistrer la conférence "
+
+msgid "(comma separated)"
+msgstr "(séparées par des virgules)"
+
+msgid "Conference pins"
+msgstr "Broches de conférence"
+
+msgid "Conference owner"
+msgstr "Propriétaire de la conférence "
+
+msgid "Conference numbers"
+msgstr "Numéros de conférence  "
+
+msgid "Conference name"
+msgstr "Nom de la conférence"
+
+msgid "Add number"
+msgstr "Ajouter un numéro "
+
+msgid "Enter conference name here"
+msgstr "Entrez le nom de la conférence ici"
+
+msgid "Enter blacklist name here"
+msgstr "Entrez le nom de la liste noire ici"
+
+msgid "Add blacklist"
+msgstr "Ajouter une liste noire"
+
+msgid "Save blacklist"
+msgstr "Enregistrer la liste noire"
+
+msgid "List name"
+msgstr "Liste de noms"
+
+msgid "Blacklist Name"
+msgstr "Nom de la liste noire"
+
+msgid "Caller ID Number"
+msgstr "Numéro d'identification de l'appelant"
+
+msgid "Caller ID Name"
+msgstr "Nom de l'appelant"
+
+msgid "Outbound Calls"
+msgstr "Appels sortants"
+
+msgid "In-House Calls"
+msgstr "Appels internes"
+
+msgid "Timezone"
+msgstr "Fuseau horaire"
+
+msgid "Email Notifications"
+msgstr "Notifications par email "
+
+msgid "User privilege level"
+msgstr "Niveau de privilège de l'utilisateur"
+
+msgid "User status"
+msgstr "Statut de l'utilisateur"
+
+msgid "Change Password"
+msgstr "Changer le mot de passe"
+
+msgid "Diversion"
+msgstr "Dérivation"
+
+msgid "Restrictions"
+msgstr "Restrictions"
+
+msgid "Caller ID"
+msgstr "Identification de l'appelant"
+
+msgid "CID"
+msgstr "CID"
+
+msgid "Choose a device to register then make calls from right here in your web browser"
+msgstr "Choisissez un appareil à enregistrer puis faites des appels directement depuis votre navigateur"
+
+msgid "Please choose sip device to register with"
+msgstr "S'il vous plaît choisir sip appareil pour vous inscrire avec"
+
+msgid "D/L"
+msgstr "D / L"
+
+msgid "Forgot your password?"
+msgstr "Mot de passe oublié?"
+
+msgid "Not provided"
+msgstr "Non fourni"
+
+msgid "Not activated"
+msgstr "Non activé"
+
+msgid "Numbers management"
+msgstr "Gestion des nombres"
+
+msgid "Reseller Portal"
+msgstr "Portail revendeur"
+
+msgid "Reseller status"
+msgstr "Statut du revendeur"
+
+msgid "Unmask"
+msgstr "Démasquer"
+
+msgid "Mask"
+msgstr "Masque"
+
+msgid "Please check your mailbox for further instructions"
+msgstr "S'il vous plaît vérifier votre boîte aux lettres pour plus d'instructions"
+
+msgid "Best regards"
+msgstr "Meilleures salutations"
+
+msgid "Regards"
+msgstr "Cordialement"
+
+msgid "You can also open support tickets in our Support Centre at"
+msgstr "Vous pouvez également ouvrir des tickets de support dans notre centre de support à"
+
+msgid "Support Centre"
+msgstr "Centre de support"
+
+msgid "The following access credentials are valid for the portal"
+msgstr "Les informations d'accès suivantes sont valides pour le portail"
+
+msgid "As an account holder you now have access to our customer portal at"
+msgstr "En tant que titulaire de compte, vous avez maintenant accès à notre portail client à"
+
+msgid "We're pleased to confirm that your account has been created"
+msgstr "Nous sommes heureux de confirmer que votre compte a été créé"
+
+msgid "Welcome to"
+msgstr "Bienvenue à"
+
+msgid "Terms of Service"
+msgstr "Conditions d'utilisation"
+
+msgid "I agree to the"
+msgstr "je suis d'accord avec le"
+
+msgid "Create an account"
+msgstr "Créer un compte"
+
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+msgid "(mandatory)"
+msgstr "(obligatoire)"
+
+msgid "Company name"
+msgstr "Nom de la compagnie"
+
+msgid "(optional)"
+msgstr "(optionnel)"
+
+msgid "Confirm email address"
+msgstr "Confirmez votre adresse email "
+
+msgid "Enter email address"
+msgstr "Entrer l'adresse e-mail "
+
+msgid "Thank you for registering"
+msgstr " Merci de votre inscription  "
+
+msgid "Dear"
+msgstr "cher"
+
+msgid "Account Name"
+msgstr "Nom du compte "
+
+msgid "Your name (mandatory)"
+msgstr "Votre nom (obligatoire)"
+
+msgid "Your surname (mandatory)"
+msgstr " Votre nom de famille (obligatoire) "
+
+msgid "Registration"
+msgstr "enregistrement"
+
+msgid "Create"
+msgstr "Créer"
+
+msgid "Sing up"
+msgstr "Chanter"
+
+msgid "Accounting"
+msgstr "Comptabilité"
+
+msgid "Finance"
+msgstr "La finance"
+
+msgid "add list"
+msgstr "Ajouter la liste "
+
+msgid "add blacklist"
+msgstr " ajouter une liste noire "
+
+msgid "Blacklists"
+msgstr "Listes noires "
+
+msgid "Click to add number"
+msgstr " cliquez pour ajouter un numéro"
+
+msgid "Do you really want to change this setting?"
+msgstr "Voulez-vous vraiment changer ce paramètre?"
+
+msgid "Retrieve"
+msgstr "Récupérer"
+
+msgid "Valet"
+msgstr "Valet"
+
+msgid "Park and Retrieve"
+msgstr " Garez et récupérez "
+
+msgid "Privacy"
+msgstr "Intimité "
+
+msgid "Intercom"
+msgstr "Interphone"
+
+msgid "Direct to Voicemail"
+msgstr " Direct à la messagerie vocale"
+
+msgid "Check Voicemail"
+msgstr "Vérifier la messagerie vocale  "
+
+msgid "Update Call-Forward"
+msgstr "Mettre à jour le suivi des appels "
+
+msgid "Toggle Call-Forward"
+msgstr "Activer la fonction de renvoi d'appel "
+
+msgid "Disable Call-Forward"
+msgstr "Désactiver le renvoi automatique "
+
+msgid "Enable Call-Forward"
+msgstr "Activer le transfert d'appel "
+
+msgid "Feature codes"
+msgstr " Codes de caractéristiques"
+
+msgid "Parking"
+msgstr "Parking"
+
+msgid "Miscellaneous"
+msgstr "Divers"
+
+msgid "Hot-Desking"
+msgstr " Hot-Desking"
+
+msgid "Call-Forward"
+msgstr "Renvoi d'appel"
+
+msgid "Auth failed."
+msgstr "L'authentification a échoué."
+
+msgid "Enable"
+msgstr "Activer"
+
+msgid "Disable"
+msgstr "Désactiver"
+
+msgid "Feature Codes"
+msgstr "Codes de caractéristiques"
+
+msgid "Reload"
+msgstr "Recharger "
+
+msgid "Save"
+msgstr "sauvegarder"
+
+msgid "Create group"
+msgstr "Créer un groupe "
+
+msgid "Enter group name here"
+msgstr " Entrez le nom du groupe ici "
+
+msgid "Create user"
+msgstr " Créer un utilisateur"
+
+msgid "Confirm email address (mandatory)"
+msgstr "Confirmer l'adresse email (obligatoire)  "
+
+msgid "Enter email address (mandatory)"
+msgstr "Entrer l'adresse email (obligatoire) "
+
+msgid "Surname (mandatory)"
+msgstr "Nom (obligatoire) "
+
+msgid "Name (mandatory)"
+msgstr "Nom (obligatoire) "
+
+msgid "Enter password here"
+msgstr "Entrez le mot de passe ici "
+
+msgid "Enter username here"
+msgstr " Entrez le nom d'utilisateur ici "
+
+msgid "Enter device nickname here"
+msgstr " Entrez le pseudonyme de l'appareil ici "
+
+msgid "Enter phonenumber here"
+msgstr " Entrez le numéro de téléphone ici "
+
+msgid "Enter device name here"
+msgstr "Entrez le nom de l'appareil ici  "
+
+msgid "Cell Phone"
+msgstr " Téléphone portable"
+
+msgid "Create Cell Phone"
+msgstr " Créer un téléphone portable "
+
+msgid "SIP Phone"
+msgstr "Téléphone SIP"
+
+msgid "Create SIP Phone"
+msgstr "Créer un téléphone SIP"
+
+msgid "Edit menu"
+msgstr "Modifier le menu "
+
+msgid "Edit user"
+msgstr "Modifier l'utilisateur "
+
+msgid "Edit device"
+msgstr " Modifier l'appareil"
+
+msgid "Add device"
+msgstr "Ajouter un appareil "
+
+msgid "Ext. length"
+msgstr "Ext.longueur "
+
+msgid "Timeout"
+msgstr "Temps libre"
+
+msgid "Owner"
+msgstr "Propriétaire"
+
+msgid "Retries"
+msgstr "Tentatives"
+
+msgid "Menu name"
+msgstr "Nom du menu "
+
+msgid "Time"
+msgstr "Temps"
+
+msgid "Muted"
+msgstr "En sourdine"
+
+msgid "Play name"
+msgstr "Nom du jeu"
+
+msgid "Numbers"
+msgstr "Nombres"
+
+msgid "Prompt Name"
+msgstr "Nom de l'invite "
+
+msgid "CID Number"
+msgstr "Numéro CID"
+
+msgid "Privilege"
+msgstr " Privilège"
+
+msgid "Last Name"
+msgstr "Nom de famille"
+
+msgid "First Name"
+msgstr "Prénom"
+
+msgid "Endpoints amount"
+msgstr "Nombre de points finaux"
+
+msgid "Group Name"
+msgstr "Nom de groupe "
+
+msgid "Conferences"
+msgstr "Conférences"
+
+msgid "Add Time of Day rule"
+msgstr "Ajouter la règle de l'heure du jour  "
+
+msgid "Edit Time of Day rule"
+msgstr "Modifier la règle de l'heure du jour  "
+
+msgid "Time of the day rules"
+msgstr "Règles de l'heure du jour "
+
+msgid "Menus"
+msgstr "Menus"
+
+msgid "Groups"
+msgstr "Groupes"
+
+msgid "Account's Devices"
+msgstr "Appareils du compte"
+
+msgid "Account's Users"
+msgstr "Utilisateurs du compte"
+
+msgid "Account settings"
+msgstr "Paramètres du compte "
+
+msgid "Add conference"
+msgstr "Ajouter une conférence "
+
+msgid "add click-to-call"
+msgstr "ajouter le bouton "cliquer pour appeler" "
+
+msgid "add conference"
+msgstr "ajouter une conférence "
+
+msgid "add rule"
+msgstr " ajouter une règle"
+
+msgid "Add group"
+msgstr "Ajouter un groupe "
+
+msgid "add group"
+msgstr "ajouter un groupe"
+
+msgid "Add prompt"
+msgstr "Ajouter une invite "
+
+msgid "add sound file"
+msgstr "ajouter un fichier son "
+
+msgid "Add menu"
+msgstr "Ajouter un menu "
+
+msgid "add menu"
+msgstr "ajouter un menu "
+
+msgid "add device"
+msgstr "ajouter un appareil "
+
+msgid "add user"
+msgstr "ajouter un utilisateur "
+
+msgid "submit"
+msgstr "soumettre"
+
+msgid "call"
+msgstr "appel"
+
+msgid "register"
+msgstr "registre"
+
+msgid "Webphone"
+msgstr "Webphone"
+
+msgid "Call details"
+msgstr "Détails de l'appel "
+
+msgid "Hang Up"
+msgstr "Raccrocher"
+
+msgid "Callee Number"
+msgstr " Numéro de Callee"
+
+msgid "Caller Number"
+msgstr "Numéro de l'appelant"
+
+msgid "Device"
+msgstr "Dispositif"
+
+msgid "Call History"
+msgstr "Historique des appels "
+
+msgid "Account's Call History"
+msgstr "Historique des appels du compte "
+
+msgid "Account's Current Calls"
+msgstr "Appels actuels du compte "
+
+msgid "Account statistics"
+msgstr " Statistiques du compte "
+
+msgid "Caller ID"
+msgstr "Identification de l'appelant"
+
+msgid "Duration"
+msgstr "Durée"
+
+msgid "Play"
+msgstr "Jouer"
+
+msgid "Email Address"
+msgstr "Adresse e-mail "
+
+msgid "Keep Caller ID"
+msgstr " Garder l'identification de l'appelant"
+
+msgid "Also Ring My VoIP Phone"
+msgstr " Sonnerie également mon téléphone VoIP"
+
+msgid "Forward Calls To"
+msgstr "Transférer les appels vers "
+
+msgid "Send Voicemail to Email"
+msgstr "Envoyer la messagerie vocale à l'adresse e-mail  "
+
+msgid "User's timezone"
+msgstr " Fuseau horaire de l'utilisateur"
+
+msgid "Enable Call Forward"
+msgstr "Activer le renvoi d'appel"
+
+msgid "Incoming faxes"
+msgstr "Fax entrant "
+
+msgid "Devices"
+msgstr "Dispositifs"
+
+msgid "User portal"
+msgstr "Portail utilisateur "
+
+msgid "Send fax"
+msgstr "Envoyer un fax "
+
+msgid "Voice mailboxes"
+msgstr "Boîtes vocales "
+
+msgid "Voicemails"
+msgstr " Messages vocaux"
+
+msgid "Sign Out"
+msgstr "Déconnexion"
+
+msgid "Hosted PBX"
+msgstr "PBX hébergé "
+
+msgid "HOSTED PBX"
+msgstr "PBX HÉBERGÉ "
+
+msgid "User Portal"
+msgstr "Portail utilisateur"
+
+msgid "Callflow Builder"
+msgstr "Callflow Builder"
+
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "Statistics"
+msgstr "Statistiques"
+
+msgid "Payments"
+msgstr " Paiements"
+
+msgid "Delivery"
+msgstr "Livraison"
+
+msgid "Service Order"
+msgstr "Demande de service "
+
+msgid "Instructions"
+msgstr "Instructions"
+
+msgid "About us"
+msgstr "À propos de nous"
+
+msgid "Contacts"
+msgstr "Contacts"
+
+
