@@ -14,6 +14,7 @@
     ,may_be_clean_third_party_billing/1
     ,set_session_billing_status_vars/1
     ,setup_environment/6
+    ,is_peer_phiz_whitelisted/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -229,3 +230,14 @@ set_session_billing_status_vars(Context) ->
     z_context:set_session('currency_sign'
                          ,modkazoo_util:get_value(<<"currency_sign">>,Vars,<<"₽"/utf8>>)
                          ,Context).
+
+is_peer_phiz_whitelisted(Context) ->
+    z_ip_address:ip_match(m_req:get(peer, Context), ip_whitelist(Context)).
+
+ip_whitelist(Context) ->
+    SiteWhitelist = m_vars:get_value(phiz_ip_whitelist, Context),
+    case z_utils:is_empty(SiteWhitelist) of
+        true -> z_config:get(ip_whitelist);
+        false -> SiteWhitelist
+    end.
+
