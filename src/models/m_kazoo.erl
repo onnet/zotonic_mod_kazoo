@@ -14,6 +14,9 @@
 m_get([ is_auth | Rest ], Context) ->
   {modkazoo_auth:is_auth(Context), Rest};
 
+m_get([ is_peer_phiz_whitelisted | Rest ], Context) ->
+  {modkazoo_auth:is_peer_phiz_whitelisted(Context), Rest};
+
 m_get([ signal_filter | Rest ], Context) ->
   {z_session_manager:get_session_id(Context), Rest};
 
