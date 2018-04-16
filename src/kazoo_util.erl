@@ -625,7 +625,8 @@ kz_set_acc_doc(K, V, AccountId, Context) ->
     CurrDoc = kz_get_acc_doc_by_account_id(AccountId, Context),
     NewDoc = case V of
         'undefined' -> modkazoo_util:delete_key(K, CurrDoc);
-         _ -> modkazoo_util:set_value(K, V, CurrDoc)
+        <<>> -> modkazoo_util:delete_key(K, CurrDoc);
+        _ -> modkazoo_util:set_value(K, V, CurrDoc)
     end,
     case AccountId =:= 'undefined' of
         'false' -> 
@@ -2971,9 +2972,11 @@ toggle_all_calls_recording(Context) ->
     end,
     case RecState of
         [] ->
-            kz_set_acc_doc([<<"preflow">>,<<"always">>], record_call_doc_id(Context), Context);
+            kz_set_acc_doc([<<"preflow">>,<<"always">>], record_call_doc_id(Context), Context),
+            kz_set_acc_doc([<<"record_call">>], 'true', Context);
         _ ->
-            kz_set_acc_doc([<<"preflow">>,<<"always">>], <<>>, Context)
+            kz_set_acc_doc([<<"preflow">>,<<"always">>], <<>>, Context),
+            kz_set_acc_doc([<<"record_call">>], 'false', Context)
     end.
 
 record_call_doc_id(Context) ->
