@@ -5,4 +5,5 @@
                  }
   %}
   {{ m.notifier.first[{account_balance account_id=m.session.rs_selected_account_id}]|currency_sign }}
+
 </span>

@@ -23,7 +23,8 @@ build_a_fortune([Amt], Context) ->
 build_a_fortune(Amt, Context) when is_list(Amt); is_binary(Amt) ->
     Amount = ?TO_FLT(re:replace(Amt, "[^A-Za-z0-9.]", "", [global, {return, binary}])),
     build_a_fortune(Amount, Context);
-build_a_fortune(Amount, Context) ->
+build_a_fortune(Amt, Context) ->
+    Amount = ?TO_FLT(Amt),
     CurrencySign = case z_context:get_session('currency_sign', Context) of
                        'undefined' -> <<"£"/utf8>>;
                        Sign -> Sign

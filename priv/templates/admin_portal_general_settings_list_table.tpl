@@ -31,10 +31,28 @@
     <tr>
       <th class="text-center1">{_ All calls recording _}</th>
       <th>
-          <span id="account_record_call">
+
+        <span id="all_calls_recording_enabled">
+          <i id="toggle_account_record_call"
+             class="fa
+                    {% if account_doc[1]["preflow"][1]["always"] %}
+                      fa-toggle-on
+                    {% else %}
+                      fa-toggle-off
+                    {% endif %}
+                    pointer"
+          ></i>
+          {% wire id="toggle_account_record_call"
+                  type="click"
+                  action={postback postback="toggle_all_calls_recording"
+                                   delegate="mod_kazoo"
+                         }
+          %}
+        </span>
+       <!--   <span id="account_record_call">
             <i id="toggle_account_record_call"
                class="fa fa-toggle-{% if account_doc[1]["record_call"] %}on{% else %}off{% endif %} pointer"></i>
-            {% wire id="toggle_account_record_call"
+            {# wire id="toggle_account_record_call"
                     type="click"
                     action={postback postback={toggle_field type doc_id field_name prefix account_id}
                                      delegate="mod_kazoo"
@@ -44,8 +62,8 @@
                                                  prefix="account_"
                                                  account_id=account_id
                            }
-            %}
-          </span>
+            #}
+          </span> -->
       </th>
     </tr>
     <tr>
