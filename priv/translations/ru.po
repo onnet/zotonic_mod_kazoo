@@ -4,6 +4,15 @@ msgstr ""
 msgid ""
 msgstr ""
 
+msgid ""
+msgstr ""
+
+msgid "Recordings list"
+msgstr "Список записей"
+
+msgid "Account call recordings"
+msgstr "Записи разговоров"
+
 msgid "PSRN"
 msgstr "ОГРН"
 

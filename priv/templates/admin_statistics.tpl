@@ -33,6 +33,4 @@
   </span>
 </div>
 
-    {% include "admin_portal_call_recordings_table.tpl" headline=_"Account's Call Recordings" %}
-
 {% endblock %}
