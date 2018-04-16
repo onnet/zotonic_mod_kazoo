@@ -36,6 +36,7 @@
     ,kz_list_account_users/2
     ,kz_admin_list_account_users/2
     ,kz_list_account_devices/1
+    ,list_account_recordings/1
     ,kz_list_account_cdr/3
     ,kz_list_account_cdr/5
     ,kz_list_account_cdr_page/3
@@ -1228,6 +1229,12 @@ kz_purge_voicemail(VMBoxId, MediaId, Delay, Context) ->
     timer:sleep(Delay * ?MILLISECONDS_IN_SECOND),
     vmbox_message('delete', MediaId, VMBoxId, Context).
 
+list_account_recordings(Context) ->
+    AccountId = z_context:get_session('kazoo_account_id', Context),
+    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    API_String = <<?V2/binary, ?ACCOUNTS/binary, AccountId/binary,?RECORDINGS/binary>>,
+    crossbar_account_authtoken_request('get', API_String, [], AuthToken, Context, <<>>).
+
 kz_list_account_cdr(CreatedFrom, CreatedTo, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
     AuthToken = z_context:get_session(kazoo_auth_token, Context),
@@ -1290,7 +1297,7 @@ kz_vmessage_download_link(VMBoxId, MediaId, Context) ->
     
 kz_kzattachment_link(RecordingId, DocType, Context) ->
     AccountId = z_context:get_session('kazoo_account_id', Context),
-    AuthToken = z_context:get_session(kazoo_auth_token, Context),
+    AuthToken = z_context:get_session('kazoo_auth_token', Context),
     kz_kzattachment_link(AccountId, RecordingId, AuthToken, DocType, Context).
 
 kz_kzattachment_link(AccountId, [_|_] = RecordingIds, AuthToken, DocType, Context) ->

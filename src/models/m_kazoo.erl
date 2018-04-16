@@ -209,6 +209,9 @@ m_get([ {z_recording_download_link, [{cdr_id, CallId}]} | Rest ], Context) ->
 m_get([ {kz_incoming_fax_download_link, [{doc_id, DocId}]} | Rest ], Context) ->
     {kazoo_util:kz_incoming_fax_download_link(DocId, Context), Rest};
 
+m_get([ list_account_recordings | Rest ], Context) ->
+    {kazoo_util:list_account_recordings(Context), Rest};
+
 m_get([ {list_user_cdr,[{created_from, 'undefined'},{'created_to', 'undefined'}]} | Rest ], Context) ->
     {kazoo_util:kz_list_user_cdr_reduced(modkazoo_util:today_begins_tstamp(Context), modkazoo_util:today_ends_tstamp(Context), Context), Rest};
 m_get([ {list_user_cdr,[{created_from, CreatedFrom},{'created_to', CreatedTo}]} | Rest ], Context) ->
