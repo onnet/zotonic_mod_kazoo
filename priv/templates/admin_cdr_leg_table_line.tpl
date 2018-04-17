@@ -47,9 +47,10 @@
     {% endif %}
   </td>
   <td style="text-align: center;">
-    {% if call["recording_url"] and (call["billing_seconds"] > 3) %}
+    {% if call["custom_channel_vars"][1]["media_recording_id"] and (call["billing_seconds"] > 3) %}
       <audio id="audio_{{ #this_call }}" preload="none">
-        <source src="{{ call["z_recording_download_link"] }}" type="audio/mp3">
+        <source src="/kzattachment?account_id={{ m.session.kazoo_account_id }}&doc_type=call_recording&recording_id={{ call["custom_channel_vars"][1]["media_recording_id"] }}&auth_token={{ m.session.kazoo_auth_token }}"
+                type="audio/mp3">
       </audio>
       <a id="play_{{ #this_call }}"
          onclick='$("#audio_{{ #this_call }}").trigger("play");
@@ -74,7 +75,7 @@
                   $("#pause_{{ #this_call }}").hide();'>
          <i class="fa fa-stop" title="{_ Stop _}"></i>
       </a>
-      <a href="{{ call["z_recording_download_link"] }}" download>
+      <a href="/kzattachment?account_id={{ m.session.kazoo_account_id }}&doc_type=call_recording&recording_id={{ call["custom_channel_vars"][1]["media_recording_id"] }}&auth_token={{ m.session.kazoo_auth_token }}" download>
          <i style="cursor: pointer;"
             class="fa fa-download"
             title="{_ Download _}"></i>
