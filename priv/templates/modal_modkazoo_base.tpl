@@ -60,10 +60,6 @@
           "js/modules/jquery.timepicker.min.js"
      %}
 
-    {# lib
-          "js/modules/z.cropcenter.js"
-    #}
-
     {% lib
           "css/datepicker3.css"
           "css/bootstrap-select.min.css"
