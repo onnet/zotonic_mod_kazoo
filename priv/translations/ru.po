@@ -4,8 +4,8 @@ msgstr ""
 msgid ""
 msgstr ""
 
-msgid ""
-msgstr ""
+msgid "Letters"
+msgstr "Буквы"
 
 msgid "Recordings list"
 msgstr "Список записей"
@@ -2300,7 +2300,7 @@ msgid "Lowercase letters"
 msgstr "Строчные буквы"
 
 msgid "10 Characters long"
-msgstr "10 симвоов"
+msgstr "10 символов"
 
 msgid "New password"
 msgstr "Новый пароль"

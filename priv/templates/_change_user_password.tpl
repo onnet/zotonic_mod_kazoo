@@ -18,13 +18,14 @@
     <div class="row">
       <div class="col-sm-6">
         <input type="password" class="form-control margin-bottom-xs mt-1" name="password1" id="password1" placeholder="{_ New password _}" autocomplete="off">
-        <div class="col-sm-6" style="font-size: 0.85em;">
-          <span id="10char" class="fa fa-remove" style="color:#FF0004;"></span> <span>{_ 10 Characters long _}</span><br>
-          <span id="ucase" class="fa fa-remove" style="color:#FF0004;"></span> {_ Uppercase letters _}
+        <div class="col-sm-3" style="font-size: 0.85em;">
+          <span id="lcase" class="fa fa-remove" style="color:#FF0004;"></span> {_ Letters _}<br>
+        </div>
+        <div class="col-sm-3" style="font-size: 0.85em;">
+          <span id="num" class="fa fa-remove" style="color:#FF0004;"></span> {_ Digits _}
         </div>
         <div class="col-sm-6" style="font-size: 0.85em;">
-          <span id="lcase" class="fa fa-remove" style="color:#FF0004;"></span> {_ Lowercase letters _}<br>
-          <span id="num" class="fa fa-remove" style="color:#FF0004;"></span> {_ Digits _}
+          <span id="10char" class="fa fa-remove" style="color:#FF0004;"></span> <span>{_ 10 Characters long _}</span><br>
         </div>
       </div>
       <div class="col-sm-6">
@@ -64,13 +65,10 @@
 {% javascript %}
 
 function mypwdsubmit() {
-    var ucase = new RegExp("[A-Z]+");
-    var lcase = new RegExp("[a-z]+");
+    var lcase = new RegExp("[a-zA-Z]+");
     var num = new RegExp("[0-9]+");
 
     if( $("#password1").val().length >= 10  
-       && 
-        ucase.test($("#password1").val())
        && 
         lcase.test($("#password1").val())
        &&
@@ -86,8 +84,7 @@ function mypwdsubmit() {
 };
 
 $("input[type=password]").keyup(function(){
-        var ucase = new RegExp("[A-Z]+");
-	var lcase = new RegExp("[a-z]+");
+	var lcase = new RegExp("[a-zA-Z]+");
 	var num = new RegExp("[0-9]+");
 	
 	if($("#password1").val().length >= 10){
@@ -98,16 +95,6 @@ $("input[type=password]").keyup(function(){
 		$("#10char").removeClass("fa-check");
 		$("#10char").addClass("fa-remove");
 		$("#10char").css("color","#FF0004");
-	}
-	
-	if(ucase.test($("#password1").val())){
-		$("#ucase").removeClass("fa-remove");
-		$("#ucase").addClass("fa-check");
-		$("#ucase").css("color","#00A41E");
-	}else{
-		$("#ucase").removeClass("fa-check");
-		$("#ucase").addClass("fa-remove");
-		$("#ucase").css("color","#FF0004");
 	}
 	
 	if(lcase.test($("#password1").val())){
