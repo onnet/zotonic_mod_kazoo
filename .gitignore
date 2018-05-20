@@ -10,3 +10,4 @@ rel/example_project
 .rebar
 priv/log
 priv/mnesia
+priv/files/unhandled/rates.txt
