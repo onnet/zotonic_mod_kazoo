@@ -1505,7 +1505,6 @@ azrates_refresh(Context) ->
     API_String = <<?RATES/binary>>, 
     {'ok', _, _, Body} = crossbar_admin_request('get', API_String, [], 120000, Context),
     RateList = lists:reverse(modkazoo_util:get_value(<<"data">>, jiffy:decode(Body))),
-    ?PRINT(RateList),
     TabId = ets:new(rates, [bag]),
     ets:insert(TabId
               ,lists:map(fun (JObj) -> 
@@ -1517,7 +1516,6 @@ azrates_refresh(Context) ->
                          end
                         ,RateList)),
     DescriptionPriceTuples = lists:usort(ets:match(TabId,{'_','$1','$2','$3'})),
-    ?PRINT(DescriptionPriceTuples),
     CombinedRL = lists:map(fun ([Description, Cost, Surcharge]) ->
                                {[{<<"prefix">>, ets:match(TabId, {'$1',Description,Cost,Surcharge})}
                                 ,{<<"cost">>, Cost}
@@ -1526,7 +1524,6 @@ azrates_refresh(Context) ->
                                ]}
                            end
                           ,DescriptionPriceTuples),
-    ?PRINT(CombinedRL),
     file:write_file(m_vars:get_value('mod_kazoo', 'rates_file', Context), jiffy:encode(CombinedRL)).
 
 rate_number(Number, Context) ->
