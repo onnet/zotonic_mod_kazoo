@@ -774,6 +774,14 @@ req_headers(ContentType, Token) ->
          ,{"User-Agent", z_convert:to_list(erlang:node())}
         ]).
 
+req_headers(ContentType, Accept, Token) ->
+    modkazoo_util:filter_undefined(
+        [{"Content-Type", ContentType}
+         ,{"X-Auth-Token", z_convert:to_list(Token)}
+         ,{"User-Agent", z_convert:to_list(erlang:node())}
+         ,{"Accept", Accept}
+        ]).
+
 crossbar_account_send_request(Verb, API_String, DataBag, Context) ->
     crossbar_account_send_request(Verb, API_String, "application/json", DataBag, Context).
 
@@ -921,7 +929,7 @@ crossbar_admin_request(Verb, API_String, DataBag, Timeout, Context) ->
                   [] -> [];
                    _ -> jiffy:encode(DataBag)
               end,
-    ibrowse:send_req(URL, req_headers(AuthToken), Verb, Payload, [], Timeout).
+    ibrowse:send_req(URL, req_headers("application/json", "application/json", AuthToken), Verb, Payload, [], Timeout).
 
 kz_account_doc_field(Field, Context) ->
     kz_account_doc_field(Field, z_context:get_session(kazoo_account_id, Context), Context).
@@ -1496,14 +1504,29 @@ azrates(Context) ->
 azrates_refresh(Context) ->
     API_String = <<?RATES/binary>>, 
     {'ok', _, _, Body} = crossbar_admin_request('get', API_String, [], 120000, Context),
-    {JsonData} = jiffy:decode(Body),
-    RateList = lists:reverse(proplists:get_value(<<"data">>, JsonData)),
+    RateList = lists:reverse(modkazoo_util:get_value(<<"data">>, jiffy:decode(Body))),
+    ?PRINT(RateList),
     TabId = ets:new(rates, [bag]),
-    ets:insert(TabId, lists:map(fun ({[{<<"name">>,_Name},{<<"cost">>,Cost},{<<"prefix">>,Prefix},{<<"description">>,Description},{<<"surcharge">>,Surcharge}]}) -> 
-                                                                                                                          {Prefix,Description,Cost,Surcharge} end, RateList)),
+    ets:insert(TabId
+              ,lists:map(fun (JObj) -> 
+                             {modkazoo_util:get_value(<<"prefix">>, JObj)
+                             ,modkazoo_util:get_value(<<"description">>, JObj)
+                             ,modkazoo_util:get_value(<<"cost">>, JObj)
+                             ,modkazoo_util:get_value(<<"surcharge">>, JObj)
+                             }
+                         end
+                        ,RateList)),
     DescriptionPriceTuples = lists:usort(ets:match(TabId,{'_','$1','$2','$3'})),
-    CombinedRL = lists:map(fun ([Description, Cost, Surcharge]) -> {[{<<"prefix">>, ets:match(TabId, {'$1',Description,Cost,Surcharge})}
-                                                          ,{<<"cost">>, Cost}, {<<"description">>, Description},{<<"surcharge">>,Surcharge}]} end, DescriptionPriceTuples),
+    ?PRINT(DescriptionPriceTuples),
+    CombinedRL = lists:map(fun ([Description, Cost, Surcharge]) ->
+                               {[{<<"prefix">>, ets:match(TabId, {'$1',Description,Cost,Surcharge})}
+                                ,{<<"cost">>, Cost}
+                                ,{<<"description">>, Description}
+                                ,{<<"surcharge">>,Surcharge}
+                               ]}
+                           end
+                          ,DescriptionPriceTuples),
+    ?PRINT(CombinedRL),
     file:write_file(m_vars:get_value('mod_kazoo', 'rates_file', Context), jiffy:encode(CombinedRL)).
 
 rate_number(Number, Context) ->
