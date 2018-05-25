@@ -1625,6 +1625,8 @@ event({postback,{flush_pbx_registration_by_username,[{sip_username, Username}]},
     Context;
 
 event({submit,kz_webhook,_,_},Context) ->
+    lager:info("Unknown event variables: ~p", [z_context:get_q_all(Context)]),
+
     _ = kazoo_util:kz_webhook(Context),
     mod_signal:emit({update_admin_portal_webhooks_list_tpl, ?SIGNAL_FILTER(Context)}, Context),
     z_render:dialog_close(Context);

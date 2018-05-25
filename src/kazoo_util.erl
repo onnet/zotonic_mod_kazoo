@@ -3328,7 +3328,7 @@ kz_webhook(Context) ->
             crossbar_account_request('post', API_String, ?MK_DATABAG(NewDoc), Context)
     end.
 
-filter_custom_fields({"custom_key_" ++ T, Key}, Context) ->
+filter_custom_fields({<<"custom_key_", T/binary>>, Key}, Context) ->
     fun(J) -> modkazoo_util:set_value([<<"custom_data">>,?TO_BIN(Key)], modkazoo_util:get_q_bin(T,Context), J) end;
 filter_custom_fields(_, _Context) ->
     fun(J) -> J end.

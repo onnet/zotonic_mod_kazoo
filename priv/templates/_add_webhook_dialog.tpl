@@ -5,15 +5,33 @@
       <div class="row">
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Webhook name _}
-            <input type="text" class="form-control margin-bottom-xs" id="name" name="name" placeholder="{_ Enter webhook name here _}" value="{{ webhook[1]["name"] }}">
+            <input type="text"
+                   class="form-control margin-bottom-xs"
+                   id="name"
+                   name="name"
+                   placeholder="{_ Enter webhook name here _}"
+                   value="{{ webhook[1]["name"] }}">
           </label>
         </div>
         <div class="col-sm-6">
           <label class="form-control-onnet margin-bottom-xs">{_ Hook _}
           <select id="hook" name="hook" class="form-control margin-bottom-xs" style="text-align:center;">
-                  <option value="channel_create" {% if "channel_create" == webhook[1]["hook"] %}selected{% endif %}>{_ CHANNEL_CREATE _}</option>
-                  <option value="channel_answer" {% if "channel_answer" == webhook[1]["hook"] %}selected{% endif %}>{_ CHANNEL_ANSWER _}</option>
-                  <option value="channel_destroy" {% if "channel_destroy" == webhook[1]["hook"] %}selected{% endif %}>{_ CHANNEL_DESTROY _}</option>
+            <option value="channel_create"
+                    {% if "channel_create" == webhook[1]["hook"] %}selected{% endif %}>
+              {_ CHANNEL_CREATE _}
+            </option>
+            <option value="channel_answer"
+                    {% if "channel_answer" == webhook[1]["hook"] %}selected{% endif %}>
+              {_ CHANNEL_ANSWER _}
+            </option>
+            <option value="channel_destroy"
+                    {% if "channel_destroy" == webhook[1]["hook"] %}selected{% endif %}>
+              {_ CHANNEL_DESTROY _}
+            </option>
+            <option value="amocrm"
+                    {% if "amocrm" == webhook[1]["hook"] %}selected{% endif %}>
+              {_ AmoCRM _}
+            </option>
           </select>
           </label>
         </div>
