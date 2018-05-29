@@ -512,6 +512,13 @@ m_get([ {kz_get_account_trunk, [{trunk_id, TrunkId}]} | Rest ], Context) ->
 m_get([ {kz_get_trunk_server, [{trunk_id, TrunkId},{server_index, Index}]} | Rest ], Context) ->
     {kazoo_util:kz_trunk_server_details(TrunkId, Index, Context), Rest};
 
+m_get([ kz_list_webhooks | Rest ], Context) ->
+    {kazoo_util:kz_list_webhooks(Context), Rest};
+
+m_get([ kz_list_webhooks_ids | Rest ], Context) ->
+    Ids = [modkazoo_util:get_value([<<"id">>], Hook)  || Hook <- kazoo_util:kz_list_webhooks(Context)],
+    {Ids, Rest};
+
 m_get([ kz_list_account_webhooks | Rest ], Context) ->
     {kazoo_util:kz_list_account_webhooks(Context), Rest};
 

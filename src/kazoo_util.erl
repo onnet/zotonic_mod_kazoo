@@ -266,6 +266,7 @@
     ,ts_server_set_field/5
     ,ts_trunk_disable/3
     ,ts_trunk_enable/3
+    ,kz_list_webhooks/1
     ,kz_list_account_webhooks/1
     ,kz_webhook_info/2
     ,kz_webhook_delete/2
@@ -3284,6 +3285,10 @@ update_trunk_server(Server, Context) ->
                           ,J)
                  end],
     lists:foldl(fun(F, J) -> F(J) end, Server, Routines).
+
+kz_list_webhooks(Context) ->
+    API_String = <<?V2/binary, ?WEBHOOKS/binary>>,
+    crossbar_account_request('get', API_String, [], Context).
 
 kz_list_account_webhooks(Context) ->
     API_String = <<?V1/binary, ?ACCOUNTS(Context)/binary, ?WEBHOOKS/binary>>,
