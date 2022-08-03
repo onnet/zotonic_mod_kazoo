@@ -1,9 +1,9 @@
-# CentOS 7 Zotonic + mod_kazoo = OKUI installation notes
-### Note: In order OKUI functions properly [Onbill Kazoo app](https://github.com/onnet/onbill "onbill") should be installed in your Kazoo environment
-## Zotonic installation
+# Ниструкция по установке OKUI (CentOS 7 Zotonic + mod_kazoo)
+### Note: Для корректной работы OKUI необходимо заранее установить приложение [Onbill Kazoo app](https://github.com/onnet/onbill "onbill") в вашей телекоммуникационнй платформе Kazoo
+## Установка Zotonic
 
-- Disable selinux.
-- Add needed packages:
+- Отключите selinux.
+- Добавьте следующие пакеты в вашей ОС CentOS 7:
 
 ```
 yum -y install epel-release
@@ -15,7 +15,7 @@ echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
 ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 timedatectl set-ntp true
 ```
-- Install Erlang
+- Установите Erlang
 ```
 curl -O https://raw.githubusercontent.com/yrashk/kerl/master/kerl
 chmod a+x kerl
@@ -24,14 +24,8 @@ kerl list releases
 kerl build 19.3 r19.3
 kerl install r19.3 /usr/local/erlang
 ```
-- Braintree (don't forget to create plans; create addons and add them to plans... at Braintree itself (through dashboard)
-```
-easy_install pip
-pip install requests[security]
-pip install urllib3
-pip install braintree
-```
-- Prepare system
+
+- Подготовка системы
 ```
 useradd zotonic 
 echo "sleep 10" >> /etc/rc.local 
@@ -47,7 +41,7 @@ setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam
 setcap 'cap_net_bind_service=+ep' /usr/local/erlang/erts-8.3/bin/beam.smp
 ```
 
-- Install Zotonic
+- Установка Zotonic
 ```
 su - zotonic 
 
